@@ -1,0 +1,35 @@
+Niepce Digital
+==============
+
+This software is licensed under GPL version 2. See file 
+COPYING for details.
+
+(c) 2006 Hubert Figuière
+
+To build is you need the following:
+-----------------------------------
+
+A C++ compiler
+gtk+ 2.8
+cairo 1.1
+gtkmm 2.8
+cairomm
+sqlite3
+
+Niepce is being developed on Linux. It should build and work on other
+UNIX systems, and may work on Windows and MacOS X if you can build it.
+
+Getting the code
+----------------
+
+Obviously you have it.
+
+To get the most recent code, it is hosted on Gna.org Subversion servers.
+All you need is to check the following page:
+http://gna.org/svn/?group=niepce
+
+
+Website
+-------
+
+http://home.gna.org/niepce/
