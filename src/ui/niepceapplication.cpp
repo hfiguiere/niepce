@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - ui/niepceapplication.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,16 +19,26 @@
  * 02110-1301, USA
  */
 
+#include "niepceapplication.h"
+#include "niepcewindow.h"
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+using framework::Frame;
 
-int main(int argc, char ** argv)
-{
+namespace ui {
 
-	db::Library::Ptr library(new db::Library(".dir"));
+	NiepceApplication *NiepceApplication::create()
+	{
+		if (m_application == NULL) {
+			m_application = new NiepceApplication();
+		}
+		return dynamic_cast<NiepceApplication*>(m_application);
+	}
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+
+	Frame *NiepceApplication::makeMainFrame()
+	{
+		return new NiepceWindow;
+	}
+
+
 }
-

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Fri Mar 23 22:53:12 2007 by hub@grinch-->
+<!--Generated with glade3 3.2.0 on Sat Mar 24 14:38:14 2007 by hub@grinch-->
 <glade-interface>
   <requires lib="canvas"/>
-  <widget class="GtkWindow" id="window1">
+  <widget class="GtkWindow" id="mainwindow">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
@@ -197,16 +197,10 @@
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
-                  <widget class="GnomeIconList" id="librarylist">
+                  <widget class="GtkIconView" id="librarylist">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="width">1000000</property>
-                    <property name="height">1000000</property>
-                    <property name="icon_width">78</property>
-                    <property name="row_spacing">4</property>
-                    <property name="column_spacing">2</property>
-                    <property name="text_spacing">2</property>
                   </widget>
                   <packing>
                     <property name="tab_expand">False</property>
@@ -256,16 +250,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GnomeIconList" id="imageribbon">
+          <widget class="GtkIconView" id="imageribbon">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="width">1000000</property>
-            <property name="height">1000000</property>
-            <property name="icon_width">78</property>
-            <property name="row_spacing">4</property>
-            <property name="column_spacing">2</property>
-            <property name="text_spacing">2</property>
           </widget>
           <packing>
             <property name="position">3</property>

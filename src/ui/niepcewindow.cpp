@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - ui/niepcewindow.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,16 +19,17 @@
  * 02110-1301, USA
  */
 
+#include <gtkmm.h>
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#include "niepcewindow.h"
 
-int main(int argc, char ** argv)
-{
 
-	db::Library::Ptr library(new db::Library(".dir"));
+namespace ui {
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	NiepceWindow::NiepceWindow()
+		: framework::Frame(GLADEDIR "mainwindow.glade", "mainwindow")
+	{
+		Gtk::Window & win = gtkWindow();
+
+	}
 }
-

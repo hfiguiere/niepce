@@ -1,2 +1,2 @@
 
-SUBDIRS = framework db ui
+SUBDIRS = framework db ui main

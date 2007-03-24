@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - framework/application.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,15 +20,34 @@
  */
 
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#ifndef _FRAMEWORK_APPLICATION_H_
+#define _FRAMEWORK_APPLICATION_H_
 
-int main(int argc, char ** argv)
-{
+#include "configuration.h"
 
-	db::Library::Ptr library(new db::Library(".dir"));
+namespace framework {
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	class Frame;
+
+	class Application 
+	{
+	public:
+
+		virtual Frame *makeMainFrame();
+
+		Configuration & config()
+			{ return m_config; }
+		static Application *instance();
+		static int main(int argc, char **argv);
+
+	protected:
+		Application();
+		static Application *m_application; 
+
+	private:
+		Configuration m_config;
+	};
+
 }
 
+#endif

@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - framework/application.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,15 +20,30 @@
  */
 
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#include "frame.h"
 
-int main(int argc, char ** argv)
-{
 
-	db::Library::Ptr library(new db::Library(".dir"));
+namespace framework {
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	Frame::Frame()
+		: m_window(new Gtk::Window()),
+			m_glade(NULL)
+	{
+	}
+
+
+	Frame::Frame(const std::string & gladeFile, const Glib::ustring & widgetName)
+		: m_window(NULL),
+			m_glade(Gnome::Glade::Xml::create(gladeFile))
+	{
+		if (m_glade) {
+			m_window = static_cast<Gtk::Window*>(m_glade->get_widget(widgetName));
+		}
+	}
+
+
+	Frame::~Frame()
+	{
+		delete m_window;
+	}
 }
-

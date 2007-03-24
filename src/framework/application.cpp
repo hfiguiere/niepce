@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - framework/application.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,16 +19,48 @@
  * 02110-1301, USA
  */
 
+#include <boost/scoped_ptr.hpp>
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#include <gtkmm.h>
 
-int main(int argc, char ** argv)
-{
+#include "application.h"
+#include "frame.h"
 
-	db::Library::Ptr library(new db::Library(".dir"));
+namespace framework {
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	Application *Application::m_application = NULL; 
+
+	Application::Application()
+	{
+	}
+
+
+	Application *Application::instance()
+	{
+		if (m_application == NULL) {
+			m_application = new Application();
+		}
+		return m_application;
+	}
+
+
+	int Application::main(int argc, char **argv)
+	{
+		Application * app = instance();
+
+		Gtk::Main kit(argc, argv);
+
+    boost::scoped_ptr<Frame> window(app->makeMainFrame());		
+
+    Gtk::Main::run(window->gtkWindow());
+
+		return 0;
+	}
+
+	Frame *Application::makeMainFrame()
+	{
+		return new Frame;
+	}
+
 }
 

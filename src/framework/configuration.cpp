@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - framework/configuration.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,15 +20,21 @@
  */
 
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#include "configuration.h"
 
-int main(int argc, char ** argv)
-{
 
-	db::Library::Ptr library(new db::Library(".dir"));
+namespace framework {
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	const std::string & Configuration::operator[](const std::string & key) const
+	{
+		static std::string empty;
+
+		config_map_t::const_iterator iter = m_configdata.find(key);
+		if(iter == m_configdata.end()) {
+			return empty;
+		}
+		
+		return iter->second;
+	}
+
 }
-

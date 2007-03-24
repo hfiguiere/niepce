@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - db/library.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,15 +20,36 @@
  */
 
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
 
-int main(int argc, char ** argv)
-{
+#ifndef _DB_LIBRARY_H_
+#define _DB_LIBRARY_H_
 
-	db::Library::Ptr library(new db::Library(".dir"));
+#include <string>
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+#include <boost/shared_ptr.hpp>
+
+namespace db {
+
+	class Library
+	{
+	public:
+		typedef boost::shared_ptr<Library> Ptr;
+
+		Library(const std::string & dir);
+		virtual ~Library();
+
+		/** set the main library directory */
+		void setMainDir(const std::string & dir)
+			{ m_maindir = dir; }
+		/** return the main directory */
+		const std::string & mainDir() const
+			{ return m_maindir; }
+
+
+	private:
+		std::string m_maindir;
+	};
+
 }
 
+#endif

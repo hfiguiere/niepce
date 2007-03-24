@@ -1,5 +1,5 @@
 /*
- * niepce - main/main.cpp
+ * niepce - db/library.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,15 +20,17 @@
  */
 
 
-#include "db/library.h"
-#include "ui/niepceapplication.h"
+#include "library.h"
 
-int main(int argc, char ** argv)
-{
+namespace db {
 
-	db::Library::Ptr library(new db::Library(".dir"));
+	Library::Library(const std::string & dir)
+		: m_maindir(dir)
+	{
+	}
 
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	Library::~Library()
+	{
+	}
+	
 }
-
