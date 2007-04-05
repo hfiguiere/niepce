@@ -19,17 +19,32 @@
  * 02110-1301, USA
  */
 
-#include <gtkmm.h>
+#include <gtkmm/window.h>
 
 #include "niepcewindow.h"
 
 
 namespace ui {
 
-	NiepceWindow::NiepceWindow()
-		: framework::Frame(GLADEDIR "mainwindow.glade", "mainwindow")
-	{
-		Gtk::Window & win = gtkWindow();
 
+	NiepceWindow::NiepceWindow()
+		: framework::Frame()//GLADEDIR "mainwindow.glade", "mainwindow")
+	{
+//		Glib::RefPtr<Gnome::Glade::Xml> & g(glade());
+		Gtk::Window & win(gtkWindow());
+
+		win.add(m_vbox);
+		m_vbox.pack_start(m_menuBar, Gtk::PACK_SHRINK);
+		
+		Glib::RefPtr<Gtk::ListStore> liststore = Gtk::ListStore::create(m_librarycolumns);
+		m_librarytree.set_model(liststore);
+		Gtk::TreeModel::iterator iter = liststore->append();
+		Gtk::TreeModel::Row row = *iter;
+		row[m_librarycolumns.m_col_text] = "foo";
+
+		m_vbox.pack_start(m_librarytree);
+
+		win.set_size_request(600, 400);
+		win.show_all_children();
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Sat Mar 24 14:38:14 2007 by hub@grinch-->
+<!--Generated with glade3 3.2.0 on Sat Mar 24 20:29:04 2007 by hub@grinch-->
 <glade-interface>
   <requires lib="canvas"/>
   <widget class="GtkWindow" id="mainwindow">
@@ -189,6 +189,7 @@
               </widget>
               <packing>
                 <property name="resize">False</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
             <child>
@@ -256,6 +257,7 @@
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
           </widget>
           <packing>
+            <property name="padding">3</property>
             <property name="position">3</property>
           </packing>
         </child>

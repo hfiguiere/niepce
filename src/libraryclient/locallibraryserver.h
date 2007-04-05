@@ -1,5 +1,5 @@
 /*
- * niepce - framework/application.h
+ * niepce - libraryclient/locallibraryserver.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,35 +20,18 @@
  */
 
 
-#ifndef _FRAMEWORK_APPLICATION_H_
-#define _FRAMEWORK_APPLICATION_H_
 
-#include "configuration.h"
+#ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
+#define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
-namespace framework {
+namespace libraryclient {
 
-	class Frame;
-
-	class Application 
+	class LocalLibraryServer
 	{
 	public:
-		virtual ~Application();
-
-		virtual Frame *makeMainFrame();
-
-		Configuration & config()
-			{ return m_config; }
-		static Application *instance();
-		static int main(int argc, char **argv);
-
-	protected:
-		Application();
-		static Application *m_application; 
-
-	private:
-		Configuration m_config;
 	};
 
 }
+
 
 #endif

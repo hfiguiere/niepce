@@ -48,6 +48,7 @@ namespace db {
 
 	private:
 		std::string m_maindir;
+		
 	};
 
 }

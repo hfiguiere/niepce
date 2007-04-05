@@ -25,12 +25,20 @@
 
 #include "application.h"
 #include "frame.h"
+#include "libraryclient/libraryclient.h"
+
+using libraryclient::LibraryClient;
 
 namespace framework {
 
 	Application *Application::m_application = NULL; 
 
 	Application::Application()
+	{
+	}
+
+
+	Application::~Application()
 	{
 	}
 
@@ -47,8 +55,9 @@ namespace framework {
 	int Application::main(int argc, char **argv)
 	{
 		Application * app = instance();
-
 		Gtk::Main kit(argc, argv);
+
+		LibraryClient::Ptr library(new LibraryClient("local:.dir"));
 
     boost::scoped_ptr<Frame> window(app->makeMainFrame());		
 

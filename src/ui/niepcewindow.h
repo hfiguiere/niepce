@@ -23,10 +23,27 @@
 #ifndef _UI_NIEPCEWINDOW_H_
 #define _UI_NIEPCEWINDOW_H_
 
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/box.h>
+#include <gtkmm/menubar.h>
+
 #include "framework/frame.h"
 
 
 namespace ui {
+
+	class ModelColumns : public Gtk::TreeModelColumnRecord
+	{
+	public:
+		
+		ModelColumns()
+			{ add(m_col_text); add(m_col_number); }
+		
+		Gtk::TreeModelColumn<Glib::ustring> m_col_text;
+		Gtk::TreeModelColumn<int> m_col_number;
+	};
 
 	class NiepceWindow
 		: public framework::Frame
@@ -34,6 +51,11 @@ namespace ui {
 	public:
 		NiepceWindow();
 
+	private:
+		Gtk::TreeView m_librarytree;
+		ModelColumns m_librarycolumns;
+		Gtk::VBox m_vbox;
+		Gtk::MenuBar m_menuBar;
 	};
 
 }

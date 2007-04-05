@@ -1,6 +1,8 @@
 
 
 
+INCLUDES = -I$(top_srcdir)/src
+
 noinst_LTLIBRARIES = libniepceframework.la
 
 noinst_HEADERS = configuration.h application.h \

@@ -23,8 +23,8 @@
 #ifndef _FRAMEWORK_FRAME_H_
 #define _FRAMEWORK_FRAME_H_
 
-#include <gtkmm.h>
-#include <libglademm.h>
+#include <gtkmm/window.h>
+#include <libglademm/xml.h>
 
 namespace framework {
 

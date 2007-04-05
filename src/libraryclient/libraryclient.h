@@ -1,5 +1,5 @@
 /*
- * niepce - framework/application.h
+ * niepce - libraryclient/libraryclient.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,34 +19,40 @@
  * 02110-1301, USA
  */
 
+#ifndef _LIBRARYCLIENT_H_
+#define _LIBRARYCLIENT_H_
 
-#ifndef _FRAMEWORK_APPLICATION_H_
-#define _FRAMEWORK_APPLICATION_H_
+#include <string>
+#include <boost/shared_ptr.hpp>
 
-#include "configuration.h"
+#include "clienttypes.h"
 
-namespace framework {
+namespace libraryclient {
 
-	class Frame;
+	class ClientImpl;
 
-	class Application 
+	class LibraryClient
 	{
 	public:
-		virtual ~Application();
+		typedef boost::shared_ptr<LibraryClient> Ptr;
 
-		virtual Frame *makeMainFrame();
+		LibraryClient(const std::string & moniker);
+		~LibraryClient();
 
-		Configuration & config()
-			{ return m_config; }
-		static Application *instance();
-		static int main(int argc, char **argv);
-
-	protected:
-		Application();
-		static Application *m_application; 
+		/** get all the keywords 
+		 * @return transaction ID
+		 */
+		tid getAllKeywords();
+		/** get all the folder
+		 * @return transaction ID
+		 */
+	  tid getAllFolders();
 
 	private:
-		Configuration m_config;
+		ClientImpl* m_pImpl;
+
+		LibraryClient(const LibraryClient &);
+		LibraryClient & operator=(const LibraryClient &);
 	};
 
 }

@@ -20,15 +20,12 @@
  */
 
 
-#include "db/library.h"
 #include "ui/niepceapplication.h"
 
 int main(int argc, char ** argv)
 {
-
-	db::Library::Ptr library(new db::Library(".dir"));
-
 	ui::NiepceApplication::create();
 	return framework::Application::main(argc, argv);
 }
+
 

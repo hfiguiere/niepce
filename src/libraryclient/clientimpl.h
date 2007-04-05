@@ -1,5 +1,5 @@
 /*
- * niepce - framework/application.h
+ * niepce - libraryclient/clientimpl.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -20,35 +20,34 @@
  */
 
 
-#ifndef _FRAMEWORK_APPLICATION_H_
-#define _FRAMEWORK_APPLICATION_H_
+#ifndef _LIBRARYCLIENT_CLIENTIMPL_H_
+#define _LIBRARYCLIENT_CLIENTIMPL_H_
 
-#include "configuration.h"
+#include <string>
 
-namespace framework {
+#include "clienttypes.h"
 
-	class Frame;
+namespace libraryclient {
 
-	class Application 
+	class LocalLibraryServer;
+
+	class ClientImpl
 	{
 	public:
-		virtual ~Application();
+		static ClientImpl *makeClientImpl(const std::string & moniker);
 
-		virtual Frame *makeMainFrame();
+		ClientImpl(const std::string & moniker);
+		virtual ~ClientImpl();
 
-		Configuration & config()
-			{ return m_config; }
-		static Application *instance();
-		static int main(int argc, char **argv);
+		tid getAllKeywords();
+	  tid getAllFolders();
 
 	protected:
-		Application();
-		static Application *m_application; 
-
-	private:
-		Configuration m_config;
+		const std::string m_moniker;
+		LocalLibraryServer *m_localLibrary;
 	};
 
 }
+
 
 #endif
