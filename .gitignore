@@ -1,0 +1,17 @@
+.libs
+.deps
+Makefile
+Makefile.in
+config.guess
+autogen.err
+config.log
+config.sub
+config.status
+config.h
+configure
+aclocal.m4
+*.o
+*.lo
+*.la
+src/db/test_db
+*~
