@@ -30,6 +30,7 @@
 
 #include "db/iconnectiondriver.h"
 
+struct sqlite3;
 
 namespace db {
 
@@ -42,7 +43,7 @@ class SqliteCnxDrv: public db::IConnectionDriver {
     friend class SqliteCnxMgrDrv ;
     boost::scoped_ptr<Priv> m_priv ;
 
-    friend class boost::shared_ptr<db::IConnectionDriver>;
+    friend void boost::checked_delete<SqliteCnxDrv>(SqliteCnxDrv * x);
 
     //forbid copy
     SqliteCnxDrv (const SqliteCnxDrv &) ;
@@ -50,8 +51,8 @@ class SqliteCnxDrv: public db::IConnectionDriver {
 
     SqliteCnxDrv (sqlite3 *a_sqlite_handle) ;
 
-public:
     virtual ~SqliteCnxDrv () ;
+public:
 
     const char* get_last_error () const ;
 
