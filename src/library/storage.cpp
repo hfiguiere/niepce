@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/storage.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,39 +19,13 @@
  * 02110-1301, USA
  */
 
-#include "libraryclient.h"
-#include "clientimpl.h"
+#include "storage.h"
 
-namespace libraryclient {
+namespace library {
 
-	LibraryClient::LibraryClient(const std::string & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
+	Storage::~Storage()
 	{
 
-	}
-
-	LibraryClient::~LibraryClient()
-	{
-		delete m_pImpl;
-	}
-
-
-	tid LibraryClient::getAllKeywords()
-	{
-		return m_pImpl->getAllKeywords();
-	}
-
-
-	tid LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
-
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
-	{
-		// TODO
-		return false;
 	}
 
 }

@@ -1,5 +1,4 @@
 /* -*- Mode: C++; indent-tabs-mode:tab; c-basic-offset:2 -*- */
-
 /*
  *This file is part of the Nemiver Project.
  *
@@ -23,6 +22,8 @@
  *
  *See COPYRIGHT file copyright information.
  */
+
+
 #include "config.h"
 
 #include <string>

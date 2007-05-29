@@ -47,9 +47,13 @@ CPPFLAGS="$CPPFLAGS -Werror"
 
 AC_CONFIG_FILES([
 Makefile
+doc/Doxyfile
+doc/Makefile
+doc/doxygen/Makefile
 src/Makefile
 src/db/Makefile
 src/db/sqlite/Makefile
+src/library/Makefile
 src/libraryclient/Makefile
 src/framework/Makefile
 src/ui/Makefile

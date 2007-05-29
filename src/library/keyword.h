@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/keyword.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,39 +19,33 @@
  * 02110-1301, USA
  */
 
-#include "libraryclient.h"
-#include "clientimpl.h"
 
-namespace libraryclient {
+#ifndef __NIEPCE_LIBRARY_KEYWORD_H__
+#define __NIEPCE_LIBRARY_KEYWORD_H__
 
-	LibraryClient::LibraryClient(const std::string & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
+#include <string>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
+namespace library {
+
+	class Keyword
 	{
+	public:
+		typedef boost::shared_ptr<Keyword> Ptr;
+		typedef std::vector<int> IdList;
 
-	}
-
-	LibraryClient::~LibraryClient()
-	{
-		delete m_pImpl;
-	}
-
-
-	tid LibraryClient::getAllKeywords()
-	{
-		return m_pImpl->getAllKeywords();
-	}
-
-
-	tid LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
-
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
-	{
-		// TODO
-		return false;
-	}
+		Keyword(int id, const std::string & keyword);
+		
+		int id() const
+			{ return m_id; }
+		const std::string & keyword() 
+			{ return m_keyword; }
+	private:
+		int m_id;
+		std::string m_keyword;
+	};
 
 }
+
+#endif

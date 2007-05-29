@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/storage.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,39 +19,27 @@
  * 02110-1301, USA
  */
 
-#include "libraryclient.h"
-#include "clientimpl.h"
 
-namespace libraryclient {
+#ifndef __NIEPCE_LIBRARY_STORAGE_H__
+#define __NIEPCE_LIBRARY_STORAGE_H__
 
-	LibraryClient::LibraryClient(const std::string & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
+#include <boost/shared_ptr.hpp>
+
+#include "library/keyword.h"
+
+namespace library {
+
+	/** @brief the interface for a storage */
+	class Storage
 	{
+	public:
+		typedef boost::shared_ptr<Storage> Ptr;
 
-	}
+		virtual ~Storage();
 
-	LibraryClient::~LibraryClient()
-	{
-		delete m_pImpl;
-	}
-
-
-	tid LibraryClient::getAllKeywords()
-	{
-		return m_pImpl->getAllKeywords();
-	}
-
-
-	tid LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
-
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
-	{
-		// TODO
-		return false;
-	}
+		virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
+	};
 
 }
+
+#endif

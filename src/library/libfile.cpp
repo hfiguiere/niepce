@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/libfile.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,39 +19,31 @@
  * 02110-1301, USA
  */
 
-#include "libraryclient.h"
-#include "clientimpl.h"
 
-namespace libraryclient {
+#include "libfile.h"
 
-	LibraryClient::LibraryClient(const std::string & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
+namespace library {
+	
+	LibFile::LibFile(int id, int folderId, const std::string &name,
+					const std::string & relPath)
+		: m_id(id), m_folderId(folderId),
+			m_name(name), m_relativePath(relPath),
+			m_hasKeywordList(false)
 	{
 
 	}
 
-	LibraryClient::~LibraryClient()
+	LibFile::~LibFile()
 	{
-		delete m_pImpl;
 	}
 
 
-	tid LibraryClient::getAllKeywords()
+	const Keyword::IdList & LibFile::keywords() const
 	{
-		return m_pImpl->getAllKeywords();
-	}
-
-
-	tid LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
-
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
-	{
-		// TODO
-		return false;
+		if(!m_hasKeywordList) {
+			storage()->fetchKeywordsForFile(m_id, m_keywordList);
+		}
+		return m_keywordList;
 	}
 
 }

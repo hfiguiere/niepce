@@ -1,5 +1,5 @@
 /*
- * niepce - db/test_sqlstatement.cpp
+ * niepce - db/test_db.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -100,3 +100,4 @@ BOOST_AUTO_UNIT_TEST(connection_test)
 	}
 
 }
+

@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - db/test_library.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,39 +19,25 @@
  * 02110-1301, USA
  */
 
-#include "libraryclient.h"
-#include "clientimpl.h"
 
-namespace libraryclient {
+#include "sqlstatement.h"
+#include "iconnectiondriver.h"
+#include "library.h"
 
-	LibraryClient::LibraryClient(const std::string & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
-	{
-
-	}
-
-	LibraryClient::~LibraryClient()
-	{
-		delete m_pImpl;
-	}
+#define BOOST_AUTO_TEST_MAIN
+#include <boost/test/auto_unit_test.hpp>
 
 
-	tid LibraryClient::getAllKeywords()
-	{
-		return m_pImpl->getAllKeywords();
-	}
+BOOST_AUTO_UNIT_TEST(library_test)
+{
+	db::Library lib("./");
 
+	BOOST_CHECK_EQUAL(lib.checkDatabaseVersion(), 1);
 
-	tid LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
+	db::IConnectionDriver::Ptr db(lib.dbDriver());
+	
+//	db::SQLStatement check("SELECT ");
+//	db->
 
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
-	{
-		// TODO
-		return false;
-	}
-
+	BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
 }

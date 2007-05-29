@@ -1,10 +1,9 @@
 
 
+INCLUDES = -I$(top_srcdir)/src
 
 noinst_LTLIBRARIES = liblibraryclient.la
 
-noinst_HEADERS = libraryclient.h clientimpl.h \
+liblibraryclient_la_SOURCES = libraryclient.h  libraryclient.cpp \
+	clientimpl.h clientimpl.cpp \
 	locallibraryserver.h clienttypes.h
-
-liblibraryclient_la_SOURCES = libraryclient.cpp \
-	clientimpl.cpp

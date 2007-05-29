@@ -26,18 +26,18 @@
 #include <boost/shared_ptr.hpp>
 
 #include "clienttypes.h"
+#include "library/storage.h"
 
 namespace libraryclient {
 
 	class ClientImpl;
 
 	class LibraryClient
+		: public library::Storage
 	{
 	public:
-		typedef boost::shared_ptr<LibraryClient> Ptr;
-
 		LibraryClient(const std::string & moniker);
-		~LibraryClient();
+		virtual ~LibraryClient();
 
 		/** get all the keywords 
 		 * @return transaction ID
@@ -47,6 +47,9 @@ namespace libraryclient {
 		 * @return transaction ID
 		 */
 	  tid getAllFolders();
+
+		/* sync call */
+		virtual bool fetchKeywordsForFile(int file, library::Keyword::IdList &keywords);
 
 	private:
 		ClientImpl* m_pImpl;

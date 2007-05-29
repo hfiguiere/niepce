@@ -1,4 +1,4 @@
-/* -*- Mode: C++; indent-tabs-mode:nil; c-basic-offset:4 -*- */
+/* -*- Mode: C++; indent-tabs-mode:tab; c-basic-offset:2 -*- */
 
 /*
  *This file is part of the Nemiver Project.

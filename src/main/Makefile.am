@@ -13,4 +13,5 @@ niepce_LDADD = $(top_builddir)/src/db/libniepcedb.la \
 	$(top_builddir)/src/framework/libniepceframework.la \
 	$(top_builddir)/src/ui/libniepceui.la \
 	$(top_builddir)/src/libraryclient/liblibraryclient.la \
+	$(top_builddir)/src/library/libniepcelibrary.la \
 	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@

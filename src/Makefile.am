@@ -1,2 +1,2 @@
 
-SUBDIRS = framework db libraryclient ui main
+SUBDIRS = framework db library libraryclient ui main

@@ -28,6 +28,9 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "iconnectiondriver.h"
+#include "iconnectionmanagerdriver.h"
+
 namespace db {
 
 	class Library
@@ -38,17 +41,30 @@ namespace db {
 		Library(const std::string & dir);
 		virtual ~Library();
 
+		bool ok()
+			{ return m_inited; }
 		/** set the main library directory */
-		void setMainDir(const std::string & dir)
-			{ m_maindir = dir; }
+//		void setMainDir(const std::string & dir)
+//			{ m_maindir = dir; }
 		/** return the main directory */
 		const std::string & mainDir() const
 			{ return m_maindir; }
+		const std::string & dbName() const
+			{ return m_dbname; }
 
-
-	private:
-		std::string m_maindir;
+		int checkDatabaseVersion();
 		
+		db::IConnectionDriver::Ptr dbDriver()
+			{ return m_dbdrv; }
+	private:
+		bool init();
+		bool _initDb();
+
+		std::string                       m_maindir;
+		std::string                       m_dbname;
+		db::IConnectionManagerDriver::Ptr m_dbmgr;
+		db::IConnectionDriver::Ptr        m_dbdrv;
+		bool                              m_inited;
 	};
 
 }
