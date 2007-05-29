@@ -45,7 +45,8 @@ AX_BOOST_UNIT_TEST_FRAMEWORK
 
 CPPFLAGS="$CPPFLAGS -Werror"
 
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([
+Makefile
 src/Makefile
 src/db/Makefile
 src/db/sqlite/Makefile
