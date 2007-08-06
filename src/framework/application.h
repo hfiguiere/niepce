@@ -23,7 +23,11 @@
 #ifndef _FRAMEWORK_APPLICATION_H_
 #define _FRAMEWORK_APPLICATION_H_
 
+#include <boost/function.hpp>
+#include <glibmm/refptr.h>
+#include <gtkmm/uimanager.h>
 #include "configuration.h"
+
 
 namespace framework {
 
@@ -38,15 +42,28 @@ namespace framework {
 
 		Configuration & config()
 			{ return m_config; }
-		static Application *instance();
-		static int main(int argc, char **argv);
+		Glib::RefPtr<Gtk::UIManager> uiManager()
+			{ 
+				if(!m_refUIManager) {
+					m_refUIManager = Gtk::UIManager::create();
+				}
+				return m_refUIManager; 
+			}
 
+		void quit();
+
+		static Application *app();
+		static int main(boost::function<Application* (void)> constructor, 
+										int argc, char **argv);
+
+		
 	protected:
 		Application();
 		static Application *m_application; 
 
 	private:
-		Configuration m_config;
+		Configuration                m_config;
+		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
 	};
 
 }

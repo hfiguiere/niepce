@@ -20,12 +20,15 @@
  */
 
 
+#include <boost/bind.hpp>
+
 #include "ui/niepceapplication.h"
 
 int main(int argc, char ** argv)
 {
-	ui::NiepceApplication::create();
-	return framework::Application::main(argc, argv);
+	return framework::Application::main(
+		boost::bind(&ui::NiepceApplication::create),
+		argc, argv);
 }
 
 

@@ -31,6 +31,8 @@ cd $topsrcdir
 rm -f autogen.err
 $ACLOCAL -I m4 >> autogen.err 2>&1
 
+intltoolize
+
 $AUTOMAKE --add-missing --copy --foreign 
 $LIBTOOLIZE --force
 autoheader --force

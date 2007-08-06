@@ -31,7 +31,7 @@ namespace ui {
 		: public framework::Application
 	{
 	public:
-		static NiepceApplication *create();
+		static framework::Application *create();
 
 		virtual framework::Frame *makeMainFrame();
 

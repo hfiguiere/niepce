@@ -20,8 +20,9 @@
  */
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/function.hpp>
 
-#include <gtkmm.h>
+#include <gtkmm/main.h>
 
 #include "application.h"
 #include "frame.h"
@@ -34,6 +35,7 @@ namespace framework {
 	Application *Application::m_application = NULL; 
 
 	Application::Application()
+		: m_refUIManager()
 	{
 	}
 
@@ -43,7 +45,7 @@ namespace framework {
 	}
 
 
-	Application *Application::instance()
+	Application *Application::app()
 	{
 		if (m_application == NULL) {
 			m_application = new Application();
@@ -52,10 +54,17 @@ namespace framework {
 	}
 
 
-	int Application::main(int argc, char **argv)
+	/** Main loop. 
+	 * @param constructor the Application object constructor
+	 * @param argc
+	 * @param argv
+	 * @return main return code
+	 */
+	int Application::main(boost::function<Application* (void)> constructor, 
+												int argc, char **argv)
 	{
-		Application * app = instance();
 		Gtk::Main kit(argc, argv);
+		Application * app = constructor();
 
 		LibraryClient::Ptr library(new LibraryClient("local:.dir"));
 
@@ -71,5 +80,9 @@ namespace framework {
 		return new Frame;
 	}
 
+	void Application::quit()
+	{
+		Gtk::Main::quit();
+	}
 }
 

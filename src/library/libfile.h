@@ -27,6 +27,7 @@
 #define __NIEPCE_LIBRARY_LIBFILE_H__
 
 #include <string>
+#include <list>
 #include <boost/shared_ptr.hpp>
 
 #include "library/keyword.h"
@@ -37,7 +38,8 @@ namespace library {
 	class LibFile
 	{
 	public:
-		typedef boost::shared_ptr<LibFile> Ptr;
+		typedef boost::shared_ptr< LibFile > Ptr;
+		typedef std::list< Ptr > List;
 
 		LibFile(int id, int folderId, const std::string &name,
 						const std::string & relPath);
@@ -59,11 +61,21 @@ namespace library {
 		 */
 		const Keyword::IdList & keywords() const;
 		
+		const std::string & uri() const
+			{ return m_uri; }
+		/** check is the library file is at uri
+		 * @return true of the uri match
+		 * @todo
+		 */
+		bool isUri(const char * _uri) const
+			{ return uri() == _uri; }
 	private:
 		int         m_id;           /**< file ID */
 		int         m_folderId;     /**< parent folder */
 		std::string m_name;         /**< name */
 		std::string m_relativePath; /**< path name relative to the folder */
+		std::string m_uri;          /**< the URI */
+		std::string m_type;
 		mutable bool m_hasKeywordList;
 		mutable Keyword::IdList m_keywordList;
 	};

@@ -1,5 +1,7 @@
 
-INCLUDES = -I$(srcdir)/..
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view
+
+SUBDIRS = thumb-view
 
 gladefiles = mainwindow.glade
 
@@ -14,6 +16,7 @@ noinst_LTLIBRARIES = libniepceui.la
 noinst_HEADERS = niepcewindow.h niepceapplication.h
 
 libniepceui_la_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@GNOMEVFS_CFLAGS@ \
 	-DGLADEDIR=\"$(gladedir)\"
 libniepceui_la_SOURCES = niepcewindow.cpp \
 	niepceapplication.cpp

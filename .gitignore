@@ -23,5 +23,7 @@ autom4te.cache
 *.la
 *~
 src/db/test_db
+src/db/test_library
 src/main/niepce
-doc/Doxygen
+doc/Doxyfile
+doc/doxygen/html

@@ -26,12 +26,12 @@ using framework::Frame;
 
 namespace ui {
 
-	NiepceApplication *NiepceApplication::create()
+	framework::Application *NiepceApplication::create()
 	{
 		if (m_application == NULL) {
 			m_application = new NiepceApplication();
 		}
-		return dynamic_cast<NiepceApplication*>(m_application);
+		return m_application;
 	}
 
 

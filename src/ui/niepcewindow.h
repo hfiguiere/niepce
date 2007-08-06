@@ -24,13 +24,19 @@
 #define _UI_NIEPCEWINDOW_H_
 
 #include <gtkmm/treemodel.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/liststore.h>
 #include <gtkmm/box.h>
 #include <gtkmm/menubar.h>
+#include <gtkmm/statusbar.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/buttonbox.h>
 
 #include "framework/frame.h"
 
+namespace Gtk {
+	class TreeView;
+	class IconView;
+}
 
 namespace ui {
 
@@ -50,12 +56,27 @@ namespace ui {
 	{
 	public:
 		NiepceWindow();
+		~NiepceWindow();
 
 	private:
-		Gtk::TreeView m_librarytree;
-		ModelColumns m_librarycolumns;
-		Gtk::VBox m_vbox;
-		Gtk::MenuBar m_menuBar;
+
+		void on_action_file_import();
+		void on_action_file_quit();
+		
+		
+		void init_ui();
+		void init_actions();
+
+		ModelColumns                   m_librarycolumns;
+		Gtk::VBox                      m_vbox;
+		Gtk::HPaned                    m_hbox;
+		Gtk::VBox                      m_vbox2;
+		Gtk::HButtonBox                m_mainbar;
+		Gtk::TreeView*                 m_librarytree;
+		Gtk::Notebook*                 m_mainview; // the main views stacked.
+		Gtk::IconView*                 m_imageview;
+		Gtk::Statusbar                 m_statusBar;
+		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 	};
 
 }
