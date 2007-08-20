@@ -57,6 +57,7 @@ struct _EogThumbViewPrivate {
 	gint end_thumb;   /* the last visible thumbnail  */
 	GtkWidget *menu;  /* a contextual menu for thumbnails */
 	GtkCellRenderer *pixbuf_cell;
+	EogListStore *store;
 };
 
 /* Drag 'n Drop */
@@ -110,7 +111,7 @@ eog_thumb_view_clear_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	EogListStore *store = EOG_LIST_STORE (gtk_icon_view_get_model (GTK_ICON_VIEW (tb)));
+	EogListStore *store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
@@ -132,7 +133,7 @@ eog_thumb_view_add_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	EogListStore *store = EOG_LIST_STORE (gtk_icon_view_get_model (GTK_ICON_VIEW (tb)));
+	EogListStore *store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
@@ -520,11 +521,13 @@ eog_thumb_view_set_model (EogThumbView *tb, EogListStore *store)
 {
 	gint index;
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
-	g_return_if_fail (EOG_IS_LIST_STORE (store));
+//	g_return_if_fail (EOG_IS_LIST_STORE (store));
 	
+	tb->priv->store = store;
+
 	index = eog_list_store_get_initial_pos (store);
 
-	gtk_icon_view_set_model (GTK_ICON_VIEW (tb), GTK_TREE_MODEL (store));
+	gtk_icon_view_set_model (GTK_ICON_VIEW (tb), GTK_TREE_MODEL(store->gobj()));
 
 	if (index >= 0) {
 		GtkTreePath *path = gtk_tree_path_new_from_indices (index, -1);
@@ -532,6 +535,12 @@ eog_thumb_view_set_model (EogThumbView *tb, EogListStore *store)
 		gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (tb), path, FALSE, 0, 0);
 		gtk_tree_path_free (path);
 	}
+}
+
+EogListStore *eog_thumb_view_get_model    (EogThumbView *view)
+{
+	g_return_val_if_fail (EOG_IS_THUMB_VIEW (view), NULL);
+	return view->priv->store;
 }
 
 void
@@ -639,7 +648,7 @@ eog_thumb_view_set_current_image (EogThumbView *tb,
 	EogListStore *store;
 	gint pos;
 
-	store = EOG_LIST_STORE (gtk_icon_view_get_model (GTK_ICON_VIEW (tb)));
+	store = eog_thumb_view_get_model(tb);
 	pos = eog_list_store_get_pos_by_image (store, image);
 	path = gtk_tree_path_new_from_indices (pos, -1);
 
@@ -662,14 +671,13 @@ eog_thumb_view_select_single (EogThumbView *tb,
 			      EogThumbViewSelectionChange change)
 {
 	GtkTreePath *path = NULL;
-	GtkTreeModel *model;
 	GList *list;
 	gint n_items;
 
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
-	model = gtk_icon_view_get_model (GTK_ICON_VIEW (tb));
+	EogListStore *store = eog_thumb_view_get_model (tb);
 
-	n_items = eog_list_store_length (EOG_LIST_STORE (model));
+	n_items = eog_list_store_length (store);
 
 	if (n_items == 0) {
 		return;

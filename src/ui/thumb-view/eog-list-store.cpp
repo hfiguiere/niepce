@@ -30,13 +30,16 @@
 #include <string.h>
 #include <strings.h>
 
+#include <gtkmm/icontheme.h>
+#include <gtkmm/treeiter.h>
+
 #include "library/libfile.h"
 
 
-#define EOG_LIST_STORE_GET_PRIVATE(object) \
-	(G_TYPE_INSTANCE_GET_PRIVATE ((object), EOG_TYPE_LIST_STORE, EogListStorePrivate))
+//#define EOG_LIST_STORE_GET_PRIVATE(object) 
+//	(G_TYPE_INSTANCE_GET_PRIVATE ((object), EOG_TYPE_LIST_STORE, EogListStorePrivate))
 
-G_DEFINE_TYPE (EogListStore, eog_list_store, GTK_TYPE_LIST_STORE)
+//G_DEFINE_TYPE (EogListStore, eog_list_store, GTK_TYPE_LIST_STORE)
 
 #if 0
 typedef struct {
@@ -58,17 +61,6 @@ struct _EogListStorePrivate {
 	GMutex *mutex;         /* Mutex for saving the jobs in the model */
 };
 
-static void
-eog_list_store_finalize (GObject *object)
-{
-	EogListStore *store = EOG_LIST_STORE (object);
-	
-	if (store->priv != NULL) {
-		g_free (store->priv);		store->priv = NULL;
-	}
-	
-	G_OBJECT_CLASS (eog_list_store_parent_class)->finalize (object);
-}
 
 #if 0
 static void
@@ -82,17 +74,16 @@ foreach_monitors_free (gpointer data, gpointer user_data)
 }
 #endif
 
+#if 0
 static void
 eog_list_store_dispose (GObject *object)
 {
 	EogListStore *store = EOG_LIST_STORE (object);
 
-#if 0
 	g_list_foreach (store->priv->monitors, 
 			foreach_monitors_free, NULL);
 
 	g_list_free (store->priv->monitors);
-#endif
 
 	store->priv->monitors = NULL;
 
@@ -105,17 +96,8 @@ eog_list_store_dispose (GObject *object)
 
 	G_OBJECT_CLASS (eog_list_store_parent_class)->dispose (object);
 }
+#endif
 
-static void
-eog_list_store_class_init (EogListStoreClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = eog_list_store_finalize;
-	object_class->dispose = eog_list_store_dispose;
-
-	g_type_class_add_private (object_class, sizeof (EogListStorePrivate));
-}
 
 /*
    Sorting functions 
@@ -146,45 +128,32 @@ eog_list_store_compare_func (GtkTreeModel *model,
 	return r_value;
 }
 
-static GdkPixbuf *
-eog_list_store_get_loading_icon (void)
+
+
+
+EogListStore::EogListStore()
+	: Gtk::ListStore()
 {
-	GError *error = NULL;
-	GtkIconTheme *icon_theme;
-	GdkPixbuf *pixbuf;
-	
-	icon_theme = gtk_icon_theme_get_default();
-
-	/* FIXME: The 16 added to EOG_LIST_STORE_THUMB_SIZE should be 
-	   calculated from the BLUR_RADIUS and RECTANGLE_OUTLINE macros 
-	   in eog-thumb-shadow.c */
-	pixbuf = gtk_icon_theme_load_icon (icon_theme,
-					   "image-loading", /* icon name */
-					   EOG_LIST_STORE_THUMB_SIZE + 16, /* size */
-					   (GtkIconLookupFlags)0,  /* flags */
-					   &error);
-
-	if (!pixbuf) {
-		g_warning ("Couldn't load icon: %s", error->message);
-		g_error_free (error);
-	}
-
-	return pixbuf;
+	_init();
 }
 
-static void
-eog_list_store_init (EogListStore *self)
+
+EogListStore::EogListStore(const library::LibFile::List &list)
+	: Gtk::ListStore()
 {
-	GType types[EOG_LIST_STORE_NUM_COLUMNS];
+	_init();
 
-	types[EOG_LIST_STORE_THUMBNAIL] = GDK_TYPE_PIXBUF;
-	types[EOG_LIST_STORE_EOG_IMAGE] = G_TYPE_OBJECT;
-	types[EOG_LIST_STORE_THUMB_SET] = G_TYPE_BOOLEAN;
-	types[EOG_LIST_STORE_EOG_JOB]   = G_TYPE_POINTER;
+	std::for_each(list.begin(), list.end(),
+								boost::bind(&EogListStore::append_image,
+														this, _1));
+}
 
-	gtk_list_store_set_column_types (GTK_LIST_STORE (self),
-					 EOG_LIST_STORE_NUM_COLUMNS, types);
 
+void
+EogListStore::_init()
+{
+	set_column_types(m_columns);
+/*
 	self->priv = EOG_LIST_STORE_GET_PRIVATE (self);
 
 	self->priv->monitors = NULL;
@@ -193,54 +162,59 @@ eog_list_store_init (EogListStore *self)
 	self->priv->busy_image = eog_list_store_get_loading_icon ();
 
 	self->priv->mutex = g_mutex_new ();
-
-	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (self),
+*/
+	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (this),
 						 eog_list_store_compare_func,
 						 NULL, NULL);
 	
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (self), 
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (this), 
 					      GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, 
 					      GTK_SORT_ASCENDING);
 }
 
-GtkListStore*
-eog_list_store_new (void)
+
+EogListStore::~EogListStore()
 {
-        return (GtkListStore*)g_object_new (EOG_TYPE_LIST_STORE, NULL);
 }
+
+
+Glib::RefPtr<Gdk::Pixbuf>
+EogListStore::get_loading_icon (void)
+{
+	if(!m_loading_icon) {
+		Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
+		
+		/* FIXME: The 16 added to EOG_LIST_STORE_THUMB_SIZE should be 
+			 calculated from the BLUR_RADIUS and RECTANGLE_OUTLINE macros 
+			 in eog-thumb-shadow.c */
+		m_loading_icon = icon_theme->load_icon("image-loading", /* icon name */
+																					 EOG_LIST_STORE_THUMB_SIZE + 16, /* size */
+																					 (Gtk::IconLookupFlags)0 /* flags */);
+	}
+	return m_loading_icon;
+}
+
 
 /**
    Searchs for a file in the store. If found and @iter_found is not NULL,
    then sets @iter_found to a #GtkTreeIter pointing to the file.
  */
-static gboolean
-is_file_in_list_store (EogListStore *store,
-		       const gchar *info_uri,
-		       GtkTreeIter *iter_found)
+gboolean
+EogListStore::is_file_in_list_store (const gchar *info_uri,
+																		 Gtk::TreeIter &iter_found)
 {
 	gboolean found = FALSE;
-	library::LibFile *image;
-	GtkTreeIter iter;
+	library::LibFile::Ptr image;
 
-	if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter)) {
-		return FALSE;
-	}
+	Gtk::TreeRow iter;
 
-	do {
-		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-				    EOG_LIST_STORE_EOG_IMAGE, &image,
-				    -1);
-		if (!image)
-			continue;
-		
-		found = image->isUri(info_uri);
-	} while (!found && 
-		 gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
-	
-	if (found && iter_found != NULL) {
-		*iter_found = iter;
-	}
-
+//	iter = std::find_if(children().begin(), children().end(),
+//											boost::bind(&library::LibFile::isUri,
+//																	boost::bind(&Gtk::TreeRow::get_value, _1, 
+//																							m_columns.m_image)
+//																	info_uri));
+	found = (children().end() != iter);
+	iter_found = iter;
 	return found;
 }
 
@@ -249,7 +223,7 @@ static void
 eog_job_thumbnail_cb (EogJobThumbnail *job, gpointer data)
 {
 	EogListStore *store;
-	GtkTreeIter iter;
+	Gtk::TreeModel::iterator iter;
 	gchar *filename;
 	EogImage *image;
 	
@@ -281,18 +255,15 @@ eog_job_thumbnail_cb (EogJobThumbnail *job, gpointer data)
 #endif
 
 void
-eog_list_store_append_image (EogListStore *store, 
-														 const library::LibFile::Ptr &image)
+EogListStore::append_image (const library::LibFile::Ptr &image)
 {
-	GtkTreeIter iter;
+	Gtk::TreeModel::iterator iter = append();
 
-	gtk_list_store_append (GTK_LIST_STORE (store), &iter);
+	Gtk::TreeModel::Row row = *iter;
 
-	gtk_list_store_set (GTK_LIST_STORE (store), &iter, 
-			    EOG_LIST_STORE_EOG_IMAGE, image.get(), 
-			    EOG_LIST_STORE_THUMBNAIL, store->priv->busy_image,
-			    EOG_LIST_STORE_THUMB_SET, FALSE,
-			    -1);
+	row[m_columns.m_image] = image;
+	row[m_columns.m_thumb_set] = false;
+	row[m_columns.m_thumbnail] = get_loading_icon();
 }
 
 #if 0
@@ -527,49 +498,36 @@ eog_list_store_add_uris (EogListStore *store, GList *uri_list)
 #endif
 
 void
-eog_list_store_remove_image (EogListStore *store, EogImage *image)
+EogListStore::remove_image(const library::LibFile::Ptr &image)
 {
-	GtkTreeIter iter;
+	Gtk::TreeModel::iterator iter;
 	const gchar *file;
 
-	g_return_if_fail (EOG_IS_LIST_STORE (store));
+//	g_return_if_fail (EOG_IS_LIST_STORE (store));
 //	g_return_if_fail (EOG_IS_IMAGE (image));
 
-	library::LibFile *_image = (library::LibFile*)image;
-
-	file = _image->uri().c_str();
+	file = image->uri().c_str();
 	
-	if (is_file_in_list_store (store, file, &iter)) {
-		gtk_list_store_remove (GTK_LIST_STORE (store), &iter);
+	if (is_file_in_list_store (file, iter)) {
+		erase(iter);
 	}
 }
 
-GtkListStore *
-eog_list_store_new_from_list (const library::LibFile::List &list)
-{
-	EogListStore *store = (EogListStore*)eog_list_store_new ();
-
-	std::for_each(list.begin(), list.end(),
-								boost::bind(&eog_list_store_append_image,
-														store, _1));
-
-	return (GtkListStore*)store;
-}
 
 gint
 eog_list_store_get_pos_by_image (EogListStore *store, 
 																 const library::LibFile::Ptr &image)
 {
 	const gchar *file;
-	GtkTreeIter iter;
+	Gtk::TreeIter iter;
 	gint pos = -1;
 
-	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
+//	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
 	
 	file = image->uri().c_str();
 
-	if (is_file_in_list_store (store, file, &iter)) {
-		pos = eog_list_store_get_pos_by_iter (store, &iter);
+	if (store->is_file_in_list_store (file, iter)) {
+		pos = eog_list_store_get_pos_by_iter (store, iter.gobj());
 	}
 
 	return pos;
@@ -581,7 +539,7 @@ eog_list_store_get_image_by_pos (EogListStore *store, const gint pos)
 	EogImage *image = NULL;
 	GtkTreeIter iter;
 
-	g_return_val_if_fail (EOG_IS_LIST_STORE (store), NULL);
+//	g_return_val_if_fail (EOG_IS_LIST_STORE (store), NULL);
 
 	if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter, NULL, pos)) {
 		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 
@@ -611,7 +569,7 @@ eog_list_store_get_pos_by_iter (EogListStore *store,
 gint
 eog_list_store_length (EogListStore *store)
 {
-	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
+//	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
 
 	return gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
 }
@@ -619,9 +577,9 @@ eog_list_store_length (EogListStore *store)
 gint
 eog_list_store_get_initial_pos (EogListStore *store)
 {
-	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
+//	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
 
-	return store->priv->initial_image;
+	return 0;//store->priv->initial_image;
 }
 
 void

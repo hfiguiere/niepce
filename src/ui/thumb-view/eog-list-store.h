@@ -28,6 +28,9 @@
 #include <glib-object.h>
 #include <libgnomevfs/gnome-vfs.h>
 
+#include <gtkmm/liststore.h>
+#include <gdkmm/pixbuf.h>
+
 #include "library/libfile.h"
 
 G_BEGIN_DECLS
@@ -37,6 +40,7 @@ G_BEGIN_DECLS
   typedef struct _EogImage EogImage;
 #endif
 
+#if 0
 typedef struct _EogListStore EogListStore;
 typedef struct _EogListStoreClass EogListStoreClass;
 typedef struct _EogListStorePrivate EogListStorePrivate;
@@ -48,15 +52,6 @@ typedef struct _EogListStorePrivate EogListStorePrivate;
 #define EOG_IS_LIST_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  EOG_TYPE_LIST_STORE))
 #define EOG_LIST_STORE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  EOG_TYPE_LIST_STORE, EogListStoreClass))
 
-#define EOG_LIST_STORE_THUMB_SIZE 90
-
-typedef enum {
-	EOG_LIST_STORE_THUMBNAIL = 0,
-	EOG_LIST_STORE_THUMB_SET,
-	EOG_LIST_STORE_EOG_IMAGE,
-	EOG_LIST_STORE_EOG_JOB,
-	EOG_LIST_STORE_NUM_COLUMNS
-} EogListStoreColumn;
 
 struct _EogListStore {
         GtkListStore parent;
@@ -72,6 +67,56 @@ struct _EogListStoreClass {
 	void (* _eog_reserved3) (void);
 	void (* _eog_reserved4) (void);
 };
+#endif
+
+#define EOG_LIST_STORE_THUMB_SIZE 90
+
+typedef enum {
+	EOG_LIST_STORE_THUMBNAIL = 0,
+	EOG_LIST_STORE_THUMB_SET,
+	EOG_LIST_STORE_EOG_IMAGE,
+	EOG_LIST_STORE_EOG_JOB,
+	EOG_LIST_STORE_NUM_COLUMNS
+} EogListStoreColumn;
+
+
+class EogListStore
+	: public Gtk::ListStore 
+{
+public:
+	EogListStore();
+	EogListStore(const library::LibFile::List &list);
+	~EogListStore();
+
+	void append_image(const library::LibFile::Ptr &image);
+	void remove_image(const library::LibFile::Ptr &image);
+
+	gboolean is_file_in_list_store (const gchar *info_uri,
+																	Gtk::TreeIter &iter_found);
+	
+private:
+	/** shared initializer */
+	void _init();
+	class Columns 
+		: public Gtk::TreeModelColumnRecord
+	{
+	public:
+		Columns()
+			{ 
+				add(m_thumbnail);
+				add(m_image);
+				add(m_thumb_set);
+			}
+		
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >  m_thumbnail;
+		Gtk::TreeModelColumn<library::LibFile::Ptr>      m_image;
+		Gtk::TreeModelColumn<bool>                       m_thumb_set;
+	};
+
+	Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
+	Glib::RefPtr<Gdk::Pixbuf> m_loading_icon;
+	Columns m_columns;
+};
 
 GType           eog_list_store_get_type 	     (void) G_GNUC_CONST;
 
@@ -79,17 +124,11 @@ GtkListStore   *eog_list_store_new 		     (void);
 
 GtkListStore   *eog_list_store_new_from_list 	     (const library::LibFile::List &list);
 
-void            eog_list_store_append_image 	     (EogListStore *store, 
-						      const library::LibFile::Ptr&      image);
-
 void            eog_list_store_append_image_from_uri (EogListStore *store, 
 						      GnomeVFSURI  *uri_entry);
 
 void            eog_list_store_add_uris 	     (EogListStore *store, 
 						      GList        *uri_list);
-
-void            eog_list_store_remove_image 	     (EogListStore *store, 
-						      const library::LibFile::Ptr&      image);
 
 gint            eog_list_store_get_pos_by_image      (EogListStore *store, 
 						      const library::LibFile::Ptr&      image);
