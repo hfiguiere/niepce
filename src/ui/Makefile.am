@@ -13,10 +13,12 @@ EXTRA_DIST = $(gladefiles)
 noinst_LTLIBRARIES = libniepceui.la
 
 
-noinst_HEADERS = niepcewindow.h niepceapplication.h
+noinst_HEADERS = niepcewindow.h niepceapplication.h \
+	librarymainview.h librarymainviewcontroller.h
 
 libniepceui_la_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ \
 	-DGLADEDIR=\"$(gladedir)\"
 libniepceui_la_SOURCES = niepcewindow.cpp \
-	niepceapplication.cpp
+	niepceapplication.cpp librarymainview.cpp \
+	librarymainviewcontroller.cpp

@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -14,9 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  
- * 02110-1301, USA
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -27,9 +25,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/statusbar.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/buttonbox.h>
 
 #include "framework/frame.h"
 
@@ -40,16 +36,7 @@ namespace Gtk {
 
 namespace ui {
 
-	class ModelColumns : public Gtk::TreeModelColumnRecord
-	{
-	public:
-		
-		ModelColumns()
-			{ add(m_col_text); add(m_col_number); }
-		
-		Gtk::TreeModelColumn<Glib::ustring> m_col_text;
-		Gtk::TreeModelColumn<int> m_col_number;
-	};
+	class LibraryMainViewController;
 
 	class NiepceWindow
 		: public framework::Frame
@@ -66,15 +53,27 @@ namespace ui {
 		
 		void init_ui();
 		void init_actions();
+		
+		class LibraryTreeColumns 
+			: public Gtk::TreeModelColumnRecord
+		{
+		public:
+			
+			LibraryTreeColumns()
+				{ 
+					add(m_id);
+					add(m_label);  
+				}
+			
+			Gtk::TreeModelColumn<int> m_id;
+			Gtk::TreeModelColumn<Glib::ustring> m_label;
+		};
 
-		ModelColumns                   m_librarycolumns;
+		LibraryTreeColumns             m_librarycolumns;
 		Gtk::VBox                      m_vbox;
 		Gtk::HPaned                    m_hbox;
-		Gtk::VBox                      m_vbox2;
-		Gtk::HButtonBox                m_mainbar;
 		Gtk::TreeView*                 m_librarytree;
-		Gtk::Notebook*                 m_mainview; // the main views stacked.
-		Gtk::IconView*                 m_imageview;
+		LibraryMainViewController*     m_mainviewctrl; // the main views stacked.
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 	};

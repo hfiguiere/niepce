@@ -1,5 +1,5 @@
 /*
- * niepce - framework/frame.h
+ * niepce - ui/librarymainview.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,42 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <gtkmm/button.h>
 
-#ifndef _FRAMEWORK_FRAME_H_
-#define _FRAMEWORK_FRAME_H_
+#include "ui/librarymainview.h"
 
-#include <string>
-
-#include <libglademm/xml.h>
-
-#include "framework/controller.h"
-
-namespace Gtk {
-	class Window;
-}
-
-namespace framework {
-
-	class Frame 
-		: public Controller
+namespace ui {
+	
+	LibraryMainView::LibraryMainView()
+		: Gtk::VBox()
 	{
-	public:
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
-		Frame();
-		~Frame();
+		m_mainbar.set_layout(Gtk::BUTTONBOX_START);
+		m_notebook.set_show_tabs(false);
+		pack_start(m_mainbar, Gtk::PACK_SHRINK);
+		pack_start(m_notebook);
+	}
 
-		virtual Gtk::Widget * widget();
-
-		Gtk::Window & gtkWindow()
-			{ return *m_window; }
-		Glib::RefPtr<Gnome::Glade::Xml> & glade()
-			{ return m_glade; }
-	private:
-		Gtk::Window *m_window;
-		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
-	};
-
+	int
+	LibraryMainView::append_page(Gtk::Widget & w, const Glib::ustring & label)
+	{
+		Gtk::Button *button = Gtk::manage(new Gtk::Button(label));
+		m_mainbar.pack_start(*button);
+		return m_notebook.append_page(w, label);
+	}
+	
 }
 
-
-#endif

@@ -1,5 +1,5 @@
 /*
- * niepce - framework/frame.h
+ * niepce - ui/librarymainview.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,39 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __LIBRARY_MAIN_VIEW_H__
+#define __LIBRARY_MAIN_VIEW_H__
 
-#ifndef _FRAMEWORK_FRAME_H_
-#define _FRAMEWORK_FRAME_H_
+#include <gtkmm/notebook.h>
+#include <gtkmm/box.h>
+#include <gtkmm/buttonbox.h>
 
-#include <string>
+namespace ui {
 
-#include <libglademm/xml.h>
-
-#include "framework/controller.h"
-
-namespace Gtk {
-	class Window;
-}
-
-namespace framework {
-
-	class Frame 
-		: public Controller
+	class LibraryMainView
+		: public Gtk::VBox
 	{
 	public:
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
-		Frame();
-		~Frame();
+		LibraryMainView();
 
-		virtual Gtk::Widget * widget();
-
-		Gtk::Window & gtkWindow()
-			{ return *m_window; }
-		Glib::RefPtr<Gnome::Glade::Xml> & glade()
-			{ return m_glade; }
+		int append_page(Gtk::Widget & w, const Glib::ustring & label);
 	private:
-		Gtk::Window *m_window;
-		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
+		Gtk::HButtonBox                m_mainbar;
+		Gtk::Notebook m_notebook;
 	};
 
 }

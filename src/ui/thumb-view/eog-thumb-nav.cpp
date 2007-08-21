@@ -226,7 +226,7 @@ eog_thumb_nav_set_property (GObject      *object,
 
 	case PROP_MODE:
 		eog_thumb_nav_set_mode (nav, 
-			g_value_get_int (value));
+			(EogThumbNavMode)g_value_get_int (value));
 		break;
 	}
 }
@@ -253,9 +253,9 @@ eog_thumb_nav_constructor (GType type,
 }
 
 static void
-eog_thumb_nav_class_init (EogThumbNavClass *class)
+eog_thumb_nav_class_init (EogThumbNavClass *klass)
 {
-	GObjectClass *g_object_class = (GObjectClass *) class;
+	GObjectClass *g_object_class = (GObjectClass *) klass;
 
 	g_object_class->constructor  = eog_thumb_nav_constructor;
 	g_object_class->get_property = eog_thumb_nav_get_property;
@@ -267,7 +267,7 @@ eog_thumb_nav_class_init (EogThumbNavClass *class)
 	                                                       "Show Buttons",
 	                                                       "Whether to show navigation buttons or not",
 	                                                       TRUE,
-	                                                       (G_PARAM_READABLE | G_PARAM_WRITABLE)));
+	                                                       (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
 	g_object_class_install_property (g_object_class,
 	                                 PROP_THUMB_VIEW,
@@ -275,7 +275,7 @@ eog_thumb_nav_class_init (EogThumbNavClass *class)
 	                                                       "Thumbnail View",
 	                                                       "The internal thumbnail viewer widget",
 	                                                       EOG_TYPE_THUMB_VIEW,
-	                                                       (G_PARAM_CONSTRUCT_ONLY |
+	                                                       (GParamFlags)(G_PARAM_CONSTRUCT_ONLY |
 								G_PARAM_READABLE | 
 								G_PARAM_WRITABLE)));
 
@@ -287,7 +287,7 @@ eog_thumb_nav_class_init (EogThumbNavClass *class)
 	                                                   EOG_THUMB_NAV_MODE_ONE_ROW,
 							   EOG_THUMB_NAV_MODE_MULTIPLE_ROWS,
 							   EOG_THUMB_NAV_MODE_ONE_ROW,
-	                                                   (G_PARAM_READABLE | G_PARAM_WRITABLE)));
+	                                                   (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
 	g_type_class_add_private (g_object_class, sizeof (EogThumbNavPrivate));
 }
@@ -370,7 +370,7 @@ eog_thumb_nav_new (GtkWidget       *thumbview,
 {
 	GObject *nav;
 
-	nav = g_object_new (EOG_TYPE_THUMB_NAV, 
+	nav = (GObject*)g_object_new (EOG_TYPE_THUMB_NAV, 
 		            "show-buttons", show_buttons,
 		            "mode", mode,
 		            "thumbview", thumbview,
@@ -411,7 +411,7 @@ eog_thumb_nav_set_show_buttons (EogThumbNav *nav, gboolean show_buttons)
 EogThumbNavMode
 eog_thumb_nav_get_mode (EogThumbNav *nav)
 {
-	g_return_val_if_fail (EOG_IS_THUMB_NAV (nav), FALSE);
+	g_return_val_if_fail (EOG_IS_THUMB_NAV (nav), (EogThumbNavMode)FALSE);
 
 	return nav->priv->mode; 
 }

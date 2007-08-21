@@ -1,3 +1,4 @@
 src/ui/mainwindow.glade
 src/ui/niepcewindow.cpp
+src/ui/librarymainviewcontroller.cpp
 src/ui/thumb-view/eog-thumb-view.cpp

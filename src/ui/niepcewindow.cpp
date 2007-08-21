@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -14,12 +14,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  
- * 02110-1301, USA
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <iostream>
 
 #include <glibmm/i18n.h>
 
@@ -29,16 +27,13 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/iconview.h>
-
+#include <gtkmm/filechooserdialog.h>
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
 #include "framework/application.h"
 #include "niepcewindow.h"
-
-#include <gtkimageview/gtkimageview.h>
-#include <gtkimageview/gtkimagescrollwin.h>
+#include "librarymainviewcontroller.h"
 
 
 using framework::Application;
@@ -57,6 +52,8 @@ namespace ui {
 		init_actions();
 		init_ui();
 
+		m_mainviewctrl = new LibraryMainViewController();
+
 		win.add(m_vbox);
 
 		Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
@@ -70,44 +67,29 @@ namespace ui {
 		m_librarytree->set_model(treestore);
 		Gtk::TreeModel::iterator iter = treestore->append();
 		Gtk::TreeModel::Row row = *iter;
-		row[m_librarycolumns.m_col_text] = "foo";
-		row[m_librarycolumns.m_col_number] = 42;
+		row[m_librarycolumns.m_label] = _("Collection");
+		row[m_librarycolumns.m_id] = 0;
+		iter = treestore->append();
+		row = *iter;
+		row[m_librarycolumns.m_label] = _("Workspace");
+		row[m_librarycolumns.m_id] = 0;
+
+		m_librarytree->append_column("", m_librarycolumns.m_label);
 
 		m_hbox.pack1(*m_librarytree, Gtk::EXPAND);
 	 
-
-		// this should gets its own widget...
-		m_mainbar.set_layout(Gtk::BUTTONBOX_START);
-		Gtk::Button *button = Gtk::manage(new Gtk::Button(_("Library")));
-		m_mainbar.pack_start(*button);
-		button = Gtk::manage(new Gtk::Button(_("Darkroom")));
-		m_mainbar.pack_start(*button);
-		m_vbox2.pack_start(m_mainbar, Gtk::PACK_SHRINK);
-		m_mainview = Gtk::manage(new Gtk::Notebook());
-		m_mainview->set_show_tabs(false);
-		m_vbox2.pack_start(*m_mainview);
-		m_hbox.pack2(m_vbox2, Gtk::EXPAND);
-
-
-		// TODO instanciate the iconview...
-		m_imageview = Gtk::manage(new Gtk::IconView());
-		m_mainview->append_page(*m_imageview, _("Library"));
-
-		GtkWidget *iv = gtk_image_view_new();
-		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
-		Gtk::Widget *w = Glib::wrap(ivs);
-		m_mainview->append_page(*w, _("Darkroom"));
-
+		
+		m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
 
 		// ribbon
 		GtkWidget *thv = eog_thumb_view_new();
 		GtkWidget *thn = eog_thumb_nav_new(thv, EOG_THUMB_NAV_MODE_ONE_ROW, true);
-		w = Glib::wrap(thn);
+		Gtk::Widget *w = Glib::wrap(thn);
 		m_vbox.pack_start(*w, Gtk::PACK_SHRINK);
 
 		// status bar
 		m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
-		m_statusBar.push(Glib::ustring("Ready"));
+		m_statusBar.push(Glib::ustring(_("Ready")));
 
 		win.set_size_request(600, 400);
 		win.show_all_children();
@@ -117,14 +99,15 @@ namespace ui {
 	{
 		Application *pApp = Application::app();
 		pApp->uiManager()->remove_action_group(m_refActionGroup);		
+		delete m_mainviewctrl;
 	}
 
 	void NiepceWindow::init_actions()
 	{
 		m_refActionGroup = Gtk::ActionGroup::create();
 		
-		m_refActionGroup->add(Gtk::Action::create("MenuFile", "_File") );
-		m_refActionGroup->add(Gtk::Action::create("Import", "_Import..."),
+		m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
+		m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
 													sigc::mem_fun(*this, 
 																				&NiepceWindow::on_action_file_import));
 		m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
@@ -140,6 +123,25 @@ namespace ui {
 
 	void NiepceWindow::on_action_file_import()
 	{
+		Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
+																	Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+		dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
+
+		int result = dialog.run();
+		Glib::ustring to_import;
+		switch(result)
+		{
+		case Gtk::RESPONSE_OK:
+			to_import = dialog.get_filename();
+			// pass it to the library
+			// TODO
+			std::cout << to_import << std::endl;
+			break;
+		default:
+			break;
+		}
 	}
 
 

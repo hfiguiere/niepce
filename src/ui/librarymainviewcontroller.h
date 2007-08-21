@@ -1,5 +1,5 @@
 /*
- * niepce - framework/frame.h
+ * niepce - ui/librarymainviewcontroller.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,41 +18,32 @@
  */
 
 
-#ifndef _FRAMEWORK_FRAME_H_
-#define _FRAMEWORK_FRAME_H_
+#ifndef __UI_LIBRARYMAINVIEWCONTROLLER_H__
+#define __UI_LIBRARYMAINVIEWCONTROLLER_H__
 
-#include <string>
-
-#include <libglademm/xml.h>
 
 #include "framework/controller.h"
 
 namespace Gtk {
-	class Window;
+	class IconView;
+	class Widget;
 }
 
-namespace framework {
+namespace ui {
 
-	class Frame 
-		: public Controller
+	class LibraryMainViewController
+		: public framework::Controller
 	{
 	public:
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
-		Frame();
-		~Frame();
 
-		virtual Gtk::Widget * widget();
-
-		Gtk::Window & gtkWindow()
-			{ return *m_window; }
-		Glib::RefPtr<Gnome::Glade::Xml> & glade()
-			{ return m_glade; }
+		virtual Gtk::Widget * widget();		
 	private:
-		Gtk::Window *m_window;
-		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
+
+		// managed widgets...
+		Gtk::IconView*   m_librarylistview;
+		Gtk::Widget*     m_imageview;
 	};
 
 }
-
 
 #endif

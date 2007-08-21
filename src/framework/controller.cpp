@@ -1,5 +1,5 @@
 /*
- * niepce - framework/frame.h
+ * niepce - framework/controller.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,41 +18,25 @@
  */
 
 
-#ifndef _FRAMEWORK_FRAME_H_
-#define _FRAMEWORK_FRAME_H_
+#include <gtkmm/widget.h>
 
-#include <string>
+#include "controller.h"
 
-#include <libglademm/xml.h>
-
-#include "framework/controller.h"
-
-namespace Gtk {
-	class Window;
-}
 
 namespace framework {
 
-	class Frame 
-		: public Controller
+	Controller::Controller()
+		: m_widget(NULL)
 	{
-	public:
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
-		Frame();
-		~Frame();
+	}
 
-		virtual Gtk::Widget * widget();
 
-		Gtk::Window & gtkWindow()
-			{ return *m_window; }
-		Glib::RefPtr<Gnome::Glade::Xml> & glade()
-			{ return m_glade; }
-	private:
-		Gtk::Window *m_window;
-		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
-	};
+	Controller::~Controller()
+	{
+		if(m_widget) {
+			delete m_widget;
+		}
+	}
 
 }
 
-
-#endif
