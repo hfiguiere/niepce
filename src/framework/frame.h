@@ -37,16 +37,19 @@ namespace framework {
 		: public Controller
 	{
 	public:
+		typedef boost::shared_ptr<Frame> Ptr;
+
 		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
 		Frame();
 		~Frame();
 
-		virtual Gtk::Widget * widget();
-
 		Gtk::Window & gtkWindow()
-			{ return *m_window; }
+			{
+				return *m_window; 
+			}
 		Glib::RefPtr<Gnome::Glade::Xml> & glade()
 			{ return m_glade; }
+
 	private:
 		Gtk::Window *m_window;
 		Glib::RefPtr<Gnome::Glade::Xml> m_glade;

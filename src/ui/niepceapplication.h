@@ -31,9 +31,9 @@ namespace ui {
 		: public framework::Application
 	{
 	public:
-		static framework::Application *create();
+		static framework::Application::Ptr create();
 
-		virtual framework::Frame *makeMainFrame();
+		virtual framework::Frame::Ptr makeMainFrame();
 
 	};
 

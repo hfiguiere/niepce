@@ -35,8 +35,11 @@ namespace ui {
 		: public framework::Controller
 	{
 	public:
+		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 
-		virtual Gtk::Widget * widget();		
+	protected:
+		virtual Gtk::Widget * buildWidget();
+
 	private:
 
 		// managed widgets...

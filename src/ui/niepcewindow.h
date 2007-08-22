@@ -28,6 +28,7 @@
 #include <gtkmm/paned.h>
 
 #include "framework/frame.h"
+#include "ui/librarymainviewcontroller.h"
 
 namespace Gtk {
 	class TreeView;
@@ -36,14 +37,15 @@ namespace Gtk {
 
 namespace ui {
 
-	class LibraryMainViewController;
-
 	class NiepceWindow
 		: public framework::Frame
 	{
 	public:
 		NiepceWindow();
 		~NiepceWindow();
+
+	protected:
+		virtual Gtk::Widget * buildWidget();
 
 	private:
 
@@ -73,7 +75,7 @@ namespace ui {
 		Gtk::VBox                      m_vbox;
 		Gtk::HPaned                    m_hbox;
 		Gtk::TreeView*                 m_librarytree;
-		LibraryMainViewController*     m_mainviewctrl; // the main views stacked.
+		LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 	};

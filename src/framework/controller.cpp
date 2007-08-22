@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <gtkmm/widget.h>
 
 #include "controller.h"
@@ -33,9 +32,32 @@ namespace framework {
 
 	Controller::~Controller()
 	{
-		if(m_widget) {
-			delete m_widget;
+	}
+
+	Gtk::Widget * Controller::widget()
+	{
+		if(m_widget == NULL) 
+		{
+			m_widget = buildWidget();
 		}
+		return m_widget;
+	}
+
+	void
+	Controller::add(const Controller::Ptr & sub)
+	{
+		m_subs.push_back(sub);
+		sub->m_parent = shared_from_this();
+	}
+
+
+	bool Controller::canTerminate()
+	{
+		return true;
+	}
+
+	void Controller::terminate()
+	{
 	}
 
 }

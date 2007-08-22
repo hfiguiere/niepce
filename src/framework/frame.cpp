@@ -29,7 +29,6 @@ namespace framework {
 		: m_window(new Gtk::Window()),
 			m_glade(NULL)
 	{
-		m_widget = m_window;
 	}
 
 
@@ -39,15 +38,8 @@ namespace framework {
 	{
 		if (m_glade) {
 			m_window = static_cast<Gtk::Window*>(m_glade->get_widget(widgetName));
-			m_widget = m_window;
 		}
 	}
-
-	Gtk::Widget * Frame::widget()
-	{
-		return m_widget;
-	}
-
 
 	Frame::~Frame()
 	{

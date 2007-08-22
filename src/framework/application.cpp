@@ -19,6 +19,7 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 #include <gtkmm/main.h>
 
@@ -30,7 +31,7 @@ using libraryclient::LibraryClient;
 
 namespace framework {
 
-	Application *Application::m_application = NULL; 
+	Application::Ptr Application::m_application;
 
 	Application::Application()
 		: m_refUIManager()
@@ -42,12 +43,14 @@ namespace framework {
 	{
 	}
 
-
-	Application *Application::app()
+	/** no widget for applications */
+	Gtk::Widget * Application::buildWidget()
 	{
-		if (m_application == NULL) {
-			m_application = new Application();
-		}
+		return NULL;
+	}
+
+	Application::Ptr Application::app()
+	{
 		return m_application;
 	}
 
@@ -58,29 +61,41 @@ namespace framework {
 	 * @param argv
 	 * @return main return code
 	 */
-	int Application::main(boost::function<Application* (void)> constructor, 
+	int Application::main(boost::function<Application::Ptr (void)> constructor, 
 												int argc, char **argv)
 	{
 		Gtk::Main kit(argc, argv);
-		Application * app = constructor();
+		Application::Ptr app = constructor();
 
 		LibraryClient::Ptr library(new LibraryClient("local:.dir"));
 
-    Frame *window(app->makeMainFrame());		
+    Frame::Ptr window(app->makeMainFrame());
+		app->add(window);
 
     Gtk::Main::run(window->gtkWindow());
 
 		return 0;
 	}
 
-	Frame *Application::makeMainFrame()
-	{
-		return new Frame;
-	}
-
 	void Application::quit()
 	{
+		std::for_each(m_subs.begin(), m_subs.end(),
+									boost::bind(&Controller::terminate, _1));
+		std::for_each(m_subs.begin(), m_subs.end(),
+									boost::bind(&Controller::clearParent, _1));		
+		m_subs.clear();
 		Gtk::Main::quit();
 	}
+
+
+	/** adding a controller to an application build said controller
+	 * widget 
+	 */
+	void Application::add(const Controller::Ptr & sub)
+	{
+		Controller::add(sub);
+		sub->buildWidget();
+	}
+
 }
 

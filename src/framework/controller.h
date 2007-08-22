@@ -22,6 +22,12 @@
 #ifndef __FRAMEWORK_CONTROLLER_H__
 #define __FRAMEWORK_CONTROLLER_H__
 
+
+#include <vector>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 namespace Gtk {
 	class Widget;
 }
@@ -31,16 +37,35 @@ namespace framework {
 	/** Generic controller class
 	 */
 	class Controller
+		: public boost::enable_shared_from_this<Controller>
 	{
 	public:
+		typedef boost::shared_ptr<Controller> Ptr;
+		typedef boost::weak_ptr<Controller> WeakPtr;
+
 		Controller();
 		virtual ~Controller();
 
+		/** add a subcontroller to this one */
+		void add(const Ptr & sub);
+		void clearParent()
+			{ m_parent.reset(); }
+		
+		virtual bool canTerminate();
+		/** signal that the controller needs to terminate */
+		virtual void terminate();
+
 		/** return the widget controlled (construct it if needed) */
-		virtual Gtk::Widget * widget() = 0;
+		virtual Gtk::Widget * buildWidget() = 0;
+		Gtk::Widget * widget();
 
 	protected:
+		/** clear the parent. Usually called by the parent when unparenting */
+
 		Gtk::Widget* m_widget;
+
+		WeakPtr          m_parent;
+		std::vector<Ptr> m_subs; /**< sub controllers */
 	};
 
 }

@@ -22,21 +22,24 @@
 #define _FRAMEWORK_APPLICATION_H_
 
 #include <boost/function.hpp>
+
 #include <glibmm/refptr.h>
 #include <gtkmm/uimanager.h>
-#include "configuration.h"
 
+#include "framework/configuration.h"
+#include "framework/frame.h"
 
 namespace framework {
 
-	class Frame;
-
 	class Application 
+		: public Controller
 	{
 	public:
+		typedef boost::shared_ptr<Application> Ptr;
+
 		virtual ~Application();
 
-		virtual Frame *makeMainFrame();
+		virtual Frame::Ptr makeMainFrame() = 0;
 
 		Configuration & config()
 			{ return m_config; }
@@ -48,16 +51,18 @@ namespace framework {
 				return m_refUIManager; 
 			}
 
-		void quit();
+		virtual Gtk::Widget * buildWidget();
+		virtual void quit();
+		virtual void add(const Controller::Ptr & sub);
 
-		static Application *app();
-		static int main(boost::function<Application* (void)> constructor, 
+		static Application::Ptr app();
+		static int main(boost::function<Application::Ptr (void)> constructor, 
 										int argc, char **argv);
 
 		
 	protected:
 		Application();
-		static Application *m_application; 
+		static Application::Ptr m_application; 
 
 	private:
 		Configuration                m_config;

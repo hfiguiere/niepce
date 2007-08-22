@@ -31,20 +31,17 @@
 namespace ui {
 
 
-	Gtk::Widget * LibraryMainViewController::widget()
+	Gtk::Widget * LibraryMainViewController::buildWidget()
 	{
-		if(m_widget == NULL) {
-			LibraryMainView *mainview = new LibraryMainView();
-			m_librarylistview = Gtk::manage(new Gtk::IconView());
-			mainview->append_page(*m_librarylistview, _("Library"));
-			
-			GtkWidget *iv = gtk_image_view_new();
-			GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
-			m_imageview = Gtk::manage(Glib::wrap(ivs));
-			mainview->append_page(*m_imageview, _("Darkroom"));
-			m_widget = mainview;
-		}
-		return m_widget;
+		LibraryMainView *mainview = new LibraryMainView();
+		m_librarylistview = Gtk::manage(new Gtk::IconView());
+		mainview->append_page(*m_librarylistview, _("Library"));
+		
+		GtkWidget *iv = gtk_image_view_new();
+		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
+		m_imageview = Gtk::manage(Glib::wrap(ivs));
+		mainview->append_page(*m_imageview, _("Darkroom"));
+		return mainview;
 	}
 
 }

@@ -44,15 +44,22 @@ namespace ui {
 	NiepceWindow::NiepceWindow()
 		: framework::Frame()//GLADEDIR "mainwindow.glade", "mainwindow")
 	{
+
+	}
+
+ 	Gtk::Widget * 
+	NiepceWindow::buildWidget()
+	{
 //		Glib::RefPtr<Gnome::Glade::Xml> & g(glade());
 		Gtk::Window & win(gtkWindow());
 
-		Application *pApp = Application::app();
+		Application::Ptr pApp = Application::app();
 
 		init_actions();
 		init_ui();
 
-		m_mainviewctrl = new LibraryMainViewController();
+		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
+		add(m_mainviewctrl);
 
 		win.add(m_vbox);
 
@@ -93,13 +100,13 @@ namespace ui {
 
 		win.set_size_request(600, 400);
 		win.show_all_children();
+		return &win;
 	}
 
 	NiepceWindow::~NiepceWindow()
 	{
-		Application *pApp = Application::app();
-		pApp->uiManager()->remove_action_group(m_refActionGroup);		
-		delete m_mainviewctrl;
+		Application::Ptr pApp = Application::app();
+		pApp->uiManager()->remove_action_group(m_refActionGroup);
 	}
 
 	void NiepceWindow::init_actions()
@@ -114,7 +121,7 @@ namespace ui {
 													sigc::mem_fun(gtkWindow(), 
 																				&Gtk::Window::hide));			
 		m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-													sigc::mem_fun(Application::app(), 
+													sigc::mem_fun(Application::app().get(), 
 																				&Application::quit));	
 		Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
 
@@ -152,7 +159,7 @@ namespace ui {
 
 	void NiepceWindow::init_ui()
 	{
-		Application *pApp = Application::app();
+		Application::Ptr pApp = Application::app();
 		Glib::ustring ui_info =
 			"<ui>"
 			"  <menubar name='MenuBar'>"

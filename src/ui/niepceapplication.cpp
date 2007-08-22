@@ -23,21 +23,22 @@
 #include "niepcewindow.h"
 
 using framework::Frame;
+using framework::Application;
 
 namespace ui {
 
-	framework::Application *NiepceApplication::create()
+	Application::Ptr NiepceApplication::create()
 	{
-		if (m_application == NULL) {
-			m_application = new NiepceApplication();
+		if (!m_application) {
+			m_application = Application::Ptr(new NiepceApplication());
 		}
 		return m_application;
 	}
 
 
-	Frame *NiepceApplication::makeMainFrame()
+	Frame::Ptr NiepceApplication::makeMainFrame()
 	{
-		return new NiepceWindow;
+		return Frame::Ptr(new NiepceWindow);
 	}
 
 

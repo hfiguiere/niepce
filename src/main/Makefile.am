@@ -8,7 +8,7 @@ bin_PROGRAMS = niepce
 
 niepce_SOURCES = main.cpp
 
-niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@
+niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@
 niepce_LDADD = $(top_builddir)/src/db/libniepcedb.la \
 	$(top_builddir)/src/db/sqlite/libniepcedbsqlite.la \
 	$(top_builddir)/src/ui/libniepceui.la \
