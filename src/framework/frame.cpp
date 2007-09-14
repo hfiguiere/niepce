@@ -29,6 +29,7 @@ namespace framework {
 		: m_window(new Gtk::Window()),
 			m_glade(NULL)
 	{
+		connectSignals();
 	}
 
 
@@ -38,10 +39,29 @@ namespace framework {
 	{
 		if (m_glade) {
 			m_window = static_cast<Gtk::Window*>(m_glade->get_widget(widgetName));
+			connectSignals();
 		}
+	}
+
+
+	void Frame::connectSignals()
+	{
+		m_window->signal_delete_event().connect(
+			sigc::hide(sigc::mem_fun(this, &Frame::_close)));
+		m_window->signal_hide().connect(
+			sigc::retype_return<void>(sigc::mem_fun(this, &Frame::_close)));
 	}
 
 	Frame::~Frame()
 	{
+	}
+
+
+	bool Frame::_close()
+	{
+		if(Controller::Ptr parent = m_parent.lock()) {
+			parent->remove(shared_from_this());
+		}		
+		return false;
 	}
 }

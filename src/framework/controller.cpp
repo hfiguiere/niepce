@@ -50,6 +50,15 @@ namespace framework {
 		sub->m_parent = shared_from_this();
 	}
 
+	void Controller::remove(const Ptr & sub)
+	{
+		std::list<Ptr>::iterator iter = std::find(m_subs.begin(), 
+																							m_subs.end(), sub);
+		if(iter != m_subs.end()) {
+			(*iter)->clearParent();
+			m_subs.erase(iter);
+		}
+	}
 
 	bool Controller::canTerminate()
 	{

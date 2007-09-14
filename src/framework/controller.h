@@ -23,7 +23,7 @@
 #define __FRAMEWORK_CONTROLLER_H__
 
 
-#include <vector>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -50,6 +50,7 @@ namespace framework {
 		void add(const Ptr & sub);
 		void clearParent()
 			{ m_parent.reset(); }
+		void remove(const Ptr & sub);
 		
 		virtual bool canTerminate();
 		/** signal that the controller needs to terminate */
@@ -65,7 +66,7 @@ namespace framework {
 		Gtk::Widget* m_widget;
 
 		WeakPtr          m_parent;
-		std::vector<Ptr> m_subs; /**< sub controllers */
+		std::list<Ptr> m_subs; /**< sub controllers */
 	};
 
 }

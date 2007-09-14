@@ -50,7 +50,11 @@ namespace framework {
 		Glib::RefPtr<Gnome::Glade::Xml> & glade()
 			{ return m_glade; }
 
+	protected:
+		/** close signal handler */
+		virtual bool _close();
 	private:
+		void connectSignals();
 		Gtk::Window *m_window;
 		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
 	};

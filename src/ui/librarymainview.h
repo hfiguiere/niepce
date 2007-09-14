@@ -24,7 +24,12 @@
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
 
+namespace Gtk {
+	class ToggleButton;
+}
+
 namespace ui {
+
 
 	class LibraryMainView
 		: public Gtk::VBox
@@ -33,9 +38,14 @@ namespace ui {
 		LibraryMainView();
 
 		int append_page(Gtk::Widget & w, const Glib::ustring & label);
+	protected:
+		
+		void set_current_page(int, Gtk::ToggleButton *);
 	private:
-		Gtk::HButtonBox                m_mainbar;
-		Gtk::Notebook m_notebook;
+		Gtk::HButtonBox         m_mainbar;
+		Gtk::Notebook           m_notebook;
+		int                     m_currentpage;
+		Gtk::ToggleButton       *m_currenttoggle;
 	};
 
 }

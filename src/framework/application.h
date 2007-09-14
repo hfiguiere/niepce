@@ -54,6 +54,7 @@ namespace framework {
 		virtual Gtk::Widget * buildWidget();
 		virtual void quit();
 		virtual void add(const Controller::Ptr & sub);
+		virtual void terminate();
 
 		static Application::Ptr app();
 		static int main(boost::function<Application::Ptr (void)> constructor, 

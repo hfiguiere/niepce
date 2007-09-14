@@ -17,16 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gtkmm/button.h>
+#include <gtkmm/togglebutton.h>
 
 #include "ui/librarymainview.h"
 
 namespace ui {
 	
 	LibraryMainView::LibraryMainView()
-		: Gtk::VBox()
+		: Gtk::VBox(),
+			m_currentpage(-1),
+			m_currenttoggle(NULL)
 	{
+		set_spacing(4);
 		m_mainbar.set_layout(Gtk::BUTTONBOX_START);
+		m_mainbar.set_spacing(4);
 		m_notebook.set_show_tabs(false);
 		pack_start(m_mainbar, Gtk::PACK_SHRINK);
 		pack_start(m_notebook);
@@ -35,10 +39,28 @@ namespace ui {
 	int
 	LibraryMainView::append_page(Gtk::Widget & w, const Glib::ustring & label)
 	{
-		Gtk::Button *button = Gtk::manage(new Gtk::Button(label));
+		int idx;
+		Gtk::ToggleButton *button = Gtk::manage(new Gtk::ToggleButton(label));
 		m_mainbar.pack_start(*button);
-		return m_notebook.append_page(w, label);
+		idx = m_notebook.append_page(w, label);
+		button->signal_toggled().connect(
+			sigc::bind(sigc::mem_fun(this, &LibraryMainView::set_current_page),
+								 idx, button));
+		if(m_currentpage == -1) {
+			set_current_page(idx, button);
+		}
+		return idx;
 	}
 	
+	void LibraryMainView::set_current_page(int idx, Gtk::ToggleButton * btn)
+	{
+		m_notebook.set_current_page(idx);
+		if(m_currenttoggle) {
+//			m_currenttoggle->set_active(false);
+		}
+		btn->set_active(true);
+		m_currenttoggle = btn;
+		m_currentpage = idx;
+	}
 }
 

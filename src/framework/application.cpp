@@ -77,13 +77,20 @@ namespace framework {
 		return 0;
 	}
 
-	void Application::quit()
+
+	void Application::terminate()
 	{
 		std::for_each(m_subs.begin(), m_subs.end(),
 									boost::bind(&Controller::terminate, _1));
 		std::for_each(m_subs.begin(), m_subs.end(),
 									boost::bind(&Controller::clearParent, _1));		
 		m_subs.clear();
+	}
+
+
+	void Application::quit()
+	{
+		terminate();
 		Gtk::Main::quit();
 	}
 

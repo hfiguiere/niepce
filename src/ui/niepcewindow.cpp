@@ -81,8 +81,10 @@ namespace ui {
 		row[m_librarycolumns.m_label] = _("Workspace");
 		row[m_librarycolumns.m_id] = 0;
 
+		m_librarytree->set_headers_visible(false);
 		m_librarytree->append_column("", m_librarycolumns.m_label);
 
+		m_hbox.set_border_width(4);
 		m_hbox.pack1(*m_librarytree, Gtk::EXPAND);
 	 
 		
