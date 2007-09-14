@@ -22,10 +22,10 @@
 #include <boost/lexical_cast.hpp>
 
 #include "library.h"
+#include "utils/exception.h"
 #include "sqlite/sqlitecnxmgrdrv.h"
 #include "sqlite/sqlitecnxdrv.h"
 #include "sqlstatement.h"
-#include "exception.h"
 
 namespace db {
 
@@ -118,7 +118,7 @@ namespace db {
 			m_dbdrv->get_column_content(0, version);
 			v = boost::lexical_cast<int>(version);
 		}
-		catch(db::Exception & e)
+		catch(utils::Exception & e)
 		{
 			std::cerr << "db exception" << std::endl;
 			v = -1;

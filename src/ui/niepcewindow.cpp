@@ -29,14 +29,20 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/filechooserdialog.h>
 
+#include "utils/debug.h"
+#include "utils/moniker.h"
+#include "libraryclient/libraryclient.h"
+#include "framework/application.h"
+#include "framework/configuration.h"
+
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
-#include "framework/application.h"
 #include "niepcewindow.h"
 #include "librarymainviewcontroller.h"
 
-
+using libraryclient::LibraryClient;
 using framework::Application;
+using framework::Configuration;
 
 namespace ui {
 
@@ -102,6 +108,7 @@ namespace ui {
 
 		win.set_size_request(600, 400);
 		win.show_all_children();
+		on_open_library();
 		return &win;
 	}
 
@@ -146,7 +153,7 @@ namespace ui {
 			to_import = dialog.get_filename();
 			// pass it to the library
 			// TODO
-			std::cout << to_import << std::endl;
+			DBG_OUT("%s", to_import.c_str());
 			break;
 		default:
 			break;
@@ -157,6 +164,42 @@ namespace ui {
 	void NiepceWindow::on_action_file_quit()
 	{
 		Application::app()->quit();
+	}
+
+
+	void NiepceWindow::on_open_library()
+	{
+		Configuration & cfg = Application::app()->config();
+		std::string libMoniker;
+		libMoniker = cfg.getValue("lastOpenLibrary", "");
+		if(libMoniker.empty()) {
+			Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
+																		Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
+			
+			dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+			dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
+
+			int result = dialog.run();
+			Glib::ustring libraryToCreate;
+			switch(result)
+			{
+			case Gtk::RESPONSE_OK:
+				libraryToCreate = dialog.get_filename();
+				// pass it to the library
+				libMoniker = "local:";
+				libMoniker += libraryToCreate.c_str();
+				cfg.setValue("lastOpenLibrary", libMoniker);
+				DBG_OUT("created library %s", libMoniker.c_str());
+				break;
+			default:
+				break;
+			}
+			
+		}
+		else {
+			DBG_OUT("last library is %s", libMoniker.c_str());
+		}
+		open_library(libMoniker);
 	}
 
 	void NiepceWindow::init_ui()
@@ -184,4 +227,12 @@ namespace ui {
 			"</ui>";
 		pApp->uiManager()->add_ui_from_string(ui_info);
 	} 
+
+
+	void NiepceWindow::open_library(const std::string & libMoniker)
+	{
+		m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker)));
+		gtkWindow().set_title(Glib::ustring(libMoniker));
+	}
+
 }

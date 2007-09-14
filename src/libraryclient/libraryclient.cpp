@@ -17,12 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "utils/moniker.h"
+
 #include "libraryclient.h"
 #include "clientimpl.h"
 
 namespace libraryclient {
 
-	LibraryClient::LibraryClient(const std::string & moniker)
+	LibraryClient::LibraryClient(const utils::Moniker & moniker)
 		: m_pImpl(ClientImpl::makeClientImpl(moniker))
 	{
 

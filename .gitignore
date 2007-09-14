@@ -22,6 +22,7 @@ autom4te.cache
 *.lo
 *.la
 *~
+src/utils/testmoniker
 src/db/test_db
 src/db/test_library
 src/main/niepce

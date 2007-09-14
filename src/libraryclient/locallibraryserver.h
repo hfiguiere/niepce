@@ -24,11 +24,21 @@
 #ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 #define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
+#include "library/worker.h"
+
 namespace libraryclient {
 
+	/** @todo get rid of this class altogether */
 	class LocalLibraryServer
+		: public library::Worker
 	{
 	public:
+		LocalLibraryServer(const std::string & moniker)
+			: library::Worker(moniker)
+			{
+			}
+
+		
 	};
 
 }

@@ -24,8 +24,8 @@
  *See COPYRIGHT file copyright information.
  */
 
-#include "exception.h"
-#include "logstreamutils.h"
+#include "utils/exception.h"
+#include "utils/logstreamutils.h"
 #include "sqlstatement.h"
 
 #include <string>

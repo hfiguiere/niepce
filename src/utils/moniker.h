@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.h
+ * niepce - utils/moniker.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,49 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARYCLIENT_H_
-#define _LIBRARYCLIENT_H_
 
+#ifndef __UTILS_MONIKER_H__
+#define __UTILS_MONIKER_H__
+
+#include <ostream>
 #include <string>
-#include <boost/shared_ptr.hpp>
 
-#include "clienttypes.h"
-#include "library/storage.h"
 
 namespace utils {
-	class Moniker;
-}
 
-namespace libraryclient {
+	/** Moniker are URL like specifiers
+			In the form of scheme:path.
 
-	class ClientImpl;
-
-	class LibraryClient
-		: public library::Storage
+			@todo implement nested monikers
+	 */
+	class Moniker
 	{
 	public:
-		LibraryClient(const utils::Moniker & moniker);
-		virtual ~LibraryClient();
+		explicit Moniker(const std::string & s);
+		Moniker(const std::string & scheme, const std::string & path);
 
-		/** get all the keywords 
-		 * @return transaction ID
-		 */
-		tid getAllKeywords();
-		/** get all the folder
-		 * @return transaction ID
-		 */
-	  tid getAllFolders();
-
-		/* sync call */
-		virtual bool fetchKeywordsForFile(int file, library::Keyword::IdList &keywords);
-
+		const std::string & scheme() const
+			{ return m_scheme; }
+		const std::string & path() const
+			{ return m_path; }
+		const char *c_str() const;
 	private:
-		ClientImpl* m_pImpl;
+		std::string m_scheme;
+		std::string m_path;
 
-		LibraryClient(const LibraryClient &);
-		LibraryClient & operator=(const LibraryClient &);
+		mutable std::string m_cachedvalue;
 	};
 
+	std::ostream & operator<<(std::ostream & stream, const Moniker & m);
+
 }
+
 
 #endif

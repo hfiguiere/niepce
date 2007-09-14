@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.h
+ * niepce - library/worker.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,49 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARYCLIENT_H_
-#define _LIBRARYCLIENT_H_
+
+#ifndef __LIBRARY_WORKER_H__
+#define __LIBRARY_WORKER_H__
+
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
 
-#include "clienttypes.h"
-#include "library/storage.h"
+#include "db/library.h"
+#include "library/op.h"
+#include "library/opqueue.h"
 
 namespace utils {
 	class Moniker;
 }
 
-namespace libraryclient {
+namespace library {
 
-	class ClientImpl;
-
-	class LibraryClient
-		: public library::Storage
+	/** worker thread for the library */
+	class Worker
 	{
 	public:
-		LibraryClient(const utils::Moniker & moniker);
-		virtual ~LibraryClient();
+		Worker(const std::string & moniker);
+		virtual ~Worker();
 
-		/** get all the keywords 
-		 * @return transaction ID
-		 */
-		tid getAllKeywords();
-		/** get all the folder
-		 * @return transaction ID
-		 */
-	  tid getAllFolders();
-
-		/* sync call */
-		virtual bool fetchKeywordsForFile(int file, library::Keyword::IdList &keywords);
-
+		void main(const std::string & moniker);
 	private:
-		ClientImpl* m_pImpl;
+		void execute(const Op::Ptr & _op);
 
-		LibraryClient(const LibraryClient &);
-		LibraryClient & operator=(const LibraryClient &);
+		boost::thread    m_thread;
+		OpQueue          m_ops;
+		db::Library::Ptr m_library;
 	};
 
 }
+
 
 #endif

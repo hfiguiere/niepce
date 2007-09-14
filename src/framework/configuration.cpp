@@ -1,5 +1,5 @@
 /*
- * niepce - framework/configuration.h
+ * niepce - framework/configuration.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,21 +17,72 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include <memory>
+
+#include "gconf_proxy_header.h"
+
+#include "utils/debug.h"
 #include "configuration.h"
 
 
 namespace framework {
 
-	const std::string & Configuration::operator[](const std::string & key) const
+	Configuration::Configuration()
+		: m_gconf(Gnome::Conf::Client::get_default_client())
 	{
-		static std::string empty;
+	}
 
-		config_map_t::const_iterator iter = m_configdata.find(key);
-		if(iter == m_configdata.end()) {
-			return empty;
+
+	Configuration::~Configuration()
+	{
+	}
+
+
+	bool Configuration::hasKey(const Glib::ustring & key) const
+	{
+		//
+		bool found = true;
+
+		try {
+			m_gconf->get(Glib::ustring("/apps/niepce/") + key);
 		}
-		
-		return iter->second;
+		catch(Gnome::Conf::Error & err) {
+			DBG_OUT("key %s not found", key.c_str());
+			DBG_OUT("exception is %s", err.what().c_str());
+			found = false;
+		}
+
+		return found;
+	}
+
+
+	const Glib::ustring Configuration::getValue(const Glib::ustring & key,
+															 const Glib::ustring & def) const
+	{
+		Glib::ustring value;
+		try {
+			value = m_gconf->get_string(Glib::ustring("/apps/niepce/") + key);
+		}
+		catch(Gnome::Conf::Error &err) {
+			value = def;
+			DBG_OUT("Exception raised: %s", err.what().c_str());
+		}
+
+		return value;
+	}
+
+
+
+	void Configuration::setValue(const Glib::ustring & key, 
+															 const Glib::ustring & value)
+	{
+		try {
+			m_gconf->set(Glib::ustring("/apps/niepce/") + key, value);
+		}
+		catch(Gnome::Conf::Error & err) {
+			DBG_OUT("Exception raised: %s", err.what().c_str());
+		}
 	}
 
 }

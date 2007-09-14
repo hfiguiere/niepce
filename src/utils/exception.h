@@ -36,7 +36,7 @@
 
 #include "logstreamutils.h"
 
-namespace db {
+namespace utils {
 
 class Exception: public std::runtime_error
 {
@@ -52,21 +52,21 @@ public:
 
 #define THROW_IF_FAIL(a_cond) \
 if (!(a_cond)) { \
-LOG_EXCEPTION ("condition (" << #a_cond << ") failed; raising exception\n" ) ;\
-throw db::Exception \
+LOG_EXCEPTION (std::string("condition (") + #a_cond + ") failed; raising exception" ) ;\
+throw utils::Exception \
     (std::string ("Assertion failed: ") + #a_cond)  ;\
 }
 
 #define THROW_IF_FAIL2(a_cond, a_reason) \
 if (!(a_cond)) { \
-LOG_EXCEPTION ("condition (" << #a_cond << ") failed; raising exception " << a_reason <<"\n");\
-throw db::Exception (a_reason)  ;\
+LOG_EXCEPTION (std::string("condition (") + #a_cond + ") failed; raising exception " + a_reason);\
+throw utils::Exception (a_reason)  ;\
 }
 
 #define THROW_IF_FAIL3(a_cond, type, a_reason) \
 if (!(a_cond)) { \
-LOG_EXCEPTION ("condition (" << #a_cond << ") failed; raising exception " << #type << \
-<< ":  " << a_reason << "\n" ) ; throw type (a_reason)  ;\
+LOG_EXCEPTION (std::string("condition (") + #a_cond + ") failed; raising exception " + #type + \
+":  " + a_reason ) ; throw type (a_reason)  ;\
 }
 
 #define ABORT_IF_FAIL(a_cond, a_reason) \
@@ -75,8 +75,8 @@ LOG_EXCEPTION ("condition (" << #a_cond << ") failed; raising exception " << a_r
 }
 
 #define THROW(a_reason) \
-LOG_EXCEPTION ("raised exception: "<< (std::string (a_reason)) << "\n"); \
-throw db::Exception (std::string (a_reason))  ;
+LOG_EXCEPTION (std::string("raised exception: ") + std::string(a_reason)); \
+throw utils::Exception (std::string (a_reason))  ;
 
 #define THROW_EMPTY \
 LOG_EXCEPTION ("raised empty exception " << endl) ; \
@@ -94,13 +94,13 @@ LOG_EXCEPTION ("catched and rethrowing exception: " << exception.what() << "\n")
 
 #define RETURN_VAL_IF_FAIL(expression, value) \
 if (!(expression)) { \
-std::cerr << "assertion " << #expression << " failed. Returning " << #value << "\n"; \
+ERR_OUT("assertion %s  failed. Returning %s", #expression, #value); \
 return value ; \
 }
 
 #define RETURN_IF_FAIL(expression) \
 if (!(expression)) { \
-LOG_ERROR ("assertion " << #expression << " failed. Returning.\n") ; \
+ERR_OUT ("assertion %s failed. Returning.", #expression); \
 return ; \
 }
 

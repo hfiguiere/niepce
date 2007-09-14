@@ -1,10 +1,10 @@
 Niepce Digital
 ==============
 
-This software is licensed under GPL version 2. See file 
+This software is licensed under GPL version 3. See file 
 COPYING for details.
 
-(c) 2006 Hubert Figuière
+(c) 2006-2007 Hubert Figuière
 
 To build is you need the following:
 -----------------------------------
@@ -12,12 +12,13 @@ To build is you need the following:
 A C++ compiler
 gtk+ 2.8
 cairo 1.1
-gtkmm 2.8
+gtkmm 2.6
+gconfmm 2.6
 cairomm
 sqlite3
 
 Niepce is being developed on Linux. It should build and work on other
-UNIX systems, and may work on Windows and MacOS X if you can build it.
+UNIX systems.
 
 Getting the code
 ----------------

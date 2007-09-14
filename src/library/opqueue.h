@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/opqueue.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
+#ifndef __NIEPCE_LIBRARY_OPQUEUE_H__
+#define __NIEPCE_LIBRARY_OPQUEUE_H__
+
+#include <deque>
+#include <boost/thread/recursive_mutex.hpp>
+
+#include "op.h"
+
+namespace library {
+
+	class OpQueue
 	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
+	public:
+		OpQueue();
+		~OpQueue();
 
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
+		void add(const Op::Ptr &);
+		Op::Ptr pop();
+		bool isEmpty() const;
 
-	tid ClientImpl::getAllKeywords()
-	{
-		return 0;
-	}
-
-
-	tid ClientImpl::getAllFolders()
-	{
-		return 0;
-	}
+	private:
+		std::deque<Op::Ptr> m_queue;
+		typedef boost::recursive_mutex mutex_t;
+		mutable mutex_t     m_mutex;
+	};
 
 }
 
-
+#endif

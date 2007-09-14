@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/op.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
+
+#ifndef __NIEPCE_LIBRARY_OP_H__
+#define __NIEPCE_LIBRARY_OP_H__
+
+#include <boost/shared_ptr.hpp>
+
+namespace library {
+
+	typedef enum {
+		OP_NONE = 0,
+		OP_QUERY_FILES,
+		OP_UPDATE_FILES
+	} OpType;
+
+
+	/** a library operation */
+	class Op
 	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
+	public:
+		typedef boost::shared_ptr< Op > Ptr;
 
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
+		Op(OpType t);
+		~Op();
 
-	tid ClientImpl::getAllKeywords()
-	{
-		return 0;
-	}
+		unsigned int id() const 
+			{ return m_id; }
+		
+	private:
+		/** generate a new ID */
+		static unsigned int newId();
 
-
-	tid ClientImpl::getAllFolders()
-	{
-		return 0;
-	}
+		OpType m_type;
+		unsigned int    m_id;
+	};
 
 }
 
 
+#endif

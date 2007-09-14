@@ -30,7 +30,7 @@
 
 #include "exception.h"
 
-namespace db {
+namespace utils {
 
 Exception::Exception (const char* a_reason): std::runtime_error (a_reason)
 {}

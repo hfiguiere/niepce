@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - utils/testmoniker.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -16,44 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
+/** @brief Unit test for the Moniker class */
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
-	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
+#include <boost/test/minimal.hpp>
 
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
-
-	tid ClientImpl::getAllKeywords()
-	{
-		return 0;
-	}
+#include "moniker.h"
 
 
-	tid ClientImpl::getAllFolders()
-	{
-		return 0;
-	}
+int test_main( int, char *[] )             // note the name!
+{
+	utils::Moniker moniker("foo:/bar/test");
 
+	BOOST_CHECK(moniker.scheme() == "foo");
+	BOOST_CHECK(moniker.path() == "/bar/test");
+
+	BOOST_CHECK(strcmp(moniker.c_str(), "foo:/bar/test") == 0);
+	return 0;
 }
-
 

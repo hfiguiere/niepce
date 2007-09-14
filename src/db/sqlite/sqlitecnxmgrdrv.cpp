@@ -29,9 +29,10 @@
 
 #include <sqlite3.h>
 
-#include "db/exception.h"
+#include "utils/exception.h"
 #include "sqlitecnxdrv.h"
 #include "sqlitecnxmgrdrv.h"
+
 
 
 namespace db {
@@ -83,8 +84,9 @@ SqliteCnxMgrDrv::connect_to_db (const DBDesc &a_db_desc,
 
     int result = sqlite3_open (db_name.c_str (), &sqlite) ;
     if (result != SQLITE_OK) {
-        THROW ("could not connect to sqlite database: "
-               + std::string (sqlite3_errmsg(sqlite))) ;
+			THROW (std::string("could not connect to sqlite database '") 
+						 + db_name + "' : "
+						 + std::string (sqlite3_errmsg(sqlite)));
         sqlite3_close (sqlite);
         exit(1);
     }

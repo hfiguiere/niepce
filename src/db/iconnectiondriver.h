@@ -29,7 +29,7 @@
 #include <stdint.h>
 #include <boost/shared_ptr.hpp>
 
-namespace common {
+namespace utils {
 class Buffer ;
 //class UString ;
 }
@@ -80,10 +80,10 @@ public:
                                   enum ColumnType &) const = 0;
 
     virtual bool get_column_name (uint32_t a_offset,
-                                  common::Buffer &a_name) const = 0;
+                                  utils::Buffer &a_name) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
-                                     common::Buffer &a_column_content) const = 0;
+                                     utils::Buffer &a_column_content) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
                                      int64_t &a_column_content) const = 0;

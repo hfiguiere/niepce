@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/worker.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
+
+#include <boost/bind.hpp>
+
+#include "worker.h"
+
+namespace library {
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
+	Worker::Worker(const std::string & moniker)
+		: m_thread(boost::bind(&Worker::main, this, moniker))
 	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
-
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
-
-	tid ClientImpl::getAllKeywords()
-	{
-		return 0;
 	}
 
 
-	tid ClientImpl::getAllFolders()
+	Worker::~Worker()
 	{
-		return 0;
 	}
 
+	/** this is the main loop of the libray worker */
+	void Worker::main(const std::string & moniker)
+	{
+		bool terminated = false;
+
+		m_library = db::Library::Ptr(new db::Library(moniker));
+
+		do {
+
+			while(m_ops.isEmpty()) {
+				m_thread.yield();
+			}
+			
+			Op::Ptr op = m_ops.pop();
+
+			execute(op);
+
+		} while(!terminated);
+
+		m_library.reset();
+	}
+
+
+	void Worker::execute(const Op::Ptr & _op)
+	{
+	}
 }
-
-

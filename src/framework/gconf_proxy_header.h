@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - framework/gconf_proxy_header.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
+/** @brief Wrap Gconfmm to be warning free. */
+
+#ifndef __GCONF_PROXY_HEADER_H__
+#define __GCONF_PROXY_HEADER_H__
+
+/*
+ * Insert here the work around for the warning disabling to your taste.
+ */
+#if __GNUC__
+#pragma GCC system_header
+#endif
+#include <gconfmm.h>
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
-	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
-
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
-
-	tid ClientImpl::getAllKeywords()
-	{
-		return 0;
-	}
-
-
-	tid ClientImpl::getAllFolders()
-	{
-		return 0;
-	}
-
-}
-
-
+#endif

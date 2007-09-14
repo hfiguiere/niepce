@@ -29,8 +29,9 @@
 #include <string>
 
 #include <sqlite3.h>
-#include "db/exception.h"
-#include "db/buffer.h"
+#include "utils/exception.h"
+#include "utils/buffer.h"
+#include "utils/debug.h"
 #include "db/sqlstatement.h"
 #include "sqlitecnxdrv.h"
 
@@ -163,8 +164,8 @@ namespace db { namespace sqlite {
 			result = true ;
 			break;
 		case SQLITE_ERROR:
-			LOG_ERROR ("sqlite3_step() encountered a runtime error:"
-                 << sqlite3_errmsg (sqlite.get ())) ;
+			LOG_ERROR (std::string("sqlite3_step() encountered a runtime error:")
+                 + sqlite3_errmsg (sqlite.get ())) ;
 			if (cur_stmt) {
 				sqlite3_finalize (cur_stmt) ;
 				cur_stmt = NULL ;
@@ -272,9 +273,8 @@ namespace db { namespace sqlite {
                                   &m_priv->cur_stmt,
                                   NULL) ;
     if (status != SQLITE_OK) {
-			LOG_ERROR ("sqlite3_prepare() failed, returning: "
-								 << status << ":" << get_last_error ()
-								 << ": sql was: '" << a_statement.to_string () + "'") ;
+			ERR_OUT("sqlite3_prepare() failed, returning: %d: %s: sql was: '%s'",
+							status, get_last_error(), a_statement.to_string().c_str()) ;
 			return false ;
     }
 
@@ -330,7 +330,7 @@ namespace db { namespace sqlite {
 
 	bool
 	SqliteCnxDrv::get_column_content (uint32_t a_offset,
-																		common::Buffer &a_column_content) const
+																		utils::Buffer &a_column_content) const
 	{
     LOG_FUNCTION_SCOPE_NORMAL_DD ;
     THROW_IF_FAIL (m_priv) ;
@@ -352,8 +352,8 @@ namespace db { namespace sqlite {
     RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
     int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
     if ((type != SQLITE_INTEGER) && (type != SQLITE_NULL)) {
-			LOG_ERROR ("column number "<< static_cast<int> (a_column_content)
-								 << " is not of integer type") ;
+			ERR_OUT("column number %d is not of integer type", 
+							static_cast<int>(a_column_content));
 			return false ;
     }
     a_column_content = sqlite3_column_int64 (m_priv->cur_stmt, a_offset) ;
@@ -370,8 +370,7 @@ namespace db { namespace sqlite {
     RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
     int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
     if ((type != SQLITE_FLOAT) && (type != SQLITE_NULL)) {
-			LOG_ERROR ("column number " << (int) a_offset
-								 << " is not of type float") ;
+			ERR_OUT("column number %d is not of type float", (int) a_offset);
 			return false ;
     }
     a_column_content = sqlite3_column_double (m_priv->cur_stmt, a_offset) ;
@@ -388,7 +387,7 @@ namespace db { namespace sqlite {
     RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
     int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
     if (type == SQLITE_BLOB) {
-			LOG_ERROR ("column number " << (int) a_offset << " is of type blob") ;
+			ERR_OUT("column number %d is of type blob", (int) a_offset) ;
 			return false ;
     }
     a_column_content =
@@ -430,7 +429,7 @@ namespace db { namespace sqlite {
 	}
 
 	bool
-	SqliteCnxDrv::get_column_name (uint32_t a_offset, common::Buffer &a_name) const
+	SqliteCnxDrv::get_column_name (uint32_t a_offset, utils::Buffer &a_name) const
 	{
     LOG_FUNCTION_SCOPE_NORMAL_DD ;
     THROW_IF_FAIL (m_priv) ;

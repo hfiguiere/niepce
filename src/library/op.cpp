@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/op.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
+
+#include "op.h"
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
+namespace library {
+
+	Op::Op(OpType t)
+		: m_type(t),
+			m_id(Op::newId())
 	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
+		
 	}
 
-	ClientImpl::~ClientImpl()
+	Op::~Op()
 	{
-		delete m_localLibrary;
+
 	}
 
-	tid ClientImpl::getAllKeywords()
+	unsigned int Op::newId()
 	{
-		return 0;
-	}
-
-
-	tid ClientImpl::getAllFolders()
-	{
-		return 0;
+		static unsigned int id = 0;
+		id++;
+		return id;
 	}
 
 }
-
 

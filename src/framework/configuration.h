@@ -21,19 +21,28 @@
 #ifndef _FRAMEWORK_CONFIGURATION_H_
 #define _FRAMEWORK_CONFIGURATION_H_
 
-#include <string>
-#include <map>
+#include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
+
+#include "framework/gconf_proxy_header.h"
+
 
 namespace framework {
 
 	class Configuration
 	{
 	public:
-		const std::string & operator[](const std::string & key) const;
+		Configuration();
+		~Configuration();
+
+		bool hasKey(const Glib::ustring & key) const;
+		const Glib::ustring getValue(const Glib::ustring & key,
+																 const Glib::ustring & def) const;
+
+		void setValue(const Glib::ustring & key, const Glib::ustring & value);
 
 	private:
-		typedef std::map<std::string, std::string> config_map_t;
-		config_map_t m_configdata;
+		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
 	};
 
 }

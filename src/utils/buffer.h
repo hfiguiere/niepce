@@ -27,7 +27,7 @@
 #define __NEMIVER_BUFFER_H__
 
 
-namespace common {
+namespace utils {
 
 class Buffer {
     char * m_data ;

@@ -28,6 +28,7 @@
 #include <gtkmm/paned.h>
 
 #include "framework/frame.h"
+#include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
 
 namespace Gtk {
@@ -51,10 +52,12 @@ namespace ui {
 
 		void on_action_file_import();
 		void on_action_file_quit();
-		
+		void on_open_library();
 		
 		void init_ui();
 		void init_actions();
+
+		void open_library(const std::string & libMoniker);
 		
 		class LibraryTreeColumns 
 			: public Gtk::TreeModelColumnRecord
@@ -78,6 +81,7 @@ namespace ui {
 		LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+		libraryclient::LibraryClient::Ptr m_libClient;
 	};
 
 }

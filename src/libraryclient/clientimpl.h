@@ -23,7 +23,9 @@
 
 #include <string>
 
+#include "utils/moniker.h"
 #include "clienttypes.h"
+
 
 namespace libraryclient {
 
@@ -32,16 +34,16 @@ namespace libraryclient {
 	class ClientImpl
 	{
 	public:
-		static ClientImpl *makeClientImpl(const std::string & moniker);
+		static ClientImpl *makeClientImpl(const utils::Moniker & moniker);
 
-		ClientImpl(const std::string & moniker);
+		ClientImpl(const utils::Moniker & moniker);
 		virtual ~ClientImpl();
 
 		tid getAllKeywords();
 	  tid getAllFolders();
 
 	protected:
-		const std::string m_moniker;
+		const utils::Moniker m_moniker;
 		LocalLibraryServer *m_localLibrary;
 	};
 

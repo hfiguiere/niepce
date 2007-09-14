@@ -24,8 +24,8 @@
  *See COPYRIGHT file copyright information.
  */
 
-#include "logstreamutils.h"
-#include "exception.h"
+#include "utils/logstreamutils.h"
+#include "utils/exception.h"
 #include "insertstatement.h"
 
 namespace db {

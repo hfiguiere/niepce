@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - library/opqueue.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,43 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "utils/debug.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
 
 
-namespace libraryclient {
-	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
-	{
-		return new ClientImpl(moniker);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
-		: m_moniker(moniker),
-			m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
-	}
+#include "opqueue.h"
 
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
+namespace library {
 
-	tid ClientImpl::getAllKeywords()
+	OpQueue::OpQueue()
+		: m_queue(),
+			m_mutex()
 	{
-		return 0;
 	}
 
 
-	tid ClientImpl::getAllFolders()
+	OpQueue::~OpQueue()
 	{
-		return 0;
+	}
+
+	void
+	OpQueue::add(const Op::Ptr &op)
+	{
+		mutex_t::scoped_lock(m_mutex, true);
+		m_queue.push_back(op);
+	}
+
+
+	Op::Ptr OpQueue::pop()
+	{
+		Op::Ptr elem;
+		mutex_t::scoped_lock(m_mutex, true);		
+		elem = m_queue.front();
+		m_queue.pop_front();
+		return elem;
+	}
+
+
+	bool OpQueue::isEmpty() const
+	{
+		mutex_t::scoped_lock(m_mutex, true);
+		return m_queue.empty();
 	}
 
 }
-
-

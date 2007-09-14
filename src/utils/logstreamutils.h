@@ -34,6 +34,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "utils/debug.h"
+
 #define NMV_DEFAULT_DOMAIN __FILE__
 
 
@@ -89,13 +91,11 @@ LOG_STREAM << domain << " - " << message << std::endl;
 #endif
 
 #ifndef LOG_ERROR
-#define LOG_ERROR(message) \
-std::cerr << LOG_LEVEL_NORMAL___ << LOG_MARKER_ERROR << HERE << message << std::endl
+#define LOG_ERROR(message) ERR_OUT("Error %s", std::string(message).c_str())
 #endif
 
 #ifndef LOG_EXCEPTION
-#define LOG_EXCEPTION(message) \
-LOG_STREAM << LOG_LEVEL_NORMAL___ << LOG_MARKER_EXCEPTION << HERE << message << std::endl
+#define LOG_EXCEPTION(message) ERR_OUT("Exception %s", std::string(message).c_str())
 #endif
 
 #ifndef LOG_ERROR_D

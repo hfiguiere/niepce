@@ -25,9 +25,7 @@
 
 #include "application.h"
 #include "frame.h"
-#include "libraryclient/libraryclient.h"
 
-using libraryclient::LibraryClient;
 
 namespace framework {
 
@@ -64,10 +62,9 @@ namespace framework {
 	int Application::main(boost::function<Application::Ptr (void)> constructor, 
 												int argc, char **argv)
 	{
+		Gnome::Conf::init();
 		Gtk::Main kit(argc, argv);
 		Application::Ptr app = constructor();
-
-		LibraryClient::Ptr library(new LibraryClient("local:.dir"));
 
     Frame::Ptr window(app->makeMainFrame());
 		app->add(window);
