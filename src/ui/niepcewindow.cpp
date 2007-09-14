@@ -232,7 +232,14 @@ namespace ui {
 	void NiepceWindow::open_library(const std::string & libMoniker)
 	{
 		m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker)));
-		gtkWindow().set_title(Glib::ustring(libMoniker));
+		set_title(libMoniker);
 	}
+
+
+	void NiepceWindow::set_title(const std::string & title)
+	{
+		Frame::set_title(std::string(_("Niepce Digital - ")) + title);
+	}
+
 
 }

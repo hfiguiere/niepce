@@ -50,6 +50,12 @@ namespace framework {
 		Glib::RefPtr<Gnome::Glade::Xml> & glade()
 			{ return m_glade; }
 
+		/** set the title of the window.
+		 * @param title the title of the window.
+		 * 
+		 * override to provide you own hooks - behaviour.
+		 */
+		virtual void set_title(const std::string & title);
 	protected:
 		/** close signal handler */
 		virtual bool _close();

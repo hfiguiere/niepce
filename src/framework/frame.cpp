@@ -57,6 +57,12 @@ namespace framework {
 	}
 
 
+	void Frame::set_title(const std::string & title)
+	{
+		gtkWindow().set_title(Glib::ustring(title));
+	}
+
+
 	bool Frame::_close()
 	{
 		if(Controller::Ptr parent = m_parent.lock()) {

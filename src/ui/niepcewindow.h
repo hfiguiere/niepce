@@ -45,6 +45,9 @@ namespace ui {
 		NiepceWindow();
 		~NiepceWindow();
 
+
+		virtual void set_title(const std::string & title);
+
 	protected:
 		virtual Gtk::Widget * buildWidget();
 
