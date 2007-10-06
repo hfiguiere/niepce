@@ -1,5 +1,5 @@
 /*
- * niepce - library/op.cpp
+ * niepce - library/test_worker.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,29 +18,29 @@
  */
 
 
-#include "op.h"
+
+#define BOOST_AUTO_TEST_MAIN
+#include <boost/test/auto_unit_test.hpp>
+
+#include "worker.h"
 
 
-namespace library {
+using namespace library;
 
-	Op::Op(OpType t)
-		: m_type(t),
-		  m_id(Op::newId())
+BOOST_AUTO_UNIT_TEST(worker_test)
+{
+	char templ[] = "/tmp/niepce-tmpXXXXXX";
+	char *ptempl =  mkdtemp(templ);
+	BOOST_CHECK(ptempl);
 	{
+		Worker w(std::string("") + ptempl);
 		
+		BOOST_CHECK(w._ops().isEmpty());
+		
+		Op::Ptr p(new Op(OP_NONE));
+		w.schedule(p);
 	}
 
-	Op::~Op()
-	{
-
-	}
-
-	Op::id_t Op::newId()
-	{
-		static id_t _id = 0;
-		_id++;
-		return _id;
-	}
-
+	
 }
 

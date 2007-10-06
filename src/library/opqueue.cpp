@@ -1,5 +1,5 @@
 /*
- * niepce - library/opqueue.h
+ * niepce - library/opqueue.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -25,7 +25,7 @@ namespace library {
 
 	OpQueue::OpQueue()
 		: m_queue(),
-			m_mutex()
+		  m_mutex()
 	{
 	}
 

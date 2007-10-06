@@ -37,6 +37,7 @@ namespace db {
 			m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
 			m_inited(false)
 	{
+		DBG_OUT("dir = %s", dir.c_str());
 		db::DBDesc desc("", 0, m_dbname);
 		m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
 		m_inited = init();

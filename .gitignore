@@ -25,6 +25,8 @@ autom4te.cache
 src/utils/testmoniker
 src/db/test_db
 src/db/test_library
+src/library/test_opqueue
+src/library/test_worker
 src/main/niepce
 doc/Doxyfile
 doc/doxygen/html

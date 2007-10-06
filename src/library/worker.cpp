@@ -25,8 +25,8 @@
 namespace library {
 
 
-	Worker::Worker(const std::string & moniker)
-		: m_library(db::Library::Ptr(new db::Library(moniker)))
+	Worker::Worker(const std::string & dir)
+		: m_library(db::Library::Ptr(new db::Library(dir)))
 	{
 	}
 

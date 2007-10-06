@@ -29,22 +29,23 @@
 #include "library/op.h"
 #include "library/opqueue.h"
 
-namespace utils {
-	class Moniker;
-}
-
 namespace library {
 
 	/** worker thread for the library */
 	class Worker
 	{
 	public:
-		Worker(const std::string & moniker);
+		/** create the worker for the library whose dir is specified */
+		Worker(const std::string & dir);
 		virtual ~Worker();
 
 		void schedule(const Op::Ptr & _op);
-		void start();
+#ifdef BOOST_AUTO_TEST_MAIN
+		OpQueue & _ops() 
+			{ return m_ops; }
+#endif
 	private:
+		void start();
 		void main();
 		void execute(const Op::Ptr & _op);
 

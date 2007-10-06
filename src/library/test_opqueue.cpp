@@ -1,5 +1,5 @@
 /*
- * niepce - library/op.cpp
+ * niepce - library/test_opqueue.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,28 +19,28 @@
 
 
 #include "op.h"
+#include "opqueue.h"
 
 
-namespace library {
+#define BOOST_AUTO_TEST_MAIN
+#include <boost/test/auto_unit_test.hpp>
 
-	Op::Op(OpType t)
-		: m_type(t),
-		  m_id(Op::newId())
-	{
-		
-	}
+using namespace library;
 
-	Op::~Op()
-	{
+BOOST_AUTO_UNIT_TEST(opqueue_test)
+{
+	OpQueue q;
 
-	}
+	Op::Ptr p(new Op(OP_NONE));
 
-	Op::id_t Op::newId()
-	{
-		static id_t _id = 0;
-		_id++;
-		return _id;
-	}
+	BOOST_CHECK(q.isEmpty());
 
+	q.add(p);
+	BOOST_CHECK(!q.isEmpty());
+
+	Op::Ptr p2(q.pop());
+	BOOST_CHECK(p2 == p);
+	BOOST_CHECK(p2->id() == p->id());
+	BOOST_CHECK(q.isEmpty());	
 }
 

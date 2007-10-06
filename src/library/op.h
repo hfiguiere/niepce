@@ -39,19 +39,20 @@ namespace library {
 	{
 	public:
 		typedef boost::shared_ptr< Op > Ptr;
+		typedef unsigned int id_t; 
 
 		Op(OpType t);
 		~Op();
 
-		unsigned int id() const 
+		id_t id() const 
 			{ return m_id; }
 		
 	private:
 		/** generate a new ID */
-		static unsigned int newId();
+		static id_t newId();
 
 		OpType m_type;
-		unsigned int    m_id;
+		id_t   m_id;
 	};
 
 }
