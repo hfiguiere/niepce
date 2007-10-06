@@ -42,11 +42,13 @@ namespace library {
 		Worker(const std::string & moniker);
 		virtual ~Worker();
 
-		void main(const std::string & moniker);
+		void schedule(const Op::Ptr & _op);
+		void start();
 	private:
+		void main();
 		void execute(const Op::Ptr & _op);
 
-		boost::thread    m_thread;
+		boost::thread_group   m_threads;
 		OpQueue          m_ops;
 		db::Library::Ptr m_library;
 	};

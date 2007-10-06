@@ -32,16 +32,18 @@ namespace library {
 	class OpQueue
 	{
 	public:
+		typedef boost::recursive_mutex mutex_t;
+
 		OpQueue();
 		~OpQueue();
 
 		void add(const Op::Ptr &);
 		Op::Ptr pop();
 		bool isEmpty() const;
-
+		mutex_t & mutex() const
+			{ return m_mutex; }
 	private:
 		std::deque<Op::Ptr> m_queue;
-		typedef boost::recursive_mutex mutex_t;
 		mutable mutex_t     m_mutex;
 	};
 

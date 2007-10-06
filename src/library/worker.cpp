@@ -26,7 +26,7 @@ namespace library {
 
 
 	Worker::Worker(const std::string & moniker)
-		: m_thread(boost::bind(&Worker::main, this, moniker))
+		: m_library(db::Library::Ptr(new db::Library(moniker)))
 	{
 	}
 
@@ -35,17 +35,36 @@ namespace library {
 	{
 	}
 
+
+
+	void Worker::schedule(const Op::Ptr & _op)
+	{
+		OpQueue::mutex_t::scoped_lock(m_ops.mutex(), true);
+		bool was_empty = m_ops.isEmpty();
+		m_ops.add(_op);
+		if(was_empty) {
+			start();
+		}
+	}
+
+	void Worker::start()
+	{
+		boost::thread * thrd = m_threads.create_thread(
+			boost::bind(&Worker::main, this));
+		thrd->join();
+	}
+
 	/** this is the main loop of the libray worker */
-	void Worker::main(const std::string & moniker)
+	void Worker::main()
 	{
 		bool terminated = false;
 
-		m_library = db::Library::Ptr(new db::Library(moniker));
-
 		do {
-
-			while(m_ops.isEmpty()) {
-				m_thread.yield();
+			{
+				OpQueue::mutex_t::scoped_lock(m_ops.mutex(), true);
+				while(m_ops.isEmpty()) {
+					return;
+				}
 			}
 			
 			Op::Ptr op = m_ops.pop();
@@ -53,8 +72,6 @@ namespace library {
 			execute(op);
 
 		} while(!terminated);
-
-		m_library.reset();
 	}
 
 
