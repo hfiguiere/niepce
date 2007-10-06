@@ -21,13 +21,28 @@
 #include <string.h>
 #include <stdarg.h>
 
+#if defined(NDEBUG)
+#define _SAVENDEBUG NDEBUG
+#undef NDEBUG
+#endif
+// we make sure assert is always defined.
+#include <assert.h>
+// but we need to save the state.
+#if defined(_SAVENDEBUG)
+#define NDEBUG _SAVENDEBUG
+#endif
+
+
 #include "debug.h"
+
+
 
 namespace utils {
 
-	static void _print(const char *prefix, const char *fmt, 
+	static void _vprint(const char *prefix, const char *fmt, 
 										 const char* func,	va_list marker);
-
+	static void _print(const char *prefix, const char *fmt, 
+					   const char* func, ...);
 
 	void dbg_print(const char *fmt, const char* func, ...)
 	{
@@ -37,7 +52,7 @@ namespace utils {
 		
 		va_start(marker, func);
 		// TODO make this atomic
-		_print(DEBUG_MSG, fmt, func, marker);
+		_vprint(DEBUG_MSG, fmt, func, marker);
 
 		va_end(marker);
 		
@@ -45,6 +60,18 @@ namespace utils {
 #endif
 	}
 
+
+	/** assert 
+	 * 
+	 */
+	void dbg_assert(bool condvalue, const char* cond, const char* filen,
+					const char* linen, const char* reason)
+	{
+		if(condvalue) {
+			_print("ASSERT: ", "%s:%s %s", cond, filen, linen, reason);
+
+		}
+	}
 
 
 	void err_print(const char *fmt, const char* func, ...)
@@ -54,7 +81,7 @@ namespace utils {
 		
 		va_start(marker, func);
 		// TODO make this atomic
-		_print(ERROR_MSG, fmt, func, marker);
+		_vprint(ERROR_MSG, fmt, func, marker);
 
 		va_end(marker);
 		
@@ -63,6 +90,18 @@ namespace utils {
 
 
 	static void _print(const char *prefix, const char *fmt, 
+							const char* func, ...)
+	{
+		va_list marker;
+		
+		va_start(marker, func);
+
+		_vprint(prefix, fmt, func, marker);
+
+		va_end(marker);
+	}
+
+	static void _vprint(const char *prefix, const char *fmt, 
 							const char* func,	va_list marker)
 	{
 		fwrite(prefix, 1, strlen(prefix), stderr);
