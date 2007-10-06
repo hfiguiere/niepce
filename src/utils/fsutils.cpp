@@ -1,5 +1,5 @@
 /*
- * niepce - library/test_worker.cpp
+ * niepce - utils/fsutils.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,31 +18,13 @@
  */
 
 
-#include "utils/fsutils.h"
+#include <stdlib.h>
+#include <string>
 
-#define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
+#include "fsutils.h"
 
-
-#include <boost/test/auto_unit_test.hpp>
-
+namespace utils {
 
 
-using namespace library;
 
-BOOST_AUTO_UNIT_TEST(worker_test)
-{
-	char templ[] = "/tmp/niepce-tmpXXXXXX";
-	char *ptempl =  mkdtemp(templ);
-	BOOST_CHECK(ptempl);
-	{
-		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl);
-		
-		BOOST_CHECK(w._ops().isEmpty());
-		
-		Op::Ptr p(new Op(OP_NONE));
-		w.schedule(p);
-	}
 }
-

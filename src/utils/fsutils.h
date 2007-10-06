@@ -1,5 +1,5 @@
 /*
- * niepce - library/test_worker.cpp
+ * niepce - utils/fsutils.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,32 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __UTILS_FSUTILS_H__
+#define __UTILS_FSUTILS_H__
 
-#include "utils/fsutils.h"
+#include <string>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 
-#define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
+namespace utils {
 
-
-#include <boost/test/auto_unit_test.hpp>
-
-
-
-using namespace library;
-
-BOOST_AUTO_UNIT_TEST(worker_test)
+class DirectoryDisposer
 {
-	char templ[] = "/tmp/niepce-tmpXXXXXX";
-	char *ptempl =  mkdtemp(templ);
-	BOOST_CHECK(ptempl);
-	{
-		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl);
-		
-		BOOST_CHECK(w._ops().isEmpty());
-		
-		Op::Ptr p(new Op(OP_NONE));
-		w.schedule(p);
-	}
+public:
+	DirectoryDisposer(const std::string &dir)
+		: m_dir(dir)
+		{
+		}
+	~DirectoryDisposer()
+		{
+			boost::filesystem::remove_all(m_dir);
+		}
+private:
+	std::string m_dir;
+};
+
+
 }
 
+#endif
