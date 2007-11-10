@@ -5,6 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 
 (c) 2006-2007 Hubert Figuière
+Some portions are written by other people.
 
 To build is you need the following:
 -----------------------------------
@@ -13,9 +14,11 @@ A C++ compiler
 gtk+ 2.8
 cairo 1.1
 gtkmm 2.6
-gconfmm 2.6
+gconfmm 2.6 (this will be removed)
 cairomm
 sqlite3
+gtkimageview 1.5.0
+boost 1.33 (1.34 is know to break currently, this will be fixed)
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
