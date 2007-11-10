@@ -63,7 +63,10 @@ PKG_CHECK_MODULES(GTKIMAGEVIEW, [gtkimageview >= $LIBGTKIMAGEVIEW_VERSION])
 AX_BOOST_BASE([1.33.1])
 AX_BOOST_UNIT_TEST_FRAMEWORK
 AX_BOOST_THREAD
+dnl we need to do an extra check on the boost headers
+AC_CHECK_HEADER(boost/thread.hpp, , AC_MSG_ERROR([Boost.Thread headers not found.]))
 AX_BOOST_FILESYSTEM
+AC_CHECK_HEADER(boost/filesystem/path.hpp, , AC_MSG_ERROR([Boost.Filesystem headers not found.]))
 
 dnl hack since AX_BOOST_FILESYSTEM seems to fail
 if test "x$BOOST_FILESYSTEM_LIB" = "x" ; then
