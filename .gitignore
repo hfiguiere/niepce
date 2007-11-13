@@ -18,10 +18,13 @@ install-sh
 ltmain.sh
 stamp-*
 autom4te.cache
+intltool-*.in
 *.o
 *.lo
 *.la
 *~
+m4/intltool.m4
+po/Makefile.in.in
 src/utils/testmoniker
 src/db/test_db
 src/db/test_library
