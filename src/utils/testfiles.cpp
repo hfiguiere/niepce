@@ -38,7 +38,7 @@ int test_main( int, char *[] )             // note the name!
 	files = FileList::getFilesFromDirectory( "foo" );
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "test" );
+	files = FileList::getFilesFromDirectory( "._test" );
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	
