@@ -68,6 +68,8 @@ public:
 
     bool read_next_row () ;
 
+    virtual int64_t last_row_id();
+
     unsigned int get_number_of_columns () const ;
 
     bool get_column_type (uint32_t a_offset,

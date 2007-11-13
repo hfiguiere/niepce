@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/clientimpl.h
+ * niepce - utils/testmoniker.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -16,39 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/** @brief unit test for files */
 
+#include <boost/test/minimal.hpp>
 
-#ifndef _LIBRARYCLIENT_CLIENTIMPL_H_
-#define _LIBRARYCLIENT_CLIENTIMPL_H_
+#include <stdlib.h>
 
-#include <string>
+#include "files.h"
 
-#include "utils/moniker.h"
-#include "clienttypes.h"
+using utils::FileList;
 
+int test_main( int, char *[] )             // note the name!
+{
+	system( "mkdir -p ._test/sub" );
+	system( "touch ._test/1" );
+	system( "touch ._test/2" );
+	system( "touch ._test/3" );
 
-namespace libraryclient {
+	FileList::Ptr files;
+	
+	files = FileList::getFilesFromDirectory( "foo" );
+	BOOST_CHECK( !files );
 
-	class LocalLibraryServer;
-
-	class ClientImpl
-	{
-	public:
-		static ClientImpl *makeClientImpl(const utils::Moniker & moniker);
-
-		ClientImpl(const utils::Moniker & moniker);
-		virtual ~ClientImpl();
-
-		tid getAllKeywords();
-		tid getAllFolders();
-		void importFromDirectory(const std::string & dir, bool manage);
-
-	protected:
-		const utils::Moniker m_moniker;
-		LocalLibraryServer *m_localLibrary;
-	};
-
+	files = FileList::getFilesFromDirectory( "test" );
+	BOOST_CHECK( files );
+	BOOST_CHECK( files->size() == 3 );
+	
+	system( "rm -fr ._test" );
+	return 0;
 }
 
-
-#endif

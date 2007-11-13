@@ -67,6 +67,13 @@ SQLStatement::SQLStatement (const std::string &a_sql_string)
     m_priv->sql_string = a_sql_string ;
 }
 
+SQLStatement::SQLStatement (const boost::format & _format)
+{
+    m_priv = new SQLStatementPriv ;
+    m_priv->sql_string = str(_format);
+}
+
+
 SQLStatement::SQLStatement (const SQLStatement &a_statement)
 {
     m_priv = new SQLStatementPriv ;

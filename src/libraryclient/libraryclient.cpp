@@ -47,8 +47,13 @@ namespace libraryclient {
 		return m_pImpl->getAllFolders();
 	}
 
+	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
+	{
+		m_pImpl->importFromDirectory(dir, manage);
+	}
+
 	bool LibraryClient::fetchKeywordsForFile(int file, 
-																					 library::Keyword::IdList &keywords)
+											 library::Keyword::IdList &keywords)
 	{
 		// TODO
 		return false;

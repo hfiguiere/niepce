@@ -140,6 +140,7 @@ namespace ui {
 			// pass it to the library
 			// TODO
 			DBG_OUT("%s", to_import.c_str());
+			m_libClient->importFromDirectory(to_import, false);
 			break;
 		default:
 			break;

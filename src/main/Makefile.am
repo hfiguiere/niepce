@@ -23,4 +23,5 @@ niepce_LDADD = \
 	$(top_builddir)/src/db/sqlite/libniepcedbsqlite.la \
 	$(top_builddir)/src/utils/libniepceutils.la \
 	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ @GTKIMAGEVIEW_LIBS@ \
-	@GNOMEVFS_LIBS@ @LIBGCONFMM_LIBS@ @BOOST_THREAD_LIB@
+	@GNOMEVFS_LIBS@ @LIBGCONFMM_LIBS@ @BOOST_THREAD_LIB@ \
+	@BOOST_FILESYSTEM_LIB@

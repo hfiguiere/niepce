@@ -50,6 +50,29 @@ namespace db {
 		const std::string & dbName() const
 			{ return m_dbname; }
 
+		/** add a file to the library
+		 * @param folder the containing folder
+		 * @param file the file path
+		 * @param manage pass true it the library *manage* the file. Currently unsupported.
+		 */
+		int addFile2(const std::string & folder, const std::string & file, bool manage);
+		/** add a file to the library
+		 * @param folder_id the id of the containing folder
+		 * @param file the file path
+		 * @param manage pass true it the library *manage* the file. Currently unsupported.
+		 */
+		int addFile(int folder_id, const std::string & file, bool manage);
+		
+		/** Get a specific folder id from the library
+		 * @param folder the folder path to check
+		 * @return the id of the folder, -1 if not found
+		 */
+		int getFolder(const std::string & folder);
+		/** Add a folder
+		 * @param folder the folder path
+		 */
+		int addFolder(const std::string & folder);
+
 		int checkDatabaseVersion();
 		
 		db::IConnectionDriver::Ptr dbDriver()

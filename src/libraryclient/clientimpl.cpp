@@ -18,9 +18,15 @@
  */
 
 #include "utils/debug.h"
+#include "utils/files.h"
+#include "library/op.h"
+#include "library/commands.h"
 #include "clientimpl.h"
 #include "locallibraryserver.h"
 
+using utils::FileList;
+using library::Op;
+using library::Commands;
 
 namespace libraryclient {
 	
@@ -31,7 +37,7 @@ namespace libraryclient {
 	
 	ClientImpl::ClientImpl(const utils::Moniker & moniker)
 		: m_moniker(moniker),
-			m_localLibrary(NULL)
+		  m_localLibrary(NULL)
 	{
 		DBG_OUT("creating implementation with moniker %s", 
 						moniker.c_str());
@@ -52,6 +58,16 @@ namespace libraryclient {
 	tid ClientImpl::getAllFolders()
 	{
 		return 0;
+	}
+
+	void ClientImpl::importFromDirectory(const std::string & dir, bool manage)
+	{
+		FileList::Ptr files;
+		
+		files = FileList::getFilesFromDirectory(dir);
+
+		Op::Ptr op(Commands::opImportFiles(dir, files, manage));
+		m_localLibrary->schedule(op);
 	}
 
 }

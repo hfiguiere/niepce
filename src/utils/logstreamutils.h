@@ -170,9 +170,6 @@ std::cerr << scopename << " - " domain;
     LOG_SCOPE_NORMAL_D(PRETTY_FUNCTION_NAME_, domain)
 #endif
 
-#ifndef LOG_FUNCTION_SCOPE_NORMAL_DD
-#define LOG_FUNCTION_SCOPE_NORMAL_DD LOG_FUNCTION_SCOPE_NORMAL_D(NMV_DEFAULT_DOMAIN)
-#endif
 
 #ifndef LOG_REF_COUNT
 #define LOG_REF_COUNT(a_object_ptr, a_name) \

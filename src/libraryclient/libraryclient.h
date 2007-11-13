@@ -38,6 +38,7 @@ namespace libraryclient {
 		: public library::Storage
 	{
 	public:
+		typedef boost::shared_ptr< LibraryClient > Ptr;
 		LibraryClient(const utils::Moniker & moniker);
 		virtual ~LibraryClient();
 
@@ -48,8 +49,14 @@ namespace libraryclient {
 		/** get all the folder
 		 * @return transaction ID
 		 */
-	  tid getAllFolders();
+		tid getAllFolders();
 
+		/** Import files from a directory
+		 * @param dir the directory
+		 * @param manage true if imports have to be managed
+		 */
+		void importFromDirectory(const std::string & dir, bool manage);
+		
 		/* sync call */
 		virtual bool fetchKeywordsForFile(int file, library::Keyword::IdList &keywords);
 

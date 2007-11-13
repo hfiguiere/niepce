@@ -21,6 +21,7 @@
 #include <boost/bind.hpp>
 
 #include "worker.h"
+#include "commands.h"
 
 namespace library {
 
@@ -77,5 +78,6 @@ namespace library {
 
 	void Worker::execute(const Op::Ptr & _op)
 	{
+		Commands::dispatch(m_library, _op);
 	}
 }

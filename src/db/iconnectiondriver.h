@@ -74,6 +74,8 @@ public:
 
     virtual bool read_next_row () = 0;
 
+    virtual int64_t last_row_id() = 0;
+
     virtual unsigned int get_number_of_columns () const = 0;
 
     virtual bool get_column_type (uint32_t a_offset,

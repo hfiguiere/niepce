@@ -39,5 +39,9 @@ BOOST_AUTO_UNIT_TEST(library_test)
 //	db::SQLStatement check("SELECT ");
 //	db->
 
+
+	lib.addFolder("foo");
+	BOOST_CHECK(lib.getFolder("foo") != -1);
+
 	BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
 }

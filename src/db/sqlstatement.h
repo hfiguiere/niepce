@@ -33,6 +33,8 @@
 #include <string>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+
 
 namespace db
 {
@@ -101,6 +103,7 @@ class SQLStatement
 public:
 
     SQLStatement (const std::string &a_sql_string="") ;
+    SQLStatement (const boost::format & _format);
 
     SQLStatement (const SQLStatement &) ;
 

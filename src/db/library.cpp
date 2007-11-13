@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
 
 #include "library.h"
 #include "utils/exception.h"
@@ -55,9 +56,11 @@ namespace db {
 		int version = checkDatabaseVersion();
 		if(version == -1) {
 			// error
+			DBG_OUT("version check -1");
 		}
 		else if(version == 0) {
 			// let's create our DB
+			DBG_OUT("version == 0");
 			return _initDb();
 		}
 		return true;
@@ -109,23 +112,27 @@ namespace db {
 	 */
 	int Library::checkDatabaseVersion()
 	{
-		int v;
+		int v = 0;
+		std::string version;
 		try {
 			SQLStatement sql("SELECT value FROM admin WHERE key='version'");
 			
-			m_dbdrv->execute_statement(sql);
-			m_dbdrv->read_next_row();
-			std::string version;
-			m_dbdrv->get_column_content(0, version);
-			v = boost::lexical_cast<int>(version);
+			if(m_dbdrv->execute_statement(sql)) {
+				if(m_dbdrv->read_next_row()) {
+					if(m_dbdrv->get_column_content(0, version)) {
+						v = boost::lexical_cast<int>(version);
+					}
+				}
+			}
 		}
-		catch(utils::Exception & e)
+		catch(const utils::Exception & e)
 		{
-			std::cerr << "db exception" << std::endl;
+			DBG_OUT("db exception %s", e.what());
 			v = -1;
 		}
-		catch(boost::bad_lexical_cast & e)
+		catch(const boost::bad_lexical_cast &)
 		{
+			DBG_OUT("version is %s, can't convert to int", version.c_str());
 			v = 0;
 		}
 		catch(...)
@@ -134,5 +141,79 @@ namespace db {
 		}
 		return v;
 	}
+
+
+	int Library::addFile(int folder_id, const std::string & file, bool manage)
+	{
+		int ret = -1;
+		DBG_ASSERT(manage, "manage not supported");
+		DBG_ASSERT(folder_id != -1, "invalid folder ID");
+		try {
+			SQLStatement sql(boost::format("INSERT INTO files (path, parent_id) VALUES (%1%, %2%);") 
+							 % file % folder_id);
+			if(m_dbdrv->execute_statement(sql)) {
+				int64_t id = m_dbdrv->last_row_id();
+				DBG_OUT("last row inserted %d", (int)id);
+				ret = id;
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		return ret;
+	}
+
+
+	int Library::addFile2(const std::string & folder, const std::string & file, bool manage)
+	{
+		int folder_id = getFolder(folder);
+		if(folder_id == -1) {
+			ERR_OUT("Folder %s not found", folder.c_str());
+			folder_id = 0;
+		}
+		return addFile(folder_id, file, manage);
+	}
 	
+
+	int Library::getFolder(const std::string & folder)
+	{
+		int ret = -1;
+		SQLStatement sql(boost::format("SELECT id FROM folders WHERE path='%1%'") % folder);
+		
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				if(m_dbdrv->read_next_row()) {
+					int64_t id;
+					m_dbdrv->get_column_content(0, id);
+					ret = (int)id;
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		return ret;
+	}
+
+
+	int Library::addFolder(const std::string & folder)
+	{
+		int ret = -1;
+		SQLStatement sql(boost::format("INSERT INTO folders (path,name,vault_id,parent_id) "
+									   "VALUES('%1%', '%2%', '0', '0');") % folder % folder);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				int64_t id = m_dbdrv->last_row_id();
+				DBG_OUT("last row inserted %d", (int)id);
+				ret = (int)id;
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		return ret;
+	}
 }

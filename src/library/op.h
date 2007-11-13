@@ -18,19 +18,21 @@
  */
 
 
-
-
 #ifndef __NIEPCE_LIBRARY_OP_H__
 #define __NIEPCE_LIBRARY_OP_H__
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
+
 
 namespace library {
 
 	typedef enum {
 		OP_NONE = 0,
 		OP_QUERY_FILES,
-		OP_UPDATE_FILES
+		OP_UPDATE_FILES,
+		OP_IMPORT_FILES
 	} OpType;
 
 
@@ -40,13 +42,20 @@ namespace library {
 	public:
 		typedef boost::shared_ptr< Op > Ptr;
 		typedef unsigned int id_t; 
+		typedef std::vector< boost::any > Args;
 
 		Op(OpType t);
 		~Op();
 
+		OpType type()
+			{ return m_type; }
 		id_t id() const 
 			{ return m_id; }
-		
+
+		Args & args()
+			{ return m_args; }
+	protected:
+		Args m_args; /*< the arguments, free form */
 	private:
 		/** generate a new ID */
 		static id_t newId();

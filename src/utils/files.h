@@ -1,0 +1,60 @@
+/*
+ * niepce - utils/files.h
+ *
+ * Copyright (C) 2007 Hubert Figuiere
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+
+
+#ifndef __UTILS_FILES_H__
+#define __UTILS_FILES_H__
+
+#include <vector>
+#include <string>
+
+#include <boost/shared_ptr.hpp>
+
+namespace utils {
+
+	class FileList 
+		: private std::vector< std::string >
+	{
+	public:
+		typedef std::string value_type;
+		typedef std::vector< value_type >    _impltype_t;
+		typedef boost::shared_ptr< FileList > Ptr;
+		typedef _impltype_t::iterator         iterator;
+		typedef _impltype_t::const_iterator   const_iterator;
+		typedef _impltype_t::size_type        size_type;
+
+		FileList( )
+			{}
+		FileList( const _impltype_t & );
+
+		static Ptr getFilesFromDirectory(const value_type & dir);
+
+		const_iterator begin() const
+			{ return _impltype_t::begin(); }
+		const_iterator end() const
+			{ return _impltype_t::end(); }
+		size_type size() const
+			{ return _impltype_t::size(); }
+	};
+}
+
+
+#endif
