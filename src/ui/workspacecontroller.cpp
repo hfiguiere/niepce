@@ -22,15 +22,18 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/box.h>
 
+#include "framework/application.h"
 #include "workspacecontroller.h"
 
+
+using framework::Application;
 
 namespace ui {
 
 	WorkspaceController::WorkspaceController()
 		: framework::Controller()
 	{
-		Glib::RefPtr< Gtk::IconTheme > icon_theme(Gtk::IconTheme::get_default());
+		Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());
 		m_icons[ICON_FOLDER] = icon_theme->load_icon(
 			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
 		m_icons[ICON_PROJECT] = icon_theme->load_icon(

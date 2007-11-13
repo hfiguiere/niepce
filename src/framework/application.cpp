@@ -52,6 +52,10 @@ namespace framework {
 		return m_application;
 	}
 
+	Glib::RefPtr<Gtk::IconTheme> Application::getIconTheme() const
+	{
+		return Gtk::IconTheme::get_default();
+	}
 
 	/** Main loop. 
 	 * @param constructor the Application object constructor

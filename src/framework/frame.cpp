@@ -22,11 +22,11 @@
 #include <boost/bind.hpp>
 
 #include <gtkmm/window.h>
-#include <gtkmm/icontheme.h>
 
 #include "utils/debug.h"
 #include "utils/boost.h"
 #include "frame.h"
+#include "application.h"
 
 
 
@@ -66,17 +66,22 @@ namespace framework {
 
 	void Frame::set_icon_from_theme(const Glib::ustring & name)
 	{
-		Glib::RefPtr<Gtk::IconTheme> icon_theme(Gtk::IconTheme::get_default());
-		std::vector<int> icon_sizes(icon_theme->get_icon_sizes(name));
+		using Glib::RefPtr;
+		using Gtk::IconTheme;
+		using std::vector;
+		using std::list;
 		
-		std::list<Glib::RefPtr<Gdk::Pixbuf> > icons;
+		RefPtr< IconTheme > icon_theme(Application::app()->getIconTheme());
+		vector<int> icon_sizes(icon_theme->get_icon_sizes(name));
+		
+		list< RefPtr <Gdk::Pixbuf> > icons;
 
 		std::for_each(icon_sizes.begin(), icon_sizes.end(),
 					  // store the icon
-					  boost::bind(&std::list<Glib::RefPtr<Gdk::Pixbuf> >::push_back, 
+					  boost::bind(&std::list< RefPtr<Gdk::Pixbuf> >::push_back, 
 								  boost::ref(icons), 
 								  // load the icon
-								  boost::bind( &Gtk::IconTheme::load_icon, 
+								  boost::bind( &IconTheme::load_icon, 
 											   boost::ref(icon_theme), 
 											   boost::ref(name), _1, 
 											   Gtk::ICON_LOOKUP_USE_BUILTIN)));

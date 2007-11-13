@@ -25,6 +25,7 @@
 
 #include <glibmm/refptr.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/icontheme.h>
 
 #include "framework/configuration.h"
 #include "framework/frame.h"
@@ -55,6 +56,8 @@ namespace framework {
 		virtual void quit();
 		virtual void add(const Controller::Ptr & sub);
 		virtual void terminate();
+
+		Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
 
 		static Application::Ptr app();
 		static int main(boost::function<Application::Ptr (void)> constructor, 
