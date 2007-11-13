@@ -25,7 +25,7 @@
 namespace Glib {
 
 	/** Dereference Glib::RefPtr<> for use in boost::bind */
-	template< class T_CppObject >
+	template< class T_CppObject > inline
 	T_CppObject *get_pointer(const Glib::RefPtr< T_CppObject >& p)
 	{
 		return p.operator->();
