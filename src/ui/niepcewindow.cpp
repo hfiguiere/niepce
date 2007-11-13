@@ -48,7 +48,6 @@ namespace ui {
 	NiepceWindow::NiepceWindow()
 		: framework::Frame()//GLADEDIR "mainwindow.glade", "mainwindow")
 	{
-
 	}
 
  	Gtk::Widget * 
@@ -60,6 +59,9 @@ namespace ui {
 
 		init_actions();
 		init_ui();
+
+		Glib::ustring name("camera");
+		set_icon_from_theme(name);		
 
 		// main view
 		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
@@ -77,7 +79,6 @@ namespace ui {
 
 		Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
 		m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
-		
 		m_vbox.pack_start(m_hbox);
 
 

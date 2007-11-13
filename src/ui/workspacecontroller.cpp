@@ -19,39 +19,60 @@
 
 #include <glibmm/i18n.h>
 
-#include <gtkmm/treeview.h>
 #include <gtkmm/icontheme.h>
-#include <gtkmm/treestore.h>
+#include <gtkmm/box.h>
 
 #include "workspacecontroller.h"
 
 
 namespace ui {
 
+	WorkspaceController::WorkspaceController()
+		: framework::Controller()
+	{
+		Glib::RefPtr< Gtk::IconTheme > icon_theme(Gtk::IconTheme::get_default());
+		m_icons[ICON_FOLDER] = icon_theme->load_icon(
+			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
+		m_icons[ICON_PROJECT] = icon_theme->load_icon(
+			Glib::ustring("applications-accessories"), 16, 
+			Gtk::ICON_LOOKUP_USE_BUILTIN);
+	}
+
+
+	void WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
+									   const Glib::RefPtr<Gdk::Pixbuf> & icon,
+									   const Glib::ustring & label, int id) const
+	{
+		Gtk::TreeModel::iterator iter;
+		Gtk::TreeModel::Row row;
+		iter = treestore->append();
+		row = *iter;
+		row[m_librarycolumns.m_icon] = icon;
+		row[m_librarycolumns.m_label] = label; 
+		row[m_librarycolumns.m_id] = id;
+	}
+
+
 	Gtk::Widget * WorkspaceController::buildWidget()
 	{
 		Glib::RefPtr<Gtk::TreeStore> treestore = Gtk::TreeStore::create(m_librarycolumns);
-		m_librarytree = Gtk::manage(new Gtk::TreeView());
-		m_librarytree->set_model(treestore);
-		Gtk::TreeModel::iterator iter = treestore->append();
-		Gtk::TreeModel::Row row = *iter;
-		Glib::RefPtr< Gtk::IconTheme > icon_theme(Gtk::IconTheme::get_default());
-		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
-			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
-		row[m_librarycolumns.m_label] = _("Pictures");
-		row[m_librarycolumns.m_id] = 0;
-		iter = treestore->append();
-		row = *iter;
-		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
-			Glib::ustring("applications-accessories"), 16, 
-			Gtk::ICON_LOOKUP_USE_BUILTIN);
-		row[m_librarycolumns.m_label] = _("Projects");
-		row[m_librarycolumns.m_id] = 0;
+		m_librarytree.set_model(treestore);
 
-		m_librarytree->set_headers_visible(true);
-		m_librarytree->append_column("", m_librarycolumns.m_icon);
-		m_librarytree->append_column(_("Workspace"), m_librarycolumns.m_label);
-		return m_librarytree;
+		add_item(treestore, m_icons[ICON_FOLDER], 
+				 Glib::ustring(_("Pictures")), 0);
+		add_item(treestore, m_icons[ICON_PROJECT], 
+				 Glib::ustring(_("Projects")), 0);
+
+		m_librarytree.set_headers_visible(false);
+		m_librarytree.append_column("", m_librarycolumns.m_icon);
+		m_librarytree.append_column("", m_librarycolumns.m_label);
+
+		// TODO make it a mnemonic
+		m_label.set_text_with_mnemonic(Glib::ustring(_("_Workspace")));
+		m_label.set_mnemonic_widget(m_librarytree);
+		m_vbox.pack_start(m_label, Gtk::PACK_SHRINK);
+		m_vbox.pack_start(m_librarytree);
+		return &m_vbox;
 	}
 	
 

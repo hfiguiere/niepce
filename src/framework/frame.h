@@ -56,6 +56,10 @@ namespace framework {
 		 * override to provide you own hooks - behaviour.
 		 */
 		virtual void set_title(const std::string & title);
+		/** set the window icon from the theme 
+		 * @param name the icon name in the theme
+		 */
+		void set_icon_from_theme(const Glib::ustring & name);
 	protected:
 		/** close signal handler */
 		virtual bool _close();

@@ -14,4 +14,4 @@ noinst_LTLIBRARIES = libniepceutils.la
 libniepceutils_la_SOURCES = exception.h exception.cpp \
 	buffer.h logstreamutils.h \
 	moniker.h moniker.cpp \
-	debug.h debug.cpp
+	debug.h debug.cpp boost.h

@@ -22,11 +22,17 @@
 #ifndef __UI_WORKSPACECONTROLLER_H__
 #define __UI_WORKSPACECONTROLLER_H__
 
+#include <boost/array.hpp>
+
+#include <glibmm/ustring.h>
+
+#include <gtkmm/treeview.h>
+#include <gtkmm/label.h>
+#include <gtkmm/treestore.h>
 
 #include "framework/controller.h"
 
 namespace Gtk {
-	class TreeView;
 }
 
 
@@ -37,6 +43,7 @@ namespace ui {
 		: public framework::Controller
 	{
 	public:
+		WorkspaceController();
 		class LibraryTreeColumns 
 			: public Gtk::TreeModelColumnRecord
 		{
@@ -57,8 +64,19 @@ namespace ui {
 		virtual Gtk::Widget * buildWidget();
 
 	private:
+		void add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
+					  const Glib::RefPtr<Gdk::Pixbuf> & icon,
+					  const Glib::ustring & label, int id) const;
+		enum {
+			ICON_FOLDER = 0,
+			ICON_PROJECT,
+			_ICON_SIZE
+		};
+		boost::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
 		LibraryTreeColumns             m_librarycolumns;
-		Gtk::TreeView*                 m_librarytree;
+		Gtk::VBox                      m_vbox;
+		Gtk::Label                     m_label;
+		Gtk::TreeView                  m_librarytree;
 	};
 
 

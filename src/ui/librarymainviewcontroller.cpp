@@ -20,12 +20,9 @@
 
 #include <glibmm/i18n.h>
 
-#include <gtkmm/iconview.h>
-
 #include <gtkimageview/gtkimageview.h>
 #include <gtkimageview/gtkimagescrollwin.h>
 
-#include "librarymainview.h"
 #include "librarymainviewcontroller.h"
 
 namespace ui {
@@ -33,15 +30,13 @@ namespace ui {
 
 	Gtk::Widget * LibraryMainViewController::buildWidget()
 	{
-		LibraryMainView *mainview = new LibraryMainView();
-		m_librarylistview = Gtk::manage(new Gtk::IconView());
-		mainview->append_page(*m_librarylistview, _("Library"));
+		m_mainview.append_page(m_librarylistview, _("Library"));
 		
 		GtkWidget *iv = gtk_image_view_new();
 		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
 		m_imageview = Gtk::manage(Glib::wrap(ivs));
-		mainview->append_page(*m_imageview, _("Darkroom"));
-		return mainview;
+		m_mainview.append_page(*m_imageview, _("Darkroom"));
+		return &m_mainview;
 	}
 
 }

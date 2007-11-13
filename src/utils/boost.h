@@ -1,5 +1,5 @@
 /*
- * niepce - ui/librarymainviewcontroller.h
+ * niepce - utils/boost.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,38 +18,20 @@
  */
 
 
-#ifndef __UI_LIBRARYMAINVIEWCONTROLLER_H__
-#define __UI_LIBRARYMAINVIEWCONTROLLER_H__
 
+#ifndef _UTILS_BOOST_H_
+#define _UTILS_BOOST_H_
 
-#include <gtkmm/iconview.h>
+namespace Glib {
 
-#include "librarymainview.h"
-#include "framework/controller.h"
-
-namespace Gtk {
-	class Widget;
-}
-
-namespace ui {
-
-	class LibraryMainViewController
-		: public framework::Controller
+	/** Dereference Glib::RefPtr<> for use in boost::bind */
+	template< class T_CppObject >
+	T_CppObject *get_pointer(const Glib::RefPtr< T_CppObject >& p)
 	{
-	public:
-		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
-
-	protected:
-		virtual Gtk::Widget * buildWidget();
-
-	private:
-
-		// managed widgets...
-		LibraryMainView  m_mainview;
-		Gtk::IconView    m_librarylistview;
-		Gtk::Widget*     m_imageview;
-	};
+		return p.operator->();
+	}
 
 }
+
 
 #endif
