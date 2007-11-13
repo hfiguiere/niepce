@@ -1,5 +1,5 @@
 /*
- * niepce - utils/debug.h
+ * niepce - utils/debug.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -65,10 +65,10 @@ namespace utils {
 	 * 
 	 */
 	void dbg_assert(bool condvalue, const char* cond, const char* filen,
-					const char* linen, const char* reason)
+					int linen, const char* reason)
 	{
 		if(condvalue) {
-			_print("ASSERT: ", "%s:%s %s", cond, filen, linen, reason);
+			_print("ASSERT: ", "%s:%d %s", cond, filen, linen, reason);
 
 		}
 	}

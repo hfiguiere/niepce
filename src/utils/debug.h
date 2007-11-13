@@ -63,7 +63,7 @@ namespace utils {
 	 * @param reason the reason of the assert
 	 */
 	void dbg_assert(bool condvalue, const char* cond, const char* filen,
-					const char* linen, const char* reason);
+					int linen, const char* reason);
 
 	/** print error message. printf format.
 	 * Call with the ERR_OUT macro.
