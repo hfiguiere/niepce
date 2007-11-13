@@ -39,13 +39,19 @@
 #define NMV_DEFAULT_DOMAIN __FILE__
 
 
-#ifndef HERE
-#define HERE __ASSERT_FUNCTION << ":" <<__FILE__<< ":" << __LINE__ << ":"
+#ifndef PRETTY_FUNCTION_NAME_
+#ifdef DEBUG
+#define PRETTY_FUNCTION_NAME_ __ASSERT_FUNCTION
+#else
+// non portable construct, who the hell care.
+#define PRETTY_FUNCTION_NAME_ __PRETTY_FUNCTION__
+#endif
 #endif
 
-#ifndef PRETY_FUNCTION_NAME_
-#define PRETTY_FUNCTION_NAME_ __ASSERT_FUNCTION
+#ifndef HERE
+#define HERE PRETTY_FUNCTION_NAME_ << ":" <<__FILE__<< ":" << __LINE__ << ":"
 #endif
+
 
 #ifndef LOG_STREAM
 #define LOG_STREAM std::cerr
