@@ -76,15 +76,15 @@ namespace framework {
 		
 		list< RefPtr <Gdk::Pixbuf> > icons;
 
-		std::for_each(icon_sizes.begin(), icon_sizes.end(),
-					  // store the icon
-					  boost::bind(&std::list< RefPtr<Gdk::Pixbuf> >::push_back, 
-								  boost::ref(icons), 
-								  // load the icon
-								  boost::bind( &IconTheme::load_icon, 
-											   boost::ref(icon_theme), 
-											   boost::ref(name), _1, 
-											   Gtk::ICON_LOOKUP_USE_BUILTIN)));
+		for_each(icon_sizes.begin(), icon_sizes.end(),
+				 // store the icon
+				 bind(&std::list< RefPtr<Gdk::Pixbuf> >::push_back, 
+					  boost::ref(icons), 
+					  // load the icon
+					  bind( &IconTheme::load_icon, 
+							boost::ref(icon_theme), 
+							boost::ref(name), _1, 
+							Gtk::ICON_LOOKUP_USE_BUILTIN)));
 		gtkWindow().set_icon_list(icons);
 	}
 
