@@ -30,10 +30,9 @@
 #include "framework/frame.h"
 #include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
+#include "ui/workspacecontroller.h"
 
 namespace Gtk {
-	class TreeView;
-	class IconView;
 }
 
 namespace ui {
@@ -62,27 +61,11 @@ namespace ui {
 
 		void open_library(const std::string & libMoniker);
 		
-		class LibraryTreeColumns 
-			: public Gtk::TreeModelColumnRecord
-		{
-		public:
-			
-			LibraryTreeColumns()
-				{ 
-					add(m_icon);
-					add(m_id);
-					add(m_label);  
-				}
-			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
-			Gtk::TreeModelColumn<int> m_id;
-			Gtk::TreeModelColumn<Glib::ustring> m_label;
-		};
 
-		LibraryTreeColumns             m_librarycolumns;
 		Gtk::VBox                      m_vbox;
 		Gtk::HPaned                    m_hbox;
-		Gtk::TreeView*                 m_librarytree;
 		LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
+		WorkspaceController::Ptr       m_workspacectrl;
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		libraryclient::LibraryClient::Ptr m_libClient;

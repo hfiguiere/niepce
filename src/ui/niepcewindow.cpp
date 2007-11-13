@@ -22,13 +22,10 @@
 #include <glibmm/i18n.h>
 
 #include <gtkmm/window.h>
-#include <gtkmm/treestore.h>
 #include <gtkmm/box.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
-#include <gtkmm/treeview.h>
 #include <gtkmm/filechooserdialog.h>
-#include <gtkmm/icontheme.h>
 
 #include "utils/debug.h"
 #include "utils/moniker.h"
@@ -64,8 +61,17 @@ namespace ui {
 		init_actions();
 		init_ui();
 
+		// main view
 		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
 		add(m_mainviewctrl);
+		// workspace treeview
+		m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
+		add(m_workspacectrl);
+
+
+		m_hbox.set_border_width(4);
+		m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
+		m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
 
 		win.add(m_vbox);
 
@@ -75,35 +81,7 @@ namespace ui {
 		m_vbox.pack_start(m_hbox);
 
 
-		Glib::RefPtr<Gtk::TreeStore> treestore = Gtk::TreeStore::create(m_librarycolumns);
-		m_librarytree = Gtk::manage(new Gtk::TreeView());
-		m_librarytree->set_model(treestore);
-		Gtk::TreeModel::iterator iter = treestore->append();
-		Gtk::TreeModel::Row row = *iter;
-		Glib::RefPtr< Gtk::IconTheme > icon_theme(Gtk::IconTheme::get_default());
-		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
-			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
-		row[m_librarycolumns.m_label] = _("Pictures");
-		row[m_librarycolumns.m_id] = 0;
-		iter = treestore->append();
-		row = *iter;
-		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
-			Glib::ustring("applications-accessories"), 16, 
-			Gtk::ICON_LOOKUP_USE_BUILTIN);
-		row[m_librarycolumns.m_label] = _("Projects");
-		row[m_librarycolumns.m_id] = 0;
-
-		m_librarytree->set_headers_visible(true);
-		m_librarytree->append_column("", m_librarycolumns.m_icon);
-		m_librarytree->append_column(_("Workspace"), m_librarycolumns.m_label);
-
-		m_hbox.set_border_width(4);
-		m_hbox.pack1(*m_librarytree, Gtk::EXPAND);
-	 
-		
-		m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
-
-		// ribbon
+		// ribbon FIXME Move to its own controller
 		GtkWidget *thv = eog_thumb_view_new();
 		GtkWidget *thn = eog_thumb_nav_new(thv, EOG_THUMB_NAV_MODE_ONE_ROW, true);
 		Gtk::Widget *w = Glib::wrap(thn);
