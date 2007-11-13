@@ -69,10 +69,11 @@ namespace ui {
 			
 			LibraryTreeColumns()
 				{ 
+					add(m_icon);
 					add(m_id);
 					add(m_label);  
 				}
-			
+			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
 			Gtk::TreeModelColumn<int> m_id;
 			Gtk::TreeModelColumn<Glib::ustring> m_label;
 		};

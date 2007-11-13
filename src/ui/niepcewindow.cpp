@@ -28,6 +28,7 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/icontheme.h>
 
 #include "utils/debug.h"
 #include "utils/moniker.h"
@@ -56,7 +57,6 @@ namespace ui {
  	Gtk::Widget * 
 	NiepceWindow::buildWidget()
 	{
-//		Glib::RefPtr<Gnome::Glade::Xml> & g(glade());
 		Gtk::Window & win(gtkWindow());
 
 		Application::Ptr pApp = Application::app();
@@ -80,15 +80,22 @@ namespace ui {
 		m_librarytree->set_model(treestore);
 		Gtk::TreeModel::iterator iter = treestore->append();
 		Gtk::TreeModel::Row row = *iter;
-		row[m_librarycolumns.m_label] = _("Collection");
+		Glib::RefPtr< Gtk::IconTheme > icon_theme(Gtk::IconTheme::get_default());
+		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
+			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
+		row[m_librarycolumns.m_label] = _("Pictures");
 		row[m_librarycolumns.m_id] = 0;
 		iter = treestore->append();
 		row = *iter;
-		row[m_librarycolumns.m_label] = _("Workspace");
+		row[m_librarycolumns.m_icon] = icon_theme->load_icon(
+			Glib::ustring("applications-accessories"), 16, 
+			Gtk::ICON_LOOKUP_USE_BUILTIN);
+		row[m_librarycolumns.m_label] = _("Projects");
 		row[m_librarycolumns.m_id] = 0;
 
-		m_librarytree->set_headers_visible(false);
-		m_librarytree->append_column("", m_librarycolumns.m_label);
+		m_librarytree->set_headers_visible(true);
+		m_librarytree->append_column("", m_librarycolumns.m_icon);
+		m_librarytree->append_column(_("Workspace"), m_librarycolumns.m_label);
 
 		m_hbox.set_border_width(4);
 		m_hbox.pack1(*m_librarytree, Gtk::EXPAND);
