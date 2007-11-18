@@ -27,16 +27,18 @@
 #include <string>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/filesystem/path.hpp>
 
 namespace utils {
 
 	class FileList 
-		: private std::vector< std::string >
+		: private std::vector< boost::filesystem::path >
 	{
 	public:
-		typedef std::string value_type;
-		typedef std::vector< value_type >    _impltype_t;
 		typedef boost::shared_ptr< FileList > Ptr;
+
+		typedef std::vector< boost::filesystem::path >    _impltype_t;
+		typedef _impltype_t::value_type       value_type;
 		typedef _impltype_t::iterator         iterator;
 		typedef _impltype_t::const_iterator   const_iterator;
 		typedef _impltype_t::size_type        size_type;

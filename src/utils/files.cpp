@@ -33,16 +33,14 @@ namespace utils {
 	{
 	}
 
-	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & dir)
+	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p )
 	{
+		if(!exists( p ) ) {
+			DBG_OUT( "directory %s do not exist", p.string().c_str() );
+			return Ptr();
+		}
 		try
 		{
-			bfs::path p( dir );
-			if(!exists( p ) ) {
-				DBG_OUT( "directory %s do not exist", dir.c_str() );
-				return Ptr();
-			}
-			
 			FileList::Ptr l( new FileList() );
 			
 			bfs::directory_iterator end_itr; 
