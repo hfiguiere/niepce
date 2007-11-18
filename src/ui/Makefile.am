@@ -3,7 +3,7 @@ INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view
 
 SUBDIRS = thumb-view
 
-gladefiles = mainwindow.glade
+gladefiles = 
 
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
