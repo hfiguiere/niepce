@@ -35,27 +35,35 @@ namespace utils {
 
 	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & dir)
 	{
-
-		bfs::path p( dir );
-		if(!exists( p ) ) {
-			DBG_OUT( "directory %s do not exist", dir.c_str() );
-			return Ptr();
-		}
-		
-		FileList::Ptr l( new FileList() );
-		
-		bfs::directory_iterator end_itr; 
-		for ( bfs::directory_iterator itr( p );
-			  itr != end_itr;
-			  ++itr )
+		try
 		{
-			if ( !is_directory(*itr) )
-			{
-				l->push_back(itr->leaf());
-				DBG_OUT("found file %s", itr->leaf().c_str());
+			bfs::path p( dir );
+			if(!exists( p ) ) {
+				DBG_OUT( "directory %s do not exist", dir.c_str() );
+				return Ptr();
 			}
+			
+			FileList::Ptr l( new FileList() );
+			
+			bfs::directory_iterator end_itr; 
+			for ( bfs::directory_iterator itr( p );
+				  itr != end_itr;
+				  ++itr )
+			{
+				if ( !is_directory(*itr) )
+				{
+					l->push_back(itr->leaf());
+					DBG_OUT( "found file %s", itr->leaf().c_str() );
+				}
+			}
+			return l;
 		}
-		return l;
+		catch( std::exception & e )
+		{
+			ERR_OUT( "Exception: %s", e.what() );
+		}
+
+		return Ptr();
 	}
 
 

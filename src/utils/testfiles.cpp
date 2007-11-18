@@ -1,5 +1,5 @@
 /*
- * niepce - utils/testmoniker.cpp
+ * niepce - utils/testfiles.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -28,21 +28,21 @@ using utils::FileList;
 
 int test_main( int, char *[] )             // note the name!
 {
-	system( "mkdir -p ._test/sub" );
-	system( "touch ._test/1" );
-	system( "touch ._test/2" );
-	system( "touch ._test/3" );
+	system( "mkdir -p AAtest/sub" );
+	system( "touch AAtest/1" );
+	system( "touch AAtest/2" );
+	system( "touch AAtest/3" );
 
 	FileList::Ptr files;
 	
 	files = FileList::getFilesFromDirectory( "foo" );
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "._test" );
+	files = FileList::getFilesFromDirectory( "AAtest" );
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	
-	system( "rm -fr ._test" );
+	system( "rm -fr AAtest" );
 	return 0;
 }
 
