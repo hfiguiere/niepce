@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/clienttypes.h
+ * niepce - db/storage.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,14 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARYCLIENT_CLIENTTYPES_H_
-#define _LIBRARYCLIENT_CLIENTTYPES_H_
 
-namespace libraryclient {
+#ifndef __NIEPCE_LIBRARY_STORAGE_H__
+#define __NIEPCE_LIBRARY_STORAGE_H__
 
-	typedef int tid; /**< transaction ID */
+#include <boost/shared_ptr.hpp>
+
+#include "db/keyword.h"
+
+namespace db {
+
+	/** @brief the interface for a storage */
+	class Storage
+	{
+	public:
+		typedef boost::shared_ptr<Storage> Ptr;
+
+		virtual ~Storage();
+
+		virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
+	};
 
 }
-
 
 #endif

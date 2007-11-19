@@ -31,7 +31,7 @@
 #include <gtkmm/liststore.h>
 #include <gdkmm/pixbuf.h>
 
-#include "library/libfile.h"
+#include "db/libfile.h"
 
 G_BEGIN_DECLS
 
@@ -85,11 +85,11 @@ class EogListStore
 {
 public:
 	EogListStore();
-	EogListStore(const library::LibFile::List &list);
+	EogListStore(const db::LibFile::List &list);
 	~EogListStore();
 
-	void append_image(const library::LibFile::Ptr &image);
-	void remove_image(const library::LibFile::Ptr &image);
+	void append_image(const db::LibFile::Ptr &image);
+	void remove_image(const db::LibFile::Ptr &image);
 
 	gboolean is_file_in_list_store (const gchar *info_uri,
 																	Gtk::TreeIter &iter_found);
@@ -109,8 +109,8 @@ private:
 			}
 		
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >  m_thumbnail;
-		Gtk::TreeModelColumn<library::LibFile::Ptr>      m_image;
-		Gtk::TreeModelColumn<bool>                       m_thumb_set;
+		Gtk::TreeModelColumn<db::LibFile::Ptr>            m_image;
+		Gtk::TreeModelColumn<bool>                        m_thumb_set;
 	};
 
 	Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
@@ -122,7 +122,7 @@ GType           eog_list_store_get_type 	     (void) G_GNUC_CONST;
 
 GtkListStore   *eog_list_store_new 		     (void);
 
-GtkListStore   *eog_list_store_new_from_list 	     (const library::LibFile::List &list);
+GtkListStore   *eog_list_store_new_from_list 	     (const db::LibFile::List &list);
 
 void            eog_list_store_append_image_from_uri (EogListStore *store, 
 						      GnomeVFSURI  *uri_entry);
@@ -131,7 +131,7 @@ void            eog_list_store_add_uris 	     (EogListStore *store,
 						      GList        *uri_list);
 
 gint            eog_list_store_get_pos_by_image      (EogListStore *store, 
-						      const library::LibFile::Ptr&      image);
+						      const db::LibFile::Ptr&      image);
 
 EogImage       *eog_list_store_get_image_by_pos      (EogListStore *store, 
 						      const gint   pos);

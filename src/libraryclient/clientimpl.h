@@ -24,7 +24,7 @@
 #include <string>
 
 #include "utils/moniker.h"
-#include "clienttypes.h"
+#include "library/clienttypes.h"
 
 
 namespace libraryclient {
@@ -34,14 +34,14 @@ namespace libraryclient {
 	class ClientImpl
 	{
 	public:
-		static ClientImpl *makeClientImpl(const utils::Moniker & moniker);
-
-		ClientImpl(const utils::Moniker & moniker);
+		static ClientImpl *makeClientImpl(const utils::Moniker & moniker, framework::NotificationCenter * nc);
+		
+		ClientImpl(const utils::Moniker & moniker, framework::NotificationCenter * nc);
 		virtual ~ClientImpl();
 
-		tid getAllKeywords();
-		tid getAllFolders();
-		void importFromDirectory(const std::string & dir, bool manage);
+		library::tid_t getAllKeywords();
+		library::tid_t getAllFolders();
+		library::tid_t importFromDirectory(const std::string & dir, bool manage);
 
 	protected:
 		const utils::Moniker m_moniker;

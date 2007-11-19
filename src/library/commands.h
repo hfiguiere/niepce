@@ -38,13 +38,15 @@ namespace library {
 		// commands: execute an op
 		static void cmdQueryFiles(const db::Library::Ptr & lib);
 		static void cmdUpdateFiles(const db::Library::Ptr & lib);
-		
+
+		static void cmdListAllFolders(const db::Library::Ptr & lib);
 		static void cmdImportFiles(const db::Library::Ptr & lib, const std::string & folder, 
 								   const utils::FileList::Ptr & files, bool manage);
 		
 
 		// op: create an op
-		static Op::Ptr opImportFiles(const std::string & folder, 
+		static Op::Ptr opListAllFolders(tid_t id);
+		static Op::Ptr opImportFiles(tid_t id, const std::string & folder, 
 									 const utils::FileList::Ptr & files, bool manage);
 	};
 

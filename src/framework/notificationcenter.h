@@ -1,5 +1,5 @@
 /*
- * niepce - library/keyword.h
+ * niepce - framework/notification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,31 +18,39 @@
  */
 
 
-#ifndef __NIEPCE_LIBRARY_KEYWORD_H__
-#define __NIEPCE_LIBRARY_KEYWORD_H__
 
-#include <string>
-#include <vector>
-#include <boost/shared_ptr.hpp>
 
-namespace library {
+#ifndef __FRAMEWORK_NOTIFICATIONCENTER_H__
+#define __FRAMEWORK_NOTIFICATIONCENTER_H__
 
-	class Keyword
+#include <boost/function.hpp>
+
+#include "framework/notification.h"
+
+namespace framework {
+
+	class NotificationCenter
 	{
 	public:
-		typedef boost::shared_ptr<Keyword> Ptr;
-		typedef std::vector<int> IdList;
+		typedef boost::function< void (Notification::Ptr) > subscriber_t;
 
-		Keyword(int id, const std::string & keyword);
+		NotificationCenter();
+		~NotificationCenter();
+
 		
-		int id() const
-			{ return m_id; }
-		const std::string & keyword() 
-			{ return m_keyword; }
+		// called from out of thread
+		void post(const Notification::Ptr & n);
+
+		void subscribe(const subscriber_t & );
+		void unsubscribe(const subscriber_t & );
+		
 	private:
-		int m_id;
-		std::string m_keyword;
+		void _dispatch(void);
+
+		class Priv;
+		Priv *p;
 	};
+
 
 }
 

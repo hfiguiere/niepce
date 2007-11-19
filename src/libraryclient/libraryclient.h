@@ -23,11 +23,15 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "clienttypes.h"
-#include "library/storage.h"
+#include "library/clienttypes.h"
+#include "db/storage.h"
 
 namespace utils {
 	class Moniker;
+}
+
+namespace framework {
+	class NotificationCenter;
 }
 
 namespace libraryclient {
@@ -35,21 +39,23 @@ namespace libraryclient {
 	class ClientImpl;
 
 	class LibraryClient
-		: public library::Storage
+		: public db::Storage
 	{
 	public:
 		typedef boost::shared_ptr< LibraryClient > Ptr;
-		LibraryClient(const utils::Moniker & moniker);
+
+		LibraryClient(const utils::Moniker & moniker, framework::NotificationCenter * nc);
 		virtual ~LibraryClient();
 
+		static library::tid_t newTid();
 		/** get all the keywords 
 		 * @return transaction ID
 		 */
-		tid getAllKeywords();
+		library::tid_t getAllKeywords();
 		/** get all the folder
 		 * @return transaction ID
 		 */
-		tid getAllFolders();
+		library::tid_t getAllFolders();
 
 		/** Import files from a directory
 		 * @param dir the directory
@@ -58,7 +64,7 @@ namespace libraryclient {
 		void importFromDirectory(const std::string & dir, bool manage);
 		
 		/* sync call */
-		virtual bool fetchKeywordsForFile(int file, library::Keyword::IdList &keywords);
+		virtual bool fetchKeywordsForFile(int file, db::Keyword::IdList &keywords);
 
 	private:
 		ClientImpl* m_pImpl;

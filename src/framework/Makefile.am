@@ -11,4 +11,6 @@ noinst_HEADERS = configuration.h application.h \
 libniepceframework_la_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@LIBGCONFMM_CFLAGS@
 libniepceframework_la_SOURCES = configuration.cpp \
-	application.cpp frame.cpp controller.cpp
+	application.cpp frame.cpp controller.cpp \
+	notification.h \
+	notificationcenter.h notificationcenter.cpp

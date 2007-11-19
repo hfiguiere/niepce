@@ -1,5 +1,5 @@
 /*
- * niepce - library/opqueue.cpp
+ * niepce - db/keyword.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,43 +19,15 @@
 
 
 
-#include "opqueue.h"
+#include "keyword.h"
 
-namespace library {
 
-	OpQueue::OpQueue()
-		: m_queue(),
-		  m_mutex()
+namespace db {
+
+	Keyword::Keyword(int id, const std::string & keyword)
+		: m_id(id), m_keyword(keyword)
 	{
 	}
 
-
-	OpQueue::~OpQueue()
-	{
-	}
-
-	void
-	OpQueue::add(const Op::Ptr &op)
-	{
-		mutex_t::scoped_lock(m_mutex, true);
-		m_queue.push_back(op);
-	}
-
-
-	Op::Ptr OpQueue::pop()
-	{
-		Op::Ptr elem;
-		mutex_t::scoped_lock(m_mutex, true);		
-		elem = m_queue.front();
-		m_queue.pop_front();
-		return elem;
-	}
-
-
-	bool OpQueue::isEmpty() const
-	{
-		mutex_t::scoped_lock(m_mutex, true);
-		return m_queue.empty();
-	}
 
 }

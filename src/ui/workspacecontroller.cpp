@@ -17,12 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/any.hpp>
+#include <boost/bind.hpp>
+
 #include <glibmm/i18n.h>
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/box.h>
 
+#include "utils/debug.h"
+#include "niepce/notifications.h"
+#include "db/library.h" // FIXME uh oh. this shouldn't be
+#include "libraryclient/libraryclient.h"
 #include "framework/application.h"
+#include "niepcewindow.h"
 #include "workspacecontroller.h"
 
 
@@ -39,8 +47,39 @@ namespace ui {
 		m_icons[ICON_PROJECT] = icon_theme->load_icon(
 			Glib::ustring("applications-accessories"), 16, 
 			Gtk::ICON_LOOKUP_USE_BUILTIN);
+		m_icons[ICON_ROLL] = icon_theme->load_icon(
+			Glib::ustring("emblem-photos"), 16,
+			Gtk::ICON_LOOKUP_USE_BUILTIN);
 	}
 
+	void WorkspaceController::on_lib_notification(const framework::Notification::Ptr &n)
+	{
+		DBG_OUT("notification for workspace");
+		if(n->type() == niepce::NOTIFICATION_LIB) {
+			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+			switch(ln.type) {
+			case db::Library::NOTIFY_ADDED_FOLDERS:
+			{
+				db::LibFolder::ListPtr l 
+					= boost::any_cast<db::LibFolder::ListPtr>(ln.param);
+				DBG_OUT("received added folders # %d", l->size());
+				for_each(l->begin(), l->end(), 
+						 boost::bind(&WorkspaceController::add_folder_item, 
+									 this, _1));
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	}
+
+
+	void WorkspaceController::add_folder_item(const db::LibFolder::Ptr & f)
+	{
+		add_item(m_treestore, m_icons[ICON_ROLL], 
+				 f->name(), f->id());
+	}
 
 	void WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
 									   const Glib::RefPtr<Gdk::Pixbuf> & icon,
@@ -58,12 +97,12 @@ namespace ui {
 
 	Gtk::Widget * WorkspaceController::buildWidget()
 	{
-		Glib::RefPtr<Gtk::TreeStore> treestore = Gtk::TreeStore::create(m_librarycolumns);
-		m_librarytree.set_model(treestore);
+		m_treestore = Gtk::TreeStore::create(m_librarycolumns);
+		m_librarytree.set_model(m_treestore);
 
-		add_item(treestore, m_icons[ICON_FOLDER], 
+		add_item(m_treestore, m_icons[ICON_FOLDER], 
 				 Glib::ustring(_("Pictures")), 0);
-		add_item(treestore, m_icons[ICON_PROJECT], 
+		add_item(m_treestore, m_icons[ICON_PROJECT], 
 				 Glib::ustring(_("Projects")), 0);
 
 		m_librarytree.set_headers_visible(false);
@@ -78,5 +117,12 @@ namespace ui {
 		return &m_vbox;
 	}
 	
+	void WorkspaceController::on_ready()
+	{
+		libraryclient::LibraryClient::Ptr libClient(
+			boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient());
+
+		libClient->getAllFolders();
+	}
 
 }

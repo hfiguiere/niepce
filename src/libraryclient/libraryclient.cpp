@@ -22,10 +22,13 @@
 #include "libraryclient.h"
 #include "clientimpl.h"
 
+using library::tid_t;
+
+
 namespace libraryclient {
 
-	LibraryClient::LibraryClient(const utils::Moniker & moniker)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker))
+	LibraryClient::LibraryClient(const utils::Moniker & moniker, framework::NotificationCenter * nc)
+		: m_pImpl(ClientImpl::makeClientImpl(moniker, nc))
 	{
 
 	}
@@ -35,14 +38,21 @@ namespace libraryclient {
 		delete m_pImpl;
 	}
 
+	tid_t LibraryClient::newTid()
+	{
+		static tid_t id = 0;
+		id++;
+		return id;
+	}
 
-	tid LibraryClient::getAllKeywords()
+
+	tid_t LibraryClient::getAllKeywords()
 	{
 		return m_pImpl->getAllKeywords();
 	}
 
 
-	tid LibraryClient::getAllFolders()
+	tid_t LibraryClient::getAllFolders()
 	{
 		return m_pImpl->getAllFolders();
 	}
@@ -53,7 +63,7 @@ namespace libraryclient {
 	}
 
 	bool LibraryClient::fetchKeywordsForFile(int file, 
-											 library::Keyword::IdList &keywords)
+											 db::Keyword::IdList &keywords)
 	{
 		// TODO
 		return false;

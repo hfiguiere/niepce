@@ -23,9 +23,9 @@
 
 namespace library {
 
-	Op::Op(OpType t)
+	Op::Op(OpType t, tid_t id)
 		: m_type(t),
-		  m_id(Op::newId())
+		  m_id(id)
 	{
 		
 	}
@@ -33,13 +33,6 @@ namespace library {
 	Op::~Op()
 	{
 
-	}
-
-	Op::id_t Op::newId()
-	{
-		static id_t _id = 0;
-		_id++;
-		return _id;
 	}
 
 }

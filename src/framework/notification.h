@@ -1,5 +1,5 @@
 /*
- * niepce - library/test_worker.cpp
+ * niepce - framework/notification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,31 +18,39 @@
  */
 
 
-#include "utils/fsutils.h"
-
-#define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
-
-
-#include <boost/test/auto_unit_test.hpp>
 
 
 
-using namespace library;
+#ifndef __FRAMEWORK_NOTIFICATION_H__
+#define __FRAMEWORK_NOTIFICATION_H__
 
-BOOST_AUTO_UNIT_TEST(worker_test)
-{
-	char templ[] = "/tmp/niepce-tmpXXXXXX";
-	char *ptempl =  mkdtemp(templ);
-	BOOST_CHECK(ptempl);
+#include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
+
+namespace framework {
+
+	/** A notification to post to the notification center */
+	class Notification
 	{
-		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl, NULL);
-		
-		BOOST_CHECK(w._ops().isEmpty());
-		
-		Op::Ptr p(new Op(OP_NONE, 0));
-		w.schedule(p);
-	}
+	public:
+		typedef boost::shared_ptr<Notification> Ptr;
+
+		Notification(int type)
+			: m_type(type)
+			{}
+
+		int type() const
+			{ return m_type; }
+		const boost::any & data() const
+			{ return m_data; }
+		void setData(const boost::any & d)
+			{ m_data = d; }
+	private:
+		int        m_type;
+		boost::any m_data;
+	};
+
 }
 
+
+#endif

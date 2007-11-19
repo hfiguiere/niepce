@@ -1,5 +1,5 @@
 /*
- * niepce - library/test_worker.cpp
+ * niepce - db/libfile.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,31 +18,30 @@
  */
 
 
-#include "utils/fsutils.h"
+#include "libfile.h"
 
-#define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
-
-
-#include <boost/test/auto_unit_test.hpp>
-
-
-
-using namespace library;
-
-BOOST_AUTO_UNIT_TEST(worker_test)
-{
-	char templ[] = "/tmp/niepce-tmpXXXXXX";
-	char *ptempl =  mkdtemp(templ);
-	BOOST_CHECK(ptempl);
+namespace db {
+	
+	LibFile::LibFile(int id, int folderId, const std::string &name,
+					const std::string & relPath)
+		: m_id(id), m_folderId(folderId),
+			m_name(name), m_relativePath(relPath),
+			m_hasKeywordList(false)
 	{
-		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl, NULL);
-		
-		BOOST_CHECK(w._ops().isEmpty());
-		
-		Op::Ptr p(new Op(OP_NONE, 0));
-		w.schedule(p);
-	}
-}
 
+	}
+
+	LibFile::~LibFile()
+	{
+	}
+
+
+	const Keyword::IdList & LibFile::keywords() const
+	{
+		if(!m_hasKeywordList) {
+			storage()->fetchKeywordsForFile(m_id, m_keywordList);
+		}
+		return m_keywordList;
+	}
+
+}

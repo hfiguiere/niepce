@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/bind.hpp>
+
 #include <gtkmm/widget.h>
 
 #include "controller.h"
@@ -69,5 +71,16 @@ namespace framework {
 	{
 	}
 
+
+	void Controller::_ready()
+	{
+		std::for_each(m_subs.begin(), m_subs.end(),
+					  boost::bind(&Controller::_ready, _1));
+		on_ready();
+	}
+
+	void Controller::on_ready()
+	{
+	}
 }
 

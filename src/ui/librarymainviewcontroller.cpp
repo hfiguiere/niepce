@@ -23,9 +23,15 @@
 #include <gtkimageview/gtkimageview.h>
 #include <gtkimageview/gtkimagescrollwin.h>
 
+#include "utils/debug.h"
 #include "librarymainviewcontroller.h"
 
 namespace ui {
+
+	void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
+	{
+		DBG_OUT("notification");
+	}
 
 
 	Gtk::Widget * LibraryMainViewController::buildWidget()
@@ -37,6 +43,10 @@ namespace ui {
 		m_imageview = Gtk::manage(Glib::wrap(ivs));
 		m_mainview.append_page(*m_imageview, _("Darkroom"));
 		return &m_mainview;
+	}
+
+	void LibraryMainViewController::on_ready()
+	{
 	}
 
 }

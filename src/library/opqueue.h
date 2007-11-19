@@ -22,30 +22,13 @@
 #ifndef __NIEPCE_LIBRARY_OPQUEUE_H__
 #define __NIEPCE_LIBRARY_OPQUEUE_H__
 
-#include <deque>
-#include <boost/thread/recursive_mutex.hpp>
 
+#include "utils/mtqueue.h"
 #include "op.h"
 
 namespace library {
 
-	class OpQueue
-	{
-	public:
-		typedef boost::recursive_mutex mutex_t;
-
-		OpQueue();
-		~OpQueue();
-
-		void add(const Op::Ptr &);
-		Op::Ptr pop();
-		bool isEmpty() const;
-		mutex_t & mutex() const
-			{ return m_mutex; }
-	private:
-		std::deque<Op::Ptr> m_queue;
-		mutable mutex_t     m_mutex;
-	};
+	typedef utils::MtQueue< Op::Ptr > OpQueue;
 
 }
 

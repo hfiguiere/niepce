@@ -25,6 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 
+#include "library/clienttypes.h"
 
 namespace library {
 
@@ -32,6 +33,7 @@ namespace library {
 		OP_NONE = 0,
 		OP_QUERY_FILES,
 		OP_UPDATE_FILES,
+		OP_LIST_ALL_FOLDERS,
 		OP_IMPORT_FILES
 	} OpType;
 
@@ -41,15 +43,14 @@ namespace library {
 	{
 	public:
 		typedef boost::shared_ptr< Op > Ptr;
-		typedef unsigned int id_t; 
 		typedef std::vector< boost::any > Args;
 
-		Op(OpType t);
+		Op(OpType t, tid_t id);
 		~Op();
 
 		OpType type()
 			{ return m_type; }
-		id_t id() const 
+		tid_t id() const 
 			{ return m_id; }
 
 		Args & args()
@@ -57,11 +58,8 @@ namespace library {
 	protected:
 		Args m_args; /*< the arguments, free form */
 	private:
-		/** generate a new ID */
-		static id_t newId();
-
 		OpType m_type;
-		id_t   m_id;
+		tid_t   m_id;
 	};
 
 }

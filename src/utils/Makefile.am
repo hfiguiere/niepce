@@ -17,6 +17,7 @@ testfiles_LDADD = libniepceutils.la \
 noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \
+	mtqueue.h \
 	buffer.h logstreamutils.h \
 	moniker.h moniker.cpp \
 	debug.h debug.cpp boost.h \

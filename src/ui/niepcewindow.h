@@ -28,11 +28,13 @@
 #include <gtkmm/paned.h>
 
 #include "framework/frame.h"
+#include "framework/notificationcenter.h"
 #include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
 #include "ui/workspacecontroller.h"
 
-namespace Gtk {
+namespace framework {
+	class NotificatioCenter;
 }
 
 namespace ui {
@@ -47,6 +49,8 @@ namespace ui {
 
 		virtual void set_title(const std::string & title);
 
+		libraryclient::LibraryClient::Ptr getLibraryClient()
+			{ return m_libClient; }
 	protected:
 		virtual Gtk::Widget * buildWidget();
 
@@ -61,6 +65,7 @@ namespace ui {
 
 		void open_library(const std::string & libMoniker);
 		
+		framework::NotificationCenter  *m_lib_notifcenter;
 
 		Gtk::VBox                      m_vbox;
 		Gtk::HPaned                    m_hbox;

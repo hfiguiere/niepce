@@ -1,5 +1,5 @@
 /*
- * niepce - library/libfile.cpp
+ * niepce - db/libfolder.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,30 +18,35 @@
  */
 
 
-#include "libfile.h"
 
-namespace library {
-	
-	LibFile::LibFile(int id, int folderId, const std::string &name,
-					const std::string & relPath)
-		: m_id(id), m_folderId(folderId),
-			m_name(name), m_relativePath(relPath),
-			m_hasKeywordList(false)
+#ifndef __NIEPCE_DB_LIBFOLDER_H__
+#define __NIEPCE_DB_LIBFOLDER_H__
+
+#include <string>
+#include <list>
+#include <boost/shared_ptr.hpp>
+
+namespace db {
+
+	class LibFolder
 	{
+	public:
+		typedef boost::shared_ptr< LibFolder > Ptr;
+		typedef std::list< Ptr > List;
+		typedef boost::shared_ptr< List > ListPtr;
 
-	}
-
-	LibFile::~LibFile()
-	{
-	}
-
-
-	const Keyword::IdList & LibFile::keywords() const
-	{
-		if(!m_hasKeywordList) {
-			storage()->fetchKeywordsForFile(m_id, m_keywordList);
-		}
-		return m_keywordList;
-	}
-
+		LibFolder(int id, std::string name)
+			: m_id(id), m_name(name)
+			{
+			}
+		int id() const
+			{ return m_id; }
+		const std::string & name() const
+			{ return m_name; }
+	private:
+		int         m_id;
+		std::string m_name;
+	};
 }
+
+#endif

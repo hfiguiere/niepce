@@ -94,6 +94,7 @@ doc/Makefile
 doc/doxygen/Makefile
 src/Makefile
 src/ext/Makefile
+src/niepce/Makefile
 src/utils/Makefile
 src/db/Makefile
 src/db/sqlite/Makefile

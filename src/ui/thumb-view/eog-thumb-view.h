@@ -25,7 +25,7 @@
 /*#include "eog-image.h"*/
 #include "eog-list-store.h"
 
-#include "library/libfile.h"
+#include "db/libfile.h"
 
 G_BEGIN_DECLS
 
@@ -77,7 +77,7 @@ void        eog_thumb_view_select_single 	    (EogThumbView *view,
 						     EogThumbViewSelectionChange change);
 
 void        eog_thumb_view_set_current_image	    (EogThumbView *view, 
-						     const library::LibFile::Ptr&     image,
+						     const db::LibFile::Ptr&     image,
 						     gboolean     deselect_other);
 
 void        eog_thumb_view_set_thumbnail_popup      (EogThumbView *view, 

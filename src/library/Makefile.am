@@ -21,9 +21,7 @@ test_opqueue_LDADD = $(TEST_LIBS)
 test_worker_SOURCES = test_worker.cpp
 test_worker_LDADD = $(TEST_LIBS)
 
-libniepcelibrary_la_SOURCES = libfile.h libfile.cpp \
-	keyword.h keyword.cpp \
-	storage.h storage.cpp \
-	op.h op.cpp opqueue.h opqueue.cpp \
+libniepcelibrary_la_SOURCES = clienttypes.h \
+	op.h op.cpp opqueue.h \
 	worker.h worker.cpp \
 	commands.h commands.cpp

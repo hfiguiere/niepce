@@ -70,11 +70,13 @@ namespace framework {
 		Gtk::Main kit(argc, argv);
 		Application::Ptr app = constructor();
 
-    Frame::Ptr window(app->makeMainFrame());
+		kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 
+											   &Application::_ready));
+		Frame::Ptr window(app->makeMainFrame());
 		app->add(window);
-
-    Gtk::Main::run(window->gtkWindow());
-
+		
+		Gtk::Main::run(window->gtkWindow());
+	
 		return 0;
 	}
 

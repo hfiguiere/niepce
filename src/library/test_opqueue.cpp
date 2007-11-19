@@ -31,7 +31,7 @@ BOOST_AUTO_UNIT_TEST(opqueue_test)
 {
 	OpQueue q;
 
-	Op::Ptr p(new Op(OP_NONE));
+	Op::Ptr p(new Op(OP_NONE, 1));
 
 	BOOST_CHECK(q.isEmpty());
 

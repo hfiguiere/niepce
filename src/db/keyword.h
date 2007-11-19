@@ -1,5 +1,5 @@
 /*
- * niepce - library/storage.h
+ * niepce - library/keyword.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,13 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "storage.h"
 
-namespace library {
+#ifndef __NIEPCE_LIBRARY_KEYWORD_H__
+#define __NIEPCE_LIBRARY_KEYWORD_H__
 
-	Storage::~Storage()
+#include <string>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
+namespace db {
+
+	class Keyword
 	{
+	public:
+		typedef boost::shared_ptr<Keyword> Ptr;
+		typedef std::vector<int> IdList;
 
-	}
+		Keyword(int id, const std::string & keyword);
+		
+		int id() const
+			{ return m_id; }
+		const std::string & keyword() 
+			{ return m_keyword; }
+	private:
+		int m_id;
+		std::string m_keyword;
+	};
 
 }
+
+#endif

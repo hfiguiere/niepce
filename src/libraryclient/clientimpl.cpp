@@ -21,27 +21,30 @@
 #include "utils/files.h"
 #include "library/op.h"
 #include "library/commands.h"
+#include "libraryclient.h"
 #include "clientimpl.h"
 #include "locallibraryserver.h"
 
 using utils::FileList;
 using library::Op;
 using library::Commands;
+using library::tid_t;
 
 namespace libraryclient {
 	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker)
+	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker, 
+										   framework::NotificationCenter * nc)
 	{
-		return new ClientImpl(moniker);
+		return new ClientImpl(moniker, nc);
 	}
 	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker)
+	ClientImpl::ClientImpl(const utils::Moniker & moniker, framework::NotificationCenter * nc)
 		: m_moniker(moniker),
 		  m_localLibrary(NULL)
 	{
 		DBG_OUT("creating implementation with moniker %s", 
 						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path());
+		m_localLibrary = new LocalLibraryServer(moniker.path(), nc);
 	}
 
 	ClientImpl::~ClientImpl()
@@ -49,25 +52,30 @@ namespace libraryclient {
 		delete m_localLibrary;
 	}
 
-	tid ClientImpl::getAllKeywords()
+	tid_t ClientImpl::getAllKeywords()
 	{
 		return 0;
 	}
 
 
-	tid ClientImpl::getAllFolders()
+	tid_t ClientImpl::getAllFolders()
 	{
-		return 0;
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opListAllFolders(id));
+		m_localLibrary->schedule(op);
+		return id;
 	}
 
-	void ClientImpl::importFromDirectory(const std::string & dir, bool manage)
+	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 	{
 		FileList::Ptr files;
 		
 		files = FileList::getFilesFromDirectory(dir);
 
-		Op::Ptr op(Commands::opImportFiles(dir, files, manage));
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opImportFiles(id, dir, files, manage));
 		m_localLibrary->schedule(op);
+		return id;
 	}
 
 }

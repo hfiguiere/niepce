@@ -26,10 +26,12 @@
 
 #include "librarymainview.h"
 #include "framework/controller.h"
+#include "framework/notification.h"
 
 namespace Gtk {
 	class Widget;
 }
+
 
 namespace ui {
 
@@ -38,10 +40,13 @@ namespace ui {
 	{
 	public:
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
+		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
 
+		void on_lib_notification(const framework::Notification::Ptr &);
+		
 	protected:
 		virtual Gtk::Widget * buildWidget();
-
+		virtual void on_ready();
 	private:
 
 		// managed widgets...

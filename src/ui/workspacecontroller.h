@@ -23,6 +23,7 @@
 #define __UI_WORKSPACECONTROLLER_H__
 
 #include <boost/array.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <glibmm/ustring.h>
 
@@ -30,11 +31,12 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treestore.h>
 
+#include "db/libfolder.h"
 #include "framework/controller.h"
+#include "framework/notification.h"
 
 namespace Gtk {
 }
-
 
 
 namespace ui {
@@ -43,6 +45,8 @@ namespace ui {
 		: public framework::Controller
 	{
 	public:
+		typedef boost::shared_ptr<WorkspaceController> Ptr;
+
 		WorkspaceController();
 		class LibraryTreeColumns 
 			: public Gtk::TreeModelColumnRecord
@@ -60,16 +64,22 @@ namespace ui {
 			Gtk::TreeModelColumn<Glib::ustring> m_label;
 		};
 
+		virtual void on_ready();
+
+		void on_lib_notification(const framework::Notification::Ptr &);
+
 	protected:
 		virtual Gtk::Widget * buildWidget();
 
 	private:
+		void add_folder_item(const db::LibFolder::Ptr & f);
 		void add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
 					  const Glib::RefPtr<Gdk::Pixbuf> & icon,
 					  const Glib::ustring & label, int id) const;
 		enum {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
+			ICON_ROLL,
 			_ICON_SIZE
 		};
 		boost::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
@@ -77,6 +87,7 @@ namespace ui {
 		Gtk::VBox                      m_vbox;
 		Gtk::Label                     m_label;
 		Gtk::TreeView                  m_librarytree;
+		Glib::RefPtr<Gtk::TreeStore>   m_treestore;
 	};
 
 

@@ -48,6 +48,7 @@ namespace framework {
 
 		/** add a subcontroller to this one */
 		void add(const Ptr & sub);
+		/** clear the parent. Usually called by the parent when unparenting */
 		void clearParent()
 			{ m_parent.reset(); }
 		void remove(const Ptr & sub);
@@ -60,9 +61,12 @@ namespace framework {
 		virtual Gtk::Widget * buildWidget() = 0;
 		Gtk::Widget * widget();
 
+		/** called when everything is ready 
+		 * subclasses should reimplement if needed
+		 */
+		virtual void on_ready();
 	protected:
-		/** clear the parent. Usually called by the parent when unparenting */
-
+		void _ready();
 		Gtk::Widget* m_widget;
 
 		WeakPtr          m_parent;

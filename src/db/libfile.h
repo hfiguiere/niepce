@@ -1,5 +1,5 @@
 /*
- * niepce - library/libfile.h
+ * niepce - db/libfile.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -21,17 +21,17 @@
 
 
 
-#ifndef __NIEPCE_LIBRARY_LIBFILE_H__
-#define __NIEPCE_LIBRARY_LIBFILE_H__
+#ifndef __NIEPCE_DB_LIBFILE_H__
+#define __NIEPCE_DB_LIBFILE_H__
 
 #include <string>
 #include <list>
 #include <boost/shared_ptr.hpp>
 
-#include "library/keyword.h"
-#include "library/storage.h"
+#include "db/keyword.h"
+#include "db/storage.h"
 
-namespace library {
+namespace db {
 
 	class LibFile
 	{

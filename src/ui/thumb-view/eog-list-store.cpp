@@ -33,7 +33,7 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/treeiter.h>
 
-#include "library/libfile.h"
+#include "db/libfile.h"
 
 
 //#define EOG_LIST_STORE_GET_PRIVATE(object) 
@@ -111,8 +111,8 @@ eog_list_store_compare_func (GtkTreeModel *model,
 {
 	gint r_value;
 
-	const library::LibFile *image_a;
-	const library::LibFile *image_b;
+	const db::LibFile *image_a;
+	const db::LibFile *image_b;
 
 	gtk_tree_model_get (model, a, 
 			    EOG_LIST_STORE_EOG_IMAGE, &image_a,
@@ -138,7 +138,7 @@ EogListStore::EogListStore()
 }
 
 
-EogListStore::EogListStore(const library::LibFile::List &list)
+EogListStore::EogListStore(const db::LibFile::List &list)
 	: Gtk::ListStore()
 {
 	_init();
@@ -204,7 +204,7 @@ EogListStore::is_file_in_list_store (const gchar *info_uri,
 																		 Gtk::TreeIter &iter_found)
 {
 	gboolean found = FALSE;
-	library::LibFile::Ptr image;
+	db::LibFile::Ptr image;
 
 	Gtk::TreeRow iter;
 
@@ -255,7 +255,7 @@ eog_job_thumbnail_cb (EogJobThumbnail *job, gpointer data)
 #endif
 
 void
-EogListStore::append_image (const library::LibFile::Ptr &image)
+EogListStore::append_image (const db::LibFile::Ptr &image)
 {
 	Gtk::TreeModel::iterator iter = append();
 
@@ -498,7 +498,7 @@ eog_list_store_add_uris (EogListStore *store, GList *uri_list)
 #endif
 
 void
-EogListStore::remove_image(const library::LibFile::Ptr &image)
+EogListStore::remove_image(const db::LibFile::Ptr &image)
 {
 	Gtk::TreeModel::iterator iter;
 	const gchar *file;
@@ -516,7 +516,7 @@ EogListStore::remove_image(const library::LibFile::Ptr &image)
 
 gint
 eog_list_store_get_pos_by_image (EogListStore *store, 
-																 const library::LibFile::Ptr &image)
+																 const db::LibFile::Ptr &image)
 {
 	const gchar *file;
 	Gtk::TreeIter iter;

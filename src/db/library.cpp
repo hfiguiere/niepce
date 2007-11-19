@@ -22,21 +22,26 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
+#include "niepce/notifications.h"
 #include "library.h"
 #include "utils/exception.h"
 #include "sqlite/sqlitecnxmgrdrv.h"
 #include "sqlite/sqlitecnxdrv.h"
 #include "sqlstatement.h"
+#include "framework/notificationcenter.h"
+
+using framework::NotificationCenter;
 
 namespace db {
 
 	const char * s_databaseName = "niepcelibrary.db";
 
-	Library::Library(const std::string & dir)
+	Library::Library(const std::string & dir, NotificationCenter * nc)
 		: m_maindir(dir),
-			m_dbname(m_maindir + "/" + s_databaseName),
-			m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
-			m_inited(false)
+		  m_dbname(m_maindir + "/" + s_databaseName),
+		  m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
+		  m_notif_center(nc),
+		  m_inited(false)
 	{
 		DBG_OUT("dir = %s", dir.c_str());
 		db::DBDesc desc("", 0, m_dbname);
@@ -44,8 +49,27 @@ namespace db {
 		m_inited = init();
 	}
 
+
 	Library::~Library()
 	{
+	}
+
+
+	void Library::notify(NotifyType t, const boost::any & param)
+	{
+		if(m_notif_center) {
+			DBG_OUT("notif");
+			// pass the notification
+			framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_LIB));
+			LibNotification ln;
+			ln.type = t;
+			ln.param = param;
+			n->setData(boost::any(ln));
+			m_notif_center->post(n);
+		}
+		else {
+			DBG_OUT("try to send a notification without notification center");
+		}
 	}
 
 	/** init the database
@@ -216,4 +240,26 @@ namespace db {
 		}
 		return ret;
 	}
+
+
+	void Library::getAllFolders(const LibFolder::ListPtr & l)
+	{
+		SQLStatement sql("SELECT id,name FROM folders;");
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				while(m_dbdrv->read_next_row()) {
+					int64_t id;
+					std::string name;
+					m_dbdrv->get_column_content(0, id);
+					m_dbdrv->get_column_content(1, name);
+					l->push_back(LibFolder::Ptr(new LibFolder(id, name)));
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+	}
+
 }

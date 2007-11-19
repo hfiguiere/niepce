@@ -23,6 +23,7 @@
 #include "sqlstatement.h"
 #include "iconnectiondriver.h"
 #include "library.h"
+#include "libfile.h"
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -30,7 +31,7 @@
 
 BOOST_AUTO_UNIT_TEST(library_test)
 {
-	db::Library lib("./");
+	db::Library lib("./", NULL);
 
 	BOOST_CHECK_EQUAL(lib.checkDatabaseVersion(), 1);
 
@@ -42,6 +43,13 @@ BOOST_AUTO_UNIT_TEST(library_test)
 
 	lib.addFolder("foo");
 	BOOST_CHECK(lib.getFolder("foo") != -1);
+	lib.addFolder("bar");
+	BOOST_CHECK(lib.getFolder("foo") != -1);
+
+	db::LibFolder::ListPtr l( new db::LibFolder::List );
+	lib.getAllFolders( l );
+	BOOST_CHECK( l->size() == 2 );
+
 
 	BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
 }

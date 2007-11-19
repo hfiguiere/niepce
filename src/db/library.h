@@ -25,9 +25,16 @@
 #include <string>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 
 #include "iconnectiondriver.h"
 #include "iconnectionmanagerdriver.h"
+#include "libfolder.h"
+
+namespace framework {
+	class NotificationCenter;
+}
+
 
 namespace db {
 
@@ -36,7 +43,13 @@ namespace db {
 	public:
 		typedef boost::shared_ptr<Library> Ptr;
 
-		Library(const std::string & dir);
+		typedef enum {
+			NOTIFY_NONE = 0,
+			NOTIFY_ADDED_FOLDERS,
+			NOTIFY_ADDED_FILES
+		} NotifyType;
+
+		Library(const std::string & dir, framework::NotificationCenter * nc);
 		virtual ~Library();
 
 		bool ok()
@@ -49,6 +62,8 @@ namespace db {
 			{ return m_maindir; }
 		const std::string & dbName() const
 			{ return m_dbname; }
+
+		void notify(NotifyType t, const boost::any & param);
 
 		/** add a file to the library
 		 * @param folder the containing folder
@@ -72,6 +87,10 @@ namespace db {
 		 * @param folder the folder path
 		 */
 		int addFolder(const std::string & folder);
+		/** List all the folders.
+		 * @param l the list of LibFolder
+		 */
+		void getAllFolders(const LibFolder::ListPtr & l);
 
 		int checkDatabaseVersion();
 		
@@ -85,7 +104,15 @@ namespace db {
 		std::string                       m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
+		framework::NotificationCenter *   m_notif_center;
 		bool                              m_inited;
+	};
+
+	
+	struct LibNotification
+	{
+		Library::NotifyType type;
+		boost::any          param;
 	};
 
 }

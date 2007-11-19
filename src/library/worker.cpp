@@ -26,8 +26,8 @@
 namespace library {
 
 
-	Worker::Worker(const std::string & dir)
-		: m_library(db::Library::Ptr(new db::Library(dir)))
+	Worker::Worker(const std::string & dir, framework::NotificationCenter * nc)
+		: m_library(db::Library::Ptr(new db::Library(dir, nc)))
 	{
 	}
 

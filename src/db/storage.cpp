@@ -1,5 +1,5 @@
 /*
- * niepce - library/test_worker.cpp
+ * niepce - db/storage.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,32 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "storage.h"
 
-#include "utils/fsutils.h"
+namespace db {
 
-#define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
-
-
-#include <boost/test/auto_unit_test.hpp>
-
-
-
-using namespace library;
-
-BOOST_AUTO_UNIT_TEST(worker_test)
-{
-	char templ[] = "/tmp/niepce-tmpXXXXXX";
-	char *ptempl =  mkdtemp(templ);
-	BOOST_CHECK(ptempl);
+	Storage::~Storage()
 	{
-		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl, NULL);
-		
-		BOOST_CHECK(w._ops().isEmpty());
-		
-		Op::Ptr p(new Op(OP_NONE, 0));
-		w.schedule(p);
-	}
-}
 
+	}
+
+}

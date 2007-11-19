@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
 
@@ -32,6 +33,7 @@
 #include "libraryclient/libraryclient.h"
 #include "framework/application.h"
 #include "framework/configuration.h"
+#include "framework/notificationcenter.h"
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
@@ -41,14 +43,21 @@
 using libraryclient::LibraryClient;
 using framework::Application;
 using framework::Configuration;
+using framework::NotificationCenter;
 
 namespace ui {
 
 
 	NiepceWindow::NiepceWindow()
 		: framework::Frame()//GLADEDIR "mainwindow.glade", "mainwindow")
+		, m_lib_notifcenter(NULL)
 	{
 	}
+
+
+//	NiepceWindow::~NiepceWindow()
+//	{
+//	}
 
  	Gtk::Widget * 
 	NiepceWindow::buildWidget()
@@ -60,16 +69,21 @@ namespace ui {
 		init_actions();
 		init_ui();
 
+		m_lib_notifcenter = new NotificationCenter();
+
 		Glib::ustring name("camera");
 		set_icon_from_theme(name);		
 
 		// main view
 		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
+		m_lib_notifcenter->subscribe(boost::bind(&LibraryMainViewController::on_lib_notification, 
+												 get_pointer(m_mainviewctrl), _1));
 		add(m_mainviewctrl);
 		// workspace treeview
 		m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
+		m_lib_notifcenter->subscribe(boost::bind(&WorkspaceController::on_lib_notification, 
+												 get_pointer(m_workspacectrl), _1));
 		add(m_workspacectrl);
-
 
 		m_hbox.set_border_width(4);
 		m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
@@ -218,7 +232,8 @@ namespace ui {
 
 	void NiepceWindow::open_library(const std::string & libMoniker)
 	{
-		m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker)));
+		m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker),
+														   m_lib_notifcenter));
 		set_title(libMoniker);
 	}
 

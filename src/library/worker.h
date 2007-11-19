@@ -36,7 +36,7 @@ namespace library {
 	{
 	public:
 		/** create the worker for the library whose dir is specified */
-		Worker(const std::string & dir);
+		Worker(const std::string & dir, framework::NotificationCenter * nc);
 		virtual ~Worker();
 
 		void schedule(const Op::Ptr & _op);

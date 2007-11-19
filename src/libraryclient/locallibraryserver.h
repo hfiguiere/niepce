@@ -33,8 +33,8 @@ namespace libraryclient {
 		: public library::Worker
 	{
 	public:
-		LocalLibraryServer(const std::string & dir)
-			: library::Worker(dir)
+		LocalLibraryServer(const std::string & dir, framework::NotificationCenter * nc)
+			: library::Worker(dir, nc)
 			{
 			}
 

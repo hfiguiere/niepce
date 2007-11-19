@@ -1,5 +1,5 @@
 /*
- * niepce - library/keyword.h
+ * niepce - niepce/notifications.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,16 +18,16 @@
  */
 
 
+#ifndef _NIEPCE_NOTIFICATION_H_
+#define _NIEPCE_NOTIFICATION_H_
 
-#include "keyword.h"
+namespace niepce {
 
-
-namespace library {
-
-	Keyword::Keyword(int id, const std::string & keyword)
-		: m_id(id), m_keyword(keyword)
-	{
-	}
-
+	enum {
+		NOTIFICATION_LIB = 0
+	};
 
 }
+
+
+#endif

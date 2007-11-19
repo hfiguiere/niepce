@@ -30,7 +30,7 @@ namespace utils {
 
 #ifdef DEBUG
 #define DBG_OUT(x, ...) \
-	utils::dbg_print(x,  __PRETTY_FUNCTION__, ## __VA_ARGS__)
+	utils::dbg_print(x,  __FUNCTION__, ## __VA_ARGS__)
 #else
 #define DBG_OUT(x, ...) 	
 #endif
@@ -44,7 +44,7 @@ namespace utils {
 #endif
 
 #define ERR_OUT(x, ...) \
-	utils::err_print(x,  __PRETTY_FUNCTION__, ## __VA_ARGS__)
+	utils::err_print(x,  __FUNCTION__, ## __VA_ARGS__)
 
 
 	/** print debug messages. printf format.
