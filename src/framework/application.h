@@ -54,6 +54,7 @@ namespace framework {
 
 		virtual Gtk::Widget * buildWidget();
 		virtual void quit();
+		void about();
 		virtual void add(const Controller::Ptr & sub);
 		virtual void terminate();
 
@@ -67,7 +68,7 @@ namespace framework {
 	protected:
 		Application();
 		static Application::Ptr m_application; 
-
+		virtual void on_about();
 	private:
 		Configuration                m_config;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;

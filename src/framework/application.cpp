@@ -22,6 +22,7 @@
 #include <boost/bind.hpp>
 
 #include <gtkmm/main.h>
+#include <gtkmm/aboutdialog.h>
 
 #include "application.h"
 #include "frame.h"
@@ -97,6 +98,10 @@ namespace framework {
 		Gtk::Main::quit();
 	}
 
+	void Application::about()
+	{
+		on_about();
+	}
 
 	/** adding a controller to an application build said controller
 	 * widget 
@@ -105,6 +110,12 @@ namespace framework {
 	{
 		Controller::add(sub);
 		sub->buildWidget();
+	}
+
+	void Application::on_about()
+	{
+		Gtk::AboutDialog dlg;
+		dlg.run();
 	}
 
 }

@@ -124,23 +124,31 @@ namespace ui {
 		
 		m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
 		m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-													sigc::mem_fun(*this, 
-																				&NiepceWindow::on_action_file_import));
+							  sigc::mem_fun(*this, 
+											&NiepceWindow::on_action_file_import));
 		m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
-													sigc::mem_fun(gtkWindow(), 
-																				&Gtk::Window::hide));			
+							  sigc::mem_fun(gtkWindow(), 
+											&Gtk::Window::hide));			
 		m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-													sigc::mem_fun(Application::app().get(), 
-																				&Application::quit));	
+							  sigc::mem_fun(Application::app().get(), 
+											&Application::quit));	
+
+		m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
+		m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));
+		m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT),
+							  sigc::mem_fun(Application::app().get(),
+											&Application::about));
+
 		Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
-
-		gtkWindow().add_accel_group(Application::app()->uiManager()->get_accel_group());
+		
+		gtkWindow().add_accel_group(Application::app()
+									->uiManager()->get_accel_group());
 	}
-
+	
 	void NiepceWindow::on_action_file_import()
 	{
 		Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
-																	Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
+									  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
 		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 		dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
@@ -220,6 +228,10 @@ namespace ui {
 //			"      <menuitem action='Copy'/>"
 //			"      <menuitem action='Paste'/>"
 //			"    </menu>"
+			"    <menu action='MenuHelp'>"
+			"      <menuitem action='Help'/>"
+			"      <menuitem action='About'/>"
+			"    </menu>"
 			"  </menubar>"
 			"  <toolbar  name='ToolBar'>"
 			"    <toolitem action='Import'/>"
