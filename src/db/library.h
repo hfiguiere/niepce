@@ -26,6 +26,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include "iconnectiondriver.h"
 #include "iconnectionmanagerdriver.h"
@@ -66,27 +67,29 @@ namespace db {
 		void notify(NotifyType t, const boost::any & param);
 
 		/** add a file to the library
-		 * @param folder the containing folder
+		 * @param folder the path of the containing folder
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFile2(const std::string & folder, const std::string & file, bool manage);
+		int addFile2(const boost::filesystem::path & folder, 
+					 const boost::filesystem::path & file, bool manage);
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFile(int folder_id, const std::string & file, bool manage);
+		int addFile(int folder_id, const boost::filesystem::path & file, 
+					bool manage);
 		
 		/** Get a specific folder id from the library
 		 * @param folder the folder path to check
-		 * @return the id of the folder, -1 if not found
+		 * @return the folder, NULL if not found
 		 */
-		int getFolder(const std::string & folder);
+		LibFolder::Ptr getFolder(const boost::filesystem::path & folder);
 		/** Add a folder
 		 * @param folder the folder path
 		 */
-		int addFolder(const std::string & folder);
+		LibFolder::Ptr addFolder(const boost::filesystem::path & folder);
 		/** List all the folders.
 		 * @param l the list of LibFolder
 		 */

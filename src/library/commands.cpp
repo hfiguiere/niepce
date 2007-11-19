@@ -45,7 +45,7 @@ namespace library {
 			switch( _op->type() )
 			{
 			case OP_IMPORT_FILES:
-				cmdImportFiles( lib, any_cast<std::string>(args[0]), 
+				cmdImportFiles( lib, any_cast<bfs::path>(args[0]), 
 								any_cast<FileList::Ptr>(args[1]), 
 								any_cast<bool>(args[2]) );
 				break;
@@ -75,19 +75,24 @@ namespace library {
 	}
 	
 	void Commands::cmdImportFiles(const Library::Ptr & lib, 
-								  const std::string & folder, 
+								  const bfs::path & folder, 
 								  const FileList::Ptr & files, bool manage)
 	{
 		DBG_ASSERT(manage == true, "managing file is currently unsupported");
-		int folder_id = lib->getFolder(folder);
-		if(folder_id == -1)
+		LibFolder::Ptr pf;
+		pf = lib->getFolder(folder);
+		if(pf == NULL)
 		{
-			folder_id = lib->addFolder(folder);
+			pf = lib->addFolder(folder);
+			LibFolder::ListPtr l( new LibFolder::List );
+			l->push_back(pf);
+			lib->notify(Library::NOTIFY_ADDED_FOLDERS,
+						boost::any(l));
 		}
 		std::for_each( files->begin(), files->end(), 
 					   bind(&Library::addFile,
-							boost::ref(lib), folder_id,
-							bind( &bfs::path::string, _1 ) , manage) );
+							boost::ref(lib), pf->id(),
+							_1, manage) );
 		lib->notify(Library::NOTIFY_ADDED_FILES, boost::any());
 	}
 
@@ -98,7 +103,7 @@ namespace library {
 		return Op::Ptr(new Op( OP_LIST_ALL_FOLDERS, id ));
 	}
 
-	Op::Ptr Commands::opImportFiles(tid_t id, const std::string & folder, 
+	Op::Ptr Commands::opImportFiles(tid_t id, const bfs::path & folder, 
 									const FileList::Ptr & files, bool manage)
 	{
 		Op::Ptr op(new Op( OP_IMPORT_FILES, id ));

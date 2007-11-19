@@ -32,6 +32,8 @@
 
 using framework::NotificationCenter;
 
+namespace bfs = boost::filesystem;
+
 namespace db {
 
 	const char * s_databaseName = "niepcelibrary.db";
@@ -167,14 +169,15 @@ namespace db {
 	}
 
 
-	int Library::addFile(int folder_id, const std::string & file, bool manage)
+	int Library::addFile(int folder_id, const bfs::path & file, bool manage)
 	{
 		int ret = -1;
 		DBG_ASSERT(manage, "manage not supported");
-		DBG_ASSERT(folder_id != -1, "invalid folder ID");
+		DBG_ASSERT(folder_id == -1, "invalid folder ID");
 		try {
-			SQLStatement sql(boost::format("INSERT INTO files (path, parent_id) VALUES (%1%, %2%);") 
-							 % file % folder_id);
+			SQLStatement sql(boost::format("INSERT INTO files (path, parent_id)"
+										   " VALUES ('%1%', '%2%');") 
+							 % file.string() % folder_id);
 			if(m_dbdrv->execute_statement(sql)) {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
@@ -189,28 +192,33 @@ namespace db {
 	}
 
 
-	int Library::addFile2(const std::string & folder, const std::string & file, bool manage)
+	int Library::addFile2(const bfs::path & folder, const bfs::path & file, 
+						  bool manage)
 	{
-		int folder_id = getFolder(folder);
-		if(folder_id == -1) {
-			ERR_OUT("Folder %s not found", folder.c_str());
-			folder_id = 0;
+		LibFolder::Ptr f;
+		f = getFolder(folder);
+		if(f == NULL) {
+			ERR_OUT("Folder %s not found", folder.string().c_str());
 		}
-		return addFile(folder_id, file, manage);
+		return addFile(f ? f->id() : -1, file, manage);
 	}
 	
 
-	int Library::getFolder(const std::string & folder)
+	LibFolder::Ptr Library::getFolder(const bfs::path & folder)
 	{
-		int ret = -1;
-		SQLStatement sql(boost::format("SELECT id FROM folders WHERE path='%1%'") % folder);
+		LibFolder::Ptr f;
+		SQLStatement sql(boost::format("SELECT id,name "
+									   "FROM folders WHERE path='%1%'") 
+						 % folder.string());
 		
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				if(m_dbdrv->read_next_row()) {
 					int64_t id;
+					std::string name;
 					m_dbdrv->get_column_content(0, id);
-					ret = (int)id;
+					m_dbdrv->get_column_content(1, name);
+					f = LibFolder::Ptr(new LibFolder((int)id, name));
 				}
 			}
 		}
@@ -218,27 +226,29 @@ namespace db {
 		{
 			DBG_OUT("db exception %s", e.what());
 		}
-		return ret;
+		return f;
 	}
 
 
-	int Library::addFolder(const std::string & folder)
+	LibFolder::Ptr Library::addFolder(const bfs::path & folder)
 	{
-		int ret = -1;
-		SQLStatement sql(boost::format("INSERT INTO folders (path,name,vault_id,parent_id) "
-									   "VALUES('%1%', '%2%', '0', '0');") % folder % folder);
+		LibFolder::Ptr f;
+		SQLStatement sql(boost::format("INSERT INTO folders "
+									   "(path,name,vault_id,parent_id) "
+									   "VALUES('%1%', '%2%', '0', '0');") 
+						 % folder.string() % folder.leaf());
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
-				ret = (int)id;
+				f = LibFolder::Ptr(new LibFolder((int)id, folder.leaf()));
 			}
 		}
 		catch(utils::Exception & e)
 		{
 			DBG_OUT("db exception %s", e.what());
 		}
-		return ret;
+		return f;
 	}
 
 

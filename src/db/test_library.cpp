@@ -24,6 +24,7 @@
 #include "iconnectiondriver.h"
 #include "library.h"
 #include "libfile.h"
+#include "libfolder.h"
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -42,9 +43,10 @@ BOOST_AUTO_UNIT_TEST(library_test)
 
 
 	lib.addFolder("foo");
-	BOOST_CHECK(lib.getFolder("foo") != -1);
+	db::LibFolder::Ptr f(lib.getFolder("foo"));
+	BOOST_CHECK(f);
 	lib.addFolder("bar");
-	BOOST_CHECK(lib.getFolder("foo") != -1);
+	BOOST_CHECK(lib.getFolder("bar"));
 
 	db::LibFolder::ListPtr l( new db::LibFolder::List );
 	lib.getAllFolders( l );
