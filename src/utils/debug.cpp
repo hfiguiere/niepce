@@ -108,6 +108,7 @@ namespace utils {
 
 		if(func) {
 			fwrite(func, 1, strlen(func), stderr);
+			fwrite(" - ", 1, 3, stderr);
 		}
 
 		vfprintf(stderr, fmt, marker);
