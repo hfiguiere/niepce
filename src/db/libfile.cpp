@@ -20,13 +20,14 @@
 
 #include "libfile.h"
 
+namespace bfs = boost::filesystem;
+
 namespace db {
 	
-	LibFile::LibFile(int id, int folderId, const std::string &name,
-					const std::string & relPath)
-		: m_id(id), m_folderId(folderId),
-			m_name(name), m_relativePath(relPath),
-			m_hasKeywordList(false)
+	LibFile::LibFile(int id, int folderId, const bfs::path & p,
+					 const std::string & name )
+	: m_id(id), m_folderId(folderId),
+		  m_name(name), m_path(p)
 	{
 
 	}
@@ -39,7 +40,7 @@ namespace db {
 	const Keyword::IdList & LibFile::keywords() const
 	{
 		if(!m_hasKeywordList) {
-			storage()->fetchKeywordsForFile(m_id, m_keywordList);
+//			storage()->fetchKeywordsForFile(m_id, m_keywordList);
 		}
 		return m_keywordList;
 	}

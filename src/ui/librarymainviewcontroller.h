@@ -23,8 +23,10 @@
 
 
 #include <gtkmm/iconview.h>
+#include <gtkmm/liststore.h>
 
 #include "librarymainview.h"
+#include "db/libfile.h"
 #include "framework/controller.h"
 #include "framework/notification.h"
 
@@ -42,6 +44,24 @@ namespace ui {
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
 
+
+		class LibraryListColumns 
+			: public Gtk::TreeModelColumnRecord
+		{
+		public:
+			
+			LibraryListColumns()
+				{ 
+					add(m_pix);
+					add(m_name);
+					add(m_libfile);
+				}
+			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
+			Gtk::TreeModelColumn<Glib::ustring> m_name;
+			Gtk::TreeModelColumn<db::LibFile::Ptr> m_libfile;
+		};
+
+
 		void on_lib_notification(const framework::Notification::Ptr &);
 		
 	protected:
@@ -50,9 +70,11 @@ namespace ui {
 	private:
 
 		// managed widgets...
-		LibraryMainView  m_mainview;
-		Gtk::IconView    m_librarylistview;
-		Gtk::Widget*     m_imageview;
+		LibraryMainView              m_mainview;
+		Gtk::IconView                m_librarylistview;
+		LibraryListColumns           m_columns;
+		Glib::RefPtr<Gtk::ListStore> m_model;
+		Gtk::Widget*                 m_imageview;
 	};
 
 }

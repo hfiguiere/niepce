@@ -19,11 +19,17 @@
 
 
 #include <glibmm/i18n.h>
+#include <glibmm/ustring.h>
+
+#include <gtkmm/icontheme.h>
 
 #include <gtkimageview/gtkimageview.h>
 #include <gtkimageview/gtkimagescrollwin.h>
 
 #include "utils/debug.h"
+#include "niepce/notifications.h"
+#include "db/library.h"
+#include "framework/application.h"
 #include "librarymainviewcontroller.h"
 
 namespace ui {
@@ -31,11 +37,42 @@ namespace ui {
 	void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
 	{
 		DBG_OUT("notification");
+		if(n->type() == niepce::NOTIFICATION_LIB) {
+			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+			switch(ln.type) {
+			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+			{
+				db::LibFile::ListPtr l 
+					= boost::any_cast<db::LibFile::ListPtr>(ln.param);
+				DBG_OUT("received folder content file # %d", l->size());
+				Glib::RefPtr< Gtk::IconTheme > icon_theme(framework::Application::app()->getIconTheme());
+				m_model->clear();
+				db::LibFile::List::const_iterator iter = l->begin();
+				for( ; iter != l->end(); iter++ )
+				{
+					Gtk::TreeModel::iterator riter = m_model->append();
+					Gtk::TreeRow row = *riter;
+					row[m_columns.m_pix] = icon_theme->load_icon(
+						Glib::ustring("image-loading"), 32,
+						Gtk::ICON_LOOKUP_USE_BUILTIN);
+					row[m_columns.m_name] = Glib::ustring((*iter)->name());
+					row[m_columns.m_libfile] = *iter;
+				}
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 
 
 	Gtk::Widget * LibraryMainViewController::buildWidget()
 	{
+		m_model = Gtk::ListStore::create(m_columns);
+		m_librarylistview.set_pixbuf_column(m_columns.m_pix);
+		m_librarylistview.set_markup_column(m_columns.m_name);
+		m_librarylistview.set_model(m_model);
 		m_mainview.append_page(m_librarylistview, _("Library"));
 		
 		GtkWidget *iv = gtk_image_view_new();

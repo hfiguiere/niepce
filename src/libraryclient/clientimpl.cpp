@@ -66,6 +66,14 @@ namespace libraryclient {
 		return id;
 	}
 
+	tid_t ClientImpl::queryFolderContent(int folder_id)
+	{
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opQueryFolderContent(id, folder_id));
+		m_localLibrary->schedule(op);
+		return id;
+	}
+
 	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 	{
 		FileList::Ptr files;

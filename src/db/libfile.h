@@ -27,6 +27,7 @@
 #include <string>
 #include <list>
 #include <boost/shared_ptr.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include "db/keyword.h"
 #include "db/storage.h"
@@ -38,9 +39,10 @@ namespace db {
 	public:
 		typedef boost::shared_ptr< LibFile > Ptr;
 		typedef std::list< Ptr > List;
+		typedef boost::shared_ptr< List > ListPtr;
 
-		LibFile(int id, int folderId, const std::string &name,
-						const std::string & relPath);
+		LibFile(int id, int folderId, const boost::filesystem::path & p,
+						const std::string & name );
 		virtual ~LibFile();
 
 		int id() const
@@ -49,30 +51,32 @@ namespace db {
 			{ return m_folderId; }
 		const std::string & name() const
 			{ return m_name; }
-		const std::string & relativePath() const
-			{ return m_relativePath; }
+		const boost::filesystem::path & path() const
+			{ return m_path; }
 
-		Storage::Ptr storage() const;
+//		Storage::Ptr storage() const;
 
 		/** retrieve the keywords id list 
 		 * @return the list
 		 */
 		const Keyword::IdList & keywords() const;
 		
-		const std::string & uri() const
-			{ return m_uri; }
+		/** return an URI of the real path
+		 * because the Gtk stuff want that.
+		 */
+		const std::string uri() const
+			{ return std::string("file://") + m_path.string(); }
 		/** check is the library file is at uri
 		 * @return true of the uri match
 		 * @todo
 		 */
-		bool isUri(const char * _uri) const
-			{ return uri() == _uri; }
+//		bool isUri(const char * _uri) const
+//			{ return uri() == _uri; }
 	private:
 		int         m_id;           /**< file ID */
 		int         m_folderId;     /**< parent folder */
 		std::string m_name;         /**< name */
-		std::string m_relativePath; /**< path name relative to the folder */
-		std::string m_uri;          /**< the URI */
+		boost::filesystem::path  m_path;/**< path name relative to the folder */
 		std::string m_type;
 		mutable bool m_hasKeywordList;
 		mutable Keyword::IdList m_keywordList;

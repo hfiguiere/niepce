@@ -52,6 +52,12 @@ namespace ui {
 			Gtk::ICON_LOOKUP_USE_BUILTIN);
 	}
 
+	libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
+	{
+		return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+	}
+
+
 	void WorkspaceController::on_lib_notification(const framework::Notification::Ptr &n)
 	{
 		DBG_OUT("notification for workspace");
@@ -77,21 +83,32 @@ namespace ui {
 
 	void WorkspaceController::on_libtree_selection()
 	{
-		DBG_OUT("selected");
+		Glib::RefPtr<Gtk::TreeSelection> selection = m_librarytree.get_selection();
+		Gtk::TreeModel::iterator selected = selection->get_selected();
+		if((*selected)[m_librarycolumns.m_type] == FOLDER_ITEM)
+		{
+			int id = (*selected)[m_librarycolumns.m_id];
+			getLibraryClient()->queryFolderContent(id);
+		}
+		else 
+		{
+			DBG_OUT("selected something not a folder");
+		}
 	}
 
 
 	void WorkspaceController::add_folder_item(const db::LibFolder::Ptr & f)
 	{
 		add_item(m_treestore, m_folderNode->children(), m_icons[ICON_ROLL], 
-				 f->name(), f->id());
+				 f->name(), f->id(), FOLDER_ITEM);
 	}
 
 	Gtk::TreeModel::iterator
-	WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
+	WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> &treestore,
 								  const Gtk::TreeNodeChildren & childrens,
 								  const Glib::RefPtr<Gdk::Pixbuf> & icon,
-								  const Glib::ustring & label, int id) const
+								  const Glib::ustring & label, int id,
+								  int type) const
 	{
 		Gtk::TreeModel::iterator iter;
 		Gtk::TreeModel::Row row;
@@ -100,6 +117,7 @@ namespace ui {
 		row[m_librarycolumns.m_icon] = icon;
 		row[m_librarycolumns.m_label] = label; 
 		row[m_librarycolumns.m_id] = id;
+		row[m_librarycolumns.m_type] = type;
 		return iter;
 	}
 
@@ -110,11 +128,13 @@ namespace ui {
 		m_librarytree.set_model(m_treestore);
 
 		m_folderNode = add_item(m_treestore, m_treestore->children(),
-								 m_icons[ICON_FOLDER], 
-								 Glib::ustring(_("Pictures")), 0);
+								m_icons[ICON_FOLDER], 
+								Glib::ustring(_("Pictures")), 0,
+								FOLDERS_ITEM);
 		m_projectNode = add_item(m_treestore, m_treestore->children(),
-								  m_icons[ICON_PROJECT], 
-								  Glib::ustring(_("Projects")), 0);
+								 m_icons[ICON_PROJECT], 
+								 Glib::ustring(_("Projects")), 0,
+								 PROJECTS_ITEM);
 
 		m_librarytree.set_headers_visible(false);
 		m_librarytree.append_column("", m_librarycolumns.m_icon);
@@ -135,10 +155,7 @@ namespace ui {
 	
 	void WorkspaceController::on_ready()
 	{
-		libraryclient::LibraryClient::Ptr libClient(
-			boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient());
-
-		libClient->getAllFolders();
+		getLibraryClient()->getAllFolders();
 	}
 
 }

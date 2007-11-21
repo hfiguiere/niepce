@@ -272,4 +272,32 @@ namespace db {
 		}
 	}
 
+	void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
+	{
+		SQLStatement sql(boost::format("SELECT id,parent_id,path FROM files "
+									   " WHERE parent_id='%1%'")
+						 % folder_id);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				while(m_dbdrv->read_next_row()) {
+					int64_t id;
+					int64_t fid;
+					std::string pathname;
+					m_dbdrv->get_column_content(0, id);
+					m_dbdrv->get_column_content(1, fid);
+					m_dbdrv->get_column_content(2, pathname);
+					bfs::path p(pathname);
+					fl->push_back(LibFile::Ptr(new LibFile((int)id, 
+														   (int)folder_id,
+														   p, p.leaf())));
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		
+	}
+
 }

@@ -57,6 +57,11 @@ namespace libraryclient {
 		return m_pImpl->getAllFolders();
 	}
 
+	tid_t LibraryClient::queryFolderContent(int id)
+	{
+		return m_pImpl->queryFolderContent(id);
+	}
+
 	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
 	{
 		m_pImpl->importFromDirectory(dir, manage);

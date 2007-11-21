@@ -31,6 +31,8 @@
 #include "iconnectiondriver.h"
 #include "iconnectionmanagerdriver.h"
 #include "libfolder.h"
+#include "libfile.h"
+
 
 namespace framework {
 	class NotificationCenter;
@@ -47,7 +49,8 @@ namespace db {
 		typedef enum {
 			NOTIFY_NONE = 0,
 			NOTIFY_ADDED_FOLDERS,
-			NOTIFY_ADDED_FILES
+			NOTIFY_ADDED_FILES,
+			NOTIFY_FOLDER_CONTENT_QUERIED
 		} NotifyType;
 
 		Library(const std::string & dir, framework::NotificationCenter * nc);
@@ -94,6 +97,12 @@ namespace db {
 		 * @param l the list of LibFolder
 		 */
 		void getAllFolders(const LibFolder::ListPtr & l);
+
+		/** List the folder content
+		 * @param folder_id id of the folder
+		 * @param fl the resulting file list
+		 */
+		void getFolderContent(int folder_id, const LibFile::ListPtr & fl);
 
 		int checkDatabaseVersion();
 		

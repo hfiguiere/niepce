@@ -47,21 +47,30 @@ namespace ui {
 	public:
 		typedef boost::shared_ptr<WorkspaceController> Ptr;
 
+		enum {
+			FOLDERS_ITEM,
+			PROJECTS_ITEM,
+			FOLDER_ITEM,
+			PROJECT_ITEM
+		};
+
 		WorkspaceController();
-		class LibraryTreeColumns 
+		class WorkspaceTreeColumns 
 			: public Gtk::TreeModelColumnRecord
 		{
 		public:
 			
-			LibraryTreeColumns()
+			WorkspaceTreeColumns()
 				{ 
 					add(m_icon);
 					add(m_id);
 					add(m_label);  
+					add(m_type);
 				}
 			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
 			Gtk::TreeModelColumn<int> m_id;
 			Gtk::TreeModelColumn<Glib::ustring> m_label;
+			Gtk::TreeModelColumn<int> m_type;
 		};
 
 		virtual void on_ready();
@@ -73,6 +82,8 @@ namespace ui {
 		virtual Gtk::Widget * buildWidget();
 
 	private:
+		libraryclient::LibraryClient::Ptr getLibraryClient();
+
 		/** add a folder item in the treeview */
 		void add_folder_item(const db::LibFolder::Ptr & f);
 		/** add a tree item in the treeview 
@@ -81,11 +92,13 @@ namespace ui {
 		 * @param icon the icon for the item
 		 * @param label the item label
 		 * @param id the item id (in the database)
+		 * @paran type the type of node
 		 */
 		Gtk::TreeModel::iterator add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
 										  const Gtk::TreeNodeChildren & childrens,
 										  const Glib::RefPtr<Gdk::Pixbuf> & icon,
-										  const Glib::ustring & label, int id) const;
+										  const Glib::ustring & label, int id,
+										  int type) const;
 		enum {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
@@ -93,7 +106,7 @@ namespace ui {
 			_ICON_SIZE
 		};
 		boost::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
-		LibraryTreeColumns             m_librarycolumns;
+		WorkspaceTreeColumns           m_librarycolumns;
 		Gtk::VBox                      m_vbox;
 		Gtk::Label                     m_label;
 		Gtk::TreeView                  m_librarytree;

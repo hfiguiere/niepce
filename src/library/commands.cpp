@@ -26,6 +26,7 @@
 #include "utils/debug.h"
 #include "db/library.h"
 #include "db/libfolder.h"
+#include "db/libfile.h"
 #include "commands.h"
 
 namespace bfs = boost::filesystem;
@@ -34,6 +35,7 @@ using boost::any_cast;
 
 using db::Library;
 using db::LibFolder;
+using db::LibFile;
 using utils::FileList;
 
 namespace library {
@@ -51,6 +53,9 @@ namespace library {
 				break;
 			case OP_LIST_ALL_FOLDERS:
 				cmdListAllFolders(lib);
+				break;
+			case OP_QUERY_FOLDER_CONTENT:
+				cmdQueryFolderContent( lib, any_cast<int>(args[0]) );
 				break;
 			default:
 				DBG_OUT("unkown op");
@@ -97,6 +102,12 @@ namespace library {
 	}
 
 
+	void Commands::cmdQueryFolderContent(const Library::Ptr & lib, int folder_id)
+	{
+		LibFile::ListPtr fl(new LibFile::List());
+		lib->getFolderContent(folder_id, fl);
+		lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
+	}
 
 	Op::Ptr Commands::opListAllFolders(tid_t id)
 	{
@@ -116,6 +127,13 @@ namespace library {
 		return op;
 	}
 
+	Op::Ptr Commands::opQueryFolderContent(tid_t id, int folder_id)
+	{
+		Op::Ptr op(new Op( OP_QUERY_FOLDER_CONTENT, id ));
+		Op::Args & args(op->args());
+		args.push_back( boost::any( folder_id ));
+		return op;
+	}
 
 }
 
