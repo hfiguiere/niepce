@@ -67,15 +67,25 @@ namespace ui {
 		virtual void on_ready();
 
 		void on_lib_notification(const framework::Notification::Ptr &);
+		void on_libtree_selection();
 
 	protected:
 		virtual Gtk::Widget * buildWidget();
 
 	private:
+		/** add a folder item in the treeview */
 		void add_folder_item(const db::LibFolder::Ptr & f);
-		void add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
-					  const Glib::RefPtr<Gdk::Pixbuf> & icon,
-					  const Glib::ustring & label, int id) const;
+		/** add a tree item in the treeview 
+		 * @param treestore the treestore to add to
+		 * @param childrens the children subtree to add to
+		 * @param icon the icon for the item
+		 * @param label the item label
+		 * @param id the item id (in the database)
+		 */
+		Gtk::TreeModel::iterator add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
+										  const Gtk::TreeNodeChildren & childrens,
+										  const Glib::RefPtr<Gdk::Pixbuf> & icon,
+										  const Glib::ustring & label, int id) const;
 		enum {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
@@ -87,7 +97,9 @@ namespace ui {
 		Gtk::VBox                      m_vbox;
 		Gtk::Label                     m_label;
 		Gtk::TreeView                  m_librarytree;
-		Glib::RefPtr<Gtk::TreeStore>   m_treestore;
+		Gtk::TreeModel::iterator       m_folderNode;  /**< the folder node */
+		Gtk::TreeModel::iterator       m_projectNode; /**< the project node */
+		Glib::RefPtr<Gtk::TreeStore>   m_treestore;   /**< the treestore */
 	};
 
 

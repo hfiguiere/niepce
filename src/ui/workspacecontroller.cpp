@@ -75,23 +75,32 @@ namespace ui {
 	}
 
 
+	void WorkspaceController::on_libtree_selection()
+	{
+		DBG_OUT("selected");
+	}
+
+
 	void WorkspaceController::add_folder_item(const db::LibFolder::Ptr & f)
 	{
-		add_item(m_treestore, m_icons[ICON_ROLL], 
+		add_item(m_treestore, m_folderNode->children(), m_icons[ICON_ROLL], 
 				 f->name(), f->id());
 	}
 
-	void WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
-									   const Glib::RefPtr<Gdk::Pixbuf> & icon,
-									   const Glib::ustring & label, int id) const
+	Gtk::TreeModel::iterator
+	WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
+								  const Gtk::TreeNodeChildren & childrens,
+								  const Glib::RefPtr<Gdk::Pixbuf> & icon,
+								  const Glib::ustring & label, int id) const
 	{
 		Gtk::TreeModel::iterator iter;
 		Gtk::TreeModel::Row row;
-		iter = treestore->append();
+		iter = treestore->append(childrens);
 		row = *iter;
 		row[m_librarycolumns.m_icon] = icon;
 		row[m_librarycolumns.m_label] = label; 
 		row[m_librarycolumns.m_id] = id;
+		return iter;
 	}
 
 
@@ -100,10 +109,12 @@ namespace ui {
 		m_treestore = Gtk::TreeStore::create(m_librarycolumns);
 		m_librarytree.set_model(m_treestore);
 
-		add_item(m_treestore, m_icons[ICON_FOLDER], 
-				 Glib::ustring(_("Pictures")), 0);
-		add_item(m_treestore, m_icons[ICON_PROJECT], 
-				 Glib::ustring(_("Projects")), 0);
+		m_folderNode = add_item(m_treestore, m_treestore->children(),
+								 m_icons[ICON_FOLDER], 
+								 Glib::ustring(_("Pictures")), 0);
+		m_projectNode = add_item(m_treestore, m_treestore->children(),
+								  m_icons[ICON_PROJECT], 
+								  Glib::ustring(_("Projects")), 0);
 
 		m_librarytree.set_headers_visible(false);
 		m_librarytree.append_column("", m_librarycolumns.m_icon);
@@ -114,6 +125,11 @@ namespace ui {
 		m_label.set_mnemonic_widget(m_librarytree);
 		m_vbox.pack_start(m_label, Gtk::PACK_SHRINK);
 		m_vbox.pack_start(m_librarytree);
+
+		m_librarytree.get_selection()->signal_changed().connect (
+			sigc::mem_fun(*this, 
+						  &WorkspaceController::on_libtree_selection));
+
 		return &m_vbox;
 	}
 	
