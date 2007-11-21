@@ -30,7 +30,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 
-BOOST_AUTO_UNIT_TEST(sqlstatement_test)
+BOOST_AUTO_TEST_CASE(sqlstatement_test)
 {
 	BOOST_CHECK(1);
 
@@ -50,7 +50,7 @@ BOOST_AUTO_UNIT_TEST(sqlstatement_test)
 	BOOST_CHECK_EQUAL(ss.str(), sql);
 }
 
-BOOST_AUTO_UNIT_TEST(insertstatement_test)
+BOOST_AUTO_TEST_CASE(insertstatement_test)
 {
 	db::ColumnList columns(2);
 
@@ -73,7 +73,7 @@ BOOST_AUTO_UNIT_TEST(insertstatement_test)
 
 
 
-BOOST_AUTO_UNIT_TEST(connection_test)
+BOOST_AUTO_TEST_CASE(connection_test)
 {
 	try {
 		db::IConnectionManagerDriver::Ptr mgr(new db::sqlite::SqliteCnxMgrDrv());
