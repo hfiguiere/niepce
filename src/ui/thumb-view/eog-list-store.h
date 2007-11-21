@@ -92,7 +92,7 @@ public:
 	void remove_image(const db::LibFile::Ptr &image);
 
 	gboolean is_file_in_list_store (const gchar *info_uri,
-																	Gtk::TreeIter &iter_found);
+									Gtk::TreeIter &iter_found);
 	
 private:
 	/** shared initializer */
@@ -114,6 +114,9 @@ private:
 	};
 
 	Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
+	int	_list_store_compare_func (const Gtk::TreeModel::iterator& a, 
+								  const Gtk::TreeModel::iterator& b);
+
 	Glib::RefPtr<Gdk::Pixbuf> m_loading_icon;
 	Columns m_columns;
 };

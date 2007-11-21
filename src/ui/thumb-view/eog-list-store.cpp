@@ -103,25 +103,15 @@ eog_list_store_dispose (GObject *object)
    Sorting functions 
 */
 
-static gint
-eog_list_store_compare_func (GtkTreeModel *model,
-			     GtkTreeIter *a,
-			     GtkTreeIter *b,
-			     gpointer user_data)
+int
+EogListStore::_list_store_compare_func (const Gtk::TreeModel::iterator& a, 
+										const Gtk::TreeModel::iterator& b)
 {
-	gint r_value;
+	int r_value;
 
-	const db::LibFile *image_a;
-	const db::LibFile *image_b;
+	const db::LibFile::Ptr image_a = (*a)[m_columns.m_image];
+	const db::LibFile::Ptr image_b = (*b)[m_columns.m_image];
 
-	gtk_tree_model_get (model, a, 
-			    EOG_LIST_STORE_EOG_IMAGE, &image_a,
-			    -1);
-
-	gtk_tree_model_get (model, b, 
-			    EOG_LIST_STORE_EOG_IMAGE, &image_b,
-			    -1);
-	
 	r_value = strcasecmp (image_a->name().c_str(), 
 			      image_b->name().c_str());
 
@@ -163,13 +153,9 @@ EogListStore::_init()
 
 	self->priv->mutex = g_mutex_new ();
 */
-	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (this),
-						 eog_list_store_compare_func,
-						 NULL, NULL);
-	
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (this), 
-					      GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, 
-					      GTK_SORT_ASCENDING);
+	set_sort_func(m_columns.m_image, 
+				  sigc::mem_fun(this , 
+								&EogListStore::_list_store_compare_func));
 }
 
 

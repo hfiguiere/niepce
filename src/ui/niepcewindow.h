@@ -59,7 +59,8 @@ namespace ui {
 		void on_action_file_import();
 		void on_action_file_quit();
 		void on_open_library();
-		
+		void on_lib_notification(const framework::Notification::Ptr &);
+
 		void init_ui();
 		void init_actions();
 
@@ -74,6 +75,7 @@ namespace ui {
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		libraryclient::LibraryClient::Ptr m_libClient;
+		GtkWidget*                     m_thumbview;
 	};
 
 }

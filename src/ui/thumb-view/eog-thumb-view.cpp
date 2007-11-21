@@ -1,8 +1,10 @@
 /* Eye Of Gnome - Thumbnail View
  *
  * Copyright (C) 2006 The Free Software Foundation
+ * Copyright (C) 2007 Hubert Figuiere
  *
- * Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
+ * C++-ization: Hubert Figuiere <hub@figuiere.net>
+ * Original Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +39,7 @@
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
+#include "utils/boost.h"
 #include "db/libfile.h"
 
 #define EOG_THUMB_VIEW_SPACING 0
@@ -57,7 +60,7 @@ struct _EogThumbViewPrivate {
 	gint end_thumb;   /* the last visible thumbnail  */
 	GtkWidget *menu;  /* a contextual menu for thumbnails */
 	GtkCellRenderer *pixbuf_cell;
-	EogListStore *store;
+	Glib::RefPtr<EogListStore> store;
 };
 
 /* Drag 'n Drop */
@@ -68,7 +71,7 @@ enum {
 };
 
 static GtkTargetEntry target_table[] = {
-	{ "text/uri-list", 0, TARGET_URILIST },
+	{ const_cast<gchar*>("text/uri-list"), 0, TARGET_URILIST },
 };
 
 
@@ -111,17 +114,19 @@ eog_thumb_view_clear_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	EogListStore *store = eog_thumb_view_get_model(tb);
+	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
 	g_assert (start_thumb <= end_thumb);
 	
 	path = gtk_tree_path_new_from_indices (start_thumb, -1);
-	for (result = gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+	for (result = gtk_tree_model_get_iter (GTK_TREE_MODEL (store->gobj()), 
+										   &iter, path);
 	     result && thumb <= end_thumb;
-	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter), thumb++) {
-		eog_list_store_thumbnail_unset (store, &iter);
+	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store->gobj()), 
+											&iter), thumb++) {
+		eog_list_store_thumbnail_unset (get_pointer(store), &iter);
 	}
 	gtk_tree_path_free (path);
 }
@@ -133,17 +138,17 @@ eog_thumb_view_add_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	EogListStore *store = eog_thumb_view_get_model(tb);
+	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
 	g_assert (start_thumb <= end_thumb);
 	
 	path = gtk_tree_path_new_from_indices (start_thumb, -1);
-	for (result = gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+	for (result = gtk_tree_model_get_iter (GTK_TREE_MODEL (store->gobj()), &iter, path);
 	     result && thumb <= end_thumb;
-	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter), thumb++) {
-		eog_list_store_thumbnail_set (store, &iter);
+	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store->gobj()), &iter), thumb++) {
+		eog_list_store_thumbnail_set (get_pointer(store), &iter);
 	}
 	gtk_tree_path_free (path);
 }
@@ -517,15 +522,15 @@ eog_thumb_view_new (void)
 }
 
 void
-eog_thumb_view_set_model (EogThumbView *tb, EogListStore *store)
+eog_thumb_view_set_model (EogThumbView * tb, 
+						  const Glib::RefPtr<EogListStore> & store)
 {
 	gint index;
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
-//	g_return_if_fail (EOG_IS_LIST_STORE (store));
 	
 	tb->priv->store = store;
 
-	index = eog_list_store_get_initial_pos (store);
+	index = eog_list_store_get_initial_pos (get_pointer(store));
 
 	gtk_icon_view_set_model (GTK_ICON_VIEW (tb), GTK_TREE_MODEL(store->gobj()));
 
@@ -537,9 +542,10 @@ eog_thumb_view_set_model (EogThumbView *tb, EogListStore *store)
 	}
 }
 
-EogListStore *eog_thumb_view_get_model    (EogThumbView *view)
+Glib::RefPtr<EogListStore> eog_thumb_view_get_model    (EogThumbView *view)
 {
-	g_return_val_if_fail (EOG_IS_THUMB_VIEW (view), NULL);
+	g_return_val_if_fail (EOG_IS_THUMB_VIEW (view), 
+						  Glib::RefPtr<EogListStore>());
 	return view->priv->store;
 }
 
@@ -645,11 +651,11 @@ eog_thumb_view_set_current_image (EogThumbView *tb,
 								  gboolean deselect_other)
 {
 	GtkTreePath *path;
-	EogListStore *store;
+	Glib::RefPtr<EogListStore> store;
 	gint pos;
 
 	store = eog_thumb_view_get_model(tb);
-	pos = eog_list_store_get_pos_by_image (store, image);
+	pos = eog_list_store_get_pos_by_image (get_pointer(store), image);
 	path = gtk_tree_path_new_from_indices (pos, -1);
 
 	if (path == NULL) {
@@ -675,9 +681,9 @@ eog_thumb_view_select_single (EogThumbView *tb,
 	gint n_items;
 
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
-	EogListStore *store = eog_thumb_view_get_model (tb);
+	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model (tb);
 
-	n_items = eog_list_store_length (store);
+	n_items = eog_list_store_length (get_pointer(store));
 
 	if (n_items == 0) {
 		return;

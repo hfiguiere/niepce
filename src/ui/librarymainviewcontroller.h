@@ -24,6 +24,8 @@
 
 #include <gtkmm/iconview.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/scrolledwindow.h>
 
 #include "librarymainview.h"
 #include "db/libfile.h"
@@ -61,7 +63,6 @@ namespace ui {
 			Gtk::TreeModelColumn<db::LibFile::Ptr> m_libfile;
 		};
 
-
 		void on_lib_notification(const framework::Notification::Ptr &);
 		
 	protected:
@@ -72,6 +73,7 @@ namespace ui {
 		// managed widgets...
 		LibraryMainView              m_mainview;
 		Gtk::IconView                m_librarylistview;
+		Gtk::ScrolledWindow          m_scrollview;
 		LibraryListColumns           m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_model;
 		Gtk::Widget*                 m_imageview;

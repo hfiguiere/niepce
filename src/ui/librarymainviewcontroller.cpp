@@ -73,7 +73,9 @@ namespace ui {
 		m_librarylistview.set_pixbuf_column(m_columns.m_pix);
 		m_librarylistview.set_markup_column(m_columns.m_name);
 		m_librarylistview.set_model(m_model);
-		m_mainview.append_page(m_librarylistview, _("Library"));
+		m_scrollview.add(m_librarylistview);
+		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+		m_mainview.append_page(m_scrollview, _("Library"));
 		
 		GtkWidget *iv = gtk_image_view_new();
 		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));

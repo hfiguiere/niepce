@@ -28,8 +28,10 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
 
+#include "niepce/notifications.h"
 #include "utils/debug.h"
 #include "utils/moniker.h"
+#include "db/library.h"
 #include "libraryclient/libraryclient.h"
 #include "framework/application.h"
 #include "framework/configuration.h"
@@ -70,6 +72,8 @@ namespace ui {
 		init_ui();
 
 		m_lib_notifcenter = new NotificationCenter();
+		m_lib_notifcenter->subscribe(boost::bind(&NiepceWindow::on_lib_notification, 
+												 this, _1));
 
 		Glib::ustring name("camera");
 		set_icon_from_theme(name);		
@@ -97,8 +101,8 @@ namespace ui {
 
 
 		// ribbon FIXME Move to its own controller
-		GtkWidget *thv = eog_thumb_view_new();
-		GtkWidget *thn = eog_thumb_nav_new(thv, EOG_THUMB_NAV_MODE_ONE_ROW, true);
+		m_thumbview = eog_thumb_view_new();
+		GtkWidget *thn = eog_thumb_nav_new(m_thumbview, EOG_THUMB_NAV_MODE_ONE_ROW, true);
 		Gtk::Widget *w = Glib::wrap(thn);
 		m_vbox.pack_start(*w, Gtk::PACK_SHRINK);
 
@@ -169,6 +173,28 @@ namespace ui {
 		}
 	}
 
+	void NiepceWindow::on_lib_notification(const framework::Notification::Ptr &n)
+	{
+		if(n->type() == niepce::NOTIFICATION_LIB) {
+			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+			switch(ln.type) {
+			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+			{
+				db::LibFile::ListPtr l 
+					= boost::any_cast<db::LibFile::ListPtr>(ln.param);
+				DBG_OUT("received folder content file # %d", l->size());
+
+				Glib::RefPtr<EogListStore> store(new EogListStore( *l ));
+				eog_thumb_view_set_model((EogThumbView*)m_thumbview, 
+										 store);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
+	}
 
 	void NiepceWindow::on_action_file_quit()
 	{
@@ -183,7 +209,7 @@ namespace ui {
 		libMoniker = cfg.getValue("lastOpenLibrary", "");
 		if(libMoniker.empty()) {
 			Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
-																		Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
+										  Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
 			
 			dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 			dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
