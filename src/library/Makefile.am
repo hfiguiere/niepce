@@ -1,6 +1,7 @@
 
 
-INCLUDES = -I$(top_srcdir)/src/ 
+INCLUDES = -I$(top_srcdir)/src/ \
+	@LIBGTKMM_CFLAGS@ @OPENRAW_CFLAGS@
 
 check_PROGRAMS = test_opqueue
 TESTS = test_opqueue
@@ -11,7 +12,7 @@ TEST_LIBS =  \
 	../framework/libniepceframework.la \
         @BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
 	@BOOST_THREAD_LIB@ @BOOST_FILESYSTEM_LIB@ \
-	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@
+	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@
 
 noinst_LTLIBRARIES = libniepcelibrary.la
 
@@ -21,4 +22,6 @@ test_opqueue_LDADD = $(TEST_LIBS)
 
 libniepcelibrary_la_SOURCES = clienttypes.h \
 	op.h op.cpp  \
-	commands.h commands.cpp
+	commands.h commands.cpp \
+	thumbnailcache.h thumbnailcache.cpp \
+	thumbnailnotification.h

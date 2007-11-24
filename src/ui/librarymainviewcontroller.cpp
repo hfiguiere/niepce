@@ -29,9 +29,10 @@
 #include "utils/debug.h"
 #include "niepce/notifications.h"
 #include "db/library.h"
-#include "db/thumbnailnotification.h"
+#include "library/thumbnailnotification.h"
 #include "framework/application.h"
 #include "librarymainviewcontroller.h"
+#include "niepcewindow.h"
 
 namespace ui {
 
@@ -58,23 +59,15 @@ namespace ui {
 					Gtk::TreeModel::iterator riter = m_model->append();
 					Gtk::TreeRow row = *riter;
 					// locate it in local cache...
-					std::map<int, Glib::RefPtr<Gdk::Pixbuf> >::iterator iter2
-						= m_iconcache.find((*iter)->id());
-					if(iter2 != m_iconcache.end()) {
-						row[m_columns.m_pix] = iter2->second;
-						m_iconcache.erase(iter2);
-					}
-					else {
-						row[m_columns.m_pix] = icon_theme->load_icon(
-							Glib::ustring("image-loading"), 32,
-							Gtk::ICON_LOOKUP_USE_BUILTIN);
-					}
+					row[m_columns.m_pix] = icon_theme->load_icon(
+						Glib::ustring("image-loading"), 32,
+						Gtk::ICON_LOOKUP_USE_BUILTIN);
 					row[m_columns.m_name] = Glib::ustring((*iter)->name());
 					row[m_columns.m_libfile] = *iter;
 					m_idmap[(*iter)->id()] = riter;
 				}
 				// at that point clear the cache because the icon view is populated.
-				m_iconcache.clear();
+				getLibraryClient()->thumbnailCache().request(l);
 				break;
 			}
 			default:
@@ -84,8 +77,8 @@ namespace ui {
 		}
 		case niepce::NOTIFICATION_THUMBNAIL:
 		{
-			db::ThumbnailNotification tn 
-				= boost::any_cast<db::ThumbnailNotification>(n->data());
+			library::ThumbnailNotification tn 
+				= boost::any_cast<library::ThumbnailNotification>(n->data());
 			std::map<int, Gtk::TreeIter>::iterator iter
 				= m_idmap.find( tn.id );
 			if(iter != m_idmap.end()) {
@@ -94,8 +87,6 @@ namespace ui {
 				row[m_columns.m_pix] = tn.pixmap;
 			}
 			else {
-				// icon view not yet populated. put in local cache....
-				m_iconcache[tn.id] = tn.pixmap;
 				DBG_OUT("row %d not found", tn.id);
 			}
 			break;
@@ -125,6 +116,11 @@ namespace ui {
 
 	void LibraryMainViewController::on_ready()
 	{
+	}
+
+	libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
+	{
+		return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 	}
 
 }

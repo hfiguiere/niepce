@@ -29,6 +29,7 @@
 
 #include "librarymainview.h"
 #include "db/libfile.h"
+#include "libraryclient/libraryclient.h"
 #include "framework/controller.h"
 #include "framework/notification.h"
 
@@ -69,6 +70,7 @@ namespace ui {
 		virtual Gtk::Widget * buildWidget();
 		virtual void on_ready();
 	private:
+		libraryclient::LibraryClient::Ptr getLibraryClient();
 
 		// managed widgets...
 		LibraryMainView              m_mainview;
@@ -77,7 +79,6 @@ namespace ui {
 		LibraryListColumns           m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_model;
 		std::map<int, Gtk::TreeIter> m_idmap;
-		std::map<int, Glib::RefPtr<Gdk::Pixbuf> > m_iconcache;
 		Gtk::Widget*                 m_imageview;
 	};
 

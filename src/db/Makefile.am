@@ -2,8 +2,7 @@
 
 SUBDIRS = sqlite
 
-INCLUDES = -I$(top_srcdir)/src/ \
-	@LIBGTKMM_CFLAGS@ @OPENRAW_CFLAGS@
+INCLUDES = -I$(top_srcdir)/src/ 
 
 TESTS = test_db test_library
 
@@ -14,8 +13,7 @@ TEST_LIBS =  \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
 	@BOOST_FILESYSTEM_LIB@ \
 	@BOOST_THREAD_LIB@ \
-	@LIBGTKMM_LIBS@ \
-	@SQLITE3_LIBS@ @OPENRAW_LIBS@
+	@SQLITE3_LIBS@ 
 
 check_PROGRAMS = test_db test_library
 
@@ -34,5 +32,4 @@ libniepcedb_la_SOURCES = library.cpp sqlstatement.cpp \
 	insertstatement.cpp \
 	libfile.h libfile.cpp \
 	keyword.h keyword.cpp \
-	thumbnailcache.h thumbnailcache.cpp \
 	storage.h storage.cpp

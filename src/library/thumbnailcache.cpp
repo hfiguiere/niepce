@@ -1,5 +1,5 @@
 /*
- * niepce - db/thumbnailcache.cpp
+ * niepce - library/thumbnailcache.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -28,7 +28,9 @@
 #include "thumbnailcache.h"
 #include "thumbnailnotification.h"
 
-namespace db {
+using db::LibFile;
+
+namespace library {
 
 	ThumbnailCache::ThumbnailCache(const boost::filesystem::path & dir,
 								   framework::NotificationCenter * nc)

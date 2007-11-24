@@ -32,7 +32,6 @@
 #include "iconnectionmanagerdriver.h"
 #include "libfolder.h"
 #include "libfile.h"
-#include "thumbnailcache.h"
 
 namespace framework {
 	class NotificationCenter;
@@ -69,10 +68,6 @@ namespace db {
 			{ return m_dbname; }
 
 		void notify(NotifyType t, const boost::any & param);
-
-
-		ThumbnailCache & thumbnailCache()
-			{ return m_thumbnailCache; }
 
 		/** add a file to the library
 		 * @param folder the path of the containing folder
@@ -119,7 +114,6 @@ namespace db {
 
 		boost::filesystem::path           m_maindir;
 		boost::filesystem::path           m_dbname;
-		ThumbnailCache                    m_thumbnailCache;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
 		framework::NotificationCenter *   m_notif_center;

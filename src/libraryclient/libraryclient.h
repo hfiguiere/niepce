@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "library/clienttypes.h"
+#include "library/thumbnailcache.h"
 #include "db/storage.h"
 
 namespace utils {
@@ -65,11 +66,16 @@ namespace libraryclient {
 		 */
 		void importFromDirectory(const std::string & dir, bool manage);
 		
+		library::ThumbnailCache & thumbnailCache()
+			{ return m_thumbnailCache; }
+
 		/* sync call */
 		virtual bool fetchKeywordsForFile(int file, db::Keyword::IdList &keywords);
 
 	private:
 		ClientImpl* m_pImpl;
+
+		library::ThumbnailCache                    m_thumbnailCache;
 
 		LibraryClient(const LibraryClient &);
 		LibraryClient & operator=(const LibraryClient &);

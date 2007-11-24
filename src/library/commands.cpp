@@ -106,7 +106,6 @@ namespace library {
 	{
 		LibFile::ListPtr fl(new LibFile::List());
 		lib->getFolderContent(folder_id, fl);
-		lib->thumbnailCache().request(fl);
 		lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
 	}
 

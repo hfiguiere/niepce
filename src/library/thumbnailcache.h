@@ -1,5 +1,5 @@
 /*
- * niepce - db/thumbnailcache.h
+ * niepce - library/thumbnailcache.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DB_THUMBNAILCACHE_H__
-#define _DB_THUMBNAILCACHE_H__
+#ifndef _LIBRARY_THUMBNAILCACHE_H__
+#define _LIBRARY_THUMBNAILCACHE_H__
 
 #include <boost/filesystem/path.hpp>
 
@@ -28,7 +28,7 @@
 #include "framework/notificationcenter.h"
 #include "db/libfile.h"
 
-namespace db {
+namespace library {
 
 
 	class ThumbnailTask
@@ -36,15 +36,15 @@ namespace db {
 	public:
 		typedef boost::shared_ptr< ThumbnailTask > Ptr;
 		
-		ThumbnailTask(const LibFile::Ptr & f, int w, int h)
+		ThumbnailTask(const db::LibFile::Ptr & f, int w, int h)
 			: m_file(f), m_width(w), m_height(h)
 			{ }
 		
-		const LibFile::Ptr & file()
+		const db::LibFile::Ptr & file()
 			{ return m_file; }
 		
 	private:
-		const LibFile::Ptr m_file;
+		const db::LibFile::Ptr m_file;
 		int m_width;
 		int m_height;
 	};
@@ -58,8 +58,8 @@ namespace db {
 			framework::NotificationCenter * nc);
 		~ThumbnailCache();
 
-		void request(const LibFile::ListPtr & fl);
-		void requestForFile(const LibFile::Ptr & f);
+		void request(const db::LibFile::ListPtr & fl);
+		void requestForFile(const db::LibFile::Ptr & f);
 
 	protected:
 		virtual void execute(const  ThumbnailTask::Ptr & task);

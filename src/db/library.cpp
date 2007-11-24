@@ -37,12 +37,10 @@ namespace bfs = boost::filesystem;
 namespace db {
 
 	const char * s_databaseName = "niepcelibrary.db";
-	const char * s_thumbcacheDirname = "thumbcache";
 
 	Library::Library(const std::string & dir, NotificationCenter * nc)
 		: m_maindir(dir),
 		  m_dbname(m_maindir / s_databaseName),
-		  m_thumbnailCache(m_maindir / s_thumbcacheDirname, nc),
 		  m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
 		  m_notif_center(nc),
 		  m_inited(false)

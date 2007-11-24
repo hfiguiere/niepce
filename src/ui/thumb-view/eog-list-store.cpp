@@ -132,7 +132,7 @@ EogListStore::EogListStore(const db::LibFile::List &list)
 	: Gtk::ListStore()
 {
 	_init();
-
+	m_idmap.clear();
 	std::for_each(list.begin(), list.end(),
 								boost::bind(&EogListStore::append_image,
 														this, _1));
@@ -161,6 +161,17 @@ EogListStore::_init()
 
 EogListStore::~EogListStore()
 {
+}
+
+bool EogListStore::find_by_id(int id, Gtk::TreeRow & row)
+{
+	std::map<int, Gtk::TreeIter>::iterator iter =
+		m_idmap.find(id);
+	if(iter != m_idmap.end()) {
+		row = *(iter->second);
+		return true;
+	}
+	return false;
 }
 
 
@@ -250,6 +261,7 @@ EogListStore::append_image (const db::LibFile::Ptr &image)
 	row[m_columns.m_image] = image;
 	row[m_columns.m_thumb_set] = false;
 	row[m_columns.m_thumbnail] = get_loading_icon();
+	m_idmap[image->id()] = iter;
 }
 
 #if 0

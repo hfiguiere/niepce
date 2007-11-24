@@ -84,19 +84,6 @@ class EogListStore
 	: public Gtk::ListStore 
 {
 public:
-	EogListStore();
-	EogListStore(const db::LibFile::List &list);
-	~EogListStore();
-
-	void append_image(const db::LibFile::Ptr &image);
-	void remove_image(const db::LibFile::Ptr &image);
-
-	gboolean is_file_in_list_store (const gchar *info_uri,
-									Gtk::TreeIter &iter_found);
-	
-private:
-	/** shared initializer */
-	void _init();
 	class Columns 
 		: public Gtk::TreeModelColumnRecord
 	{
@@ -113,12 +100,27 @@ private:
 		Gtk::TreeModelColumn<bool>                        m_thumb_set;
 	};
 
+
+	EogListStore();
+	EogListStore(const db::LibFile::List &list);
+	~EogListStore();
+
+	void append_image(const db::LibFile::Ptr &image);
+	void remove_image(const db::LibFile::Ptr &image);
+	bool find_by_id(int, Gtk::TreeRow & row);
+	gboolean is_file_in_list_store (const gchar *info_uri,
+									Gtk::TreeIter &iter_found);
+
+	Columns m_columns;	
+private:
+	/** shared initializer */
+	void _init();
+
 	Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
 	int	_list_store_compare_func (const Gtk::TreeModel::iterator& a, 
 								  const Gtk::TreeModel::iterator& b);
-
 	Glib::RefPtr<Gdk::Pixbuf> m_loading_icon;
-	Columns m_columns;
+	std::map<int, Gtk::TreeIter> m_idmap;
 };
 
 GType           eog_list_store_get_type 	     (void) G_GNUC_CONST;

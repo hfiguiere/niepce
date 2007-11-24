@@ -32,6 +32,7 @@
 #include "utils/debug.h"
 #include "utils/moniker.h"
 #include "db/library.h"
+#include "library/thumbnailnotification.h"
 #include "libraryclient/libraryclient.h"
 #include "framework/application.h"
 #include "framework/configuration.h"
@@ -175,7 +176,9 @@ namespace ui {
 
 	void NiepceWindow::on_lib_notification(const framework::Notification::Ptr &n)
 	{
-		if(n->type() == niepce::NOTIFICATION_LIB) {
+		switch(n->type()) {
+		case niepce::NOTIFICATION_LIB:
+		{
 			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
 			switch(ln.type) {
 			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
@@ -192,6 +195,26 @@ namespace ui {
 			default:
 				break;
 			}
+			break;
+		}
+		case niepce::NOTIFICATION_THUMBNAIL:
+		{
+			Glib::RefPtr<EogListStore> store 
+				= eog_thumb_view_get_model((EogThumbView*)m_thumbview);
+			library::ThumbnailNotification tn 
+				= boost::any_cast<library::ThumbnailNotification>(n->data());
+			Gtk::TreeRow row;
+			bool found = store->find_by_id(tn.id, row);
+			if(found) {
+				row[store->m_columns.m_thumbnail] = tn.pixmap;
+			}
+			else {
+				DBG_OUT("row %d not found", tn.id);
+			}
+			break;
+		}
+		default:
+			break;
 		}
 
 	}

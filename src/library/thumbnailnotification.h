@@ -1,5 +1,5 @@
 /*
- * niepce - db/thumbnailnotification.h
+ * niepce - library/thumbnailnotification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,12 +18,12 @@
  */
 
 
-#ifndef _DB_THUMBNAILNOTIFICATION_H__
-#define _DB_THUMBNAILNOTIFICATION_H__
+#ifndef _LIBRARY_THUMBNAILNOTIFICATION_H__
+#define _LIBRARY_THUMBNAILNOTIFICATION_H__
 
 #include <gdkmm/pixbuf.h>
 
-namespace db {
+namespace library {
 
 	struct ThumbnailNotification
 	{
