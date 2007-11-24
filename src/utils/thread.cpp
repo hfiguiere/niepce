@@ -1,5 +1,5 @@
 /*
- * niepce - library/worker.cpp
+ * niepce - utils/thread.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,10 +18,41 @@
  */
 
 
+#include <boost/bind.hpp>
 
-#include "worker.h"
+#include "thread.h"
 
-namespace library {
+namespace utils {
 
+
+	Thread::Thread()
+	{
+	}
+
+
+	Thread::~Thread()
+	{
+	}
+
+
+
+#if 0
+	void Thread::schedule(const Op::Ptr & _op)
+	{
+		OpQueue::mutex_t::scoped_lock(m_ops.mutex(), true);
+		bool was_empty = m_ops.isEmpty();
+		m_ops.add(_op);
+		if(was_empty) {
+			start();
+		}
+	}
+#endif
+
+	void Thread::start()
+	{
+		boost::thread * thrd = m_threads.create_thread(
+			boost::bind(&Thread::main, this));
+		thrd->join();
+	}
 
 }

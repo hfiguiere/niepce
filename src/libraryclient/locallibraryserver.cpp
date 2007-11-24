@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/locallibraryserver.h
+ * niepce - libraryclient/locallibraryserver.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,38 +19,38 @@
  * 02110-1301, USA
  */
 
+#include "locallibraryserver.h"
 
+#include "library/commands.h"
 
-#ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
-#define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
-
-#include "library/op.h"
-#include "library/worker.h"
-#include "db/library.h"
+using library::Op;
+using library::Commands;
 
 namespace libraryclient {
 
-	class LocalLibraryServer
-		: public library::Worker< library::Op::Ptr >
+	/** this is the main loop of the libray worker */
+	void LocalLibraryServer::main()
 	{
-	public:
-		/** create the local server for the library whose dir is specified */
-		LocalLibraryServer(const std::string & dir, 
-						   framework::NotificationCenter * nc)
-			: library::Worker< library::Op::Ptr >()
-			, m_library(db::Library::Ptr(new db::Library(dir, nc)))
+		bool terminated = false;
+
+		do {
 			{
+				queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
+				while(m_tasks.isEmpty()) {
+					return;
+				}
 			}
+			
+			Op::Ptr op = m_tasks.pop();
+			execute(op);
+		} while(!terminated);
+	}
 
-	protected:
-		virtual void execute(const library::Op::Ptr & _op);
+	void LocalLibraryServer::execute(const Op::Ptr & _op)
+	{
+		Commands::dispatch(m_library, _op);
+	}
 
-		virtual void main();
-		
-		db::Library::Ptr m_library;
-	};
 
 }
 
-
-#endif

@@ -21,14 +21,14 @@
 #include "utils/fsutils.h"
 
 #define BOOST_AUTO_TEST_MAIN
-#include "worker.h"
+#include "locallibraryserver.h"
 
 
 #include <boost/test/auto_unit_test.hpp>
 
 
-
 using namespace library;
+using namespace libraryclient;
 
 BOOST_AUTO_UNIT_TEST(worker_test)
 {
@@ -37,9 +37,9 @@ BOOST_AUTO_UNIT_TEST(worker_test)
 	BOOST_CHECK(ptempl);
 	{
 		utils::DirectoryDisposer d(ptempl);
-		Worker w(std::string("") + ptempl, NULL);
+		LocalLibraryServer w(std::string("") + ptempl, NULL);
 		
-		BOOST_CHECK(w._ops().isEmpty());
+		BOOST_CHECK(w._tasks().isEmpty());
 		
 		Op::Ptr p(new Op(OP_NONE, 0));
 		w.schedule(p);

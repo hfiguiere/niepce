@@ -24,37 +24,53 @@
 
 #include <string>
 #include <boost/thread.hpp>
+#include <boost/bind.hpp>
 
-#include "db/library.h"
-#include "library/op.h"
-#include "library/opqueue.h"
+#include "utils/thread.h"
+#include "utils/mtqueue.h"
 
 namespace library {
 
 	/** worker thread for the library */
+	template <class T>
 	class Worker
+		: public utils::Thread
 	{
 	public:
-		/** create the worker for the library whose dir is specified */
-		Worker(const std::string & dir, framework::NotificationCenter * nc);
-		virtual ~Worker();
+		Worker();
+		typedef utils::MtQueue<T> queue_t;
 
-		void schedule(const Op::Ptr & _op);
 #ifdef BOOST_AUTO_TEST_MAIN
-		OpQueue & _ops() 
-			{ return m_ops; }
+		queue_t & _tasks() 
+			{ return m_tasks; }
 #endif
+		void schedule(const T & );
+	protected:
+		queue_t      m_tasks;
 	private:
-		void start();
-		void main();
-		void execute(const Op::Ptr & _op);
-
-		boost::thread_group   m_threads;
-		OpQueue          m_ops;
-		db::Library::Ptr m_library;
+		virtual void execute(const T & _op) = 0;
 	};
 
-}
+	template <class T>
+	Worker<T>::Worker()
+		: utils::Thread()
+	{
+	}
 
+
+	template <class T>
+	void Worker<T>::schedule(const T & _op)
+	{
+		typename queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
+		bool was_empty = m_tasks.isEmpty();
+		m_tasks.add(_op);
+		if(was_empty) {
+			start();
+		}
+	}
+
+
+
+}
 
 #endif

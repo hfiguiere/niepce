@@ -1,5 +1,5 @@
 /*
- * niepce - library/worker.cpp
+ * niepce - utils/thread.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,10 +18,33 @@
  */
 
 
+#ifndef __UTILS_THREAD_H__
+#define __UTILS_THREAD_H__
 
-#include "worker.h"
 
-namespace library {
+#include <string>
+#include <boost/thread.hpp>
 
+
+namespace utils {
+
+	/** thread */
+	class Thread
+	{
+	public:
+		/** create the worker for the library whose dir is specified */
+		Thread();
+		virtual ~Thread();
+
+	protected:
+		void start();
+		virtual void main() = 0;
+	private:
+
+		boost::thread_group   m_threads;
+	};
 
 }
+
+
+#endif

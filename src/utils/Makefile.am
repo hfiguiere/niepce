@@ -21,4 +21,5 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	buffer.h logstreamutils.h \
 	moniker.h moniker.cpp \
 	debug.h debug.cpp boost.h \
-	files.h files.cpp
+	files.h files.cpp \
+	thread.h thread.cpp

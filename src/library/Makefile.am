@@ -3,8 +3,8 @@
 INCLUDES = -I$(top_srcdir)/src/
 
 
-check_PROGRAMS = test_opqueue test_worker
-TESTS = test_opqueue test_worker
+check_PROGRAMS = test_opqueue
+TESTS = test_opqueue
 TEST_LIBS =  \
         libniepcelibrary.la \
 	../db/libniepcedb.la ../db/sqlite/libniepcedbsqlite.la \
@@ -19,10 +19,8 @@ noinst_LTLIBRARIES = libniepcelibrary.la
 test_opqueue_SOURCES = test_opqueue.cpp
 test_opqueue_LDADD = $(TEST_LIBS)
 
-test_worker_SOURCES = test_worker.cpp
-test_worker_LDADD = $(TEST_LIBS)
 
 libniepcelibrary_la_SOURCES = clienttypes.h \
-	op.h op.cpp opqueue.h \
-	worker.h worker.cpp \
+	op.h op.cpp  \
+	worker.h  \
 	commands.h commands.cpp
