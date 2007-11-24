@@ -70,8 +70,8 @@ namespace db {
 				framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_THUMBNAIL));
 				ThumbnailNotification tn;
 				tn.id = task->file()->id();
-				tn.width = pix->width();
-				tn.height = pix->height();
+				tn.width = pix->get_width();
+				tn.height = pix->get_height();
 				tn.pixmap = pix;
 				n->setData(boost::any(tn));
 				DBG_OUT("notify thumbnail for id=%d", tn.id);
