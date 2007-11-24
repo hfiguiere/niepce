@@ -1,3 +1,3 @@
 
 SUBDIRS = 
-DIST_SUBDIRS = gil
+DIST_SUBDIRS =
