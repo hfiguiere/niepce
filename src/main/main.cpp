@@ -21,11 +21,18 @@
 
 
 #include <boost/bind.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include "ui/niepceapplication.h"
 
+namespace bfs = boost::filesystem;
+
 int main(int argc, char ** argv)
 {
+	// we need to init boost::filesystem to use native path checks.
+	// note: this is not the case in the tests.
+	bfs::path::default_name_check(&bfs::native);
+
 	return framework::Application::main(
 		boost::bind(&ui::NiepceApplication::create),
 		argc, argv);
