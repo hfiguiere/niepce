@@ -37,16 +37,18 @@ namespace bfs = boost::filesystem;
 namespace db {
 
 	const char * s_databaseName = "niepcelibrary.db";
+	const char * s_thumbcacheDirname = "thumbcache";
 
 	Library::Library(const std::string & dir, NotificationCenter * nc)
 		: m_maindir(dir),
-		  m_dbname(m_maindir + "/" + s_databaseName),
+		  m_dbname(m_maindir / s_databaseName),
+		  m_thumbnailCache(m_maindir / s_thumbcacheDirname, nc),
 		  m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
 		  m_notif_center(nc),
 		  m_inited(false)
 	{
 		DBG_OUT("dir = %s", dir.c_str());
-		db::DBDesc desc("", 0, m_dbname);
+		db::DBDesc desc("", 0, m_dbname.string());
 		m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
 		m_inited = init();
 	}
@@ -95,41 +97,35 @@ namespace db {
 	bool Library::_initDb()
 	{
 		SQLStatement adminTable("CREATE TABLE admin (key TEXT NOT NULL,"
-														" value TEXT)");
+								" value TEXT)");
 		SQLStatement adminVersion("INSERT INTO admin (key, value) "
-															" VALUES ('version', '1')");
+								  " VALUES ('version', '1')");
+		SQLStatement vaultTable("CREATE TABLE vaults (id INTEGER PRIMARY KEY,"
+								" path TEXT)");
+		SQLStatement folderTable("CREATE TABLE folders (id INTEGER PRIMARY KEY,"
+								 " path TEXT, name TEXT, vault_id INTEGER, "
+								 " parent_id INTEGER)");
+		SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
+							   " path TEXT, name TEXT, parent_id INTEGER)");
+		SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
+								  " keyword TEXT, parent_id INTEGER)");
+		SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
+									 " keyword_id INTEGER)");
+		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
+								" name TEXT)");
+		SQLStatement collectingTable("CREATE TABLE collecting (file_id INTEGER,"
+									 " collection_id INTEGER)");
+
 		m_dbdrv->execute_statement(adminTable);
 		m_dbdrv->execute_statement(adminVersion);
-
-		SQLStatement vaultTable("CREATE TABLE vaults (id INTEGER PRIMARY KEY,"
-														" path TEXT)");
 		m_dbdrv->execute_statement(vaultTable);
-
-		SQLStatement folderTable("CREATE TABLE folders (id INTEGER PRIMARY KEY,"
-														 " path TEXT, name TEXT, vault_id INTEGER, "
-														 " parent_id INTEGER)");
 		m_dbdrv->execute_statement(folderTable);
-
-		SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
-													 " path TEXT, parent_id INTEGER)");
 		m_dbdrv->execute_statement(fileTable);
-
-		SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
-															" keyword TEXT, parent_id INTEGER)");
 		m_dbdrv->execute_statement(keywordTable);
-
-		SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
-																 " keyword_id INTEGER)");
 		m_dbdrv->execute_statement(keywordingTable);
-
-		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
-														" name TEXT)");
 		m_dbdrv->execute_statement(collsTable);
-								
-		SQLStatement collectingTable("CREATE TABLE collecting (file_id INTEGER,"
-																 " collection_id INTEGER)");
 		m_dbdrv->execute_statement(collectingTable);
-
+		
 		return true;
 	}
 
@@ -144,10 +140,9 @@ namespace db {
 			SQLStatement sql("SELECT value FROM admin WHERE key='version'");
 			
 			if(m_dbdrv->execute_statement(sql)) {
-				if(m_dbdrv->read_next_row()) {
-					if(m_dbdrv->get_column_content(0, version)) {
-						v = boost::lexical_cast<int>(version);
-					}
+				if(m_dbdrv->read_next_row() 
+				   && m_dbdrv->get_column_content(0, version)) {
+					v = boost::lexical_cast<int>(version);
 				}
 			}
 		}
@@ -175,9 +170,9 @@ namespace db {
 		DBG_ASSERT(manage, "manage not supported");
 		DBG_ASSERT(folder_id == -1, "invalid folder ID");
 		try {
-			SQLStatement sql(boost::format("INSERT INTO files (path, parent_id)"
-										   " VALUES ('%1%', '%2%');") 
-							 % file.string() % folder_id);
+			SQLStatement sql(boost::format("INSERT INTO files (path, name, parent_id)"
+										   " VALUES ('%1%', '%2%', '%3%');") 
+							 % file.string() % file.leaf() % folder_id);
 			if(m_dbdrv->execute_statement(sql)) {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
@@ -192,8 +187,8 @@ namespace db {
 	}
 
 
-	int Library::addFile2(const bfs::path & folder, const bfs::path & file, 
-						  bool manage)
+	int Library::addFileAndFolder(const bfs::path & folder, const bfs::path & file, 
+								  bool manage)
 	{
 		LibFolder::Ptr f;
 		f = getFolder(folder);
@@ -274,7 +269,7 @@ namespace db {
 
 	void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
 	{
-		SQLStatement sql(boost::format("SELECT id,parent_id,path FROM files "
+		SQLStatement sql(boost::format("SELECT id,parent_id,path,name FROM files "
 									   " WHERE parent_id='%1%'")
 						 % folder_id);
 		try {
@@ -283,13 +278,16 @@ namespace db {
 					int64_t id;
 					int64_t fid;
 					std::string pathname;
+					std::string name;
 					m_dbdrv->get_column_content(0, id);
 					m_dbdrv->get_column_content(1, fid);
 					m_dbdrv->get_column_content(2, pathname);
-					bfs::path p(pathname);
+					m_dbdrv->get_column_content(3, name);
+					DBG_OUT("found %s", pathname.c_str());
 					fl->push_back(LibFile::Ptr(new LibFile((int)id, 
 														   (int)folder_id,
-														   p, p.leaf())));
+														   bfs::path(pathname), 
+														   name)));
 				}
 			}
 		}

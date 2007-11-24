@@ -1,5 +1,5 @@
 /*
- * niepce - library/worker.cpp
+ * niepce - db/thumbnailnotification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,10 +18,21 @@
  */
 
 
+#ifndef _DB_THUMBNAILNOTIFICATION_H__
+#define _DB_THUMBNAILNOTIFICATION_H__
 
-#include "worker.h"
+#include <gdkmm/pixbuf.h>
 
-namespace library {
+namespace db {
 
+	struct ThumbnailNotification
+	{
+		int  id;
+		int  width;
+		int  height;
+		Glib::RefPtr<Gdk::Pixbuf> pixmap; 
+	};
 
 }
+
+#endif

@@ -28,23 +28,6 @@ using library::Commands;
 
 namespace libraryclient {
 
-	/** this is the main loop of the libray worker */
-	void LocalLibraryServer::main()
-	{
-		bool terminated = false;
-
-		do {
-			{
-				queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
-				while(m_tasks.isEmpty()) {
-					return;
-				}
-			}
-			
-			Op::Ptr op = m_tasks.pop();
-			execute(op);
-		} while(!terminated);
-	}
 
 	void LocalLibraryServer::execute(const Op::Ptr & _op)
 	{

@@ -76,6 +76,8 @@ namespace ui {
 		Gtk::ScrolledWindow          m_scrollview;
 		LibraryListColumns           m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_model;
+		std::map<int, Gtk::TreeIter> m_idmap;
+		std::map<int, Glib::RefPtr<Gdk::Pixbuf> > m_iconcache;
 		Gtk::Widget*                 m_imageview;
 	};
 

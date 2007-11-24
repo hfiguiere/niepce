@@ -24,7 +24,8 @@
 namespace niepce {
 
 	enum {
-		NOTIFICATION_LIB = 0
+		NOTIFICATION_LIB = 0,
+		NOTIFICATION_THUMBNAIL
 	};
 
 }

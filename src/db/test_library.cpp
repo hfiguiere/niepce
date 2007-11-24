@@ -53,5 +53,5 @@ BOOST_AUTO_UNIT_TEST(library_test)
 	BOOST_CHECK( l->size() == 2 );
 
 
-	BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
+	BOOST_CHECK(unlink(lib.dbName().string().c_str()) != -1);
 }

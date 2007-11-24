@@ -32,7 +32,7 @@
 #include "iconnectionmanagerdriver.h"
 #include "libfolder.h"
 #include "libfile.h"
-
+#include "thumbnailcache.h"
 
 namespace framework {
 	class NotificationCenter;
@@ -62,20 +62,25 @@ namespace db {
 //		void setMainDir(const std::string & dir)
 //			{ m_maindir = dir; }
 		/** return the main directory */
-		const std::string & mainDir() const
+		const boost::filesystem::path & mainDir() const
 			{ return m_maindir; }
-		const std::string & dbName() const
+		/** get the path to the DB file */
+		const boost::filesystem::path & dbName() const
 			{ return m_dbname; }
 
 		void notify(NotifyType t, const boost::any & param);
+
+
+		ThumbnailCache & thumbnailCache()
+			{ return m_thumbnailCache; }
 
 		/** add a file to the library
 		 * @param folder the path of the containing folder
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFile2(const boost::filesystem::path & folder, 
-					 const boost::filesystem::path & file, bool manage);
+		int addFileAndFolder(const boost::filesystem::path & folder, 
+							 const boost::filesystem::path & file, bool manage);
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path
@@ -112,8 +117,9 @@ namespace db {
 		bool init();
 		bool _initDb();
 
-		std::string                       m_maindir;
-		std::string                       m_dbname;
+		boost::filesystem::path           m_maindir;
+		boost::filesystem::path           m_dbname;
+		ThumbnailCache                    m_thumbnailCache;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
 		framework::NotificationCenter *   m_notif_center;

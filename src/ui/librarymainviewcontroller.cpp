@@ -29,6 +29,7 @@
 #include "utils/debug.h"
 #include "niepce/notifications.h"
 #include "db/library.h"
+#include "db/thumbnailnotification.h"
 #include "framework/application.h"
 #include "librarymainviewcontroller.h"
 
@@ -37,7 +38,10 @@ namespace ui {
 	void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
 	{
 		DBG_OUT("notification");
-		if(n->type() == niepce::NOTIFICATION_LIB) {
+		switch(n->type())
+		{
+		case niepce::NOTIFICATION_LIB:
+		{
 			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
 			switch(ln.type) {
 			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
@@ -47,22 +51,57 @@ namespace ui {
 				DBG_OUT("received folder content file # %d", l->size());
 				Glib::RefPtr< Gtk::IconTheme > icon_theme(framework::Application::app()->getIconTheme());
 				m_model->clear();
+				m_idmap.clear();
 				db::LibFile::List::const_iterator iter = l->begin();
 				for( ; iter != l->end(); iter++ )
 				{
 					Gtk::TreeModel::iterator riter = m_model->append();
 					Gtk::TreeRow row = *riter;
-					row[m_columns.m_pix] = icon_theme->load_icon(
-						Glib::ustring("image-loading"), 32,
-						Gtk::ICON_LOOKUP_USE_BUILTIN);
+					// locate it in local cache...
+					std::map<int, Glib::RefPtr<Gdk::Pixbuf> >::iterator iter2
+						= m_iconcache.find((*iter)->id());
+					if(iter2 != m_iconcache.end()) {
+						row[m_columns.m_pix] = iter2->second;
+						m_iconcache.erase(iter2);
+					}
+					else {
+						row[m_columns.m_pix] = icon_theme->load_icon(
+							Glib::ustring("image-loading"), 32,
+							Gtk::ICON_LOOKUP_USE_BUILTIN);
+					}
 					row[m_columns.m_name] = Glib::ustring((*iter)->name());
 					row[m_columns.m_libfile] = *iter;
+					m_idmap[(*iter)->id()] = riter;
 				}
+				// at that point clear the cache because the icon view is populated.
+				m_iconcache.clear();
 				break;
 			}
 			default:
 				break;
 			}
+			break;
+		}
+		case niepce::NOTIFICATION_THUMBNAIL:
+		{
+			db::ThumbnailNotification tn 
+				= boost::any_cast<db::ThumbnailNotification>(n->data());
+			std::map<int, Gtk::TreeIter>::iterator iter
+				= m_idmap.find( tn.id );
+			if(iter != m_idmap.end()) {
+				// found the icon view item
+				Gtk::TreeRow row = *(iter->second);
+				row[m_columns.m_pix] = tn.pixmap;
+			}
+			else {
+				// icon view not yet populated. put in local cache....
+				m_iconcache[tn.id] = tn.pixmap;
+				DBG_OUT("row %d not found", tn.id);
+			}
+			break;
+		}
+		default:
+			break;
 		}
 	}
 

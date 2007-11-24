@@ -24,20 +24,20 @@
 #ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 #define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
+#include "utils/worker.h"
 #include "library/op.h"
-#include "library/worker.h"
 #include "db/library.h"
 
 namespace libraryclient {
 
 	class LocalLibraryServer
-		: public library::Worker< library::Op::Ptr >
+		: public utils::Worker< library::Op::Ptr >
 	{
 	public:
 		/** create the local server for the library whose dir is specified */
 		LocalLibraryServer(const std::string & dir, 
 						   framework::NotificationCenter * nc)
-			: library::Worker< library::Op::Ptr >()
+			: utils::Worker< library::Op::Ptr >()
 			, m_library(db::Library::Ptr(new db::Library(dir, nc)))
 			{
 			}
@@ -45,8 +45,7 @@ namespace libraryclient {
 	protected:
 		virtual void execute(const library::Op::Ptr & _op);
 
-		virtual void main();
-		
+	private:
 		db::Library::Ptr m_library;
 	};
 

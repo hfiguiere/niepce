@@ -50,8 +50,8 @@ namespace utils {
 			{
 				if ( !is_directory(*itr) )
 				{
-					l->push_back(itr->leaf());
-					DBG_OUT( "found file %s", itr->leaf().c_str() );
+					l->push_back(*itr);
+					DBG_OUT( "found file %s", itr->string().c_str() );
 				}
 			}
 			return l;

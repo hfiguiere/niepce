@@ -94,18 +94,19 @@ namespace library {
 			lib->notify(Library::NOTIFY_ADDED_FOLDERS,
 						boost::any(l));
 		}
-		std::for_each( files->begin(), files->end(), 
-					   bind(&Library::addFile,
-							boost::ref(lib), pf->id(),
-							_1, manage) );
-		lib->notify(Library::NOTIFY_ADDED_FILES, boost::any());
-	}
+		std::for_each( files->begin(), files->end(),
+					   bind(&Library::addFile, boost::ref(lib),
+					   pf->id(), _1, manage) );
+					   lib->notify(Library::NOTIFY_ADDED_FILES,
+					   boost::any()); }
 
 
-	void Commands::cmdQueryFolderContent(const Library::Ptr & lib, int folder_id)
+	void Commands::cmdQueryFolderContent(const Library::Ptr & lib, 
+										 int folder_id)
 	{
 		LibFile::ListPtr fl(new LibFile::List());
 		lib->getFolderContent(folder_id, fl);
+		lib->thumbnailCache().request(fl);
 		lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
 	}
 

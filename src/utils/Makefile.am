@@ -22,4 +22,4 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	moniker.h moniker.cpp \
 	debug.h debug.cpp boost.h \
 	files.h files.cpp \
-	thread.h thread.cpp
+	thread.h thread.cpp worker.h

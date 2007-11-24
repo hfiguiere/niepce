@@ -1,5 +1,7 @@
 
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view \
+	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@
 
 SUBDIRS = thumb-view
 
@@ -17,8 +19,7 @@ noinst_HEADERS = niepcewindow.h niepceapplication.h \
 	librarymainview.h librarymainviewcontroller.h \
 	workspacecontroller.h
 
-libniepceui_la_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
-	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
+libniepceui_la_CPPFLAGS = \
 	-DGLADEDIR=\"$(gladedir)\"
 libniepceui_la_SOURCES = niepcewindow.cpp \
 	niepceapplication.cpp librarymainview.cpp \

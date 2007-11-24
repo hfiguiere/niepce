@@ -1,7 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src/
-
+INCLUDES = -I$(top_srcdir)/src/ 
 
 check_PROGRAMS = test_opqueue
 TESTS = test_opqueue
@@ -22,5 +21,4 @@ test_opqueue_LDADD = $(TEST_LIBS)
 
 libniepcelibrary_la_SOURCES = clienttypes.h \
 	op.h op.cpp  \
-	worker.h  \
 	commands.h commands.cpp
