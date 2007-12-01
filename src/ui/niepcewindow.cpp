@@ -158,14 +158,21 @@ namespace ui {
 		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 		dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
 
+		Configuration & cfg = Application::app()->config();
+		std::string last_import_location;
+		last_import_location = cfg.getValue("lastImportLocation", "");
+		if(!last_import_location.empty()) {
+			dialog.set_filename(last_import_location);
+		}
+
 		int result = dialog.run();
 		Glib::ustring to_import;
 		switch(result)
 		{
 		case Gtk::RESPONSE_OK:
 			to_import = dialog.get_filename();
-			// pass it to the library
-			// TODO
+			cfg.setValue("lastImportLocation", to_import);
+			
 			DBG_OUT("%s", to_import.c_str());
 			m_libClient->importFromDirectory(to_import, false);
 			break;
