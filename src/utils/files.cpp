@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -54,6 +53,7 @@ namespace utils {
 					DBG_OUT( "found file %s", itr->string().c_str() );
 				}
 			}
+			l->sort();
 			return l;
 		}
 		catch( std::exception & e )

@@ -23,7 +23,7 @@
 #ifndef __UTILS_FILES_H__
 #define __UTILS_FILES_H__
 
-#include <vector>
+#include <list>
 #include <string>
 
 #include <boost/shared_ptr.hpp>
@@ -32,12 +32,12 @@
 namespace utils {
 
 	class FileList 
-		: private std::vector< boost::filesystem::path >
+		: private std::list< boost::filesystem::path >
 	{
 	public:
 		typedef boost::shared_ptr< FileList > Ptr;
 
-		typedef std::vector< boost::filesystem::path >    _impltype_t;
+		typedef std::list< boost::filesystem::path >    _impltype_t;
 		typedef _impltype_t::value_type       value_type;
 		typedef _impltype_t::iterator         iterator;
 		typedef _impltype_t::const_iterator   const_iterator;
