@@ -2,9 +2,9 @@
 
 INCLUDES = -I$(top_srcdir)/src/
 
-TESTS = testmoniker testfiles
+TESTS = testmoniker testfiles testgeometry
 
-check_PROGRAMS = testmoniker testfiles
+check_PROGRAMS = testmoniker testfiles testgeometry
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.la
@@ -13,6 +13,8 @@ testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.la \
 	@BOOST_FILESYSTEM_LIB@
 
+testgeometry_SOURCES = testgeometry.cpp
+testgeometry_LDADD = libniepceutils.la
 
 noinst_LTLIBRARIES = libniepceutils.la
 
@@ -22,4 +24,5 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	moniker.h moniker.cpp \
 	debug.h debug.cpp boost.h \
 	files.h files.cpp \
+	geometry.h geometry.cpp \
 	thread.h thread.cpp worker.h
