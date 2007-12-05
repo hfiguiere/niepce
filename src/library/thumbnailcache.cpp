@@ -61,8 +61,8 @@ namespace library {
 	{
 		DBG_OUT("creating thumbnail for %s",task->file()->path().string().c_str());
 		GdkPixbuf *pixbuf =
-			or_gdkpixbuf_extract_thumbnail(task->file()->path().string().c_str(),
-										   160);
+			or_gdkpixbuf_extract_rotated_thumbnail(task->file()->path().string().c_str(),
+												   160);
 		if( pixbuf )
 		{
 			Glib::RefPtr<Gdk::Pixbuf> pix( Glib::wrap( pixbuf, true )); // take ownership
