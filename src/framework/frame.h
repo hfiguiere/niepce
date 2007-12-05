@@ -39,8 +39,9 @@ namespace framework {
 	public:
 		typedef boost::shared_ptr<Frame> Ptr;
 
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName);
-		Frame();
+		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
+			  const std::string & layout_cfg_key = "");
+		Frame(const std::string & layout_cfg_key = "");
 		~Frame();
 
 		Gtk::Window & gtkWindow()
@@ -65,8 +66,12 @@ namespace framework {
 		virtual bool _close();
 	private:
 		void connectSignals();
+		void frameRectFromConfig();
+		void frameRectToConfig();
+
 		Gtk::Window *m_window;
 		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
+		std::string m_layout_cfg_key;
 	};
 
 }

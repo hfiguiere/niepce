@@ -52,7 +52,7 @@ namespace ui {
 
 
 	NiepceWindow::NiepceWindow()
-		: framework::Frame()//GLADEDIR "mainwindow.glade", "mainwindow")
+		: framework::Frame("mainWindow-frame")
 		, m_lib_notifcenter(NULL)
 	{
 	}

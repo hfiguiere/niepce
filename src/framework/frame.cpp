@@ -25,6 +25,7 @@
 
 #include "utils/debug.h"
 #include "utils/boost.h"
+#include "utils/geometry.h"
 #include "frame.h"
 #include "application.h"
 
@@ -32,21 +33,27 @@
 
 namespace framework {
 
-	Frame::Frame()
+	Frame::Frame(const std::string & layout_cfg_key)
 		: m_window(new Gtk::Window()),
-			m_glade(NULL)
+		  m_glade(NULL),
+		  m_layout_cfg_key(layout_cfg_key)
 	{
 		connectSignals();
+		frameRectFromConfig();
 	}
 
 
-	Frame::Frame(const std::string & gladeFile, const Glib::ustring & widgetName)
+	Frame::Frame(const std::string & gladeFile, 
+				 const Glib::ustring & widgetName,
+				 const std::string & layout_cfg_key)
 		: m_window(NULL),
-			m_glade(Gnome::Glade::Xml::create(gladeFile))
+		  m_glade(Gnome::Glade::Xml::create(gladeFile)),
+		  m_layout_cfg_key(layout_cfg_key)
 	{
 		if (m_glade) {
 			m_window = static_cast<Gtk::Window*>(m_glade->get_widget(widgetName));
 			connectSignals();
+			frameRectFromConfig();
 		}
 	}
 
@@ -61,6 +68,7 @@ namespace framework {
 
 	Frame::~Frame()
 	{
+		frameRectToConfig();
 	}
 
 
@@ -98,7 +106,44 @@ namespace framework {
 	{
 		if(Controller::Ptr parent = m_parent.lock()) {
 			parent->remove(shared_from_this());
-		}		
+		}
 		return false;
 	}
+
+	void Frame::frameRectFromConfig()
+	{
+		DBG_OUT("loading frame rect (%s)", m_layout_cfg_key.c_str());
+		if(!m_layout_cfg_key.empty()) {
+			Configuration & cfg = Application::app()->config();
+			std::string val;
+			val = cfg.getValue(m_layout_cfg_key, "");
+			if(!val.empty()) {
+				try {
+					utils::Rect r(val);
+					m_window->move(r.x(), r.y());
+					m_window->resize(r.w(), r.h());				
+				}
+				catch(std::bad_cast)
+				{
+					ERR_OUT("wrong value in configuration: %s", val.c_str());
+				}
+			}
+		}
+	}
+
+
+	void Frame::frameRectToConfig()
+	{
+		DBG_OUT("saving frame rect (%s)", m_layout_cfg_key.c_str());
+		if(!m_layout_cfg_key.empty()) {
+			Configuration & cfg = Application::app()->config();
+			int x, y, w, h;
+			x = y = w = h = 0;
+			m_window->get_position(x, y);
+			m_window->get_size(w, h);
+			utils::Rect r(x, y, w, h);
+			cfg.setValue(m_layout_cfg_key, r.to_string());
+		}
+	}
+
 }
