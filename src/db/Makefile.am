@@ -10,6 +10,7 @@ TEST_LIBS =  \
 	libniepcedb.la sqlite/libniepcedbsqlite.la \
 	../utils/libniepceutils.la \
 	../framework/libniepceframework.la \
+	@LIBGTKMM_LIBS@\
 	@BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
 	@BOOST_FILESYSTEM_LIB@ \
 	@BOOST_THREAD_LIB@ \
