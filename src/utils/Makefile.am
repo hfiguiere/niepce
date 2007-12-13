@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src/
+INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@
 
 TESTS = testmoniker testfiles testgeometry
 
@@ -19,7 +19,7 @@ testgeometry_LDADD = libniepceutils.la
 noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \
-	mtqueue.h \
+	mtqueue.h exempi.h exempi.cpp \
 	buffer.h logstreamutils.h \
 	moniker.h moniker.cpp \
 	debug.h debug.cpp boost.h \

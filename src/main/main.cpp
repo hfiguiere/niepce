@@ -23,9 +23,13 @@
 #include <boost/bind.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include "utils/exempi.h"
+#include "niepce/xmp.h"
 #include "ui/niepceapplication.h"
 
 namespace bfs = boost::filesystem;
+using utils::ExempiManager;
+
 
 int main(int argc, char ** argv)
 {
@@ -33,6 +37,8 @@ int main(int argc, char ** argv)
 	// note: this is not the case in the tests.
 	bfs::path::default_name_check(&bfs::native);
 
+	ExempiManager ex_manager(niepce::xmp_namespaces);
+	
 	return framework::Application::main(
 		boost::bind(&ui::NiepceApplication::create),
 		argc, argv);
