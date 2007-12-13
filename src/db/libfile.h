@@ -56,6 +56,16 @@ namespace db {
 
 //		Storage::Ptr storage() const;
 
+		void setOrientation(int32_t v);
+		int32_t orientation() const
+			{ return m_orientation; }
+		void setRating(int32_t v);
+		int32_t rating() const
+			{ return m_rating; }
+		void setLabel(int32_t v);
+		int32_t label() const
+			{ return m_label; }
+
 		/** retrieve the keywords id list 
 		 * @return the list
 		 */
@@ -77,7 +87,10 @@ namespace db {
 		int         m_folderId;     /**< parent folder */
 		std::string m_name;         /**< name */
 		boost::filesystem::path  m_path;/**< path name relative to the folder */
-		std::string m_type;
+//		std::string m_type;
+		int32_t     m_orientation;  /**< Exif orientatoin */
+		int32_t     m_rating;       /**< rating */
+		int32_t     m_label;        /**< Label ID */
 		mutable bool m_hasKeywordList;
 		mutable Keyword::IdList m_keywordList;
 	};

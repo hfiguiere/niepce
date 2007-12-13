@@ -96,9 +96,10 @@ namespace library {
 		}
 		std::for_each( files->begin(), files->end(),
 					   bind(&Library::addFile, boost::ref(lib),
-					   pf->id(), _1, manage) );
-					   lib->notify(Library::NOTIFY_ADDED_FILES,
-					   boost::any()); }
+							pf->id(), _1, manage) );
+		lib->notify(Library::NOTIFY_ADDED_FILES,
+					boost::any()); 
+	}
 
 
 	void Commands::cmdQueryFolderContent(const Library::Ptr & lib, 

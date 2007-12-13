@@ -14,7 +14,8 @@ TEST_LIBS =  \
 	../framework/libniepceframework.la \
         @BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
 	@BOOST_THREAD_LIB@ @BOOST_FILESYSTEM_LIB@ \
-	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@
+	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
+	@EXEMPI_LIBS@
 
 test_worker_SOURCES = test_worker.cpp
 test_worker_LDADD = $(TEST_LIBS)

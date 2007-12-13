@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <time.h>
 #include <iostream>
 
 #include <boost/lexical_cast.hpp>
@@ -25,6 +26,7 @@
 #include "niepce/notifications.h"
 #include "library.h"
 #include "utils/exception.h"
+#include "utils/exempi.h"
 #include "sqlite/sqlitecnxmgrdrv.h"
 #include "sqlite/sqlitecnxdrv.h"
 #include "sqlstatement.h"
@@ -104,15 +106,25 @@ namespace db {
 								 " path TEXT, name TEXT, vault_id INTEGER, "
 								 " parent_id INTEGER)");
 		SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
-							   " path TEXT, name TEXT, parent_id INTEGER)");
+							   " path TEXT, name TEXT, parent_id INTEGER,"
+							   " orientation INTEGER, file_date INTEGER,"
+							   " rating INTEGER, label INTEGER,"
+							   " import_date INTEGER, mod_date INTEGER, "
+							   " xmp BLOB)");
 		SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
 								  " keyword TEXT, parent_id INTEGER)");
 		SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
 									 " keyword_id INTEGER)");
-		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
-								" name TEXT)");
-		SQLStatement collectingTable("CREATE TABLE collecting (file_id INTEGER,"
-									 " collection_id INTEGER)");
+//		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
+//								" name TEXT)");
+//		SQLStatement collectingTable("CREATE TABLE collecting (file_id INTEGER,"
+//									 " collection_id INTEGER)");
+
+		SQLStatement fileUpdateTrigger(
+			"CREATE TRIGGER file_update_trigger UPDATE ON files "
+			" BEGIN"
+			"  UPDATE files SET mod_date = strftime('%s','now');"
+			" END");
 
 		m_dbdrv->execute_statement(adminTable);
 		m_dbdrv->execute_statement(adminVersion);
@@ -121,8 +133,10 @@ namespace db {
 		m_dbdrv->execute_statement(fileTable);
 		m_dbdrv->execute_statement(keywordTable);
 		m_dbdrv->execute_statement(keywordingTable);
-		m_dbdrv->execute_statement(collsTable);
-		m_dbdrv->execute_statement(collectingTable);
+//		m_dbdrv->execute_statement(collsTable);
+//		m_dbdrv->execute_statement(collectingTable);
+
+		m_dbdrv->execute_statement(fileUpdateTrigger);
 		
 		return true;
 	}
@@ -168,18 +182,36 @@ namespace db {
 		DBG_ASSERT(manage, "manage not supported");
 		DBG_ASSERT(folder_id == -1, "invalid folder ID");
 		try {
-			SQLStatement sql(boost::format("INSERT INTO files (path, name, parent_id)"
-										   " VALUES ('%1%', '%2%', '%3%');") 
-							 % file.string() % file.leaf() % folder_id);
+			int32_t rating, label_id, orientation;
+			std::string label;
+			utils::XmpMeta meta(file);
+			label_id = 0;
+			orientation = meta.orientation();
+			rating = meta.rating();
+			label = meta.label();
+			SQLStatement sql(boost::format("INSERT INTO files (path, name, "
+										   " parent_id, import_date, mod_date, "
+										   " orientation, file_date, rating, label, "
+										   " xmp) "
+										   " VALUES ('%1%', '%2%', '%3%', "
+										   " '%4%', '%4%', '%5%', '0', '%6%', '%7%', '');") 
+							 % file.string() % file.leaf() % folder_id
+							 % time(NULL) % orientation % rating % folder_id);
 			if(m_dbdrv->execute_statement(sql)) {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
 				ret = id;
+				std::string buf = meta.serialize();
+//				m_dbdrv->store_blob("files", "xmp", id, buf);
 			}
 		}
-		catch(utils::Exception & e)
+		catch(const utils::Exception & e)
 		{
 			DBG_OUT("db exception %s", e.what());
+		}
+		catch(const std::exception & e)
+		{
+			DBG_OUT("unknown exception %s", e.what());
 		}
 		return ret;
 	}
@@ -207,11 +239,11 @@ namespace db {
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				if(m_dbdrv->read_next_row()) {
-					int64_t id;
+					int32_t id;
 					std::string name;
 					m_dbdrv->get_column_content(0, id);
 					m_dbdrv->get_column_content(1, name);
-					f = LibFolder::Ptr(new LibFolder((int)id, name));
+					f = LibFolder::Ptr(new LibFolder(id, name));
 				}
 			}
 		}
@@ -251,7 +283,7 @@ namespace db {
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				while(m_dbdrv->read_next_row()) {
-					int64_t id;
+					int32_t id;
 					std::string name;
 					m_dbdrv->get_column_content(0, id);
 					m_dbdrv->get_column_content(1, name);
@@ -267,14 +299,15 @@ namespace db {
 
 	void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
 	{
-		SQLStatement sql(boost::format("SELECT id,parent_id,path,name FROM files "
+		SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
+									   "orientation,rating,label FROM files "
 									   " WHERE parent_id='%1%'")
 						 % folder_id);
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				while(m_dbdrv->read_next_row()) {
-					int64_t id;
-					int64_t fid;
+					int32_t id;
+					int32_t fid;
 					std::string pathname;
 					std::string name;
 					m_dbdrv->get_column_content(0, id);
@@ -282,10 +315,18 @@ namespace db {
 					m_dbdrv->get_column_content(2, pathname);
 					m_dbdrv->get_column_content(3, name);
 					DBG_OUT("found %s", pathname.c_str());
-					fl->push_back(LibFile::Ptr(new LibFile((int)id, 
-														   (int)folder_id,
-														   bfs::path(pathname), 
-														   name)));
+					LibFile::Ptr f(new LibFile(id, folder_id,
+											   bfs::path(pathname), 
+											   name));
+					int32_t val;
+					m_dbdrv->get_column_content(4, val);
+					f->setOrientation(val);
+					m_dbdrv->get_column_content(5, val);
+					f->setRating(val);
+					m_dbdrv->get_column_content(6, val);
+					f->setLabel(val);
+					fl->push_back(f);
+					
 				}
 			}
 		}

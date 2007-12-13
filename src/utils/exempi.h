@@ -20,7 +20,12 @@
 #ifndef __UTILS_EXEMPI_H__
 #define __UTILS_EXEMPI_H__
 
+#include <string>
+
+#include <boost/filesystem/path.hpp>
 #include <boost/noncopyable.hpp>
+
+#include <exempi/xmp.h>
 
 namespace utils {
 
@@ -37,6 +42,22 @@ namespace utils {
 		~ExempiManager();
 	};
 
+	/** a high-level wrapper for xmp */
+	class XmpMeta 
+	{
+	public:
+		XmpMeta();
+		XmpMeta(const boost::filesystem::path & for_file);
+		~XmpMeta();
+
+		std::string serialize() const;
+
+		int32_t orientation() const;
+		std::string label() const;
+		int32_t rating() const;
+	private:
+		XmpPtr m_xmp;
+	};
 }
 
 #endif

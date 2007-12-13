@@ -1,4 +1,4 @@
-/* -*- Mode: C++; indent-tabs-mode:tab; c-basic-offset:2 -*- */
+/* -*- indent-tabs-mode:tab; c-basic-offset:2 -*- */
 /*
  *This file is part of the Nemiver Project.
  *
@@ -331,6 +331,23 @@ namespace db { namespace sqlite {
 			a_column_content.set
 				(static_cast<const char*>(sqlite3_column_blob (m_priv->cur_stmt, a_offset)),
 				 sqlite3_column_bytes (m_priv->cur_stmt, a_offset)) ;
+			return true ;
+		}
+
+		bool
+		SqliteCnxDrv::get_column_content (uint32_t a_offset,
+										  int32_t &a_column_content) const
+		{
+			THROW_IF_FAIL (m_priv) ;
+
+			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
+			int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
+			if ((type != SQLITE_INTEGER) && (type != SQLITE_NULL)) {
+				ERR_OUT("column number %d is not of integer type", 
+						static_cast<int>(a_column_content));
+				return false ;
+			}
+			a_column_content = sqlite3_column_int (m_priv->cur_stmt, a_offset) ;
 			return true ;
 		}
 

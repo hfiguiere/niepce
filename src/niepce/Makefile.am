@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(srcdir)/.. 
+INCLUDES = -I$(srcdir)/.. @EXEMPI_CFLAGS@
 
 noinst_HEADERS = notifications.h xmp.h 
 

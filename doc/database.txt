@@ -1,0 +1,52 @@
+Database description
+Hubert Figuiere <hub@figuiere.net>
+
+
+Adminstration table. Contain various parameters.
+
+admin	        key            Key
+                value	       Value
+
+The known keys are:
+version :       The version of the database. Current = 1.
+
+
+Files in the library
+
+files           id             Unique ID in the database
+		path           The absolute path to the file
+		parent_id      The ID on the containing folder (= folders.id)
+		orientation    The Exif orientation of the file
+		file_date      The file date, likely shooting date from Exif (time_t)
+		rating         The file rating (0-5)
+		label          The label (labels.id)
+		import_date    The date of import in the database (time_t)
+		mod_date       The date modified (time_t)
+		xmp            The XMP blob
+
+
+Folders for the library "storage"
+
+folders         id             Unique ID in the database
+		path           The absolute path of the folder
+		name 	       The display name
+		vault_id       The vault ID (unused) 0 = no vault (= vaults.id)
+		parent_id      The ID of the parent (= folders.id). 0 = top level
+
+Keywords are defined in on table, and linked to files in the other
+
+keywords        id             Unique ID in the database
+		keyword	       The text of the keyword
+		parent_id      The parent keyword. 0 = top level (= keywords.id)
+
+keywording	file_id	       The file ID it is linked to (= files.id)
+		keyword_id     The keyword ID associated (= keywords.id)
+
+There shouldn't be more than on pair of identical (file_id,keyword_id)
+
+Vaults are storage location for files. Currently unimplemented
+
+vaults		id	       Unique ID in the database
+		path	       Absolute path of the vault
+
+

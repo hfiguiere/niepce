@@ -2,7 +2,7 @@
 
 SUBDIRS = sqlite
 
-INCLUDES = -I$(top_srcdir)/src/ 
+INCLUDES = -I$(top_srcdir)/src/  @EXEMPI_CFLAGS@
 
 TESTS = test_db test_library
 
@@ -14,7 +14,7 @@ TEST_LIBS =  \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
 	@BOOST_FILESYSTEM_LIB@ \
 	@BOOST_THREAD_LIB@ \
-	@SQLITE3_LIBS@ 
+	@SQLITE3_LIBS@ @EXEMPI_LIBS@
 
 check_PROGRAMS = test_db test_library
 

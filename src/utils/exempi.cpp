@@ -18,8 +18,16 @@
  */
 
 
+#include <stdio.h>
+#include <string.h>
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/lexical_cast.hpp>
 #include <exempi/xmp.h>
+#include <exempi/xmpconsts.h>
 #include "exempi.h"
+
+namespace bfs = boost::filesystem;
 
 namespace utils {
 
@@ -40,6 +48,95 @@ namespace utils {
 	ExempiManager::~ExempiManager()
 	{
 		xmp_terminate();
+	}
+
+
+
+	XmpMeta::XmpMeta(const bfs::path & file)
+	{
+        size_t len;
+        char * buffer;
+		bfs::path sidecar = file.branch_path()
+			/ (basename(file) + ".xmp");
+		m_xmp = xmp_new_empty();
+
+		FILE * f = fopen(sidecar.string().c_str(), "rb");
+
+        if (f != NULL) {
+			fseek(f, 0, SEEK_END);
+			len = ftell(f);
+			fseek(f, 0, SEEK_SET);
+			
+			buffer = (char*)malloc(len + 1);
+			/*size_t rlen =*/ fread(buffer, 1, len, f);
+			xmp_parse(m_xmp, buffer, len);
+			free(buffer);
+        }
+	}
+
+	XmpMeta::~XmpMeta()
+	{
+		if(m_xmp) {
+			xmp_free(m_xmp);
+		}
+	}
+
+	std::string XmpMeta::serialize() const
+	{
+		std::string buf;
+		XmpStringPtr output = xmp_string_new();
+		if(xmp_serialize_and_format(m_xmp, output, 
+									XMP_SERIAL_OMITPACKETWRAPPER, 
+									0, "\n", " ", 0)) {
+			buf = xmp_string_cstr(output);
+		}
+		return buf;
+	}
+
+
+	int32_t XmpMeta::orientation() const
+	{
+		int32_t _orientation = 0;
+		XmpStringPtr value = xmp_string_new();
+		if(xmp_get_property(m_xmp, NS_TIFF, "Orientation", value, NULL)) {
+			try {
+				_orientation = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
+			}
+			catch(const boost::bad_lexical_cast &)
+			{
+			}
+		}
+		xmp_string_free(value);
+		return _orientation;
+	}
+
+
+	std::string XmpMeta::label() const
+	{
+		std::string _label;
+		XmpStringPtr value = xmp_string_new();
+		if(xmp_get_property(m_xmp, NS_XAP, "Label", value, NULL)) {
+			_label = xmp_string_cstr(value);
+		}
+		xmp_string_free(value);
+		return _label;
+	}
+
+
+	int32_t XmpMeta::rating() const
+	{
+		int32_t _rating = 0;
+		XmpStringPtr value = xmp_string_new();
+		if(xmp_get_property(m_xmp, NS_XAP, "Rating", value, NULL)) {
+			try {
+				_rating = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
+			}
+			catch(const boost::bad_lexical_cast &)
+			{
+			}
+		}
+		xmp_string_free(value);
+		return _rating;
 	}
 
 }

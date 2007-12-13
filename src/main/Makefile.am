@@ -1,7 +1,7 @@
 
 
 
-INCLUDES = -I$(srcdir)/.. 
+INCLUDES = -I$(srcdir)/.. @EXEMPI_CFLAGS@
 
 bin_PROGRAMS = niepce
 

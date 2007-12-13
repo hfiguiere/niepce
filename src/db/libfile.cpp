@@ -27,7 +27,8 @@ namespace db {
 	LibFile::LibFile(int id, int folderId, const bfs::path & p,
 					 const std::string & name )
 	: m_id(id), m_folderId(folderId),
-		  m_name(name), m_path(p)
+	  m_name(name), m_path(p),
+	  m_orientation(0), m_rating(0), m_label(0)
 	{
 
 	}
@@ -43,6 +44,23 @@ namespace db {
 //			storage()->fetchKeywordsForFile(m_id, m_keywordList);
 		}
 		return m_keywordList;
+	}
+
+	void LibFile::setOrientation(int32_t v)
+	{
+		m_orientation = v;
+	}
+
+
+	void LibFile::setRating(int32_t v)
+	{
+		m_rating = v;
+	}
+
+
+	void LibFile::setLabel(int32_t v)
+	{
+		m_label = v;
 	}
 
 }

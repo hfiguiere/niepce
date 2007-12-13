@@ -88,6 +88,9 @@ public:
                                      utils::Buffer &a_column_content) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
+                                     int32_t &a_column_content) const = 0;
+
+    virtual bool get_column_content (uint32_t a_offset,
                                      int64_t &a_column_content) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
@@ -95,6 +98,7 @@ public:
 
     virtual bool get_column_content (uint32_t a_offset,
                                      std::string& a_column_content) const = 0;
+
 };//end IConnectionDriver
 
 
