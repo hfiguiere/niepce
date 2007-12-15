@@ -50,6 +50,9 @@ namespace utils {
 		XmpMeta(const boost::filesystem::path & for_file);
 		~XmpMeta();
 
+		/** serialize the XMP inline */
+		std::string serialize_inline() const;
+		/** serialize the XMP (for the sidecar) */
 		std::string serialize() const;
 
 		int32_t orientation() const;

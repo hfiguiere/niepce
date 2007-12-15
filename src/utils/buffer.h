@@ -26,7 +26,6 @@
 #ifndef __NEMIVER_BUFFER_H__
 #define __NEMIVER_BUFFER_H__
 
-
 namespace utils {
 
 class Buffer {

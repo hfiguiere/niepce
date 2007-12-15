@@ -67,7 +67,7 @@ namespace utils {
 	void dbg_assert(bool condvalue, const char* cond, const char* filen,
 					int linen, const char* reason)
 	{
-		if(condvalue) {
+		if(!condvalue) {
 			_print("ASSERT: ", "%s:%d %s", cond, filen, linen, reason);
 
 		}

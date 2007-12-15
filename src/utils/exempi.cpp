@@ -81,6 +81,18 @@ namespace utils {
 		}
 	}
 
+	std::string XmpMeta::serialize_inline() const
+	{
+		std::string buf;
+		XmpStringPtr output = xmp_string_new();
+		if(xmp_serialize_and_format(m_xmp, output, 
+									XMP_SERIAL_OMITPACKETWRAPPER | XMP_SERIAL_OMITALLFORMATTING, 
+									0, "", "", 0)) {
+			buf = xmp_string_cstr(output);
+		}
+		return buf;
+	}
+
 	std::string XmpMeta::serialize() const
 	{
 		std::string buf;

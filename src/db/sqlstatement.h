@@ -34,7 +34,11 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/any.hpp>
 
+#include "utils/buffer.h"
+#include "db/iconnectiondriver.h"
 
 namespace db
 {
@@ -114,8 +118,17 @@ public:
 
     static std::string escape_string (const std::string &a_sql_string) ;
 
+	bool bind(int idx, const std::string & text);
+	bool bind(int idx, const utils::Buffer & blob);
+
     operator const char* () const ;
     friend std::iostream& operator<< (std::iostream&, const SQLStatement&) ;
+
+    typedef boost::tuple<ColumnType, int, boost::any> binder_t;
+    const std::vector< binder_t > & bindings() const
+        { return m_bindings; }
+private:
+    std::vector< binder_t > m_bindings;
 };
 
 std::ostream & operator<< (std::ostream &, const SQLStatement &) ;

@@ -61,6 +61,25 @@ SQLStatement::escape_string (const std::string &a_sql_string)
     return out_string ;
 }
 
+bool 
+SQLStatement::bind(int idx, const std::string & text)
+{
+    m_bindings.push_back(binder_t(COLUMN_TYPE_STRING, idx, 
+                                  boost::any(text)));
+    return true;
+}
+
+
+bool 
+SQLStatement::bind(int idx, const utils::Buffer & blob)
+{
+    m_bindings.push_back(binder_t(COLUMN_TYPE_BLOB, idx, 
+                                      boost::any(&blob)));
+    return true;
+}
+
+
+
 SQLStatement::SQLStatement (const std::string &a_sql_string)
 {
     m_priv = new SQLStatementPriv ;

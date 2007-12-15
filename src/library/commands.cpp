@@ -83,7 +83,7 @@ namespace library {
 								  const bfs::path & folder, 
 								  const FileList::Ptr & files, bool manage)
 	{
-		DBG_ASSERT(manage == true, "managing file is currently unsupported");
+		DBG_ASSERT(!manage, "managing file is currently unsupported");
 		LibFolder::Ptr pf;
 		pf = lib->getFolder(folder);
 		if(pf == NULL)

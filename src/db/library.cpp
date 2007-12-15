@@ -110,7 +110,7 @@ namespace db {
 							   " orientation INTEGER, file_date INTEGER,"
 							   " rating INTEGER, label INTEGER,"
 							   " import_date INTEGER, mod_date INTEGER, "
-							   " xmp BLOB)");
+							   " xmp TEXT)");
 		SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
 								  " keyword TEXT, parent_id INTEGER)");
 		SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
@@ -179,8 +179,8 @@ namespace db {
 	int Library::addFile(int folder_id, const bfs::path & file, bool manage)
 	{
 		int ret = -1;
-		DBG_ASSERT(manage, "manage not supported");
-		DBG_ASSERT(folder_id == -1, "invalid folder ID");
+		DBG_ASSERT(!manage, "manage not supported");
+		DBG_ASSERT(folder_id != -1, "invalid folder ID");
 		try {
 			int32_t rating, label_id, orientation;
 			std::string label;
@@ -194,15 +194,15 @@ namespace db {
 										   " orientation, file_date, rating, label, "
 										   " xmp) "
 										   " VALUES ('%1%', '%2%', '%3%', "
-										   " '%4%', '%4%', '%5%', '0', '%6%', '%7%', '');") 
+										   " '%4%', '%4%', '%5%', '0', '%6%', '%7%', ?1);") 
 							 % file.string() % file.leaf() % folder_id
 							 % time(NULL) % orientation % rating % folder_id);
+			std::string buf = meta.serialize_inline();
+			sql.bind(1, buf);
 			if(m_dbdrv->execute_statement(sql)) {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
 				ret = id;
-				std::string buf = meta.serialize();
-//				m_dbdrv->store_blob("files", "xmp", id, buf);
 			}
 		}
 		catch(const utils::Exception & e)

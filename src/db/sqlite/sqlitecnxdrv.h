@@ -29,12 +29,12 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "db/iconnectiondriver.h"
+#include "sqlitestatement.h"
 
 struct sqlite3;
 
 namespace db {
 
-class SQLStatement ;
 
 namespace sqlite {
 
@@ -53,7 +53,7 @@ class SqliteCnxDrv: public db::IConnectionDriver {
 
     virtual ~SqliteCnxDrv () ;
 public:
-
+    sqlite3* sqlite_handle() const;
     const char* get_last_error () const ;
 
     bool start_transaction () ;

@@ -213,6 +213,14 @@ namespace db { namespace sqlite {
 			close () ;
 		}
 
+	    sqlite3 * SqliteCnxDrv::sqlite_handle() const
+		{
+			if (m_priv && m_priv->sqlite) {
+				return m_priv->sqlite.get ();
+			}
+			return NULL;
+		}
+
 		const char*
 		SqliteCnxDrv::get_last_error () const
 		{
@@ -246,38 +254,78 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::execute_statement (const SQLStatement &a_statement)
 		{
-			THROW_IF_FAIL (m_priv && m_priv->sqlite) ;
-			DBG_OUT("sql string: %s", a_statement.to_string().c_str()) ;
+		  THROW_IF_FAIL (m_priv && m_priv->sqlite) ;
+		  DBG_OUT("sql string: %s", a_statement.to_string().c_str()) ;
+		  
+		  //if the previous statement
+		  //(also contains the resulting context of a query
+		  //execution) hasn't been deleted, delete it before
+		  //we go forward.
+		  if (m_priv->cur_stmt) {
+			sqlite3_finalize (m_priv->cur_stmt) ;
+			m_priv->cur_stmt = NULL ;
+			m_priv->last_execution_result = SQLITE_OK ;
+		  }
+			
+		  if (a_statement.to_string().size() == 0)
+			return false ;
+			
+		  int status = sqlite3_prepare (m_priv->sqlite.get (),
+										a_statement.to_string ().c_str (),
+										a_statement.to_string ().size(),
+										&m_priv->cur_stmt,
+										NULL) ;
 
-			//if the previous statement
-			//(also contains the resulting context of a query
-			//execution) hasn't been deleted, delete it before
-			//we go forward.
-			if (m_priv->cur_stmt) {
-				sqlite3_finalize (m_priv->cur_stmt) ;
-				m_priv->cur_stmt = NULL ;
-				m_priv->last_execution_result = SQLITE_OK ;
+		  if (status != SQLITE_OK) {
+			ERR_OUT("sqlite3_prepare() failed, returning: %d: %s: sql was: '%s'",
+					status, get_last_error(), a_statement.to_string().c_str()) ;
+			return false ;
+		  }
+
+		  const std::vector< SQLStatement::binder_t > & bindings = a_statement.bindings();
+		  for(std::vector< SQLStatement::binder_t >::const_iterator iter = bindings.begin();
+			  iter != bindings.end(); iter++) 
+		  {
+			ColumnType ctype = iter->get<0>();
+			int idx = iter->get<1>();
+			switch(ctype) {
+			case COLUMN_TYPE_STRING:
+			{
+			  try {
+				std::string text(boost::any_cast<std::string>(iter->get<2>()));
+				sqlite3_bind_text(m_priv->cur_stmt, idx, text.c_str(), 
+								  text.size(), SQLITE_STATIC);
+			  }
+			  catch(...)
+			  {
+				DBG_OUT("e");
+			  }
+			  break;
 			}
-
-			if (a_statement.to_string().size() == 0)
-				return false ;
-
-			int status = sqlite3_prepare (m_priv->sqlite.get (),
-										  a_statement.to_string ().c_str (),
-										  a_statement.to_string ().size(),
-										  &m_priv->cur_stmt,
-										  NULL) ;
-			if (status != SQLITE_OK) {
-				ERR_OUT("sqlite3_prepare() failed, returning: %d: %s: sql was: '%s'",
-						status, get_last_error(), a_statement.to_string().c_str()) ;
-				return false ;
+			case COLUMN_TYPE_BLOB:
+			{
+			  try {
+				const utils::Buffer* blob(boost::any_cast<const utils::Buffer*>(iter->get<2>()));
+				sqlite3_bind_blob(m_priv->cur_stmt, idx, blob->get_data(), 
+								  blob->get_len(), SQLITE_STATIC);
+			  }
+			  catch(...)
+			  {
+				DBG_OUT("e");
+			  }
+			  break;
 			}
-
-			THROW_IF_FAIL (m_priv->cur_stmt) ;
-			if (!should_have_data ()) {
-				return m_priv->step_cur_statement () ;
+			default:
+			  break;
 			}
-			return true ;
+		  }
+		  
+		  THROW_IF_FAIL (m_priv->cur_stmt) ;
+		  if (!should_have_data ()) {
+			return m_priv->step_cur_statement () ;
+		  }
+
+		  return true ;
 		}
 
 		bool
