@@ -58,9 +58,12 @@ namespace ui {
 	}
 
 
-//	NiepceWindow::~NiepceWindow()
-//	{
-//	}
+	NiepceWindow::~NiepceWindow()
+	{
+		Application::Ptr pApp = Application::app();
+		pApp->uiManager()->remove_action_group(m_refActionGroup);
+		delete m_lib_notifcenter;
+	}
 
  	Gtk::Widget * 
 	NiepceWindow::buildWidget()
@@ -115,12 +118,6 @@ namespace ui {
 		win.show_all_children();
 		on_open_library();
 		return &win;
-	}
-
-	NiepceWindow::~NiepceWindow()
-	{
-		Application::Ptr pApp = Application::app();
-		pApp->uiManager()->remove_action_group(m_refActionGroup);
 	}
 
 	void NiepceWindow::init_actions()

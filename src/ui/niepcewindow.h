@@ -44,7 +44,7 @@ namespace ui {
 	{
 	public:
 		NiepceWindow();
-		~NiepceWindow();
+		virtual ~NiepceWindow();
 
 
 		virtual void set_title(const std::string & title);
