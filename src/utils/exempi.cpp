@@ -20,11 +20,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/lexical_cast.hpp>
+
 #include <exempi/xmp.h>
 #include <exempi/xmpconsts.h>
+
+#include "debug.h"
 #include "exempi.h"
 
 namespace bfs = boost::filesystem;
@@ -151,4 +155,28 @@ namespace utils {
 		return _rating;
 	}
 
+
+	time_t  XmpMeta::creation_date() const
+	{
+		time_t date = 0;
+		XmpDateTime value;
+		if(xmp_get_property_date(m_xmp, NS_EXIF, "DateTimeOriginal", 
+								 &value, NULL)) {
+			struct tm dt;
+			dt.tm_sec = value.second;
+			dt.tm_min = value.minute;
+			dt.tm_hour = value.hour;
+			dt.tm_mday = value.day;
+			dt.tm_mon = value.month;
+			dt.tm_year = value.year - 1900;
+			dt.tm_isdst = -1;
+			// this field is supposed to be a glibc extension. oh joy.
+			dt.tm_gmtoff = value.tzSign * ((value.tzHour * 3600) +
+										   (value.tzMinute * 60));
+			date = mktime(&dt);
+			DBG_ASSERT(date != -1, "date is -1");
+		}
+		return date;
+	}
+	
 }

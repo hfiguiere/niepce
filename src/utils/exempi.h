@@ -58,6 +58,7 @@ namespace utils {
 		int32_t orientation() const;
 		std::string label() const;
 		int32_t rating() const;
+		time_t  creation_date() const;
 	private:
 		XmpPtr m_xmp;
 	};

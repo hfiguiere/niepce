@@ -57,7 +57,7 @@ dnl PKG_CHECK_MODULES(LIBGNOMEUI, [libgnomeui-2.0 >= $LIBGNOMEUI_VERSION])
 PKG_CHECK_MODULES(LIBGCONFMM, [gconfmm-2.6 >= $LIBGCONFMM_VERSION])
 PKG_CHECK_MODULES(GNOMEVFS, [gnome-vfs-2.0 > 2.0])
 PKG_CHECK_MODULES(SQLITE3, [sqlite3 >= 3.0])
-PKG_CHECK_MODULES(EXEMPI, [exempi-2.0 >= 1.99])
+PKG_CHECK_MODULES(EXEMPI, [exempi-2.0 >= 1.99.6])
 PKG_CHECK_MODULES(GTKIMAGEVIEW, [gtkimageview >= $LIBGTKIMAGEVIEW_VERSION])
 
 PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-1.0 >= 0.0.4)
@@ -71,11 +71,6 @@ dnl we need to do an extra check on the boost headers
 AC_CHECK_HEADER(boost/thread.hpp, , AC_MSG_ERROR([Boost.Thread headers not found.]))
 AX_BOOST_FILESYSTEM
 AC_CHECK_HEADER(boost/filesystem/path.hpp, , AC_MSG_ERROR([Boost.Filesystem headers not found.]))
-
-dnl hack since AX_BOOST_FILESYSTEM seems to fail
-if test "x$BOOST_FILESYSTEM_LIB" = "x" ; then
-   BOOST_FILESYSTEM_LIB=-lboost_filesystem
-fi
 
 IT_PROG_INTLTOOL([0.35.0])
 

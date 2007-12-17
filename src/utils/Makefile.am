@@ -16,6 +16,10 @@ testfiles_LDADD = libniepceutils.la \
 testgeometry_SOURCES = testgeometry.cpp
 testgeometry_LDADD = libniepceutils.la
 
+#testxmp_SOURCES = testxmp.cpp
+#testxmp_LDADD = libniepceutils.la \
+#	@BOOST_DATE_TIME_LIB@
+
 noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \

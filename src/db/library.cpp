@@ -189,14 +189,19 @@ namespace db {
 			orientation = meta.orientation();
 			rating = meta.rating();
 			label = meta.label();
+			time_t creation_date = meta.creation_date();
+			if(creation_date == -1) {
+				creation_date = 0;
+			}
 			SQLStatement sql(boost::format("INSERT INTO files (path, name, "
 										   " parent_id, import_date, mod_date, "
-										   " orientation, file_date, rating, label, "
-										   " xmp) "
+										   " orientation, file_date, rating, "
+										   " label, xmp) "
 										   " VALUES ('%1%', '%2%', '%3%', "
-										   " '%4%', '%4%', '%5%', '0', '%6%', '%7%', ?1);") 
+										   " '%4%', '%4%', '%5%', '%8%', '%6%', '%7%', ?1);") 
 							 % file.string() % file.leaf() % folder_id
-							 % time(NULL) % orientation % rating % folder_id);
+							 % time(NULL) % orientation % rating % folder_id
+							 % creation_date);
 			std::string buf = meta.serialize_inline();
 			sql.bind(1, buf);
 			if(m_dbdrv->execute_statement(sql)) {
