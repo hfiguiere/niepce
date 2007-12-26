@@ -267,7 +267,7 @@ namespace db { namespace sqlite {
 			m_priv->last_execution_result = SQLITE_OK ;
 		  }
 			
-		  if (a_statement.to_string().size() == 0)
+		  if (a_statement.to_string().empty())
 			return false ;
 			
 		  int status = sqlite3_prepare (m_priv->sqlite.get (),
