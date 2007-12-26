@@ -28,6 +28,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include "utils/databinder.h"
+
 namespace Gtk {
 	class Widget;
 }
@@ -71,6 +73,8 @@ namespace framework {
 
 		WeakPtr          m_parent;
 		std::list<Ptr> m_subs; /**< sub controllers */
+
+		utils::DataBinderPool m_databinders;
 	};
 
 }

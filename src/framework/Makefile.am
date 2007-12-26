@@ -13,4 +13,5 @@ libniepceframework_la_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 libniepceframework_la_SOURCES = configuration.cpp \
 	application.cpp frame.cpp controller.cpp \
 	notification.h \
-	notificationcenter.h notificationcenter.cpp
+	notificationcenter.h notificationcenter.cpp \
+	configdatabinder.h configdatabinder.cpp

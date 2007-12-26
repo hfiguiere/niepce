@@ -1,5 +1,5 @@
 /*
- * niepce - framework/configuration.h
+ * niepce - framework/configdatabinder.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,34 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef _FRAMEWORK_CONFIGURATION_H_
-#define _FRAMEWORK_CONFIGURATION_H_
-
-#include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-
-#include "framework/gconf_proxy_header.h"
-
+#include "configdatabinder.h"
 
 namespace framework {
 
-	class Configuration
-	{
-	public:
-		Configuration();
-		~Configuration();
 
-		bool hasKey(const Glib::ustring & key) const;
-		const Glib::ustring getValue(const Glib::ustring & key,
-									 const Glib::ustring & def) const;
+ConfigDataBinderBase::ConfigDataBinderBase(const property_t & property,
+										   Configuration & config, 
+										   const std::string & key)
+	: utils::DataBinderBase(),
+	  m_property(property),
+	  m_config_key(key),
+	  m_config(config)
+{
+	m_conn = m_property.signal_changed().connect(
+		sigc::mem_fun(*this, &ConfigDataBinderBase::on_changed));
+}
 
-		void setValue(const Glib::ustring & key, const Glib::ustring & value);
-
-	private:
-		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
-	};
 
 }
 
-#endif

@@ -21,6 +21,8 @@
 #ifndef _UI_NIEPCEWINDOW_H_
 #define _UI_NIEPCEWINDOW_H_
 
+#include <boost/scoped_ptr.hpp>
+
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>
 #include <gtkmm/menubar.h>
@@ -29,6 +31,7 @@
 
 #include "framework/frame.h"
 #include "framework/notificationcenter.h"
+#include "framework/configdatabinder.h"
 #include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
 #include "ui/workspacecontroller.h"

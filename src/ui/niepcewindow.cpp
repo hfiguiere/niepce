@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
@@ -96,6 +97,10 @@ namespace ui {
 		m_hbox.set_border_width(4);
 		m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
 		m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
+		m_databinders.add_binder(new framework::ConfigDataBinder<int>(m_hbox.property_position(),
+																	  Application::app()->config(),
+																	  "workspaceSplitter"));
+
 
 		win.add(m_vbox);
 
@@ -119,6 +124,7 @@ namespace ui {
 		on_open_library();
 		return &win;
 	}
+
 
 	void NiepceWindow::init_actions()
 	{

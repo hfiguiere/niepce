@@ -31,4 +31,5 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	debug.h debug.cpp boost.h \
 	files.h files.cpp \
 	geometry.h geometry.cpp \
-	thread.h thread.cpp worker.h
+	thread.h thread.cpp worker.h \
+	databinder.h databinder.cpp

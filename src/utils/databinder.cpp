@@ -1,5 +1,5 @@
 /*
- * niepce - framework/configuration.h
+ * niepce - utils/databinder.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -17,34 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "databinder.h"
 
-#ifndef _FRAMEWORK_CONFIGURATION_H_
-#define _FRAMEWORK_CONFIGURATION_H_
+namespace utils {
 
-#include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-
-#include "framework/gconf_proxy_header.h"
-
-
-namespace framework {
-
-	class Configuration
+DataBinderPool::~DataBinderPool()
+{
+	for(iterator iter = begin(); iter != end(); iter++)
 	{
-	public:
-		Configuration();
-		~Configuration();
-
-		bool hasKey(const Glib::ustring & key) const;
-		const Glib::ustring getValue(const Glib::ustring & key,
-									 const Glib::ustring & def) const;
-
-		void setValue(const Glib::ustring & key, const Glib::ustring & value);
-
-	private:
-		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
-	};
-
+		boost::checked_delete(*iter);
+	}
 }
 
-#endif
+
+void DataBinderPool::add_binder(DataBinderBase *binder)
+{
+	push_back(binder);
+}
+
+
+}

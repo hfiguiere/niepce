@@ -1,5 +1,5 @@
 /*
- * niepce - framework/configuration.h
+ * niepce - utils/databinder.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,33 +18,39 @@
  */
 
 
-#ifndef _FRAMEWORK_CONFIGURATION_H_
-#define _FRAMEWORK_CONFIGURATION_H_
-
-#include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-
-#include "framework/gconf_proxy_header.h"
 
 
-namespace framework {
+#ifndef _UTILS_DATABINDER_H_
+#define _UTILS_DATABINDER_H_
 
-	class Configuration
-	{
-	public:
-		Configuration();
-		~Configuration();
+#include <vector>
 
-		bool hasKey(const Glib::ustring & key) const;
-		const Glib::ustring getValue(const Glib::ustring & key,
-									 const Glib::ustring & def) const;
+#include <boost/utility.hpp>
 
-		void setValue(const Glib::ustring & key, const Glib::ustring & value);
 
-	private:
-		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
-	};
+namespace utils {
+
+/** @brief the base class for all the data binders */
+class DataBinderBase
+	: public boost::noncopyable
+{
+public:
+	virtual ~DataBinderBase() 
+		{}
+};
+
+/** @brief a pool of data binders */
+class DataBinderPool
+	: private std::vector< DataBinderBase* >
+{
+public:
+	~DataBinderPool();
+	/** add a data binder to the pool. the pool will own the pointer */
+	void add_binder(DataBinderBase *);
+};
+
 
 }
+
 
 #endif
