@@ -27,9 +27,12 @@
 #include <string>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 #include <boost/filesystem/path.hpp>
 
 namespace utils {
+
+	bool filter_xmp_out(const boost::filesystem::path & file);
 
 	class FileList 
 		: private std::list< boost::filesystem::path >
@@ -47,7 +50,8 @@ namespace utils {
 			{}
 		FileList( const _impltype_t & );
 
-		static Ptr getFilesFromDirectory(const value_type & dir);
+		static Ptr getFilesFromDirectory(const value_type & dir,
+										 boost::function<bool (const value_type &)> filter);
 
 		const_iterator begin() const
 			{ return _impltype_t::begin(); }

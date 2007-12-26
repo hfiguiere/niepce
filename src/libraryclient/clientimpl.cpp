@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "utils/debug.h"
 #include "utils/files.h"
 #include "library/op.h"
@@ -86,11 +87,13 @@ namespace libraryclient {
 		return id;
 	}
 
+
 	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 	{
 		FileList::Ptr files;
 		
-		files = FileList::getFilesFromDirectory(dir);
+		files = FileList::getFilesFromDirectory(dir, 
+												boost::bind(&utils::filter_xmp_out, _1));
 
 		tid_t id = LibraryClient::newTid();
 		Op::Ptr op(Commands::opImportFiles(id, dir, files, manage));

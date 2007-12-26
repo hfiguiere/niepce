@@ -19,6 +19,8 @@
 
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "debug.h"
 #include "files.h"
@@ -27,12 +29,23 @@ namespace bfs = boost::filesystem;
 
 namespace utils {
 
+	bool filter_xmp_out(const bfs::path & file)
+	{
+		std::string ext = extension(file);
+		boost::to_lower(ext);
+		if(ext == ".xmp") {
+			return false;
+		}
+		return true;
+	}
+
+
 	FileList::FileList( const _impltype_t & v )
 		: _impltype_t( v )
 	{
 	}
 
-	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p )
+	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, boost::function<bool (const value_type &)> filter)
 	{
 		if(!exists( p ) ) {
 			DBG_OUT( "directory %s do not exist", p.string().c_str() );
@@ -49,8 +62,10 @@ namespace utils {
 			{
 				if ( !is_directory(*itr) )
 				{
-					l->push_back(*itr);
-					DBG_OUT( "found file %s", itr->string().c_str() );
+					if( filter(*itr) ) {
+						l->push_back(*itr);
+						DBG_OUT( "found file %s", itr->string().c_str() );
+					}
 				}
 			}
 			l->sort();
