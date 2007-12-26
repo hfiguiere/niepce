@@ -27,6 +27,7 @@
 #include "db/library.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
+#include "db/keyword.h"
 #include "commands.h"
 
 namespace bfs = boost::filesystem;
@@ -36,6 +37,7 @@ using boost::any_cast;
 using db::Library;
 using db::LibFolder;
 using db::LibFile;
+using db::Keyword;
 using utils::FileList;
 
 namespace library {
@@ -54,8 +56,14 @@ namespace library {
 			case OP_LIST_ALL_FOLDERS:
 				cmdListAllFolders(lib);
 				break;
+			case OP_LIST_ALL_KEYWORDS:
+				cmdListAllKeywords(lib);
+				break;
 			case OP_QUERY_FOLDER_CONTENT:
 				cmdQueryFolderContent( lib, any_cast<int>(args[0]) );
+				break;
+			case OP_QUERY_KEYWORD_CONTENT:
+				cmdQueryKeywordContent( lib, any_cast<int>(args[0]) );
 				break;
 			default:
 				DBG_OUT("unkown op");
@@ -68,6 +76,15 @@ namespace library {
 			return false;
 		}
 		return true;
+	}
+
+	void Commands::cmdListAllKeywords(const Library::Ptr & lib)
+	{
+		Keyword::ListPtr l( new Keyword::List );
+		lib->getAllKeywords( l );
+		/////
+		// notify folder added l
+		lib->notify(Library::NOTIFY_ADDED_KEYWORDS, boost::any(l));
 	}
 
 	void Commands::cmdListAllFolders(const Library::Ptr & lib)
@@ -110,9 +127,22 @@ namespace library {
 		lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
 	}
 
+	void Commands::cmdQueryKeywordContent(const Library::Ptr & lib, 
+										  int keyword_id)
+	{
+		LibFile::ListPtr fl(new LibFile::List());
+		lib->getKeywordContent(keyword_id, fl);
+		lib->notify(Library::NOTIFY_KEYWORD_CONTENT_QUERIED, boost::any(fl));		
+	}
+
 	Op::Ptr Commands::opListAllFolders(tid_t id)
 	{
 		return Op::Ptr(new Op( OP_LIST_ALL_FOLDERS, id ));
+	}
+
+	Op::Ptr Commands::opListAllKeywords(tid_t id)
+	{
+		return Op::Ptr(new Op( OP_LIST_ALL_KEYWORDS, id ));
 	}
 
 	Op::Ptr Commands::opImportFiles(tid_t id, const bfs::path & folder, 
@@ -133,6 +163,14 @@ namespace library {
 		Op::Ptr op(new Op( OP_QUERY_FOLDER_CONTENT, id ));
 		Op::Args & args(op->args());
 		args.push_back( boost::any( folder_id ));
+		return op;
+	}
+
+	Op::Ptr Commands::opQueryKeywordContent(tid_t id, int keyword_id)
+	{
+		Op::Ptr op(new Op( OP_QUERY_KEYWORD_CONTENT, id ));
+		Op::Args & args(op->args());
+		args.push_back( boost::any( keyword_id ));
 		return op;
 	}
 

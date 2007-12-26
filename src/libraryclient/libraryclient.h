@@ -59,6 +59,7 @@ namespace libraryclient {
 		library::tid_t getAllFolders();
 
 		library::tid_t queryFolderContent(int id);
+		library::tid_t queryKeywordContent(int id);
 
 		/** Import files from a directory
 		 * @param dir the directory

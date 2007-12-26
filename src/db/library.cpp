@@ -312,6 +312,30 @@ namespace db {
 		}
 	}
 
+	static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
+	{
+		int32_t id;
+		int32_t fid;
+		std::string pathname;
+		std::string name;
+		dbdrv->get_column_content(0, id);
+		dbdrv->get_column_content(1, fid);
+		dbdrv->get_column_content(2, pathname);
+		dbdrv->get_column_content(3, name);
+		DBG_OUT("found %s", pathname.c_str());
+		LibFile::Ptr f(new LibFile(id, fid,
+								   bfs::path(pathname), 
+								   name));
+		int32_t val;
+		dbdrv->get_column_content(4, val);
+		f->setOrientation(val);
+		dbdrv->get_column_content(5, val);
+		f->setRating(val);
+		dbdrv->get_column_content(6, val);
+		f->setLabel(val);
+		return f;
+	}
+
 	void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
 	{
 		SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
@@ -321,27 +345,28 @@ namespace db {
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				while(m_dbdrv->read_next_row()) {
+					LibFile::Ptr f(getFileFromDbRow(m_dbdrv));
+					fl->push_back(f);
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+	}
+
+	void Library::getAllKeywords(const Keyword::ListPtr & l)
+	{
+		SQLStatement sql("SELECT id,keyword FROM keywords ORDER BY keyword;");
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				while(m_dbdrv->read_next_row()) {
 					int32_t id;
-					int32_t fid;
-					std::string pathname;
 					std::string name;
 					m_dbdrv->get_column_content(0, id);
-					m_dbdrv->get_column_content(1, fid);
-					m_dbdrv->get_column_content(2, pathname);
-					m_dbdrv->get_column_content(3, name);
-					DBG_OUT("found %s", pathname.c_str());
-					LibFile::Ptr f(new LibFile(id, folder_id,
-											   bfs::path(pathname), 
-											   name));
-					int32_t val;
-					m_dbdrv->get_column_content(4, val);
-					f->setOrientation(val);
-					m_dbdrv->get_column_content(5, val);
-					f->setRating(val);
-					m_dbdrv->get_column_content(6, val);
-					f->setLabel(val);
-					fl->push_back(f);
-					
+					m_dbdrv->get_column_content(1, name);
+					l->push_back(Keyword::Ptr(new Keyword(id, name)));
 				}
 			}
 		}
@@ -375,6 +400,8 @@ namespace db {
 			try {
 				if(m_dbdrv->execute_statement(sql2)) {
 					keyword_id = m_dbdrv->last_row_id();
+					Keyword::Ptr kw(new Keyword(keyword_id, keyword));
+					notify(NOTIFY_ADDED_KEYWORD, boost::any(kw));
 				}
 			}
 			catch(utils::Exception & e)
@@ -401,6 +428,30 @@ namespace db {
 			DBG_OUT("db exception %s", e.what());
 		}
 		return ret;
+	}
+
+
+	void Library::getKeywordContent(int keyword_id, const LibFile::ListPtr & fl)
+	{
+		SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
+									   "orientation,rating,label FROM files "
+									   " WHERE id IN "
+									   " (SELECT file_id FROM keywording "
+									   " WHERE keyword_id='%1%')")
+						 % keyword_id);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				while(m_dbdrv->read_next_row()) {
+					LibFile::Ptr f(getFileFromDbRow(m_dbdrv));
+					fl->push_back(f);
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+
 	}
 
 }

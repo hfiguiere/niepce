@@ -40,6 +40,7 @@ namespace libraryclient {
 		virtual ~ClientImpl();
 
 		library::tid_t getAllKeywords();
+		library::tid_t queryKeywordContent(int id);
 		library::tid_t getAllFolders();
 		library::tid_t queryFolderContent(int id);
 		library::tid_t importFromDirectory(const std::string & dir, bool manage);

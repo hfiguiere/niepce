@@ -50,6 +50,10 @@ namespace ui {
 		m_icons[ICON_ROLL] = icon_theme->load_icon(
 			Glib::ustring("emblem-photos"), 16,
 			Gtk::ICON_LOOKUP_USE_BUILTIN);
+		// FIXME use an icon that make more sense.
+		m_icons[ICON_KEYWORD] = icon_theme->load_icon(
+			Glib::ustring("application-certificate"), 16, 
+			Gtk::ICON_LOOKUP_USE_BUILTIN);
 	}
 
 	libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
@@ -74,6 +78,24 @@ namespace ui {
 									 this, _1));
 				break;
 			}
+			case db::Library::NOTIFY_ADDED_KEYWORD:
+			{
+				db::Keyword::Ptr k
+					= boost::any_cast<db::Keyword::Ptr>(ln.param);
+				DBG_ASSERT(k, "keyword must not be NULL");
+				add_keyword_item(k);
+				break;
+			}
+			case db::Library::NOTIFY_ADDED_KEYWORDS:
+			{
+				db::Keyword::ListPtr l
+					= boost::any_cast<db::Keyword::ListPtr>(ln.param);
+				DBG_ASSERT(l, "keyword list must not be NULL");
+				for_each(l->begin(), l->end(), 
+						 boost::bind(&WorkspaceController::add_keyword_item, 
+									 this, _1));
+				break;
+			}
 			default:
 				break;
 			}
@@ -90,12 +112,22 @@ namespace ui {
 			int id = (*selected)[m_librarycolumns.m_id];
 			getLibraryClient()->queryFolderContent(id);
 		}
+		else if((*selected)[m_librarycolumns.m_type] == KEYWORD_ITEM)
+		{
+			int id = (*selected)[m_librarycolumns.m_id];
+			getLibraryClient()->queryKeywordContent(id);			
+		}
 		else 
 		{
 			DBG_OUT("selected something not a folder");
 		}
 	}
 
+	void WorkspaceController::add_keyword_item(const db::Keyword::Ptr & k)
+	{
+		add_item(m_treestore, m_keywordsNode->children(), 
+				 m_icons[ICON_KEYWORD], k->keyword(), k->id(), KEYWORD_ITEM);
+	}
 
 	void WorkspaceController::add_folder_item(const db::LibFolder::Ptr & f)
 	{
@@ -135,6 +167,10 @@ namespace ui {
 								 m_icons[ICON_PROJECT], 
 								 Glib::ustring(_("Projects")), 0,
 								 PROJECTS_ITEM);
+		m_keywordsNode = add_item(m_treestore, m_treestore->children(),
+								  m_icons[ICON_KEYWORD],
+								  Glib::ustring(_("Keywords")), 0,
+								  KEYWORDS_ITEM);
 
 		m_librarytree.set_headers_visible(false);
 		m_librarytree.append_column("", m_librarycolumns.m_icon);
@@ -156,6 +192,7 @@ namespace ui {
 	void WorkspaceController::on_ready()
 	{
 		getLibraryClient()->getAllFolders();
+		getLibraryClient()->getAllKeywords();
 	}
 
 }

@@ -50,8 +50,10 @@ namespace ui {
 		enum {
 			FOLDERS_ITEM,
 			PROJECTS_ITEM,
+			KEYWORDS_ITEM,
 			FOLDER_ITEM,
-			PROJECT_ITEM
+			PROJECT_ITEM,
+			KEYWORD_ITEM
 		};
 
 		WorkspaceController();
@@ -84,8 +86,10 @@ namespace ui {
 	private:
 		libraryclient::LibraryClient::Ptr getLibraryClient();
 
-		/** add a folder item in the treeview */
+		/** add a folder item to the treeview */
 		void add_folder_item(const db::LibFolder::Ptr & f);
+		/** add a keyword item to the treeview */
+		void add_keyword_item(const db::Keyword::Ptr & k);
 		/** add a tree item in the treeview 
 		 * @param treestore the treestore to add to
 		 * @param childrens the children subtree to add to
@@ -103,6 +107,7 @@ namespace ui {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
 			ICON_ROLL,
+			ICON_KEYWORD,
 			_ICON_SIZE
 		};
 		boost::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
@@ -112,6 +117,7 @@ namespace ui {
 		Gtk::TreeView                  m_librarytree;
 		Gtk::TreeModel::iterator       m_folderNode;  /**< the folder node */
 		Gtk::TreeModel::iterator       m_projectNode; /**< the project node */
+		Gtk::TreeModel::iterator       m_keywordsNode; /**< the keywords node */
 		Glib::RefPtr<Gtk::TreeStore>   m_treestore;   /**< the treestore */
 	};
 

@@ -46,6 +46,7 @@ namespace ui {
 			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
 			switch(ln.type) {
 			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+			case db::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
 			{
 				db::LibFile::ListPtr l 
 					= boost::any_cast<db::LibFile::ListPtr>(ln.param);

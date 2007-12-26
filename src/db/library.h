@@ -28,10 +28,11 @@
 #include <boost/any.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "iconnectiondriver.h"
-#include "iconnectionmanagerdriver.h"
-#include "libfolder.h"
-#include "libfile.h"
+#include "db/iconnectiondriver.h"
+#include "db/iconnectionmanagerdriver.h"
+#include "db/libfolder.h"
+#include "db/libfile.h"
+#include "db/keyword.h"
 
 namespace framework {
 	class NotificationCenter;
@@ -49,7 +50,10 @@ namespace db {
 			NOTIFY_NONE = 0,
 			NOTIFY_ADDED_FOLDERS,
 			NOTIFY_ADDED_FILES,
-			NOTIFY_FOLDER_CONTENT_QUERIED
+			NOTIFY_ADDED_KEYWORDS,
+			NOTIFY_ADDED_KEYWORD,
+			NOTIFY_FOLDER_CONTENT_QUERIED,
+			NOTIFY_KEYWORD_CONTENT_QUERIED
 		} NotifyType;
 
 		Library(const std::string & dir, framework::NotificationCenter * nc);
@@ -103,6 +107,9 @@ namespace db {
 		 * @param fl the resulting file list
 		 */
 		void getFolderContent(int folder_id, const LibFile::ListPtr & fl);
+
+		void getAllKeywords(const Keyword::ListPtr & l);
+		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
 
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate

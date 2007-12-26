@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __NIEPCE_LIBRARY_KEYWORD_H__
-#define __NIEPCE_LIBRARY_KEYWORD_H__
+#ifndef __NIEPCE_DB_KEYWORD_H__
+#define __NIEPCE_DB_KEYWORD_H__
 
 #include <string>
 #include <vector>
@@ -31,6 +31,8 @@ namespace db {
 	{
 	public:
 		typedef boost::shared_ptr<Keyword> Ptr;
+		typedef std::vector<Ptr> List;
+		typedef boost::shared_ptr<List> ListPtr;
 		typedef std::vector<int> IdList;
 
 		Keyword(int id, const std::string & keyword);

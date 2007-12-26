@@ -54,7 +54,10 @@ namespace libraryclient {
 
 	tid_t ClientImpl::getAllKeywords()
 	{
-		return 0;
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opListAllKeywords(id));
+		m_localLibrary->schedule(op);
+		return id;
 	}
 
 
@@ -70,6 +73,15 @@ namespace libraryclient {
 	{
 		tid_t id = LibraryClient::newTid();
 		Op::Ptr op(Commands::opQueryFolderContent(id, folder_id));
+		m_localLibrary->schedule(op);
+		return id;
+	}
+
+
+	tid_t ClientImpl::queryKeywordContent(int keyword_id)
+	{
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opQueryKeywordContent(id, keyword_id));
 		m_localLibrary->schedule(op);
 		return id;
 	}
