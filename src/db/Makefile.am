@@ -11,9 +11,9 @@ TEST_LIBS =  \
 	../utils/libniepceutils.la \
 	../framework/libniepceframework.la \
 	@LIBGTKMM_LIBS@\
-	@BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
-	@BOOST_FILESYSTEM_LIB@ \
-	@BOOST_THREAD_LIB@ \
+	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
+	@BOOST_FILESYSTEM_LIBS@ \
+	@BOOST_THREAD_LIBS@ \
 	@SQLITE3_LIBS@ @EXEMPI_LIBS@
 
 check_PROGRAMS = test_db test_library

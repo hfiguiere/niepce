@@ -11,7 +11,7 @@ testmoniker_LDADD = libniepceutils.la
 
 testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.la \
-	@BOOST_FILESYSTEM_LIB@
+	@BOOST_FILESYSTEM_LIBS@
 
 testgeometry_SOURCES = testgeometry.cpp
 testgeometry_LDADD = libniepceutils.la

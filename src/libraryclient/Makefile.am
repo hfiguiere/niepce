@@ -12,8 +12,8 @@ TEST_LIBS =  \
 	../db/libniepcedb.la ../db/sqlite/libniepcedbsqlite.la \
         ../utils/libniepceutils.la \
 	../framework/libniepceframework.la \
-        @BOOST_UNIT_TEST_FRAMEWORK_LIB@ \
-	@BOOST_THREAD_LIB@ @BOOST_FILESYSTEM_LIB@ \
+        @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
+	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
 	@EXEMPI_LIBS@
 
