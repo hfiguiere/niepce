@@ -57,13 +57,15 @@ namespace utils {
 
 
 	XmpMeta::XmpMeta(const bfs::path & file)
+		: m_xmp(NULL),
+		  m_keyword_fetched(false)
 	{
         size_t len;
         char * buffer;
 		bfs::path sidecar = file.branch_path()
 			/ (basename(file) + ".xmp");
-		m_xmp = xmp_new_empty();
 
+		DBG_OUT("creating xmpmeta from %s", sidecar.string().c_str());
 		FILE * f = fopen(sidecar.string().c_str(), "rb");
 
         if (f != NULL) {
@@ -73,7 +75,11 @@ namespace utils {
 			
 			buffer = (char*)malloc(len + 1);
 			/*size_t rlen =*/ fread(buffer, 1, len, f);
-			xmp_parse(m_xmp, buffer, len);
+			m_xmp = xmp_new_empty();
+			if(!xmp_parse(m_xmp, buffer, len)) {
+				xmp_free(m_xmp);
+				m_xmp = NULL;
+			}
 			free(buffer);
         }
 	}
@@ -178,5 +184,18 @@ namespace utils {
 		}
 		return date;
 	}
-	
+
+	const std::vector< std::string > & XmpMeta::keywords() const
+	{
+		if(!m_keyword_fetched) {
+			XmpIteratorPtr iter = xmp_iterator_new(m_xmp, NS_DC, "subject", 
+												   XMP_ITER_JUSTLEAFNODES);
+			XmpStringPtr value = xmp_string_new();
+			while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+				m_keywords.push_back(xmp_string_cstr(value));
+			}
+			m_keyword_fetched = true;
+		}
+		return m_keywords;
+	}
 }

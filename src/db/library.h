@@ -104,6 +104,19 @@ namespace db {
 		 */
 		void getFolderContent(int folder_id, const LibFile::ListPtr & fl);
 
+		/** Locate the keyword, creating it if needed
+		 * @param keyword the keyword to locate
+		 * @return -1 if not found (shouldn't happen) or the id of the
+		 * keyword, either found or just created.
+		 */
+		int makeKeyword(const std::string & keyword);
+		/** Assign a keyword to a file.
+		 * @param kw_id the keyword id
+		 * @param file_id the file id
+		 * @return true if success, false if error
+		 */
+		bool assignKeyword(int kw_id, int file_id);
+
 		int checkDatabaseVersion();
 		
 		db::IConnectionDriver::Ptr dbDriver()

@@ -20,6 +20,7 @@
 #ifndef __UTILS_EXEMPI_H__
 #define __UTILS_EXEMPI_H__
 
+#include <vector>
 #include <string>
 
 #include <boost/filesystem/path.hpp>
@@ -50,6 +51,8 @@ namespace utils {
 		XmpMeta(const boost::filesystem::path & for_file);
 		~XmpMeta();
 
+		bool isOk() const 
+			{ return m_xmp != NULL; }
 		/** serialize the XMP inline */
 		std::string serialize_inline() const;
 		/** serialize the XMP (for the sidecar) */
@@ -59,8 +62,12 @@ namespace utils {
 		std::string label() const;
 		int32_t rating() const;
 		time_t  creation_date() const;
+		const std::vector< std::string > & keywords() const;
 	private:
 		XmpPtr m_xmp;
+		// caches
+		mutable bool m_keyword_fetched;
+		mutable std::vector< std::string > m_keywords;
 	};
 }
 

@@ -2,9 +2,11 @@
 
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@
 
-TESTS = testmoniker testfiles testgeometry
+TESTS = testmoniker testfiles testgeometry testxmp
 
-check_PROGRAMS = testmoniker testfiles testgeometry
+EXTRA_DIST = test.xmp
+
+check_PROGRAMS = testmoniker testfiles testgeometry testxmp
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.la
@@ -16,9 +18,9 @@ testfiles_LDADD = libniepceutils.la \
 testgeometry_SOURCES = testgeometry.cpp
 testgeometry_LDADD = libniepceutils.la
 
-#testxmp_SOURCES = testxmp.cpp
-#testxmp_LDADD = libniepceutils.la \
-#	@BOOST_DATE_TIME_LIB@
+testxmp_SOURCES = testxmp.cpp
+testxmp_LDADD = libniepceutils.la \
+	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@
 
 noinst_LTLIBRARIES = libniepceutils.la
 

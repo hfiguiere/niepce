@@ -208,6 +208,16 @@ namespace db {
 				int64_t id = m_dbdrv->last_row_id();
 				DBG_OUT("last row inserted %d", (int)id);
 				ret = id;
+				const std::vector< std::string > &keywords(meta.keywords());
+				std::vector< std::string >::const_iterator iter;
+				for(iter = keywords.begin();
+					iter != keywords.end(); iter++) 
+				{
+					int kwid = makeKeyword(*iter);
+					if(kwid != -1) {
+						assignKeyword(kwid, id);
+					}
+				}
 			}
 		}
 		catch(const utils::Exception & e)
@@ -339,7 +349,58 @@ namespace db {
 		{
 			DBG_OUT("db exception %s", e.what());
 		}
-		
+	}
+	
+	int Library::makeKeyword(const std::string & keyword)
+	{
+		int keyword_id = -1;
+		SQLStatement sql("SELECT id FROM keywords WHERE "
+						 "keyword=?1;");
+		sql.bind(1, keyword);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				if(m_dbdrv->read_next_row()) {
+					m_dbdrv->get_column_content(0, keyword_id);
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		if(keyword_id == -1) {
+			SQLStatement sql2("INSERT INTO keywords (keyword, parent_id) "
+							  " VALUES(?1, 0);");
+			sql2.bind(1, keyword);
+			try {
+				if(m_dbdrv->execute_statement(sql2)) {
+					keyword_id = m_dbdrv->last_row_id();
+				}
+			}
+			catch(utils::Exception & e)
+			{
+				DBG_OUT("db exception %s", e.what());
+			}
+		}
+
+		return keyword_id;
+	}
+
+
+	bool Library::assignKeyword(int kw_id, int file_id)
+	{
+		bool ret = false;
+		SQLStatement sql(boost::format("INSERT INTO keywording (file_id, keyword_id) "
+									   " VALUES('%1%', '%2%');") 
+						 % file_id % kw_id );
+		try {
+			ret = m_dbdrv->execute_statement(sql);
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		return ret;
 	}
 
 }
