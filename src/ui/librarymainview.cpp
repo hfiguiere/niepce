@@ -19,14 +19,14 @@
 
 #include <gtkmm/togglebutton.h>
 
+#include "utils/debug.h"
 #include "ui/librarymainview.h"
 
 namespace ui {
-	
+
 	LibraryMainView::LibraryMainView()
 		: Gtk::VBox(),
-			m_currentpage(-1),
-			m_currenttoggle(NULL)
+		  m_currentpage(-1)
 	{
 		set_spacing(4);
 		m_mainbar.set_layout(Gtk::BUTTONBOX_START);
@@ -40,26 +40,32 @@ namespace ui {
 	LibraryMainView::append_page(Gtk::Widget & w, const Glib::ustring & label)
 	{
 		int idx;
-		Gtk::ToggleButton *button = Gtk::manage(new Gtk::ToggleButton(label));
+		
+		Gtk::ToggleButton* button = Gtk::manage(new Gtk::ToggleButton(label));
 		m_mainbar.pack_start(*button);
 		idx = m_notebook.append_page(w, label);
-		button->signal_toggled().connect(
+		sigc::connection conn = button->signal_toggled().connect(
 			sigc::bind(sigc::mem_fun(this, &LibraryMainView::set_current_page),
-								 idx, button));
+					   idx, button));
 		if(m_currentpage == -1) {
 			set_current_page(idx, button);
 		}
+		if((int)m_buttons.size() < idx + 1) {
+			m_buttons.resize(idx + 1);
+		}
+		m_buttons[idx] = std::make_pair(button, conn);
 		return idx;
 	}
 	
 	void LibraryMainView::set_current_page(int idx, Gtk::ToggleButton * btn)
 	{
 		m_notebook.set_current_page(idx);
-		if(m_currenttoggle) {
-//			m_currenttoggle->set_active(false);
+		if(m_currentpage >= 0) {
+			m_buttons[m_currentpage].second.block();
+			m_buttons[m_currentpage].first->set_active(false);
+			m_buttons[m_currentpage].second.unblock();
 		}
 		btn->set_active(true);
-		m_currenttoggle = btn;
 		m_currentpage = idx;
 	}
 }

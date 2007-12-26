@@ -20,6 +20,9 @@
 #ifndef __LIBRARY_MAIN_VIEW_H__
 #define __LIBRARY_MAIN_VIEW_H__
 
+#include <vector>
+#include <utility>
+
 #include <gtkmm/notebook.h>
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
@@ -45,7 +48,7 @@ namespace ui {
 		Gtk::HButtonBox         m_mainbar;
 		Gtk::Notebook           m_notebook;
 		int                     m_currentpage;
-		Gtk::ToggleButton       *m_currenttoggle;
+		std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;
 	};
 
 }
