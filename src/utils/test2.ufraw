@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UFRaw Version='7'>
+<InputFilename>/home/hub/incoming pics/20071225/img_5792.cr2</InputFilename>
+<OutputFilename>/home/hub/incoming pics/processed/20071225/img_5792.jpg</OutputFilename>
+<OutputPath>/home/hub/incoming pics/processed/20071225</OutputPath>
+<WB>Auto WB</WB>
+<Temperature>3684</Temperature>
+<Green>1.079753</Green>
+<ChannelMultipliers>1.497253 1.000000 2.023889</ChannelMultipliers>
+<Exposure>1.000000</Exposure>
+<ExposureNorm>1994</ExposureNorm>
+<RestoreDetails>clip</RestoreDetails>
+<ClipHighlights>film</ClipHighlights>
+<OutputType>4</OutputType>
+<CreateID>1</CreateID>
+<BaseManualCurve Current='yes'>
+</BaseManualCurve>
+<ManualCurve Current='yes'>
+</ManualCurve>
+<sRGBInputProfile Current='yes'>
+</sRGBInputProfile>
+<sRGBOutputProfile Current='yes'>
+</sRGBOutputProfile>
+<Make>Canon</Make>
+<Model>EOS 20D</Model>
+<Timestamp>Tue Dec 25 16:53:51 2007</Timestamp>
+<Orientation>5</Orientation>
+<ISOSpeed>1600</ISOSpeed>
+<Shutter>1/200 s</Shutter>
+<Aperture>F2.8</Aperture>
+<FocalLength>50.0 mm</FocalLength>
+<FocalLength35></FocalLength35>
+<EXIFSource>exiv2 0.15</EXIFSource>
+<Crop>0 201 2213 3522</Crop>
+<Log>
+ufraw_open: w:3522 h:2348 curvesize:0
+Reseting Exif.Image.Orientation from &apos;8&apos;  to &apos;1&apos;
+EXIF data read using exiv2, buflen 11058
+Warning: Directory Canon has an unhandled next pointer.
+Warning: Size 5352 of Exif.Canon.0x4002 exceeds 4096 bytes limit. Not decoded.
+
+Loading Canon EOS 20D image from /home/hub/incoming pics/20071225/img_5792.cr2 ...
+Black: 128, Maximum: 4095
+Exposure Normalization set to 1994 (1.04 EV)
+AHD interpolation...
+</Log>
+</UFRaw>

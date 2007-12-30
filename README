@@ -26,10 +26,13 @@ gconfmm 2.6 (this will be removed)
 cairomm
 sqlite3
 gtkimageview 1.5.0
-boost 1.33 (1.34 cause some problems with the unit testing. TODO)
+libxml > 2.5.0
+boost 1.33
  -boost thread
  -boost filesystem
  -boost test (for the unit test)
+exempi 1.99.6
+libopenraw 0.0.4
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.

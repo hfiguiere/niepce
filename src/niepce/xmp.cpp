@@ -23,7 +23,7 @@ using utils::ExempiManager;
 
 namespace niepce {
 
-	const char NIEPCE_XMP_NAMESPACE[] = "http://ns.figuiere.net/ns/niepce/1.0";
+	const char NIEPCE_XMP_NAMESPACE[] = "http://xmlns.figuiere.net/ns/niepce/1.0";
 	const char NIEPCE_XMP_NS_PREFIX[] = "niepce";
 
 	const ExempiManager::ns_defs_t xmp_namespaces[] = 
