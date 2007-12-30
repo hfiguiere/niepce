@@ -29,6 +29,12 @@ namespace bfs = boost::filesystem;
 
 namespace utils {
 
+	bool filter_none(const boost::filesystem::path & file)
+	{
+		return true;
+	}
+
+
 	bool filter_xmp_out(const bfs::path & file)
 	{
 		std::string ext = extension(file);

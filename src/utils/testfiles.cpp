@@ -19,6 +19,7 @@
 /** @brief unit test for files */
 
 #include <boost/test/minimal.hpp>
+#include <boost/bind.hpp>
 
 #include <stdlib.h>
 
@@ -35,10 +36,10 @@ int test_main( int, char *[] )             // note the name!
 
 	FileList::Ptr files;
 	
-	files = FileList::getFilesFromDirectory( "foo" );
+	files = FileList::getFilesFromDirectory( "foo", boost::bind(utils::filter_none, _1) );
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "AAtest" );
+	files = FileList::getFilesFromDirectory( "AAtest", boost::bind(utils::filter_none, _1));
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	

@@ -32,6 +32,7 @@
 
 namespace utils {
 
+	bool filter_none(const boost::filesystem::path & file);
 	bool filter_xmp_out(const boost::filesystem::path & file);
 
 	class FileList 
