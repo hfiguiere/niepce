@@ -150,6 +150,7 @@ namespace ui {
 		row[m_librarycolumns.m_label] = label; 
 		row[m_librarycolumns.m_id] = id;
 		row[m_librarycolumns.m_type] = type;
+		row[m_librarycolumns.m_count] = "--";
 		return iter;
 	}
 
@@ -174,7 +175,12 @@ namespace ui {
 
 		m_librarytree.set_headers_visible(false);
 		m_librarytree.append_column("", m_librarycolumns.m_icon);
-		m_librarytree.append_column("", m_librarycolumns.m_label);
+		int num = m_librarytree.append_column("", m_librarycolumns.m_label);
+		Gtk::TreeViewColumn * col = m_librarytree.get_column(num - 1);
+		col->set_expand(true);
+		num = m_librarytree.append_column("", m_librarycolumns.m_count);
+		col = m_librarytree.get_column(num - 1);
+		col->set_alignment(1.0);
 
 		// TODO make it a mnemonic
 		m_label.set_text_with_mnemonic(Glib::ustring(_("_Workspace")));
