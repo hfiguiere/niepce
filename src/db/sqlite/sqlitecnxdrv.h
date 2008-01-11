@@ -29,7 +29,6 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "db/iconnectiondriver.h"
-#include "sqlitestatement.h"
 
 struct sqlite3;
 
