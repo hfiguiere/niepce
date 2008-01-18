@@ -42,7 +42,10 @@ namespace library {
 		
 		const db::LibFile::Ptr & file()
 			{ return m_file; }
-		
+		int width() const
+			{ return m_width; }
+		int height() const
+			{ return m_height; }
 	private:
 		const db::LibFile::Ptr m_file;
 		int m_width;

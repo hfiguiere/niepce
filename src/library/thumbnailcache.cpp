@@ -1,7 +1,7 @@
 /*
  * niepce - library/thumbnailcache.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/any.hpp>
+
 #include <gdkmm/pixbuf.h>
 #include <libopenraw-gnome/gdkpixbuf.h>
 
 #include "niepce/notifications.h"
 #include "utils/debug.h"
+#include "framework/mimetype.h"
 #include "thumbnailcache.h"
 #include "thumbnailnotification.h"
 
@@ -52,21 +56,46 @@ namespace library {
 
 	void ThumbnailCache::requestForFile(const LibFile::Ptr & f)
 	{
-		ThumbnailTask::Ptr task(new ThumbnailTask(f, 160, 120));
+		ThumbnailTask::Ptr task(new ThumbnailTask(f, 160, 160));
 		schedule( task );
 	}
 
 
 	void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
 	{
-		DBG_OUT("creating thumbnail for %s",task->file()->path().string().c_str());
-		GdkPixbuf *pixbuf =
-			or_gdkpixbuf_extract_rotated_thumbnail(task->file()->path().string().c_str(),
-												   160);
-		if( pixbuf )
+		const char *filename = task->file()->path().string().c_str();
+		DBG_OUT("creating thumbnail for %s",filename);
+
+		framework::MimeType mime_type(filename);
+
+
+		DBG_OUT("MIME type %s", mime_type.string().c_str());
+
+		if(mime_type.isUnknown()) {
+			DBG_OUT("unknown file type", filename);
+			return;
+		}
+		if(!mime_type.isImage()) {
+			DBG_OUT("not an image type");
+			return;
+		}
+		
+		Glib::RefPtr<Gdk::Pixbuf> pix;
+		if(!mime_type.isDigicamRaw()) {
+			DBG_OUT("not a raw type, trying GdkPixbuf loaders");
+			pix = Gdk::Pixbuf::create_from_file(filename, task->width(), task->height(), true);
+		}	
+		else {	
+			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename, 
+																	   std::min(task->width(),
+																				task->height()));
+			if( pixbuf )
+			{
+				 pix = Glib::wrap( pixbuf, true ); // take ownership
+			}
+		}
+		if(pix)
 		{
-			Glib::RefPtr<Gdk::Pixbuf> pix( Glib::wrap( pixbuf, true )); // take ownership
-			
 			if(m_notif_center) {
 				// pass the notification
 				framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_THUMBNAIL));
@@ -82,7 +111,7 @@ namespace library {
 		}
 		else 
 		{
-			DBG_OUT("couldn't get the thumbnail for %s", task->file()->path().string().c_str());
+			DBG_OUT("couldn't get the thumbnail for %s", filename);
 		}
 	}
 

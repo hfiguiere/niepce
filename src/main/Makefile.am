@@ -16,12 +16,12 @@ niepce_LDADD = \
 	$(top_builddir)/src/db/sqlite/libniepcedbsqlite.la \
 	$(top_builddir)/src/ui/libniepceui.la \
 	$(top_builddir)/src/ui/thumb-view/libthumbview.la \
-	$(top_builddir)/src/framework/libniepceframework.la \
 	$(top_builddir)/src/library/libniepcelibrary.la \
 	$(top_builddir)/src/libraryclient/liblibraryclient.la \
 	$(top_builddir)/src/library/libniepcelibrary.la \
 	$(top_builddir)/src/db/libniepcedb.la \
 	$(top_builddir)/src/db/sqlite/libniepcedbsqlite.la \
+	$(top_builddir)/src/framework/libniepceframework.la \
 	$(top_builddir)/src/utils/libniepceutils.la \
 	$(top_builddir)/src/niepce/libniepceglobals.la \
 	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ @GTKIMAGEVIEW_LIBS@ \

@@ -24,6 +24,7 @@ cairo 1.1
 gtkmm 2.6
 gconfmm 2.6 (this will be removed)
 cairomm
+gnome-vfs >= 2.14
 sqlite3
 gtkimageview 1.5.0
 libxml > 2.5.0
