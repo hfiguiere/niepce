@@ -65,6 +65,7 @@ namespace ui {
 		};
 
 		void on_lib_notification(const framework::Notification::Ptr &);
+		void on_tnail_notification(const framework::Notification::Ptr &);
 		
 	protected:
 		virtual Gtk::Widget * buildWidget();

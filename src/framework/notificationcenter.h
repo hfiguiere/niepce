@@ -41,8 +41,8 @@ namespace framework {
 		// called from out of thread
 		void post(const Notification::Ptr & n);
 
-		void subscribe(const subscriber_t & );
-		void unsubscribe(const subscriber_t & );
+		void subscribe(int type, const subscriber_t & );
+		void unsubscribe(int type, const subscriber_t & );
 		
 	private:
 		void _dispatch(void);

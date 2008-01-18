@@ -38,11 +38,9 @@ namespace ui {
 
 	void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
 	{
-		DBG_OUT("notification");
-		switch(n->type())
-		{
-		case niepce::NOTIFICATION_LIB:
-		{
+		DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
+				   "wrong notification type");
+		if(n->type() == niepce::NOTIFICATION_LIB) {
 			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
 			switch(ln.type) {
 			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
@@ -74,10 +72,14 @@ namespace ui {
 			default:
 				break;
 			}
-			break;
 		}
-		case niepce::NOTIFICATION_THUMBNAIL:
-		{
+	}
+
+	void LibraryMainViewController::on_tnail_notification(const framework::Notification::Ptr &n)
+	{
+		DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, 
+				   "wrong notification type");
+		if(n->type() == niepce::NOTIFICATION_THUMBNAIL) {
 			library::ThumbnailNotification tn 
 				= boost::any_cast<library::ThumbnailNotification>(n->data());
 			std::map<int, Gtk::TreeIter>::iterator iter
@@ -90,10 +92,6 @@ namespace ui {
 			else {
 				DBG_OUT("row %d not found", tn.id);
 			}
-			break;
-		}
-		default:
-			break;
 		}
 	}
 

@@ -18,6 +18,7 @@
  */
 
 #include <list>
+#include <map>
 #include <functional>
 
 #include <boost/bind.hpp>
@@ -34,10 +35,11 @@ namespace framework {
 	class NotificationCenter::Priv
 	{
 	public:
+		typedef std::list< subscriber_t > SubscriberList;
 		Glib::Dispatcher                     m_dispatcher;
 		sigc::connection                     m_dispatchConn;
 		utils::MtQueue< Notification::Ptr >  m_notificationQueue;
-		std::list< subscriber_t >            m_subscribers;
+		std::map< int, SubscriberList >      m_subscribers;
 	};
 
 
@@ -55,13 +57,14 @@ namespace framework {
 	}
 
 
-	void NotificationCenter::subscribe(const subscriber_t & s)
+	void NotificationCenter::subscribe(int type, const subscriber_t & s)
 	{
+		
 		// TODO make sure it is not yet subscribed
-		p->m_subscribers.push_back(s);
+		p->m_subscribers[type].push_back(s);
 	}
 
-	void NotificationCenter::unsubscribe(const subscriber_t & s)
+	void NotificationCenter::unsubscribe(int type, const subscriber_t & s)
 	{
 //		m_subscribers.remove_if(boost::bind(&boost::function_equal, _1, s));
 	}
@@ -76,7 +79,8 @@ namespace framework {
 	{
 		Notification::Ptr notif( p->m_notificationQueue.pop() );
 
-		std::for_each(p->m_subscribers.begin(), p->m_subscribers.end(), 
+		const Priv::SubscriberList & subscriber_list(p->m_subscribers[notif->type()]);
+		std::for_each(subscriber_list.begin(), subscriber_list.end(), 
 					  bind(boost::apply<void>(), _1, boost::ref(notif)));
 	}
 }

@@ -77,7 +77,11 @@ namespace ui {
 		init_ui();
 
 		m_lib_notifcenter = new NotificationCenter();
-		m_lib_notifcenter->subscribe(boost::bind(&NiepceWindow::on_lib_notification, 
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
+									 boost::bind(&NiepceWindow::on_lib_notification, 
+												 this, _1));
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
+									 boost::bind(&NiepceWindow::on_tnail_notification, 
 												 this, _1));
 
 		Glib::ustring name("camera");
@@ -85,13 +89,18 @@ namespace ui {
 
 		// main view
 		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
-		m_lib_notifcenter->subscribe(boost::bind(&LibraryMainViewController::on_lib_notification, 
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
+									 boost::bind(&LibraryMainViewController::on_lib_notification, 
+												 get_pointer(m_mainviewctrl), _1));
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
+									 boost::bind(&LibraryMainViewController::on_tnail_notification, 
 												 get_pointer(m_mainviewctrl), _1));
 		add(m_mainviewctrl);
 		// workspace treeview
 		m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
-		m_lib_notifcenter->subscribe(boost::bind(&WorkspaceController::on_lib_notification, 
-												 get_pointer(m_workspacectrl), _1));
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
+									 boost::bind(&WorkspaceController::on_lib_notification, 
+												 get_pointer(m_workspacectrl), _1));	
 		add(m_workspacectrl);
 
 		m_hbox.set_border_width(4);
@@ -186,9 +195,8 @@ namespace ui {
 
 	void NiepceWindow::on_lib_notification(const framework::Notification::Ptr &n)
 	{
-		switch(n->type()) {
-		case niepce::NOTIFICATION_LIB:
-		{
+		DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, "wrong notification type");
+		if(n->type() == niepce::NOTIFICATION_LIB) {
 			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
 			switch(ln.type) {
 			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
@@ -206,10 +214,13 @@ namespace ui {
 			default:
 				break;
 			}
-			break;
 		}
-		case niepce::NOTIFICATION_THUMBNAIL:
-		{
+	}
+
+	void NiepceWindow::on_tnail_notification(const framework::Notification::Ptr &n)
+	{
+		DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, "wrong notification type");
+		if(n->type() == niepce::NOTIFICATION_THUMBNAIL)	{
 			Glib::RefPtr<EogListStore> store 
 				= eog_thumb_view_get_model((EogThumbView*)m_thumbview);
 			library::ThumbnailNotification tn 
@@ -222,13 +233,10 @@ namespace ui {
 			else {
 				DBG_OUT("row %d not found", tn.id);
 			}
-			break;
 		}
-		default:
-			break;
-		}
-
 	}
+
+
 
 	void NiepceWindow::on_action_file_quit()
 	{

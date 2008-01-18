@@ -63,6 +63,7 @@ namespace ui {
 		void on_action_file_quit();
 		void on_open_library();
 		void on_lib_notification(const framework::Notification::Ptr &);
+		void on_tnail_notification(const framework::Notification::Ptr &);
 
 		void init_ui();
 		void init_actions();
