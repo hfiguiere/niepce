@@ -29,6 +29,7 @@
 #include "niepce/notifications.h"
 #include "utils/debug.h"
 #include "framework/mimetype.h"
+#include "framework/gdkutils.h"
 #include "thumbnailcache.h"
 #include "thumbnailnotification.h"
 
@@ -85,6 +86,9 @@ namespace library {
 		if(!mime_type.isDigicamRaw()) {
 			DBG_OUT("not a raw type, trying GdkPixbuf loaders");
 			pix = Gdk::Pixbuf::create_from_file(filename, task->width(), task->height(), true);
+			if(pix) {
+				pix = framework::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
+			}
 		}	
 		else {	
 			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename, 

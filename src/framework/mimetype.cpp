@@ -23,11 +23,18 @@
 
 #include "mimetype.h"
 
+namespace bfs = boost::filesystem;
+
 namespace framework {
 
 	MimeType::MimeType(const char * filename)
 	{
 		m_type = gnome_vfs_get_mime_type_for_name(filename);
+	}
+
+	MimeType::MimeType(const boost::filesystem::path & filename)
+	{
+		m_type = gnome_vfs_get_mime_type_for_name(filename.string().c_str());
 	}
 
 	bool MimeType::isDigicamRaw() const

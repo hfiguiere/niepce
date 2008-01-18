@@ -1,5 +1,5 @@
 /*
- * niepce - framework/mimetype.h
+ * niepce - frawework/gdkutils.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,31 +18,16 @@
  */
 
 
-#ifndef _FRAMEWORK_MIMETYPE_H_
-#define _FRAMEWORK_MIMETYPE_H_
+#ifndef __FRAMEWORK_GDKUTILS_H__
+#define __FRAMEWORK_GDKUTILS_H__
 
-#include <string>
-#include <boost/filesystem/path.hpp>
+#include <gdkmm/pixbuf.h>
+
 
 namespace framework {
-
-	class MimeType
-	{
-	public:
-		MimeType(const char *filename);
-		MimeType(const boost::filesystem::path & filename);
-
-		bool isDigicamRaw() const;
-		bool isImage() const;
-		bool isUnknown() const;
-
-		const std::string & string() const
-			{ return m_type; }
-	private:
-		std::string m_type;
-	};
-
+	
+	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_exif_rotate(const Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
+													int exif_orientation);
 }
-
 
 #endif

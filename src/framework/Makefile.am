@@ -15,4 +15,5 @@ libniepceframework_la_SOURCES = configuration.cpp \
 	notification.h \
 	mimetype.h mimetype.cpp \
 	notificationcenter.h notificationcenter.cpp \
-	configdatabinder.h configdatabinder.cpp
+	configdatabinder.h configdatabinder.cpp \
+	gdkutils.h gdkutils.cpp

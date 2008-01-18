@@ -1,7 +1,7 @@
 /*
  * niepce - utils/exempi.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,15 +44,17 @@ namespace utils {
 	};
 
 	/** a high-level wrapper for xmp */
-	class XmpMeta 
+	class XmpMeta
 	{
 	public:
 		XmpMeta();
-		XmpMeta(const boost::filesystem::path & for_file);
-		~XmpMeta();
+ 		XmpMeta(const boost::filesystem::path & for_file, bool sidecar_only);
+		virtual ~XmpMeta();
 
 		bool isOk() const 
 			{ return m_xmp != NULL; }
+		XmpPtr xmp() const
+			{ return m_xmp; }
 		/** serialize the XMP inline */
 		std::string serialize_inline() const;
 		/** serialize the XMP (for the sidecar) */
@@ -64,6 +66,10 @@ namespace utils {
 		time_t  creation_date() const;
 		const std::vector< std::string > & keywords() const;
 	private:
+		XmpMeta( const XmpMeta & ); // copy constructor
+
+		XmpMeta & operator=(const XmpMeta &); // assignment
+
 		XmpPtr m_xmp;
 		// caches
 		mutable bool m_keyword_fetched;

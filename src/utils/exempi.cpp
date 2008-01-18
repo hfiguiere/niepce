@@ -1,7 +1,7 @@
 /*
  * niepce - utils/exempi.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,32 +56,50 @@ namespace utils {
 
 
 
-	XmpMeta::XmpMeta(const bfs::path & file)
+	/** @param file the path to the file to open 
+	 * @param sidecar_only we only want the sidecar.
+	 * It will locate the XMP sidecar for the file.
+	 */
+	XmpMeta::XmpMeta(const bfs::path & file, bool sidecar_only)
 		: m_xmp(NULL),
 		  m_keyword_fetched(false)
 	{
-        size_t len;
-        char * buffer;
-		bfs::path sidecar = file.branch_path()
-			/ (basename(file) + ".xmp");
-
-		DBG_OUT("creating xmpmeta from %s", sidecar.string().c_str());
-		FILE * f = fopen(sidecar.string().c_str(), "rb");
-
-        if (f != NULL) {
-			fseek(f, 0, SEEK_END);
-			len = ftell(f);
-			fseek(f, 0, SEEK_SET);
-			
-			buffer = (char*)malloc(len + 1);
-			/*size_t rlen =*/ fread(buffer, 1, len, f);
-			m_xmp = xmp_new_empty();
-			if(!xmp_parse(m_xmp, buffer, len)) {
-				xmp_free(m_xmp);
-				m_xmp = NULL;
+		if(!sidecar_only) {
+			DBG_OUT("trying to load the XMP from the file");
+			XmpFilePtr xmpfile = xmp_files_open_new(file.string().c_str(), XMP_OPEN_READ);
+			if(xmpfile != NULL) {
+				m_xmp = xmp_files_get_new_xmp(xmpfile);
+				if(xmpfile == NULL) {
+					ERR_OUT("xmpfile is NULL");
+				}
+				xmp_files_free(xmpfile);
 			}
-			free(buffer);
-        }
+		}
+		
+		if(m_xmp == NULL) {
+			size_t len;
+			char * buffer;
+			bfs::path sidecar = file.branch_path()
+				/ (basename(file) + ".xmp");
+			
+			DBG_OUT("creating xmpmeta from %s", sidecar.string().c_str());
+			FILE * f = fopen(sidecar.string().c_str(), "rb");
+			
+			if (f != NULL) {
+				fseek(f, 0, SEEK_END);
+				len = ftell(f);
+				fseek(f, 0, SEEK_SET);
+				
+				buffer = (char*)malloc(len + 1);
+				/*size_t rlen =*/ fread(buffer, 1, len, f);
+				m_xmp = xmp_new_empty();
+				if(!xmp_parse(m_xmp, buffer, len)) {
+					xmp_free(m_xmp);
+					m_xmp = NULL;
+				}
+				free(buffer);
+			}
+		}
 	}
 
 	XmpMeta::~XmpMeta()

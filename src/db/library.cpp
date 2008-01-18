@@ -1,7 +1,7 @@
 /*
  * niepce - db/library.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "sqlite/sqlitecnxdrv.h"
 #include "sqlstatement.h"
 #include "framework/notificationcenter.h"
+#include "framework/mimetype.h"
 
 using framework::NotificationCenter;
 
@@ -184,7 +185,8 @@ namespace db {
 		try {
 			int32_t rating, label_id, orientation;
 			std::string label;
-			utils::XmpMeta meta(file);
+			framework::MimeType mimetype(file);
+			utils::XmpMeta meta(file, mimetype.isDigicamRaw());
 			label_id = 0;
 			orientation = meta.orientation();
 			rating = meta.rating();
