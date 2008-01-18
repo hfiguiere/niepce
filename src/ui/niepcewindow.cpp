@@ -38,6 +38,7 @@
 #include "framework/application.h"
 #include "framework/configuration.h"
 #include "framework/notificationcenter.h"
+#include "framework/gdkutils.h"
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
@@ -228,7 +229,8 @@ namespace ui {
 			Gtk::TreeRow row;
 			bool found = store->find_by_id(tn.id, row);
 			if(found) {
-				row[store->m_columns.m_thumbnail] = tn.pixmap;
+				// FIXME parametrize
+				row[store->m_columns.m_thumbnail] = framework::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
 			}
 			else {
 				DBG_OUT("row %d not found", tn.id);

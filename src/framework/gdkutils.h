@@ -26,6 +26,12 @@
 
 namespace framework {
 	
+	/** scale the pixbuf to fit in the square 
+	 * @param dim the dimension of the square
+	 */
+	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_scale_to_fit(const Glib::RefPtr<Gdk::Pixbuf> & pix,
+													 int dim);
+	/** Rotate a pixbuf following the Exif rotation (may mirror too) */
 	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_exif_rotate(const Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
 													int exif_orientation);
 }
