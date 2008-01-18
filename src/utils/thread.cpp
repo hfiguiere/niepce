@@ -52,7 +52,8 @@ namespace utils {
 	{
 		boost::thread * thrd = m_threads.create_thread(
 			boost::bind(&Thread::main, this));
-		thrd->join();
+// TODO add this thread to a manager for task management.
+//		thrd->join();
 	}
 
 }
