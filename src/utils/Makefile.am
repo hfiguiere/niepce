@@ -9,23 +9,25 @@ EXTRA_DIST = test.xmp test2.ufraw
 check_PROGRAMS = testmoniker testfiles testgeometry testxmp testufrawmeta
 
 testmoniker_SOURCES = testmoniker.cpp
-testmoniker_LDADD = libniepceutils.la
+testmoniker_LDADD = libniepceutils.la \
+	@BOOST_THREAD_LIBS@
 
 testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.la \
-	@BOOST_FILESYSTEM_LIBS@
+	@BOOST_FILESYSTEM_LIBS@ @BOOST_THREAD_LIBS@
 
 testgeometry_SOURCES = testgeometry.cpp
 testgeometry_LDADD = libniepceutils.la
 
 testxmp_SOURCES = testxmp.cpp
 testxmp_LDADD = libniepceutils.la \
-	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@
+	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @BOOST_THREAD_LIBS@
 
 testufrawmeta_SOURCES = testufrawmeta.cpp
 testufrawmeta_CXXFLAGS =  -g -O0
 testufrawmeta_LDADD = libniepceutils.la ../niepce/libniepceglobals.la \
-	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @LIBXML2_LIBS@
+	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @LIBXML2_LIBS@ \
+	@BOOST_THREAD_LIBS@
 
 noinst_LTLIBRARIES = libniepceutils.la
 

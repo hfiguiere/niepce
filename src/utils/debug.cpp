@@ -21,6 +21,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include <pthread.h>
+
 #if defined(NDEBUG)
 #define _SAVENDEBUG NDEBUG
 #undef NDEBUG
@@ -32,6 +34,7 @@
 #define NDEBUG _SAVENDEBUG
 #endif
 
+#include <boost/thread/recursive_mutex.hpp>
 
 #include "debug.h"
 
@@ -104,6 +107,11 @@ namespace utils {
 	static void _vprint(const char *prefix, const char *fmt, 
 							const char* func,	va_list marker)
 	{
+		static boost::recursive_mutex mutex;
+		boost::recursive_mutex::scoped_lock lock(mutex);
+		char buf[128];
+		snprintf(buf, 128, "(%d) ", (int)pthread_self());
+		fwrite(buf, 1, strlen(buf), stderr);
 		fwrite(prefix, 1, strlen(prefix), stderr);
 
 		if(func) {

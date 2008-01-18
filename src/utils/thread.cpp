@@ -39,7 +39,7 @@ namespace utils {
 #if 0
 	void Thread::schedule(const Op::Ptr & _op)
 	{
-		OpQueue::mutex_t::scoped_lock(m_ops.mutex(), true);
+		OpQueue::mutex_t::scoped_lock lock(m_ops.mutex(), true);
 		bool was_empty = m_ops.isEmpty();
 		m_ops.add(_op);
 		if(was_empty) {

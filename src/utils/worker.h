@@ -71,7 +71,7 @@ namespace utils {
 			{
 				// make sure we terminate the thread before we unlock
 				// the task queue.
-				typename queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
+				typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
 				if(m_tasks.empty()) {
 					break;
 				}
@@ -85,7 +85,7 @@ namespace utils {
 	template <class T>
 	void Worker<T>::schedule(const T & _op)
 	{
-		typename queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
+		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
 		bool was_empty = m_tasks.empty();
 		m_tasks.add(_op);
 		if(was_empty) {
