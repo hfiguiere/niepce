@@ -44,7 +44,8 @@ namespace utils {
 
 		void add(const T &);
 		T pop();
-		bool isEmpty() const;
+		bool empty() const;
+		void clear();
 		mutex_t & mutex() const
 			{ return m_mutex; }
 	private:
@@ -85,13 +86,18 @@ namespace utils {
 
 
 	template < class T >
-	bool MtQueue<T>::isEmpty() const
+	bool MtQueue<T>::empty() const
 	{
 		mutex_t::scoped_lock(m_mutex, true);
 		return m_queue.empty();
 	}
 
-
+	template < class T >
+	void MtQueue<T>::clear() 
+	{
+		mutex_t::scoped_lock(m_mutex, true);
+		m_queue.clear();
+	}
 }
 
 #endif

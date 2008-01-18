@@ -45,6 +45,7 @@ namespace utils {
 			{ return m_tasks; }
 #endif
 		void schedule(const T & );
+		void clear();
 	protected:
 		virtual void main();
 
@@ -65,11 +66,14 @@ namespace utils {
 	{
 		bool terminated = false;
 		
-		do {
+		do 
+		{
 			{
+				// make sure we terminate the thread before we unlock
+				// the task queue.
 				typename queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
-				while(m_tasks.isEmpty()) {
-					return;
+				if(m_tasks.empty()) {
+					break;
 				}
 			}
 			
@@ -82,14 +86,18 @@ namespace utils {
 	void Worker<T>::schedule(const T & _op)
 	{
 		typename queue_t::mutex_t::scoped_lock(m_tasks.mutex(), true);
-		bool was_empty = m_tasks.isEmpty();
+		bool was_empty = m_tasks.empty();
 		m_tasks.add(_op);
 		if(was_empty) {
 			start();
 		}
 	}
 
-
+	template <class T>
+	void Worker<T>::clear()
+	{
+		m_tasks.clear();
+	}
 
 }
 

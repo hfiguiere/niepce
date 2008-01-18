@@ -49,6 +49,7 @@ namespace library {
 
 	void ThumbnailCache::request(const LibFile::ListPtr & fl)
 	{
+		clear();
 		std::for_each(fl->begin(), fl->end(),
 					 boost::bind(&ThumbnailCache::requestForFile, this, 
 								 _1));
