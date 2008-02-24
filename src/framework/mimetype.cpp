@@ -29,12 +29,24 @@ namespace framework {
 
 	MimeType::MimeType(const char * filename)
 	{
+#if GNOMEVFS_VER >= 214
 		m_type = gnome_vfs_get_mime_type_for_name(filename);
+#else
+		std::string f("file:///");
+		f += filename;
+		m_type = gnome_vfs_get_mime_type(f.c_str());
+#endif
 	}
 
 	MimeType::MimeType(const boost::filesystem::path & filename)
 	{
+#if GNOMEVFS_VER >= 214
 		m_type = gnome_vfs_get_mime_type_for_name(filename.string().c_str());
+#else
+		std::string f("file:///");
+		f += filename.string();
+		m_type = gnome_vfs_get_mime_type(f.c_str());
+#endif
 	}
 
 	bool MimeType::isDigicamRaw() const
