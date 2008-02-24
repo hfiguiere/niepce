@@ -10,7 +10,7 @@ TEST_LIBS =  \
 	libniepcedb.la sqlite/libniepcedbsqlite.la \
 	../utils/libniepceutils.la \
 	../framework/libniepceframework.la \
-	@LIBGTKMM_LIBS@\
+	@LIBGTKMM_LIBS@ @GNOMEVFS_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@ \
 	@BOOST_THREAD_LIBS@ \
@@ -22,7 +22,7 @@ test_db_SOURCES = test_db.cpp
 test_db_LDADD = $(TEST_LIBS)
 
 test_library_SOURCE = test_library.cpp
-test_library_LDADD = $(TEST_LIBS) 
+test_library_LDADD = $(TEST_LIBS)  
 
 noinst_LTLIBRARIES = libniepcedb.la
 

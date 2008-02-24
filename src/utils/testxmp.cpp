@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testxmp.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ int test_main( int, char *[] )             // note the name!
 	}
 	utils::ExempiManager xmpManager;
 
-	utils::XmpMeta meta(dir / "test.xmp");
+	utils::XmpMeta meta(dir / "test.xmp", true);
 	BOOST_CHECK(meta.isOk());
 	BOOST_CHECK(meta.orientation() == 1);
 	const std::vector< std::string > & keywords(meta.keywords());

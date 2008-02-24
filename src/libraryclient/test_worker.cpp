@@ -1,7 +1,7 @@
 /*
  * niepce - library/test_worker.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ BOOST_AUTO_UNIT_TEST(worker_test)
 	BOOST_CHECK(ptempl);
 	{
 		utils::DirectoryDisposer d(ptempl);
-		LocalLibraryServer w(std::string("") + ptempl, NULL);
+		LocalLibraryServer w(std::string("") + ptempl, framework::NotificationCenter::Ptr());
 		
-		BOOST_CHECK(w._tasks().isEmpty());
+		BOOST_CHECK(w._tasks().empty());
 		
 		Op::Ptr p(new Op(OP_NONE, 0));
 		w.schedule(p);

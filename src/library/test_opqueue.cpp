@@ -1,7 +1,7 @@
 /*
  * niepce - library/test_opqueue.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,14 @@ BOOST_AUTO_UNIT_TEST(opqueue_test)
 
 	Op::Ptr p(new Op(OP_NONE, 1));
 
-	BOOST_CHECK(q.isEmpty());
+	BOOST_CHECK(q.empty());
 
 	q.add(p);
-	BOOST_CHECK(!q.isEmpty());
+	BOOST_CHECK(!q.empty());
 
 	Op::Ptr p2(q.pop());
 	BOOST_CHECK(p2 == p);
 	BOOST_CHECK(p2->id() == p->id());
-	BOOST_CHECK(q.isEmpty());	
+	BOOST_CHECK(q.empty());	
 }
 

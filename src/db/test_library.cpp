@@ -1,7 +1,7 @@
 /*
  * niepce - db/test_library.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 
 BOOST_AUTO_UNIT_TEST(library_test)
 {
-	db::Library lib("./", NULL);
+	db::Library lib("./", framework::NotificationCenter::Ptr());
 
 	BOOST_CHECK_EQUAL(lib.checkDatabaseVersion(), 1);
 

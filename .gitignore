@@ -23,6 +23,7 @@ intltool-*.in
 *.lo
 *.la
 *~
+*.bak
 m4/intltool.m4
 po/Makefile.in.in
 src/utils/testmoniker
