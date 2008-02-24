@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docbase="/home/hub/cvslocal/niepce/doc"
+   sodipodi:docname="ui.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path4160"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="339.23371"
+     inkscape:cy="669.3071"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     inkscape:window-width="1024"
+     inkscape:window-height="691"
+     inkscape:window-x="0"
+     inkscape:window-y="27" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Main"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <rect
+       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="rect2160"
+       width="565.71429"
+       height="334.28571"
+       x="91.428574"
+       y="263.79074" />
+    <rect
+       style="fill:#008080"
+       id="rect2162"
+       width="172.81509"
+       height="254.83539"
+       x="107.21465"
+       y="275.70953" />
+    <rect
+       style="fill:#008000"
+       id="rect2164"
+       width="537.86584"
+       height="39.163162"
+       x="105.51124"
+       y="543.79077" />
+    <rect
+       style="fill:#000080"
+       id="rect2166"
+       width="348.77451"
+       height="255.00871"
+       x="294.28571"
+       y="276.19974" />
+    <rect
+       style="fill:#800080"
+       id="rect2189"
+       width="76.771591"
+       height="19.192898"
+       x="305.06607"
+       y="286.66656" />
+    <rect
+       style="fill:#ff2a2a"
+       id="rect2195"
+       width="81.822357"
+       height="19.192898"
+       x="388.90872"
+       y="285.6564" />
+    <g
+       id="g4365">
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3186"
+         d="M 219.27979,592.22451 L 148.41574,652.41846 L 148.41574,652.41846"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.84663004px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1" />
+      <text
+         id="text4357"
+         y="668.50421"
+         x="94.954338"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="668.50421"
+           x="94.954338"
+           id="tspan4359"
+           sodipodi:role="line">Window (niepcewindow)</tspan></text>
+    </g>
+    <g
+       id="g4372">
+      <path
+         sodipodi:nodetypes="cc"
+         id="path4355"
+         d="M 430.23572,571.84642 L 495.06402,654.04524"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.94627947px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline" />
+      <text
+         id="text4361"
+         y="669.51434"
+         x="437.39606"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="669.51434"
+           x="437.39606"
+           id="tspan4363"
+           sodipodi:role="line">Film strip (niepcewindow)</tspan></text>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.86790729px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline"
+       d="M 781.22454,559.68539 L 845.12106,629.84076"
+       id="path4370"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g4409">
+      <path
+         sodipodi:nodetypes="cc"
+         id="path4377"
+         d="M 195.33093,297.01845 L 109.73512,225.80702"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0120579px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline" />
+      <text
+         id="text4379"
+         y="197.77312"
+         x="28.284269"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="197.77312"
+           x="28.284269"
+           id="tspan4381"
+           sodipodi:role="line">Workspace</tspan><tspan
+           id="tspan4383"
+           y="212.77312"
+           x="28.284269"
+           sodipodi:role="line">(workspacecontroller)</tspan></text>
+    </g>
+    <g
+       id="g4444">
+      <path
+         sodipodi:nodetypes="cc"
+         id="path4391"
+         d="M 609.42014,288.01919 L 657.31116,197.43063"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.85382313px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline" />
+      <text
+         id="text4393"
+         y="177.57008"
+         x="550.53314"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="177.57008"
+           x="550.53314"
+           id="tspan4395"
+           sodipodi:role="line">Main View</tspan><tspan
+           id="tspan4397"
+           y="192.57008"
+           x="550.53314"
+           sodipodi:role="line">(librarymainviewcontroller)</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Library"
+     style="display:inline">
+    <rect
+       style="fill:#800080"
+       id="rect2187"
+       width="328.29956"
+       height="206.07112"
+       x="305.06607"
+       y="313.94067" />
+    <rect
+       style="fill:#ffaaaa"
+       id="rect2199"
+       width="94.954338"
+       height="188.89853"
+       x="532.3504"
+       y="324.04221" />
+    <rect
+       style="fill:#ffaaaa"
+       id="rect2201"
+       width="213.14218"
+       height="188.89853"
+       x="311.12698"
+       y="324.04221" />
+    <g
+       id="g4434">
+      <path
+         sodipodi:nodetypes="cc"
+         id="path4415"
+         d="M 348.47339,333.14129 L 282.87197,176.55219"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.31383741px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline" />
+      <text
+         id="text4418"
+         y="154.33656"
+         x="217.1828"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="154.33656"
+           x="217.1828"
+           id="tspan4420"
+           sodipodi:role="line">Main List View</tspan><tspan
+           id="tspan4422"
+           y="169.33656"
+           x="217.1828"
+           sodipodi:role="line">(librarymainviewcontroller)</tspan></text>
+    </g>
+    <g
+       id="g4459">
+      <path
+         sodipodi:nodetypes="cc"
+         id="path4450"
+         d="M 564.01589,354.59857 L 468.36003,226.81577"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.43316531px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline" />
+      <text
+         id="text4453"
+         y="203.83405"
+         x="364.66507"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="203.83405"
+           x="364.66507"
+           id="tspan4455"
+           sodipodi:role="line">Meta Pane</tspan><tspan
+           id="tspan4457"
+           y="218.83405"
+           x="364.66507"
+           sodipodi:role="line">(librarymainviewcontroller)</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Darkroom"
+     style="display:none">
+    <rect
+       style="fill:#ff2a2a"
+       id="rect2193"
+       width="328.29959"
+       height="205.06097"
+       x="305.06607"
+       y="313.94067" />
+  </g>
+</svg>
