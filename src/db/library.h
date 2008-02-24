@@ -1,7 +1,7 @@
 /*
  * niepce - db/library.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,8 @@ namespace db {
 			NOTIFY_ADDED_KEYWORDS,
 			NOTIFY_ADDED_KEYWORD,
 			NOTIFY_FOLDER_CONTENT_QUERIED,
-			NOTIFY_KEYWORD_CONTENT_QUERIED
+			NOTIFY_KEYWORD_CONTENT_QUERIED,
+			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
 		Library(const std::string & dir, framework::NotificationCenter * nc);
@@ -107,7 +108,7 @@ namespace db {
 		 * @param fl the resulting file list
 		 */
 		void getFolderContent(int folder_id, const LibFile::ListPtr & fl);
-
+		int countFolder(int folder_id);
 		void getAllKeywords(const Keyword::ListPtr & l);
 		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
 

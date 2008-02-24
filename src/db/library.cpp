@@ -358,6 +358,25 @@ namespace db {
 		}
 	}
 
+	int Library::countFolder(int folder_id)
+	{
+		int count = -1;
+		SQLStatement sql(boost::format("SELECT COUNT(id) FROM files WHERE parent_id='%1%';")
+						 % folder_id);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				if(m_dbdrv->read_next_row()) {
+					m_dbdrv->get_column_content(0, count);
+				}
+			}			
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+		return count;
+	}
+
 	void Library::getAllKeywords(const Keyword::ListPtr & l)
 	{
 		SQLStatement sql("SELECT id,keyword FROM keywords ORDER BY keyword;");

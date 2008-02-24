@@ -92,16 +92,19 @@ namespace ui {
 		m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
 		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
 									 boost::bind(&LibraryMainViewController::on_lib_notification, 
-												 get_pointer(m_mainviewctrl), _1));
+												 m_mainviewctrl, _1));
 		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
 									 boost::bind(&LibraryMainViewController::on_tnail_notification, 
-												 get_pointer(m_mainviewctrl), _1));
+												 m_mainviewctrl, _1));
 		add(m_mainviewctrl);
 		// workspace treeview
 		m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
 		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
 									 boost::bind(&WorkspaceController::on_lib_notification, 
-												 get_pointer(m_workspacectrl), _1));	
+												 m_workspacectrl, _1));
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_COUNT,
+									 boost::bind(&WorkspaceController::on_count_notification,
+												 m_workspacectrl, _1));
 		add(m_workspacectrl);
 
 		m_hbox.set_border_width(4);

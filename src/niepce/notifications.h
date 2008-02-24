@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/notifications.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ namespace niepce {
 
 	enum {
 		NOTIFICATION_LIB = 0,
-		NOTIFICATION_THUMBNAIL
+		NOTIFICATION_THUMBNAIL,
+		NOTIFICATION_COUNT                    /**< Notification a counted items */
 	};
 
 }

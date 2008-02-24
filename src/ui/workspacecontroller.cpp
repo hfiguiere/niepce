@@ -96,9 +96,29 @@ namespace ui {
 									 this, _1));
 				break;
 			}
+			case db::Library::NOTIFY_FOLDER_COUNTED:
+			{
+				std::pair<int,int> count(boost::any_cast<std::pair<int,int> >(ln.param));
+				DBG_OUT("count for folder %d is %d", count.first, count.second);
+				std::map<int, Gtk::TreeIter>::iterator iter
+					= m_folderidmap.find( count.first );
+				if(iter != m_folderidmap.end()) {
+					Gtk::TreeRow row = *(iter->second);
+					row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(count.second);
+				}
+
+				break;
+			}
 			default:
 				break;
 			}
+		}
+	}
+
+	void WorkspaceController::on_count_notification(const framework::Notification::Ptr &n)
+	{
+		if(n->type() == niepce::NOTIFICATION_COUNT) {
+			DBG_OUT("received NOTIFICATION_COUNT");
 		}
 	}
 
@@ -125,22 +145,28 @@ namespace ui {
 
 	void WorkspaceController::add_keyword_item(const db::Keyword::Ptr & k)
 	{
-		add_item(m_treestore, m_keywordsNode->children(), 
-				 m_icons[ICON_KEYWORD], k->keyword(), k->id(), KEYWORD_ITEM);
+		Gtk::TreeModel::iterator iter(add_item(m_treestore, m_keywordsNode->children(), 
+											   m_icons[ICON_KEYWORD], k->keyword(), k->id(), 
+											   KEYWORD_ITEM));
+//		getLibraryClient()->countKeyword(f->id());
+		m_keywordsidmap[k->id()] = iter;
 	}
 
 	void WorkspaceController::add_folder_item(const db::LibFolder::Ptr & f)
 	{
-		add_item(m_treestore, m_folderNode->children(), m_icons[ICON_ROLL], 
-				 f->name(), f->id(), FOLDER_ITEM);
+		Gtk::TreeModel::iterator iter(add_item(m_treestore, m_folderNode->children(), 
+											   m_icons[ICON_ROLL], 
+											   f->name(), f->id(), FOLDER_ITEM));
+		getLibraryClient()->countFolder(f->id());
+		m_folderidmap[f->id()] = iter;
 	}
 
 	Gtk::TreeModel::iterator
 	WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> &treestore,
 								  const Gtk::TreeNodeChildren & childrens,
 								  const Glib::RefPtr<Gdk::Pixbuf> & icon,
-								  const Glib::ustring & label, int id,
-								  int type) const
+								  const Glib::ustring & label, 
+								  int id, int type) const
 	{
 		Gtk::TreeModel::iterator iter;
 		Gtk::TreeModel::Row row;

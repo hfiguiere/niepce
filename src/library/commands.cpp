@@ -1,7 +1,7 @@
 /*
  * niepce - library/commands.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,11 +62,14 @@ namespace library {
 			case OP_QUERY_FOLDER_CONTENT:
 				cmdQueryFolderContent( lib, any_cast<int>(args[0]) );
 				break;
+			case OP_COUNT_FOLDER:
+				cmdCountFolder( lib, any_cast<int>(args[0]) );
+				break;
 			case OP_QUERY_KEYWORD_CONTENT:
 				cmdQueryKeywordContent( lib, any_cast<int>(args[0]) );
 				break;
 			default:
-				DBG_OUT("unkown op");
+				DBG_OUT("unkown op %d", _op->type());
 				break;
 			}
 		}
@@ -127,6 +130,13 @@ namespace library {
 		lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
 	}
 
+	void Commands::cmdCountFolder(const db::Library::Ptr & lib, 
+								  int folder_id)
+	{
+		int count = lib->countFolder(folder_id);
+		lib->notify(Library::NOTIFY_FOLDER_COUNTED, boost::any(std::make_pair(folder_id, count)));
+	}
+
 	void Commands::cmdQueryKeywordContent(const Library::Ptr & lib, 
 										  int keyword_id)
 	{
@@ -161,6 +171,14 @@ namespace library {
 	Op::Ptr Commands::opQueryFolderContent(tid_t id, int folder_id)
 	{
 		Op::Ptr op(new Op( OP_QUERY_FOLDER_CONTENT, id ));
+		Op::Args & args(op->args());
+		args.push_back( boost::any( folder_id ));
+		return op;
+	}
+
+	Op::Ptr Commands::opCountFolder(tid_t id, int folder_id)
+	{
+		Op::Ptr op(new Op(OP_COUNT_FOLDER, id));
 		Op::Args & args(op->args());
 		args.push_back( boost::any( folder_id ));
 		return op;

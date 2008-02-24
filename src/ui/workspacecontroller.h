@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ namespace ui {
 		virtual void on_ready();
 
 		void on_lib_notification(const framework::Notification::Ptr &);
+		void on_count_notification(const framework::Notification::Ptr &);
 		void on_libtree_selection();
 
 	protected:
@@ -103,8 +104,8 @@ namespace ui {
 		Gtk::TreeModel::iterator add_item(const Glib::RefPtr<Gtk::TreeStore> & treestore, 
 										  const Gtk::TreeNodeChildren & childrens,
 										  const Glib::RefPtr<Gdk::Pixbuf> & icon,
-										  const Glib::ustring & label, int id,
-										  int type) const;
+										  const Glib::ustring & label, 
+										  int id, int type) const;
 		enum {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
@@ -121,6 +122,9 @@ namespace ui {
 		Gtk::TreeModel::iterator       m_projectNode; /**< the project node */
 		Gtk::TreeModel::iterator       m_keywordsNode; /**< the keywords node */
 		Glib::RefPtr<Gtk::TreeStore>   m_treestore;   /**< the treestore */
+		std::map<int, Gtk::TreeIter>   m_folderidmap;
+		std::map<int, Gtk::TreeIter>   m_projectidmap;
+		std::map<int, Gtk::TreeIter>   m_keywordsidmap;
 	};
 
 

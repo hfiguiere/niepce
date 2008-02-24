@@ -1,7 +1,7 @@
 /*
  * niepce - library/op.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ namespace library {
 		OP_LIST_ALL_KEYWORDS,
 		OP_IMPORT_FILES,
 		OP_QUERY_FOLDER_CONTENT,
+		OP_COUNT_FOLDER,
 		OP_QUERY_KEYWORD_CONTENT
 	} OpType;
 

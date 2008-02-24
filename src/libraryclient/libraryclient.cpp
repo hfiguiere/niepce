@@ -73,6 +73,11 @@ namespace libraryclient {
 		return m_pImpl->queryKeywordContent(id);
 	}
 
+	library::tid_t LibraryClient::countFolder(int id)
+	{
+		return m_pImpl->countFolder(id);
+	}
+
 	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
 	{
 		m_pImpl->importFromDirectory(dir, manage);

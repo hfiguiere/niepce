@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,6 +78,13 @@ namespace libraryclient {
 		return id;
 	}
 
+	tid_t ClientImpl::countFolder(int folder_id)
+	{
+		tid_t id = LibraryClient::newTid();
+		Op::Ptr op(Commands::opCountFolder(id, folder_id));
+		m_localLibrary->schedule(op);
+		return id;
+	}
 
 	tid_t ClientImpl::queryKeywordContent(int keyword_id)
 	{

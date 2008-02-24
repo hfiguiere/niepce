@@ -1,7 +1,7 @@
 /*
  * niepce - library/commands.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,8 @@ namespace library {
 								   const utils::FileList::Ptr & files, bool manage);
 		static void cmdQueryFolderContent(const db::Library::Ptr & lib, 
 										  int folder_id);
+		static void cmdCountFolder(const db::Library::Ptr & lib, 
+								   int folder_id);
 		static void cmdQueryKeywordContent(const db::Library::Ptr & lib, 
 										   int keyword_id);
 		
@@ -58,6 +60,7 @@ namespace library {
 									 const utils::FileList::Ptr & files, 
 									 bool manage);
  		static Op::Ptr opQueryFolderContent(tid_t id, int folder_id);
+		static Op::Ptr opCountFolder(tid_t id, int folder_id);
  		static Op::Ptr opQueryKeywordContent(tid_t id, int keyword_id);
 	};
 
