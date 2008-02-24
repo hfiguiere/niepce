@@ -1,4 +1,3 @@
-/* -*- indent-tabs-mode:tab; c-basic-offset:2 -*- */
 /*
  *This file is part of the Nemiver Project.
  *
@@ -203,6 +202,7 @@ namespace db { namespace sqlite {
 
 		SqliteCnxDrv::SqliteCnxDrv (sqlite3 *a_sqlite_handle)
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (a_sqlite_handle) ;
 			m_priv.reset (new Priv) ;
 			m_priv->sqlite.reset (a_sqlite_handle) ;
@@ -210,7 +210,9 @@ namespace db { namespace sqlite {
 
 		SqliteCnxDrv::~SqliteCnxDrv ()
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			close () ;
+			m_priv.reset(NULL);
 		}
 
 	    sqlite3 * SqliteCnxDrv::sqlite_handle() const
@@ -224,6 +226,7 @@ namespace db { namespace sqlite {
 		const char*
 		SqliteCnxDrv::get_last_error () const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			if (m_priv && m_priv->sqlite) {
 				return sqlite3_errmsg (m_priv->sqlite.get ());
 			}
@@ -254,6 +257,8 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::execute_statement (const SQLStatement &a_statement)
 		{
+		  boost::recursive_mutex::scoped_lock lock(m_mutex);
+
 		  THROW_IF_FAIL (m_priv && m_priv->sqlite) ;
 		  DBG_OUT("sql string: %s", a_statement.to_string().c_str()) ;
 		  
@@ -331,6 +336,7 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::should_have_data () const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			if (get_number_of_columns () > 0)
@@ -341,6 +347,7 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::read_next_row ()
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 			if (m_priv->cur_stmt) {
 				if (m_priv->last_execution_result == SQLITE_DONE) {
@@ -363,6 +370,7 @@ namespace db { namespace sqlite {
 		unsigned int
 		SqliteCnxDrv::get_number_of_columns () const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 			if (!m_priv->cur_stmt)
 				return 0 ;
@@ -373,6 +381,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
 										  utils::Buffer &a_column_content) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
@@ -386,6 +395,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
 										  int32_t &a_column_content) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
@@ -403,6 +413,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
 										  int64_t &a_column_content) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
@@ -421,6 +432,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
 										  double& a_column_content) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
 			int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
@@ -436,6 +448,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
 										  std::string& a_column_content) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
@@ -453,6 +466,7 @@ namespace db { namespace sqlite {
 		SqliteCnxDrv::get_column_type (uint32_t a_offset,
 									   enum ColumnType &a_type) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
 			int type = sqlite3_column_type (m_priv->cur_stmt, a_offset) ;
@@ -484,6 +498,7 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::get_column_name (uint32_t a_offset, utils::Buffer &a_name) const
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 			RETURN_VAL_IF_FAIL (m_priv->check_offset (a_offset), false) ;
 			const char* name = sqlite3_column_name (m_priv->cur_stmt, a_offset) ;
@@ -496,6 +511,7 @@ namespace db { namespace sqlite {
 		void
 		SqliteCnxDrv::close ()
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
 
 			if (m_priv->sqlite) {
@@ -509,6 +525,7 @@ namespace db { namespace sqlite {
 		int64_t
 		SqliteCnxDrv::last_row_id()
 		{
+			boost::recursive_mutex::scoped_lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv);
 			if (m_priv->sqlite) {
 				return sqlite3_last_insert_rowid(m_priv->sqlite.get());

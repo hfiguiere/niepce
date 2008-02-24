@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,6 @@ namespace ui {
 
 	NiepceWindow::NiepceWindow()
 		: framework::Frame("mainWindow-frame")
-		, m_lib_notifcenter(NULL)
 	{
 	}
 
@@ -64,7 +63,6 @@ namespace ui {
 	{
 		Application::Ptr pApp = Application::app();
 		pApp->uiManager()->remove_action_group(m_refActionGroup);
-		delete m_lib_notifcenter;
 	}
 
  	Gtk::Widget * 
@@ -77,7 +75,7 @@ namespace ui {
 		init_actions();
 		init_ui();
 
-		m_lib_notifcenter = new NotificationCenter();
+		m_lib_notifcenter.reset(new NotificationCenter());
 		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
 									 boost::bind(&NiepceWindow::on_lib_notification, 
 												 this, _1));

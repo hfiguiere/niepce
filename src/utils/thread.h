@@ -36,11 +36,14 @@ namespace utils {
 		Thread();
 		virtual ~Thread();
 
+		void terminate()
+			{ m_terminated = true; }
 	protected:
 		void start();
 		virtual void main() = 0;
+		volatile bool m_terminated;
 	private:
-
+		boost::thread *       m_thrd;
 		boost::thread_group   m_threads;
 	};
 

@@ -25,18 +25,16 @@
 #include <string>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/any.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include "framework/notificationcenter.h"
 #include "db/iconnectiondriver.h"
 #include "db/iconnectionmanagerdriver.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
 #include "db/keyword.h"
-
-namespace framework {
-	class NotificationCenter;
-}
 
 
 namespace db {
@@ -57,7 +55,7 @@ namespace db {
 			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
-		Library(const std::string & dir, framework::NotificationCenter * nc);
+		Library(const std::string & dir, const framework::NotificationCenter::Ptr & nc);
 		virtual ~Library();
 
 		bool ok()
@@ -137,7 +135,7 @@ namespace db {
 		boost::filesystem::path           m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
-		framework::NotificationCenter *   m_notif_center;
+		boost::weak_ptr<framework::NotificationCenter>  m_notif_center;
 		bool                              m_inited;
 	};
 

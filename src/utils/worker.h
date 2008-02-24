@@ -38,6 +38,7 @@ namespace utils {
 	{
 	public:
 		Worker();
+		virtual ~Worker();
 		typedef MtQueue<T> queue_t;
 
 #ifdef BOOST_AUTO_TEST_MAIN
@@ -60,11 +61,18 @@ namespace utils {
 	{
 	}
 
+	template <class T>
+	Worker<T>::~Worker()
+	{
+		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
+		m_tasks.clear();
+	}
+
 	/** this is the main loop of the libray worker */
 	template <class T>
 	void Worker<T>::main()
 	{
-		bool terminated = false;
+		m_terminated = false;
 		
 		do 
 		{
@@ -73,13 +81,14 @@ namespace utils {
 				// the task queue.
 				typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
 				if(m_tasks.empty()) {
+					m_terminated = true;
 					break;
 				}
 			}
 			
 			T op = m_tasks.pop();
 			execute(op);
-		} while(!terminated);
+		} while(!m_terminated);
 	}
 
 	template <class T>

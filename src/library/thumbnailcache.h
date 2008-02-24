@@ -22,7 +22,7 @@
 #define _LIBRARY_THUMBNAILCACHE_H__
 
 #include <boost/filesystem/path.hpp>
-
+#include <boost/weak_ptr.hpp>
 
 #include "utils/worker.h"
 #include "framework/notificationcenter.h"
@@ -58,7 +58,7 @@ namespace library {
 	{
 	public:
 		ThumbnailCache(const boost::filesystem::path & dir,
-			framework::NotificationCenter * nc);
+					   const framework::NotificationCenter::Ptr & nc);
 		~ThumbnailCache();
 
 		void request(const db::LibFile::ListPtr & fl);
@@ -68,7 +68,7 @@ namespace library {
 		virtual void execute(const  ThumbnailTask::Ptr & task);
 	private:
 		boost::filesystem::path         m_cacheDir;
-		framework::NotificationCenter * m_notif_center;
+		boost::weak_ptr<framework::NotificationCenter> m_notif_center;
 	};
 
 }

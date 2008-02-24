@@ -26,6 +26,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 
 namespace framework {
 
@@ -34,11 +35,15 @@ namespace framework {
 	{
 	public:
 		typedef boost::shared_ptr<Notification> Ptr;
+		typedef boost::recursive_mutex mutex_t;
 
 		Notification(int type)
 			: m_type(type)
 			{}
-
+		~Notification()
+			{ mutex_t::scoped_lock lock(m_mutex); }
+		mutex_t & mutex() const
+			{ return m_mutex; }
 		int type() const
 			{ return m_type; }
 		const boost::any & data() const
@@ -46,6 +51,7 @@ namespace framework {
 		void setData(const boost::any & d)
 			{ m_data = d; }
 	private:
+		mutable mutex_t    m_mutex;
 		int        m_type;
 		boost::any m_data;
 	};

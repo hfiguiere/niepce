@@ -41,7 +41,7 @@ namespace db {
 
 	const char * s_databaseName = "niepcelibrary.db";
 
-	Library::Library(const std::string & dir, NotificationCenter * nc)
+	Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
 		: m_maindir(dir),
 		  m_dbname(m_maindir / s_databaseName),
 		  m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
@@ -62,15 +62,17 @@ namespace db {
 
 	void Library::notify(NotifyType t, const boost::any & param)
 	{
-		if(m_notif_center) {
+		framework::NotificationCenter::Ptr nc(m_notif_center.lock());
+		if(nc) {
 			DBG_OUT("notif");
 			// pass the notification
 			framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_LIB));
+			framework::Notification::mutex_t::scoped_lock lock(n->mutex());
 			LibNotification ln;
 			ln.type = t;
 			ln.param = param;
 			n->setData(boost::any(ln));
-			m_notif_center->post(n);
+			nc->post(n);
 		}
 		else {
 			DBG_OUT("try to send a notification without notification center");

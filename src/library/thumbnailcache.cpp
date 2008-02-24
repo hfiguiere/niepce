@@ -38,7 +38,7 @@ using db::LibFile;
 namespace library {
 
 	ThumbnailCache::ThumbnailCache(const boost::filesystem::path & dir,
-								   framework::NotificationCenter * nc)
+								   const framework::NotificationCenter::Ptr & nc)
 		: m_cacheDir(dir),
 		  m_notif_center(nc)
 	{
@@ -101,7 +101,8 @@ namespace library {
 		}
 		if(pix)
 		{
-			if(m_notif_center) {
+			framework::NotificationCenter::Ptr nc(m_notif_center);
+			if(nc) {
 				// pass the notification
 				framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_THUMBNAIL));
 				ThumbnailNotification tn;
@@ -111,7 +112,7 @@ namespace library {
 				tn.pixmap = pix;
 				n->setData(boost::any(tn));
 				DBG_OUT("notify thumbnail for id=%d", tn.id);
-				m_notif_center->post(n);
+				nc->post(n);
 			}
 		}
 		else 

@@ -32,7 +32,8 @@ namespace libraryclient {
 
 	const char * s_thumbcacheDirname = "thumbcache";
 
-	LibraryClient::LibraryClient(const utils::Moniker & moniker, framework::NotificationCenter * nc)
+	LibraryClient::LibraryClient(const utils::Moniker & moniker, 
+								 const framework::NotificationCenter::Ptr & nc)
 		: m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
 		  m_thumbnailCache(bfs::path(moniker.path()) / s_thumbcacheDirname, nc)
 	{

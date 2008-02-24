@@ -1,7 +1,7 @@
 /*
  * niepce - utils/mtqueue.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ namespace utils {
 		typedef T                      value_type;
 
 		MtQueue();
-		~MtQueue();
+		virtual ~MtQueue();
 
 		void add(const T &);
 		T pop();
@@ -64,6 +64,7 @@ namespace utils {
 	template < class T >
 	MtQueue<T>::~MtQueue()
 	{
+		mutex_t::scoped_lock lock(m_mutex, true);		
 	}
 
 	template < class T > void

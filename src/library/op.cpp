@@ -32,7 +32,8 @@ namespace library {
 
 	Op::~Op()
 	{
-
+		mutex_t::scoped_lock lock(m_mutex);
+		m_args.clear();
 	}
 
 }

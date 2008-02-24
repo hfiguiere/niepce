@@ -1,7 +1,7 @@
 /*
  * niepce - utils/thread.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,15 @@ namespace utils {
 
 
 	Thread::Thread()
+		: m_terminated(true),
+		  m_thrd(NULL)
 	{
 	}
 
 
 	Thread::~Thread()
 	{
+		terminate();
 	}
 
 
@@ -50,7 +53,7 @@ namespace utils {
 
 	void Thread::start()
 	{
-		boost::thread * thrd = m_threads.create_thread(
+		m_thrd = m_threads.create_thread(
 			boost::bind(&Thread::main, this));
 // TODO add this thread to a manager for task management.
 //		thrd->join();

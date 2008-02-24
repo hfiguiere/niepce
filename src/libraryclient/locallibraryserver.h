@@ -36,7 +36,7 @@ namespace libraryclient {
 	public:
 		/** create the local server for the library whose dir is specified */
 		LocalLibraryServer(const std::string & dir, 
-						   framework::NotificationCenter * nc)
+						   const framework::NotificationCenter::Ptr & nc)
 			: utils::Worker< library::Op::Ptr >()
 			, m_library(db::Library::Ptr(new db::Library(dir, nc)))
 			{

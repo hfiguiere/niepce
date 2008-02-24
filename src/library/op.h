@@ -24,6 +24,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 
 #include "library/clienttypes.h"
 
@@ -48,20 +49,26 @@ namespace library {
 	public:
 		typedef boost::shared_ptr< Op > Ptr;
 		typedef std::vector< boost::any > Args;
+		typedef boost::recursive_mutex mutex_t;
 
 		Op(OpType t, tid_t id);
 		~Op();
 
-		OpType type()
+		mutex_t & mutex()
+			{ return m_mutex; }
+		OpType type() const
 			{ return m_type; }
 		tid_t id() const 
 			{ return m_id; }
 
 		Args & args()
 			{ return m_args; }
+		const Args & args() const
+			{ return m_args; }
 	protected:
 		Args m_args; /*< the arguments, free form */
 	private:
+		mutex_t    m_mutex;
 		OpType m_type;
 		tid_t   m_id;
 	};

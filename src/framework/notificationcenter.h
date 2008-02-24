@@ -24,6 +24,7 @@
 #define __FRAMEWORK_NOTIFICATIONCENTER_H__
 
 #include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "framework/notification.h"
 
@@ -32,6 +33,7 @@ namespace framework {
 	class NotificationCenter
 	{
 	public:
+		typedef boost::shared_ptr< NotificationCenter > Ptr;
 		typedef boost::function< void (Notification::Ptr) > subscriber_t;
 
 		NotificationCenter();

@@ -45,6 +45,7 @@ namespace library {
 	bool Commands::dispatch(const Library::Ptr & lib, const Op::Ptr & _op)
 	{
 		try {
+			Op::mutex_t::scoped_lock lock(_op->mutex());
 			const Op::Args & args(_op->args());
 			switch( _op->type() )
 			{
@@ -159,7 +160,7 @@ namespace library {
 									const FileList::Ptr & files, bool manage)
 	{
 		Op::Ptr op(new Op( OP_IMPORT_FILES, id ));
-
+		Op::mutex_t::scoped_lock lock(op->mutex());
 		Op::Args & args(op->args());
 		args.push_back( boost::any( folder ));
 		args.push_back( boost::any( files ));
@@ -171,6 +172,7 @@ namespace library {
 	Op::Ptr Commands::opQueryFolderContent(tid_t id, int folder_id)
 	{
 		Op::Ptr op(new Op( OP_QUERY_FOLDER_CONTENT, id ));
+		Op::mutex_t::scoped_lock lock(op->mutex());
 		Op::Args & args(op->args());
 		args.push_back( boost::any( folder_id ));
 		return op;
@@ -179,6 +181,7 @@ namespace library {
 	Op::Ptr Commands::opCountFolder(tid_t id, int folder_id)
 	{
 		Op::Ptr op(new Op(OP_COUNT_FOLDER, id));
+		Op::mutex_t::scoped_lock lock(op->mutex());
 		Op::Args & args(op->args());
 		args.push_back( boost::any( folder_id ));
 		return op;
@@ -187,6 +190,7 @@ namespace library {
 	Op::Ptr Commands::opQueryKeywordContent(tid_t id, int keyword_id)
 	{
 		Op::Ptr op(new Op( OP_QUERY_KEYWORD_CONTENT, id ));
+		Op::mutex_t::scoped_lock lock(op->mutex());
 		Op::Args & args(op->args());
 		args.push_back( boost::any( keyword_id ));
 		return op;
