@@ -215,7 +215,7 @@ namespace ui {
 		m_vbox.pack_start(m_librarytree);
 
 		m_librarytree.get_selection()->signal_changed().connect (
-			sigc::mem_fun(*this, 
+			sigc::mem_fun(this, 
 						  &WorkspaceController::on_libtree_selection));
 
 		return &m_vbox;

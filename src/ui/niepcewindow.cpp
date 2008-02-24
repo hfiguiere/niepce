@@ -143,7 +143,7 @@ namespace ui {
 		
 		m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
 		m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-							  sigc::mem_fun(*this, 
+							  sigc::mem_fun(this, 
 											&NiepceWindow::on_action_file_import));
 		m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
 							  sigc::mem_fun(gtkWindow(), 
