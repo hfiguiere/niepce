@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-13 17:42-0500\n"
+"POT-Creation-Date: 2008-03-01 16:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,65 +17,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../src/ui/niepcewindow.cpp:93
+#: ../src/ui/niepcewindow.cpp:131
 msgid "Ready"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:111
+#: ../src/ui/niepcewindow.cpp:144
 msgid "_File"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:112
+#: ../src/ui/niepcewindow.cpp:145
 msgid "_Import..."
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:128
+#: ../src/ui/niepcewindow.cpp:155
+msgid "_Help"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:169
 msgid "Import picture folder"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:132
+#: ../src/ui/niepcewindow.cpp:173
 msgid "Import"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:163
+#: ../src/ui/niepcewindow.cpp:256
 msgid "Create library"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:167
+#: ../src/ui/niepcewindow.cpp:260
 msgid "Create"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:228
+#: ../src/ui/niepcewindow.cpp:326
 msgid "Niepce Digital - "
 msgstr ""
 
-#: ../src/ui/librarymainviewcontroller.cpp:33
+#: ../src/ui/librarymainviewcontroller.cpp:111
 msgid "Library"
 msgstr ""
 
-#: ../src/ui/librarymainviewcontroller.cpp:38
+#: ../src/ui/librarymainviewcontroller.cpp:118
 msgid "Darkroom"
 msgstr ""
 
-#: ../src/ui/workspacecontroller.cpp:65
+#: ../src/ui/workspacecontroller.cpp:191
 msgid "Pictures"
 msgstr ""
 
-#: ../src/ui/workspacecontroller.cpp:67
+#: ../src/ui/workspacecontroller.cpp:195
 msgid "Projects"
 msgstr ""
 
+#: ../src/ui/workspacecontroller.cpp:199
+msgid "Keywords"
+msgstr ""
+
 #. TODO make it a mnemonic
-#: ../src/ui/workspacecontroller.cpp:74
+#: ../src/ui/workspacecontroller.cpp:212
 msgid "_Workspace"
 msgstr ""
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:418
+#: ../src/ui/thumb-view/eog-thumb-view.cpp:423
 msgid "pixel"
 msgid_plural "pixels"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:429
+#: ../src/ui/thumb-view/eog-thumb-view.cpp:434
 msgid "Taken on"
 msgstr ""
