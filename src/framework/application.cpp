@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
+#include <gtkmm/rc.h>
 
 #include "application.h"
 #include "frame.h"
@@ -32,8 +33,9 @@ namespace framework {
 
 	Application::Ptr Application::m_application;
 
-	Application::Application()
-		: m_refUIManager()
+	Application::Application(const char * name)
+		: m_config(Glib::ustring("/apps/") + name),
+		  m_refUIManager()
 	{
 	}
 
@@ -53,6 +55,12 @@ namespace framework {
 		return m_application;
 	}
 
+
+	Glib::ustring Application::get_rc_path()
+	{
+		return m_config.getValue("ui_theme_file", "");
+	}
+
 	Glib::RefPtr<Gtk::IconTheme> Application::getIconTheme() const
 	{
 		return Gtk::IconTheme::get_default();
@@ -70,6 +78,11 @@ namespace framework {
 		Gnome::Conf::init();
 		Gtk::Main kit(argc, argv);
 		Application::Ptr app = constructor();
+
+		std::string rcpath = app->get_rc_path();
+		if(!rcpath.empty()) {
+			Gtk::RC rc(rcpath);
+		}
 
 		kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 
 											   &Application::_ready));

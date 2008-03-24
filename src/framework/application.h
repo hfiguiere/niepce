@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ namespace framework {
 
 		virtual ~Application();
 
+		virtual Glib::ustring get_rc_path();
 		virtual Frame::Ptr makeMainFrame() = 0;
 
 		Configuration & config()
@@ -66,7 +67,7 @@ namespace framework {
 
 		
 	protected:
-		Application();
+		Application(const char *);
 		static Application::Ptr m_application; 
 		virtual void on_about();
 	private:

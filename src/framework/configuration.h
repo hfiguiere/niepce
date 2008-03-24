@@ -1,7 +1,7 @@
 /*
  * niepce - framework/configuration.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ namespace framework {
 	class Configuration
 	{
 	public:
-		Configuration();
+		Configuration(const Glib::ustring & root);
 		~Configuration();
 
 		bool hasKey(const Glib::ustring & key) const;
@@ -43,6 +43,7 @@ namespace framework {
 
 	private:
 		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
+		Glib::ustring                       m_root;
 	};
 
 }

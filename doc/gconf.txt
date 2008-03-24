@@ -1,0 +1,12 @@
+gconf keys
+
+
+/app/niepce
+      ui_theme_file = the UI rc file to load. Empty means use the system one.
+      lastOpenLibrary = the last open library to reopen (a directory)
+
+Things to move to the library gconf file.
+      hpaned
+      workspaceSplitter
+      lastImportLocation
+      mainWindow-frame

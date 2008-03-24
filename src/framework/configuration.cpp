@@ -1,7 +1,7 @@
 /*
  * niepce - framework/configuration.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,9 @@
 
 namespace framework {
 
-	Configuration::Configuration()
-		: m_gconf(Gnome::Conf::Client::get_default_client())
+	Configuration::Configuration(const Glib::ustring & root)
+		: m_gconf(Gnome::Conf::Client::get_default_client()),
+		  m_root(root)
 	{
 	}
 
@@ -45,7 +46,7 @@ namespace framework {
 		bool found = true;
 
 		try {
-			m_gconf->get(Glib::ustring("/apps/niepce/") + key);
+			m_gconf->get(m_root + "/" + key);
 		}
 		catch(Gnome::Conf::Error & err) {
 			DBG_OUT("key %s not found", key.c_str());
@@ -62,7 +63,7 @@ namespace framework {
 	{
 		Glib::ustring value;
 		try {
-			value = m_gconf->get_string(Glib::ustring("/apps/niepce/") + key);
+			value = m_gconf->get_string(m_root + "/" + key);
 		}
 		catch(Gnome::Conf::Error &err) {
 			value = def;
@@ -78,7 +79,7 @@ namespace framework {
 															 const Glib::ustring & value)
 	{
 		try {
-			m_gconf->set(Glib::ustring("/apps/niepce/") + key, value);
+			m_gconf->set(m_root + "/" + key, value);
 		}
 		catch(Gnome::Conf::Error & err) {
 			DBG_OUT("Exception raised: %s", err.what().c_str());
