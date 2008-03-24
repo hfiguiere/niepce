@@ -45,6 +45,7 @@
 #include "eog-thumb-view.h"
 #include "niepcewindow.h"
 #include "librarymainviewcontroller.h"
+#include "importdialog.h"
 
 using libraryclient::LibraryClient;
 using framework::Application;
@@ -170,37 +171,38 @@ namespace ui {
 		gtkWindow().add_accel_group(Application::app()
 									->uiManager()->get_accel_group());
 	}
-	
+
+
 	void NiepceWindow::on_action_file_import()
 	{
-		Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
-									  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
-
+		int result;
 		Configuration & cfg = Application::app()->config();
-		std::string last_import_location;
-		last_import_location = cfg.getValue("lastImportLocation", "");
-		if(!last_import_location.empty()) {
-			dialog.set_filename(last_import_location);
-		}
+	
+		ImportDialog::Ptr import_dialog(new ImportDialog());
 
-		int result = dialog.run();
-		Glib::ustring to_import;
-		switch(result)
+		result = show_modal_dialog(
+			*static_cast<Gtk::Dialog*>(import_dialog->buildWidget()));
+		switch(result) {
+		case 0:
 		{
-		case Gtk::RESPONSE_OK:
-			to_import = dialog.get_filename();
-			cfg.setValue("lastImportLocation", to_import);
-			
-			DBG_OUT("%s", to_import.c_str());
-			m_libClient->importFromDirectory(to_import, false);
+			// import
+			const Glib::ustring & to_import(import_dialog->to_import());
+			if(!to_import.empty()) {
+				cfg.setValue("last_import_location", to_import);
+				
+				DBG_OUT("%s", to_import.c_str());
+				m_libClient->importFromDirectory(to_import, false);
+			}
+			break;
+		}
+		case 1:
+			// cancel
 			break;
 		default:
 			break;
 		}
 	}
+
 
 	void NiepceWindow::on_lib_notification(const framework::Notification::Ptr &n)
 	{

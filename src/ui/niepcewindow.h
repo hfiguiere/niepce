@@ -58,8 +58,8 @@ namespace ui {
 		virtual Gtk::Widget * buildWidget();
 
 	private:
-
 		void on_action_file_import();
+
 		void on_action_file_quit();
 		void on_open_library();
 		void on_lib_notification(const framework::Notification::Ptr &);

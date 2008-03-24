@@ -8,7 +8,7 @@ gconf keys
       lastOpenLibrary = the last open library to reopen (a directory)
 
 Things to move to the library conf file.
-      lastImportLocation
+      last_import_location
       meta_pane_splitter
       workspace_splitter
       mainWindow-frame

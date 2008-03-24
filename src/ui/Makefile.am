@@ -2,7 +2,8 @@
 
 SUBDIRS = thumb-view
 
-gladefiles = preferences.glade
+gladefiles = preferences.glade \
+	importdialog.glade	
 
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
@@ -16,14 +17,11 @@ EXTRA_DIST = $(gladefiles)
 
 noinst_LTLIBRARIES = libniepceui.la
 
-
-noinst_HEADERS = niepcewindow.h niepceapplication.h \
-	librarymainview.h librarymainviewcontroller.h \
-	workspacecontroller.h
-
 libniepceui_la_CPPFLAGS = 
-libniepceui_la_SOURCES = niepcewindow.cpp \
-	niepceapplication.cpp librarymainview.cpp \
-	librarymainviewcontroller.cpp \
-	workspacecontroller.cpp \
-	metadatapanecontroller.h metadatapanecontroller.cpp
+libniepceui_la_SOURCES = niepcewindow.h niepcewindow.cpp \
+	niepceapplication.h niepceapplication.cpp \
+	librarymainview.h librarymainview.cpp \
+	librarymainviewcontroller.h librarymainviewcontroller.cpp \
+	workspacecontroller.h workspacecontroller.cpp \
+	metadatapanecontroller.h metadatapanecontroller.cpp \
+	importdialog.h importdialog.cpp
