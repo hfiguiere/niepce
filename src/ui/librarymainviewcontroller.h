@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarymainviewcontroller.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/paned.h>
 
 #include "librarymainview.h"
 #include "db/libfile.h"
@@ -77,6 +78,12 @@ namespace ui {
 		LibraryMainView              m_mainview;
 		Gtk::IconView                m_librarylistview;
 		Gtk::ScrolledWindow          m_scrollview;
+		// library split view
+		Gtk::HPaned                  m_lib_splitview;
+		Gtk::VBox                    m_lib_metapane;
+		Gtk::ScrolledWindow          m_lib_metapanescroll;
+		// darkroom split view
+		Gtk::HPaned                  m_dr_splitview;
 		LibraryListColumns           m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_model;
 		std::map<int, Gtk::TreeIter> m_idmap;

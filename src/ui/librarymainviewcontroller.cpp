@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarymainviewcontroller.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "framework/application.h"
 #include "librarymainviewcontroller.h"
 #include "niepcewindow.h"
+#include "framework/metadatawidget.h"
 
 namespace ui {
 
@@ -104,12 +105,36 @@ namespace ui {
 		m_librarylistview.set_model(m_model);
 		m_scrollview.add(m_librarylistview);
 		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-		m_mainview.append_page(m_scrollview, _("Library"));
+		m_lib_splitview.pack1(m_scrollview);
+		m_lib_splitview.pack2(m_lib_metapanescroll);
+		m_lib_metapanescroll.add(m_lib_metapane);
+		m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 		
+		framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(_("Exif")));
+		m_lib_metapane.pack_end(*w, Gtk::PACK_EXPAND_WIDGET, 0);
+
+#if 0
+		// TODO test, remove
+		Gtk::Label *label = Gtk::manage(new Gtk::Label("Data"));
+		w->add_data("foo", "Foo:", label);
+		label->set_justify(Gtk::JUSTIFY_LEFT);
+		label->property_xalign() = 0;
+		Gtk::Entry *entry = Gtk::manage(new Gtk::Entry());
+		entry->set_text("this is a text");
+		w->add_data("bar", "Bar:", entry);
+#endif
+
+		m_mainview.append_page(m_lib_splitview, _("Library"));
+		
+		// TODO DarkroomModuleController
 		GtkWidget *iv = gtk_image_view_new();
 		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
 		m_imageview = Gtk::manage(Glib::wrap(ivs));
-		m_mainview.append_page(*m_imageview, _("Darkroom"));
+		m_dr_splitview.pack1(*m_imageview, Gtk::EXPAND);
+		m_mainview.append_page(m_dr_splitview, _("Darkroom"));
+
+		// TODO PrintModuleController
+		// m_mainview.append_page(, _("Print"));
 		return &m_mainview;
 	}
 
