@@ -33,7 +33,7 @@
 #include "framework/application.h"
 #include "librarymainviewcontroller.h"
 #include "niepcewindow.h"
-#include "framework/metadatawidget.h"
+#include "metadatapanecontroller.h"
 
 namespace ui {
 
@@ -107,24 +107,21 @@ namespace ui {
 		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 		m_lib_splitview.pack1(m_scrollview);
 		m_lib_splitview.pack2(m_lib_metapanescroll);
-		m_lib_metapanescroll.add(m_lib_metapane);
+		m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
+		Gtk::Widget *lib_metapane = m_metapanecontroller->buildWidget();
+		m_lib_metapanescroll.add(*lib_metapane);
 		m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+
+		m_databinders.add_binder(new framework::ConfigDataBinder<int>(
+									 m_lib_splitview.property_position(),
+									 framework::Application::app()->config(),
+									 "meta_pane_splitter"));
 		
-		framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(_("Exif")));
-		m_lib_metapane.pack_end(*w, Gtk::PACK_EXPAND_WIDGET, 0);
-
-#if 0
-		// TODO test, remove
-		Gtk::Label *label = Gtk::manage(new Gtk::Label("Data"));
-		w->add_data("foo", "Foo:", label);
-		label->set_justify(Gtk::JUSTIFY_LEFT);
-		label->property_xalign() = 0;
-		Gtk::Entry *entry = Gtk::manage(new Gtk::Entry());
-		entry->set_text("this is a text");
-		w->add_data("bar", "Bar:", entry);
-#endif
-
 		m_mainview.append_page(m_lib_splitview, _("Library"));
+
+//		m_librarylistview.signal_selection_changed()
+//			.connect(sigc::mem_fun(*m_metapanecontroller,
+//								   &MetaDataPaneController::on_selection_changed));
 		
 		// TODO DarkroomModuleController
 		GtkWidget *iv = gtk_image_view_new();

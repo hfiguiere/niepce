@@ -24,4 +24,5 @@ libniepceui_la_CPPFLAGS = \
 libniepceui_la_SOURCES = niepcewindow.cpp \
 	niepceapplication.cpp librarymainview.cpp \
 	librarymainviewcontroller.cpp \
-	workspacecontroller.cpp
+	workspacecontroller.cpp \
+	metadatapanecontroller.h metadatapanecontroller.cpp

@@ -1,5 +1,5 @@
 /*
- * niepce - framework/metadatawidget.h
+ * niepce - ui/metadatapanecontroller.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,38 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
-#define __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
+#ifndef __UI_METADATAPANECONTROLLER_H__
+#define __UI_METADATAPANECONTROLLER_H__
 
+#include <gtkmm/box.h>
 
-#include <map>
-#include <string>
+#include "framework/controller.h"
 
-#include <gtkmm/table.h>
-#include <gtkmm/expander.h>
-
-
-namespace utils {
-	class XmpMeta;
-}
-
-namespace framework {
-
-class MetaDataWidget 
-	: public Gtk::Expander
-{
-public:
-	MetaDataWidget(const Glib::ustring & title);
+namespace ui {
 	
-	void add_data(const std::string & id, const Glib::ustring & label,
-				  Gtk::Widget *w);
-	void set_data_source(const utils::XmpMeta & xmp);
-protected:
-private:
-	Gtk::Table    m_table;
-	std::map<std::string, Gtk::Widget *> m_data_map;
-};
+	class MetaDataPaneController
+		: public framework::Controller
+	{
+	public:
+		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
+
+		virtual Gtk::Widget * buildWidget();
+	private:
+		Gtk::VBox m_metapane;
+	};
 
 }
+
+
 
 #endif

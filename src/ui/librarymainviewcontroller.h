@@ -33,6 +33,7 @@
 #include "libraryclient/libraryclient.h"
 #include "framework/controller.h"
 #include "framework/notification.h"
+#include "metadatapanecontroller.h"
 
 namespace Gtk {
 	class Widget;
@@ -80,8 +81,8 @@ namespace ui {
 		Gtk::ScrolledWindow          m_scrollview;
 		// library split view
 		Gtk::HPaned                  m_lib_splitview;
-		Gtk::VBox                    m_lib_metapane;
 		Gtk::ScrolledWindow          m_lib_metapanescroll;
+		MetaDataPaneController::Ptr  m_metapanecontroller;
 		// darkroom split view
 		Gtk::HPaned                  m_dr_splitview;
 		LibraryListColumns           m_columns;

@@ -20,7 +20,12 @@
 
 #include <utility>
 
+#include <boost/lexical_cast.hpp>
+#include <glibmm/i18n.h>
 #include <gtkmm/label.h>
+
+#include "utils/exempi.h"
+#include "utils/stringutils.h"
 
 #include "metadatawidget.h"
 
@@ -33,8 +38,21 @@ namespace framework {
 		  m_table(1, 2, false)
 	{
 		add(m_table);
+		set_expanded(true);
 	}
 
+	void MetaDataWidget::set_data_source(const utils::XmpMeta & xmp)
+	{
+		// TODO fix this.
+		std::string s(boost::lexical_cast<std::string>(xmp.rating()));
+		Gtk::Label *l = Gtk::manage(new Gtk::Label(s));
+		add_data("rating", _("Rating:"), l);
+		l = Gtk::manage(new Gtk::Label(xmp.creation_date_str()));
+		add_data("creation_date", _("Date:"), l);
+		const std::vector< std::string > & keywords(xmp.keywords());
+		l = Gtk::manage(new Gtk::Label(utils::join(keywords, ", ")));		
+		add_data("keywords", _("Keywords:"), l);		
+	}
 
 	void MetaDataWidget::add_data(const std::string & id, const Glib::ustring & label,
 								 Gtk::Widget *w)
