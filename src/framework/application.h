@@ -41,6 +41,7 @@ namespace framework {
 		virtual ~Application();
 
 		virtual Glib::ustring get_rc_path();
+		virtual bool use_custom_theme() const;
 		virtual Frame::Ptr makeMainFrame() = 0;
 
 		Configuration & config()

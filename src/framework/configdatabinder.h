@@ -66,12 +66,12 @@ public:
 			value = m_config.getValue(m_config_key, "");
 			if(!value.empty()) {
 				try {
-					static_cast<property_t&>(m_property)
-						.set_value(boost::lexical_cast<int>(value));
+					static_cast<property_t&>(m_property).set_value(
+						boost::lexical_cast<T>(value));
 				}
 				catch(const boost::bad_lexical_cast &)
 				{
-					ERR_OUT("exception");
+					ERR_OUT("exception converting %s", value.c_str());
 				}
 			}
 		}
@@ -80,7 +80,7 @@ public:
 		{
 			try {
 				m_config.setValue(m_config_key, 
-								  boost::lexical_cast<Glib::ustring>(m_value));
+								  boost::lexical_cast<std::string>(m_value));
 			}
 			catch(const boost::bad_lexical_cast &)
 			{

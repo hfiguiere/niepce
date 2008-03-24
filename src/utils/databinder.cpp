@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "debug.h"
 #include "databinder.h"
 
 namespace utils {
@@ -33,6 +34,11 @@ DataBinderPool::~DataBinderPool()
 void DataBinderPool::add_binder(DataBinderBase *binder)
 {
 	push_back(binder);
+}
+
+void DataBinderPool::destroy(DataBinderPool *pool)
+{
+	delete pool;
 }
 
 

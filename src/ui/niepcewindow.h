@@ -65,6 +65,10 @@ namespace ui {
 		void on_lib_notification(const framework::Notification::Ptr &);
 		void on_tnail_notification(const framework::Notification::Ptr &);
 
+		void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
+									 Gtk::Dialog *);
+		void on_preferences();
+
 		void init_ui();
 		void init_actions();
 

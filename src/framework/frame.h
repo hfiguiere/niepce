@@ -1,7 +1,7 @@
 /*
  * niepce - framework/frame.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@
 #define _FRAMEWORK_FRAME_H_
 
 #include <string>
-
+#include <boost/function.hpp>
 #include <libglademm/xml.h>
 
 #include "framework/controller.h"
 
 namespace Gtk {
-	class Window;
+	class Dialog;
 }
 
 namespace framework {
@@ -61,6 +61,15 @@ namespace framework {
 		 * @param name the icon name in the theme
 		 */
 		void set_icon_from_theme(const Glib::ustring & name);
+
+		/** show a model dialog
+		 * @param dlg the dialog to show.
+		 * @return the result from Dialog::run()
+		 */
+		int show_modal_dialog(Gtk::Dialog & dlg);
+		int show_modal_dialog(const char *gladefile,
+							  const char *widgetname,
+							  boost::function<void (const Glib::RefPtr<Gnome::Glade::Xml> &, Gtk::Dialog *)> setup = NULL);
 	protected:
 		/** close signal handler */
 		virtual bool _close();

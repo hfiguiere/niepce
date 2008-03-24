@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/bind.hpp>
 
-#include <gtkmm/window.h>
+#include <gtkmm/dialog.h>
 
 #include "utils/debug.h"
 #include "utils/boost.h"
@@ -99,6 +99,30 @@ namespace framework {
 	void Frame::set_title(const std::string & title)
 	{
 		gtkWindow().set_title(Glib::ustring(title));
+	}
+
+	int Frame::show_modal_dialog(Gtk::Dialog & dlg)
+	{
+		int result;
+		dlg.set_transient_for(*m_window);
+		dlg.set_default_response(Gtk::RESPONSE_CLOSE);
+		result = dlg.run();
+		dlg.hide();
+		return result;
+	}
+
+	int Frame::show_modal_dialog(const char *gladefile,
+								 const char *widgetname,
+								 boost::function<void (const Glib::RefPtr<Gnome::Glade::Xml> &, Gtk::Dialog *)> setup)
+	{
+		Glib::RefPtr<Gnome::Glade::Xml> refXml = Gnome::Glade::Xml::create(gladefile);
+		Gtk::Dialog *dlg = NULL;
+
+		dlg = refXml->get_widget(widgetname, dlg);
+		if(setup) {
+			setup(refXml, dlg);
+		}
+		return show_modal_dialog(*dlg);
 	}
 
 

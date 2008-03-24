@@ -20,11 +20,13 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/rc.h>
 
+#include "utils/debug.h"
 #include "application.h"
 #include "frame.h"
 
@@ -66,6 +68,18 @@ namespace framework {
 		return Gtk::IconTheme::get_default();
 	}
 
+	bool Application::use_custom_theme() const
+	{
+		int v;
+		try {
+			v = boost::lexical_cast<int>(m_config.getValue("ui_theme_set", "0"));
+		} 
+		catch(...) {
+			v = 0;
+		}
+		return v != 0;
+	}
+
 	/** Main loop. 
 	 * @param constructor the Application object constructor
 	 * @param argc
@@ -79,9 +93,12 @@ namespace framework {
 		Gtk::Main kit(argc, argv);
 		Application::Ptr app = constructor();
 
-		std::string rcpath = app->get_rc_path();
-		if(!rcpath.empty()) {
-			Gtk::RC rc(rcpath);
+		DBG_OUT("use_custon_theme %d", app->use_custom_theme());
+		if(app->use_custom_theme()) {
+			std::string rcpath = app->get_rc_path();
+			if(!rcpath.empty()) {
+				Gtk::RC rc(rcpath);
+			}
 		}
 
 		kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 

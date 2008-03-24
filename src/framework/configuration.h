@@ -40,7 +40,6 @@ namespace framework {
 									 const Glib::ustring & def) const;
 
 		void setValue(const Glib::ustring & key, const Glib::ustring & value);
-
 	private:
 		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
 		Glib::ustring                       m_root;

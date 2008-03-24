@@ -47,6 +47,7 @@ public:
 	~DataBinderPool();
 	/** add a data binder to the pool. the pool will own the pointer */
 	void add_binder(DataBinderBase *);
+	static void destroy(DataBinderPool *pool);
 };
 
 

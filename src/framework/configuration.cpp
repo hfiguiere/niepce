@@ -59,7 +59,7 @@ namespace framework {
 
 
 	const Glib::ustring Configuration::getValue(const Glib::ustring & key,
-															 const Glib::ustring & def) const
+												const Glib::ustring & def) const
 	{
 		Glib::ustring value;
 		try {
@@ -73,10 +73,8 @@ namespace framework {
 		return value;
 	}
 
-
-
 	void Configuration::setValue(const Glib::ustring & key, 
-															 const Glib::ustring & value)
+								 const Glib::ustring & value)
 	{
 		try {
 			m_gconf->set(m_root + "/" + key, value);

@@ -22,12 +22,12 @@
 #include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
-
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/combobox.h>
 
 #include "niepce/notifications.h"
 #include "utils/debug.h"
@@ -39,6 +39,7 @@
 #include "framework/configuration.h"
 #include "framework/notificationcenter.h"
 #include "framework/gdkutils.h"
+#include "framework/configdatabinder.h"
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
@@ -110,8 +111,7 @@ namespace ui {
 		m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
 		m_databinders.add_binder(new framework::ConfigDataBinder<int>(m_hbox.property_position(),
 																	  Application::app()->config(),
-																	  "workspaceSplitter"));
-
+																	  "workspace_splitter"));
 
 		win.add(m_vbox);
 
@@ -149,13 +149,20 @@ namespace ui {
 							  sigc::mem_fun(gtkWindow(), 
 											&Gtk::Window::hide));			
 		m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-							  sigc::mem_fun(Application::app().get(), 
+							  sigc::mem_fun(*Application::app(), 
 											&Application::quit));	
+
+		m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
+		// TODO link to action
+		m_refActionGroup->add(Gtk::Action::create("Preferences", 
+												  Gtk::Stock::PREFERENCES),
+							  sigc::mem_fun(this,
+											&NiepceWindow::on_preferences));
 
 		m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
 		m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));
 		m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT),
-							  sigc::mem_fun(Application::app().get(),
+							  sigc::mem_fun(*Application::app(),
 											&Application::about));
 
 		Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
@@ -251,7 +258,16 @@ namespace ui {
 	{
 		Configuration & cfg = Application::app()->config();
 		std::string libMoniker;
-		libMoniker = cfg.getValue("lastOpenLibrary", "");
+		int reopen = 0;
+		try {
+			reopen = boost::lexical_cast<int>(cfg.getValue("reopen_last_library", "0"));
+		}
+		catch(...)
+		{
+		}
+		if(reopen) {
+			libMoniker = cfg.getValue("lastOpenLibrary", "");
+		}
 		if(libMoniker.empty()) {
 			Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
 										  Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
@@ -282,6 +298,39 @@ namespace ui {
 		open_library(libMoniker);
 	}
 
+
+	void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> & xml, Gtk::Dialog * dialog)
+	{
+		Gtk::ComboBox * theme_combo = NULL;
+		Gtk::CheckButton * reopen_checkbutton = NULL;
+		utils::DataBinderPool * binder_pool = new utils::DataBinderPool();
+
+		dialog->signal_hide().connect(boost::bind(&utils::DataBinderPool::destroy, 
+												  binder_pool));
+		
+		theme_combo = xml->get_widget("theme_combo", theme_combo);
+		binder_pool->add_binder(new framework::ConfigDataBinder<int>(
+									theme_combo->property_active(),
+									framework::Application::app()->config(),
+									"ui_theme_set"));
+		
+		reopen_checkbutton = xml->get_widget("reopen_checkbutton", reopen_checkbutton);
+		binder_pool->add_binder(new framework::ConfigDataBinder<bool>(
+									reopen_checkbutton->property_active(),
+									framework::Application::app()->config(),
+									"reopen_last_library"));
+	}
+
+
+	void NiepceWindow::on_preferences()
+	{
+		DBG_OUT("on_preferences");
+		show_modal_dialog(GLADEDIR"preferences.glade", "preferences",
+						  boost::bind(&NiepceWindow::preference_dialog_setup,
+									  this, _1, _2));
+		DBG_OUT("end on_preferences");
+	}
+
 	void NiepceWindow::init_ui()
 	{
 		Application::Ptr pApp = Application::app();
@@ -294,11 +343,13 @@ namespace ui {
 			"      <menuitem action='Close'/>"
 			"      <menuitem action='Quit'/>"
 			"    </menu>"
-//			"    <menu action='MenuEdit'>"
+			"    <menu action='MenuEdit'>"
 //			"      <menuitem action='Cut'/>"
 //			"      <menuitem action='Copy'/>"
 //			"      <menuitem action='Paste'/>"
-//			"    </menu>"
+//			"      <separator/>"
+			"      <menuitem action='Preferences'/>"
+			"    </menu>"
 			"    <menu action='MenuHelp'>"
 			"      <menuitem action='Help'/>"
 			"      <menuitem action='About'/>"
