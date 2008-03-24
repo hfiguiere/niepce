@@ -203,6 +203,19 @@ namespace utils {
 		return date;
 	}
 
+	std::string XmpMeta::creation_date_str() const
+	{
+		std::string s;
+		XmpStringPtr value = xmp_string_new();		
+		if(xmp_get_property(m_xmp, NS_EXIF, "DateTimeOriginal", 
+								 value, NULL)) {
+			s = xmp_string_cstr(value);
+		}
+		xmp_string_free(value);
+		return s;
+	}
+
+
 	const std::vector< std::string > & XmpMeta::keywords() const
 	{
 		if(!m_keyword_fetched) {
@@ -212,6 +225,7 @@ namespace utils {
 			while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
 				m_keywords.push_back(xmp_string_cstr(value));
 			}
+			xmp_string_free(value);
 			m_keyword_fetched = true;
 		}
 		return m_keywords;

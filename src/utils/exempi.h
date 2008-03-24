@@ -25,6 +25,7 @@
 
 #include <boost/filesystem/path.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <exempi/xmp.h>
 
@@ -64,6 +65,7 @@ namespace utils {
 		std::string label() const;
 		int32_t rating() const;
 		time_t  creation_date() const;
+		std::string creation_date_str() const;
 		const std::vector< std::string > & keywords() const;
 	private:
 		XmpMeta( const XmpMeta & ); // copy constructor
