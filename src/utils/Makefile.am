@@ -2,11 +2,13 @@
 
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
-TESTS = testmoniker testfiles testgeometry testxmp testufrawmeta
+TESTS = testmoniker testfiles testgeometry testxmp testufrawmeta \
+	teststringutils
 
 EXTRA_DIST = test.xmp test2.ufraw
 
-check_PROGRAMS = testmoniker testfiles testgeometry testxmp testufrawmeta
+check_PROGRAMS = testmoniker testfiles testgeometry testxmp testufrawmeta \
+	teststringutils
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.la \
@@ -29,10 +31,14 @@ testufrawmeta_LDADD = libniepceutils.la ../niepce/libniepceglobals.la \
 	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @LIBXML2_LIBS@ \
 	@BOOST_THREAD_LIBS@
 
+teststringutils_SOURCES = teststringutils.cpp
+teststringutils_LDADD = 
+
 noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \
-	mtqueue.h exempi.h exempi.cpp \
+	mtqueue.h string.h \
+	exempi.h exempi.cpp \
 	ufrawmeta.h ufrawmeta.cpp \
 	buffer.h logstreamutils.h \
 	moniker.h moniker.cpp \
