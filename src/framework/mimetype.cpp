@@ -21,6 +21,8 @@
 
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 
+#include "config.h"
+
 #include "mimetype.h"
 
 namespace bfs = boost::filesystem;
@@ -29,7 +31,7 @@ namespace framework {
 
 	MimeType::MimeType(const char * filename)
 	{
-#if GNOMEVFS_VER >= 214
+#if HAVE_GNOME_VFS_2_14
 		m_type = gnome_vfs_get_mime_type_for_name(filename);
 #else
 		std::string f("file:///");
@@ -40,7 +42,7 @@ namespace framework {
 
 	MimeType::MimeType(const boost::filesystem::path & filename)
 	{
-#if GNOMEVFS_VER >= 214
+#if HAVE_GNOME_VFS_2_14
 		m_type = gnome_vfs_get_mime_type_for_name(filename.string().c_str());
 #else
 		std::string f("file:///");
