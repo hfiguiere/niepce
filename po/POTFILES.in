@@ -1,4 +1,9 @@
-src/ui/niepcewindow.cpp
+src/framework/metadatawidget.cpp
+src/ui/importdialog.cpp
+src/ui/importdialog.glade
 src/ui/librarymainviewcontroller.cpp
+src/ui/metadatapanecontroller.cpp
+src/ui/niepcewindow.cpp
+src/ui/preferences.glade
 src/ui/workspacecontroller.cpp
 src/ui/thumb-view/eog-thumb-view.cpp
