@@ -11,7 +11,8 @@ glade_DATA = $(gladefiles)
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-DGLADEDIR=\"$(gladedir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
-	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@
+	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
+	@EXEMPI_CFLAGS@
 
 EXTRA_DIST = $(gladefiles)
 
@@ -24,4 +25,6 @@ libniepceui_la_SOURCES = niepcewindow.h niepcewindow.cpp \
 	librarymainviewcontroller.h librarymainviewcontroller.cpp \
 	workspacecontroller.h workspacecontroller.cpp \
 	metadatapanecontroller.h metadatapanecontroller.cpp \
-	importdialog.h importdialog.cpp
+	importdialog.h importdialog.cpp \
+	selectioncontroller.h selectioncontroller.cpp \
+	filmstripcontroller.h filmstripcontroller.cpp

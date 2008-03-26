@@ -1,5 +1,5 @@
 /*
- * niepce - ui/metadatapanecontroller.h
+ * niepce - utils/autoflag.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,32 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UI_METADATAPANECONTROLLER_H__
-#define __UI_METADATAPANECONTROLLER_H__
 
-#include <gtkmm/box.h>
+#ifndef _UTILS_AUTOFLAG_H_
+#define _UTILS_AUTOFLAG_H_
 
-#include "utils/exempi.h"
-#include "framework/controller.h"
-#include "framework/metadatawidget.h"
+#include "utils/debug.h"
 
-namespace ui {
-	
-	class MetaDataPaneController
-		: public framework::Controller
-	{
-	public:
-		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
+namespace utils {
 
-		virtual Gtk::Widget * buildWidget();
-		void display(const utils::XmpMeta & meta);
-	private:
-		Gtk::VBox m_metapane;
-		framework::MetaDataWidget * m_metadataw;
-	};
+class AutoFlag
+{
+public:
+	AutoFlag(bool & f)
+		: m_flag(f)
+		{
+			m_flag = true;
+		}
+	~AutoFlag()
+		{
+			m_flag = false;
+		}
+
+private:
+	bool & m_flag;
+};
 
 }
-
-
 
 #endif

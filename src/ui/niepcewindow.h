@@ -35,6 +35,8 @@
 #include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
 #include "ui/workspacecontroller.h"
+#include "ui/selectioncontroller.h"
+#include "ui/filmstripcontroller.h"
 
 namespace framework {
 	class NotificatioCenter;
@@ -62,12 +64,12 @@ namespace ui {
 
 		void on_action_file_quit();
 		void on_open_library();
-		void on_lib_notification(const framework::Notification::Ptr &);
-		void on_tnail_notification(const framework::Notification::Ptr &);
 
 		void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
 									 Gtk::Dialog *);
 		void on_preferences();
+
+		void on_selected(int id);
 
 		void init_ui();
 		void init_actions();
@@ -80,10 +82,11 @@ namespace ui {
 		Gtk::HPaned                    m_hbox;
 		LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
 		WorkspaceController::Ptr       m_workspacectrl;
+		FilmStripController::Ptr       m_filmstrip;
+		ui::SelectionController::Ptr   m_selection_controller;
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		libraryclient::LibraryClient::Ptr m_libClient;
-		GtkWidget*                     m_thumbview;
 	};
 
 }

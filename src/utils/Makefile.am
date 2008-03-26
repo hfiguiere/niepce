@@ -38,6 +38,7 @@ noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \
 	mtqueue.h string.h \
+	autoflag.h \
 	exempi.h exempi.cpp \
 	ufrawmeta.h ufrawmeta.cpp \
 	buffer.h logstreamutils.h \

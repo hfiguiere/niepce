@@ -14,7 +14,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    sodipodi:docbase="/home/hub/cvslocal/niepce/doc"
-   sodipodi:docname="ui.svg"
+   sodipodi:docname="mainwindow-ui.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
@@ -44,13 +44,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
      inkscape:cx="339.23371"
-     inkscape:cy="669.3071"
+     inkscape:cy="609.53074"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
-     inkscape:window-width="1024"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1018"
      inkscape:window-height="691"
      inkscape:window-x="0"
-     inkscape:window-y="27" />
+     inkscape:window-y="26" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -143,7 +143,7 @@
            y="669.51434"
            x="437.39606"
            id="tspan4363"
-           sodipodi:role="line">Film strip (niepcewindow)</tspan></text>
+           sodipodi:role="line">Film strip (filmstripcontroller)</tspan></text>
     </g>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.86790729px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Lstart);stroke-opacity:1;display:inline"

@@ -34,6 +34,7 @@
 #include "framework/controller.h"
 #include "framework/notification.h"
 #include "metadatapanecontroller.h"
+#include "selectioncontroller.h"
 
 namespace Gtk {
 	class Widget;
@@ -43,12 +44,12 @@ namespace Gtk {
 namespace ui {
 
 	class LibraryMainViewController
-		: public framework::Controller
+		: public framework::Controller,
+		  public IImageSelectable
 	{
 	public:
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
-
 
 		class LibraryListColumns 
 			: public Gtk::TreeModelColumnRecord
@@ -68,7 +69,12 @@ namespace ui {
 
 		void on_lib_notification(const framework::Notification::Ptr &);
 		void on_tnail_notification(const framework::Notification::Ptr &);
-		
+		/** called when somehing is selected by the shared selection */
+		void on_selected(int id);
+
+		virtual Gtk::IconView * image_list();
+		virtual int get_selected();
+		virtual void select_image(int id);
 	protected:
 		virtual Gtk::Widget * buildWidget();
 		virtual void on_ready();

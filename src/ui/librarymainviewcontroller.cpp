@@ -103,13 +103,13 @@ namespace ui {
 		m_librarylistview.set_pixbuf_column(m_columns.m_pix);
 		m_librarylistview.set_markup_column(m_columns.m_name);
 		m_librarylistview.set_model(m_model);
+		m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
 		m_scrollview.add(m_librarylistview);
 		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 		m_lib_splitview.pack1(m_scrollview);
 		m_lib_splitview.pack2(m_lib_metapanescroll);
 		m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
-		Gtk::Widget *lib_metapane = m_metapanecontroller->buildWidget();
-		m_lib_metapanescroll.add(*lib_metapane);
+		m_lib_metapanescroll.add(*m_metapanecontroller->widget());
 		m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 
 		m_databinders.add_binder(new framework::ConfigDataBinder<int>(
@@ -135,13 +135,73 @@ namespace ui {
 		return &m_mainview;
 	}
 
+
 	void LibraryMainViewController::on_ready()
 	{
 	}
 
+
+	void LibraryMainViewController::on_selected(int id)
+	{
+		DBG_OUT("selected callback %d", id);
+		std::map<int, Gtk::TreeIter>::iterator iter
+			= m_idmap.find( id );
+		if(iter != m_idmap.end()) {
+			db::LibFile::Ptr libfile = (*iter->second)[m_columns.m_libfile];
+
+			// FIXME get the XMP a different way as it is in the DB
+			// 
+			utils::XmpMeta meta(libfile->path(), false);
+			if(meta.isOk()) {
+				m_metapanecontroller->display(meta);
+			}
+		}		
+	}
+
+
 	libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
 	{
 		return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+	}
+
+
+	Gtk::IconView * LibraryMainViewController::image_list()
+	{ 
+		return & m_librarylistview; 
+	}
+
+	int LibraryMainViewController::get_selected()
+	{
+		int id = 0;
+		Glib::RefPtr<Gtk::TreeSelection> selection;
+
+		Gtk::IconView::ArrayHandle_TreePaths paths = m_librarylistview.get_selected_items();
+		if(!paths.empty()) {
+			Gtk::TreePath path(*(paths.begin()));
+			DBG_OUT("found path %s", path.to_string().c_str());
+			Gtk::TreeRow row = *(m_model->get_iter(path));
+			if(row) {
+				DBG_OUT("found row");
+				db::LibFile::Ptr libfile = row[m_columns.m_libfile];
+				if(libfile) {
+					id = libfile->id();
+				}
+			}
+		}
+		DBG_OUT("get_selected %d", id);
+		return id;
+	}
+
+	void LibraryMainViewController::select_image(int id)
+	{
+		DBG_OUT("library select %d", id);
+		std::map<int, Gtk::TreeIter>::iterator iter
+			= m_idmap.find( id );
+		if(iter != m_idmap.end()) {
+			// found the icon view item
+			Gtk::TreePath path = m_model->get_path(iter->second);
+			m_librarylistview.select_path(path);
+		}
 	}
 
 }

@@ -33,19 +33,17 @@
 #include "utils/debug.h"
 #include "utils/moniker.h"
 #include "db/library.h"
-#include "library/thumbnailnotification.h"
 #include "libraryclient/libraryclient.h"
 #include "framework/application.h"
 #include "framework/configuration.h"
 #include "framework/notificationcenter.h"
-#include "framework/gdkutils.h"
 #include "framework/configdatabinder.h"
 
-#include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
 #include "niepcewindow.h"
 #include "librarymainviewcontroller.h"
 #include "importdialog.h"
+#include "selectioncontroller.h"
 
 using libraryclient::LibraryClient;
 using framework::Application;
@@ -78,12 +76,6 @@ namespace ui {
 		init_ui();
 
 		m_lib_notifcenter.reset(new NotificationCenter());
-		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
-									 boost::bind(&NiepceWindow::on_lib_notification, 
-												 this, _1));
-		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
-									 boost::bind(&NiepceWindow::on_tnail_notification, 
-												 this, _1));
 
 		Glib::ustring name("camera");
 		set_icon_from_theme(name);		
@@ -121,15 +113,31 @@ namespace ui {
 		m_vbox.pack_start(m_hbox);
 
 
-		// ribbon FIXME Move to its own controller
-		m_thumbview = eog_thumb_view_new();
-		GtkWidget *thn = eog_thumb_nav_new(m_thumbview, EOG_THUMB_NAV_MODE_ONE_ROW, true);
-		Gtk::Widget *w = Glib::wrap(thn);
-		m_vbox.pack_start(*w, Gtk::PACK_SHRINK);
+		m_filmstrip = FilmStripController::Ptr(new FilmStripController);
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
+									 boost::bind(&FilmStripController::on_lib_notification, 
+												 m_filmstrip, _1));
+		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
+									 boost::bind(&FilmStripController::on_tnail_notification, 
+												 m_filmstrip, _1));
+
+		add(m_filmstrip);
+
+		m_vbox.pack_start(*(m_filmstrip->widget()), Gtk::PACK_SHRINK);
 
 		// status bar
 		m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
 		m_statusBar.push(Glib::ustring(_("Ready")));
+
+		m_selection_controller = SelectionController::Ptr(new SelectionController);
+		m_selection_controller->add_selectable(m_filmstrip.get());
+		m_selection_controller->add_selectable(m_mainviewctrl.get());
+		m_selection_controller->signal_selected
+			.connect(boost::bind(&NiepceWindow::on_selected,
+								 this, _1));
+		m_selection_controller->signal_selected
+			.connect(boost::bind(&LibraryMainViewController::on_selected,
+								 m_mainviewctrl, _1));
 
 		win.set_size_request(600, 400);
 		win.show_all_children();
@@ -204,51 +212,6 @@ namespace ui {
 	}
 
 
-	void NiepceWindow::on_lib_notification(const framework::Notification::Ptr &n)
-	{
-		DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, "wrong notification type");
-		if(n->type() == niepce::NOTIFICATION_LIB) {
-			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
-			switch(ln.type) {
-			case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-			case db::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
-			{
-				db::LibFile::ListPtr l 
-					= boost::any_cast<db::LibFile::ListPtr>(ln.param);
-				DBG_OUT("received folder content file # %d", l->size());
-
-				Glib::RefPtr<EogListStore> store(new EogListStore( *l ));
-				eog_thumb_view_set_model((EogThumbView*)m_thumbview, 
-										 store);
-				break;
-			}
-			default:
-				break;
-			}
-		}
-	}
-
-	void NiepceWindow::on_tnail_notification(const framework::Notification::Ptr &n)
-	{
-		DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, "wrong notification type");
-		if(n->type() == niepce::NOTIFICATION_THUMBNAIL)	{
-			Glib::RefPtr<EogListStore> store 
-				= eog_thumb_view_get_model((EogThumbView*)m_thumbview);
-			library::ThumbnailNotification tn 
-				= boost::any_cast<library::ThumbnailNotification>(n->data());
-			Gtk::TreeRow row;
-			bool found = store->find_by_id(tn.id, row);
-			if(found) {
-				// FIXME parametrize
-				row[store->m_columns.m_thumbnail] = framework::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
-			}
-			else {
-				DBG_OUT("row %d not found", tn.id);
-			}
-		}
-	}
-
-
 
 	void NiepceWindow::on_action_file_quit()
 	{
@@ -298,6 +261,11 @@ namespace ui {
 			DBG_OUT("last library is %s", libMoniker.c_str());
 		}
 		open_library(libMoniker);
+	}
+
+	void NiepceWindow::on_selected(int id)
+	{
+		DBG_OUT("on selected %d", id);
 	}
 
 

@@ -21,6 +21,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
 
+#include "utils/debug.h"
 #include "framework/metadatawidget.h"
 #include "metadatapanecontroller.h"
 
@@ -30,10 +31,12 @@ namespace ui {
 	
 	Gtk::Widget * MetaDataPaneController::buildWidget()
 	{
-		framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(_("Exif")));
-		m_metapane.pack_end(*w, Gtk::PACK_EXPAND_WIDGET, 0);
+		m_metadataw = Gtk::manage(new framework::MetaDataWidget(_("Exif")));
+		m_metapane.pack_end(*m_metadataw, Gtk::PACK_EXPAND_WIDGET, 0);
+		m_widget = &m_metapane;
 
 		// TODO test, remove
+#if 0
 		Gtk::Label *label = Gtk::manage(new Gtk::Label("Data"));
 		w->add_data("foo", "Foo:", label);
 		label->set_justify(Gtk::JUSTIFY_LEFT);
@@ -41,8 +44,16 @@ namespace ui {
 		Gtk::Entry *entry = Gtk::manage(new Gtk::Entry());
 		entry->set_text("this is a text");
 		w->add_data("bar", "Bar:", entry);
-	
+#endif
+
 		return &m_metapane;
+	}
+
+
+	void MetaDataPaneController::display(const utils::XmpMeta & meta)
+	{
+		DBG_OUT("displaying metadata");
+		m_metadataw->set_data_source(meta);		
 	}
 
 }
