@@ -32,8 +32,8 @@ namespace framework {
 		orig_w = pix->get_width();
 		int orig_dim = std::max(orig_h, orig_w);
 		double ratio = (double)dim / (double)orig_dim;
-		width = ratio * orig_w;
-		height = ratio * orig_h;
+		width = (int)(ratio * orig_w);
+		height = (int)(ratio * orig_h);
 		return pix->scale_simple(width, height, 
 								 Gdk::INTERP_BILINEAR);
 	}
