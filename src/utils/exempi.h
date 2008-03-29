@@ -29,6 +29,33 @@
 
 #include <exempi/xmp.h>
 
+namespace xmp {
+
+	enum MetaDataType {
+		META_DT_NONE = 0,
+		META_DT_STRING,
+		META_DT_DATE,
+		META_DT_STAR_RATING
+	};
+	
+	
+	struct MetaDataFormat {
+		const char * label;
+		const char * ns;
+		const char * property;
+		MetaDataType     type;
+		bool         readonly;
+	};
+	
+	struct MetaDataSectionFormat {
+		const char * section;
+		const MetaDataFormat * formats;
+	};
+	
+
+}
+
+
 namespace utils {
 
 	class ExempiManager

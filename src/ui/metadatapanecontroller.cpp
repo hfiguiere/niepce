@@ -20,40 +20,98 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-
+#include <boost/bind.hpp>
+#include <exempi/xmpconsts.h>
 #include "utils/debug.h"
+#include "utils/exempi.h"
 #include "framework/metadatawidget.h"
 #include "metadatapanecontroller.h"
 
+using namespace xmp;
 
 namespace ui {
 
 	
+	const MetaDataSectionFormat *
+	MetaDataPaneController::get_format() 
+	{
+		static const MetaDataFormat s_camerainfo_format[] = {
+			{ _("Make:"), NS_TIFF, "Make", META_DT_STRING, true },
+			{ _("Model:"), NS_TIFF, "Model", META_DT_STRING, true },
+			{ _("Lens:"), NS_EXIF_AUX, "Lens", META_DT_STRING, true },
+			
+			{ NULL, NULL, NULL, META_DT_NONE, true }
+		};
+		static const MetaDataFormat s_shootinginfo_format[] = {
+			{ _("Exposure Program:"), NS_EXIF, "ExposureProgram", META_DT_STRING, true },
+			{ _("Speed:"), NS_EXIF, "ExposureTime", META_DT_STRING, true },
+			{ _("Aperture:"), NS_EXIF, "FNumber", META_DT_STRING, true },
+			{ _("ISO:"), NS_EXIF, "ISOSpeedRatings[1]", META_DT_STRING, true },
+			{ _("Exposure Bias:"), NS_EXIF, "ExposureBiasValue", META_DT_STRING, true },
+			// this one is fishy as it hardcode the prefix.
+			{ _("Flash:"), NS_EXIF, "Flash/exif:Fired", META_DT_STRING, true },
+			{ _("Flash compensation:"), NS_EXIF_AUX, "FlashCompensation", META_DT_STRING, true },
+			{ _("Focal length:"), NS_EXIF, "FocalLength", META_DT_STRING, true },
+			{ _("White balance:"), NS_EXIF, "WhiteBalance", META_DT_STRING, true },
+			{ _("Date:"), NS_EXIF, "DateTimeOriginal", META_DT_DATE, false },
+			
+			{ NULL, NULL, NULL, META_DT_NONE, true }
+		};
+		static const MetaDataFormat s_iptc_format[] = {
+			{ _("Rating:"), NS_XAP, "Rating", META_DT_STAR_RATING, false },
+			{ _("Keywords:"), NS_DC, "subject[1]", META_DT_STRING, false },
+			{ NULL, NULL, NULL, META_DT_NONE, true }			
+		};
+		static const MetaDataSectionFormat s_format[] = {
+			{ _("Camera Information"),
+			  s_camerainfo_format
+			},
+			{ _("Shooting Information"),
+			  s_shootinginfo_format
+			},
+			{ _("IPTC"),
+			  s_iptc_format
+			},
+			{ _("Rights"),
+			  NULL
+			},
+			{ NULL, NULL
+			}
+		};
+		return s_format;
+	}
+
+	MetaDataPaneController::MetaDataPaneController()
+		: m_metapane(false)
+	{
+	}
+
+	
 	Gtk::Widget * MetaDataPaneController::buildWidget()
 	{
-		m_metadataw = Gtk::manage(new framework::MetaDataWidget(_("Exif")));
-		m_metapane.pack_end(*m_metadataw, Gtk::PACK_EXPAND_WIDGET, 0);
 		m_widget = &m_metapane;
 
-		// TODO test, remove
-#if 0
-		Gtk::Label *label = Gtk::manage(new Gtk::Label("Data"));
-		w->add_data("foo", "Foo:", label);
-		label->set_justify(Gtk::JUSTIFY_LEFT);
-		label->property_xalign() = 0;
-		Gtk::Entry *entry = Gtk::manage(new Gtk::Entry());
-		entry->set_text("this is a text");
-		w->add_data("bar", "Bar:", entry);
-#endif
+		const MetaDataSectionFormat * formats = get_format();
+		
+		const MetaDataSectionFormat * current = formats;
+		while(current->section) {
+			framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(current->section));
+			m_metapane.pack_start(*w, Gtk::PACK_SHRINK, 0);
+			w->set_data_format(current);
+			m_widgets.push_back(w);
+			current++;
+		}
 
 		return &m_metapane;
 	}
 
 
-	void MetaDataPaneController::display(const utils::XmpMeta & meta)
+	void MetaDataPaneController::display(const utils::XmpMeta * meta)
 	{
 		DBG_OUT("displaying metadata");
-		m_metadataw->set_data_source(meta);		
+		std::for_each(m_widgets.begin(), m_widgets.end(),
+					  boost::bind(&framework::MetaDataWidget::set_data_source,
+								  _1, meta));
 	}
 
 }

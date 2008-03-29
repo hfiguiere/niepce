@@ -21,6 +21,7 @@
 #include <utility>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/bind.hpp>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 
@@ -36,45 +37,79 @@ namespace framework {
 
 	MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
 		: Gtk::Expander(title),
-		  m_table(1, 2, false)
+		  m_table(1, 2, false),
+		  m_fmt(NULL)
 	{
 		add(m_table);
 		set_expanded(true);
 	}
 
-	void MetaDataWidget::set_data_source(const utils::XmpMeta & xmp)
+	void MetaDataWidget::set_data_format(const xmp::MetaDataSectionFormat * fmt)
 	{
-		// TODO fix this.
-		DBG_OUT("set data source");
-		Gtk::Label *l;
-		try {
-			std::string s(boost::lexical_cast<std::string>(xmp.rating()));
-			l = Gtk::manage(new Gtk::Label(s));
-			l->set_alignment(0, 0.5);
-			add_data("rating", _("Rating:"), l);
-		}
-		catch(...)
-		{
-			DBG_OUT("rating cast failed");
-		}
-		l = Gtk::manage(new Gtk::Label(xmp.creation_date_str()));
-		l->set_alignment(0, 0.5);
-		add_data("creation_date", _("Date:"), l);
-		const std::vector< std::string > & keywords(xmp.keywords());
-		l = Gtk::manage(new Gtk::Label(utils::join(keywords, ", ")));		
-		l->set_alignment(0, 0.5);
-		add_data("keywords", _("Keywords:"), l);		
+		m_fmt = fmt;
 	}
 
-	void MetaDataWidget::add_data(const std::string & id, const Glib::ustring & label,
-								 Gtk::Widget *w)
+	namespace {
+		static 
+		void clear_widget(std::pair<const std::string, Gtk::Widget *> & p)
+		{
+			Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
+			if(l) {
+				l->set_text("");
+			}
+		}
+	}
+
+	void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
+	{
+		DBG_OUT("set data source");
+		if(!m_data_map.empty()) {
+			std::for_each(m_data_map.begin(), m_data_map.end(),
+						  boost::bind(&clear_widget, _1));
+		}
+		if(!xmp) {
+			return;
+		}
+		if(!m_fmt) {
+			DBG_OUT("empty format");
+			return;
+		}
+
+		const xmp::MetaDataFormat * current = m_fmt->formats;
+		XmpStringPtr value = xmp_string_new();
+		while(current && current->label) {
+			std::string id(current->property);
+			id += "-";
+			id += current->ns;
+			if(xmp_get_property(xmp->xmp(), current->ns,
+								current->property, value, NULL)) {
+				add_data(id, current->label, xmp_string_cstr(value), 
+						 current->type);
+				DBG_OUT("adding data id = %s, ns = %s, prop = %s,"
+						"label = %s, value = %s",
+						id.c_str(), current->ns, current->property,
+						current->label,	xmp_string_cstr(value));
+			}
+			else {
+				DBG_OUT("get_property failed id = %s, ns = %s, prop = %s,"
+						"label = %s",
+						id.c_str(), current->ns, current->property,
+						current->label);
+			}
+			current++;
+		}
+		xmp_string_free(value);
+	}
+
+
+	void MetaDataWidget::add_data(const std::string & id, 
+								  const std::string & label,
+								  const char * value,
+								  xmp::MetaDataType type)
 	{
 		DBG_OUT("add data");
 
-		Gtk::Label *labelw = Gtk::manage(new Gtk::Label(Glib::ustring("<b>") 
-														+ label + "</b>"));
-		labelw->set_alignment(0, 0.5);
-		labelw->set_use_markup(true);
+		Gtk::Label *w = NULL;
 		int n_row;
 		std::map<std::string, Gtk::Widget *>::iterator iter 
 			= m_data_map.end();
@@ -89,6 +124,15 @@ namespace framework {
 		if(iter == m_data_map.end()) {
 			DBG_OUT("not found");
 			DBG_OUT("num of row %d", n_row);
+			Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
+												 Glib::ustring("<b>") 
+												 + label + "</b>"));
+			labelw->set_alignment(0, 0.5);
+			labelw->set_use_markup(true);
+
+			w = Gtk::manage(new Gtk::Label());
+			w->set_alignment(0, 0.5);
+
 			m_table.resize(n_row + 1, 2);
 			m_table.attach(*labelw, 0, 1, n_row, n_row+1, 
 						   Gtk::FILL, Gtk::SHRINK, 4, 0);
@@ -96,7 +140,10 @@ namespace framework {
 						   Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK, 4, 0);
 			m_data_map.insert(std::make_pair(id, w));
 		}
-		
+		else {
+			w = static_cast<Gtk::Label*>(iter->second);
+		}
+		w->set_text(value);
 		m_table.show_all();
 	}
 

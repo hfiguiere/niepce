@@ -24,7 +24,13 @@
 
 #include "utils/exempi.h"
 #include "framework/controller.h"
-#include "framework/metadatawidget.h"
+
+namespace xmp {
+	struct MetaDataSectionFormat;
+}
+namespace framework {
+	class MetaDataWidget;
+}
 
 namespace ui {
 	
@@ -33,12 +39,14 @@ namespace ui {
 	{
 	public:
 		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
-
+		MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();
-		void display(const utils::XmpMeta & meta);
+		void display(const utils::XmpMeta * meta);
 	private:
 		Gtk::VBox m_metapane;
-		framework::MetaDataWidget * m_metadataw;
+		std::vector<framework::MetaDataWidget *> m_widgets;
+
+		static const xmp::MetaDataSectionFormat * get_format();
 	};
 
 }

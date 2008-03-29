@@ -31,8 +31,12 @@
 namespace utils {
 	class XmpMeta;
 }
+namespace xmp {
+	struct MetaDataSectionFormat;
+}
 
 namespace framework {
+
 
 class MetaDataWidget 
 	: public Gtk::Expander
@@ -40,13 +44,15 @@ class MetaDataWidget
 public:
 	MetaDataWidget(const Glib::ustring & title);
 	
-	void add_data(const std::string & id, const Glib::ustring & label,
-				  Gtk::Widget *w);
-	void set_data_source(const utils::XmpMeta & xmp);
+	void add_data(const std::string & id, const std::string & label,
+				  const char * value, xmp::MetaDataType type);
+	void set_data_format(const xmp::MetaDataSectionFormat * fmt);
+	void set_data_source(const utils::XmpMeta * xmp);
 protected:
 private:
 	Gtk::Table    m_table;
 	std::map<std::string, Gtk::Widget *> m_data_map;
+	const xmp::MetaDataSectionFormat * m_fmt;
 };
 
 }

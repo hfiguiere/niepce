@@ -119,10 +119,6 @@ namespace ui {
 		
 		m_mainview.append_page(m_lib_splitview, _("Library"));
 
-//		m_librarylistview.signal_selection_changed()
-//			.connect(sigc::mem_fun(*m_metapanecontroller,
-//								   &MetaDataPaneController::on_selection_changed));
-		
 		// TODO DarkroomModuleController
 		GtkWidget *iv = gtk_image_view_new();
 		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
@@ -153,9 +149,15 @@ namespace ui {
 			// 
 			utils::XmpMeta meta(libfile->path(), false);
 			if(meta.isOk()) {
-				m_metapanecontroller->display(meta);
+				m_metapanecontroller->display(&meta);
+			}
+			else  {
+				m_metapanecontroller->display(NULL);
 			}
 		}		
+		else  {
+			m_metapanecontroller->display(NULL);
+		}
 	}
 
 
