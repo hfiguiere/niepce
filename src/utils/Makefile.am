@@ -59,5 +59,4 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	db/insertstatement.cpp db/insertstatement.h\
 	db/sqlstatement.cpp db/sqlstatement.h\
 	db/sqlite/sqlitecnxdrv.cpp db/sqlite/sqlitecnxdrv.h \
-	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.h \
-	db/sqlite/sqlitestatement.cpp db/sqlite/sqlitestatement.h
+	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.h
