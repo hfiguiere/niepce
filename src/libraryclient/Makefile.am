@@ -9,7 +9,7 @@ TESTS = test_worker
 TEST_LIBS =  \
 	liblibraryclient.la \
         ../library/libniepcelibrary.la \
-	../db/libniepcedb.la ../db/sqlite/libniepcedbsqlite.la \
+	../db/libniepcedb.la \
         ../utils/libniepceutils.la \
 	../framework/libniepceframework.la \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \

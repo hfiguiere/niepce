@@ -38,7 +38,7 @@
 #include <boost/any.hpp>
 
 #include "utils/buffer.h"
-#include "db/iconnectiondriver.h"
+#include "utils/db/iconnectiondriver.h"
 
 namespace db
 {

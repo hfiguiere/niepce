@@ -1,14 +1,15 @@
 
+DIST_SUBDIR = db
 
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
 TESTS = testmoniker testfiles testgeometry testxmp testufrawmeta \
-	teststringutils
+	teststringutils test_db
 
 EXTRA_DIST = test.xmp test2.ufraw
 
 check_PROGRAMS = testmoniker testfiles testgeometry testxmp testufrawmeta \
-	teststringutils
+	teststringutils test_db
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.la \
@@ -34,6 +35,12 @@ testufrawmeta_LDADD = libniepceutils.la ../niepce/libniepceglobals.la \
 teststringutils_SOURCES = teststringutils.cpp
 teststringutils_LDADD = 
 
+test_db_SOURCES = db/test_db.cpp
+test_db_LDADD = libniepceutils.la \
+	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
+	@BOOST_THREAD_LIBS@\
+	@SQLITE3_LIBS@
+
 noinst_LTLIBRARIES = libniepceutils.la
 
 libniepceutils_la_SOURCES = exception.h exception.cpp \
@@ -47,4 +54,10 @@ libniepceutils_la_SOURCES = exception.h exception.cpp \
 	files.h files.cpp \
 	geometry.h geometry.cpp \
 	thread.h thread.cpp worker.h \
-	databinder.h databinder.cpp
+	databinder.h databinder.cpp \
+	db/iconnectiondriver.h db/iconnectionmanagerdriver.h \
+	db/insertstatement.cpp db/insertstatement.h\
+	db/sqlstatement.cpp db/sqlstatement.h\
+	db/sqlite/sqlitecnxdrv.cpp db/sqlite/sqlitecnxdrv.h \
+	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.h \
+	db/sqlite/sqlitestatement.cpp db/sqlite/sqlitestatement.h

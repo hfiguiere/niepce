@@ -114,8 +114,9 @@ src/Makefile
 src/ext/Makefile
 src/niepce/Makefile
 src/utils/Makefile
+src/utils/db/Makefile
+src/utils/db/sqlite/Makefile
 src/db/Makefile
-src/db/sqlite/Makefile
 src/library/Makefile
 src/libraryclient/Makefile
 src/framework/Makefile

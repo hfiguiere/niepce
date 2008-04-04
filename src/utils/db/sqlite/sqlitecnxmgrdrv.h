@@ -28,8 +28,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "db/iconnectionmanagerdriver.h"
-#include "db/iconnectiondriver.h"
+#include "utils/db/iconnectionmanagerdriver.h"
+#include "utils/db/iconnectiondriver.h"
 
 namespace db {
 namespace sqlite {

@@ -30,8 +30,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include "framework/notificationcenter.h"
-#include "db/iconnectiondriver.h"
-#include "db/iconnectionmanagerdriver.h"
+#include "utils/db/iconnectiondriver.h"
+#include "utils/db/iconnectionmanagerdriver.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
 #include "db/libmetadata.h"

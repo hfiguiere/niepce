@@ -27,9 +27,9 @@
 #include "library.h"
 #include "utils/exception.h"
 #include "utils/exempi.h"
-#include "sqlite/sqlitecnxmgrdrv.h"
-#include "sqlite/sqlitecnxdrv.h"
-#include "sqlstatement.h"
+#include "utils/db/sqlite/sqlitecnxmgrdrv.h"
+#include "utils/db/sqlite/sqlitecnxdrv.h"
+#include "utils/db/sqlstatement.h"
 #include "framework/notificationcenter.h"
 #include "framework/mimetype.h"
 
@@ -279,7 +279,7 @@ namespace db {
 		LibFolder::Ptr f;
 		SQLStatement sql(boost::format("INSERT INTO folders "
 									   "(path,name,vault_id,parent_id) "
-									   "VALUES('%1%', '%2%', '0', '0');") 
+									   "VALUES('%1%', '%2%', '0', '0')") 
 						 % folder.string() % folder.leaf());
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
@@ -298,7 +298,7 @@ namespace db {
 
 	void Library::getAllFolders(const LibFolder::ListPtr & l)
 	{
-		SQLStatement sql("SELECT id,name FROM folders;");
+		SQLStatement sql("SELECT id,name FROM folders");
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				while(m_dbdrv->read_next_row()) {
@@ -381,7 +381,7 @@ namespace db {
 
 	void Library::getAllKeywords(const Keyword::ListPtr & l)
 	{
-		SQLStatement sql("SELECT id,keyword FROM keywords ORDER BY keyword;");
+		SQLStatement sql("SELECT id,keyword FROM keywords ORDER BY keyword");
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
 				while(m_dbdrv->read_next_row()) {

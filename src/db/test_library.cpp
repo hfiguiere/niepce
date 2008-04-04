@@ -20,8 +20,8 @@
  */
 
 
-#include "sqlstatement.h"
-#include "iconnectiondriver.h"
+#include "utils/db/sqlstatement.h"
+#include "utils/db/iconnectiondriver.h"
 #include "library.h"
 #include "libfile.h"
 #include "libfolder.h"
@@ -38,10 +38,6 @@ BOOST_AUTO_UNIT_TEST(library_test)
 
 	db::IConnectionDriver::Ptr db(lib.dbDriver());
 	
-//	db::SQLStatement check("SELECT ");
-//	db->
-
-
 	lib.addFolder("foo");
 	db::LibFolder::Ptr f(lib.getFolder("foo"));
 	BOOST_CHECK(f);

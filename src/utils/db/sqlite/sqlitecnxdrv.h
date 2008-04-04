@@ -29,7 +29,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
-#include "db/iconnectiondriver.h"
+#include "utils/db/iconnectiondriver.h"
 
 struct sqlite3;
 
