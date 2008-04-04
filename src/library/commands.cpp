@@ -27,6 +27,7 @@
 #include "db/library.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
+#include "db/libmetadata.h"
 #include "db/keyword.h"
 #include "commands.h"
 
@@ -37,6 +38,7 @@ using boost::any_cast;
 using db::Library;
 using db::LibFolder;
 using db::LibFile;
+using db::LibMetadata;
 using db::Keyword;
 using utils::FileList;
 
@@ -109,12 +111,13 @@ namespace library {
 	void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
 									  int file_id)
 	{
-//		LibMetadata::Ptr lm(new LibMetadata());
-//		lib->getMetaData(file_id, lm);
-//		lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
+		LibMetadata::Ptr lm(new LibMetadata());
+		lib->getMetaData(file_id, lm);
+		lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
 	}
 
 
+	/////////////////  ops generation
 	Op::Ptr Commands::opListAllFolders(tid_t id)
 	{
 		Op::Ptr op(new Op(id));

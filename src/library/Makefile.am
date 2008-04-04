@@ -1,7 +1,7 @@
 
 
 INCLUDES = -I$(top_srcdir)/src/ \
-	@LIBGTKMM_CFLAGS@ @OPENRAW_CFLAGS@
+	@LIBGTKMM_CFLAGS@ @OPENRAW_CFLAGS@ @EXEMPI_CFLAGS@
 
 check_PROGRAMS = test_opqueue
 TESTS = test_opqueue

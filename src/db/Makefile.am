@@ -32,5 +32,6 @@ noinst_HEADERS = library.h iconnectiondriver.h iconnectionmanagerdriver.h \
 libniepcedb_la_SOURCES = library.cpp sqlstatement.cpp \
 	insertstatement.cpp \
 	libfile.h libfile.cpp \
+	libmetadata.h libmetadata.cpp \
 	keyword.h keyword.cpp \
 	storage.h storage.cpp

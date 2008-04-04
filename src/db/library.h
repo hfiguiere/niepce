@@ -34,6 +34,7 @@
 #include "db/iconnectionmanagerdriver.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
+#include "db/libmetadata.h"
 #include "db/keyword.h"
 
 
@@ -110,6 +111,7 @@ namespace db {
 		int countFolder(int folder_id);
 		void getAllKeywords(const Keyword::ListPtr & l);
 		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
+		void getMetaData(int file_id, const LibMetadata::Ptr & );
 
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate

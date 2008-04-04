@@ -55,6 +55,13 @@ namespace utils {
 	}
 
 
+	XmpMeta::XmpMeta()
+		: m_xmp(),
+		  m_keyword_fetched(false)		  
+	{
+		m_xmp = xmp_new_empty();
+	}
+
 
 	/** @param file the path to the file to open 
 	 * @param sidecar_only we only want the sidecar.
@@ -131,6 +138,13 @@ namespace utils {
 			buf = xmp_string_cstr(output);
 		}
 		return buf;
+	}
+
+	void XmpMeta::unserialize(const char * buffer)
+	{
+		if(!buffer) 
+			return;
+		xmp_parse(m_xmp, buffer, strlen(buffer));
 	}
 
 

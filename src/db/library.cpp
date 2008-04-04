@@ -460,7 +460,7 @@ namespace db {
 									   "orientation,rating,label FROM files "
 									   " WHERE id IN "
 									   " (SELECT file_id FROM keywording "
-									   " WHERE keyword_id='%1%')")
+									   " WHERE keyword_id='%1%');")
 						 % keyword_id);
 		try {
 			if(m_dbdrv->execute_statement(sql)) {
@@ -474,7 +474,29 @@ namespace db {
 		{
 			DBG_OUT("db exception %s", e.what());
 		}
-
 	}
+
+
+	void Library::getMetaData(int file_id, const LibMetadata::Ptr & meta)
+	{
+		SQLStatement sql(boost::format("SELECT xmp FROM files "
+									   " WHERE id='%1%';")
+						 % file_id);
+		try {
+			if(m_dbdrv->execute_statement(sql)) {
+				while(m_dbdrv->read_next_row()) {
+					std::string xml;
+					m_dbdrv->get_column_content(0, xml);
+					meta->unserialize(xml.c_str());
+				}
+			}
+		}
+		catch(utils::Exception & e)
+		{
+			DBG_OUT("db exception %s", e.what());
+		}
+	}
+
+
 
 }

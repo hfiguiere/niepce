@@ -70,6 +70,13 @@ namespace ui {
 				getLibraryClient()->thumbnailCache().request(l);
 				break;
 			}
+			case db::Library::NOTIFY_METADATA_QUERIED:
+			{
+				db::LibMetadata::Ptr lm
+					= boost::any_cast<db::LibMetadata::Ptr>(ln.param);
+				DBG_OUT("received metadate");
+				m_metapanecontroller->display(lm.get());
+			}
 			default:
 				break;
 			}
@@ -145,15 +152,7 @@ namespace ui {
 		if(iter != m_idmap.end()) {
 			db::LibFile::Ptr libfile = (*iter->second)[m_columns.m_libfile];
 
-			// FIXME get the XMP a different way as it is in the DB
-			// 
-			utils::XmpMeta meta(libfile->path(), false);
-			if(meta.isOk()) {
-				m_metapanecontroller->display(&meta);
-			}
-			else  {
-				m_metapanecontroller->display(NULL);
-			}
+			getLibraryClient()->requestMetadata(libfile->id());
 		}		
 		else  {
 			m_metapanecontroller->display(NULL);

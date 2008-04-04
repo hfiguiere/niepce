@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src
+INCLUDES = -I$(top_srcdir)/src @EXEMPI_CFLAGS@
 
 noinst_LTLIBRARIES = liblibraryclient.la
 

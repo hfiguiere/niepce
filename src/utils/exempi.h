@@ -87,6 +87,10 @@ namespace utils {
 		std::string serialize_inline() const;
 		/** serialize the XMP (for the sidecar) */
 		std::string serialize() const;
+		/** load the XMP from the unserialized buffer 
+		 * (NUL terminated) 
+		 */
+		void unserialize(const char *);
 
 		int32_t orientation() const;
 		std::string label() const;

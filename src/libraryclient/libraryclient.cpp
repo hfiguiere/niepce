@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,6 +77,11 @@ namespace libraryclient {
 	library::tid_t LibraryClient::countFolder(int id)
 	{
 		return m_pImpl->countFolder(id);
+	}
+
+	library::tid_t LibraryClient::requestMetadata(int id)
+	{
+		return m_pImpl->requestMetadata(id);
 	}
 
 	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)

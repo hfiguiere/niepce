@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ namespace libraryclient {
 		library::tid_t queryFolderContent(int id);
 		library::tid_t queryKeywordContent(int id);
 		library::tid_t countFolder(int id);
+		library::tid_t requestMetadata(int id);
 
 		/** Import files from a directory
 		 * @param dir the directory
