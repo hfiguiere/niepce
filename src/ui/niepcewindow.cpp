@@ -206,13 +206,19 @@ namespace ui {
 
 	void NiepceWindow::undo_state(const Glib::RefPtr<Gtk::Action> & action)
 	{
-		action->set_sensitive(Application::app()->undo_history().has_undo());
+		framework::UndoHistory & history(Application::app()->undo_history());
+		action->set_sensitive(history.has_undo());
+		std::string s = history.next_undo();
+		action->property_label() = Glib::ustring(_("Undo ")) + s;
 	}
 
 
 	void NiepceWindow::redo_state(const Glib::RefPtr<Gtk::Action> & action)
 	{
-		action->set_sensitive(Application::app()->undo_history().has_redo());
+		framework::UndoHistory & history(Application::app()->undo_history());
+		action->set_sensitive(history.has_redo());
+		std::string s = history.next_redo();
+		action->property_label() = Glib::ustring(_("Redo ")) + s;
 	}
 
 	void NiepceWindow::on_action_file_import()

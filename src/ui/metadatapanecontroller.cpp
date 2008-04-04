@@ -39,7 +39,6 @@ namespace ui {
 			{ _("Make:"), NS_TIFF, "Make", META_DT_STRING, true },
 			{ _("Model:"), NS_TIFF, "Model", META_DT_STRING, true },
 			{ _("Lens:"), NS_EXIF_AUX, "Lens", META_DT_STRING, true },
-			
 			{ NULL, NULL, NULL, META_DT_NONE, true }
 		};
 		static const MetaDataFormat s_shootinginfo_format[] = {
@@ -54,7 +53,6 @@ namespace ui {
 			{ _("Focal length:"), NS_EXIF, "FocalLength", META_DT_STRING, true },
 			{ _("White balance:"), NS_EXIF, "WhiteBalance", META_DT_STRING, true },
 			{ _("Date:"), NS_EXIF, "DateTimeOriginal", META_DT_DATE, false },
-			
 			{ NULL, NULL, NULL, META_DT_NONE, true }
 		};
 		static const MetaDataFormat s_iptc_format[] = {

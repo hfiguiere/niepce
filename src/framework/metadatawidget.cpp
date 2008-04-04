@@ -85,12 +85,13 @@ namespace framework {
 								current->property, value, NULL)) {
 				add_data(id, current->label, xmp_string_cstr(value), 
 						 current->type);
-				DBG_OUT("adding data id = %s, ns = %s, prop = %s,"
-						"label = %s, value = %s",
-						id.c_str(), current->ns, current->property,
-						current->label,	xmp_string_cstr(value));
+//				DBG_OUT("adding data id = %s, ns = %s, prop = %s,"
+//						"label = %s, value = %s",
+//						id.c_str(), current->ns, current->property,
+//						current->label,	xmp_string_cstr(value));
 			}
 			else {
+				add_data(id, current->label, "", current->type);
 				DBG_OUT("get_property failed id = %s, ns = %s, prop = %s,"
 						"label = %s",
 						id.c_str(), current->ns, current->property,
