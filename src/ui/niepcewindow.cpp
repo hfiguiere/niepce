@@ -38,6 +38,7 @@
 #include "framework/configuration.h"
 #include "framework/notificationcenter.h"
 #include "framework/configdatabinder.h"
+#include "framework/undo.h"
 
 #include "eog-thumb-view.h"
 #include "niepcewindow.h"
@@ -49,6 +50,7 @@ using libraryclient::LibraryClient;
 using framework::Application;
 using framework::Configuration;
 using framework::NotificationCenter;
+using framework::UndoHistory;
 
 namespace ui {
 
@@ -162,7 +164,23 @@ namespace ui {
 											&Application::quit));	
 
 		m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
-		// TODO link to action
+		Glib::RefPtr<Gtk::Action> undo_action
+			= Gtk::Action::create("Undo", Gtk::Stock::UNDO);
+		m_refActionGroup->add(undo_action,
+							  boost::bind(&UndoHistory::undo,
+										  boost::ref(Application::app()->undo_history())));
+		m_undostate_conn = Application::app()->undo_history().changed.connect(
+			boost::bind(&NiepceWindow::undo_state, this, undo_action));
+		undo_state(undo_action);
+		Glib::RefPtr<Gtk::Action> redo_action
+			= Gtk::Action::create("Redo", Gtk::Stock::REDO);
+		m_refActionGroup->add(redo_action,
+							  boost::bind(&UndoHistory::redo,
+										  boost::ref(Application::app()->undo_history())));
+		m_redostate_conn = Application::app()->undo_history().changed.connect(
+			boost::bind(&NiepceWindow::redo_state, this, redo_action));
+		redo_state(redo_action);
+
 		m_refActionGroup->add(Gtk::Action::create("Preferences", 
 												  Gtk::Stock::PREFERENCES),
 							  sigc::mem_fun(this,
@@ -180,6 +198,16 @@ namespace ui {
 									->uiManager()->get_accel_group());
 	}
 
+	void NiepceWindow::undo_state(const Glib::RefPtr<Gtk::Action> & action)
+	{
+		action->set_sensitive(Application::app()->undo_history().has_undo());
+	}
+
+
+	void NiepceWindow::redo_state(const Glib::RefPtr<Gtk::Action> & action)
+	{
+		action->set_sensitive(Application::app()->undo_history().has_redo());
+	}
 
 	void NiepceWindow::on_action_file_import()
 	{
@@ -314,6 +342,9 @@ namespace ui {
 			"      <menuitem action='Quit'/>"
 			"    </menu>"
 			"    <menu action='MenuEdit'>"
+			"      <menuitem action='Undo'/>"
+			"      <menuitem action='Redo'/>"
+			"      <separator/>"
 //			"      <menuitem action='Cut'/>"
 //			"      <menuitem action='Copy'/>"
 //			"      <menuitem action='Paste'/>"

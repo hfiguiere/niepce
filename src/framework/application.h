@@ -29,6 +29,8 @@
 
 #include "framework/configuration.h"
 #include "framework/frame.h"
+#include "framework/undo.h"
+
 
 namespace framework {
 
@@ -66,7 +68,8 @@ namespace framework {
 		static int main(boost::function<Application::Ptr (void)> constructor, 
 										int argc, char **argv);
 
-		
+		UndoHistory & undo_history()
+			{ return m_undo; }
 	protected:
 		Application(const char *);
 		static Application::Ptr m_application; 
@@ -74,6 +77,7 @@ namespace framework {
 	private:
 		Configuration                m_config;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
+		UndoHistory                  m_undo;
 	};
 
 }

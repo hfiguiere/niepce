@@ -22,6 +22,7 @@
 #define _UI_NIEPCEWINDOW_H_
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/signals.hpp>
 
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>
@@ -60,6 +61,9 @@ namespace ui {
 		virtual Gtk::Widget * buildWidget();
 
 	private:
+		void undo_state(const Glib::RefPtr<Gtk::Action> & action);
+		void redo_state(const Glib::RefPtr<Gtk::Action> & action);
+
 		void on_action_file_import();
 
 		void on_action_file_quit();
@@ -87,6 +91,9 @@ namespace ui {
 		Gtk::Statusbar                 m_statusBar;
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		libraryclient::LibraryClient::Ptr m_libClient;
+		// connections
+		boost::signals::scoped_connection m_undostate_conn;
+		boost::signals::scoped_connection m_redostate_conn;
 	};
 
 }
