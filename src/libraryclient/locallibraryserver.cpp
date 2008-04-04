@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/locallibraryserver.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,17 +21,14 @@
 
 #include "locallibraryserver.h"
 
-#include "library/commands.h"
-
 using library::Op;
-using library::Commands;
 
 namespace libraryclient {
 
 
 	void LocalLibraryServer::execute(const Op::Ptr & _op)
 	{
-		Commands::dispatch(m_library, _op);
+		(*_op)(m_library);
 	}
 
 

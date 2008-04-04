@@ -41,7 +41,7 @@ BOOST_AUTO_UNIT_TEST(worker_test)
 		
 		BOOST_CHECK(w._tasks().empty());
 		
-		Op::Ptr p(new Op(OP_NONE, 0));
+		Op::Ptr p(new Op(0));
 		w.schedule(p);
 	}
 }

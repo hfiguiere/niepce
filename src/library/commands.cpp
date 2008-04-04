@@ -42,46 +42,6 @@ using utils::FileList;
 
 namespace library {
 
-	bool Commands::dispatch(const Library::Ptr & lib, const Op::Ptr & _op)
-	{
-		try {
-			Op::mutex_t::scoped_lock lock(_op->mutex());
-			const Op::Args & args(_op->args());
-			switch( _op->type() )
-			{
-			case OP_IMPORT_FILES:
-				cmdImportFiles( lib, any_cast<bfs::path>(args[0]), 
-								any_cast<FileList::Ptr>(args[1]), 
-								any_cast<bool>(args[2]) );
-				break;
-			case OP_LIST_ALL_FOLDERS:
-				cmdListAllFolders(lib);
-				break;
-			case OP_LIST_ALL_KEYWORDS:
-				cmdListAllKeywords(lib);
-				break;
-			case OP_QUERY_FOLDER_CONTENT:
-				cmdQueryFolderContent( lib, any_cast<int>(args[0]) );
-				break;
-			case OP_COUNT_FOLDER:
-				cmdCountFolder( lib, any_cast<int>(args[0]) );
-				break;
-			case OP_QUERY_KEYWORD_CONTENT:
-				cmdQueryKeywordContent( lib, any_cast<int>(args[0]) );
-				break;
-			default:
-				DBG_OUT("unkown op %d", _op->type());
-				break;
-			}
-		}
-		catch( const boost::bad_any_cast & e)
-		{
-			DBG_OUT("parameter cast error %s", e.what());
-			return false;
-		}
-		return true;
-	}
-
 	void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 	{
 		Keyword::ListPtr l( new Keyword::List );
@@ -146,53 +106,67 @@ namespace library {
 		lib->notify(Library::NOTIFY_KEYWORD_CONTENT_QUERIED, boost::any(fl));		
 	}
 
+	void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
+									  int file_id)
+	{
+//		LibMetadata::Ptr lm(new LibMetadata());
+//		lib->getMetaData(file_id, lm);
+//		lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
+	}
+
+
 	Op::Ptr Commands::opListAllFolders(tid_t id)
 	{
-		return Op::Ptr(new Op( OP_LIST_ALL_FOLDERS, id ));
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdListAllFolders, _1);
+		return op;
 	}
 
 	Op::Ptr Commands::opListAllKeywords(tid_t id)
 	{
-		return Op::Ptr(new Op( OP_LIST_ALL_KEYWORDS, id ));
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdListAllKeywords, _1);
+		return op;
 	}
 
 	Op::Ptr Commands::opImportFiles(tid_t id, const bfs::path & folder, 
 									const FileList::Ptr & files, bool manage)
 	{
-		Op::Ptr op(new Op( OP_IMPORT_FILES, id ));
-		Op::mutex_t::scoped_lock lock(op->mutex());
-		Op::Args & args(op->args());
-		args.push_back( boost::any( folder ));
-		args.push_back( boost::any( files ));
-		args.push_back( boost::any( manage ));
-
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdImportFiles,
+							   _1, folder, files, manage);
 		return op;
 	}
 
 	Op::Ptr Commands::opQueryFolderContent(tid_t id, int folder_id)
 	{
-		Op::Ptr op(new Op( OP_QUERY_FOLDER_CONTENT, id ));
-		Op::mutex_t::scoped_lock lock(op->mutex());
-		Op::Args & args(op->args());
-		args.push_back( boost::any( folder_id ));
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdQueryFolderContent,
+							   _1, folder_id);
 		return op;
 	}
 
 	Op::Ptr Commands::opCountFolder(tid_t id, int folder_id)
 	{
-		Op::Ptr op(new Op(OP_COUNT_FOLDER, id));
-		Op::mutex_t::scoped_lock lock(op->mutex());
-		Op::Args & args(op->args());
-		args.push_back( boost::any( folder_id ));
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdCountFolder, _1, folder_id);
 		return op;
 	}
 
 	Op::Ptr Commands::opQueryKeywordContent(tid_t id, int keyword_id)
 	{
-		Op::Ptr op(new Op( OP_QUERY_KEYWORD_CONTENT, id ));
-		Op::mutex_t::scoped_lock lock(op->mutex());
-		Op::Args & args(op->args());
-		args.push_back( boost::any( keyword_id ));
+		
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdQueryKeywordContent,
+							   _1, keyword_id);
+		return op;
+	}
+
+	Op::Ptr Commands::opRequestMetadata(tid_t id, int file_id)
+	{
+		Op::Ptr op(new Op(id));
+		op->fn() = boost::bind(&Commands::cmdRequestMetadata,
+							   _1, file_id);
 		return op;
 	}
 

@@ -21,55 +21,32 @@
 #ifndef __NIEPCE_LIBRARY_OP_H__
 #define __NIEPCE_LIBRARY_OP_H__
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
-#include <boost/any.hpp>
-#include <boost/thread/recursive_mutex.hpp>
+#include <boost/function.hpp>
 
 #include "library/clienttypes.h"
+#include "db/library.h"
 
 namespace library {
-
-	typedef enum {
-		OP_NONE = 0,
-		OP_QUERY_FILES,
-		OP_UPDATE_FILES,
-		OP_LIST_ALL_FOLDERS,
-		OP_LIST_ALL_KEYWORDS,
-		OP_IMPORT_FILES,
-		OP_QUERY_FOLDER_CONTENT,
-		OP_COUNT_FOLDER,
-		OP_QUERY_KEYWORD_CONTENT
-	} OpType;
-
 
 	/** a library operation */
 	class Op
 	{
 	public:
 		typedef boost::shared_ptr< Op > Ptr;
-		typedef std::vector< boost::any > Args;
-		typedef boost::recursive_mutex mutex_t;
+		typedef boost::function<void (const db::Library::Ptr &)> function_t;
 
-		Op(OpType t, tid_t id);
-		~Op();
+		Op(tid_t id);
 
-		mutex_t & mutex()
-			{ return m_mutex; }
-		OpType type() const
-			{ return m_type; }
 		tid_t id() const 
 			{ return m_id; }
 
-		Args & args()
-			{ return m_args; }
-		const Args & args() const
-			{ return m_args; }
+        void operator() (const db::Library::Ptr &);
+		function_t & fn()
+			{ return m_function; }
 	protected:
-		Args m_args; /*< the arguments, free form */
 	private:
-		mutex_t    m_mutex;
-		OpType m_type;
+		function_t m_function;
 		tid_t   m_id;
 	};
 

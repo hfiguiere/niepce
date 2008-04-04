@@ -23,17 +23,17 @@
 
 namespace library {
 
-	Op::Op(OpType t, tid_t id)
-		: m_type(t),
-		  m_id(id)
+	Op::Op(tid_t id)
+		: m_id(id)
 	{
 		
 	}
 
-	Op::~Op()
+	void Op::operator() (const db::Library::Ptr &l)
 	{
-		mutex_t::scoped_lock lock(m_mutex);
-		m_args.clear();
+		if(m_function) {
+			m_function(l);
+		}
 	}
 
 }

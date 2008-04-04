@@ -33,8 +33,6 @@ namespace library {
 	{
 	public:
 
-		static bool dispatch(const db::Library::Ptr & lib, const Op::Ptr & _op);
-
 		// commands: execute an op
 //		static void cmdQueryFiles(const db::Library::Ptr & lib);
 //		static void cmdUpdateFiles(const db::Library::Ptr & lib);
@@ -43,13 +41,16 @@ namespace library {
 		static void cmdListAllKeywords(const db::Library::Ptr & lib);
 		static void cmdImportFiles(const db::Library::Ptr & lib, 
 								   const boost::filesystem::path & folder, 
-								   const utils::FileList::Ptr & files, bool manage);
+								   const utils::FileList::Ptr & files, 
+								   bool manage);
 		static void cmdQueryFolderContent(const db::Library::Ptr & lib, 
 										  int folder_id);
 		static void cmdCountFolder(const db::Library::Ptr & lib, 
 								   int folder_id);
 		static void cmdQueryKeywordContent(const db::Library::Ptr & lib, 
 										   int keyword_id);
+		static void cmdRequestMetadata(const db::Library::Ptr & lib,
+									   int file_id);
 		
 
 		// op: create an op
@@ -62,6 +63,7 @@ namespace library {
  		static Op::Ptr opQueryFolderContent(tid_t id, int folder_id);
 		static Op::Ptr opCountFolder(tid_t id, int folder_id);
  		static Op::Ptr opQueryKeywordContent(tid_t id, int keyword_id);
+		static Op::Ptr opRequestMetadata(tid_t id, int file_id);
 	};
 
 }
