@@ -181,6 +181,12 @@ namespace ui {
 			boost::bind(&NiepceWindow::redo_state, this, redo_action));
 		redo_state(redo_action);
 
+		// FIXME: bind
+		m_refActionGroup->add(Gtk::Action::create("Cut", Gtk::Stock::CUT));
+		m_refActionGroup->add(Gtk::Action::create("Copy", Gtk::Stock::COPY));
+		m_refActionGroup->add(Gtk::Action::create("Paste", Gtk::Stock::PASTE));
+		m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE));
+
 		m_refActionGroup->add(Gtk::Action::create("Preferences", 
 												  Gtk::Stock::PREFERENCES),
 							  sigc::mem_fun(this,
@@ -345,10 +351,11 @@ namespace ui {
 			"      <menuitem action='Undo'/>"
 			"      <menuitem action='Redo'/>"
 			"      <separator/>"
-//			"      <menuitem action='Cut'/>"
-//			"      <menuitem action='Copy'/>"
-//			"      <menuitem action='Paste'/>"
-//			"      <separator/>"
+			"      <menuitem action='Cut'/>"
+			"      <menuitem action='Copy'/>"
+			"      <menuitem action='Paste'/>"
+			"      <menuitem action='Delete'/>"
+			"      <separator/>"
 			"      <menuitem action='Preferences'/>"
 			"    </menu>"
 			"    <menu action='MenuHelp'>"
