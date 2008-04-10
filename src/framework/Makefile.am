@@ -4,12 +4,12 @@
 INCLUDES = -I$(top_srcdir)/src @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@LIBGCONFMM_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@
 
-noinst_LTLIBRARIES = libniepceframework.la
+noinst_LIBRARIES = libniepceframework.a
 
 noinst_HEADERS = configuration.h application.h \
 	frame.h controller.h
 
-libniepceframework_la_SOURCES = configuration.cpp \
+libniepceframework_a_SOURCES = configuration.cpp \
 	application.cpp frame.cpp controller.cpp \
 	notification.h \
 	mimetype.h mimetype.cpp \

@@ -4,6 +4,6 @@ INCLUDES = -I$(srcdir)/.. @EXEMPI_CFLAGS@
 
 noinst_HEADERS = notifications.h xmp.h 
 
-noinst_LTLIBRARIES = libniepceglobals.la
+noinst_LIBRARIES = libniepceglobals.a
 
-libniepceglobals_la_SOURCES = xmp.cpp
+libniepceglobals_a_SOURCES = xmp.cpp
