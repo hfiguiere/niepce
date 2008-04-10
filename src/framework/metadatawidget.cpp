@@ -81,21 +81,29 @@ namespace framework {
 			std::string id(current->property);
 			id += "-";
 			id += current->ns;
-			if(xmp_get_property(xmp->xmp(), current->ns,
-								current->property, value, NULL)) {
-				add_data(id, current->label, xmp_string_cstr(value), 
-						 current->type);
-//				DBG_OUT("adding data id = %s, ns = %s, prop = %s,"
-//						"label = %s, value = %s",
-//						id.c_str(), current->ns, current->property,
-//						current->label,	xmp_string_cstr(value));
+			if(current->type == xmp::META_DT_STRING_ARRAY) {
+				XmpIteratorPtr iter = xmp_iterator_new(xmp->xmp(), current->ns,
+												  current->property, XMP_ITER_JUSTLEAFNODES);
+				std::vector<std::string> vec;
+				while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+					vec.push_back(xmp_string_cstr(value));
+				}
+				std::string v = utils::join(vec, ", ");
+				add_data(id, current->label, v.c_str(), current->type);				
 			}
 			else {
-				add_data(id, current->label, "", current->type);
-				DBG_OUT("get_property failed id = %s, ns = %s, prop = %s,"
-						"label = %s",
-						id.c_str(), current->ns, current->property,
-						current->label);
+				const char * v = "";
+				if(xmp_get_property(xmp->xmp(), current->ns,
+									current->property, value, NULL)) {
+					v = xmp_string_cstr(value);
+				}
+				else {
+					DBG_OUT("get_property failed id = %s, ns = %s, prop = %s,"
+							"label = %s",
+							id.c_str(), current->ns, current->property,
+							current->label);
+				}
+				add_data(id, current->label, v, current->type);
 			}
 			current++;
 		}

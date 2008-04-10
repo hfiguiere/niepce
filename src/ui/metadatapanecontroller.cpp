@@ -45,7 +45,7 @@ namespace ui {
 			{ _("Exposure Program:"), NS_EXIF, "ExposureProgram", META_DT_STRING, true },
 			{ _("Speed:"), NS_EXIF, "ExposureTime", META_DT_STRING, true },
 			{ _("Aperture:"), NS_EXIF, "FNumber", META_DT_STRING, true },
-			{ _("ISO:"), NS_EXIF, "ISOSpeedRatings[1]", META_DT_STRING, true },
+			{ _("ISO:"), NS_EXIF, "ISOSpeedRatings", META_DT_STRING_ARRAY, true },
 			{ _("Exposure Bias:"), NS_EXIF, "ExposureBiasValue", META_DT_STRING, true },
 			// this one is fishy as it hardcode the prefix.
 			{ _("Flash:"), NS_EXIF, "Flash/exif:Fired", META_DT_STRING, true },
@@ -57,7 +57,7 @@ namespace ui {
 		};
 		static const MetaDataFormat s_iptc_format[] = {
 			{ _("Rating:"), NS_XAP, "Rating", META_DT_STAR_RATING, false },
-			{ _("Keywords:"), NS_DC, "subject[1]", META_DT_STRING, false },
+			{ _("Keywords:"), NS_DC, "subject", META_DT_STRING_ARRAY, false },
 			{ NULL, NULL, NULL, META_DT_NONE, true }			
 		};
 		static const MetaDataSectionFormat s_format[] = {
