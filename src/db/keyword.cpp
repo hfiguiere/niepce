@@ -24,8 +24,8 @@
 
 namespace db {
 
-	Keyword::Keyword(int id, const std::string & keyword)
-		: m_id(id), m_keyword(keyword)
+	Keyword::Keyword(int _id, const std::string & _keyword)
+		: m_id(_id), m_keyword(_keyword)
 	{
 	}
 

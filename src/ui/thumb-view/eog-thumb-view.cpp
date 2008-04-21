@@ -183,7 +183,7 @@ eog_thumb_view_update_visible_range (EogThumbView *tb,
 
 static void
 tb_on_visible_range_changed_cb (EogThumbView *tb,
-                                gpointer user_data)
+                                gpointer /*user_data*/)
 {
 	GtkTreePath *path1, *path2;
 
@@ -208,7 +208,7 @@ tb_on_visible_range_changed_cb (EogThumbView *tb,
 
 static void
 tb_on_adjustment_changed_cb (EogThumbView *tb,
-			     gpointer user_data)
+							 gpointer /*user_data*/)
 {
 	GtkTreePath *path1, *path2;
 	gint start_thumb, end_thumb;
@@ -242,8 +242,8 @@ tb_on_adjustment_changed_cb (EogThumbView *tb,
 
 static void
 tb_on_parent_set_cb (GtkWidget *widget,
-		     GtkObject *old_parent,
-		     gpointer   user_data)
+					 GtkObject * /*old_parent*/,
+					 gpointer  /*user_data*/)
 {
 	EogThumbView *tb = EOG_THUMB_VIEW (widget);
 	GtkScrolledWindow *sw;
@@ -285,7 +285,7 @@ tb_on_parent_set_cb (GtkWidget *widget,
 
 static gboolean
 tb_on_button_press_event_cb (GtkWidget *tb, GdkEventButton *event, 
-                             gpointer user_data)
+                             gpointer /*user_data*/)
 {
     GtkTreePath *path;
     
@@ -313,11 +313,11 @@ tb_on_button_press_event_cb (GtkWidget *tb, GdkEventButton *event,
 
 static void
 tb_on_drag_data_get_cb (GtkWidget        *widget,
-			GdkDragContext   *drag_context,
-			GtkSelectionData *data,
-			guint             info,
-			guint             time,
-			gpointer          user_data) 
+						GdkDragContext   */*drag_context*/,
+						GtkSelectionData *data,
+						guint             /*info*/,
+						guint             /*time*/,
+						gpointer          /*user_data*/) 
 {
 	GList *list;
 	GList *node;
@@ -560,8 +560,8 @@ eog_thumb_view_set_item_height (EogThumbView *tb, gint height)
 }
 
 static void
-eog_thumb_view_get_n_selected_helper (GtkIconView *tb,
-				      GtkTreePath *path,
+eog_thumb_view_get_n_selected_helper (GtkIconView * /*tb*/,
+									  GtkTreePath * /*path*/,
 				      gpointer data)
 {
 	/* data is of type (guint *) */

@@ -64,7 +64,7 @@ namespace framework {
 		p->m_subscribers[type].push_back(s);
 	}
 
-	void NotificationCenter::unsubscribe(int type, const subscriber_t & s)
+	void NotificationCenter::unsubscribe(int /*type*/, const subscriber_t & /*s*/)
 	{
 //		m_subscribers.remove_if(boost::bind(&boost::function_equal, _1, s));
 	}

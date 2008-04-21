@@ -197,7 +197,7 @@ EogListStore::get_loading_icon (void)
    then sets @iter_found to a #GtkTreeIter pointing to the file.
  */
 gboolean
-EogListStore::is_file_in_list_store (const gchar *info_uri,
+EogListStore::is_file_in_list_store (const gchar * /*info_uri*/,
 																		 Gtk::TreeIter &iter_found)
 {
 	gboolean found = FALSE;
@@ -573,7 +573,7 @@ eog_list_store_length (EogListStore *store)
 }
 
 gint
-eog_list_store_get_initial_pos (EogListStore *store)
+eog_list_store_get_initial_pos (EogListStore *)
 {
 //	g_return_val_if_fail (EOG_IS_LIST_STORE (store), -1);
 
@@ -581,8 +581,8 @@ eog_list_store_get_initial_pos (EogListStore *store)
 }
 
 void
-eog_list_store_thumbnail_set (EogListStore *store, 
-			      GtkTreeIter *iter)
+eog_list_store_thumbnail_set (EogListStore *, 
+			      GtkTreeIter *)
 {
 #if 0
 	EogJob *job;
@@ -622,8 +622,8 @@ eog_list_store_thumbnail_set (EogListStore *store,
 }
 
 void
-eog_list_store_thumbnail_unset (EogListStore *store, 
-				GtkTreeIter *iter)
+eog_list_store_thumbnail_unset (EogListStore *, 
+				GtkTreeIter *)
 {
 #if 0
 	EogImage *image;

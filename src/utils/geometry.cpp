@@ -13,12 +13,12 @@ namespace utils {
 	{
 	}
 
-	Rect::Rect(int x, int y, int w, int h)
+	Rect::Rect(int _x, int _y, int _w, int _h)
 	{
-		_r[X] = x;
-		_r[Y] = y;
-		_r[W] = w;
-		_r[H] = h;
+		_r[X] = _x;
+		_r[Y] = _y;
+		_r[W] = _w;
+		_r[H] = _h;
 	}
 
 

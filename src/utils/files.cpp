@@ -29,7 +29,7 @@ namespace bfs = boost::filesystem;
 
 namespace utils {
 
-	bool filter_none(const boost::filesystem::path & file)
+	bool filter_none(const boost::filesystem::path & )
 	{
 		return true;
 	}

@@ -35,8 +35,8 @@ namespace db {
 		typedef std::list< Ptr > List;
 		typedef boost::shared_ptr< List > ListPtr;
 
-		LibFolder(int id, std::string name)
-			: m_id(id), m_name(name)
+		LibFolder(int _id, std::string _name)
+			: m_id(_id), m_name(_name)
 			{
 			}
 		int id() const

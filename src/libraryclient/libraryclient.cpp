@@ -89,8 +89,8 @@ namespace libraryclient {
 		m_pImpl->importFromDirectory(dir, manage);
 	}
 
-	bool LibraryClient::fetchKeywordsForFile(int file, 
-											 db::Keyword::IdList &keywords)
+	bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
+											 db::Keyword::IdList & /*keywords*/)
 	{
 		// TODO
 		return false;

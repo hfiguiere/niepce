@@ -56,7 +56,7 @@ Gtk::Widget * ImportDialog::buildWidget()
 	Gtk::Button *select_directories = xml->get_widget("select_directories",
 													  select_directories);
 	select_directories->signal_clicked().connect(
-			boost::bind(&ImportDialog::select_directories, this));
+			boost::bind(&ImportDialog::do_select_directories, this));
 	m_date_tz_combo = xml->get_widget("date_tz_combo", m_date_tz_combo);
 	m_ufraw_import_check = xml->get_widget("ufraw_import_check", 
 										   m_ufraw_import_check);
@@ -69,7 +69,7 @@ Gtk::Widget * ImportDialog::buildWidget()
 }
 
 
-void ImportDialog::select_directories()
+void ImportDialog::do_select_directories()
 {
 	Configuration & cfg = Application::app()->config();
 	

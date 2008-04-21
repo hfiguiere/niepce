@@ -52,7 +52,7 @@ public:
 private:
 	class ImportParam;
 
-	void select_directories();
+	void do_select_directories();
 	
 	Glib::ustring m_to_import;
 	Gtk::ComboBox *m_date_tz_combo;

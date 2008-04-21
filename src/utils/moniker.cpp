@@ -48,9 +48,9 @@ namespace utils {
 		}
 	}
 
-	Moniker::Moniker(const std::string & scheme, const std::string & path)
-		: m_scheme(scheme),
-			m_path(path)
+	Moniker::Moniker(const std::string & _scheme, const std::string & _path)
+		: m_scheme(_scheme),
+		  m_path(_path)
 	{
 	}
 

@@ -90,6 +90,28 @@ BOOST_TEST
 BOOST_THREADS
 BOOST_SIGNALS
 
+AC_LANG_PUSH(C++)
+if test "$GCC" = "yes"; then
+        for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
+                      -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
+                      -Wunused -Wpointer-arith -Wshadow ; do
+                SAVE_CXXFLAGS="$CXXFLAGS"
+                CXXFLAGS="$CXXFLAGS $option"
+                AC_MSG_CHECKING([whether gcc understands $option])
+                AC_TRY_COMPILE([], [],
+                        has_option=yes,
+                        has_option=no,)
+                if test $has_option = no; then
+                  CXXFLAGS="$SAVE_CXXFLAGS"
+                fi
+                AC_MSG_RESULT($has_option)
+                unset has_option
+                unset SAVE_CXXFLAGS
+        done
+        unset option
+fi
+AC_LANG_POP
+
 
 IT_PROG_INTLTOOL([0.35.0])
 

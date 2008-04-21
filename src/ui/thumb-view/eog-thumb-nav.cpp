@@ -157,7 +157,7 @@ eog_thumb_nav_scroll_right (gpointer user_data)
 }
 
 static void
-eog_thumb_nav_left_button_clicked (GtkButton *button, gpointer user_data)
+eog_thumb_nav_left_button_clicked (GtkButton *, gpointer user_data)
 {
 	GtkWidget *sw = EOG_THUMB_NAV (user_data)->priv->sw;
 
@@ -168,7 +168,7 @@ eog_thumb_nav_left_button_clicked (GtkButton *button, gpointer user_data)
 }
 
 static void
-eog_thumb_nav_right_button_clicked (GtkButton *button, gpointer user_data)
+eog_thumb_nav_right_button_clicked (GtkButton *, gpointer user_data)
 {
 	GtkWidget *sw = EOG_THUMB_NAV (user_data)->priv->sw;
 
@@ -182,7 +182,7 @@ static void
 eog_thumb_nav_get_property (GObject    *object, 
 			    guint       property_id, 
 			    GValue     *value, 
-			    GParamSpec *pspec)
+			    GParamSpec *)
 {
 	EogThumbNav *nav = EOG_THUMB_NAV (object);
 
@@ -208,7 +208,7 @@ static void
 eog_thumb_nav_set_property (GObject      *object, 
 			    guint         property_id, 
 			    const GValue *value, 
-			    GParamSpec   *pspec)
+			    GParamSpec   *)
 {
 	EogThumbNav *nav = EOG_THUMB_NAV (object);
 

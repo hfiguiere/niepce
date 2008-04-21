@@ -23,8 +23,8 @@
 
 namespace library {
 
-	Op::Op(tid_t id)
-		: m_id(id)
+	Op::Op(tid_t _id)
+		: m_id(_id)
 	{
 		
 	}

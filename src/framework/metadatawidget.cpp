@@ -114,7 +114,7 @@ namespace framework {
 	void MetaDataWidget::add_data(const std::string & id, 
 								  const std::string & label,
 								  const char * value,
-								  xmp::MetaDataType type)
+								  xmp::MetaDataType /*type*/)
 	{
 		DBG_OUT("add data");
 

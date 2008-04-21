@@ -37,8 +37,8 @@ namespace framework {
 		typedef boost::shared_ptr<Notification> Ptr;
 		typedef boost::recursive_mutex mutex_t;
 
-		Notification(int type)
-			: m_type(type)
+		Notification(int _type)
+			: m_type(_type)
 			{}
 		~Notification()
 			{ mutex_t::scoped_lock lock(m_mutex); }

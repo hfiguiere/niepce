@@ -24,10 +24,10 @@ namespace bfs = boost::filesystem;
 
 namespace db {
 	
-	LibFile::LibFile(int id, int folderId, const bfs::path & p,
-					 const std::string & name )
-	: m_id(id), m_folderId(folderId),
-	  m_name(name), m_path(p),
+	LibFile::LibFile(int _id, int _folderId, const bfs::path & p,
+					 const std::string & _name )
+	: m_id(_id), m_folderId(_folderId),
+	  m_name(_name), m_path(p),
 	  m_orientation(0), m_rating(0), m_label(0)
 	{
 
