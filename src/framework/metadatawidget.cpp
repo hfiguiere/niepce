@@ -116,23 +116,18 @@ namespace framework {
 								  const char * value,
 								  xmp::MetaDataType /*type*/)
 	{
-		DBG_OUT("add data");
-
 		Gtk::Label *w = NULL;
 		int n_row;
 		std::map<std::string, Gtk::Widget *>::iterator iter 
 			= m_data_map.end();
 		if(m_data_map.empty()) {
 			n_row = 0;
-			DBG_OUT("empty");
 		}
 		else {
 			iter = m_data_map.find(id);
 			n_row = m_table.property_n_rows();
 		}
 		if(iter == m_data_map.end()) {
-			DBG_OUT("not found");
-			DBG_OUT("num of row %d", n_row);
 			Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
 												 Glib::ustring("<b>") 
 												 + label + "</b>"));
