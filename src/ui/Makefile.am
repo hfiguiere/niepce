@@ -28,6 +28,7 @@ libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
 	importdialog.h importdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \
 	filmstripcontroller.h filmstripcontroller.cpp \
+	librarycellrenderer.h librarycellrenderer.cpp \
 	thumb-view/eog-list-store.cpp thumb-view/eog-list-store.h \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
 	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h

@@ -22,6 +22,8 @@
 #include <glibmm/ustring.h>
 
 #include <gtkmm/icontheme.h>
+#include <gtkmm/celllayout.h>
+#include <gtkmm/cellrenderer.h>
 
 #include <gtkimageview/gtkimageview.h>
 #include <gtkimageview/gtkimagescrollwin.h>
@@ -34,6 +36,7 @@
 #include "librarymainviewcontroller.h"
 #include "niepcewindow.h"
 #include "metadatapanecontroller.h"
+#include "librarycellrenderer.h"
 
 namespace ui {
 
@@ -62,7 +65,6 @@ namespace ui {
 					row[m_columns.m_pix] = icon_theme->load_icon(
 						Glib::ustring("image-loading"), 32,
 						Gtk::ICON_LOOKUP_USE_BUILTIN);
-					row[m_columns.m_name] = Glib::ustring((*iter)->name());
 					row[m_columns.m_libfile] = *iter;
 					m_idmap[(*iter)->id()] = riter;
 				}
@@ -107,10 +109,24 @@ namespace ui {
 	Gtk::Widget * LibraryMainViewController::buildWidget()
 	{
 		m_model = Gtk::ListStore::create(m_columns);
-		m_librarylistview.set_pixbuf_column(m_columns.m_pix);
-		m_librarylistview.set_markup_column(m_columns.m_name);
 		m_librarylistview.set_model(m_model);
 		m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
+
+		
+		// the main cell
+		LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
+
+		GtkCellLayout *cl = GTK_CELL_LAYOUT(m_librarylistview.gobj());
+		DBG_ASSERT(cl, "No cell layout");
+		gtk_cell_layout_pack_start(cl, GTK_CELL_RENDERER(libcell->gobj()), 
+								   FALSE);
+		gtk_cell_layout_add_attribute(cl, 
+									  GTK_CELL_RENDERER(libcell->gobj()),
+									  "pixbuf", m_columns.m_pix.index());
+		gtk_cell_layout_add_attribute(cl,
+									  GTK_CELL_RENDERER(libcell->gobj()),
+									  "libfile", m_columns.m_libfile.index());
+
 		m_scrollview.add(m_librarylistview);
 		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 		m_lib_splitview.pack1(m_scrollview);

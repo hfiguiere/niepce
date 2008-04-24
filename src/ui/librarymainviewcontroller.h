@@ -59,11 +59,9 @@ namespace ui {
 			LibraryListColumns()
 				{ 
 					add(m_pix);
-					add(m_name);
 					add(m_libfile);
 				}
 			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-			Gtk::TreeModelColumn<Glib::ustring> m_name;
 			Gtk::TreeModelColumn<db::LibFile::Ptr> m_libfile;
 		};
 
