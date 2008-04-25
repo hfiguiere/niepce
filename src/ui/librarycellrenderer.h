@@ -23,6 +23,7 @@
 #define __UI_LIBRARY_CELL_RENDERER_H__
 
 #include <gtkmm/cellrendererpixbuf.h>
+#include <cairomm/surface.h>
 
 #include "db/libfile.h"
 
@@ -50,6 +51,8 @@ public:
 
 private:
 	Glib::Property<db::LibFile::Ptr>    m_libfileproperty;
+	Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
+	Cairo::RefPtr<Cairo::ImageSurface>  m_jpeg_format_emblem;
 };
 
 

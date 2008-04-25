@@ -10,6 +10,7 @@ glade_DATA = $(gladefiles)
 
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-DGLADEDIR=\"$(gladedir)\" \
+	-DDATADIR=\"$(datadir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@

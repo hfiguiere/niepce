@@ -11,4 +11,5 @@ DISTCLEANFILES = intltool-extract \
                  intltool-update \
                  po/.intltool-merge-cache
 
-SUBDIRS = po src
+SUBDIRS = po data src
+DIST_SUBDIRS = po art data doc src

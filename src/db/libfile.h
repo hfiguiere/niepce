@@ -34,6 +34,12 @@
 
 namespace db {
 
+	enum {
+		FILE_FORMAT_UNKNOWN = 0,
+		FILE_FORMAT_RAW = 1,
+		FILE_FORMAT_JPEG = 2
+	};
+
 	class LibFile
 	{
 	public:

@@ -132,6 +132,8 @@ Makefile
 doc/Doxyfile
 doc/Makefile
 doc/doxygen/Makefile
+data/Makefile
+data/icons/Makefile
 src/Makefile
 src/ext/Makefile
 src/niepce/Makefile

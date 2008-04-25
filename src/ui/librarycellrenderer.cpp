@@ -21,6 +21,10 @@
 #include "utils/debug.h"
 #include "librarycellrenderer.h"
 
+#ifndef DATADIR
+#error DATADIR is not defined
+#endif
+
 namespace ui {
 
 LibraryCellRenderer::LibraryCellRenderer()
@@ -28,6 +32,38 @@ LibraryCellRenderer::LibraryCellRenderer()
 	  Gtk::CellRendererPixbuf(),
 	  m_libfileproperty(*this, "libfile")
 {
+	try {
+		m_raw_format_emblem 
+			= Cairo::ImageSurface::create_from_png(
+				std::string(DATADIR"/niepce/pixmaps/niepce-raw-fmt.png"));
+		m_jpeg_format_emblem 
+			= Cairo::ImageSurface::create_from_png(
+				std::string(DATADIR"/niepce/pixmaps/niepce-jpg-fmt.png"));
+	}
+	catch(...)
+	{
+		ERR_OUT("exception");
+	}
+}
+
+namespace {
+
+	void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
+						  const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
+						  const GdkRectangle & r)
+		
+	{	
+		if(emblem) {
+			int w, h;
+			w = emblem->get_width();
+			h = emblem->get_height();
+			double x, y;
+			x = r.x + r.width - 4 - w;
+			y = r.y + r.height - 4 - h;
+			cr->set_source(emblem, x, y);
+			cr->paint();
+		}
+	}
 
 }
 
@@ -80,7 +116,12 @@ void LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& windo
 	
 	Gtk::CellRendererPixbuf::render_vfunc(window, widget, background_area,
 										  cell_area, expose_area, flags);
+
+	Cairo::RefPtr<Cairo::ImageSurface> emblem = m_raw_format_emblem;
+	drawFormatEmblem(cr, emblem, r);
 }
+
+
 
 Glib::PropertyProxy_ReadOnly<db::LibFile::Ptr> 	
 LibraryCellRenderer::property_libfile() const
