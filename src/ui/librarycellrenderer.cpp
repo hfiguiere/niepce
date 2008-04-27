@@ -112,7 +112,7 @@ namespace {
 					const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
 					const GdkRectangle & r)
 	{
-		if(rating == -1) {
+		if(rating == -1 || !star || !unstar) {
 			return;
 		}
 		int w = star->get_width();
