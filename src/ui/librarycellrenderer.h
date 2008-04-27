@@ -53,6 +53,8 @@ private:
 	Glib::Property<db::LibFile::Ptr>    m_libfileproperty;
 	Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
 	Cairo::RefPtr<Cairo::ImageSurface>  m_jpeg_format_emblem;
+	Cairo::RefPtr<Cairo::ImageSurface>  m_star;
+	Cairo::RefPtr<Cairo::ImageSurface>  m_unstar;
 };
 
 

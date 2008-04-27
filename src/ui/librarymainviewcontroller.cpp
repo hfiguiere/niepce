@@ -111,8 +111,10 @@ namespace ui {
 		m_model = Gtk::ListStore::create(m_columns);
 		m_librarylistview.set_model(m_model);
 		m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
+		m_librarylistview.property_row_spacing() = 0;
+		m_librarylistview.property_column_spacing() = 0;
+		m_librarylistview.property_spacing() = 0;
 
-		
 		// the main cell
 		LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
 

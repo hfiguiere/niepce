@@ -21,7 +21,7 @@ To build is you need the following:
 A C++ compiler
 gtk+ 2.8
 cairo 1.1
-gtkmm 2.6
+gtkmm 2.10
 gconfmm 2.6 (this will be removed)
 cairomm
 gnome-vfs >= 2.14
