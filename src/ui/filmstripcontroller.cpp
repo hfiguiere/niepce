@@ -34,9 +34,12 @@ namespace ui {
 
 Gtk::Widget * FilmStripController::buildWidget()
 {
-	// ribbon FIXME Move to its own controller
 	m_thumbview = Glib::wrap(GTK_ICON_VIEW(eog_thumb_view_new()));
-	GtkWidget *thn = eog_thumb_nav_new(GTK_WIDGET(m_thumbview->gobj()), EOG_THUMB_NAV_MODE_ONE_ROW, true);
+	GtkWidget *thn = eog_thumb_nav_new(GTK_WIDGET(m_thumbview->gobj()), 
+									   EOG_THUMB_NAV_MODE_ONE_ROW, true);
+	gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(m_thumbview->gobj()),
+									 GTK_SELECTION_SINGLE);
+
 	m_widget = Glib::wrap(thn);
 	return m_widget;
 }
