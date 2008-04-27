@@ -32,7 +32,7 @@
      inkscape:cx="375"
      inkscape:cy="869.3302"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer1"
      inkscape:window-width="1024"
      inkscape:window-height="697"
      inkscape:window-x="0"
@@ -74,38 +74,96 @@
          x="334.69043"
          y="89.782104"
          style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans">JPEG</tspan></text>
+    <g
+       id="g3169"
+       inkscape:export-filename="/home/hub/cvslocal/niepce/data/icons/niepce-png-fmt.png"
+       inkscape:export-xdpi="36"
+       inkscape:export-ydpi="36">
+      <rect
+         rx="5.3061228"
+         ry="9.2857141"
+         y="283.36218"
+         x="108.5"
+         height="30"
+         width="65"
+         id="rect2180"
+         style="fill:#333333;fill-opacity:1;display:inline" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2182"
+         y="304.7821"
+         x="118.69043"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:DejaVu Sans"
+           y="304.7821"
+           x="118.69043"
+           id="tspan2184"
+           sodipodi:role="line">PNG</tspan></text>
+    </g>
+    <g
+       id="g3164"
+       transform="translate(-8,0)"
+       inkscape:export-filename="/home/hub/cvslocal/niepce/data/icons/niepce-tiff-fmt.png"
+       inkscape:export-xdpi="36"
+       inkscape:export-ydpi="36">
+      <rect
+         rx="5.3061228"
+         ry="9.2857141"
+         y="332.36218"
+         x="115.5"
+         height="30"
+         width="65"
+         id="rect3158"
+         style="fill:#333333;fill-opacity:1;display:inline" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3160"
+         y="353.7821"
+         x="125.69043"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:DejaVu Sans"
+           y="353.7821"
+           x="125.69043"
+           id="tspan3162"
+           sodipodi:role="line">TIFF</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="R+J"
      style="display:inline">
-    <rect
-       style="fill:#333333;fill-opacity:1;display:inline"
-       id="rect2178"
-       width="65"
-       height="30"
-       x="109"
-       y="229.36218"
-       ry="9.2857141"
-       rx="5.3061228"
-       inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-rawjpeg-fmt.png"
-       inkscape:export-xdpi="36"
-       inkscape:export-ydpi="36" />
-    <text
-       xml:space="preserve"
-       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:DejaVu Sans"
-       x="123"
-       y="251.36218"
-       id="text2168"
-       sodipodi:linespacing="100%"
-       inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-rawjpeg-fmt.png"
-       inkscape:export-xdpi="36"
-       inkscape:export-ydpi="36"><tspan
-         sodipodi:role="line"
-         id="tspan2176"
+    <g
+       id="g3174">
+      <rect
+         inkscape:export-ydpi="36"
+         inkscape:export-xdpi="36"
+         inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-rawjpeg-fmt.png"
+         rx="5.3061228"
+         ry="9.2857141"
+         y="229.36218"
+         x="109"
+         height="30"
+         width="65"
+         id="rect2178"
+         style="fill:#333333;fill-opacity:1;display:inline" />
+      <text
+         inkscape:export-ydpi="36"
+         inkscape:export-xdpi="36"
+         inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-rawjpeg-fmt.png"
+         sodipodi:linespacing="100%"
+         id="text2168"
+         y="251.36218"
          x="123"
-         y="251.36218">R+J</tspan></text>
+         style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:DejaVu Sans"
+         xml:space="preserve"><tspan
+           y="251.36218"
+           x="123"
+           id="tspan2176"
+           sodipodi:role="line">R+J</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -145,32 +203,35 @@
      id="layer3"
      inkscape:label="RAW"
      style="display:inline">
-    <rect
-       style="fill:#333333;fill-opacity:1;display:inline"
-       id="rect4121"
-       width="65"
-       height="30"
-       x="109.5"
-       y="178.36218"
-       ry="9.2857141"
-       rx="5.3061228"
-       inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-raw-fmt.png"
-       inkscape:export-xdpi="36"
-       inkscape:export-ydpi="36" />
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
-       x="119"
-       y="201.36218"
-       id="text2164"
-       sodipodi:linespacing="125%"
-       inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-raw-fmt.png"
-       inkscape:export-xdpi="36"
-       inkscape:export-ydpi="36"><tspan
-         sodipodi:role="line"
-         id="tspan2166"
-         x="119"
+    <g
+       id="g3179">
+      <rect
+         inkscape:export-ydpi="36"
+         inkscape:export-xdpi="36"
+         inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-raw-fmt.png"
+         rx="5.3061228"
+         ry="9.2857141"
+         y="178.36218"
+         x="109.5"
+         height="30"
+         width="65"
+         id="rect4121"
+         style="fill:#333333;fill-opacity:1;display:inline" />
+      <text
+         inkscape:export-ydpi="36"
+         inkscape:export-xdpi="36"
+         inkscape:export-filename="/home/hub/cvslocal/niepce/art/niepce-raw-fmt.png"
+         sodipodi:linespacing="125%"
+         id="text2164"
          y="201.36218"
-         style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:DejaVu Sans">RAW</tspan></text>
+         x="119"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:DejaVu Sans"
+           y="201.36218"
+           x="119"
+           id="tspan2166"
+           sodipodi:role="line">RAW</tspan></text>
+    </g>
   </g>
 </svg>
