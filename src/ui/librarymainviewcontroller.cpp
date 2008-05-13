@@ -18,15 +18,14 @@
  */
 
 
+#include <gtk/gtkcelllayout.h>
+
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/celllayout.h>
 #include <gtkmm/cellrenderer.h>
-
-#include <gtkimageview/gtkimageview.h>
-#include <gtkimageview/gtkimagescrollwin.h>
 
 #include "utils/debug.h"
 #include "niepce/notifications.h"
@@ -37,6 +36,7 @@
 #include "niepcewindow.h"
 #include "metadatapanecontroller.h"
 #include "librarycellrenderer.h"
+#include "darkroommodule.h"
 
 namespace ui {
 
@@ -134,6 +134,7 @@ namespace ui {
 		m_lib_splitview.pack1(m_scrollview);
 		m_lib_splitview.pack2(m_lib_metapanescroll);
 		m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
+		add(m_metapanecontroller);
 		m_lib_metapanescroll.add(*m_metapanecontroller->widget());
 		m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 
@@ -144,12 +145,10 @@ namespace ui {
 		
 		m_mainview.append_page(m_lib_splitview, _("Library"));
 
-		// TODO DarkroomModuleController
-		GtkWidget *iv = gtk_image_view_new();
-		GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(iv));
-		m_imageview = Gtk::manage(Glib::wrap(ivs));
-		m_dr_splitview.pack1(*m_imageview, Gtk::EXPAND);
-		m_mainview.append_page(m_dr_splitview, _("Darkroom"));
+
+		m_darkroom = DarkroomModule::Ptr(new DarkroomModule());
+		m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
+		add(m_darkroom);
 
 		// TODO PrintModuleController
 		// m_mainview.append_page(, _("Print"));
@@ -165,18 +164,26 @@ namespace ui {
 	void LibraryMainViewController::on_selected(int id)
 	{
 		DBG_OUT("selected callback %d", id);
-		std::map<int, Gtk::TreeIter>::iterator iter
-			= m_idmap.find( id );
-		if(iter != m_idmap.end()) {
-			db::LibFile::Ptr libfile = (*iter->second)[m_columns.m_libfile];
-
-			getLibraryClient()->requestMetadata(libfile->id());
+		if(id > 0) {
+			getLibraryClient()->requestMetadata(id);
 		}		
 		else  {
 			m_metapanecontroller->display(NULL);
 		}
 	}
 
+	void LibraryMainViewController::on_image_activated(int id)
+	{
+		DBG_OUT("on image activated %d", id);
+		std::map<int, Gtk::TreeIter>::iterator iter
+			= m_idmap.find( id );
+		if(iter != m_idmap.end()) {
+			db::LibFile::Ptr libfile = (*iter->second)[m_columns.m_libfile];
+			m_darkroom->set_image(libfile);
+			m_mainview.activate_page(1);
+		}
+	}
+	
 
 	libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
 	{

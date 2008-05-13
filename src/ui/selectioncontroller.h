@@ -34,7 +34,9 @@ namespace Gtk {
 
 namespace ui {
 
-/** interface for selectable image */
+/** interface for selectable image. Make the controller
+ *  inherit/implement it.
+ */
 class IImageSelectable 
 {
 public:
@@ -54,10 +56,15 @@ public:
 
 	void add_selectable(IImageSelectable *);
 
+	void activated(const Gtk::TreeModel::Path & /*path*/,
+				   IImageSelectable * selectable);
 	void selected(IImageSelectable *);
 
 	// the signal to call when selection is changed.
 	boost::signal<void (int)> signal_selected;
+
+	// signal for when the item is activated (ie double-click)
+	boost::signal<void (int)> signal_activated;
 protected:
 	virtual Gtk::Widget * buildWidget()
 		{ return NULL; }

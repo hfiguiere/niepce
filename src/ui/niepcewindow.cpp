@@ -116,6 +116,7 @@ namespace ui {
 
 
 		m_filmstrip = FilmStripController::Ptr(new FilmStripController);
+		add(m_filmstrip);
 		m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
 									 boost::bind(&FilmStripController::on_lib_notification, 
 												 m_filmstrip, _1));
@@ -123,7 +124,6 @@ namespace ui {
 									 boost::bind(&FilmStripController::on_tnail_notification, 
 												 m_filmstrip, _1));
 
-		add(m_filmstrip);
 
 		m_vbox.pack_start(*(m_filmstrip->widget()), Gtk::PACK_SHRINK);
 
@@ -132,13 +132,15 @@ namespace ui {
 		m_statusBar.push(Glib::ustring(_("Ready")));
 
 		m_selection_controller = SelectionController::Ptr(new SelectionController);
+		add(m_selection_controller);
 		m_selection_controller->add_selectable(m_filmstrip.get());
 		m_selection_controller->add_selectable(m_mainviewctrl.get());
 		m_selection_controller->signal_selected
-			.connect(boost::bind(&NiepceWindow::on_selected,
-								 this, _1));
-		m_selection_controller->signal_selected
 			.connect(boost::bind(&LibraryMainViewController::on_selected,
+								 m_mainviewctrl, _1));
+
+		m_selection_controller->signal_activated
+			.connect(boost::bind(&LibraryMainViewController::on_image_activated,
 								 m_mainviewctrl, _1));
 
 		win.set_size_request(600, 400);
@@ -148,11 +150,71 @@ namespace ui {
 	}
 
 
+	void NiepceWindow::init_ui()
+	{
+		Application::Ptr pApp = Application::app();
+		Glib::ustring ui_info =
+			"<ui>"
+			"  <menubar name='MenuBar'>"
+			"    <menu action='MenuLibrary'>"
+			"      <menuitem action='NewLibrary' />"
+			"      <menuitem action='OpenLibrary' />"
+			"      <separator/>"
+			"      <menuitem action='NewFolder'/>"
+			"      <menuitem action='NewProject'/>"
+			"      <menuitem action='Import'/>"
+			"      <separator/>"
+			"      <menuitem action='Close'/>"
+			"      <menuitem action='Quit'/>"
+			"    </menu>"
+			"    <menu action='MenuEdit'>"
+			"      <menuitem action='Undo'/>"
+			"      <menuitem action='Redo'/>"
+			"      <separator/>"
+			"      <menuitem action='Cut'/>"
+			"      <menuitem action='Copy'/>"
+			"      <menuitem action='Paste'/>"
+			"      <menuitem action='Delete'/>"
+			"      <separator/>"
+			"      <menuitem action='Preferences'/>"
+			"    </menu>"
+			"    <menu action='MenuImage'>"
+			"      <menuitem action='RotateLeft'/>"
+			"      <menuitem action='RotateRight'/>"			
+			"      <separator/>"
+			"      <menuitem action='SetRating'/>"
+			"      <menuitem action='SetLabel'/>"
+			"      <separator/>"
+			"      <menuitem action='DeleteImage'/>"
+			"    </menu>"
+			"    <menu action='MenuHelp'>"
+			"      <menuitem action='Help'/>"
+			"      <menuitem action='About'/>"
+			"    </menu>"
+			"  </menubar>"
+			"  <toolbar  name='ToolBar'>"
+			"    <toolitem action='Import'/>"
+			"    <toolitem action='Quit'/>"
+			"  </toolbar>"
+			"</ui>";
+		pApp->uiManager()->add_ui_from_string(ui_info);
+	} 
+
+
+
 	void NiepceWindow::init_actions()
 	{
 		m_refActionGroup = Gtk::ActionGroup::create();
 		
-		m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
+		m_refActionGroup->add(Gtk::Action::create("MenuLibrary", _("_Library")));
+		m_refActionGroup->add(Gtk::Action::create("NewLibrary", Gtk::Stock::NEW));
+		m_refActionGroup->add(Gtk::Action::create("OpenLibrary", Gtk::Stock::OPEN),
+							  boost::bind(&NiepceWindow::on_action_file_open,
+										  this));
+
+		m_refActionGroup->add(Gtk::Action::create("NewFolder", _("New _Folder...")));
+		m_refActionGroup->add(Gtk::Action::create("NewProject", _("New _Project...")));
+
 		m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
 							  sigc::mem_fun(this, 
 											&NiepceWindow::on_action_file_import));
@@ -191,6 +253,15 @@ namespace ui {
 												  Gtk::Stock::PREFERENCES),
 							  sigc::mem_fun(this,
 											&NiepceWindow::on_preferences));
+
+		m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
+		
+		m_refActionGroup->add(Gtk::Action::create("RotateLeft", _("Rotate L_eft")));
+		m_refActionGroup->add(Gtk::Action::create("RotateRight", _("Rotate R_ight")));
+
+		m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label...")));
+		m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating...")));
+		m_refActionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
 		m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
 		m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));
@@ -259,6 +330,11 @@ namespace ui {
 	}
 
 
+	void NiepceWindow::on_action_file_open()
+	{
+		DBG_OUT("there");
+	}
+
 	void NiepceWindow::on_open_library()
 	{
 		Configuration & cfg = Application::app()->config();
@@ -303,11 +379,6 @@ namespace ui {
 		open_library(libMoniker);
 	}
 
-	void NiepceWindow::on_selected(int id)
-	{
-		DBG_OUT("on selected %d", id);
-	}
-
 
 	void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> & xml, Gtk::Dialog * dialog)
 	{
@@ -340,42 +411,6 @@ namespace ui {
 									  this, _1, _2));
 		DBG_OUT("end on_preferences");
 	}
-
-	void NiepceWindow::init_ui()
-	{
-		Application::Ptr pApp = Application::app();
-		Glib::ustring ui_info =
-			"<ui>"
-			"  <menubar name='MenuBar'>"
-			"    <menu action='MenuFile'>"
-			"      <menuitem action='Import'/>"
-			"      <separator/>"
-			"      <menuitem action='Close'/>"
-			"      <menuitem action='Quit'/>"
-			"    </menu>"
-			"    <menu action='MenuEdit'>"
-			"      <menuitem action='Undo'/>"
-			"      <menuitem action='Redo'/>"
-			"      <separator/>"
-			"      <menuitem action='Cut'/>"
-			"      <menuitem action='Copy'/>"
-			"      <menuitem action='Paste'/>"
-			"      <menuitem action='Delete'/>"
-			"      <separator/>"
-			"      <menuitem action='Preferences'/>"
-			"    </menu>"
-			"    <menu action='MenuHelp'>"
-			"      <menuitem action='Help'/>"
-			"      <menuitem action='About'/>"
-			"    </menu>"
-			"  </menubar>"
-			"  <toolbar  name='ToolBar'>"
-			"    <toolitem action='Import'/>"
-			"    <toolitem action='Quit'/>"
-			"  </toolbar>"
-			"</ui>";
-		pApp->uiManager()->add_ui_from_string(ui_info);
-	} 
 
 
 	void NiepceWindow::open_library(const std::string & libMoniker)

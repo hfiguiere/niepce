@@ -1,5 +1,5 @@
 /*
- * niepce - ui/librarymainview.h
+ * niepce - ui/librarymainview.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -57,6 +57,15 @@ namespace ui {
 		return idx;
 	}
 	
+	void LibraryMainView::activate_page(int idx)
+	{
+		if(m_currentpage != idx) {
+			Gtk::ToggleButton * btn = m_buttons[idx].first;
+			set_current_page(idx, btn);
+		}
+	}
+
+
 	void LibraryMainView::set_current_page(int idx, Gtk::ToggleButton * btn)
 	{
 		m_notebook.set_current_page(idx);

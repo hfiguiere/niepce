@@ -13,6 +13,7 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	application.cpp frame.cpp controller.cpp \
 	notification.h \
 	mimetype.h mimetype.cpp \
+	imageloader.h imageloader.cpp \
 	notificationcenter.h notificationcenter.cpp \
 	configdatabinder.h configdatabinder.cpp \
 	gdkutils.h gdkutils.cpp \

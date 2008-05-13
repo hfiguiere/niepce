@@ -1,7 +1,7 @@
 /*
- * niepce - ui/librarymainview.h
+ * niepce - ui/darkroommodule.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,42 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBRARY_MAIN_VIEW_H__
-#define __LIBRARY_MAIN_VIEW_H__
 
-#include <vector>
-#include <utility>
 
-#include <gtkmm/notebook.h>
+
+#ifndef _UI_DARKROOMMODULE_H__
+#define _UI_DARKROOMMODULE_H__
+
+#include <gtkmm/widget.h>
+#include <gtkmm/paned.h>
 #include <gtkmm/box.h>
-#include <gtkmm/buttonbox.h>
 
-namespace Gtk {
-	class ToggleButton;
-}
 
+#include "framework/controller.h"
+#include "db/libfile.h"
+	
 namespace ui {
 
+class DarkroomModule
+	: public framework::Controller
+{
+public:
+	typedef boost::shared_ptr<DarkroomModule> Ptr;
 
-	class LibraryMainView
-		: public Gtk::VBox
-	{
-	public:
-		LibraryMainView();
+	void set_image(const db::LibFile::Ptr & file);
 
-		int append_page(Gtk::Widget & w, const Glib::ustring & label);
-		void activate_page(int);
-	protected:
-		
-		void set_current_page(int, Gtk::ToggleButton *);
-	private:
-		Gtk::HButtonBox         m_mainbar;
-		Gtk::Notebook           m_notebook;
-		int                     m_currentpage;
-		std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;
-	};
+protected:
+	virtual Gtk::Widget * buildWidget();
+
+private:
+	// darkroom split view
+	Gtk::HPaned                  m_dr_splitview;
+	Gtk::VBox                    m_vbox;
+	GtkWidget*                   m_imageview;
+	Gtk::Widget*                 m_imageviewscroll;
+};
+
 
 }
-
 
 #endif

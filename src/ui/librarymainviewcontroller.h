@@ -35,6 +35,7 @@
 #include "framework/notification.h"
 #include "metadatapanecontroller.h"
 #include "selectioncontroller.h"
+#include "darkroommodule.h"
 
 namespace Gtk {
 	class Widget;
@@ -67,8 +68,10 @@ namespace ui {
 
 		void on_lib_notification(const framework::Notification::Ptr &);
 		void on_tnail_notification(const framework::Notification::Ptr &);
+
 		/** called when somehing is selected by the shared selection */
 		void on_selected(int id);
+		void on_image_activated(int id);
 
 		virtual Gtk::IconView * image_list();
 		virtual int get_selected();
@@ -87,12 +90,12 @@ namespace ui {
 		Gtk::HPaned                  m_lib_splitview;
 		Gtk::ScrolledWindow          m_lib_metapanescroll;
 		MetaDataPaneController::Ptr  m_metapanecontroller;
-		// darkroom split view
-		Gtk::HPaned                  m_dr_splitview;
+
+		DarkroomModule::Ptr          m_darkroom;
+
 		LibraryListColumns           m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_model;
 		std::map<int, Gtk::TreeIter> m_idmap;
-		Gtk::Widget*                 m_imageview;
 	};
 
 }

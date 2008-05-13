@@ -67,13 +67,12 @@ namespace ui {
 		void on_action_file_import();
 
 		void on_action_file_quit();
+		void on_action_file_open();
 		void on_open_library();
 
 		void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
 									 Gtk::Dialog *);
 		void on_preferences();
-
-		void on_selected(int id);
 
 		void init_ui();
 		void init_actions();

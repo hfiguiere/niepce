@@ -40,8 +40,19 @@ void SelectionController::add_selectable(IImageSelectable * selectable)
 	selectable->image_list()->signal_selection_changed().connect(
 		boost::bind(&SelectionController::selected, 
 					this, selectable));
+	selectable->image_list()->signal_item_activated().connect(
+		boost::bind(&SelectionController::activated, this, _1, selectable));
 }
 
+
+void SelectionController::activated(const Gtk::TreeModel::Path & /*path*/,
+									IImageSelectable * selectable)
+{
+	utils::AutoFlag f(m_in_handler);
+	int selection = selectable->get_selected();
+	DBG_OUT("item activated %d", selection);
+	signal_activated(selection);
+}
 
 void SelectionController::selected(IImageSelectable * selectable)
 {
