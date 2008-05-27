@@ -19,6 +19,9 @@
 
 #include "config.h"
 
+#include <glibmm/i18n.h>
+#include <gtkmm/aboutdialog.h>
+
 #include "niepceapplication.h"
 #include "niepcewindow.h"
 
@@ -27,23 +30,45 @@ using framework::Application;
 
 namespace ui {
 
-	NiepceApplication::NiepceApplication()
-		: Application(PACKAGE)
-	{
-	}
+NiepceApplication::NiepceApplication()
+    : Application(PACKAGE)
+{
+}
 
-	Application::Ptr NiepceApplication::create()
-	{
-		if (!m_application) {
-			m_application = Application::Ptr(new NiepceApplication());
-		}
-		return m_application;
-	}
+Application::Ptr NiepceApplication::create()
+{
+    if (!m_application) {
+        m_application = Application::Ptr(new NiepceApplication());
+    }
+    return m_application;
+}
 
 
-	Frame::Ptr NiepceApplication::makeMainFrame()
-	{
-		return Frame::Ptr(new NiepceWindow);
-	}
+Frame::Ptr NiepceApplication::makeMainFrame()
+{
+    return Frame::Ptr(new NiepceWindow);
+}
+
+void NiepceApplication::on_about()
+{
+    Gtk::AboutDialog dlg;
+//    dlg.set_name("Niepce");
+    dlg.set_program_name("Niepce Digital");
+    dlg.set_version(VERSION);
+    dlg.set_comments(Glib::ustring(_("A digital photo application.\n\nBuild options: " 
+                                     NIEPCE_BUILD_CONFIG)));
+    dlg.run();
+}
+
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

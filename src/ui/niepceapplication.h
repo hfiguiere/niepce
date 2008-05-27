@@ -1,3 +1,6 @@
+#ifndef _UI_NIEPCEAPPLICATION_H_
+#define _UI_NIEPCEAPPLICATION_H_
+
 /*
  * niepce - ui/niepceapplication.h
  *
@@ -18,9 +21,6 @@
  */
 
 
-#ifndef _UI_NIEPCEAPPLICATION_H_
-#define _UI_NIEPCEAPPLICATION_H_
-
 #include "framework/application.h"
 
 namespace ui {
@@ -34,8 +34,19 @@ namespace ui {
 		virtual framework::Frame::Ptr makeMainFrame();
 	protected:
 		NiepceApplication();
+		virtual void on_about();
 	};
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 #endif
