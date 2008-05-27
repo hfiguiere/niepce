@@ -179,7 +179,7 @@ namespace utils {
 
 	int32_t XmpMeta::rating() const
 	{
-		int32_t _rating = 0;
+		int32_t _rating = -1;
 		XmpStringPtr value = xmp_string_new();
 		if(xmp_get_property(m_xmp, NS_XAP, "Rating", value, NULL)) {
 			try {
@@ -244,4 +244,5 @@ namespace utils {
 		}
 		return m_keywords;
 	}
+
 }

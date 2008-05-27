@@ -45,57 +45,69 @@ namespace framework {
 
 namespace ui {
 
-	class NiepceWindow
-		: public framework::Frame
-	{
-	public:
-		NiepceWindow();
-		virtual ~NiepceWindow();
+class NiepceWindow
+    : public framework::Frame
+{
+public:
+    NiepceWindow();
+    virtual ~NiepceWindow();
 
 
-		virtual void set_title(const std::string & title);
+    virtual void set_title(const std::string & title);
 
-		libraryclient::LibraryClient::Ptr getLibraryClient()
-			{ return m_libClient; }
-	protected:
-		virtual Gtk::Widget * buildWidget();
+    libraryclient::LibraryClient::Ptr getLibraryClient()
+        { return m_libClient; }
+protected:
+    virtual Gtk::Widget * buildWidget();
 
-	private:
-		void undo_state(const Glib::RefPtr<Gtk::Action> & action);
-		void redo_state(const Glib::RefPtr<Gtk::Action> & action);
+private:
+    void undo_state(const Glib::RefPtr<Gtk::Action> & action);
+    void redo_state(const Glib::RefPtr<Gtk::Action> & action);
 
-		void on_action_file_import();
+    void on_action_file_import();
 
-		void on_action_file_quit();
-		void on_action_file_open();
-		void on_open_library();
+    void on_action_file_quit();
+    void on_action_file_open();
+    void on_open_library();
 
-		void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
-									 Gtk::Dialog *);
-		void on_preferences();
+    void on_set_rating(int rating);
 
-		void init_ui();
-		void init_actions();
+    void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
+                                 Gtk::Dialog *);
+    void on_preferences();
 
-		void open_library(const std::string & libMoniker);
+    void init_ui();
+    void init_actions();
+
+    void open_library(const std::string & libMoniker);
 		
-		framework::NotificationCenter::Ptr  m_lib_notifcenter;
+    framework::NotificationCenter::Ptr  m_lib_notifcenter;
 
-		Gtk::VBox                      m_vbox;
-		Gtk::HPaned                    m_hbox;
-		LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
-		WorkspaceController::Ptr       m_workspacectrl;
-		FilmStripController::Ptr       m_filmstrip;
-		ui::SelectionController::Ptr   m_selection_controller;
-		Gtk::Statusbar                 m_statusBar;
-		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
-		libraryclient::LibraryClient::Ptr m_libClient;
-		// connections
-		boost::signals::scoped_connection m_undostate_conn;
-		boost::signals::scoped_connection m_redostate_conn;
-	};
+    Gtk::VBox                      m_vbox;
+    Gtk::HPaned                    m_hbox;
+    LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
+    WorkspaceController::Ptr       m_workspacectrl;
+    FilmStripController::Ptr       m_filmstrip;
+    ui::SelectionController::Ptr   m_selection_controller;
+    Gtk::Statusbar                 m_statusBar;
+    Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+    libraryclient::LibraryClient::Ptr m_libClient;
+    // connections
+    boost::signals::scoped_connection m_undostate_conn;
+    boost::signals::scoped_connection m_redostate_conn;
+};
 
 }
 
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
