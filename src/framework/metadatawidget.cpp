@@ -89,7 +89,8 @@ namespace framework {
 					vec.push_back(xmp_string_cstr(value));
 				}
 				std::string v = utils::join(vec, ", ");
-				add_data(id, current->label, v.c_str(), current->type);				
+				add_data(id, current->label, v.c_str(), current->type);
+                xmp_iterator_free(iter);
 			}
 			else {
 				const char * v = "";
@@ -152,3 +153,13 @@ namespace framework {
 	}
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
