@@ -1,7 +1,7 @@
 /*
  * niepce - utils/worker.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ namespace utils {
 		
 		do 
 		{
+			T op;
 			{
 				// make sure we terminate the thread before we unlock
 				// the task queue.
@@ -84,9 +85,8 @@ namespace utils {
 					m_terminated = true;
 					break;
 				}
+				op = m_tasks.pop();
 			}
-			
-			T op = m_tasks.pop();
 			execute(op);
 		} while(!m_terminated);
 	}
