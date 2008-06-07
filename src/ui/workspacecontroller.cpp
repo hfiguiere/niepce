@@ -42,18 +42,24 @@ namespace ui {
 		: framework::Controller()
 	{
 		Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());
-		m_icons[ICON_FOLDER] = icon_theme->load_icon(
-			Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
-		m_icons[ICON_PROJECT] = icon_theme->load_icon(
-			Glib::ustring("applications-accessories"), 16, 
-			Gtk::ICON_LOOKUP_USE_BUILTIN);
-		m_icons[ICON_ROLL] = icon_theme->load_icon(
-			Glib::ustring("emblem-photos"), 16,
-			Gtk::ICON_LOOKUP_USE_BUILTIN);
-		// FIXME use an icon that make more sense.
-		m_icons[ICON_KEYWORD] = icon_theme->load_icon(
-			Glib::ustring("application-certificate"), 16, 
-			Gtk::ICON_LOOKUP_USE_BUILTIN);
+		try {
+			m_icons[ICON_FOLDER] = icon_theme->load_icon(
+				Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
+			m_icons[ICON_PROJECT] = icon_theme->load_icon(
+				Glib::ustring("applications-accessories"), 16, 
+				Gtk::ICON_LOOKUP_USE_BUILTIN);
+			m_icons[ICON_ROLL] = icon_theme->load_icon(
+				Glib::ustring("emblem-photos"), 16,
+				Gtk::ICON_LOOKUP_USE_BUILTIN);
+			// FIXME use an icon that make more sense.
+			m_icons[ICON_KEYWORD] = icon_theme->load_icon(
+				Glib::ustring("application-certificate"), 16, 
+				Gtk::ICON_LOOKUP_USE_BUILTIN);
+		}
+		catch(const Gtk::IconThemeError & e)
+		{
+			ERR_OUT("Exception %s.", e.what().c_str());
+		}
 	}
 
 	libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
