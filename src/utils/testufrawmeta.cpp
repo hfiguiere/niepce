@@ -42,13 +42,13 @@ int test_main( int, char *[] )             // note the name!
 	}
 	utils::ExempiManager xmpManager(niepce::xmp_namespaces);
 
-	XmpPtr xmp = xmp_new_empty();
+    xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
 
 	utils::UfrawMeta ufraw(dir / "test2.ufraw");
 
 	BOOST_CHECK(ufraw.ufraw_to_xmp(xmp));
 
-	XmpStringPtr property = xmp_string_new();
+    xmp::ScopedPtr<XmpStringPtr> property(xmp_string_new());
 	BOOST_CHECK(property != NULL);
 	BOOST_CHECK(xmp_get_property(xmp, NS_CAMERA_RAW_SETTINGS,
 								 "WhiteBalance", property, NULL));
@@ -100,10 +100,6 @@ int test_main( int, char *[] )             // note the name!
 									  "ImportedFromUFraw", &imported, NULL));
 	BOOST_CHECK(imported);
 
-	xmp_string_free(property);
-
-	xmp_free(xmp);
-	
 	return 0;
 }
 
