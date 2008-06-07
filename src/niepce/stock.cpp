@@ -43,10 +43,10 @@ void registerStockItems()
     icon_factory->add_default();
 
     try {
-        Gtk::Stock::add(Gtk::StockItem(ROTATE_LEFT, _("Rotate L_eft")));
+        Gtk::Stock::add(Gtk::StockItem(ROTATE_LEFT, _("Rotate L_eft"), Gdk::ModifierType(0), '['));
         icon_factory->add(ROTATE_LEFT, Gtk::IconSet(
                               Gdk::Pixbuf::create_from_file(DATADIR"/niepce/pixmaps/niepce-rotate-left.png")));
-        Gtk::Stock::add(Gtk::StockItem(ROTATE_RIGHT, _("Rotate R_ight")));
+        Gtk::Stock::add(Gtk::StockItem(ROTATE_RIGHT, _("Rotate R_ight"), Gdk::ModifierType(0), ']'));
         icon_factory->add(ROTATE_RIGHT, Gtk::IconSet(
                               Gdk::Pixbuf::create_from_file(DATADIR"/niepce/pixmaps/niepce-rotate-right.png")));
     }
