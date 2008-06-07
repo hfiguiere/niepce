@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-01 16:32-0500\n"
+"POT-Creation-Date: 2008-06-07 16:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,64 +17,274 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../src/ui/niepcewindow.cpp:131
-msgid "Ready"
-msgstr ""
-
-#: ../src/ui/niepcewindow.cpp:144
-msgid "_File"
-msgstr ""
-
-#: ../src/ui/niepcewindow.cpp:145
-msgid "_Import..."
-msgstr ""
-
-#: ../src/ui/niepcewindow.cpp:155
-msgid "_Help"
-msgstr ""
-
-#: ../src/ui/niepcewindow.cpp:169
+#: ../src/ui/importdialog.cpp:76
 msgid "Import picture folder"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:173
+#: ../src/ui/importdialog.cpp:80 ../src/ui/importdialog.glade.h:5
 msgid "Import"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:256
-msgid "Create library"
+#: ../src/ui/importdialog.glade.h:1
+msgid "..."
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:260
-msgid "Create"
+#: ../src/ui/importdialog.glade.h:2
+msgid "<b>Date:</b>"
 msgstr ""
 
-#: ../src/ui/niepcewindow.cpp:326
-msgid "Niepce Digital - "
+#: ../src/ui/importdialog.glade.h:3
+msgid ""
+"Date is local\n"
+"Date is UTC"
 msgstr ""
 
-#: ../src/ui/librarymainviewcontroller.cpp:111
+#: ../src/ui/importdialog.glade.h:6
+msgid "Import Raw_Studio"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:7
+msgid "Import _UFRaw"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:8
+msgid "You can still change this after importing the pictures."
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:9
+msgid "_Directory:"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:10
+msgid "_Folders"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:11
+msgid "_Import"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:12
+msgid "_Options"
+msgstr ""
+
+#: ../src/ui/importdialog.glade.h:13
+msgid "gtk-cancel"
+msgstr ""
+
+#: ../src/ui/librarymainviewcontroller.cpp:146
 msgid "Library"
 msgstr ""
 
-#: ../src/ui/librarymainviewcontroller.cpp:118
+#: ../src/ui/librarymainviewcontroller.cpp:150
 msgid "Darkroom"
 msgstr ""
 
-#: ../src/ui/workspacecontroller.cpp:191
+#: ../src/ui/metadatapanecontroller.cpp:39
+msgid "Make:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:40
+msgid "Model:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:41
+msgid "Lens:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:45
+msgid "Exposure Program:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:46
+msgid "Speed:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:47
+msgid "Aperture:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:48
+msgid "ISO:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:49
+msgid "Exposure Bias:"
+msgstr ""
+
+#. this one is fishy as it hardcode the prefix.
+#: ../src/ui/metadatapanecontroller.cpp:51
+msgid "Flash:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:52
+msgid "Flash compensation:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:53
+msgid "Focal length:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:54
+msgid "White balance:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:55
+msgid "Date:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:59
+msgid "Rating:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:60
+msgid "Keywords:"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:64
+msgid "Camera Information"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:67
+msgid "Shooting Information"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:70
+msgid "IPTC"
+msgstr ""
+
+#: ../src/ui/metadatapanecontroller.cpp:73
+msgid "Rights"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:134
+msgid "Ready"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:220
+msgid "_Library"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:226
+msgid "New _Folder..."
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:227
+msgid "New _Project..."
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:229
+msgid "_Import..."
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:239
+msgid "_Edit"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:268
+msgid "_Image"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:279
+msgid "Set _Label"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:282
+msgid "Set _Rating"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:283
+msgid "_No Rating"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:285
+msgid "_1 Star"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:287
+msgid "_2 Stars"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:289
+msgid "_3 Stars"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:291
+msgid "_4 Stars"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:293
+msgid "_5 Stars"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:298
+msgid "_Help"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:315
+msgid "Undo "
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:324
+msgid "Redo "
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:385
+msgid "Create library"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:389
+msgid "Create"
+msgstr ""
+
+#: ../src/ui/niepcewindow.cpp:463
+msgid "Niepce Digital - "
+msgstr ""
+
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. indent-tabs-mode:nil
+#. fill-column:99
+#. End:
+#.
+#: ../src/ui/preferences.glade.h:1
+msgid ""
+"System\n"
+"Dark"
+msgstr ""
+
+#: ../src/ui/preferences.glade.h:3
+msgid "_General"
+msgstr ""
+
+#: ../src/ui/preferences.glade.h:4
+msgid "_Reopen Library"
+msgstr ""
+
+#: ../src/ui/preferences.glade.h:5
+msgid "_Theme:\t"
+msgstr ""
+
+#: ../src/ui/preferences.glade.h:6
+msgid "_User Interface"
+msgstr ""
+
+#: ../src/ui/workspacecontroller.cpp:197
 msgid "Pictures"
 msgstr ""
 
-#: ../src/ui/workspacecontroller.cpp:195
+#: ../src/ui/workspacecontroller.cpp:201
 msgid "Projects"
 msgstr ""
 
-#: ../src/ui/workspacecontroller.cpp:199
+#: ../src/ui/workspacecontroller.cpp:205
 msgid "Keywords"
 msgstr ""
 
 #. TODO make it a mnemonic
-#: ../src/ui/workspacecontroller.cpp:212
+#: ../src/ui/workspacecontroller.cpp:218
 msgid "_Workspace"
 msgstr ""
 

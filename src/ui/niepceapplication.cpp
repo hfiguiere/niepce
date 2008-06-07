@@ -22,6 +22,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/aboutdialog.h>
 
+#include "niepce/stock.h"
 #include "niepceapplication.h"
 #include "niepcewindow.h"
 
@@ -33,6 +34,7 @@ namespace ui {
 NiepceApplication::NiepceApplication()
     : Application(PACKAGE)
 {
+    niepce::Stock::registerStockItems();
 }
 
 Application::Ptr NiepceApplication::create()

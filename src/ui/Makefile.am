@@ -23,13 +23,13 @@ libniepceui_a_CPPFLAGS =
 libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
 	niepceapplication.h niepceapplication.cpp \
 	librarymainview.h librarymainview.cpp \
+	librarycellrenderer.h librarycellrenderer.cpp \
 	librarymainviewcontroller.h librarymainviewcontroller.cpp \
 	workspacecontroller.h workspacecontroller.cpp \
 	metadatapanecontroller.h metadatapanecontroller.cpp \
 	importdialog.h importdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \
 	filmstripcontroller.h filmstripcontroller.cpp \
-	librarycellrenderer.h librarycellrenderer.cpp \
 	darkroommodule.h darkroommodule.cpp \
 	thumb-view/eog-list-store.cpp thumb-view/eog-list-store.h \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \

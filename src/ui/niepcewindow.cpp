@@ -23,6 +23,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/window.h>
+#include <gtkmm/action.h>
 #include <gtkmm/box.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
@@ -30,6 +31,7 @@
 #include <gtkmm/combobox.h>
 
 #include "niepce/notifications.h"
+#include "niepce/stock.h"
 #include "utils/debug.h"
 #include "utils/moniker.h"
 #include "db/library.h"
@@ -211,6 +213,8 @@ void NiepceWindow::init_ui()
 
 void NiepceWindow::init_actions()
 {
+    Glib::RefPtr<Gtk::Action> an_action;
+
     m_refActionGroup = Gtk::ActionGroup::create();
 		
     m_refActionGroup->add(Gtk::Action::create("MenuLibrary", _("_Library")));
@@ -262,9 +266,15 @@ void NiepceWindow::init_actions()
                                         &NiepceWindow::on_preferences));
 
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
-		
-    m_refActionGroup->add(Gtk::Action::create("RotateLeft", _("Rotate L_eft")));
-    m_refActionGroup->add(Gtk::Action::create("RotateRight", _("Rotate R_ight")));
+   
+    an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
+//_("Rotate L_eft"));
+//    an_action->property_icon_name() = "object-rotate-left";
+    m_refActionGroup->add(an_action);
+    an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
+//                                    _("Rotate R_ight"));
+//    an_action->property_icon_name() = "object-rotate-right";
+    m_refActionGroup->add(an_action);
 
     m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
 
