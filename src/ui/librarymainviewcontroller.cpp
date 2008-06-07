@@ -146,7 +146,7 @@ namespace ui {
 		m_mainview.append_page(m_lib_splitview, _("Library"));
 
 
-		m_darkroom = DarkroomModule::Ptr(new DarkroomModule());
+		m_darkroom = DarkroomModule::Ptr(new DarkroomModule(m_actionGroup));
 		m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
 		add(m_darkroom);
 
@@ -231,3 +231,13 @@ namespace ui {
 	}
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

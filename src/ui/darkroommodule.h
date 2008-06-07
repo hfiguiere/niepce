@@ -26,6 +26,7 @@
 #include <gtkmm/widget.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/box.h>
+#include <gtkmm/actiongroup.h>
 
 
 #include "framework/controller.h"
@@ -39,6 +40,11 @@ class DarkroomModule
 public:
 	typedef boost::shared_ptr<DarkroomModule> Ptr;
 
+	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group)
+		: m_actionGroup(action_group)
+		{
+		}
+
 	void set_image(const db::LibFile::Ptr & file);
 
 protected:
@@ -50,6 +56,7 @@ private:
 	Gtk::VBox                    m_vbox;
 	GtkWidget*                   m_imageview;
 	Gtk::Widget*                 m_imageviewscroll;
+	Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
 };
 
 

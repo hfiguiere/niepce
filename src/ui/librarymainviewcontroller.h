@@ -52,6 +52,11 @@ namespace ui {
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
 
+		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions)
+			: m_actionGroup(actions)
+			{
+			}
+
 		class LibraryListColumns 
 			: public Gtk::TreeModelColumnRecord
 		{
@@ -81,6 +86,7 @@ namespace ui {
 		virtual void on_ready();
 	private:
 		libraryclient::LibraryClient::Ptr getLibraryClient();
+		Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
 
 		// managed widgets...
 		LibraryMainView              m_mainview;
@@ -99,5 +105,15 @@ namespace ui {
 	};
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 #endif

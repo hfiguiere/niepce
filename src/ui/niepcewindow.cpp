@@ -85,7 +85,7 @@ NiepceWindow::buildWidget()
     set_icon_from_theme(name);		
 
     // main view
-    m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController());
+    m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController(m_refActionGroup));
     m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
                                  boost::bind(&LibraryMainViewController::on_lib_notification, 
                                              m_mainviewctrl, _1));
@@ -268,12 +268,8 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
    
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
-//_("Rotate L_eft"));
-//    an_action->property_icon_name() = "object-rotate-left";
     m_refActionGroup->add(an_action);
     an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
-//                                    _("Rotate R_ight"));
-//    an_action->property_icon_name() = "object-rotate-right";
     m_refActionGroup->add(an_action);
 
     m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));

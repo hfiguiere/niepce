@@ -62,6 +62,11 @@ Gtk::Widget * DarkroomModule::buildWidget()
 	toolbar->append(*btn);
 	btn = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::GO_FORWARD));
 	toolbar->append(*btn);
+	Glib::RefPtr<Gtk::Action> an_action;
+	an_action = m_actionGroup->get_action("RotateLeft");
+	toolbar->append(*(an_action->create_tool_item()));
+	an_action = m_actionGroup->get_action("RotateRight");
+	toolbar->append(*(an_action->create_tool_item()));
 
 	m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
@@ -72,3 +77,13 @@ Gtk::Widget * DarkroomModule::buildWidget()
 
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
