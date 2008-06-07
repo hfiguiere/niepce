@@ -76,21 +76,21 @@ void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
     }
 
     const xmp::MetaDataFormat * current = m_fmt->formats;
-    XmpStringPtr value = xmp_string_new();
+    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
     while(current && current->label) {
         std::string id(current->property);
         id += "-";
         id += current->ns;
         if(current->type == xmp::META_DT_STRING_ARRAY) {
-            XmpIteratorPtr iter = xmp_iterator_new(xmp->xmp(), current->ns,
-                                                   current->property, XMP_ITER_JUSTLEAFNODES);
+            xmp::ScopedPtr<XmpIteratorPtr> 
+                iter(xmp_iterator_new(xmp->xmp(), current->ns,
+                                      current->property, XMP_ITER_JUSTLEAFNODES));
             std::vector<std::string> vec;
             while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                 vec.push_back(xmp_string_cstr(value));
             }
             std::string v = utils::join(vec, ", ");
             add_data(id, current->label, v.c_str(), current->type);
-            xmp_iterator_free(iter);
         }
         else {
             const char * v = "";
@@ -108,7 +108,6 @@ void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
         }
         current++;
     }
-    xmp_string_free(value);
 }
 
 

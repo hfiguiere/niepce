@@ -1,3 +1,6 @@
+#ifndef __UTILS_EXEMPI_H__
+#define __UTILS_EXEMPI_H__
+
 /*
  * niepce - utils/exempi.h
  *
@@ -17,8 +20,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UTILS_EXEMPI_H__
-#define __UTILS_EXEMPI_H__
 
 #include <vector>
 #include <string>
@@ -29,7 +30,53 @@
 
 #include <exempi/xmp.h>
 
+
 namespace xmp {
+
+inline
+void release(XmpIteratorPtr ptr)
+{
+    xmp_iterator_free(ptr);
+}
+
+inline
+void release(XmpStringPtr ptr)
+{
+    xmp_string_free(ptr);
+}
+
+inline
+void release(XmpFilePtr ptr)
+{
+    xmp_files_free(ptr);
+}
+
+inline 
+void release(XmpPtr ptr)
+{
+    xmp_free(ptr);
+}
+
+/**
+ * @brief a scoped pointer for Xmp opaque types
+ * @todo move to Exempi.
+ */
+template <class T>
+class ScopedPtr 
+    : boost::noncopyable
+{
+public:
+    ScopedPtr(T p)
+        : _p(p)
+        {}
+    ~ScopedPtr()
+        { if (_p) release(_p); }
+    operator T() const
+        { return _p; }
+private:
+    T _p;
+};
+
 
 	enum MetaDataType {
 		META_DT_NONE = 0,
@@ -111,5 +158,15 @@ namespace utils {
 		mutable std::vector< std::string > m_keywords;
 	};
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 #endif

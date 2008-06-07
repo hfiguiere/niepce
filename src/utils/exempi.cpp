@@ -73,13 +73,13 @@ namespace utils {
 	{
 		if(!sidecar_only) {
 			DBG_OUT("trying to load the XMP from the file");
-			XmpFilePtr xmpfile = xmp_files_open_new(file.string().c_str(), XMP_OPEN_READ);
+            xmp::ScopedPtr<XmpFilePtr> 
+                xmpfile(xmp_files_open_new(file.string().c_str(), XMP_OPEN_READ));
 			if(xmpfile != NULL) {
 				m_xmp = xmp_files_get_new_xmp(xmpfile);
 				if(xmpfile == NULL) {
 					ERR_OUT("xmpfile is NULL");
 				}
-				xmp_files_free(xmpfile);
 			}
 		}
 		
@@ -119,7 +119,7 @@ namespace utils {
 	std::string XmpMeta::serialize_inline() const
 	{
 		std::string buf;
-		XmpStringPtr output = xmp_string_new();
+        xmp::ScopedPtr<XmpStringPtr> output(xmp_string_new());
 		if(xmp_serialize_and_format(m_xmp, output, 
 									XMP_SERIAL_OMITPACKETWRAPPER | XMP_SERIAL_OMITALLFORMATTING, 
 									0, "", "", 0)) {
@@ -131,7 +131,7 @@ namespace utils {
 	std::string XmpMeta::serialize() const
 	{
 		std::string buf;
-		XmpStringPtr output = xmp_string_new();
+        xmp::ScopedPtr<XmpStringPtr> output(xmp_string_new());
 		if(xmp_serialize_and_format(m_xmp, output, 
 									XMP_SERIAL_OMITPACKETWRAPPER, 
 									0, "\n", " ", 0)) {
@@ -151,7 +151,7 @@ namespace utils {
 	int32_t XmpMeta::orientation() const
 	{
 		int32_t _orientation = 0;
-		XmpStringPtr value = xmp_string_new();
+        xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
 		if(xmp_get_property(m_xmp, NS_TIFF, "Orientation", value, NULL)) {
 			try {
 				_orientation = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
@@ -160,7 +160,6 @@ namespace utils {
 			{
 			}
 		}
-		xmp_string_free(value);
 		return _orientation;
 	}
 
@@ -168,11 +167,10 @@ namespace utils {
 	std::string XmpMeta::label() const
 	{
 		std::string _label;
-		XmpStringPtr value = xmp_string_new();
+        xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
 		if(xmp_get_property(m_xmp, NS_XAP, "Label", value, NULL)) {
 			_label = xmp_string_cstr(value);
 		}
-		xmp_string_free(value);
 		return _label;
 	}
 
@@ -180,7 +178,7 @@ namespace utils {
 	int32_t XmpMeta::rating() const
 	{
 		int32_t _rating = -1;
-		XmpStringPtr value = xmp_string_new();
+        xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
 		if(xmp_get_property(m_xmp, NS_XAP, "Rating", value, NULL)) {
 			try {
 				_rating = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
@@ -189,7 +187,6 @@ namespace utils {
 			{
 			}
 		}
-		xmp_string_free(value);
 		return _rating;
 	}
 
@@ -220,12 +217,11 @@ namespace utils {
 	std::string XmpMeta::creation_date_str() const
 	{
 		std::string s;
-		XmpStringPtr value = xmp_string_new();		
+        xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
 		if(xmp_get_property(m_xmp, NS_EXIF, "DateTimeOriginal", 
 								 value, NULL)) {
 			s = xmp_string_cstr(value);
 		}
-		xmp_string_free(value);
 		return s;
 	}
 
@@ -233,16 +229,25 @@ namespace utils {
 	const std::vector< std::string > & XmpMeta::keywords() const
 	{
 		if(!m_keyword_fetched) {
-			XmpIteratorPtr iter = xmp_iterator_new(m_xmp, NS_DC, "subject", 
-												   XMP_ITER_JUSTLEAFNODES);
-			XmpStringPtr value = xmp_string_new();
+            xmp::ScopedPtr<XmpIteratorPtr> iter(xmp_iterator_new(m_xmp, NS_DC, "subject", 
+                                                                 XMP_ITER_JUSTLEAFNODES));
+            xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
 			while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
 				m_keywords.push_back(xmp_string_cstr(value));
 			}
-			xmp_string_free(value);
 			m_keyword_fetched = true;
 		}
 		return m_keywords;
 	}
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
