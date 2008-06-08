@@ -34,6 +34,7 @@
 #include "niepce/stock.h"
 #include "utils/debug.h"
 #include "utils/moniker.h"
+#include "utils/boost.h"
 #include "db/library.h"
 #include "libraryclient/libraryclient.h"
 #include "framework/application.h"
@@ -84,13 +85,21 @@ NiepceWindow::buildWidget()
     Glib::ustring name("camera");
     set_icon_from_theme(name);		
 
+    m_selection_controller = SelectionController::Ptr(new SelectionController);
+    add(m_selection_controller);
+    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
+                                 boost::bind(&ImageListStore::on_lib_notification, 
+                                             m_selection_controller->list_store(), _1));
+    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
+                                 boost::bind(&ImageListStore::on_tnail_notification, 
+                                             m_selection_controller->list_store(), _1));
+
     // main view
-    m_mainviewctrl = LibraryMainViewController::Ptr(new LibraryMainViewController(m_refActionGroup));
+    m_mainviewctrl = LibraryMainViewController::Ptr(
+        new LibraryMainViewController(m_refActionGroup,
+                                      m_selection_controller->list_store()));
     m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
                                  boost::bind(&LibraryMainViewController::on_lib_notification, 
-                                             m_mainviewctrl, _1));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
-                                 boost::bind(&LibraryMainViewController::on_tnail_notification, 
                                              m_mainviewctrl, _1));
     add(m_mainviewctrl);
     // workspace treeview
@@ -117,14 +126,14 @@ NiepceWindow::buildWidget()
     m_vbox.pack_start(m_hbox);
 
 
-    m_filmstrip = FilmStripController::Ptr(new FilmStripController);
+    m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_selection_controller->list_store()));
     add(m_filmstrip);
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
-                                 boost::bind(&FilmStripController::on_lib_notification, 
-                                             m_filmstrip, _1));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
-                                 boost::bind(&FilmStripController::on_tnail_notification, 
-                                             m_filmstrip, _1));
+//    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
+//                                 boost::bind(&FilmStripController::on_lib_notification, 
+//                                             m_filmstrip, _1));
+//    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
+//                                 boost::bind(&FilmStripController::on_tnail_notification, 
+//                                             m_filmstrip, _1));
 
 
     m_vbox.pack_start(*(m_filmstrip->widget()), Gtk::PACK_SHRINK);
@@ -133,8 +142,6 @@ NiepceWindow::buildWidget()
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
     m_statusBar.push(Glib::ustring(_("Ready")));
 
-    m_selection_controller = SelectionController::Ptr(new SelectionController);
-    add(m_selection_controller);
     m_selection_controller->add_selectable(m_filmstrip.get());
     m_selection_controller->add_selectable(m_mainviewctrl.get());
     m_selection_controller->signal_selected

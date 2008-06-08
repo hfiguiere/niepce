@@ -26,7 +26,7 @@
 #endif
 
 #include "eog-thumb-view.h"
-#include "eog-list-store.h"
+//#include "eog-list-store.h"
 
 #ifdef HAVE_EXIF
 #include "eog-exif-util.h"
@@ -49,8 +49,8 @@
 
 G_DEFINE_TYPE (EogThumbView, eog_thumb_view, GTK_TYPE_ICON_VIEW)
 
-static EogImage* eog_thumb_view_get_image_from_path (EogThumbView      *tb,
-						     GtkTreePath       *path);
+//static EogImage* eog_thumb_view_get_image_from_path (EogThumbView      *tb,
+//						     GtkTreePath       *path);
 
 static void      eog_thumb_view_popup_menu          (EogThumbView      *widget, 
 						     GdkEventButton    *event);
@@ -60,7 +60,7 @@ struct _EogThumbViewPrivate {
 	gint end_thumb;   /* the last visible thumbnail  */
 	GtkWidget *menu;  /* a contextual menu for thumbnails */
 	GtkCellRenderer *pixbuf_cell;
-	Glib::RefPtr<EogListStore> store;
+	Glib::RefPtr<ui::ImageListStore> store;
 };
 
 /* Drag 'n Drop */
@@ -114,7 +114,7 @@ eog_thumb_view_clear_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model(tb);
+	Glib::RefPtr<ui::ImageListStore> store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
@@ -126,7 +126,7 @@ eog_thumb_view_clear_range (EogThumbView *tb,
 	     result && thumb <= end_thumb;
 	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store->gobj()), 
 											&iter), thumb++) {
-		eog_list_store_thumbnail_unset (get_pointer(store), &iter);
+//		eog_list_store_thumbnail_unset (get_pointer(store), &iter);
 	}
 	gtk_tree_path_free (path);
 }
@@ -138,7 +138,7 @@ eog_thumb_view_add_range (EogThumbView *tb,
 {
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model(tb);
+	Glib::RefPtr<ui::ImageListStore> store = eog_thumb_view_get_model(tb);
 	gint thumb = start_thumb;
 	gboolean result;
 	
@@ -148,7 +148,7 @@ eog_thumb_view_add_range (EogThumbView *tb,
 	for (result = gtk_tree_model_get_iter (GTK_TREE_MODEL (store->gobj()), &iter, path);
 	     result && thumb <= end_thumb;
 	     result = gtk_tree_model_iter_next (GTK_TREE_MODEL (store->gobj()), &iter), thumb++) {
-		eog_list_store_thumbnail_set (get_pointer(store), &iter);
+//		eog_list_store_thumbnail_set (get_pointer(store), &iter);
 	}
 	gtk_tree_path_free (path);
 }
@@ -283,6 +283,7 @@ tb_on_parent_set_cb (GtkWidget *widget,
 				  tb);
 }
 
+#if 0
 static gboolean
 tb_on_button_press_event_cb (GtkWidget *tb, GdkEventButton *event, 
                              gpointer /*user_data*/)
@@ -310,6 +311,7 @@ tb_on_button_press_event_cb (GtkWidget *tb, GdkEventButton *event,
     
     return FALSE;
 }
+#endif
 
 static void
 tb_on_drag_data_get_cb (GtkWidget        *widget,
@@ -475,7 +477,7 @@ eog_thumb_view_init (EogThumbView *tb)
 	
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tb),
 	                                tb->priv->pixbuf_cell, 
-	      		                "pixbuf", EOG_LIST_STORE_THUMBNAIL,
+									"pixbuf", ui::ImageListStore::Columns::STRIP_THUMB_INDEX,
 	                                NULL);
 
 	gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (tb),
@@ -512,40 +514,42 @@ eog_thumb_view_init (EogThumbView *tb)
 }
 
 GtkWidget *
-eog_thumb_view_new (void)
+eog_thumb_view_new (const Glib::RefPtr<ui::ImageListStore> & store)
 {
-	EogThumbView *tb;
-	
+	EogThumbView *tb;	
+
 	tb = (EogThumbView *)g_object_new (EOG_TYPE_THUMB_VIEW, NULL);
+	gtk_icon_view_set_model (GTK_ICON_VIEW (tb), GTK_TREE_MODEL(store->gobj()));
+	tb->priv->store = store;
 
 	return GTK_WIDGET (tb);
 }
 
 void
 eog_thumb_view_set_model (EogThumbView * tb, 
-						  const Glib::RefPtr<EogListStore> & store)
+						  const Glib::RefPtr<ui::ImageListStore> & store)
 {
-	gint index;
+//	gint index;
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
 	
 	tb->priv->store = store;
 
-	index = eog_list_store_get_initial_pos (get_pointer(store));
+//	index = eog_list_store_get_initial_pos (get_pointer(store));
 
 	gtk_icon_view_set_model (GTK_ICON_VIEW (tb), GTK_TREE_MODEL(store->gobj()));
 
-	if (index >= 0) {
-		GtkTreePath *path = gtk_tree_path_new_from_indices (index, -1);
-		gtk_icon_view_select_path (GTK_ICON_VIEW (tb), path);
-		gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (tb), path, FALSE, 0, 0);
-		gtk_tree_path_free (path);
-	}
+//	if (index >= 0) {
+//		GtkTreePath *path = gtk_tree_path_new_from_indices (index, -1);
+//		gtk_icon_view_select_path (GTK_ICON_VIEW (tb), path);
+//		gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (tb), path, FALSE, 0, 0);
+//		gtk_tree_path_free (path);
+//	}
 }
 
-Glib::RefPtr<EogListStore> eog_thumb_view_get_model    (EogThumbView *view)
+Glib::RefPtr<ui::ImageListStore> eog_thumb_view_get_model    (EogThumbView *view)
 {
 	g_return_val_if_fail (EOG_IS_THUMB_VIEW (view), 
-						  Glib::RefPtr<EogListStore>());
+						  Glib::RefPtr<ui::ImageListStore>());
 	return view->priv->store;
 }
 
@@ -578,6 +582,7 @@ eog_thumb_view_get_n_selected (EogThumbView *tb)
 	return count;
 }
 
+#if 0
 static EogImage *
 eog_thumb_view_get_image_from_path (EogThumbView *tb, GtkTreePath *path)
 {
@@ -622,6 +627,7 @@ eog_thumb_view_get_first_selected_image (EogThumbView *tb)
 
 	return image;
 }
+#endif
 
 GList *
 eog_thumb_view_get_selected_images (EogThumbView *tb)
@@ -635,7 +641,8 @@ eog_thumb_view_get_selected_images (EogThumbView *tb)
 
 	for (item = l; item != NULL; item = item->next) {
 		path = (GtkTreePath *) item->data;
-		list = g_list_prepend (list, eog_thumb_view_get_image_from_path (tb, path));
+// FIXME
+//		list = g_list_prepend (list, eog_thumb_view_get_image_from_path (tb, path));
 		gtk_tree_path_free (path);
 	}
 
@@ -645,13 +652,14 @@ eog_thumb_view_get_selected_images (EogThumbView *tb)
 	return list;
 }
 
+#if 0
 void
 eog_thumb_view_set_current_image (EogThumbView *tb, 
 								  const db::LibFile::Ptr &image,
 								  gboolean deselect_other)
 {
 	GtkTreePath *path;
-	Glib::RefPtr<EogListStore> store;
+	Glib::RefPtr<ui::ImageListStore> store;
 	gint pos;
 
 	store = eog_thumb_view_get_model(tb);
@@ -681,7 +689,7 @@ eog_thumb_view_select_single (EogThumbView *tb,
 	gint n_items;
 
 	g_return_if_fail (EOG_IS_THUMB_VIEW (tb));
-	Glib::RefPtr<EogListStore> store = eog_thumb_view_get_model (tb);
+	Glib::RefPtr<ui::ImageListStore> store = eog_thumb_view_get_model (tb);
 
 	n_items = eog_list_store_length (get_pointer(store));
 
@@ -755,6 +763,7 @@ eog_thumb_view_set_thumbnail_popup (EogThumbView *tb,
 			  G_CALLBACK (tb_on_button_press_event_cb), NULL);
 	
 }
+#endif
 
 
 static void 

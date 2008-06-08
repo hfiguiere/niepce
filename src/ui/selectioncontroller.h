@@ -26,6 +26,7 @@
 #include <boost/signal.hpp>
 
 #include "framework/controller.h"
+#include "ui/imageliststore.h"
 
 namespace Gtk {
 	class IconView;
@@ -60,20 +61,36 @@ public:
 				   IImageSelectable * selectable);
 	void selected(IImageSelectable *);
 
+
+	const Glib::RefPtr<ImageListStore> & list_store() const
+		{ return m_imageliststore; }
+
 	// the signal to call when selection is changed.
 	boost::signal<void (int)> signal_selected;
 
 	// signal for when the item is activated (ie double-click)
 	boost::signal<void (int)> signal_activated;
 protected:
+	virtual void _added();
 	virtual Gtk::Widget * buildWidget()
 		{ return NULL; }
 private:
+	Glib::RefPtr<ImageListStore>  m_imageliststore;
 	bool m_in_handler;
 	std::vector<IImageSelectable *> m_selectables;
 };
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 
 #endif

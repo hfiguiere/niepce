@@ -36,6 +36,7 @@
 #include "metadatapanecontroller.h"
 #include "selectioncontroller.h"
 #include "darkroommodule.h"
+#include "imageliststore.h"
 
 namespace Gtk {
 	class Widget;
@@ -52,27 +53,14 @@ namespace ui {
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
 
-		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions)
-			: m_actionGroup(actions)
+		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions,
+								  const Glib::RefPtr<ImageListStore> & store)
+			: m_actionGroup(actions),
+			  m_model(store)
 			{
 			}
 
-		class LibraryListColumns 
-			: public Gtk::TreeModelColumnRecord
-		{
-		public:
-			
-			LibraryListColumns()
-				{ 
-					add(m_pix);
-					add(m_libfile);
-				}
-			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-			Gtk::TreeModelColumn<db::LibFile::Ptr> m_libfile;
-		};
-
 		void on_lib_notification(const framework::Notification::Ptr &);
-		void on_tnail_notification(const framework::Notification::Ptr &);
 
 		/** called when somehing is selected by the shared selection */
 		void on_selected(int id);
@@ -99,9 +87,7 @@ namespace ui {
 
 		DarkroomModule::Ptr          m_darkroom;
 
-		LibraryListColumns           m_columns;
-		Glib::RefPtr<Gtk::ListStore> m_model;
-		std::map<int, Gtk::TreeIter> m_idmap;
+		Glib::RefPtr<ImageListStore> m_model;
 	};
 
 }

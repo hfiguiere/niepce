@@ -25,12 +25,12 @@ libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
 	librarymainview.h librarymainview.cpp \
 	librarycellrenderer.h librarycellrenderer.cpp \
 	librarymainviewcontroller.h librarymainviewcontroller.cpp \
+	imageliststore.h imageliststore.cpp\
 	workspacecontroller.h workspacecontroller.cpp \
 	metadatapanecontroller.h metadatapanecontroller.cpp \
 	importdialog.h importdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \
 	filmstripcontroller.h filmstripcontroller.cpp \
 	darkroommodule.h darkroommodule.cpp \
-	thumb-view/eog-list-store.cpp thumb-view/eog-list-store.h \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
 	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h

@@ -31,8 +31,13 @@ namespace ui {
 SelectionController::SelectionController()
 	: m_in_handler(false)
 {
+	m_imageliststore = ImageListStore::create();
 }
 
+void SelectionController::_added()
+{
+	m_imageliststore->set_parent_controller(m_parent);
+}
 
 void SelectionController::add_selectable(IImageSelectable * selectable)
 { 
@@ -74,3 +79,14 @@ void SelectionController::selected(IImageSelectable * selectable)
 }
 
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

@@ -22,8 +22,11 @@
 #ifndef EOG_THUMB_VIEW_H
 #define EOG_THUMB_VIEW_H
 
+#include <gtk/gtkiconview.h>
+#include "ui/imageliststore.h"
+
 /*#include "eog-image.h"*/
-#include "eog-list-store.h"
+//#include "eog-list-store.h"
 
 #include "db/libfile.h"
 
@@ -58,18 +61,18 @@ struct _EogThumbViewClass {
 
 GType       eog_thumb_view_get_type 		    (void) G_GNUC_CONST;
 
-GtkWidget  *eog_thumb_view_new 			    (void);
+GtkWidget  *eog_thumb_view_new 			    (const Glib::RefPtr<ui::ImageListStore> & store);
 
 void	    eog_thumb_view_set_model 		    (EogThumbView *view, 
-						     const Glib::RefPtr<EogListStore> & store);
-Glib::RefPtr<EogListStore> eog_thumb_view_get_model    (EogThumbView *view);
+												 const Glib::RefPtr<ui::ImageListStore> & store);
+Glib::RefPtr<ui::ImageListStore> eog_thumb_view_get_model    (EogThumbView *view);
 
 void        eog_thumb_view_set_item_height          (EogThumbView *view,
 						     gint          height);
 
 guint	    eog_thumb_view_get_n_selected 	    (EogThumbView *view);
 
-EogImage   *eog_thumb_view_get_first_selected_image (EogThumbView *view);
+//EogImage   *eog_thumb_view_get_first_selected_image (EogThumbView *view);
 
 GList      *eog_thumb_view_get_selected_images 	    (EogThumbView *view);
 
@@ -80,8 +83,8 @@ void        eog_thumb_view_set_current_image	    (EogThumbView *view,
 						     const db::LibFile::Ptr&     image,
 						     gboolean     deselect_other);
 
-void        eog_thumb_view_set_thumbnail_popup      (EogThumbView *view, 
-						     GtkMenu      *menu);
+//void        eog_thumb_view_set_thumbnail_popup      (EogThumbView *view, 
+//						     GtkMenu      *menu);
 
 G_END_DECLS
 

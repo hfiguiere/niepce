@@ -41,17 +41,20 @@ public:
 	typedef boost::shared_ptr<FilmStripController> Ptr;
 	typedef boost::weak_ptr<FilmStripController> WeakPtr;
 
+	FilmStripController(const Glib::RefPtr<ImageListStore> & store);
+
 	virtual Gtk::IconView * image_list();
 	virtual int get_selected();
 	virtual void select_image(int id);
 
-	void on_tnail_notification(const framework::Notification::Ptr &);
-	void on_lib_notification(const framework::Notification::Ptr &);
+//	void on_tnail_notification(const framework::Notification::Ptr &);
+//	void on_lib_notification(const framework::Notification::Ptr &);
 	
 protected:
 	virtual Gtk::Widget * buildWidget();
 private:
 	Gtk::IconView * m_thumbview;
+	Glib::RefPtr<ImageListStore> m_store;
 };
 
 

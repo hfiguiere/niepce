@@ -24,7 +24,6 @@
 #include "db/library.h"
 #include "library/thumbnailnotification.h"
 #include "utils/debug.h"
-#include "framework/gdkutils.h"
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
@@ -32,14 +31,19 @@
 
 namespace ui {
 
+FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & store)
+    : m_store(store)
+{
+}
+
 Gtk::Widget * FilmStripController::buildWidget()
 {
-	m_thumbview = Glib::wrap(GTK_ICON_VIEW(eog_thumb_view_new()));
+    DBG_ASSERT(m_store, "m_store NULL");
+	m_thumbview = Glib::wrap(GTK_ICON_VIEW(eog_thumb_view_new(m_store)));
 	GtkWidget *thn = eog_thumb_nav_new(GTK_WIDGET(m_thumbview->gobj()), 
 									   EOG_THUMB_NAV_MODE_ONE_ROW, true);
 	gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(m_thumbview->gobj()),
 									 GTK_SELECTION_SINGLE);
-
 	m_widget = Glib::wrap(thn);
 	return m_widget;
 }
@@ -53,18 +57,16 @@ int FilmStripController::get_selected()
 {
 	int id = 0;
 	Gtk::IconView::ArrayHandle_TreePaths paths = m_thumbview->get_selected_items();
-	Glib::RefPtr<EogListStore> store 
-		= eog_thumb_view_get_model((EogThumbView*)(m_thumbview->gobj()));
 	if(!paths.empty()) {
 		Gtk::TreePath path(*(paths.begin()));
 		DBG_OUT("found path %s", path.to_string().c_str());
-		Gtk::TreeRow row = *(store->get_iter(path));
+		Gtk::TreeRow row = *(m_store->get_iter(path));
 		if(row) {
 			DBG_OUT("found row");
-			db::LibFile::Ptr libfile = row[store->m_columns.m_image];
-			if(libfile) {
-				id = libfile->id();
-			}
+            db::LibFile::Ptr libfile = row[m_store->columns().m_libfile];
+            if(libfile) {
+                id = libfile->id();
+            }
 		}
 	}
 	return id;
@@ -73,16 +75,12 @@ int FilmStripController::get_selected()
 void FilmStripController::select_image(int id)
 {
 	DBG_OUT("filmstrip select %d", id);
-	Glib::RefPtr<EogListStore> store 
-		= eog_thumb_view_get_model((EogThumbView*)(m_thumbview->gobj()));
-	Gtk::TreeRow row;
-	bool found = store->find_by_id(id, row);
-	if(found) {
-		m_thumbview->select_path(store->get_path(row));
-	}
+    Gtk::TreePath path = m_store->get_path_from_id(id);
+    m_thumbview->select_path(path);
 }
 
 
+#if 0
 void FilmStripController::on_lib_notification(const framework::Notification::Ptr &n)
 {
 	DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, "wrong notification type");
@@ -127,6 +125,16 @@ void FilmStripController::on_tnail_notification(const framework::Notification::P
 		}
 	}
 }
+#endif
 
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

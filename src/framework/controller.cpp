@@ -50,6 +50,7 @@ namespace framework {
 	{
 		m_subs.push_back(sub);
 		sub->m_parent = shared_from_this();
+		sub->_added();
 	}
 
 	void Controller::remove(const Ptr & sub)
@@ -71,6 +72,9 @@ namespace framework {
 	{
 	}
 
+	void Controller::_added()
+	{
+	}
 
 	void Controller::_ready()
 	{
@@ -84,3 +88,12 @@ namespace framework {
 	}
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

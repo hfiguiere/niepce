@@ -68,6 +68,9 @@ namespace framework {
 		 */
 		virtual void on_ready();
 	protected:
+		/** called when the controller has been added to a parent. */
+		virtual void _added();
+
 		void _ready();
 		Gtk::Widget* m_widget;
 
@@ -78,5 +81,15 @@ namespace framework {
 	};
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 #endif
