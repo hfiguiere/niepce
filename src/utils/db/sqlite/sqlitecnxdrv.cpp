@@ -458,8 +458,14 @@ namespace db { namespace sqlite {
 				ERR_OUT("column number %d is of type blob", (int) a_offset) ;
 				return false ;
 			}
-			a_column_content =
-				reinterpret_cast<const char*>(sqlite3_column_text(m_priv->cur_stmt,a_offset));
+			const char * text = reinterpret_cast<const char*>(sqlite3_column_text(m_priv->cur_stmt,a_offset));
+			DBG_ASSERT(text, "column content can't be NULL");
+			if(text) {
+				a_column_content = text;
+			}
+			else {
+				ERR_OUT("text column content is NULL");
+			}
 			return true ;
 		}
 
