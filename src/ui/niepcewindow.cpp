@@ -181,6 +181,9 @@ void NiepceWindow::init_ui()
         "      <menuitem action='Preferences'/>"
         "    </menu>"
         "    <menu action='MenuImage'>"
+        "      <menuitem action='PrevImage'/>"
+        "      <menuitem action='NextImage'/>"
+        "      <separator/>"
         "      <menuitem action='RotateLeft'/>"
         "      <menuitem action='RotateRight'/>"			
         "      <separator/>"
@@ -266,7 +269,10 @@ void NiepceWindow::init_actions()
                                         &NiepceWindow::on_preferences));
 
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
-   
+
+    m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK));
+    m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD));
+
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
     m_refActionGroup->add(an_action);
     an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
