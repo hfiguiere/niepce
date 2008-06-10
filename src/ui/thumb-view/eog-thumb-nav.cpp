@@ -328,7 +328,7 @@ eog_thumb_nav_init (EogThumbNav *nav)
 					     GTK_SHADOW_IN);
 
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
-					GTK_POLICY_AUTOMATIC,
+					GTK_POLICY_ALWAYS,
 					GTK_POLICY_NEVER);
 
         adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->sw));
@@ -438,7 +438,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 						100);
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
-						GTK_POLICY_AUTOMATIC,
+						GTK_POLICY_ALWAYS,
 						GTK_POLICY_NEVER);
 
 		eog_thumb_nav_set_show_buttons (nav, priv->show_buttons);
@@ -454,7 +454,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,
-						GTK_POLICY_AUTOMATIC);
+						GTK_POLICY_ALWAYS);
 
 		gtk_widget_hide_all (priv->button_left);
 		gtk_widget_hide_all (priv->button_right);
@@ -470,7 +470,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,
-						GTK_POLICY_AUTOMATIC);
+						GTK_POLICY_ALWAYS);
 
 		gtk_widget_hide_all (priv->button_left);
 		gtk_widget_hide_all (priv->button_right);
@@ -486,7 +486,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,
-						GTK_POLICY_AUTOMATIC);
+						GTK_POLICY_ALWAYS);
 
 		gtk_widget_hide_all (priv->button_left);
 		gtk_widget_hide_all (priv->button_right);
