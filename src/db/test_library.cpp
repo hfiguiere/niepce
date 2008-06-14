@@ -30,7 +30,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 
-BOOST_AUTO_UNIT_TEST(library_test)
+BOOST_AUTO_TEST_CASE(library_test)
 {
 	db::Library lib("./", framework::NotificationCenter::Ptr());
 

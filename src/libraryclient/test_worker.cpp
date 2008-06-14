@@ -30,7 +30,7 @@
 using namespace library;
 using namespace libraryclient;
 
-BOOST_AUTO_UNIT_TEST(worker_test)
+BOOST_AUTO_TEST_CASE(worker_test)
 {
 	char templ[] = "/tmp/niepce-tmpXXXXXX";
 	char *ptempl =  mkdtemp(templ);

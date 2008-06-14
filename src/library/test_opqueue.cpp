@@ -27,7 +27,7 @@
 
 using namespace library;
 
-BOOST_AUTO_UNIT_TEST(opqueue_test)
+BOOST_AUTO_TEST_CASE(opqueue_test)
 {
 	OpQueue q;
 
