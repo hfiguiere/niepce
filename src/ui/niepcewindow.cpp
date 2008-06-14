@@ -243,7 +243,7 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
     Glib::RefPtr<Gtk::Action> undo_action
         = Gtk::Action::create("Undo", Gtk::Stock::UNDO);
-    m_refActionGroup->add(undo_action,
+    m_refActionGroup->add(undo_action, Gtk::AccelKey("<control>Z"),
                           boost::bind(&UndoHistory::undo,
                                       boost::ref(Application::app()->undo_history())));
     m_undostate_conn = Application::app()->undo_history().changed.connect(
@@ -251,7 +251,7 @@ void NiepceWindow::init_actions()
     undo_state(undo_action);
     Glib::RefPtr<Gtk::Action> redo_action
         = Gtk::Action::create("Redo", Gtk::Stock::REDO);
-    m_refActionGroup->add(redo_action,
+    m_refActionGroup->add(redo_action, Gtk::AccelKey("<control><shift>Z"),
                           boost::bind(&UndoHistory::redo,
                                       boost::ref(Application::app()->undo_history())));
     m_redostate_conn = Application::app()->undo_history().changed.connect(
@@ -271,8 +271,10 @@ void NiepceWindow::init_actions()
 
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
-    m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK));
-    m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD));
+    m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
+                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)));
+    m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
+                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)));
 
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
     m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
@@ -286,21 +288,27 @@ void NiepceWindow::init_actions()
 
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
+                          Gtk::AccelKey("0"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 0));
     m_refActionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
+                          Gtk::AccelKey("1"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 1));
     m_refActionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
+                          Gtk::AccelKey("2"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 2));
     m_refActionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
+                          Gtk::AccelKey("3"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 3));
     m_refActionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
+                          Gtk::AccelKey("4"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 4));
     m_refActionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
+                          Gtk::AccelKey("5"),
                           boost::bind(&SelectionController::set_rating, 
                                       m_selection_controller, 5));
 
