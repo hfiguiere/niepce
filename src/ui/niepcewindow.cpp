@@ -77,6 +77,9 @@ NiepceWindow::buildWidget()
 
     Application::Ptr pApp = Application::app();
 
+    m_selection_controller = SelectionController::Ptr(new SelectionController);
+    add(m_selection_controller);
+
     init_actions();
     init_ui();
 
@@ -85,8 +88,6 @@ NiepceWindow::buildWidget()
     Glib::ustring name("camera");
     set_icon_from_theme(name);		
 
-    m_selection_controller = SelectionController::Ptr(new SelectionController);
-    add(m_selection_controller);
     m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
                                  boost::bind(&ImageListStore::on_lib_notification, 
                                              m_selection_controller->list_store(), _1));
@@ -128,13 +129,6 @@ NiepceWindow::buildWidget()
 
     m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_selection_controller->list_store()));
     add(m_filmstrip);
-//    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB, 
-//                                 boost::bind(&FilmStripController::on_lib_notification, 
-//                                             m_filmstrip, _1));
-//    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
-//                                 boost::bind(&FilmStripController::on_tnail_notification, 
-//                                             m_filmstrip, _1));
-
 
     m_vbox.pack_start(*(m_filmstrip->widget()), Gtk::PACK_SHRINK);
 
@@ -281,26 +275,34 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD));
 
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
-    m_refActionGroup->add(an_action);
+    m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
+                                                 m_selection_controller, -90));
     an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
-    m_refActionGroup->add(an_action);
+    m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
+                                                 m_selection_controller, 90));
 
     m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
 
 
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 0));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 0));
     m_refActionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 1));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 1));
     m_refActionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 2));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 2));
     m_refActionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 3));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 3));
     m_refActionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 4));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 4));
     m_refActionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
-                          boost::bind(&NiepceWindow::on_set_rating, this, 5));
+                          boost::bind(&SelectionController::set_rating, 
+                                      m_selection_controller, 5));
 
     m_refActionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
@@ -418,11 +420,6 @@ void NiepceWindow::on_open_library()
         DBG_OUT("last library is %s", libMoniker.c_str());
     }
     open_library(libMoniker);
-}
-
-void NiepceWindow::on_set_rating(int rating)
-{
-		
 }
 
 

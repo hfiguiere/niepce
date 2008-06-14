@@ -97,6 +97,20 @@ void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
             getLibraryClient()->thumbnailCache().request(l);
             break;
         }
+        case db::Library::NOTIFY_METADATA_CHANGED:
+        {
+            boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
+            DBG_OUT("metadata changed");
+            Gtk::TreeRow row;
+            std::map<int, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m[0]);
+            if(iter != m_idmap.end()) {
+                row = *(iter->second);
+                //
+                db::LibFile::Ptr file = row[m_columns.m_libfile];
+                file->setMetaData(m[1], m[2]);
+                row[m_columns.m_libfile] = file;
+            }
+        }
         default:
             break;
         }

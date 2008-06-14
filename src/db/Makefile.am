@@ -29,4 +29,5 @@ libniepcedb_a_SOURCES = library.cpp \
 	libfile.h libfile.cpp \
 	libmetadata.h libmetadata.cpp \
 	keyword.h keyword.cpp \
-	storage.h storage.cpp
+	storage.h storage.cpp \
+	metadata.h

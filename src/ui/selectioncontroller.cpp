@@ -20,9 +20,16 @@
 #include <boost/bind.hpp>
 
 #include <gtkmm/iconview.h>
+#include <glibmm/i18n.h>
 
 #include "utils/autoflag.h"
 #include "utils/debug.h"
+#include "framework/undo.h"
+#include "framework/command.h"
+#include "framework/application.h"
+#include "db/metadata.h"
+#include "libraryclient/libraryclient.h"
+#include "niepcewindow.h"
 #include "selectioncontroller.h"
 
 namespace ui {
@@ -41,6 +48,7 @@ void SelectionController::_added()
 
 void SelectionController::add_selectable(IImageSelectable * selectable)
 { 
+    DBG_OUT("added %lx", selectable);
 	m_selectables.push_back(selectable);
 	selectable->image_list()->signal_selection_changed().connect(
 		boost::bind(&SelectionController::selected, 
@@ -78,8 +86,62 @@ void SelectionController::selected(IImageSelectable * selectable)
 	signal_selected(selection);
 }
 
+
+libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
+{
+    return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
 
+inline int SelectionController::get_selection()
+{
+    DBG_ASSERT(!m_selectables.empty(), "selectables list can't be empty");
+    return m_selectables[0]->get_selected();
+}
+
+
+void SelectionController::rotate(int angle)
+{
+    DBG_OUT("angle = %d", angle);
+    int selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+            
+        }
+    }
+}
+
+
+void SelectionController::set_rating(int rating)
+{
+    DBG_OUT("rating = %d", rating);
+    int selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+            db::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            DBG_OUT("old rating is %d", file->rating());
+            framework::UndoTransaction *undo = new framework::UndoTransaction(_("Set Rating"));
+            framework::Application::app()->undo_history().add(undo);
+            framework::Command *cmd = new framework::Command;
+            cmd->redo = boost::bind(&libraryclient::LibraryClient::setMetadata,
+                                    getLibraryClient(), file->id(), 
+                                    MAKE_METADATA_IDX(db::META_NS_XMPCORE, 
+                                                     db::META_XMPCORE_RATING), 
+                                    rating);
+            cmd->undo = boost::bind(&libraryclient::LibraryClient::setMetadata,
+                                    getLibraryClient(), file->id(),
+                                    MAKE_METADATA_IDX(db::META_NS_XMPCORE, 
+                                                     db::META_XMPCORE_RATING), 
+                                    file->rating());
+            undo->add(cmd);
+            undo->redo();
+        }
+    }
+}
+
+
+}
 
 /*
   Local Variables:

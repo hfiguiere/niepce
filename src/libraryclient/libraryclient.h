@@ -63,6 +63,9 @@ namespace libraryclient {
 		library::tid_t countFolder(int id);
 		library::tid_t requestMetadata(int id);
 
+        /** set the metadata */
+        library::tid_t setMetadata(int id, int meta, int value);
+
 		/** Import files from a directory
 		 * @param dir the directory
 		 * @param manage true if imports have to be managed

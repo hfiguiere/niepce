@@ -43,7 +43,11 @@ class IImageSelectable
 public:
 	virtual ~IImageSelectable() {}
 	virtual Gtk::IconView * image_list() = 0;
+    /** Return the id of the selection. <= 0 is none. */
 	virtual int get_selected() = 0;
+    /** select the image a specific id 
+     *  might emit the signals.
+     */
 	virtual void select_image(int id) = 0;
 };
 
@@ -70,11 +74,21 @@ public:
 
 	// signal for when the item is activated (ie double-click)
 	boost::signal<void (int)> signal_activated;
+
+    /////////
+    /** rotate the image in selection by %angle (trigonometric) */
+    void rotate(int angle);
+    /** set the rating of selection to %rating. */
+    void set_rating(int rating);
+
 protected:
 	virtual void _added();
 	virtual Gtk::Widget * buildWidget()
 		{ return NULL; }
 private:
+    int get_selection();
+    libraryclient::LibraryClient::Ptr getLibraryClient();
+
 	Glib::RefPtr<ImageListStore>  m_imageliststore;
 	bool m_in_handler;
 	std::vector<IImageSelectable *> m_selectables;
@@ -91,6 +105,5 @@ private:
   fill-column:99
   End:
 */
-
 
 #endif

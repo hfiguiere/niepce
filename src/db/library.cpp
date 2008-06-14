@@ -25,6 +25,7 @@
 
 #include "niepce/notifications.h"
 #include "library.h"
+#include "metadata.h"
 #include "utils/exception.h"
 #include "utils/exempi.h"
 #include "utils/db/sqlite/sqlitecnxmgrdrv.h"
@@ -499,4 +500,76 @@ namespace db {
 
 
 
+
+bool Library::setInternalMetaDataInt(int file_id, const char* col,
+                                     int32_t value)
+{
+    bool ret = false;
+    DBG_OUT("setting metadata in column %s", col);
+    SQLStatement sql(boost::format("UPDATE files SET %1%='%2%' "
+                                   " WHERE id='%3%';")
+                     % col % value % file_id);
+    try {
+        ret = m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+        ret = false;
+    }
+    return ret;
 }
+
+
+/** set metadata 
+ * @return false on error
+ */
+bool Library::setMetaData(int file_id, int meta, 
+                          const boost::any & value)
+{
+    bool retval = false;
+    DBG_OUT("setting metadata in column %x", meta);
+    switch(meta) {
+    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+        try {
+            // internal.
+            int32_t nvalue = boost::any_cast<int32_t>(value);
+            // make the column mapping more generic.
+            const char * col = NULL;
+            switch(meta) {
+            case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+                col = "rating";
+                break;
+            case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+                col = "orientation";
+                break;
+            }
+            if(col) {
+                retval = setInternalMetaDataInt(file_id, col, nvalue);
+            }
+        }
+        catch(...)
+        {
+            ERR_OUT("exception");
+            return false;
+        }
+    break;
+    default:
+        // external.
+        ERR_OUT("unknown metadata to set");
+        return false;
+    }
+    return retval;
+}
+
+}
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

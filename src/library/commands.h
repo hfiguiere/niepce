@@ -51,6 +51,8 @@ namespace library {
 										   int keyword_id);
 		static void cmdRequestMetadata(const db::Library::Ptr & lib,
 									   int file_id);
+        static void cmdSetMetadata(const db::Library::Ptr & lib,
+                                   int file_id, int meta, int value);
 		
 
 		// op: create an op
@@ -64,6 +66,7 @@ namespace library {
 		static Op::Ptr opCountFolder(tid_t id, int folder_id);
  		static Op::Ptr opQueryKeywordContent(tid_t id, int keyword_id);
 		static Op::Ptr opRequestMetadata(tid_t id, int file_id);
+        static Op::Ptr opSetMetadata(tid_t id, int file_id, int meta, int value);
 	};
 
 }

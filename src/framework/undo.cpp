@@ -45,16 +45,28 @@ void UndoTransaction::add(Command * cmd)
 
 void UndoTransaction::undo()
 {
-    DBG_OUT("undo transaction");
-    std::for_each(m_operations.rbegin(), m_operations.rend(),
-                  boost::bind(&Command::undo, _1));
+    DBG_OUT("undo transaction %d cmd", m_operations.size());
+// I have no idea why this do not work
+//    std::for_each(m_operations.rbegin(), m_operations.rend(),
+//                  boost::bind(&Command::undo, _1));
+    for(std::list<Command *>::reverse_iterator iter = m_operations.rbegin();
+        iter != m_operations.rend(); iter++)
+    {
+        (*iter)->undo();
+    }
 }
 
 void UndoTransaction::redo()
 {
-    DBG_OUT("redo transaction");
-    std::for_each(m_operations.begin(), m_operations.end(),
-                  boost::bind(&Command::redo, _1));
+    DBG_OUT("redo transaction %d cmd", m_operations.size());
+// I have no idea why this do not work
+//    std::for_each(m_operations.begin(), m_operations.end(),
+//                  boost::bind(&Command::redo, _1));
+    for(std::list<Command *>::iterator iter = m_operations.begin();
+        iter != m_operations.end(); iter++)
+    {
+        (*iter)->redo();
+    }
 }
 
 	UndoHistory::~UndoHistory()

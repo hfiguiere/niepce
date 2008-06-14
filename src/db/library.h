@@ -54,6 +54,7 @@ namespace db {
 			NOTIFY_FOLDER_CONTENT_QUERIED,
 			NOTIFY_KEYWORD_CONTENT_QUERIED,
 			NOTIFY_METADATA_QUERIED,
+            NOTIFY_METADATA_CHANGED,
 			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
@@ -112,6 +113,7 @@ namespace db {
 		void getAllKeywords(const Keyword::ListPtr & l);
 		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
 		void getMetaData(int file_id, const LibMetadata::Ptr & );
+        bool setMetaData(int file_id, int meta, const boost::any & value);
 
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate
@@ -134,6 +136,9 @@ namespace db {
 		bool init();
 		bool _initDb();
 
+        bool setInternalMetaDataInt(int file_id, const char* col,
+                                    int32_t value);
+
 		boost::filesystem::path           m_maindir;
 		boost::filesystem::path           m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
@@ -152,3 +157,13 @@ namespace db {
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+

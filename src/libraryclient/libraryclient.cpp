@@ -84,6 +84,12 @@ namespace libraryclient {
 		return m_pImpl->requestMetadata(id);
 	}
 
+    /** set the metadata */
+    library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
+    {
+        return m_pImpl->setMetadata(id, meta, value);
+    }
+
 	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
 	{
 		m_pImpl->importFromDirectory(dir, manage);
@@ -97,3 +103,12 @@ namespace libraryclient {
 	}
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

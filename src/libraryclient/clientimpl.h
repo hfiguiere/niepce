@@ -46,6 +46,7 @@ namespace libraryclient {
 		library::tid_t queryFolderContent(int id);
 		library::tid_t countFolder(int id);
 		library::tid_t requestMetadata(int id);
+        library::tid_t setMetadata(int id, int meta, int value);
 
 		library::tid_t importFromDirectory(const std::string & dir, bool manage);
 

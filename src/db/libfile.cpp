@@ -18,7 +18,9 @@
  */
 
 
+#include "utils/debug.h"
 #include "libfile.h"
+#include "metadata.h"
 
 namespace bfs = boost::filesystem;
 
@@ -63,4 +65,29 @@ namespace db {
 		m_label = v;
 	}
 
+void LibFile::setMetaData(int meta, int32_t v)
+{
+    switch(meta) {
+    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+        setRating(v);
+        break;
+    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+        setOrientation(v);
+        break;
+    default:
+        // TODO deal with label as well
+        ERR_OUT("unknown meta %d", meta);
+        break;
+    }
 }
+
+}
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

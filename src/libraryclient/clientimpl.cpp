@@ -103,6 +103,14 @@ namespace libraryclient {
 	}
 
 
+    tid_t ClientImpl::setMetadata(int file_id, int meta, int value)
+    {
+        tid_t id = LibraryClient::newTid();
+        Op::Ptr op(Commands::opSetMetadata(id, file_id, meta, value));
+        m_localLibrary->schedule(op);
+        return id;
+    }
+
 	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 	{
 		FileList::Ptr files;

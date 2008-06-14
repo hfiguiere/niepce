@@ -70,8 +70,6 @@ private:
     void on_action_file_open();
     void on_open_library();
 
-    void on_set_rating(int rating);
-
     void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
                                  Gtk::Dialog *);
     void on_preferences();

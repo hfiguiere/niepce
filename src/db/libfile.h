@@ -1,7 +1,7 @@
 /*
  * niepce - db/libfile.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007, 2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,6 +71,9 @@ namespace db {
 		void setLabel(int32_t v);
 		int32_t label() const
 			{ return m_label; }
+
+        /** set an arbitrary meta data value */
+        void setMetaData(int meta, int32_t v); 
 
 		/** retrieve the keywords id list 
 		 * @return the list
