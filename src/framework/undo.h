@@ -35,6 +35,8 @@ namespace framework {
 	{
 	public:
 		UndoTransaction(const std::string & n);
+        ~UndoTransaction();
+        void add(Command *);
 		void undo();
 		void redo();
 		const std::string & name() const

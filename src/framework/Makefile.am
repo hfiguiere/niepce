@@ -18,4 +18,5 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	configdatabinder.h configdatabinder.cpp \
 	gdkutils.h gdkutils.cpp \
 	metadatawidget.h metadatawidget.cpp \
-	undo.h undo.cpp
+	undo.h undo.cpp \
+	command.h
