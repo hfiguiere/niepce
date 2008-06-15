@@ -112,7 +112,10 @@ namespace db {
 		int countFolder(int folder_id);
 		void getAllKeywords(const Keyword::ListPtr & l);
 		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
+        /** get the metadata block (XMP) */
 		void getMetaData(int file_id, const LibMetadata::Ptr & );
+        /** set the metadata block (XMP) */
+        bool setMetaData(int file_id, const LibMetadata::Ptr & );
         bool setMetaData(int file_id, int meta, const boost::any & value);
 
 		/** Locate the keyword, creating it if needed

@@ -23,8 +23,10 @@
 #include <vector>
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 
 #include "utils/exempi.h"
+#include "db/metadata.h"
 
 namespace db {
 
@@ -36,8 +38,23 @@ namespace db {
 
 		LibMetadata();
 
+        bool setMetaData(int meta, const boost::any & value);
+        /** do like the unix "touch". Update the MetadataDate 
+         * to the current time, in UTC.
+         */
+        bool touch();
 	};
 
 }
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

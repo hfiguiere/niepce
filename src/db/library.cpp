@@ -520,8 +520,34 @@ bool Library::setInternalMetaDataInt(int file_id, const char* col,
     return ret;
 }
 
+/** set metadata block
+ * @param file_id the file ID to set the metadata block
+ * @param meta the metadata block
+ * @return false on error
+ */
+bool Library::setMetaData(int file_id, const LibMetadata::Ptr & meta)
+{
+    bool ret = false;
+    SQLStatement sql(boost::format("UPDATE files SET xmp=?1 "
+                                   " WHERE id='%1%';")
+                     % file_id);
+    sql.bind(1, meta->serialize_inline());
+    try {
+        ret = m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+        ret = false;
+    }
+    return ret;    
+}
+
 
 /** set metadata 
+ * @param file_id the file ID to set the metadata block
+ * @param meta the metadata index
+ * @param value the value to set
  * @return false on error
  */
 bool Library::setMetaData(int file_id, int meta, 
@@ -540,10 +566,10 @@ bool Library::setMetaData(int file_id, int meta,
             switch(meta) {
             case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
                 col = "rating";
-            break;
+                break;
             case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
                 col = "orientation";
-            break;
+                break;
             }
             if(col) {
                 retval = setInternalMetaDataInt(file_id, col, nvalue);
@@ -554,12 +580,17 @@ bool Library::setMetaData(int file_id, int meta,
             ERR_OUT("exception");
             return false;
         }
-    break;
+        break;
     default:
         // external.
         ERR_OUT("unknown metadata to set");
         return false;
     }
+    LibMetadata::Ptr metablock(new LibMetadata);
+    getMetaData(file_id, metablock);
+    retval = metablock->setMetaData(meta, value);
+    retval = metablock->touch();
+    retval = setMetaData(file_id, metablock);
     return retval;
 }
 

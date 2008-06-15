@@ -17,7 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+#include <time.h>
+#include <exempi/xmpconsts.h>
 
+#include "utils/debug.h"
 #include "libmetadata.h"
 
 namespace db {
@@ -28,5 +32,84 @@ LibMetadata::LibMetadata()
 {
 }
 
+namespace {
+
+bool xmpPropertyNameFromIndex(int meta, std::string & ns, std::string & property)
+{
+    bool found = true;
+    switch(meta) {
+    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+        ns = NS_XAP;
+        property = "Rating";
+        break;
+    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+        ns = NS_TIFF;
+        property = "Orientation";
+        break;
+    default:
+        found = false;
+        break;
+    }
+   
+    return found;
+}
 
 }
+
+bool LibMetadata::setMetaData(int meta, const boost::any & value)
+{
+    std::string ns;
+    std::string property;
+    bool result = false;
+
+    result = xmpPropertyNameFromIndex(meta, ns, property);
+    if(result) {
+        try {
+            result = xmp_set_property_int32(xmp(), ns.c_str(), property.c_str(), 
+                                            boost::any_cast<int32_t>(value), 0);
+        }
+        catch(...)
+        {
+            ERR_OUT("exception");
+        }
+    }
+    else {
+        ERR_OUT("unknown property");
+    }
+    return result;
+}
+
+bool LibMetadata::touch()
+{
+    bool result = false;
+    XmpDateTime date;
+    struct tm dt, *dt2;
+    time_t currenttime = time(NULL);
+    dt2 = gmtime_r(&currenttime, &dt);
+    if(dt2 == &dt) {
+        memset(&date, 0, sizeof date);
+        date.second = dt.tm_sec;
+        date.minute = dt.tm_min;
+        date.hour = dt.tm_hour;
+        date.day = dt.tm_mday;
+        date.month = dt.tm_mon;
+        date.year = dt.tm_year + 1900;
+
+        result = xmp_set_property_date(xmp(), NS_XAP, "MetadataDate",
+                                       &date, 0);
+    }
+    return result;
+}
+
+
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
