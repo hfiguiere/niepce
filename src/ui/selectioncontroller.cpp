@@ -134,6 +134,9 @@ void SelectionController::set_rating(int rating)
                                     MAKE_METADATA_IDX(db::META_NS_XMPCORE, 
                                                      db::META_XMPCORE_RATING), 
                                     file->rating());
+            // we need to set the rating here so that undo/redo works
+            // consistently.
+            file->setRating(rating);
             undo->add(cmd);
             undo->redo();
         }
