@@ -119,6 +119,8 @@ bool Library::_initDb()
                               " keyword TEXT, parent_id INTEGER)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
                                  " keyword_id INTEGER)");
+    SQLStatement xmpUpdateQueueTable("CREATE TABLE xmp_update_queue "
+                                     " (id INTEGER UNIQUE)");
 //		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
 //								" name TEXT)");
 //		SQLStatement collectingTable("CREATE TABLE collecting (file_id INTEGER,"
@@ -129,6 +131,11 @@ bool Library::_initDb()
         " BEGIN"
         "  UPDATE files SET mod_date = strftime('%s','now');"
         " END");
+    SQLStatement xmpUpdateTrigger(
+        "CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files "
+        " BEGIN"
+        "  INSERT INTO xmp_update_queue (id) VALUES(new.id);"
+        " END");
 
     m_dbdrv->execute_statement(adminTable);
     m_dbdrv->execute_statement(adminVersion);
@@ -137,11 +144,12 @@ bool Library::_initDb()
     m_dbdrv->execute_statement(fileTable);
     m_dbdrv->execute_statement(keywordTable);
     m_dbdrv->execute_statement(keywordingTable);
+    m_dbdrv->execute_statement(xmpUpdateQueueTable);
 //		m_dbdrv->execute_statement(collsTable);
 //		m_dbdrv->execute_statement(collectingTable);
 
     m_dbdrv->execute_statement(fileUpdateTrigger);
-		
+    m_dbdrv->execute_statement(xmpUpdateTrigger);
     return true;
 }
 

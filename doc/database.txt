@@ -42,7 +42,12 @@ keywords        id             Unique ID in the database
 keywording	file_id	       The file ID it is linked to (= files.id)
 		keyword_id     The keyword ID associated (= keywords.id)
 
-There shouldn't be more than on pair of identical (file_id,keyword_id)
+There shouldn't be more than one pair of identical (file_id,keyword_id)
+
+The update queue for XMP. When an XMP is changed in the DB it is
+queued in the table.
+
+xmp_update_queue   id          File ID to update.
 
 Vaults are storage location for files. Currently unimplemented
 
