@@ -30,77 +30,77 @@ namespace bfs = boost::filesystem;
 
 namespace libraryclient {
 
-	const char * s_thumbcacheDirname = "thumbcache";
+const char * s_thumbcacheDirname = "thumbcache";
 
-	LibraryClient::LibraryClient(const utils::Moniker & moniker, 
-								 const framework::NotificationCenter::Ptr & nc)
-		: m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
-		  m_thumbnailCache(bfs::path(moniker.path()) / s_thumbcacheDirname, nc)
-	{
+LibraryClient::LibraryClient(const utils::Moniker & moniker, 
+                             const framework::NotificationCenter::Ptr & nc)
+    : m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
+      m_thumbnailCache(bfs::path(moniker.path()) / s_thumbcacheDirname, nc)
+{
 
-	}
+}
 
-	LibraryClient::~LibraryClient()
-	{
-		delete m_pImpl;
-	}
+LibraryClient::~LibraryClient()
+{
+    delete m_pImpl;
+}
 
-	tid_t LibraryClient::newTid()
-	{
-		static tid_t id = 0;
-		id++;
-		return id;
-	}
-
-
-	tid_t LibraryClient::getAllKeywords()
-	{
-		return m_pImpl->getAllKeywords();
-	}
+tid_t LibraryClient::newTid()
+{
+    static tid_t id = 0;
+    id++;
+    return id;
+}
 
 
-	tid_t LibraryClient::getAllFolders()
-	{
-		return m_pImpl->getAllFolders();
-	}
+tid_t LibraryClient::getAllKeywords()
+{
+    return m_pImpl->getAllKeywords();
+}
 
-	tid_t LibraryClient::queryFolderContent(int id)
-	{
-		return m_pImpl->queryFolderContent(id);
-	}
 
-	tid_t LibraryClient::queryKeywordContent(int id)
-	{
-		return m_pImpl->queryKeywordContent(id);
-	}
+tid_t LibraryClient::getAllFolders()
+{
+    return m_pImpl->getAllFolders();
+}
 
-	library::tid_t LibraryClient::countFolder(int id)
-	{
-		return m_pImpl->countFolder(id);
-	}
+tid_t LibraryClient::queryFolderContent(int id)
+{
+    return m_pImpl->queryFolderContent(id);
+}
 
-	library::tid_t LibraryClient::requestMetadata(int id)
-	{
-		return m_pImpl->requestMetadata(id);
-	}
+tid_t LibraryClient::queryKeywordContent(int id)
+{
+    return m_pImpl->queryKeywordContent(id);
+}
 
-    /** set the metadata */
-    library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
-    {
-        return m_pImpl->setMetadata(id, meta, value);
-    }
+library::tid_t LibraryClient::countFolder(int id)
+{
+    return m_pImpl->countFolder(id);
+}
 
-	void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
-	{
-		m_pImpl->importFromDirectory(dir, manage);
-	}
+library::tid_t LibraryClient::requestMetadata(int id)
+{
+    return m_pImpl->requestMetadata(id);
+}
 
-	bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
-											 db::Keyword::IdList & /*keywords*/)
-	{
-		// TODO
-		return false;
-	}
+/** set the metadata */
+library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
+{
+    return m_pImpl->setMetadata(id, meta, value);
+}
+
+void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
+{
+    m_pImpl->importFromDirectory(dir, manage);
+}
+
+bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
+                                         db::Keyword::IdList & /*keywords*/)
+{
+    // TODO
+    return false;
+}
 
 }
 /*

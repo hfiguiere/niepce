@@ -69,85 +69,85 @@ void UndoTransaction::redo()
     }
 }
 
-	UndoHistory::~UndoHistory()
-	{
-		clear();
-	}
+UndoHistory::~UndoHistory()
+{
+    clear();
+}
 
-	void UndoHistory::add(UndoTransaction* t)
-	{
-		m_undos.push_front(t);
-		clear(m_redos);
+void UndoHistory::add(UndoTransaction* t)
+{
+    m_undos.push_front(t);
+    clear(m_redos);
 
-		changed();
-	}
+    changed();
+}
 
-	void UndoHistory::undo()
-	{
-		DBG_OUT("run undo history");
-		if(!m_undos.empty()) {
-			UndoTransaction * t = m_undos.front();
-			if(t) {
-				t->undo();
-				m_undos.pop_front();
-				m_redos.push_front(t);
-				changed();
-			}
-		}
-	}
+void UndoHistory::undo()
+{
+    DBG_OUT("run undo history");
+    if(!m_undos.empty()) {
+        UndoTransaction * t = m_undos.front();
+        if(t) {
+            t->undo();
+            m_undos.pop_front();
+            m_redos.push_front(t);
+            changed();
+        }
+    }
+}
 
-	void UndoHistory::redo()
-	{
-		DBG_OUT("run redo history");
-		if(!m_redos.empty()) {
-			UndoTransaction * t = m_redos.front();
-			if(t) {
-				t->redo();
-				m_redos.pop_front();
-				m_undos.push_front(t);
-				changed();
-			}
-		}
-	}
+void UndoHistory::redo()
+{
+    DBG_OUT("run redo history");
+    if(!m_redos.empty()) {
+        UndoTransaction * t = m_redos.front();
+        if(t) {
+            t->redo();
+            m_redos.pop_front();
+            m_undos.push_front(t);
+            changed();
+        }
+    }
+}
 
 
-	void UndoHistory::clear()
-	{
-		clear(m_undos);
-		clear(m_redos);
+void UndoHistory::clear()
+{
+    clear(m_undos);
+    clear(m_redos);
 
-		changed();
-	}
+    changed();
+}
 
-	std::string UndoHistory::next_undo() const
-	{
-		if(!m_undos.empty()) {
-			UndoTransaction * t = m_undos.front();
-			if(t) {
-				return t->name();
-			}
-		}
-		return "";
-	}
+std::string UndoHistory::next_undo() const
+{
+    if(!m_undos.empty()) {
+        UndoTransaction * t = m_undos.front();
+        if(t) {
+            return t->name();
+        }
+    }
+    return "";
+}
 
-	std::string UndoHistory::next_redo() const
-	{
-		if(!m_redos.empty()) {
-			UndoTransaction * t = m_redos.front();
-			if(t) {
-				return t->name();
-			}
-		}
-		return "";
-	}
+std::string UndoHistory::next_redo() const
+{
+    if(!m_redos.empty()) {
+        UndoTransaction * t = m_redos.front();
+        if(t) {
+            return t->name();
+        }
+    }
+    return "";
+}
 
 	
-	void UndoHistory::clear(std::list<UndoTransaction*> & l)
-	{
-		std::for_each(l.begin(), l.end(), 
-					  boost::bind(&boost::checked_delete<UndoTransaction>, _1));
-		l.clear();
-	}
+void UndoHistory::clear(std::list<UndoTransaction*> & l)
+{
+    std::for_each(l.begin(), l.end(), 
+                  boost::bind(&boost::checked_delete<UndoTransaction>, _1));
+    l.clear();
+}
 
 }
 

@@ -17,10 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
-
 #ifndef __NIEPCE_DB_LIBFILE_H__
 #define __NIEPCE_DB_LIBFILE_H__
 
@@ -34,78 +30,88 @@
 
 namespace db {
 
-	enum {
-		FILE_FORMAT_UNKNOWN = 0,
-		FILE_FORMAT_RAW = 1,
-		FILE_FORMAT_JPEG = 2
-	};
+enum {
+    FILE_FORMAT_UNKNOWN = 0,
+    FILE_FORMAT_RAW = 1,
+    FILE_FORMAT_JPEG = 2
+};
 
-	class LibFile
-	{
-	public:
-		typedef boost::shared_ptr< LibFile > Ptr;
-		typedef std::list< Ptr > List;
-		typedef boost::shared_ptr< List > ListPtr;
+class LibFile
+{
+public:
+    typedef boost::shared_ptr< LibFile > Ptr;
+    typedef std::list< Ptr > List;
+    typedef boost::shared_ptr< List > ListPtr;
 
-		LibFile(int id, int folderId, const boost::filesystem::path & p,
-						const std::string & name );
-		virtual ~LibFile();
+    LibFile(int id, int folderId, const boost::filesystem::path & p,
+            const std::string & name );
+    virtual ~LibFile();
 
-		int id() const
-			{ return m_id; }
-		int folderId() const
-			{ return m_folderId; }
-		const std::string & name() const
-			{ return m_name; }
-		const boost::filesystem::path & path() const
-			{ return m_path; }
+    int id() const
+        { return m_id; }
+    int folderId() const
+        { return m_folderId; }
+    const std::string & name() const
+        { return m_name; }
+    const boost::filesystem::path & path() const
+        { return m_path; }
 
 //		Storage::Ptr storage() const;
 
-		void setOrientation(int32_t v);
-		int32_t orientation() const
-			{ return m_orientation; }
-		void setRating(int32_t v);
-		int32_t rating() const
-			{ return m_rating; }
-		void setLabel(int32_t v);
-		int32_t label() const
-			{ return m_label; }
+    void setOrientation(int32_t v);
+    int32_t orientation() const
+        { return m_orientation; }
+    void setRating(int32_t v);
+    int32_t rating() const
+        { return m_rating; }
+    void setLabel(int32_t v);
+    int32_t label() const
+        { return m_label; }
 
-        /** set an arbitrary meta data value */
-        void setMetaData(int meta, int32_t v); 
+    /** set an arbitrary meta data value */
+    void setMetaData(int meta, int32_t v); 
 
-		/** retrieve the keywords id list 
-		 * @return the list
-		 */
-		const Keyword::IdList & keywords() const;
+    /** retrieve the keywords id list 
+     * @return the list
+     */
+    const Keyword::IdList & keywords() const;
 		
-		/** return an URI of the real path
-		 * because the Gtk stuff want that.
-		 */
-		const std::string uri() const
-			{ return std::string("file://") + m_path.string(); }
-		/** check is the library file is at uri
-		 * @return true of the uri match
-		 * @todo
-		 */
+    /** return an URI of the real path
+     * because the Gtk stuff want that.
+     */
+    const std::string uri() const
+        { return std::string("file://") + m_path.string(); }
+    /** check is the library file is at uri
+     * @return true of the uri match
+     * @todo
+     */
 //		bool isUri(const char * _uri) const
 //			{ return uri() == _uri; }
-	private:
-		int         m_id;           /**< file ID */
-		int         m_folderId;     /**< parent folder */
-		std::string m_name;         /**< name */
-		boost::filesystem::path  m_path;/**< path name relative to the folder */
+private:
+    int         m_id;           /**< file ID */
+    int         m_folderId;     /**< parent folder */
+    std::string m_name;         /**< name */
+    boost::filesystem::path  m_path;/**< path name relative to the folder */
 //		std::string m_type;
-		int32_t     m_orientation;  /**< Exif orientatoin */
-		int32_t     m_rating;       /**< rating */
-		int32_t     m_label;        /**< Label ID */
-		mutable bool m_hasKeywordList;
-		mutable Keyword::IdList m_keywordList;
-	};
+    int32_t     m_orientation;  /**< Exif orientatoin */
+    int32_t     m_rating;       /**< rating */
+    int32_t     m_label;        /**< Label ID */
+    mutable bool m_hasKeywordList;
+    mutable Keyword::IdList m_keywordList;
+};
 
 }
 
 
 #endif
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

@@ -29,52 +29,61 @@
 
 namespace framework {
 
-	class Command;
+class Command;
 
-	class UndoTransaction
-	{
-	public:
-		UndoTransaction(const std::string & n);
-        ~UndoTransaction();
-        void add(Command *);
-		void undo();
-		void redo();
-		const std::string & name() const
-			{ return m_name; }
-	private:
-		std::list<Command *> m_operations;
-		std::string m_name;
-	};
+class UndoTransaction
+{
+public:
+    UndoTransaction(const std::string & n);
+    ~UndoTransaction();
+    void add(Command *);
+    void undo();
+    void redo();
+    const std::string & name() const
+        { return m_name; }
+private:
+    std::list<Command *> m_operations;
+    std::string m_name;
+};
 
-	class UndoHistory
-		: public boost::noncopyable
-	{
-	public:
-		~UndoHistory();
+class UndoHistory
+    : public boost::noncopyable
+{
+public:
+    ~UndoHistory();
 		
-		/** the history becomes owner */
-		void add(UndoTransaction*);
-		void undo();
-		void redo();
-		void clear();
-		bool has_undo() const
-			{ return !m_undos.empty(); }
-		bool has_redo() const
-			{ return !m_redos.empty(); }
-		std::string next_undo() const;
-		std::string next_redo() const;
+    /** the history becomes owner */
+    void add(UndoTransaction*);
+    void undo();
+    void redo();
+    void clear();
+    bool has_undo() const
+        { return !m_undos.empty(); }
+    bool has_redo() const
+        { return !m_redos.empty(); }
+    std::string next_undo() const;
+    std::string next_redo() const;
 
-		// called when the undo history change.
-		boost::signal<void (void)> changed;
-	private:
-		void clear(std::list<UndoTransaction*> & l);
+    // called when the undo history change.
+    boost::signal<void (void)> changed;
+private:
+    void clear(std::list<UndoTransaction*> & l);
 
-		std::list<UndoTransaction*> m_undos;
-		std::list<UndoTransaction*> m_redos;
-	};
+    std::list<UndoTransaction*> m_undos;
+    std::list<UndoTransaction*> m_redos;
+};
 
 	
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
