@@ -80,7 +80,8 @@ public:
     void rotate(int angle);
     /** set the rating of selection to %rating. */
     void set_rating(int rating);
-
+    /** set the label of selection to the label with index %label. */
+    void set_label(int label);
 protected:
 	virtual void _added();
 	virtual Gtk::Widget * buildWidget()
@@ -88,6 +89,9 @@ protected:
 private:
     int get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
+
+    bool _set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
+                       int meta, int old_value, int new_value);
 
 	Glib::RefPtr<ImageListStore>  m_imageliststore;
 	bool m_in_handler;

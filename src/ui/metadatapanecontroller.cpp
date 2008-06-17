@@ -57,6 +57,7 @@ namespace ui {
 		};
 		static const MetaDataFormat s_iptc_format[] = {
 			{ _("Rating:"), NS_XAP, "Rating", META_DT_STAR_RATING, false },
+			{ _("Label:"), NS_XAP, "Label", META_DT_STRING, false },            
 			{ _("Keywords:"), NS_DC, "subject", META_DT_STRING_ARRAY, false },
 			{ NULL, NULL, NULL, META_DT_NONE, true }			
 		};

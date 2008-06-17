@@ -112,6 +112,45 @@ void SelectionController::rotate(int angle)
 }
 
 
+bool SelectionController::_set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
+                                        int meta, int old_value, int new_value)
+{
+    framework::UndoTransaction *undo = new framework::UndoTransaction(undo_label);
+    framework::Application::app()->undo_history().add(undo);
+    framework::Command *cmd = new framework::Command;
+    cmd->redo = boost::bind(&libraryclient::LibraryClient::setMetadata,
+                            getLibraryClient(), file->id(), 
+                            meta, new_value);
+    cmd->undo = boost::bind(&libraryclient::LibraryClient::setMetadata,
+                            getLibraryClient(), file->id(),
+                            meta, old_value);
+    undo->add(cmd);
+    undo->redo();
+    return true;
+}
+
+
+void SelectionController::set_label(int label)
+{
+    DBG_OUT("label = %d", label);
+    int selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+            db::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            DBG_OUT("old label is %d", file->label());
+            int old_value = file->label();
+            _set_metadata(_("Set Label"), file, 
+                          MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL), 
+                          old_value, label);
+            // we need to set the label here so that undo/redo works
+            // consistently.
+            file->setLabel(label);
+        }
+    }
+}
+
+
 void SelectionController::set_rating(int rating)
 {
     DBG_OUT("rating = %d", rating);
@@ -121,24 +160,13 @@ void SelectionController::set_rating(int rating)
         if(iter) {
             db::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
             DBG_OUT("old rating is %d", file->rating());
-            framework::UndoTransaction *undo = new framework::UndoTransaction(_("Set Rating"));
-            framework::Application::app()->undo_history().add(undo);
-            framework::Command *cmd = new framework::Command;
-            cmd->redo = boost::bind(&libraryclient::LibraryClient::setMetadata,
-                                    getLibraryClient(), file->id(), 
-                                    MAKE_METADATA_IDX(db::META_NS_XMPCORE, 
-                                                     db::META_XMPCORE_RATING), 
-                                    rating);
-            cmd->undo = boost::bind(&libraryclient::LibraryClient::setMetadata,
-                                    getLibraryClient(), file->id(),
-                                    MAKE_METADATA_IDX(db::META_NS_XMPCORE, 
-                                                     db::META_XMPCORE_RATING), 
-                                    file->rating());
+            int old_value = file->rating();
+            _set_metadata(_("Set Rating"), file, 
+                          MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING), 
+                          old_value, rating);
             // we need to set the rating here so that undo/redo works
             // consistently.
             file->setRating(rating);
-            undo->add(cmd);
-            undo->redo();
         }
     }
 }

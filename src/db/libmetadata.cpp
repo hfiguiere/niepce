@@ -43,6 +43,10 @@ bool xmpPropertyNameFromIndex(int meta, std::string & ns, std::string & property
         ns = NS_XAP;
         property = "Rating";
         break;
+    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
+        ns = NS_XAP;
+        property = "Label";
+        break;
     case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
         ns = NS_TIFF;
         property = "Orientation";

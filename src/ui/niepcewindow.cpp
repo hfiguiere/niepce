@@ -196,7 +196,12 @@ void NiepceWindow::init_ui()
         "        <menuitem action='SetRating4'/>"
         "        <menuitem action='SetRating5'/>"
         "      </menu>"
-        "      <menuitem action='SetLabel'/>"
+        "      <menu action='SetLabel'>"
+        "        <menuitem action='SetLabel6'/>"
+        "        <menuitem action='SetLabel7'/>"
+        "        <menuitem action='SetLabel8'/>"
+        "        <menuitem action='SetLabel9'/>"
+        "      </menu>"
         "      <separator/>"
         "      <menuitem action='DeleteImage'/>"
         "    </menu>"
@@ -284,7 +289,22 @@ void NiepceWindow::init_actions()
                                                  m_selection_controller, 90));
 
     m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
-
+    m_refActionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
+                          Gtk::AccelKey("6"),
+                          boost::bind(&SelectionController::set_label, 
+                                      m_selection_controller, 1));
+    m_refActionGroup->add(Gtk::Action::create("SetLabel7", _("Label _7")),
+                          Gtk::AccelKey("7"),
+                          boost::bind(&SelectionController::set_label, 
+                                      m_selection_controller, 2));
+    m_refActionGroup->add(Gtk::Action::create("SetLabel8", _("Label _8")),
+                          Gtk::AccelKey("8"),
+                          boost::bind(&SelectionController::set_label, 
+                                      m_selection_controller, 3));
+    m_refActionGroup->add(Gtk::Action::create("SetLabel9", _("Label _9")),
+                          Gtk::AccelKey("9"),
+                          boost::bind(&SelectionController::set_label, 
+                                      m_selection_controller, 4));
 
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),

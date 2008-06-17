@@ -565,8 +565,9 @@ bool Library::setMetaData(int file_id, int meta,
     DBG_OUT("setting metadata in column %x", meta);
     switch(meta) {
     case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
     case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
-        try {
+        if(value.type() == typeid(int32_t)) {
             // internal.
             int32_t nvalue = boost::any_cast<int32_t>(value);
             // make the column mapping more generic.
@@ -578,15 +579,13 @@ bool Library::setMetaData(int file_id, int meta,
             case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
                 col = "orientation";
                 break;
+            case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
+                col = "label";
+                break;
             }
             if(col) {
                 retval = setInternalMetaDataInt(file_id, col, nvalue);
             }
-        }
-        catch(...)
-        {
-            ERR_OUT("exception");
-            return false;
         }
         break;
     default:
