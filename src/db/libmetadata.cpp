@@ -27,8 +27,9 @@
 namespace db {
 
 
-LibMetadata::LibMetadata()
-	: XmpMeta()
+LibMetadata::LibMetadata(int _id)
+	: XmpMeta(),
+      m_id(_id)
 {
 }
 
@@ -64,13 +65,13 @@ bool LibMetadata::setMetaData(int meta, const boost::any & value)
 
     result = xmpPropertyNameFromIndex(meta, ns, property);
     if(result) {
-        try {
+        if(value.type() == typeid(int32_t)) {
             result = xmp_set_property_int32(xmp(), ns.c_str(), property.c_str(), 
                                             boost::any_cast<int32_t>(value), 0);
         }
-        catch(...)
-        {
-            ERR_OUT("exception");
+        else if(value.type() == typeid(std::string)) {
+            result = xmp_set_property(xmp(), ns.c_str(), property.c_str(), 
+                                      boost::any_cast<std::string>(value).c_str(), 0);
         }
     }
     else {

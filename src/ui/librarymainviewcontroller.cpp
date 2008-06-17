@@ -49,9 +49,20 @@ namespace ui {
 			{
 				db::LibMetadata::Ptr lm
 					= boost::any_cast<db::LibMetadata::Ptr>(ln.param);
-				DBG_OUT("received metadate");
-				m_metapanecontroller->display(lm.get());
+				DBG_OUT("received metadata");
+				m_metapanecontroller->display(lm->id(), lm.get());
+                break;
 			}
+            case db::Library::NOTIFY_METADATA_CHANGED:
+            {
+                DBG_OUT("metadata changed");
+                boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
+                if(m[0] == m_metapanecontroller->displayed_file()) {
+                    // FIXME: actually just update the metadata
+                    getLibraryClient()->requestMetadata(m[0]);
+                }
+                break;
+            }
 			default:
 				break;
 			}
@@ -121,7 +132,7 @@ namespace ui {
 			getLibraryClient()->requestMetadata(id);
 		}		
 		else  {
-			m_metapanecontroller->display(NULL);
+			m_metapanecontroller->display(0, NULL);
 		}
 	}
 

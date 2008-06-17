@@ -36,13 +36,18 @@ namespace db {
 	public:
 		typedef boost::shared_ptr<LibMetadata> Ptr;
 
-		LibMetadata();
+		LibMetadata(int _id);
 
+        int id() const
+            { return m_id; }
         bool setMetaData(int meta, const boost::any & value);
         /** do like the unix "touch". Update the MetadataDate 
          * to the current time, in UTC.
          */
         bool touch();
+    private:
+        LibMetadata(const LibMetadata &);
+        int m_id;
 	};
 
 }

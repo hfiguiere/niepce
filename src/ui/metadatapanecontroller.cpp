@@ -80,7 +80,8 @@ namespace ui {
 	}
 
 	MetaDataPaneController::MetaDataPaneController()
-		: m_metapane(false)
+		: m_metapane(false),
+          m_fileid(0)
 	{
 	}
 
@@ -104,8 +105,9 @@ namespace ui {
 	}
 
 
-	void MetaDataPaneController::display(const utils::XmpMeta * meta)
+	void MetaDataPaneController::display(int file_id, const utils::XmpMeta * meta)
 	{
+        m_fileid = file_id;
 		DBG_OUT("displaying metadata");
 		std::for_each(m_widgets.begin(), m_widgets.end(),
 					  boost::bind(&framework::MetaDataWidget::set_data_source,

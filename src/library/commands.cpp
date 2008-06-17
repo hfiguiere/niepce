@@ -112,7 +112,7 @@ void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
 void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
                                   int file_id)
 {
-    LibMetadata::Ptr lm(new LibMetadata());
+    LibMetadata::Ptr lm(new LibMetadata(file_id));
     lib->getMetaData(file_id, lm);
     lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
 }

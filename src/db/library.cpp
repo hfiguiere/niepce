@@ -134,7 +134,7 @@ bool Library::_initDb()
     SQLStatement xmpUpdateTrigger(
         "CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files "
         " BEGIN"
-        "  INSERT INTO xmp_update_queue (id) VALUES(new.id);"
+        "  INSERT OR IGNORE INTO xmp_update_queue (id) VALUES(new.id);"
         " END");
 
     m_dbdrv->execute_statement(adminTable);
@@ -594,7 +594,7 @@ bool Library::setMetaData(int file_id, int meta,
         ERR_OUT("unknown metadata to set");
         return false;
     }
-    LibMetadata::Ptr metablock(new LibMetadata);
+    LibMetadata::Ptr metablock(new LibMetadata(file_id));
     getMetaData(file_id, metablock);
     retval = metablock->setMetaData(meta, value);
     retval = metablock->touch();

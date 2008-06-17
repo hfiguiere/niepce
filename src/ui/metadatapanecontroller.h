@@ -41,12 +41,16 @@ namespace ui {
 		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
 		MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();
-		void display(const utils::XmpMeta * meta);
+		void display(int file_id, const utils::XmpMeta * meta);
+        int displayed_file() const 
+            { return m_fileid; }
 	private:
 		Gtk::VBox m_metapane;
 		std::vector<framework::MetaDataWidget *> m_widgets;
 
 		static const xmp::MetaDataSectionFormat * get_format();
+
+        int m_fileid;
 	};
 
 }
