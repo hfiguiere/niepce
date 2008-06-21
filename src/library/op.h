@@ -36,21 +36,30 @@ namespace library {
 		typedef boost::shared_ptr< Op > Ptr;
 		typedef boost::function<void (const db::Library::Ptr &)> function_t;
 
-		Op(tid_t id);
+		Op(tid_t id, const function_t & func);
 
 		tid_t id() const 
 			{ return m_id; }
 
         void operator() (const db::Library::Ptr &);
-		function_t & fn()
+		const function_t & fn() const
 			{ return m_function; }
 	protected:
 	private:
-		function_t m_function;
 		tid_t   m_id;
+		function_t m_function;
 	};
 
 }
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

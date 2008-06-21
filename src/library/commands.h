@@ -55,19 +55,6 @@ namespace library {
                                    int file_id, int meta, int value);
 		static void cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib);
 
-		// op: create an op
-		static Op::Ptr opListAllFolders(tid_t id);
-		static Op::Ptr opListAllKeywords(tid_t id);
-		static Op::Ptr opImportFiles(tid_t id, 
-									 const boost::filesystem::path & folder, 
-									 const utils::FileList::Ptr & files, 
-									 bool manage);
- 		static Op::Ptr opQueryFolderContent(tid_t id, int folder_id);
-		static Op::Ptr opCountFolder(tid_t id, int folder_id);
- 		static Op::Ptr opQueryKeywordContent(tid_t id, int keyword_id);
-		static Op::Ptr opRequestMetadata(tid_t id, int file_id);
-        static Op::Ptr opSetMetadata(tid_t id, int file_id, int meta, int value);
-        static Op::Ptr opProcessXmpUpdateQueue(tid_t id);
 	};
 
 }

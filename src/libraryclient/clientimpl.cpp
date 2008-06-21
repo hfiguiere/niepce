@@ -33,106 +33,116 @@ using library::tid_t;
 
 namespace libraryclient {
 	
-	ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker, 
-										   const framework::NotificationCenter::Ptr & nc)
-	{
-		return new ClientImpl(moniker, nc);
-	}
-	
-	ClientImpl::ClientImpl(const utils::Moniker & moniker, const framework::NotificationCenter::Ptr & nc)
-		: m_moniker(moniker),
-		  m_localLibrary(NULL)
-	{
-		DBG_OUT("creating implementation with moniker %s", 
-						moniker.c_str());
-		m_localLibrary = new LocalLibraryServer(moniker.path(), nc);
-	}
+ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker, 
+                                       const framework::NotificationCenter::Ptr & nc)
+{
+    return new ClientImpl(moniker, nc);
+}
 
-	ClientImpl::~ClientImpl()
-	{
-		delete m_localLibrary;
-	}
+ClientImpl::ClientImpl(const utils::Moniker & moniker, const framework::NotificationCenter::Ptr & nc)
+    : m_moniker(moniker),
+      m_localLibrary(NULL)
+{
+    DBG_OUT("creating implementation with moniker %s", 
+            moniker.c_str());
+    m_localLibrary = new LocalLibraryServer(moniker.path(), nc);
+}
 
-	tid_t ClientImpl::getAllKeywords()
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opListAllKeywords(id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
+ClientImpl::~ClientImpl()
+{
+    delete m_localLibrary;
+}
 
-
-	tid_t ClientImpl::getAllFolders()
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opListAllFolders(id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
-
-	tid_t ClientImpl::queryFolderContent(int folder_id)
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opQueryFolderContent(id, folder_id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
-
-	tid_t ClientImpl::countFolder(int folder_id)
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opCountFolder(id, folder_id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
-
-	tid_t ClientImpl::queryKeywordContent(int keyword_id)
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opQueryKeywordContent(id, keyword_id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
-
-	tid_t ClientImpl::requestMetadata(int file_id)
-	{
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opRequestMetadata(id, file_id));
-		m_localLibrary->schedule(op);
-		return id;
-	}
-
-
-    tid_t ClientImpl::setMetadata(int file_id, int meta, int value)
-    {
-        tid_t id = LibraryClient::newTid();
-        Op::Ptr op(Commands::opSetMetadata(id, file_id, meta, value));
-        m_localLibrary->schedule(op);
-        return id;
-    }
-
-
-tid_t ClientImpl::processXmpUpdateQueue()
+tid_t ClientImpl::getAllKeywords()
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(Commands::opProcessXmpUpdateQueue(id));
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdListAllKeywords, _1)));
     m_localLibrary->schedule(op);
     return id;
 }
 
 
-	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
-	{
-		FileList::Ptr files;
-		
-		files = FileList::getFilesFromDirectory(dir, 
-												boost::bind(&utils::filter_xmp_out, _1));
+tid_t ClientImpl::getAllFolders()
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdListAllFolders, _1)));
+    m_localLibrary->schedule(op);
+    return id;
+}
 
-		tid_t id = LibraryClient::newTid();
-		Op::Ptr op(Commands::opImportFiles(id, dir, files, manage));
-		m_localLibrary->schedule(op);
-		return id;
-	}
+tid_t ClientImpl::queryFolderContent(int folder_id)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdQueryFolderContent,
+                                      _1, folder_id)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::countFolder(int folder_id)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdCountFolder, 
+                                      _1, folder_id)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::queryKeywordContent(int keyword_id)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdQueryKeywordContent,
+                                      _1, keyword_id)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::requestMetadata(int file_id)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdRequestMetadata,
+                                      _1, file_id)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::setMetadata(int file_id, int meta, int value)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdSetMetadata, _1,
+                                      file_id, meta, value)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::processXmpUpdateQueue()
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdProcessXmpUpdateQueue,
+                                      _1)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
+tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
+{
+    FileList::Ptr files;
+	
+    files = FileList::getFilesFromDirectory(dir, 
+                                            boost::bind(&utils::filter_xmp_out, _1));
+    
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdImportFiles,
+                                      _1, dir, files, manage)));
+    m_localLibrary->schedule(op);
+    return id;
+}
 
 }
 

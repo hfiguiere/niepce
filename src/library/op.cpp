@@ -1,7 +1,7 @@
 /*
  * niepce - library/op.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,18 +23,27 @@
 
 namespace library {
 
-	Op::Op(tid_t _id)
-		: m_id(_id)
-	{
-		
-	}
+Op::Op(tid_t _id, const function_t & func)
+    : m_id(_id),
+      m_function(func)
+{
+}
 
-	void Op::operator() (const db::Library::Ptr &l)
-	{
-		if(m_function) {
-			m_function(l);
-		}
-	}
+void Op::operator() (const db::Library::Ptr &l)
+{
+    if(m_function) {
+        m_function(l);
+    }
+}
 
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
