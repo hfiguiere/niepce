@@ -85,10 +85,16 @@ namespace library {
 		Glib::RefPtr<Gdk::Pixbuf> pix;
 		if(!mime_type.isDigicamRaw()) {
 			DBG_OUT("not a raw type, trying GdkPixbuf loaders");
-			pix = Gdk::Pixbuf::create_from_file(filename, task->width(), task->height(), true);
-			if(pix) {
-				pix = framework::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
-			}
+            try {
+                pix = Gdk::Pixbuf::create_from_file(filename, task->width(), task->height(), true);
+                if(pix) {
+                    pix = framework::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
+                }
+            }
+            catch(const Glib::Error & e) 
+            {
+                ERR_OUT("exception %s", e.what().c_str());
+            }
 		}	
 		else {	
 			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename, 
