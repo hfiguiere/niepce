@@ -28,6 +28,7 @@
 
 #include <stdint.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 namespace utils {
 class Buffer ;
@@ -54,6 +55,8 @@ class IConnectionDriver {
 public:
     typedef boost::shared_ptr<IConnectionDriver> Ptr;
 
+    typedef boost::function<void (void)> f0_t;
+
     virtual ~IConnectionDriver ()
     {}
 
@@ -67,8 +70,9 @@ public:
 
     virtual bool rollback_transaction () = 0 ;
 
-    virtual bool execute_statement
-    (const SQLStatement &a_statement) = 0;
+    virtual bool execute_statement (const SQLStatement &a_statement) = 0;
+    
+    virtual bool create_function0(const std::string & name, const f0_t & f) = 0;
 
     virtual bool should_have_data () const = 0;
 
@@ -106,3 +110,12 @@ public:
 
 #endif //__NEMIVER_I_CONNECTION_DRIVER_H__
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

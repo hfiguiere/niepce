@@ -1,5 +1,8 @@
 /*
- *This file is part of the Nemiver Project.
+ * (c) 2007-2008 Hubert Figuiere
+ *
+ ***********************************************************
+ *This file was part of the Nemiver Project.
  *
  *Nemiver is free software; you can redistribute
  *it and/or modify it under the terms of
@@ -27,6 +30,9 @@
 
 #include <string.h>
 #include <string>
+#include <list>
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #include <sqlite3.h>
 #include "utils/exception.h"
@@ -119,6 +125,8 @@ namespace db { namespace sqlite {
 
 			//the result of the last sqlite3_step() function, or -333
 			int last_execution_result ;
+            
+            std::list<boost::function<void (void)> > userfunctions;
 
 			Priv():
 				sqlite(NULL),
@@ -334,6 +342,31 @@ namespace db { namespace sqlite {
 		  return true ;
 		}
 
+        namespace {
+            
+        void wrapper(sqlite3_context* ctx, int, sqlite3_value**)
+        {
+            boost::function<void (void)> *f;
+            f = (boost::function<void (void)>*)sqlite3_user_data(ctx);
+            (*f)();
+        }
+
+        }
+
+        bool 
+        SqliteCnxDrv::create_function0(const std::string & name, 
+                                       const db::IConnectionDriver::f0_t & f)
+        {
+            m_priv->userfunctions.push_back(f);
+            sqlite3_create_function(m_priv->sqlite.get(), name.c_str(), 
+                                    0, SQLITE_ANY, 
+                                    (void*)&(m_priv->userfunctions.back()), 
+                                    &wrapper, NULL, NULL);
+
+            return true;
+        }
+
+
 		bool
 		SqliteCnxDrv::should_have_data () const
 		{
@@ -540,6 +573,15 @@ namespace db { namespace sqlite {
 			return -1;
 		}
 	}//end namespace sqlite
-}//end namespace dbd
+}//end namespace db
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

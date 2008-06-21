@@ -128,6 +128,10 @@ void Commands::cmdSetMetadata(const db::Library::Ptr & lib,
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
 }
 
+void Commands::cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib)
+{
+    lib->processXmpUpdateQueue();
+}
 
 /////////////////  ops generation
 Op::Ptr Commands::opListAllFolders(tid_t id)
@@ -185,6 +189,14 @@ Op::Ptr Commands::opRequestMetadata(tid_t id, int file_id)
     return op;
 }
 
+
+Op::Ptr Commands::opProcessXmpUpdateQueue(tid_t id)
+{
+    Op::Ptr op(new Op(id));
+    op->fn() = boost::bind(&Commands::cmdProcessXmpUpdateQueue,
+                           _1);
+    return op;
+}
 
 Op::Ptr Commands::opSetMetadata(tid_t id, int file_id, int meta, int value)
 {

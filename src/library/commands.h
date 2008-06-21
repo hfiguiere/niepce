@@ -53,7 +53,7 @@ namespace library {
 									   int file_id);
         static void cmdSetMetadata(const db::Library::Ptr & lib,
                                    int file_id, int meta, int value);
-		
+		static void cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib);
 
 		// op: create an op
 		static Op::Ptr opListAllFolders(tid_t id);
@@ -67,9 +67,19 @@ namespace library {
  		static Op::Ptr opQueryKeywordContent(tid_t id, int keyword_id);
 		static Op::Ptr opRequestMetadata(tid_t id, int file_id);
         static Op::Ptr opSetMetadata(tid_t id, int file_id, int meta, int value);
+        static Op::Ptr opProcessXmpUpdateQueue(tid_t id);
 	};
 
 }
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

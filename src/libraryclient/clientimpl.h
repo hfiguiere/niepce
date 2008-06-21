@@ -48,6 +48,8 @@ namespace libraryclient {
 		library::tid_t requestMetadata(int id);
         library::tid_t setMetadata(int id, int meta, int value);
 
+        library::tid_t processXmpUpdateQueue();
+
 		library::tid_t importFromDirectory(const std::string & dir, bool manage);
 
 	protected:
@@ -59,3 +61,12 @@ namespace libraryclient {
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

@@ -90,6 +90,11 @@ library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
     return m_pImpl->setMetadata(id, meta, value);
 }
 
+library::tid_t LibraryClient::processXmpUpdateQueue()
+{
+    return m_pImpl->processXmpUpdateQueue();
+}
+
 void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
 {
     m_pImpl->importFromDirectory(dir, manage);

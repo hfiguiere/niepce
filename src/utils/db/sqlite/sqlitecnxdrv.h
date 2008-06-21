@@ -1,6 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode:nil; c-basic-offset:4; -*- */
-
 /*
+ * (c) 2007-2008 Hubert Figuiere
+ *
+ ***********************************************************
  *This file is part of the Dodji Common Library Project.
  *
  *Dodji is free software; you can redistribute
@@ -65,6 +66,8 @@ public:
 
     bool execute_statement (const db::SQLStatement &a_statement) ;
 
+    bool create_function0(const std::string & name, const f0_t & f);
+
     bool should_have_data () const ;
 
     bool read_next_row () ;
@@ -100,4 +103,13 @@ public:
 }//end namspace common
 
 #endif //__NEMIVER_SQLITE_CNX_DRV_H__
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 

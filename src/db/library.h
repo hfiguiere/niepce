@@ -55,6 +55,7 @@ namespace db {
 			NOTIFY_KEYWORD_CONTENT_QUERIED,
 			NOTIFY_METADATA_QUERIED,
             NOTIFY_METADATA_CHANGED,
+            NOTIFY_XMP_NEEDS_UPDATE,
 			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
@@ -118,6 +119,9 @@ namespace db {
         bool setMetaData(int file_id, const LibMetadata::Ptr & );
         bool setMetaData(int file_id, int meta, const boost::any & value);
 
+        /** Trigger the processing of the XMP update queue */
+        bool processXmpUpdateQueue();
+
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate
 		 * @return -1 if not found (shouldn't happen) or the id of the
@@ -139,6 +143,15 @@ namespace db {
 		bool init();
 		bool _initDb();
 
+        /** external sqlite fucntion to trigger the rewrite of the XMP */
+        void triggerRewriteXmp(void);
+        bool getXmpIdsInQueue(std::vector<int> & ids);
+        /** rewrite the XMP sidecar for the file whose id is %id
+         * and remove it from the queue.
+         */
+        bool rewriteXmpForId(int id);
+
+        /** set an "internal" metadata of type int */
         bool setInternalMetaDataInt(int file_id, const char* col,
                                     int32_t value);
 

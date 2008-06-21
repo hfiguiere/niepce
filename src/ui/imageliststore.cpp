@@ -110,6 +110,12 @@ void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
                 file->setMetaData(m[1], m[2]);
                 row[m_columns.m_libfile] = file;
             }
+            break;
+        }
+        case db::Library::NOTIFY_XMP_NEEDS_UPDATE:
+        {
+            getLibraryClient()->processXmpUpdateQueue();
+            break;
         }
         default:
             break;

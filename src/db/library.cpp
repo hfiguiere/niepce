@@ -18,10 +18,14 @@
  */
 
 #include <time.h>
+#include <stdio.h>
 #include <iostream>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/convenience.hpp>
 
 #include "niepce/notifications.h"
 #include "library.h"
@@ -42,6 +46,8 @@ namespace db {
 
 const char * s_databaseName = "niepcelibrary.db";
 
+
+
 Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
     : m_maindir(dir),
       m_dbname(m_maindir / s_databaseName),
@@ -53,13 +59,21 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
     db::DBDesc desc("", 0, m_dbname.string());
     m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
     m_inited = init();
-}
 
+    m_dbdrv->create_function0("rewrite_xmp", 
+                              boost::bind(&Library::triggerRewriteXmp,
+                                          this));
+}
 
 Library::~Library()
 {
 }
 
+void Library::triggerRewriteXmp(void)
+{
+    DBG_OUT("rewrite_xmp");
+    notify(NOTIFY_XMP_NEEDS_UPDATE, boost::any());
+}
 
 void Library::notify(NotifyType t, const boost::any & param)
 {
@@ -114,7 +128,7 @@ bool Library::_initDb()
                            " orientation INTEGER, file_date INTEGER,"
                            " rating INTEGER, label INTEGER,"
                            " import_date INTEGER, mod_date INTEGER, "
-                           " xmp TEXT)");
+                           " xmp TEXT, xmp_date INTEGER)");
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
                               " keyword TEXT, parent_id INTEGER)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
@@ -135,6 +149,7 @@ bool Library::_initDb()
         "CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files "
         " BEGIN"
         "  INSERT OR IGNORE INTO xmp_update_queue (id) VALUES(new.id);"
+        "  SELECT rewrite_xmp(); "
         " END");
 
     m_dbdrv->execute_statement(adminTable);
@@ -600,6 +615,89 @@ bool Library::setMetaData(int file_id, int meta,
     retval = setMetaData(file_id, metablock);
     return retval;
 }
+
+
+bool Library::getXmpIdsInQueue(std::vector<int> & ids)
+{
+    SQLStatement sql("SELECT id  FROM xmp_update_queue;");
+    try {
+        if(m_dbdrv->execute_statement(sql)) {
+            while(m_dbdrv->read_next_row()) {
+                int32_t id;
+                m_dbdrv->get_column_content(0, id);
+                ids.push_back(id);
+            }
+        }
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+        return false;
+    }
+    return true;
+}
+
+
+bool Library::rewriteXmpForId(int id)
+{
+    SQLStatement del(boost::format("DELETE FROM xmp_update_queue "
+                                   " WHERE id='%1%';") % id);
+    SQLStatement getxmp(boost::format("SELECT xmp, path FROM files "
+                                   " WHERE id='%1%';") % id);
+    try {
+        
+        if(m_dbdrv->execute_statement(del) 
+           && m_dbdrv->execute_statement(getxmp)) {
+            while(m_dbdrv->read_next_row()) {
+                std::string xmp_buffer;
+                std::string spath;
+                m_dbdrv->get_column_content(0, xmp_buffer);
+                m_dbdrv->get_column_content(1, spath);
+                boost::filesystem::path p;
+                p = boost::filesystem::change_extension(spath, ".xmp");
+                DBG_ASSERT(p.string() != spath, "path must have been changed");
+                if(exists(p)) {
+                    DBG_OUT("%s already exist", p.string().c_str());
+                    // TODO backup
+                }
+                // TODO probably a faster way to do that
+                utils::XmpMeta xmppacket;
+                xmppacket.unserialize(xmp_buffer.c_str());
+                // TODO use different API
+                FILE * f = fopen(p.string().c_str(), "w");
+                if(f) {
+                    std::string sidecar = xmppacket.serialize();
+                    fwrite(sidecar.c_str(), sizeof(std::string::value_type),
+                           sidecar.size(), f);
+                    fclose(f);
+                }
+                // TODO rewrite the modified date in the files table
+                // caveat: this will trigger this rewrite recursively.
+            }
+        }
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+        return false;
+    }    
+    return true;
+}
+
+
+bool Library::processXmpUpdateQueue()
+{
+    bool retval = false;
+    std::vector<int> ids;
+    retval = getXmpIdsInQueue(ids);
+    if(retval) {
+        std::for_each(ids.begin(), ids.end(),
+                     boost::bind(&Library::rewriteXmpForId,
+                                 this, _1));
+    }
+    return retval;
+}
+
 
 }
 /*

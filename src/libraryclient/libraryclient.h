@@ -66,6 +66,9 @@ namespace libraryclient {
         /** set the metadata */
         library::tid_t setMetadata(int id, int meta, int value);
 
+        /** tell to process the Xmp update Queue */
+        library::tid_t processXmpUpdateQueue();
+
 		/** Import files from a directory
 		 * @param dir the directory
 		 * @param manage true if imports have to be managed

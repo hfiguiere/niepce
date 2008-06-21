@@ -111,6 +111,16 @@ namespace libraryclient {
         return id;
     }
 
+
+tid_t ClientImpl::processXmpUpdateQueue()
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(Commands::opProcessXmpUpdateQueue(id));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
+
 	tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 	{
 		FileList::Ptr files;
@@ -127,3 +137,13 @@ namespace libraryclient {
 }
 
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

@@ -23,6 +23,7 @@ files           id             Unique ID in the database
 		import_date    The date of import in the database (time_t)
 		mod_date       The date modified (time_t)
 		xmp            The XMP blob
+		xmp_data       The date the XMP is rewritten on disk (time_t)
 
 
 Folders for the library "storage"
