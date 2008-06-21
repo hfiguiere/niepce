@@ -151,14 +151,9 @@ void XmpMeta::unserialize(const char * buffer)
 int32_t XmpMeta::orientation() const
 {
     int32_t _orientation = 0;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    if(xmp_get_property(m_xmp, NS_TIFF, "Orientation", value, NULL)) {
-        try {
-            _orientation = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
-        }
-        catch(const boost::bad_lexical_cast &)
-        {
-        }
+   
+    if(!xmp_get_property_int32(m_xmp, NS_TIFF, "Orientation", &_orientation, NULL)) {
+        ERR_OUT("get \"Orientation\" property failed: %d", xmp_get_error());
     }
     return _orientation;
 }
@@ -178,14 +173,8 @@ std::string XmpMeta::label() const
 int32_t XmpMeta::rating() const
 {
     int32_t _rating = -1;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    if(xmp_get_property(m_xmp, NS_XAP, "Rating", value, NULL)) {
-        try {
-            _rating = boost::lexical_cast<int32_t>(xmp_string_cstr(value));
-        }
-        catch(const boost::bad_lexical_cast &)
-        {
-        }
+    if(!xmp_get_property_int32(m_xmp, NS_XAP, "Rating", &_rating, NULL)) {
+        ERR_OUT("get \"Rating\" property failed: %d", xmp_get_error());
     }
     return _rating;
 }
@@ -210,6 +199,9 @@ time_t  XmpMeta::creation_date() const
                                        (value.tzMinute * 60));
         date = mktime(&dt);
         DBG_ASSERT(date != -1, "date is -1");
+    }
+    else {
+        ERR_OUT("get \"DateTimeOriginal\" property failed: %d", xmp_get_error());
     }
     return date;
 }
