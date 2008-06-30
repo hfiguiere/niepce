@@ -35,7 +35,7 @@
 #include "framework/notification.h"
 #include "metadatapanecontroller.h"
 #include "selectioncontroller.h"
-#include "darkroommodule.h"
+#include "modules/darkroom/darkroommodule.h"
 #include "imageliststore.h"
 
 namespace Gtk {
@@ -85,7 +85,7 @@ namespace ui {
 		Gtk::ScrolledWindow          m_lib_metapanescroll;
 		MetaDataPaneController::Ptr  m_metapanecontroller;
 
-		DarkroomModule::Ptr          m_darkroom;
+        darkroom::DarkroomModule::Ptr m_darkroom;
 
 		Glib::RefPtr<ImageListStore> m_model;
 	};

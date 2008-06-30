@@ -13,6 +13,7 @@ INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
+	@GOOCANVASMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@
 
 EXTRA_DIST = $(gladefiles)
@@ -31,6 +32,5 @@ libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
 	importdialog.h importdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \
 	filmstripcontroller.h filmstripcontroller.cpp \
-	darkroommodule.h darkroommodule.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
 	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h

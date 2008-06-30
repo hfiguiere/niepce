@@ -26,14 +26,16 @@ gconfmm 2.6 (this will be removed)
 cairomm
 gnome-vfs >= 2.14
 sqlite3
-gtkimageview 1.5.0
 libxml > 2.5.0
 boost 1.33
  -boost thread
  -boost filesystem
  -boost test (for the unit test)
-exempi 1.99.6
+exempi 2.0.0
 libopenraw 0.0.4
+geglmm 0.0.17
+babl
+goocanvasmm 0.10.0
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.

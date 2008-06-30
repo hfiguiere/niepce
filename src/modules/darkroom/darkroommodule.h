@@ -1,5 +1,5 @@
 /*
- * niepce - ui/darkroommodule.h
+ * niepce - modules/darkroom/darkroommodule.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -20,19 +20,20 @@
 
 
 
-#ifndef _UI_DARKROOMMODULE_H__
-#define _UI_DARKROOMMODULE_H__
+#ifndef _DARKROOM_MODULE_H__
+#define _DARKROOM_MODULE_H__
 
 #include <gtkmm/widget.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/box.h>
 #include <gtkmm/actiongroup.h>
 
-
 #include "framework/controller.h"
 #include "db/libfile.h"
+#include "modules/darkroom/image.h"
+#include "modules/darkroom/imagecanvas.h"
 	
-namespace ui {
+namespace darkroom {
 
 class DarkroomModule
 	: public framework::Controller
@@ -41,7 +42,8 @@ public:
 	typedef boost::shared_ptr<DarkroomModule> Ptr;
 
 	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group)
-		: m_actionGroup(action_group)
+		: m_actionGroup(action_group),
+          m_image(new Image)
 		{
 		}
 
@@ -54,12 +56,21 @@ private:
 	// darkroom split view
 	Gtk::HPaned                  m_dr_splitview;
 	Gtk::VBox                    m_vbox;
-	GtkWidget*                   m_imageview;
-	Gtk::Widget*                 m_imageviewscroll;
+    ImageCanvas*                 m_imagecanvas;
 	Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    Image::Ptr                   m_image;
 };
 
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

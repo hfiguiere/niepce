@@ -34,7 +34,6 @@
 #include "niepcewindow.h"
 #include "metadatapanecontroller.h"
 #include "librarycellrenderer.h"
-#include "darkroommodule.h"
 
 namespace ui {
 
@@ -110,7 +109,8 @@ namespace ui {
 		m_mainview.append_page(m_lib_splitview, _("Library"));
 
 
-		m_darkroom = DarkroomModule::Ptr(new DarkroomModule(m_actionGroup));
+		m_darkroom = darkroom::DarkroomModule::Ptr(
+            new darkroom::DarkroomModule(m_actionGroup));
 		m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
 		add(m_darkroom);
 

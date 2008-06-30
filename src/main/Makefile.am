@@ -18,10 +18,12 @@ niepce_LDADD = \
 	$(top_builddir)/src/libraryclient/liblibraryclient.a \
 	$(top_builddir)/src/library/libniepcelibrary.a \
 	$(top_builddir)/src/db/libniepcedb.a \
+	$(top_builddir)/src/modules/darkroom/libmoduledarkroom.a \
 	$(top_builddir)/src/framework/libniepceframework.a \
 	$(top_builddir)/src/utils/libniepceutils.a \
 	$(top_builddir)/src/niepce/libniepceglobals.a \
-	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ @GTKIMAGEVIEW_LIBS@ \
+	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ \
 	@GNOMEVFS_LIBS@ @LIBGCONFMM_LIBS@ @BOOST_THREAD_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@  @BOOST_SIGNALS_LIBS@ \
-	@OPENRAW_LIBS@ @EXEMPI_LIBS@
+	@GOOCANVASMM_LIBS@ @BABL_LIBS@ \
+	@GEGLMM_LIBS@ @OPENRAW_LIBS@ @EXEMPI_LIBS@

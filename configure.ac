@@ -20,7 +20,7 @@ LIBGTKMM_VERSION=2.10.0
 LIBGLADEMM_VERSION=2.6.0
 LIBGCONFMM_VERSION=2.6.0
 LIBGNOMEUI_VERSION=2.0.0
-LIBGTKIMAGEVIEW_VERSION=1.5.0
+LIBGOOCANVASMM_VERSION=0.6.0
 
 AC_PROG_CXX
 AC_GNU_SOURCE
@@ -62,13 +62,21 @@ PKG_CHECK_EXISTS([gnome-vfs-2.0 >= 2.14], [HAVE_GNOME_VFS_2_14=1], [HAVE_GNOME_V
 dnl AC_SUBST(GNOMEVFS_VER)
 PKG_CHECK_MODULES(SQLITE3, [sqlite3 >= 3.0])
 PKG_CHECK_MODULES(EXEMPI, [exempi-2.0 >= 1.99.6])
-PKG_CHECK_MODULES(GTKIMAGEVIEW, [gtkimageview >= $LIBGTKIMAGEVIEW_VERSION])
 dnl need at least 2.5.0 because of xmlTextReader
 PKG_CHECK_MODULES(LIBXML2, [libxml-2.0 >= 2.5.0])
+PKG_CHECK_MODULES(BABL, babl)
 
 PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-1.0 >= 0.0.4)
 AC_SUBST(OPENRAW_CFLAGS)
 AC_SUBST(OPENRAW_LIBS)
+
+dnl we want to use geglmm
+PKG_CHECK_MODULES(GEGLMM, geglmm >= 0.0.17)
+AC_SUBST(GEGLMM_CFLAGS)
+AC_SUBST(GEGLMM_LIBS)
+
+PKG_CHECK_MODULES(GOOCANVASMM, [goocanvasmm-1.0 >= $LIBGOOCANVASMM_VERSION])
+
 
 if test $HAVE_GNOME_VFS_2_14 = 1
 then
@@ -92,11 +100,13 @@ BOOST_SIGNALS
 
 AC_LANG_PUSH(C++)
 if test "$GCC" = "yes"; then
+        NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
                       -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
                       -Wunused -Wpointer-arith -Wshadow ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
+		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "
                 AC_MSG_CHECKING([whether gcc understands $option])
                 AC_TRY_COMPILE([], [],
                         has_option=yes,
@@ -125,7 +135,7 @@ AM_GLIB_GNU_GETTEXT
 NIEPCE_LOCALEDIR=[${datadir}/locale]
 AC_SUBST(NIEPCE_LOCALEDIR)
 
-AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], [$niepce_build_config], [The string used to hardcode the build config.])
+AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
 
 AC_CONFIG_FILES([
 Makefile
@@ -146,6 +156,8 @@ src/libraryclient/Makefile
 src/framework/Makefile
 src/ui/Makefile
 src/ui/thumb-view/Makefile
+src/modules/Makefile
+src/modules/darkroom/Makefile
 src/main/Makefile
 po/Makefile.in
 po/Makefile

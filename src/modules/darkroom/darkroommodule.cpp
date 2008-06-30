@@ -17,52 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gtkimageview/gtkimageview.h>
-#include <gtkimageview/gtkimagescrollwin.h>
-
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/toolbar.h>
 #include <gtkmm/stock.h>
+#include <geglmm/init.h>
 
 #include "utils/debug.h"
 #include "framework/imageloader.h"
 #include "darkroommodule.h"
 
-namespace ui {
+namespace darkroom {
 
 
 void DarkroomModule::set_image(const db::LibFile::Ptr & file)
 {
-	try {
-		framework::ImageLoader loader(file->path());
-
-		Glib::RefPtr<Gdk::Pixbuf> pixbuf = loader.get_pixbuf();
-
-		gtk_image_view_set_pixbuf(GTK_IMAGE_VIEW(m_imageview),
-								  pixbuf->gobj(), true);
-	}
-	catch(const Glib::Error & e)
-	{
-		ERR_OUT("exception loading image: %s", e.what().c_str());
-	}
+    m_image->reload(file->path());
+    int w, h;
+    w = m_imagecanvas->get_width();
+    h = m_imagecanvas->get_height();
+    m_image->set_scale_to_dim(w, h);
+    m_imagecanvas->set_image(m_image->pixbuf_for_display());
 }
 
 
 Gtk::Widget * DarkroomModule::buildWidget()
 {
-    m_imageview = gtk_image_view_new();
-	GtkWidget *ivs = gtk_image_scroll_win_new(GTK_IMAGE_VIEW(m_imageview));
-	m_imageviewscroll = Gtk::manage(Glib::wrap(ivs));
-	m_vbox.pack_start(*m_imageviewscroll, Gtk::PACK_EXPAND_WIDGET);
+    Gegl::init(0, NULL);
+    m_imagecanvas = Gtk::manage(new ImageCanvas());
+	m_vbox.pack_start(*m_imagecanvas, Gtk::PACK_EXPAND_WIDGET);
 
 	// build the toolbar.
 	Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
-	// FIXME: bind the buttons
-	Gtk::ToolButton *btn = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::GO_BACK));
-	toolbar->append(*btn);
-	btn = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::GO_FORWARD));
-	toolbar->append(*btn);
+
 	Glib::RefPtr<Gtk::Action> an_action;
+	an_action = m_actionGroup->get_action("PrevImage");
+	toolbar->append(*(an_action->create_tool_item()));
+	an_action = m_actionGroup->get_action("NextImage");
+	toolbar->append(*(an_action->create_tool_item()));
 	an_action = m_actionGroup->get_action("RotateLeft");
 	toolbar->append(*(an_action->create_tool_item()));
 	an_action = m_actionGroup->get_action("RotateRight");
