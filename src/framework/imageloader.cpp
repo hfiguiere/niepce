@@ -41,16 +41,18 @@ Glib::RefPtr<Gdk::Pixbuf> ImageLoader::get_pixbuf()
 
 	// TODO this code is ugly.
 	FILE * f = fopen(m_file.string().c_str(), "rb");
-	size_t byte_read;
-	guint8 buffer[128*1024];
-	do {
-		byte_read = fread((void*)buffer, 1, 128*1024, f);
-		if(byte_read) {
-			loader->write(buffer, byte_read);
-		}
-	} while(byte_read);
-	loader->close();
-	
+    if(f) {
+        size_t byte_read;
+        guint8 buffer[128*1024];
+        do {
+            byte_read = fread((void*)buffer, 1, 128*1024, f);
+            if(byte_read) {
+                loader->write(buffer, byte_read);
+            }
+        } while(byte_read);
+	}
+    loader->close();
+
 	return loader->get_pixbuf();
 }
 
