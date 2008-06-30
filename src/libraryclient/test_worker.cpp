@@ -23,12 +23,17 @@
 #define BOOST_AUTO_TEST_MAIN
 #include "locallibraryserver.h"
 
-
+#include <boost/bind.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
 
 using namespace library;
 using namespace libraryclient;
+
+void foo(const db::Library::Ptr &)
+{
+}
+
 
 BOOST_AUTO_TEST_CASE(worker_test)
 {
@@ -41,7 +46,7 @@ BOOST_AUTO_TEST_CASE(worker_test)
 		
 		BOOST_CHECK(w._tasks().empty());
 		
-		Op::Ptr p(new Op(0));
+		Op::Ptr p(new Op(0, boost::bind(&foo, db::Library::Ptr())));
 		w.schedule(p);
 	}
 }

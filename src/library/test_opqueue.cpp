@@ -21,17 +21,22 @@
 #include "op.h"
 #include "opqueue.h"
 
-
+#include <boost/bind.hpp>
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 using namespace library;
 
+void foo(const db::Library::Ptr &)
+{
+}
+
+
 BOOST_AUTO_TEST_CASE(opqueue_test)
 {
 	OpQueue q;
 
-	Op::Ptr p(new Op(1));
+	Op::Ptr p(new Op(1, boost::bind(&foo, db::Library::Ptr())));
 
 	BOOST_CHECK(q.empty());
 
