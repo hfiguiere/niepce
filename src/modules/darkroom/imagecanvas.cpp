@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <goocanvasmm/item.h>
-#include <goocanvasmm/rect.h>
+#include "framework/goocanvas_proxy_header.h"
 
 #include "utils/debug.h"
 

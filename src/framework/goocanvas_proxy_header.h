@@ -1,5 +1,5 @@
 /*
- * niepce - darkroom/imagecanvas.h
+ * niepce - framework/goocanvas_proxy_header.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,36 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** @brief Wrap goocanvas to be warning free. */
 
-#include <gdkmm/pixbuf.h>
-#include <gtkmm/bin.h>
-
-#include "framework/goocanvas_proxy_header.h"
-
-namespace darkroom {
-
-class ImageCanvas
-    : public Goocanvas::Canvas
-{
-public:
-    ImageCanvas();
-
-    void set_image(const Glib::RefPtr<Gdk::Pixbuf> & img);
-
-private:
-    Glib::RefPtr<Goocanvas::Image> m_imageitem;
-    Glib::RefPtr<Goocanvas::Rect>  m_frameitem;
-    Goocanvas::Canvas*             m_imagecanvas;
-};
-
-}
+#ifndef __GOOCANVAS_PROXY_HEADER_H__
+#define __GOOCANVAS_PROXY_HEADER_H__
 
 /*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
+ * Insert here the work around for the warning disabling to your taste.
+ */
+#if __GNUC__
+#pragma GCC system_header
+#endif
+#include <goocanvasmm/canvas.h>
+#include <goocanvasmm/image.h>
+#include <goocanvasmm/rect.h>
+
+
+
+
+#endif
