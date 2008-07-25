@@ -30,6 +30,7 @@
 
 #include "framework/controller.h"
 #include "db/libfile.h"
+#include "libraryclient/libraryclient.h"
 #include "modules/darkroom/image.h"
 #include "modules/darkroom/imagecanvas.h"
 	
@@ -41,9 +42,11 @@ class DarkroomModule
 public:
 	typedef boost::shared_ptr<DarkroomModule> Ptr;
 
-	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group)
-		: m_actionGroup(action_group),
-          m_image(new Image)
+	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
+                   const libraryclient::LibraryClient::Ptr & client)
+        : m_actionGroup(action_group),
+          m_image(new Image),
+          m_libClient(client)
 		{
 		}
 
@@ -53,12 +56,13 @@ protected:
 	virtual Gtk::Widget * buildWidget();
 
 private:
-	// darkroom split view
-	Gtk::HPaned                  m_dr_splitview;
-	Gtk::VBox                    m_vbox;
+    // darkroom split view
+    Gtk::HPaned                  m_dr_splitview;
+    Gtk::VBox                    m_vbox;
     ImageCanvas*                 m_imagecanvas;
-	Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     Image::Ptr                   m_image;
+    libraryclient::LibraryClient::Ptr m_libClient;
 };
 
 

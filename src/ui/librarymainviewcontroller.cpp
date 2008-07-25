@@ -37,156 +37,156 @@
 
 namespace ui {
 
-	void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
-	{
-		DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
-				   "wrong notification type");
-		if(n->type() == niepce::NOTIFICATION_LIB) {
-			db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
-			switch(ln.type) {
-			case db::Library::NOTIFY_METADATA_QUERIED:
-			{
-				db::LibMetadata::Ptr lm
-					= boost::any_cast<db::LibMetadata::Ptr>(ln.param);
-				DBG_OUT("received metadata");
-				m_metapanecontroller->display(lm->id(), lm.get());
-                break;
-			}
-            case db::Library::NOTIFY_METADATA_CHANGED:
-            {
-                DBG_OUT("metadata changed");
-                boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
-                if(m[0] == m_metapanecontroller->displayed_file()) {
-                    // FIXME: actually just update the metadata
-                    getLibraryClient()->requestMetadata(m[0]);
-                }
-                break;
+void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
+{
+    DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
+               "wrong notification type");
+    if(n->type() == niepce::NOTIFICATION_LIB) {
+        db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+        switch(ln.type) {
+        case db::Library::NOTIFY_METADATA_QUERIED:
+        {
+            db::LibMetadata::Ptr lm
+                = boost::any_cast<db::LibMetadata::Ptr>(ln.param);
+            DBG_OUT("received metadata");
+            m_metapanecontroller->display(lm->id(), lm.get());
+            break;
+        }
+        case db::Library::NOTIFY_METADATA_CHANGED:
+        {
+            DBG_OUT("metadata changed");
+            boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
+            if(m[0] == m_metapanecontroller->displayed_file()) {
+                // FIXME: actually just update the metadata
+                getLibraryClient()->requestMetadata(m[0]);
             }
-			default:
-				break;
-			}
-		}
-	}
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
 
 
 
-	Gtk::Widget * LibraryMainViewController::buildWidget()
-	{
-		m_librarylistview.set_model(m_model);
-		m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
-		m_librarylistview.property_row_spacing() = 0;
-		m_librarylistview.property_column_spacing() = 0;
-		m_librarylistview.property_spacing() = 0;
+Gtk::Widget * LibraryMainViewController::buildWidget()
+{
+    m_librarylistview.set_model(m_model);
+    m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
+    m_librarylistview.property_row_spacing() = 0;
+    m_librarylistview.property_column_spacing() = 0;
+    m_librarylistview.property_spacing() = 0;
 
-		// the main cell
-		LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
+    // the main cell
+    LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
 
-		GtkCellLayout *cl = GTK_CELL_LAYOUT(m_librarylistview.gobj());
-		DBG_ASSERT(cl, "No cell layout");
-		gtk_cell_layout_pack_start(cl, GTK_CELL_RENDERER(libcell->gobj()), 
-								   FALSE);
-		gtk_cell_layout_add_attribute(cl, 
-									  GTK_CELL_RENDERER(libcell->gobj()),
-									  "pixbuf", m_model->columns().m_pix.index());
-		gtk_cell_layout_add_attribute(cl,
-									  GTK_CELL_RENDERER(libcell->gobj()),
-									  "libfile", m_model->columns().m_libfile.index());
+    GtkCellLayout *cl = GTK_CELL_LAYOUT(m_librarylistview.gobj());
+    DBG_ASSERT(cl, "No cell layout");
+    gtk_cell_layout_pack_start(cl, GTK_CELL_RENDERER(libcell->gobj()), 
+                               FALSE);
+    gtk_cell_layout_add_attribute(cl, 
+                                  GTK_CELL_RENDERER(libcell->gobj()),
+                                  "pixbuf", m_model->columns().m_pix.index());
+    gtk_cell_layout_add_attribute(cl,
+                                  GTK_CELL_RENDERER(libcell->gobj()),
+                                  "libfile", m_model->columns().m_libfile.index());
 
-		m_scrollview.add(m_librarylistview);
-		m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-		m_lib_splitview.pack1(m_scrollview);
-		m_lib_splitview.pack2(m_lib_metapanescroll);
-		m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
-		add(m_metapanecontroller);
-		m_lib_metapanescroll.add(*m_metapanecontroller->widget());
-		m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    m_scrollview.add(m_librarylistview);
+    m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_lib_splitview.pack1(m_scrollview);
+    m_lib_splitview.pack2(m_lib_metapanescroll);
+    m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
+    add(m_metapanecontroller);
+    m_lib_metapanescroll.add(*m_metapanecontroller->widget());
+    m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 
-		m_databinders.add_binder(new framework::ConfigDataBinder<int>(
-									 m_lib_splitview.property_position(),
-									 framework::Application::app()->config(),
-									 "meta_pane_splitter"));
+    m_databinders.add_binder(new framework::ConfigDataBinder<int>(
+                                 m_lib_splitview.property_position(),
+                                 framework::Application::app()->config(),
+                                 "meta_pane_splitter"));
 		
-		m_mainview.append_page(m_lib_splitview, _("Library"));
+    m_mainview.append_page(m_lib_splitview, _("Library"));
 
 
-		m_darkroom = darkroom::DarkroomModule::Ptr(
-            new darkroom::DarkroomModule(m_actionGroup));
-		m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
-		add(m_darkroom);
+    m_darkroom = darkroom::DarkroomModule::Ptr(
+        new darkroom::DarkroomModule(m_actionGroup, getLibraryClient()));
+    m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
+    add(m_darkroom);
 
-		// TODO PrintModuleController
-		// m_mainview.append_page(, _("Print"));
-		return &m_mainview;
-	}
-
-
-	void LibraryMainViewController::on_ready()
-	{
-	}
+    // TODO PrintModuleController
+    // m_mainview.append_page(, _("Print"));
+    return &m_mainview;
+}
 
 
-	void LibraryMainViewController::on_selected(int id)
-	{
-		DBG_OUT("selected callback %d", id);
-		if(id > 0) {
-			getLibraryClient()->requestMetadata(id);
-		}		
-		else  {
-			m_metapanecontroller->display(0, NULL);
-		}
-	}
+void LibraryMainViewController::on_ready()
+{
+}
 
-	void LibraryMainViewController::on_image_activated(int id)
-	{
-		DBG_OUT("on image activated %d", id);
-		Gtk::TreeIter iter = m_model->get_iter_from_id(id);
-		if(iter) {
-			db::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
-			m_darkroom->set_image(libfile);
-			m_mainview.activate_page(1);
-		}
-	}
+
+void LibraryMainViewController::on_selected(int id)
+{
+    DBG_OUT("selected callback %d", id);
+    if(id > 0) {
+        getLibraryClient()->requestMetadata(id);
+    }		
+    else  {
+        m_metapanecontroller->display(0, NULL);
+    }
+}
+
+void LibraryMainViewController::on_image_activated(int id)
+{
+    DBG_OUT("on image activated %d", id);
+    Gtk::TreeIter iter = m_model->get_iter_from_id(id);
+    if(iter) {
+        db::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
+        m_darkroom->set_image(libfile);
+        m_mainview.activate_page(1);
+    }
+}
 	
 
-	libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
-	{
-		return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
-	}
+libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
+{
+    return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+}
 
 
-	Gtk::IconView * LibraryMainViewController::image_list()
-	{ 
-		return & m_librarylistview; 
-	}
+Gtk::IconView * LibraryMainViewController::image_list()
+{ 
+    return & m_librarylistview; 
+}
 
-	int LibraryMainViewController::get_selected()
-	{
-		int id = 0;
-		Glib::RefPtr<Gtk::TreeSelection> selection;
+int LibraryMainViewController::get_selected()
+{
+    int id = 0;
+    Glib::RefPtr<Gtk::TreeSelection> selection;
 
-		Gtk::IconView::ArrayHandle_TreePaths paths = m_librarylistview.get_selected_items();
-		if(!paths.empty()) {
-			Gtk::TreePath path(*(paths.begin()));
-			DBG_OUT("found path %s", path.to_string().c_str());
-			Gtk::TreeRow row = *(m_model->get_iter(path));
-			if(row) {
-				DBG_OUT("found row");
-				db::LibFile::Ptr libfile = row[m_model->columns().m_libfile];
-				if(libfile) {
-					id = libfile->id();
-				}
-			}
-		}
-		DBG_OUT("get_selected %d", id);
-		return id;
-	}
+    Gtk::IconView::ArrayHandle_TreePaths paths = m_librarylistview.get_selected_items();
+    if(!paths.empty()) {
+        Gtk::TreePath path(*(paths.begin()));
+        DBG_OUT("found path %s", path.to_string().c_str());
+        Gtk::TreeRow row = *(m_model->get_iter(path));
+        if(row) {
+            DBG_OUT("found row");
+            db::LibFile::Ptr libfile = row[m_model->columns().m_libfile];
+            if(libfile) {
+                id = libfile->id();
+            }
+        }
+    }
+    DBG_OUT("get_selected %d", id);
+    return id;
+}
 
-	void LibraryMainViewController::select_image(int id)
-	{
-		DBG_OUT("library select %d", id);
-		Gtk::TreePath path = m_model->get_path_from_id(id);
-		m_librarylistview.select_path(path);
-	}
+void LibraryMainViewController::select_image(int id)
+{
+    DBG_OUT("library select %d", id);
+    Gtk::TreePath path = m_model->get_path_from_id(id);
+    m_librarylistview.select_path(path);
+}
 
 }
 
