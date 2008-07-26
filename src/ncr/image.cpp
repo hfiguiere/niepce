@@ -1,20 +1,21 @@
 /*
- * niepce - modules/darkroom/image.cpp
+ * niepce - ncr/image.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, see 
+ * <http://www.gnu.org/licenses/>.
  */
 
 
@@ -24,13 +25,16 @@ extern "C" {
 
 #include <boost/bind.hpp>
 
+#include <libopenraw/libopenraw.h>
+
 #include <geglmm/node.h>
 #include <geglmm/operation.h>
 
 #include "utils/debug.h"
+#include "ncr.h"
 #include "image.h"
 
-namespace darkroom {
+namespace ncr {
 
 struct Image::Private {
     Private()
@@ -41,6 +45,7 @@ struct Image::Private {
 
     int m_width, m_height; /**< the native dimension */
     Glib::RefPtr<Gegl::Node> m_node;
+    Glib::RefPtr<Gegl::Node> m_rgb;    /**< RGB pixmap */
     Glib::RefPtr<Gegl::Node> m_scale;
     Glib::RefPtr<Gegl::Node> m_output;
 };
@@ -55,17 +60,81 @@ Image::~Image()
     delete priv;
 }
 
-void Image::reload(const boost::filesystem::path & p)
+void Image::reload(const boost::filesystem::path & p, bool is_raw,
+    int orientation)
 {
     Glib::RefPtr<Gegl::Node> load_file;
 
     priv->m_node = Gegl::Node::create();
-    load_file = priv->m_node->new_child("operation", "load");
-    load_file->set("path", p.string());
+
+    if(!is_raw) {
+        load_file = priv->m_node->new_child("operation", "load");
+        load_file->set("path", p.string());
+        priv->m_rgb = load_file;
+    }
+    else {
+        ORRawDataRef rawdata;
+        or_get_extract_rawdata(p.string().c_str(), 0, &rawdata);
+        Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
+        load_file = priv->m_node->new_child("operation", "load-buffer");
+        load_file->set("buffer", buffer);
+        or_rawdata_release(rawdata);
+
+        // @todo currently the operation do not exist in GEGL!!!
+        // will stretch contrast for now...
+        Glib::RefPtr<Gegl::Node> demosaic = priv->m_node->new_child(
+            "operation", "stretch-contrast");
+//        demosaic->set();
+        load_file->link(demosaic);
+        priv->m_rgb = demosaic;
+    }
     
+    Glib::RefPtr<Gegl::Node> current;
+
+    if(orientation > 1) {
+        DBG_OUT("rotation is %d", orientation);
+        int degrees = 0;
+        bool flip = false;
+        switch(orientation) {
+        case 2:
+            flip = true;
+            break;
+        case 4:
+            flip = true;
+            // fall through
+        case 3:
+            degrees = 180;
+            break;
+        case 5:
+            flip = true;
+            // fall through
+        case 6:
+            degrees = 90;
+            break;
+        case 7:
+            flip = true;
+            // fall through
+        case 8:
+            degrees = 270;
+            break;
+        }
+        Glib::RefPtr<Gegl::Node> rotate = priv->m_node->new_child(
+            "operation", "rotate");
+        rotate->set("degrees", degrees);
+        priv->m_rgb->link(rotate);
+        current = rotate;
+        if(flip) {
+//            rotate =  priv->m_node->new_child(
+//                "operation", "rotate");
+        }
+    }
+    else {
+        current = priv->m_rgb;
+    }
+
     priv->m_scale = priv->m_node->new_child("operation", "scale");
     set_scale(0.25);
-    load_file->link(priv->m_scale);
+    current->link(priv->m_scale);
     priv->m_output = priv->m_scale;
     
     int width, height;
@@ -135,6 +204,6 @@ Glib::RefPtr<Gdk::Pixbuf> Image::pixbuf_for_display()
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

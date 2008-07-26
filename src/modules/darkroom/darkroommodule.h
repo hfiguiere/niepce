@@ -31,7 +31,7 @@
 #include "framework/controller.h"
 #include "db/libfile.h"
 #include "libraryclient/libraryclient.h"
-#include "modules/darkroom/image.h"
+#include "ncr/image.h"
 #include "modules/darkroom/imagecanvas.h"
 	
 namespace darkroom {
@@ -45,7 +45,7 @@ public:
 	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
                    const libraryclient::LibraryClient::Ptr & client)
         : m_actionGroup(action_group),
-          m_image(new Image),
+          m_image(new ncr::Image),
           m_libClient(client)
 		{
 		}
@@ -61,7 +61,7 @@ private:
     Gtk::VBox                    m_vbox;
     ImageCanvas*                 m_imagecanvas;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
-    Image::Ptr                   m_image;
+    ncr::Image::Ptr              m_image;
     libraryclient::LibraryClient::Ptr m_libClient;
 };
 
@@ -75,6 +75,6 @@ private:
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

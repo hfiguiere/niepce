@@ -154,6 +154,7 @@ src/db/Makefile
 src/library/Makefile
 src/libraryclient/Makefile
 src/framework/Makefile
+src/ncr/Makefile
 src/ui/Makefile
 src/ui/thumb-view/Makefile
 src/modules/Makefile

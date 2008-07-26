@@ -20,10 +20,11 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/toolbar.h>
 #include <gtkmm/stock.h>
-#include <geglmm/init.h>
 
 #include "utils/debug.h"
 #include "framework/imageloader.h"
+#include "framework/mimetype.h"
+#include "ncr/ncr.h"
 #include "darkroommodule.h"
 
 namespace darkroom {
@@ -31,7 +32,10 @@ namespace darkroom {
 
 void DarkroomModule::set_image(const db::LibFile::Ptr & file)
 {
-    m_image->reload(file->path());
+    // @fixme: use the LibFile type when Bug#12044 is fixed.
+    m_image->reload(file->path(), 
+                    framework::MimeType(file->path()).isDigicamRaw(),
+                    file->orientation());
     int w, h;
     w = m_imagecanvas->get_width();
     h = m_imagecanvas->get_height();
@@ -42,7 +46,7 @@ void DarkroomModule::set_image(const db::LibFile::Ptr & file)
 
 Gtk::Widget * DarkroomModule::buildWidget()
 {
-    Gegl::init(0, NULL);
+    ncr::init();
     m_imagecanvas = Gtk::manage(new ImageCanvas());
 	m_vbox.pack_start(*m_imagecanvas, Gtk::PACK_EXPAND_WIDGET);
 
@@ -75,6 +79,6 @@ Gtk::Widget * DarkroomModule::buildWidget()
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */
