@@ -66,6 +66,7 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
     Glib::RefPtr<Gegl::Node> load_file;
 
     priv->m_node = Gegl::Node::create();
+    priv->m_node->set("format", babl_format("RGB u16"));
 
     if(!is_raw) {
         load_file = priv->m_node->new_child("operation", "load");
@@ -78,59 +79,83 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
         Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
         load_file = priv->m_node->new_child("operation", "load-buffer");
         load_file->set("buffer", buffer);
+        or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);
         or_rawdata_release(rawdata);
 
-        // @todo currently the operation do not exist in GEGL!!!
-        // will stretch contrast for now...
-        Glib::RefPtr<Gegl::Node> demosaic = priv->m_node->new_child(
+        Glib::RefPtr<Gegl::Node> stretch = priv->m_node->new_child(
             "operation", "stretch-contrast");
-//        demosaic->set();
-        load_file->link(demosaic);
-        priv->m_rgb = demosaic;
+        
+        Glib::RefPtr<Gegl::Node> demosaic = priv->m_node->new_child(
+            "operation", "demosaic-bimedian");
+        // @todo refactor somewhere.
+        int npattern = 0;
+        switch(pattern) {
+        case OR_CFA_PATTERN_GRBG:
+            npattern = 0;
+            break;
+        case OR_CFA_PATTERN_BGGR:
+            npattern = 1;
+            break;
+        case OR_CFA_PATTERN_GBRG:
+            npattern = 2;
+            break;
+        case OR_CFA_PATTERN_RGGB:
+            npattern = 3;
+            break;
+        default:
+            break;
+        }
+
+        demosaic->set("pattern", npattern);
+
+        priv->m_rgb = load_file->link(stretch)->link(demosaic);
     }
     
     Glib::RefPtr<Gegl::Node> current;
 
-    if(orientation > 1) {
-        DBG_OUT("rotation is %d", orientation);
-        int degrees = 0;
-        bool flip = false;
-        switch(orientation) {
-        case 2:
-            flip = true;
-            break;
-        case 4:
-            flip = true;
-            // fall through
-        case 3:
-            degrees = 180;
-            break;
-        case 5:
-            flip = true;
-            // fall through
-        case 6:
-            degrees = 90;
-            break;
-        case 7:
-            flip = true;
-            // fall through
-        case 8:
-            degrees = 270;
-            break;
-        }
-        Glib::RefPtr<Gegl::Node> rotate = priv->m_node->new_child(
-            "operation", "rotate");
-        rotate->set("degrees", degrees);
-        priv->m_rgb->link(rotate);
-        current = rotate;
-        if(flip) {
-//            rotate =  priv->m_node->new_child(
-//                "operation", "rotate");
-        }
+    DBG_OUT("rotation is %d", orientation);
+    int degrees = 0;
+    bool flip = false;
+    switch(orientation) {
+    case 0:
+    case 1:
+        break;
+    case 2:
+        flip = true;
+        break;
+    case 4:
+        flip = true;
+        // fall through
+    case 3:
+        degrees = 180;
+        break;
+    case 5:
+        flip = true;
+        // fall through
+    case 6:
+        degrees = 90;
+        break;
+    case 7:
+        flip = true;
+        // fall through
+    case 8:
+        degrees = 270;
+        break;
+    }
+    // @todo ideally we would have a plain GEGL op for that.
+    Glib::RefPtr<Gegl::Node> rotate;
+    if(flip) {
+        // @todo find a test case.
+        rotate =  priv->m_node->new_child("operation", "reflect");
+        rotate->set("x", -1.0);
+        current = priv->m_rgb->link(rotate);
     }
     else {
         current = priv->m_rgb;
     }
+    rotate = priv->m_node->new_child("operation", "rotate");
+    rotate->set("degrees", degrees);
+    current = current->link(rotate);
 
     priv->m_scale = priv->m_node->new_child("operation", "scale");
     set_scale(0.25);
