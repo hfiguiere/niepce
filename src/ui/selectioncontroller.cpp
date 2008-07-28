@@ -99,6 +99,47 @@ inline int SelectionController::get_selection()
 }
 
 
+void SelectionController::_selection_move(bool backwards)
+{
+    int selection = get_selection();
+    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+    if(backwards) {
+        if(iter != m_imageliststore->children().begin()) {
+            iter--;
+        }
+    }
+    else {
+        iter++;
+    }
+    if(iter) {
+        // make sure the iterator is valid...
+        db::LibFile::Ptr libfile 
+            = (*iter)[m_imageliststore->columns().m_libfile];
+        selection = libfile->id();
+
+        utils::AutoFlag f(m_in_handler);
+        
+        std::for_each(m_selectables.begin(), m_selectables.end(),
+                      boost::bind(&IImageSelectable::select_image, _1,  
+                                  selection));
+        signal_selected(selection);
+    }
+}
+
+/** select the previous image. Emit the signal */
+void SelectionController::select_previous()
+{
+    _selection_move(true);
+}
+
+
+/** select the next image. Emit the signal */
+void SelectionController::select_next()
+{
+    _selection_move(false);
+}
+
+
 void SelectionController::rotate(int angle)
 {
     DBG_OUT("angle = %d", angle);
@@ -106,7 +147,7 @@ void SelectionController::rotate(int angle)
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            
+            // @todo
         }
     }
 }
@@ -180,6 +221,6 @@ void SelectionController::set_rating(int rating)
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

@@ -277,9 +277,13 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
     m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
-                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)));
+                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)),
+                          boost::bind(&SelectionController::select_previous, 
+                                      m_selection_controller));
     m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
-                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)));
+                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)),
+                          boost::bind(&SelectionController::select_next, 
+                                      m_selection_controller));
 
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
     m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
@@ -508,6 +512,6 @@ void NiepceWindow::set_title(const std::string & title)
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

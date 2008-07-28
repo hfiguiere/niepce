@@ -76,6 +76,10 @@ public:
 	boost::signal<void (int)> signal_activated;
 
     /////////
+    /** select the previous image. Emit the signal */
+    void select_previous();
+    /** select the next image. Emit the signal */
+    void select_next();
     /** rotate the image in selection by %angle (trigonometric) */
     void rotate(int angle);
     /** set the rating of selection to %rating. */
@@ -90,8 +94,13 @@ private:
     int get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
-    bool _set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
+    bool _set_metadata(const std::string & undo_label, 
+                       const db::LibFile::Ptr & file,
                        int meta, int old_value, int new_value);
+    /** move the selection and emit the signal 
+     * @param backwards true if the move is backwards.
+     */
+    void _selection_move(bool backwards);
 
 	Glib::RefPtr<ImageListStore>  m_imageliststore;
 	bool m_in_handler;
@@ -106,7 +115,7 @@ private:
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */
 
