@@ -79,7 +79,7 @@ public:
      */
     void setFileType(FileType v);
     /** Getter for the filetype enumeration. */
-    FileType filetype() const
+    FileType fileType() const
         { return m_file_type; }
     
     /** set an arbitrary meta data value */

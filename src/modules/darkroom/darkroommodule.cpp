@@ -32,9 +32,8 @@ namespace darkroom {
 
 void DarkroomModule::set_image(const db::LibFile::Ptr & file)
 {
-    // @fixme: use the LibFile type when Bug#12044 is fixed.
     m_image->reload(file->path(), 
-                    framework::MimeType(file->path()).isDigicamRaw(),
+                    file->fileType() == db::LibFile::FILE_TYPE_RAW,
                     file->orientation());
     int w, h;
     w = m_imagecanvas->get_width();

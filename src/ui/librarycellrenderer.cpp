@@ -218,9 +218,9 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 
     Cairo::RefPtr<Cairo::ImageSurface> emblem;
     
-    DBG_OUT("the filetype: %i", file->filetype());
+    DBG_OUT("the filetype: %i", file->fileType());
     
-    switch(file->filetype()) {
+    switch(file->fileType()) {
     case db::LibFile::FILE_TYPE_RAW:
         emblem = m_raw_format_emblem;
         break;
