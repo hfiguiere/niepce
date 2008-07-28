@@ -37,21 +37,37 @@ LibraryCellRenderer::LibraryCellRenderer()
 	  m_libfileproperty(*this, "libfile")
 {
 	try {
-		m_raw_format_emblem 
-			= Cairo::ImageSurface::create_from_png(
-				std::string(DATADIR"/niepce/pixmaps/niepce-raw-fmt.png"));
-		m_jpeg_format_emblem 
-			= Cairo::ImageSurface::create_from_png(
-				std::string(DATADIR"/niepce/pixmaps/niepce-jpg-fmt.png"));
-		m_star = Cairo::ImageSurface::create_from_png(
-			std::string(DATADIR"/niepce/pixmaps/niepce-set-star.png"));
-		m_unstar = Cairo::ImageSurface::create_from_png(
-			std::string(DATADIR"/niepce/pixmaps/niepce-unset-star.png"));
+        m_raw_format_emblem 
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-raw-fmt.png"));
+        m_rawjpeg_format_emblem 
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-rawjpeg-fmt.png"));
+        m_img_format_emblem 
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-img-fmt.png"));     
+        m_video_format_emblem 
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-video-fmt.png"));
+        m_unknown_format_emblem 
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-unknown-fmt.png"));
+        
+        m_star = Cairo::ImageSurface::create_from_png(
+            std::string(DATADIR"/niepce/pixmaps/niepce-set-star.png"));
+        m_unstar = Cairo::ImageSurface::create_from_png(
+            std::string(DATADIR"/niepce/pixmaps/niepce-unset-star.png"));
 	}
-	catch(...)
+	catch(const std::exception & e)
 	{
-		ERR_OUT("exception");
+            ERR_OUT("exception while creating emblems: %s", e.what());
+            ERR_OUT("a - check if all the needed pixmaps are present in the filesystem");
 	}
+    catch(...)
+    {
+        ERR_OUT("uncatched exception");
+    }
+        
 }
 
 namespace {
@@ -93,8 +109,8 @@ namespace {
 						  const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
 						  const GdkRectangle & r)
 		
-	{	
-		if(emblem) {
+    {	
+        if(emblem) {
 			int w, h;
 			w = emblem->get_width();
 			h = emblem->get_height();
@@ -198,11 +214,32 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 	cr->set_line_width(1.0);
 	cr->rectangle(r.x, r.y, r.width, r.height);
 	cr->stroke();
+        
+
+    Cairo::RefPtr<Cairo::ImageSurface> emblem;
+    
+    DBG_OUT("the filetype: %i", file->filetype());
+    
+    switch(file->filetype()) {
+    case db::LibFile::FILE_TYPE_RAW:
+        emblem = m_raw_format_emblem;
+        break;
+    case db::LibFile::FILE_TYPE_RAW_JPEG:
+        emblem = m_rawjpeg_format_emblem;
+        break;
+    case db::LibFile::FILE_TYPE_IMAGE:
+        emblem = m_img_format_emblem;
+        break;
+    case db::LibFile::FILE_TYPE_VIDEO:
+        emblem = m_video_format_emblem;
+        break;
+    default:
+        emblem = m_unknown_format_emblem;
+        break;
+    }
 
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
 	drawThumbnail(cr, pixbuf, r);
-
-	Cairo::RefPtr<Cairo::ImageSurface> emblem = m_raw_format_emblem;
 	drawRating(cr, file->rating(), m_star, m_unstar, r);
 	drawFormatEmblem(cr, emblem, r);
 }

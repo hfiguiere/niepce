@@ -17,7 +17,10 @@ files           id             Unique ID in the database
 		path           The absolute path to the file
 		parent_id      The ID on the containing folder (= folders.id)
 		orientation    The Exif orientation of the file
-		file_date      The file date, likely shooting date from Exif (time_t)
+		file_type      The file type. See db::LibFile::FileType for
+                               possible values.
+		file_date      The file date, likely shooting date from 
+                               Exif (time_t)
 		rating         The file rating (0-5)
 		label          The label (labels.id)
 		import_date    The date of import in the database (time_t)

@@ -25,16 +25,12 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include "framework/mimetype.h"
 #include "db/keyword.h"
 #include "db/storage.h"
 
 namespace db {
 
-enum {
-    FILE_FORMAT_UNKNOWN = 0,
-    FILE_FORMAT_RAW = 1,
-    FILE_FORMAT_JPEG = 2
-};
 
 class LibFile
 {
@@ -42,6 +38,16 @@ public:
     typedef boost::shared_ptr< LibFile > Ptr;
     typedef std::list< Ptr > List;
     typedef boost::shared_ptr< List > ListPtr;
+
+    enum FileType {
+        FILE_TYPE_UNKNOWN = 0,
+        FILE_TYPE_RAW = 1,
+        FILE_TYPE_RAW_JPEG = 2,
+        FILE_TYPE_IMAGE = 3,
+        FILE_TYPE_VIDEO = 4
+    };
+
+    static FileType mimetype_to_filetype(framework::MimeType mime);
 
     LibFile(int id, int folderId, const boost::filesystem::path & p,
             const std::string & name );
@@ -68,6 +74,14 @@ public:
     int32_t label() const
         { return m_label; }
 
+    /** Setter for the filetype.
+     * @param v the FILETYPE of the file
+     */
+    void setFileType(FileType v);
+    /** Getter for the filetype enumeration. */
+    FileType filetype() const
+        { return m_file_type; }
+    
     /** set an arbitrary meta data value */
     void setMetaData(int meta, int32_t v); 
 
@@ -96,6 +110,7 @@ private:
     int32_t     m_orientation;  /**< Exif orientatoin */
     int32_t     m_rating;       /**< rating */
     int32_t     m_label;        /**< Label ID */
+    FileType    m_file_type;    /**< File type */
     mutable bool m_hasKeywordList;
     mutable Keyword::IdList m_keywordList;
 };

@@ -125,8 +125,8 @@ bool Library::_initDb()
                              " parent_id INTEGER)");
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " path TEXT, name TEXT, parent_id INTEGER,"
-                           " orientation INTEGER, file_date INTEGER,"
-                           " rating INTEGER, label INTEGER,"
+                           " orientation INTEGER, file_type INTEGER, "
+                           " file_date INTEGER, rating INTEGER, label INTEGER,"
                            " import_date INTEGER, mod_date INTEGER, "
                            " xmp TEXT, xmp_date INTEGER)");
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
@@ -210,9 +210,10 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
     DBG_ASSERT(folder_id != -1, "invalid folder ID");
     try {
         int32_t rating, label_id, orientation;
-        std::string label;
-        framework::MimeType mimetype(file);
-        utils::XmpMeta meta(file, mimetype.isDigicamRaw());
+        std::string label;  
+        framework::MimeType mime = framework::MimeType(file);
+        db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
+        utils::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
         label_id = 0;
         orientation = meta.orientation();
         rating = meta.rating();
@@ -221,15 +222,21 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
         if(creation_date == -1) {
             creation_date = 0;
         }
-        SQLStatement sql(boost::format("INSERT INTO files (path, name, "
-                                       " parent_id, import_date, mod_date, "
-                                       " orientation, file_date, rating, "
-                                       " label, xmp) "
-                                       " VALUES ('%1%', '%2%', '%3%', "
-                                       " '%4%', '%4%', '%5%', '%8%', '%6%', '%7%', ?1);") 
+
+        SQLStatement sql(boost::format("INSERT INTO files ("
+                                       " path, name, parent_id, "
+                                       " import_date, mod_date, "
+                                       " orientation, file_date, rating, label, file_type,"
+                                       " xmp) "
+                                       " VALUES ("
+                                       " '%1%', '%2%', '%3%', "
+                                       " '%4%', '%4%',"
+                                       " '%5%', '%6%', '%7%', '%8%', '%9%',"
+                                       " ?1);") 
                          % file.string() % file.leaf() % folder_id
-                         % time(NULL) % orientation % rating % folder_id
-                         % creation_date);
+                         % time(NULL)
+                         % orientation % creation_date % rating
+                         % folder_id % file_type);
         std::string buf = meta.serialize_inline();
         sql.bind(1, buf);
         if(m_dbdrv->execute_statement(sql)) {
@@ -361,13 +368,19 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
     f->setRating(val);
     dbdrv->get_column_content(6, val);
     f->setLabel(val);
+
+    /* Casting needed. Remember that a simple enum like this is just a couple
+     * of #define for integers.
+     */
+    dbdrv->get_column_content(7, val);
+    f->setFileType((db::LibFile::FileType)val);
     return f;
 }
 
 void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
 {
     SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
-                                   "orientation,rating,label FROM files "
+                                   "orientation,rating,label,file_type FROM files "
                                    " WHERE parent_id='%1%'")
                      % folder_id);
     try {

@@ -3,5 +3,6 @@
 iconsdir = @datarootdir@/niepce/pixmaps/
 icons_DATA = niepce-jpg-fmt.png niepce-raw-fmt.png niepce-rawjpeg-fmt.png\
 	niepce-tiff-fmt.png niepce-png-fmt.png\
+	niepce-img-fmt.png niepce-unknown-fmt.png niepce-video-fmt.png\
 	niepce-set-star.png niepce-unset-star.png\
 	niepce-rotate-left.png niepce-rotate-right.png
