@@ -77,6 +77,7 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
         ORRawDataRef rawdata;
         or_get_extract_rawdata(p.string().c_str(), 0, &rawdata);
         Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
+        // @todo can return a NULL buffer if load failed. Deal with that.
         load_file = priv->m_node->new_child("operation", "load-buffer");
         load_file->set("buffer", buffer);
         or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);

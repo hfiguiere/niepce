@@ -70,8 +70,9 @@ PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-1.0 >= 0.0.4)
 AC_SUBST(OPENRAW_CFLAGS)
 AC_SUBST(OPENRAW_LIBS)
 
-dnl we want to use geglmm
-PKG_CHECK_MODULES(GEGLMM, geglmm >= 0.0.17)
+dnl we want to use geglmm.
+dnl 0.0.17.1 because of bugs in 0.0.17
+PKG_CHECK_MODULES(GEGLMM, geglmm >= 0.0.17.1)
 AC_SUBST(GEGLMM_CFLAGS)
 AC_SUBST(GEGLMM_LIBS)
 
