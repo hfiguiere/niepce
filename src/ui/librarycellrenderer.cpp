@@ -72,24 +72,24 @@ LibraryCellRenderer::LibraryCellRenderer()
 
 namespace {
 
-	void drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
-					   Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-					   const GdkRectangle & r)
-	{
-		double x, y;
-		x = r.x + PAD;
-		y = r.y + PAD;
-		int w = pixbuf->get_width();
-		int h = pixbuf->get_height();
-		int min = std::min(w,h);
-		int max = std::max(w,h);
-		int offset = (max - min) / 2;
-		if(w > h) {
-			y += offset;
-		}
-		else {
-			x += offset;
-		}
+void drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
+                   Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
+                   const GdkRectangle & r)
+{
+    double x, y;
+    x = r.x + PAD;
+    y = r.y + PAD;
+    int w = pixbuf->get_width();
+    int h = pixbuf->get_height();
+    int min = std::min(w,h);
+    int max = std::max(w,h);
+    int offset = (max - min) / 2;
+    if(w > h) {
+        y += offset;
+    }
+    else {
+        x += offset;
+    }
 	
 // draw the shadow...
 //		cr->set_source_rgb(0.0, 0.0, 0.0);
@@ -97,56 +97,56 @@ namespace {
 //		cr->fill();
 
 // draw the white border
-		cr->set_source_rgb(1.0, 1.0, 1.0);
-  		cr->rectangle(x, y, w, h);
-		cr->stroke();
+    cr->set_source_rgb(1.0, 1.0, 1.0);
+    cr->rectangle(x, y, w, h);
+    cr->stroke();
 		
-		Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
-		cr->paint();
-	}
+    Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
+    cr->paint();
+}
 
-	void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
-						  const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
-						  const GdkRectangle & r)
+void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
+                      const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
+                      const GdkRectangle & r)
 		
-    {	
-        if(emblem) {
-			int w, h;
-			w = emblem->get_width();
-			h = emblem->get_height();
-			double x, y;
-			x = r.x + r.width - 4 - w;
-			y = r.y + r.height - 4 - h;
-			cr->set_source(emblem, x, y);
-			cr->paint();
-		}
-	}
+{	
+    if(emblem) {
+        int w, h;
+        w = emblem->get_width();
+        h = emblem->get_height();
+        double x, y;
+        x = r.x + r.width - 4 - w;
+        y = r.y + r.height - 4 - h;
+        cr->set_source(emblem, x, y);
+        cr->paint();
+    }
+}
 
-	void drawRating(const Cairo::RefPtr<Cairo::Context> & cr, 
-					int32_t rating,
-					const Cairo::RefPtr<Cairo::ImageSurface> & star,
-					const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
-					const GdkRectangle & r)
-	{
-		if(rating == -1 || !star || !unstar) {
-			return;
-		}
-		int w = star->get_width();
-		int h = star->get_height();
-		double x, y;
-		x = r.x + 4;
-		y = r.y + r.height - 4 - h;
-		for(int32_t i = 1; i <= 5; i++) {
-			if(i <= rating) {
-				cr->set_source(star, x, y);
-			}
-			else {
-				cr->set_source(unstar, x, y);
-			}
-			cr->paint();
-			x += w;
-		}
-	}
+void drawRating(const Cairo::RefPtr<Cairo::Context> & cr, 
+                int32_t rating,
+                const Cairo::RefPtr<Cairo::ImageSurface> & star,
+                const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
+                const GdkRectangle & r)
+{
+    if(rating == -1 || !star || !unstar) {
+        return;
+    }
+    int w = star->get_width();
+    int h = star->get_height();
+    double x, y;
+    x = r.x + 4;
+    y = r.y + r.height - 4 - h;
+    for(int32_t i = 1; i <= 5; i++) {
+        if(i <= rating) {
+            cr->set_source(star, x, y);
+        }
+        else {
+            cr->set_source(unstar, x, y);
+        }
+        cr->paint();
+        x += w;
+    }
+}
 
 }
 
@@ -218,7 +218,7 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 
     Cairo::RefPtr<Cairo::ImageSurface> emblem;
     
-    DBG_OUT("the filetype: %i", file->fileType());
+//    DBG_OUT("the filetype: %i", file->fileType());
     
     switch(file->fileType()) {
     case db::LibFile::FILE_TYPE_RAW:
@@ -261,5 +261,12 @@ LibraryCellRenderer::property_libfile()
 
 
 }
-
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
