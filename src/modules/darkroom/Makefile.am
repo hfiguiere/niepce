@@ -14,4 +14,6 @@ noinst_LIBRARIES=libmoduledarkroom.a
 
 libmoduledarkroom_a_SOURCES = darkroommodule.cpp darkroommodule.h \
 	imagecanvas.h imagecanvas.cpp \
+	toolboxcontroller.h toolboxcontroller.cpp \
+	dritemwidget.h dritemwidget.cpp \
 	$(NULL)

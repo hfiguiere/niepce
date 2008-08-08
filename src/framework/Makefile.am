@@ -18,6 +18,9 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	notificationcenter.h notificationcenter.cpp \
 	configdatabinder.h configdatabinder.cpp \
 	gdkutils.h gdkutils.cpp \
+	widgets/toolboxitemwidget.h widgets/toolboxitemwidget.cpp \
+	widgets/editablehscale.h widgets/editablehscale.cpp \
 	metadatawidget.h metadatawidget.cpp \
 	undo.h undo.cpp \
-	command.h
+	command.h \
+	$(NULL)

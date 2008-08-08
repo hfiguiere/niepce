@@ -27,12 +27,14 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/box.h>
 #include <gtkmm/actiongroup.h>
+#include <gtkmm/scrolledwindow.h>
 
 #include "framework/controller.h"
 #include "db/libfile.h"
 #include "libraryclient/libraryclient.h"
 #include "ncr/image.h"
 #include "modules/darkroom/imagecanvas.h"
+#include "modules/darkroom/toolboxcontroller.h"
 	
 namespace darkroom {
 
@@ -60,6 +62,8 @@ private:
     Gtk::HPaned                  m_dr_splitview;
     Gtk::VBox                    m_vbox;
     ImageCanvas*                 m_imagecanvas;
+    Gtk::ScrolledWindow          m_toolscroller;
+    ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
     libraryclient::LibraryClient::Ptr m_libClient;

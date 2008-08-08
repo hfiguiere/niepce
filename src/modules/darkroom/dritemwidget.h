@@ -1,5 +1,5 @@
 /*
- * niepce - framework/metadatawidget.h
+ * niepce - darkroom/dritem.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,43 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
-#define __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
 
 
-#include <map>
-#include <string>
+#ifndef _DARKROOM_DRITEMWIDGET_H_
+#define _DARKROOM_DRITEMWIDGET_H_
 
-#include <gtkmm/table.h>
+#include <gtkmm/box.h>
 
 #include "framework/widgets/toolboxitemwidget.h"
 
-namespace utils {
-	class XmpMeta;
-}
-namespace xmp {
-	struct MetaDataSectionFormat;
-}
+namespace darkroom {
 
-namespace framework {
-
-
-class MetaDataWidget 
-	: public framework::ToolboxItemWidget
+/** Generic Darkroom item for the toolbox. */
+class DrItemWidget
+    : public framework::ToolboxItemWidget
 {
 public:
-	MetaDataWidget(const Glib::ustring & title);
-	
-	void add_data(const std::string & id, const std::string & label,
-				  const char * value, xmp::MetaDataType type);
-	void set_data_format(const xmp::MetaDataSectionFormat * fmt);
-	void set_data_source(const utils::XmpMeta * xmp);
-protected:
+    DrItemWidget(const Glib::ustring & title);
+
+    void add_widget(const Glib::ustring & label, Gtk::Widget &);
 private:
-	Gtk::Table    m_table;
-	std::map<std::string, Gtk::Widget *> m_data_map;
-	const xmp::MetaDataSectionFormat * m_fmt;
+    Gtk::VBox   m_box;
 };
+
 
 }
 
@@ -66,5 +52,6 @@ private:
   fill-column:80
   End:
 */
+
 
 #endif

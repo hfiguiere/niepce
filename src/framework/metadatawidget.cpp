@@ -36,12 +36,11 @@
 namespace framework {
 
 MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
-    : Gtk::Expander(title),
+    : ToolboxItemWidget(title),
       m_table(1, 2, false),
       m_fmt(NULL)
 {
     add(m_table);
-    set_expanded(true);
 }
 
 void MetaDataWidget::set_data_format(const xmp::MetaDataSectionFormat * fmt)
@@ -159,6 +158,6 @@ void MetaDataWidget::add_data(const std::string & id,
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

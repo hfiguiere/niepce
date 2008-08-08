@@ -10,3 +10,4 @@ src/ui/selectioncontroller.cpp
 src/ui/workspacecontroller.cpp
 src/ui/thumb-view/eog-thumb-view.cpp
 src/niepce/stock.cpp
+src/modules/darkroom/toolboxcontroller.cpp

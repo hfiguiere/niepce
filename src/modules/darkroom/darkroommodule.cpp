@@ -22,8 +22,8 @@
 #include <gtkmm/stock.h>
 
 #include "utils/debug.h"
-#include "framework/imageloader.h"
-#include "framework/mimetype.h"
+#include "framework/application.h"
+#include "framework/configdatabinder.h"
 #include "ncr/ncr.h"
 #include "darkroommodule.h"
 
@@ -64,6 +64,17 @@ Gtk::Widget * DarkroomModule::buildWidget()
 
 	m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
+    m_dr_splitview.pack2(m_toolscroller, Gtk::SHRINK);
+
+    m_databinders.add_binder(new framework::ConfigDataBinder<int>(
+                                 m_dr_splitview.property_position(),
+                                 framework::Application::app()->config(),
+                                 "dr_toolbox_pane_splitter"));
+
+    m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController());
+    add(m_toolbox_ctrl);
+    m_toolscroller.add(*m_toolbox_ctrl->widget());
+    m_toolscroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 
 	m_widget = &m_dr_splitview;
 	return m_widget;

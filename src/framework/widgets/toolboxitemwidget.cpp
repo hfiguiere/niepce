@@ -1,5 +1,5 @@
 /*
- * niepce - framework/metadatawidget.h
+ * niepce - framework/toolboxitemwidget.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,43 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
-#define __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
 
-
-#include <map>
-#include <string>
-
-#include <gtkmm/table.h>
-
-#include "framework/widgets/toolboxitemwidget.h"
-
-namespace utils {
-	class XmpMeta;
-}
-namespace xmp {
-	struct MetaDataSectionFormat;
-}
+#include "toolboxitemwidget.h"
 
 namespace framework {
 
-
-class MetaDataWidget 
-	: public framework::ToolboxItemWidget
+ToolboxItemWidget::ToolboxItemWidget(const Glib::ustring & title)
+    : Gtk::Expander(Glib::ustring("<b>") + title + "</b>")
 {
-public:
-	MetaDataWidget(const Glib::ustring & title);
-	
-	void add_data(const std::string & id, const std::string & label,
-				  const char * value, xmp::MetaDataType type);
-	void set_data_format(const xmp::MetaDataSectionFormat * fmt);
-	void set_data_source(const utils::XmpMeta * xmp);
-protected:
-private:
-	Gtk::Table    m_table;
-	std::map<std::string, Gtk::Widget *> m_data_map;
-	const xmp::MetaDataSectionFormat * m_fmt;
-};
+    set_expanded(true);
+    set_use_markup(true);
+}
 
 }
 
@@ -67,4 +41,4 @@ private:
   End:
 */
 
-#endif
+
