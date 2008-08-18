@@ -64,13 +64,13 @@ namespace utils {
 	template < class T >
 	MtQueue<T>::~MtQueue()
 	{
-		mutex_t::scoped_lock lock(m_mutex, true);		
+		mutex_t::scoped_lock lock(m_mutex);		
 	}
 
 	template < class T > void
 	MtQueue<T>::add(const T &op)
 	{
-		mutex_t::scoped_lock lock(m_mutex, true);
+		mutex_t::scoped_lock lock(m_mutex);
 		m_queue.push_back(op);
 	}
 
@@ -79,7 +79,7 @@ namespace utils {
 	T MtQueue<T>::pop()
 	{
 		T elem;
-		mutex_t::scoped_lock lock(m_mutex, true);		
+		mutex_t::scoped_lock lock(m_mutex);		
 		elem = m_queue.front();
 		m_queue.pop_front();
 		return elem;
@@ -89,14 +89,14 @@ namespace utils {
 	template < class T >
 	bool MtQueue<T>::empty() const
 	{
-		mutex_t::scoped_lock lock(m_mutex, true);
+		mutex_t::scoped_lock lock(m_mutex);
 		return m_queue.empty();
 	}
 
 	template < class T >
 	void MtQueue<T>::clear() 
 	{
-		mutex_t::scoped_lock lock(m_mutex, true);
+		mutex_t::scoped_lock lock(m_mutex);
 		m_queue.clear();
 	}
 }

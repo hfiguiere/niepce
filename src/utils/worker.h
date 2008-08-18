@@ -64,7 +64,7 @@ namespace utils {
 	template <class T>
 	Worker<T>::~Worker()
 	{
-		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
+		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex());
 		m_tasks.clear();
 	}
 
@@ -80,7 +80,7 @@ namespace utils {
 			{
 				// make sure we terminate the thread before we unlock
 				// the task queue.
-				typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
+				typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex());
 				if(m_tasks.empty()) {
 					m_terminated = true;
 					break;
@@ -94,7 +94,7 @@ namespace utils {
 	template <class T>
 	void Worker<T>::schedule(const T & _op)
 	{
-		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex(), true);
+		typename queue_t::mutex_t::scoped_lock lock(m_tasks.mutex());
 		bool was_empty = m_tasks.empty();
 		m_tasks.add(_op);
 		if(was_empty) {
