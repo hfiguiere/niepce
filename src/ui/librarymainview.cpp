@@ -68,6 +68,14 @@ namespace ui {
 
 	void LibraryMainView::set_current_page(int idx, Gtk::ToggleButton * btn)
 	{
+        if(m_currentpage == idx) {
+            // just preempt. Make sure the button is still active.
+            // otherwise it cause an infinite loop.
+			m_buttons[m_currentpage].second.block();
+			m_buttons[m_currentpage].first->set_active(true);
+			m_buttons[m_currentpage].second.unblock();
+            return;
+        }
 		m_notebook.set_current_page(idx);
 		if(m_currentpage >= 0) {
 			m_buttons[m_currentpage].second.block();
