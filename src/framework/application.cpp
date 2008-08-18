@@ -33,125 +33,135 @@
 
 namespace framework {
 
-	Application::Ptr Application::m_application;
+Application::Ptr Application::m_application;
 
-	Application::Application(const char * name)
-		: m_config(Glib::ustring("/apps/") + name),
-		  m_refUIManager()
-	{
-	}
-
-
-	Application::~Application()
-	{
-	}
-
-	/** no widget for applications */
-	Gtk::Widget * Application::buildWidget()
-	{
-		return NULL;
-	}
-
-	Application::Ptr Application::app()
-	{
-		return m_application;
-	}
+Application::Application(const char * name)
+    : m_config(Glib::ustring("/apps/") + name),
+      m_refUIManager()
+{
+}
 
 
-	Glib::ustring Application::get_rc_path()
-	{
-		return m_config.getValue("ui_theme_file", "");
-	}
+Application::~Application()
+{
+}
 
-	Glib::RefPtr<Gtk::IconTheme> Application::getIconTheme() const
-	{
-		return Gtk::IconTheme::get_default();
-	}
+/** no widget for applications */
+Gtk::Widget * Application::buildWidget()
+{
+    return NULL;
+}
 
-	bool Application::use_custom_theme() const
-	{
-		int v;
-		try {
-			v = boost::lexical_cast<int>(m_config.getValue("ui_theme_set", "0"));
-		} 
-		catch(...) {
-			v = 0;
-		}
-		return v != 0;
-	}
+Application::Ptr Application::app()
+{
+    return m_application;
+}
 
-	/** Main loop. 
-	 * @param constructor the Application object constructor
-	 * @param argc
-	 * @param argv
-	 * @return main return code
-	 */
-	int Application::main(boost::function<Application::Ptr (void)> constructor, 
-												int argc, char **argv)
-	{
-		Gnome::Conf::init();
-        if(!Glib::thread_supported()) {
-            DBG_OUT("thread init");
-            Glib::thread_init();
+
+Glib::ustring Application::get_rc_path()
+{
+    return m_config.getValue("ui_theme_file", "");
+}
+
+Glib::RefPtr<Gtk::IconTheme> Application::getIconTheme() const
+{
+    return Gtk::IconTheme::get_default();
+}
+
+bool Application::use_custom_theme() const
+{
+    int v;
+    try {
+        v = boost::lexical_cast<int>(m_config.getValue("ui_theme_set", "0"));
+    } 
+    catch(...) {
+        v = 0;
+    }
+    return v != 0;
+}
+
+/** Main loop. 
+ * @param constructor the Application object constructor
+ * @param argc
+ * @param argv
+ * @return main return code
+ */
+int Application::main(boost::function<Application::Ptr (void)> constructor, 
+                      int argc, char **argv)
+{
+    Gnome::Conf::init();
+    if(!Glib::thread_supported()) {
+        DBG_OUT("thread init");
+        Glib::thread_init();
+    }
+
+    Gtk::Main kit(argc, argv);
+    Application::Ptr app = constructor();
+
+    DBG_OUT("use_custon_theme %d", app->use_custom_theme());
+    if(app->use_custom_theme()) {
+        std::string rcpath = app->get_rc_path();
+        if(!rcpath.empty()) {
+            Gtk::RC rc(rcpath);
         }
+    }
 
-		Gtk::Main kit(argc, argv);
-		Application::Ptr app = constructor();
-
-		DBG_OUT("use_custon_theme %d", app->use_custom_theme());
-		if(app->use_custom_theme()) {
-			std::string rcpath = app->get_rc_path();
-			if(!rcpath.empty()) {
-				Gtk::RC rc(rcpath);
-			}
-		}
-
-		kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 
-											   &Application::_ready));
-		Frame::Ptr window(app->makeMainFrame());
-		app->add(window);
+    kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 
+                                           &Application::_ready));
+    Frame::Ptr window(app->makeMainFrame());
+    app->add(window);
 		
-		Gtk::Main::run(window->gtkWindow());
+    Gtk::Main::run(window->gtkWindow());
 	
-		return 0;
-	}
+    return 0;
+}
 
 
-	void Application::terminate()
-	{
-		std::for_each(m_subs.begin(), m_subs.end(),
-									boost::bind(&Controller::terminate, _1));
-		std::for_each(m_subs.begin(), m_subs.end(),
-									boost::bind(&Controller::clearParent, _1));		
-		m_subs.clear();
-	}
+void Application::terminate()
+{
+    std::for_each(m_subs.begin(), m_subs.end(),
+                  boost::bind(&Controller::terminate, _1));
+    std::for_each(m_subs.begin(), m_subs.end(),
+                  boost::bind(&Controller::clearParent, _1));		
+    m_subs.clear();
+}
 
 
-	void Application::quit()
-	{
-		terminate();
-		Gtk::Main::quit();
-	}
+void Application::quit()
+{
+    terminate();
+    Gtk::Main::quit();
+}
 
-	void Application::about()
-	{
-		on_about();
-	}
+void Application::about()
+{
+    on_about();
+}
 
-	/** adding a controller to an application build said controller
-	 * widget 
-	 */
-	void Application::add(const Controller::Ptr & sub)
-	{
-		Controller::add(sub);
-		sub->buildWidget();
-	}
+/** adding a controller to an application build said controller
+ * widget 
+ */
+void Application::add(const Controller::Ptr & sub)
+{
+    Controller::add(sub);
+    sub->buildWidget();
+}
 
-	void Application::on_about()
-	{
-		Gtk::AboutDialog dlg;
-		dlg.run();
-	}
+void Application::on_about()
+{
+    Gtk::AboutDialog dlg;
+    dlg.run();
+}
 
 }
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

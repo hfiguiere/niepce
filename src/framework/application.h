@@ -34,52 +34,61 @@
 
 namespace framework {
 
-	class Application 
-		: public Controller
-	{
-	public:
-		typedef boost::shared_ptr<Application> Ptr;
+class Application 
+    : public Controller
+{
+public:
+    typedef boost::shared_ptr<Application> Ptr;
 
-		virtual ~Application();
+    virtual ~Application();
 
-		virtual Glib::ustring get_rc_path();
-		virtual bool use_custom_theme() const;
-		virtual Frame::Ptr makeMainFrame() = 0;
+    virtual Glib::ustring get_rc_path();
+    virtual bool use_custom_theme() const;
+    virtual Frame::Ptr makeMainFrame() = 0;
 
-		Configuration & config()
-			{ return m_config; }
-		Glib::RefPtr<Gtk::UIManager> uiManager()
-			{ 
-				if(!m_refUIManager) {
-					m_refUIManager = Gtk::UIManager::create();
-				}
-				return m_refUIManager; 
-			}
+    Configuration & config()
+        { return m_config; }
+    Glib::RefPtr<Gtk::UIManager> uiManager()
+        { 
+            if(!m_refUIManager) {
+                m_refUIManager = Gtk::UIManager::create();
+            }
+            return m_refUIManager; 
+        }
 
-		virtual Gtk::Widget * buildWidget();
-		virtual void quit();
-		void about();
-		virtual void add(const Controller::Ptr & sub);
-		virtual void terminate();
+    virtual Gtk::Widget * buildWidget();
+    virtual void quit();
+    void about();
+    virtual void add(const Controller::Ptr & sub);
+    virtual void terminate();
 
-		Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
+    Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
 
-		static Application::Ptr app();
-		static int main(boost::function<Application::Ptr (void)> constructor, 
-										int argc, char **argv);
+    static Application::Ptr app();
+    static int main(boost::function<Application::Ptr (void)> constructor, 
+                    int argc, char **argv);
 
-		UndoHistory & undo_history()
-			{ return m_undo; }
-	protected:
-		Application(const char *);
-		static Application::Ptr m_application; 
-		virtual void on_about();
-	private:
-		Configuration                m_config;
-		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
-		UndoHistory                  m_undo;
-	};
+    UndoHistory & undo_history()
+        { return m_undo; }
+protected:
+    Application(const char *);
+    static Application::Ptr m_application; 
+    virtual void on_about();
+private:
+    Configuration                m_config;
+    Glib::RefPtr<Gtk::UIManager> m_refUIManager;
+    UndoHistory                  m_undo;
+};
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
