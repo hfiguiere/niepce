@@ -90,6 +90,11 @@ namespace framework {
 												int argc, char **argv)
 	{
 		Gnome::Conf::init();
+        if(!Glib::thread_supported()) {
+            DBG_OUT("thread init");
+            Glib::thread_init();
+        }
+
 		Gtk::Main kit(argc, argv);
 		Application::Ptr app = constructor();
 
