@@ -46,10 +46,16 @@ public:
 								  const Gdk::Rectangle& expose_area, 
 								  Gtk::CellRendererState flags);
 
+    void set_size(int _size)
+        { m_size = _size; }
+    int size() const
+        { return m_size; }
+
 	Glib::PropertyProxy_ReadOnly<db::LibFile::Ptr> 	property_libfile() const;
 	Glib::PropertyProxy<db::LibFile::Ptr> 	property_libfile();
 
 private:
+    int                                 m_size;
 	Glib::Property<db::LibFile::Ptr>    m_libfileproperty;
 
 	Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;

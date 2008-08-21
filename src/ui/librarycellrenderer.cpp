@@ -34,6 +34,7 @@ namespace ui {
 LibraryCellRenderer::LibraryCellRenderer()
 	: Glib::ObjectBase(typeid(LibraryCellRenderer)),
 	  Gtk::CellRendererPixbuf(),
+      m_size(160),
 	  m_libfileproperty(*this, "libfile")
 {
 	try {
@@ -163,13 +164,10 @@ LibraryCellRenderer::get_size_vfunc (Gtk::Widget& /*widget*/,
 		*y_offset = 0;
 
 	if(width || height) {
-		int w, h;
 		// TODO this should just be a property
 		//
 		Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-		w = pixbuf->get_width();
-		h = pixbuf->get_height();
-		int maxdim = std::max(w, h) + PAD * 2;
+		int maxdim = m_size + PAD * 2;
 		
 		if(width) 
 			*width = maxdim;
