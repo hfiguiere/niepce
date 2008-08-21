@@ -27,6 +27,7 @@ DrItemWidget::DrItemWidget(const Glib::ustring & title)
     : framework::ToolboxItemWidget(title)
 {
     add(m_box);
+    m_box.set_border_width(6);
 }
 
 void DrItemWidget::add_widget(const Glib::ustring & label, Gtk::Widget & w)
