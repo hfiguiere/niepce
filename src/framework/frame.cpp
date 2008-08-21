@@ -69,6 +69,8 @@ namespace framework {
 	Frame::~Frame()
 	{
 		frameRectToConfig();
+        DBG_OUT("destroy Frame");
+        delete m_window;
 	}
 
 
