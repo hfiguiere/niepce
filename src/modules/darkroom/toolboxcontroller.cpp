@@ -49,7 +49,14 @@ Gtk::Widget * ToolboxController::buildWidget()
     item = manage(new DrItemWidget(_("Tone and colour")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
     s = Gtk::manage(new framework::EditableHScale(-5.0, 5.0, 0.1));
+//    s->signal_value_changed().connect();
     item->add_widget(_("Exposure"), *s);
+    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    item->add_widget(_("Recovery"), *s);
+    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    item->add_widget(_("Fill Light"), *s);
+    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    item->add_widget(_("Blacks"), *s);
     s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));
     item->add_widget(_("Brightness"), *s);
     s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));

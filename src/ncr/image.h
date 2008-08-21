@@ -24,13 +24,16 @@
 #define _NCR_IMAGE_H_
 
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <gdkmm/pixbuf.h>
 
 namespace ncr {
 
-class Image {
+class Image 
+    : public boost::enable_shared_from_this<Image>
+{
 public:
     typedef boost::shared_ptr<Image> Ptr;
 
@@ -42,6 +45,17 @@ public:
         int orientation);
     void set_scale(double scale);
     void set_scale_to_dim(int w, int h);
+
+
+    void set_tilt(double angle);
+    void set_color_temp(int temp);
+    void set_exposure(double exposure);
+    void set_brightness(int brightness);
+    void set_contrast(int contrast);
+    void set_saturation(int saturation);
+    void set_vibrance(int vibrance);
+
+    sigc::signal<void, Image::Ptr> signal_update;
 private:
     class Private;
     Private *priv;
