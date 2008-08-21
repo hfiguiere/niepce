@@ -111,8 +111,8 @@ Gtk::Widget * LibraryMainViewController::buildWidget()
 
     m_darkroom = darkroom::DarkroomModule::Ptr(
         new darkroom::DarkroomModule(m_actionGroup, getLibraryClient()));
-    m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
     add(m_darkroom);
+    m_mainview.append_page(*m_darkroom->widget(), _("Darkroom"));
 
     // TODO PrintModuleController
     // m_mainview.append_page(, _("Print"));

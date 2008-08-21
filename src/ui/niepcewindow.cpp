@@ -101,7 +101,8 @@ NiepceWindow::buildWidget()
                                       m_selection_controller->list_store()));
     m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
                                  boost::bind(&LibraryMainViewController::on_lib_notification, 
-                                             m_mainviewctrl, _1));
+                                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
+                                             , _1));
     add(m_mainviewctrl);
     // workspace treeview
     m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
@@ -140,11 +141,13 @@ NiepceWindow::buildWidget()
     m_selection_controller->add_selectable(m_mainviewctrl.get());
     m_selection_controller->signal_selected
         .connect(boost::bind(&LibraryMainViewController::on_selected,
-                             m_mainviewctrl, _1));
+                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
+                             , _1));
 
     m_selection_controller->signal_activated
         .connect(boost::bind(&LibraryMainViewController::on_image_activated,
-                             m_mainviewctrl, _1));
+                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
+                             , _1));
 
     win.set_size_request(600, 400);
     win.show_all_children();

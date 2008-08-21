@@ -22,6 +22,11 @@
 #ifndef _UTILS_BOOST_H_
 #define _UTILS_BOOST_H_
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+
 namespace Glib {
 
 	/** Dereference Glib::RefPtr<> for use in boost::bind */
@@ -32,6 +37,25 @@ namespace Glib {
 	}
 
 }
+
+namespace utils {
+
+/** function to make a shared_ptr<> form a weak_ptr<> 
+ * idea from http://lists.boost.org/boost-users/2007/01/24384.php
+ */
+template<class T> 
+boost::shared_ptr<T> shared_ptr_from( boost::weak_ptr<T> const & wpt )
+{
+    return boost::shared_ptr<T>( wpt ); // throws on wpt.expired()
+} 
+
+}
+
+/** need to convert a weak_ptr<> to a shared_ptr<> in the bind() 
+ * this allow breaking some circular references.
+ */
+#define BIND_SHARED_PTR(_type, _spt) \
+    boost::bind(&utils::shared_ptr_from<_type>, boost::weak_ptr<_type>(_spt))
 
 
 #endif

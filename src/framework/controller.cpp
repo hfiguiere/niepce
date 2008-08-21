@@ -21,71 +21,76 @@
 
 #include <gtkmm/widget.h>
 
+#include "utils/debug.h"
 #include "controller.h"
 
 
 namespace framework {
 
-	Controller::Controller()
-		: m_widget(NULL)
-	{
-	}
+Controller::Controller()
+    : m_widget(NULL)
+{
+}
 
 
-	Controller::~Controller()
-	{
-	}
+Controller::~Controller()
+{
+    DBG_OUT("destroy Controllers");
 
-	Gtk::Widget * Controller::widget()
-	{
-		if(m_widget == NULL) 
-		{
-			m_widget = buildWidget();
-		}
-		return m_widget;
-	}
+}
 
-	void
-	Controller::add(const Controller::Ptr & sub)
-	{
-		m_subs.push_back(sub);
-		sub->m_parent = shared_from_this();
-		sub->_added();
-	}
+Gtk::Widget * Controller::widget()
+{
+    DBG_ASSERT(!m_parent.expired(), "must be attached");
+    if(m_widget == NULL) 
+    {
+        m_widget = buildWidget();
+    }
+    return m_widget;
+}
 
-	void Controller::remove(const Ptr & sub)
-	{
-		std::list<Ptr>::iterator iter = std::find(m_subs.begin(), 
-																							m_subs.end(), sub);
-		if(iter != m_subs.end()) {
-			(*iter)->clearParent();
-			m_subs.erase(iter);
-		}
-	}
+void
+Controller::add(const Controller::Ptr & sub)
+{
+    m_subs.push_back(sub);
+    sub->m_parent = shared_from_this();
+    sub->_added();
+}
 
-	bool Controller::canTerminate()
-	{
-		return true;
-	}
+void Controller::remove(const Ptr & sub)
+{
+    std::list<Ptr>::iterator iter = std::find(m_subs.begin(), 
+                                              m_subs.end(), sub);
+    if(iter != m_subs.end()) {
+        (*iter)->clearParent();
+        m_subs.erase(iter);
+    }
+}
 
-	void Controller::terminate()
-	{
-	}
+bool Controller::canTerminate()
+{
+    return true;
+}
 
-	void Controller::_added()
-	{
-	}
+void Controller::terminate()
+{
+}
 
-	void Controller::_ready()
-	{
-		std::for_each(m_subs.begin(), m_subs.end(),
-					  boost::bind(&Controller::_ready, _1));
-		on_ready();
-	}
+void Controller::_added()
+{
+}
 
-	void Controller::on_ready()
-	{
-	}
+void Controller::_ready()
+{
+    std::for_each(m_subs.begin(), m_subs.end(),
+                  boost::bind(&Controller::_ready, _1));
+    on_ready();
+}
+
+void Controller::on_ready()
+{
+}
+
 }
 
 /*
