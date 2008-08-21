@@ -51,14 +51,14 @@ EditableHScale::EditableHScale(double min, double max, double step)
 }
 
 
-bool EditableHScale::on_button_press_event(GdkEventButton *event)
+bool EditableHScale::on_button_press_event(GdkEventButton *_event)
 {
-    DBG_OUT("button %d released", event->button);
-    if (event->type == GDK_BUTTON_RELEASE && event->button != 1) {
+    DBG_OUT("button %d released", _event->button);
+    if (_event->type == GDK_BUTTON_RELEASE && _event->button != 1) {
         return false;
     } 
     else {
-        Gtk::Widget::on_button_release_event(event);
+        Gtk::Widget::on_button_release_event(_event);
         if(m_dirty) {
             m_dirty = false;
             DBG_OUT("value_change.emit(%f)", m_adj.get_value());
