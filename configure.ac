@@ -130,7 +130,7 @@ GETTEXT_PACKAGE=niepce
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
                    [The domain to use with gettext])
-ALL_LINGUAS="fr"
+ALL_LINGUAS="fr ru"
 AM_GLIB_GNU_GETTEXT
 
 NIEPCE_LOCALEDIR=[${datadir}/locale]
