@@ -1,8 +1,10 @@
 
 
 
-INCLUDES = -I$(top_srcdir)/src @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
-	@LIBGCONFMM_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
+	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@LIBGCONFMM_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@ \
+	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a
 
@@ -20,6 +22,8 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	gdkutils.h gdkutils.cpp \
 	widgets/toolboxitemwidget.h widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.h widgets/editablehscale.cpp \
+	widgets/dock-item.cpp widgets/dock-item.h \
+	widgets/dock.cpp widgets/dock.h \
 	metadatawidget.h metadatawidget.cpp \
 	undo.h undo.cpp \
 	command.h \

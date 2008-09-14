@@ -9,6 +9,7 @@ gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
 
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/thumb-view \
+	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \

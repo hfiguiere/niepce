@@ -35,8 +35,7 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-    DBG_OUT("destroy Controllers");
-
+//    DBG_OUT("destroy Controllers");
 }
 
 Gtk::Widget * Controller::widget()

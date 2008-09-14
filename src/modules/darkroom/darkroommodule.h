@@ -36,6 +36,10 @@
 #include "modules/darkroom/imagecanvas.h"
 #include "modules/darkroom/toolboxcontroller.h"
 	
+namespace framework {
+class Dock;
+}
+
 namespace darkroom {
 
 class DarkroomModule
@@ -62,11 +66,11 @@ private:
     Gtk::HPaned                  m_dr_splitview;
     Gtk::VBox                    m_vbox;
     ImageCanvas*                 m_imagecanvas;
-    Gtk::ScrolledWindow          m_toolscroller;
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
     libraryclient::LibraryClient::Ptr m_libClient;
+    framework::Dock              *m_dock;
 };
 
 

@@ -30,6 +30,7 @@
 #include "niepce/notifications.h"
 #include "db/library.h"
 #include "framework/application.h"
+#include "framework/widgets/dock.h"
 #include "librarymainviewcontroller.h"
 #include "niepcewindow.h"
 #include "metadatapanecontroller.h"
@@ -95,11 +96,11 @@ Gtk::Widget * LibraryMainViewController::buildWidget()
     m_scrollview.add(m_librarylistview);
     m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     m_lib_splitview.pack1(m_scrollview);
-    m_lib_splitview.pack2(m_lib_metapanescroll);
-    m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController());
+    m_dock = new framework::Dock();
+    m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController(*m_dock));
     add(m_metapanecontroller);
-    m_lib_metapanescroll.add(*m_metapanecontroller->widget());
-    m_lib_metapanescroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    m_lib_splitview.pack2(m_dock->getWidget());
+    (void)m_metapanecontroller->buildWidget();
 
     m_databinders.add_binder(new framework::ConfigDataBinder<int>(
                                  m_lib_splitview.property_position(),
@@ -196,6 +197,6 @@ void LibraryMainViewController::select_image(int id)
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

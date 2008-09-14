@@ -1,11 +1,11 @@
 
 
-INCLUDES = -I$(top_srcdir)/src  \
+INCLUDES = -I$(top_srcdir)/src  -I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
-	@GOOCANVASMM_CFLAGS@ \
+	@GOOCANVASMM_CFLAGS@  \
 	@GEGLMM_CFLAGS@ @EXEMPI_CFLAGS@ @OPENRAW_CFLAGS@
 
 

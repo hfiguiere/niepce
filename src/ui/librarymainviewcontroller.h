@@ -41,7 +41,9 @@
 namespace Gtk {
 	class Widget;
 }
-
+namespace framework {
+class Dock;
+}
 
 namespace ui {
 
@@ -82,7 +84,7 @@ namespace ui {
 		Gtk::ScrolledWindow          m_scrollview;
 		// library split view
 		Gtk::HPaned                  m_lib_splitview;
-		Gtk::ScrolledWindow          m_lib_metapanescroll;
+        framework::Dock              *m_dock;
 		MetaDataPaneController::Ptr  m_metapanecontroller;
 
         darkroom::DarkroomModule::Ptr m_darkroom;
@@ -98,7 +100,7 @@ namespace ui {
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */
 

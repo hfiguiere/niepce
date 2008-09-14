@@ -11,3 +11,14 @@ src/ui/workspacecontroller.cpp
 src/ui/thumb-view/eog-thumb-view.cpp
 src/niepce/stock.cpp
 src/modules/darkroom/toolboxcontroller.cpp
+src/ext/libgdl/gdl-dock-bar.c
+src/ext/libgdl/gdl-dock-item-grip.c
+src/ext/libgdl/gdl-dock-item.c
+src/ext/libgdl/gdl-dock-master.c
+src/ext/libgdl/gdl-dock-notebook.c
+src/ext/libgdl/gdl-dock-object.c
+src/ext/libgdl/gdl-dock-paned.c
+src/ext/libgdl/gdl-dock-placeholder.c
+src/ext/libgdl/gdl-dock-tablabel.c
+src/ext/libgdl/gdl-dock.c
+src/ext/libgdl/gdl-switcher.c

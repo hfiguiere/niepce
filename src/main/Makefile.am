@@ -23,6 +23,7 @@ niepce_LDADD = \
 	$(top_builddir)/src/utils/libniepceutils.a \
 	$(top_builddir)/src/niepce/libniepceglobals.a \
 	$(top_builddir)/src/ncr/libncr.a \
+	$(top_builddir)/src/ext/libgdl/libgdl.a \
 	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ \
 	@GNOMEVFS_LIBS@ @LIBGCONFMM_LIBS@ @BOOST_THREAD_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@  @BOOST_SIGNALS_LIBS@ \

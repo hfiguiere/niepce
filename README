@@ -5,8 +5,11 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files maybe under GPL version 2 or later.
 
-(c) 2006-2007 Hubert Figuière
+(c) 2006-2008 Hubert Figuière
 Some portions are written by other people.
+
+libgdl has been copied from Inkscape. Still wondering why
+Gtk+ does not provide this functionality by default.
 
 What is this?
 -------------

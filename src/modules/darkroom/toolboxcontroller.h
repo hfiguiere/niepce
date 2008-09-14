@@ -23,6 +23,12 @@
 
 #include "framework/controller.h"
 
+
+namespace framework {
+class Dock;
+class DockItem;
+}
+
 namespace darkroom {
 
 class ToolboxController
@@ -30,7 +36,10 @@ class ToolboxController
 {
 public:
     typedef boost::shared_ptr<ToolboxController> Ptr;
+    ToolboxController(framework::Dock &);
     virtual Gtk::Widget * buildWidget();
+private:
+    framework::DockItem *m_dockitem;
 };
 
 }

@@ -147,6 +147,7 @@ data/Makefile
 data/icons/Makefile
 src/Makefile
 src/ext/Makefile
+src/ext/libgdl/Makefile
 src/niepce/Makefile
 src/utils/Makefile
 src/utils/db/Makefile

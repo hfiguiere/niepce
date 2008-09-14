@@ -80,29 +80,34 @@ namespace ui {
 		return s_format;
 	}
 
-	MetaDataPaneController::MetaDataPaneController()
-		: m_metapane(false),
-          m_fileid(0)
+	MetaDataPaneController::MetaDataPaneController(framework::Dock &_dock)
+		: m_fileid(0),
+          m_dockitem(new framework::DockItem(_dock, "Metadata",
+                                             _("Image Properties"), "", 
+                                             framework::DockItem::DOCKED_STATE))
 	{
 	}
 
+    MetaDataPaneController::~MetaDataPaneController()
+    {
+    }
 	
 	Gtk::Widget * MetaDataPaneController::buildWidget()
 	{
-		m_widget = &m_metapane;
+		m_widget = &m_dockitem->getWidget();
 
 		const MetaDataSectionFormat * formats = get_format();
 		
 		const MetaDataSectionFormat * current = formats;
 		while(current->section) {
 			framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(current->section));
-			m_metapane.pack_start(*w, Gtk::PACK_SHRINK, 0);
+			m_dockitem->get_vbox()->pack_start(*w, Gtk::PACK_SHRINK, 0);
 			w->set_data_format(current);
 			m_widgets.push_back(w);
 			current++;
 		}
 
-		return &m_metapane;
+		return m_widget;
 	}
 
 

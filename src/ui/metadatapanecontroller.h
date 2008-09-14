@@ -24,12 +24,14 @@
 
 #include "utils/exempi.h"
 #include "framework/controller.h"
+#include "framework/widgets/dock-item.h"
 
 namespace xmp {
 	struct MetaDataSectionFormat;
 }
 namespace framework {
 	class MetaDataWidget;
+    class Dock;
 }
 
 namespace ui {
@@ -39,22 +41,32 @@ namespace ui {
 	{
 	public:
 		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
-		MetaDataPaneController();
+		MetaDataPaneController(framework::Dock &);
+        ~MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();
 		void display(int file_id, const utils::XmpMeta * meta);
         int displayed_file() const 
             { return m_fileid; }
 	private:
-		Gtk::VBox m_metapane;
 		std::vector<framework::MetaDataWidget *> m_widgets;
 
 		static const xmp::MetaDataSectionFormat * get_format();
 
         int m_fileid;
+        framework::DockItem *m_dockitem;
 	};
 
 }
 
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 #endif

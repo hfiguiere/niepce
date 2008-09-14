@@ -1,0 +1,7 @@
+This directory contains external code:
+
+libgdl/
+  - copied from Inskscape has it has more feature then upstream gdl.
+    last resync r19169
+    https://inkscape.svn.sourceforge.net/svnroot/inkscape/inkscape/trunk/src/libgdl/gdl-stock.h
+

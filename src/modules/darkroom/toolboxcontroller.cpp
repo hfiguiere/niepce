@@ -25,16 +25,25 @@
 
 #include "toolboxcontroller.h"
 #include "framework/widgets/editablehscale.h"
+#include "framework/widgets/dock-item.h"
 #include "dritemwidget.h"
 
 namespace darkroom {
+
+ToolboxController::ToolboxController(framework::Dock &_dock)
+    : m_dockitem(new framework::DockItem(_dock,"tools", 
+                                         _("Develop"), "", 
+                                         framework::DockItem::DOCKED_STATE))
+{
+
+}
 
 Gtk::Widget * ToolboxController::buildWidget()
 {
     DrItemWidget *item = NULL;
     framework::EditableHScale *s = NULL;
-    Gtk::VBox *toolbox = manage(new Gtk::VBox());
-    m_widget = toolbox;
+    Gtk::VBox *toolbox = m_dockitem->get_vbox();
+    m_widget = &m_dockitem->getWidget();
 
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
