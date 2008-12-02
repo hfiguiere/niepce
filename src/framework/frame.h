@@ -23,7 +23,10 @@
 
 #include <string>
 #include <boost/function.hpp>
+
+#include <sigc++/signal.h>
 #include <libglademm/xml.h>
+#include <gtkmm/toggleaction.h>
 
 #include "framework/controller.h"
 
@@ -70,9 +73,17 @@ namespace framework {
 		int show_modal_dialog(const char *gladefile,
 							  const char *widgetname,
 							  boost::function<void (const Glib::RefPtr<Gnome::Glade::Xml> &, Gtk::Dialog *)> setup = NULL);
+
+        
+        void toggle_tools_visible();
+
+        sigc::signal<void> signal_hide_tools;
+        sigc::signal<void> signal_show_tools;
 	protected:
 		/** close signal handler */
 		virtual bool _close();
+        Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
+
 	private:
 		void connectSignals();
 		void frameRectFromConfig();
@@ -86,4 +97,13 @@ namespace framework {
 }
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 #endif

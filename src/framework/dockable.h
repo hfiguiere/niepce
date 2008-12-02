@@ -1,5 +1,5 @@
 /*
- * niepce - darkroom/toolboxcontroller.h
+ * niepce - ui/dockable.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,30 +18,30 @@
  */
 
 
-#ifndef _DARKROOM_TOOLBOXCONTROLLER_H__
-#define _DARKROOM_TOOLBOXCONTROLLER_H__
+#ifndef __FRAMEWORK_DOCKABLE_H__
+#define __FRAMEWORK_DOCKABLE_H__
 
-#include "framework/dockable.h"
+#include "framework/controller.h"
+#include "framework/widgets/dock-item.h"
 
 namespace framework {
-class Dock;
-}
 
-namespace darkroom {
 
-class ToolboxController
-    : public framework::Dockable
+/** A dockable item controller
+ */
+class Dockable
+    : public Controller,
+      protected DockItem
 {
 public:
-    typedef boost::shared_ptr<ToolboxController> Ptr;
-    ToolboxController(framework::Dock &);
-    virtual Gtk::Widget * buildWidget();
+    Dockable(framework::Dock & dock, const Glib::ustring& name, 
+             const Glib::ustring& long_name, 
+             const Glib::ustring& icon_name, DockItem::State state);
+
 };
 
+
 }
-
-
-#endif
 /*
   Local Variables:
   mode:c++
@@ -51,3 +51,6 @@ public:
   fill-column:80
   End:
 */
+
+#endif
+

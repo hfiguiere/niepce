@@ -208,6 +208,10 @@ void NiepceWindow::init_ui()
         "      <separator/>"
         "      <menuitem action='DeleteImage'/>"
         "    </menu>"
+        "    <menu action='MenuTools'>"
+        "      <menuitem action='ToggleToolsVisible'/>"
+        "      <separator/>"        
+        "    </menu>"
         "    <menu action='MenuHelp'>"
         "      <menuitem action='Help'/>"
         "      <menuitem action='About'/>"
@@ -346,6 +350,12 @@ void NiepceWindow::init_actions()
                                       BIND_SHARED_PTR(SelectionController, m_selection_controller), 5));
 
     m_refActionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
+
+    m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
+    m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
+                                                    _("_Hide tools"));
+    m_refActionGroup->add(m_hide_tools_action,
+                          sigc::mem_fun(*this, &Frame::toggle_tools_visible));
 
     m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
     m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));

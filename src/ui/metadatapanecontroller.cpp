@@ -17,11 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/bind.hpp>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-#include <boost/bind.hpp>
+#include <gtkmm/stock.h>
+
 #include <exempi/xmpconsts.h>
+
 #include "utils/debug.h"
 #include "utils/exempi.h"
 #include "framework/metadatawidget.h"
@@ -80,11 +84,10 @@ namespace ui {
 		return s_format;
 	}
 
-	MetaDataPaneController::MetaDataPaneController(framework::Dock &_dock)
-		: m_fileid(0),
-          m_dockitem(new framework::DockItem(_dock, "Metadata",
-                                             _("Image Properties"), "", 
-                                             framework::DockItem::DOCKED_STATE))
+	MetaDataPaneController::MetaDataPaneController(framework::Dock &dock)
+		: Dockable(dock, "Metadata", _("Image Properties"), 
+                   Gtk::Stock::PROPERTIES.id, DockItem::DOCKED_STATE),
+          m_fileid(0)
 	{
 	}
 
@@ -94,14 +97,14 @@ namespace ui {
 	
 	Gtk::Widget * MetaDataPaneController::buildWidget()
 	{
-		m_widget = &m_dockitem->getWidget();
+		m_widget = &DockItem::getWidget();
 
 		const MetaDataSectionFormat * formats = get_format();
 		
 		const MetaDataSectionFormat * current = formats;
 		while(current->section) {
 			framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(current->section));
-			m_dockitem->get_vbox()->pack_start(*w, Gtk::PACK_SHRINK, 0);
+            DockItem::get_vbox()->pack_start(*w, Gtk::PACK_SHRINK, 0);
 			w->set_data_format(current);
 			m_widgets.push_back(w);
 			current++;

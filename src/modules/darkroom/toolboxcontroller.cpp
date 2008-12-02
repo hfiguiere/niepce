@@ -22,6 +22,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/adjustment.h>
+#include <gtkmm/stock.h>
 
 #include "toolboxcontroller.h"
 #include "framework/widgets/editablehscale.h"
@@ -30,10 +31,9 @@
 
 namespace darkroom {
 
-ToolboxController::ToolboxController(framework::Dock &_dock)
-    : m_dockitem(new framework::DockItem(_dock,"tools", 
-                                         _("Develop"), "", 
-                                         framework::DockItem::DOCKED_STATE))
+ToolboxController::ToolboxController(framework::Dock &dock)
+    : Dockable(dock,"tools", _("Develop"), Gtk::Stock::APPLY.id, 
+               DockItem::DOCKED_STATE)
 {
 
 }
@@ -42,8 +42,8 @@ Gtk::Widget * ToolboxController::buildWidget()
 {
     DrItemWidget *item = NULL;
     framework::EditableHScale *s = NULL;
-    Gtk::VBox *toolbox = m_dockitem->get_vbox();
-    m_widget = &m_dockitem->getWidget();
+    Gtk::VBox *toolbox = DockItem::get_vbox();
+    m_widget = &DockItem::getWidget();
 
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);

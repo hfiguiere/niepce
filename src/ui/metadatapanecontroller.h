@@ -23,8 +23,7 @@
 #include <gtkmm/box.h>
 
 #include "utils/exempi.h"
-#include "framework/controller.h"
-#include "framework/widgets/dock-item.h"
+#include "framework/dockable.h"
 
 namespace xmp {
 	struct MetaDataSectionFormat;
@@ -37,7 +36,7 @@ namespace framework {
 namespace ui {
 	
 	class MetaDataPaneController
-		: public framework::Controller
+		: public framework::Dockable
 	{
 	public:
 		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
@@ -53,7 +52,6 @@ namespace ui {
 		static const xmp::MetaDataSectionFormat * get_format();
 
         int m_fileid;
-        framework::DockItem *m_dockitem;
 	};
 
 }

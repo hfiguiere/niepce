@@ -117,7 +117,8 @@ namespace framework {
 								 const char *widgetname,
 								 boost::function<void (const Glib::RefPtr<Gnome::Glade::Xml> &, Gtk::Dialog *)> setup)
 	{
-		Glib::RefPtr<Gnome::Glade::Xml> refXml = Gnome::Glade::Xml::create(gladefile);
+		Glib::RefPtr<Gnome::Glade::Xml> refXml 
+            = Gnome::Glade::Xml::create(gladefile);
 		Gtk::Dialog *dlg = NULL;
 
 		dlg = refXml->get_widget(widgetname, dlg);
@@ -126,6 +127,16 @@ namespace framework {
 		}
 		return show_modal_dialog(*dlg);
 	}
+
+    void Frame::toggle_tools_visible()
+    {
+        if(m_hide_tools_action->get_active()) {
+            signal_hide_tools.emit();   
+        }
+        else {
+            signal_show_tools.emit();
+        }
+    }
 
 
 	bool Frame::_close()
@@ -172,4 +183,13 @@ namespace framework {
 		}
 	}
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 }

@@ -101,8 +101,9 @@ Dock::Dock(Gtk::Orientation orientation)
 
 Dock::~Dock()
 {
-    g_free(_gdl_dock);
-    g_free(_gdl_dock_bar);
+//WTF is that?
+//    g_free(_gdl_dock);
+//    g_free(_gdl_dock_bar);
 }
 
 void

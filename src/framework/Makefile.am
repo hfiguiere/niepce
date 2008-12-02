@@ -24,6 +24,7 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	widgets/editablehscale.h widgets/editablehscale.cpp \
 	widgets/dock-item.cpp widgets/dock-item.h \
 	widgets/dock.cpp widgets/dock.h \
+	dockable.h dockable.cpp \
 	metadatawidget.h metadatawidget.cpp \
 	undo.h undo.cpp \
 	command.h \

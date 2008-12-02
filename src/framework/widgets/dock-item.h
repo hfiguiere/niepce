@@ -47,7 +47,7 @@ public:
     DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& long_name, 
              const Glib::ustring& icon_name, State state);
 
-    ~DockItem();
+    virtual ~DockItem();
 
     Gtk::Widget& getWidget();
     GtkWidget *gobj();
