@@ -2,7 +2,7 @@
 
 noinst_LIBRARIES = libgdl.a
 
-CPPFLAGS = @LIBGTKMM_CFLAGS@ -I$(srcdir)/..
+AM_CPPFLAGS = @LIBGTKMM_CFLAGS@ -I$(srcdir)/..
 
 libgdl_a_SOURCES =	\
 	gdl-tools.h		\
