@@ -24,6 +24,12 @@
 #ifndef __GDL_DOCK_OBJECT_H__
 #define __GDL_DOCK_OBJECT_H__
 
+#ifdef __GNUC__
+// we have too mark this as a system header because otherwise GCC barfs 
+// on variadic macros.
+#pragma GCC system_header
+#endif
+
 #include <gtk/gtkcontainer.h>
 
 G_BEGIN_DECLS

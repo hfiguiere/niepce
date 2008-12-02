@@ -130,7 +130,7 @@ gdl_dock_item_grip_expose (GtkWidget      *widget,
     GdlDockItemGrip *grip;
     GdkRectangle     title_area;
     GdkRectangle     expose_area;
-    GtkStyle        *bg_style;
+    GdkGC           *bg_style;
     gint             layout_width;
     gint             layout_height;
     gint             text_x;

@@ -771,7 +771,7 @@ gdl_switcher_add_button (GdlSwitcher *switcher, const gchar *label,
     if (stock_id)
         icon_widget = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
     else if (pixbuf_icon)
-        icon_widget = gtk_image_new_from_pixbuf (pixbuf_icon);
+        icon_widget = gtk_image_new_from_pixbuf ((GdkPixbuf *)pixbuf_icon);
     else
         icon_widget = gtk_image_new_from_stock (GTK_STOCK_NEW, GTK_ICON_SIZE_BUTTON);
 
