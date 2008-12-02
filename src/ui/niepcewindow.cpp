@@ -484,11 +484,34 @@ void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml>
                                               binder_pool));
 		
     theme_combo = xml->get_widget("theme_combo", theme_combo);
-    binder_pool->add_binder(new framework::ConfigDataBinder<int>(
-                                theme_combo->property_active(),
-                                framework::Application::app()->config(),
-                                "ui_theme_set"));
-		
+ 
+// Why are ComboBox so complicated to use?
+//    class Columns : 
+//            public Gtk::TreeModel::ColumnRecord
+//    {
+//    public:
+//        Gtk::TreeModelColumn<Glib::ustring>  label;
+//        Columns() { add(label); }
+//    };
+
+//    Columns columns;
+//    Glib::RefPtr<Gtk::ListStore> model(Gtk::ListStore::create(columns));
+
+//    theme_combo->set_model(model);
+//    const std::vector<framework::Application::ThemeDesc> & themes = framework::Application::app()->get_available_themes();
+//    std::vector<framework::Application::ThemeDesc>::const_iterator i;
+//    for(i = themes.begin(); i != themes.end(); ++i) {
+//        DBG_OUT("adding %s", i->first.c_str());
+//        Gtk::TreeIter iter = model->append();
+//        (*iter).set_value(columns.label, i->first); 
+//    }
+    theme_combo->set_active(framework::Application::app()
+                            ->get_use_custom_theme());
+    theme_combo->signal_changed().connect(
+        boost::bind(&framework::Application::set_use_custom_theme,
+                    framework::Application::app(),
+                    theme_combo->property_active()));
+
     reopen_checkbutton = xml->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new framework::ConfigDataBinder<bool>(
                                 reopen_checkbutton->property_active(),

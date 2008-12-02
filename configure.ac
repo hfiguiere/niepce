@@ -145,6 +145,7 @@ doc/Makefile
 doc/doxygen/Makefile
 data/Makefile
 data/icons/Makefile
+data/themes/Makefile
 src/Makefile
 src/ext/Makefile
 src/ext/libgdl/Makefile

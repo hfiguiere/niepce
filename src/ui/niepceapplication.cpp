@@ -35,6 +35,10 @@ NiepceApplication::NiepceApplication()
     : Application(PACKAGE)
 {
     niepce::Stock::registerStockItems();
+    const char * themedir = DATADIR"/niepce/themes/";
+
+    register_theme(_("Niepce Dark"),
+                   std::string(themedir) + "niepce-dark.gtkrc");
 }
 
 Application::Ptr NiepceApplication::create()

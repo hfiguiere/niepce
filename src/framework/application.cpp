@@ -22,6 +22,7 @@
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <glibmm/i18n.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/rc.h>
@@ -39,6 +40,7 @@ Application::Application(const char * name)
     : m_config(Glib::ustring("/apps/") + name),
       m_refUIManager()
 {
+    register_theme(_("System"), "");
 }
 
 
@@ -68,7 +70,7 @@ Glib::RefPtr<Gtk::IconTheme> Application::getIconTheme() const
     return Gtk::IconTheme::get_default();
 }
 
-bool Application::use_custom_theme() const
+int Application::get_use_custom_theme() const
 {
     int v;
     try {
@@ -79,6 +81,23 @@ bool Application::use_custom_theme() const
     }
     return v != 0;
 }
+
+void Application::set_use_custom_theme(int theme_idx)
+{
+    m_config.setValue("ui_theme_set",
+                      boost::lexical_cast<Glib::ustring>(theme_idx));
+    if((theme_idx > -1) && ((size_t)theme_idx < m_themes.size())) {
+        m_config.setValue("ui_theme_file", m_themes[theme_idx].second);
+    }
+}
+
+
+void Application::register_theme(const Glib::ustring & label,
+                                 const std::string & path)
+{
+    m_themes.push_back(std::make_pair(label, path));
+}
+
 
 /** Main loop. 
  * @param constructor the Application object constructor
@@ -98,8 +117,8 @@ int Application::main(boost::function<Application::Ptr (void)> constructor,
     Gtk::Main kit(argc, argv);
     Application::Ptr app = constructor();
 
-    DBG_OUT("use_custon_theme %d", app->use_custom_theme());
-    if(app->use_custom_theme()) {
+    DBG_OUT("use_custon_theme %d", app->get_use_custom_theme());
+    if(app->get_use_custom_theme() != -1) {
         std::string rcpath = app->get_rc_path();
         if(!rcpath.empty()) {
             Gtk::RC rc(rcpath);
