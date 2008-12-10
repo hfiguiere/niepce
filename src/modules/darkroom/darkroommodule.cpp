@@ -36,10 +36,11 @@ void DarkroomModule::set_image(const db::LibFile::Ptr & file)
     m_image->reload(file->path(), 
                     file->fileType() == db::LibFile::FILE_TYPE_RAW,
                     file->orientation());
-    int w, h;
+/*    int w, h;
     w = m_imagecanvas->get_width();
     h = m_imagecanvas->get_height();
     m_image->set_scale_to_dim(w, h);
+*/
     m_imagecanvas->set_image(m_image->pixbuf_for_display());
 }
 
@@ -48,7 +49,16 @@ Gtk::Widget * DarkroomModule::buildWidget()
 {
     ncr::init();
     m_imagecanvas = Gtk::manage(new ImageCanvas());
+// TODO set a proper canvas size
+//    m_canvas_scroll.add(*m_imagecanvas);
 	m_vbox.pack_start(*m_imagecanvas, Gtk::PACK_EXPAND_WIDGET);
+
+//    int w,h;
+//    w = h = 0;
+//    m_canvas_scroll.get_size_request(w, h);
+//    DBG_OUT("scroll size %d %d", w, h);
+//    m_imagecanvas->set_size_request(w, h);
+    m_imagecanvas->set_bounds(0, 0, 1000, 1000);
 
 	// build the toolbar.
 	Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);

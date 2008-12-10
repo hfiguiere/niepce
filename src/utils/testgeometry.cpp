@@ -25,14 +25,15 @@
 
 #include "geometry.h"
 
+using utils::Rect;
 
 int test_main( int, char *[] )             // note the name!
 {
-	utils::Rect r1(0,1,2,3);
+	Rect r1(0,1,2,3);
 	BOOST_CHECK(r1.to_string() == "0 1 2 3");
 	
 	std::string s("100 100 250 250");
-	utils::Rect r2(s);
+	Rect r2(s);
 	BOOST_CHECK(r2.x() == 100);
 	BOOST_CHECK(r2.y() == 100);
 	BOOST_CHECK(r2.w() == 250);
@@ -44,13 +45,53 @@ int test_main( int, char *[] )             // note the name!
 	for(std::vector<std::string>::iterator iter = vtest.begin();
 		iter != vtest.end(); ++iter) {
 		try {
-			utils::Rect r3(*iter);
+			Rect r3(*iter);
 		}
 		catch(std::bad_cast) {
 			raised = true;
 		}
 		BOOST_CHECK(raised);
 	}
+
+
+    Rect dest1(0, 0, 640, 480);
+    Rect dest2(0, 0, 480, 640);
+
+    Rect source1(0, 0, 2000, 1000);
+    Rect source2(0, 0, 1000, 2000);
+
+    Rect result;
+
+    // FIT
+    result = source1.fit_into(dest1);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 640, 320));
+    result = source1.fit_into(dest2);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 480, 239));    
+
+    result = source2.fit_into(dest1);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 239, 480));
+    result = source2.fit_into(dest2);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 320, 640));    
+
+    // FILL
+    result = source1.fill_into(dest1);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 959, 480));
+    result = source1.fill_into(dest2);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 1280, 640));    
+
+    result = source2.fill_into(dest1);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 640, 1280));
+    result = source2.fill_into(dest2);
+    std::cout << result.to_string() << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 480, 959));    
+
 	return 0;
 }
 

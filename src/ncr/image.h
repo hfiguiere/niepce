@@ -44,8 +44,6 @@ public:
     void reload(const boost::filesystem::path & p, bool is_raw,
         int orientation);
     void set_scale(double scale);
-    void set_scale_to_dim(int w, int h);
-
 
     void set_tilt(double angle);
     void set_color_temp(int temp);

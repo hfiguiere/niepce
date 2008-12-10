@@ -180,18 +180,6 @@ void Image::set_scale(double scale)
     priv->m_scale->set("y", scale);    
 }
 
-void Image::set_scale_to_dim(int w, int h)
-{
-    double in_w = priv->m_width;
-    double in_h = priv->m_height;
-    double scale_w = w / in_w;
-    DBG_OUT("w %d in_w %f", w, in_w);
-    double scale_h = h / in_h;
-    DBG_OUT("h %d in_h %f", h, in_h);
-    DBG_OUT("scale w %f h %f", scale_w, scale_h);
-    double scale = std::min(scale_w, scale_h);
-    set_scale(scale);
-}
 
 namespace {
 

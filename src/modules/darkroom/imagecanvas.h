@@ -29,11 +29,38 @@ class ImageCanvas
     : public Goocanvas::Canvas
 {
 public:
+    typedef enum {
+        ZOOM_MODE_NONE = 0,
+        ZOOM_MODE_FIT,
+        ZOOM_MODE_FILL,
+        ZOOM_MODE_100P,
+        ZOOM_MODE_CUSTOM
+    } ZoomMode;
     ImageCanvas();
 
     void set_image(const Glib::RefPtr<Gdk::Pixbuf> & img);
-
+    void set_zoom_mode(ZoomMode mode)
+        {
+            if(m_zoom_mode != mode) {
+                m_need_redisplay = true;
+                m_zoom_mode = mode;
+            }
+        }
+    ZoomMode get_zoom_mode() const
+        {
+            return m_zoom_mode;
+        }
 private:
+    void _calc_image_frame(int img_w, int img_h,
+                          double & x, double & y,
+                          double & width, double & height);
+    /** cause to "recalulate" the content. 
+        Only if m_need_display of force */
+    void _redisplay(bool force = false);
+
+    bool                           m_need_redisplay;
+    ZoomMode                       m_zoom_mode;
+    Glib::RefPtr<Gdk::Pixbuf>      m_image;
     Glib::RefPtr<Goocanvas::Image> m_imageitem;
     Glib::RefPtr<Goocanvas::Rect>  m_frameitem;
     Goocanvas::Canvas*             m_imagecanvas;
@@ -47,6 +74,6 @@ private:
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

@@ -66,6 +66,7 @@ private:
     Gtk::HPaned                  m_dr_splitview;
     Gtk::VBox                    m_vbox;
     ImageCanvas*                 m_imagecanvas;
+    Gtk::ScrolledWindow          m_canvas_scroll;
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;

@@ -26,42 +26,62 @@
 
 namespace utils {
 
-	class Rect
-	{
-	public:
-		Rect();
-		Rect(int x, int y, int w, int h);
-		/** build a Rect from a string 
-		 * @param s string whose format is "x y w h" as decimal ints.
-		 * @throw a std::bad_cast exception if there is not 4 element
-		 * or if one of them is not an int.
-		 */
-		Rect(const std::string & s) 
-			throw(std::bad_cast);
-		
-		int x()
-			{ return _r[X]; }
-		int y() 
-			{ return _r[Y]; }
-		int w()
-			{ return _r[W]; }
-		int h()
-			{ return _r[H]; }
-		/** convert to a string in the same format as
-		 * accepted by the %Rect(const std::string & s) constructor.
-		 */
-		std::string to_string() const;
-	private:
-		/** the indices */
-		enum {
-			X = 0,
-			Y,
-			W,
-			H			
-		};
-		boost::array<int, 4> _r;
-	};
+class Rect
+{
+public:
+    Rect();
+    Rect(int x, int y, int w, int h);
+    /** build a Rect from a string 
+     * @param s string whose format is "x y w h" as decimal ints.
+     * @throw a std::bad_cast exception if there is not 4 element
+     * or if one of them is not an int.
+     */
+    Rect(const std::string & s) 
+        throw(std::bad_cast);
+    
+    int x() const
+        { return _r[X]; }
+    int y() const
+        { return _r[Y]; }
+    int w() const
+        { return _r[W]; }
+    int h() const
+        { return _r[H]; }
+    /** convert to a string in the same format as
+     * accepted by the %Rect(const std::string & s) constructor.
+     */
+    std::string to_string() const;
+
+    Rect & scale(double _s);
+
+    /** fit into destination. */
+    Rect fit_into(const Rect & dest) const;
+    /** fill into desitnation */
+    Rect fill_into(const Rect & dest) const;
+
+    bool operator==(const Rect & r) const
+        { return _r == r._r; }
+private:
+    /** the indices */
+    enum {
+        X = 0,
+        Y,
+        W,
+        H			
+    };
+    boost::array<int, 4> _r;
+};
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 
 #endif
