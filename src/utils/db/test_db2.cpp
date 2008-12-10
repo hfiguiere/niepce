@@ -32,25 +32,27 @@
 
 #include <boost/test/minimal.hpp>
 
-
-//sqlstatement_test
+//insertstatement_test
 int test_main(int, char *[])
 {
-	BOOST_CHECK(1);
+	db::ColumnList columns(2);
 
-	const char * sql = "SELECT * FROM foo WHERE bar='1'";
-	db::SQLStatement stmt(sql);
+	db::Column &c0(columns[0]);
+	c0.set_name("id");
+	c0.set_value(boost::lexical_cast<std::string>(1));
+	c0.set_auto_increment(true);
 
-	BOOST_CHECK(stmt.to_string() == sql);
+	db::Column &c1(columns[1]);
+	c1.set_name("name");
+	c1.set_value("foo");
 
-	db::SQLStatement stmt2 = stmt;
-
-	BOOST_CHECK(stmt2.to_string() == sql);
+	db::InsertStatement stmt("table", columns);
 	
-	BOOST_CHECK(db::SQLStatement::escape_string("d'oh") == "d''oh");
+	std::string s = stmt.to_string();
+	BOOST_CHECK(s.size() != 0); 
 
-	std::ostringstream ss;
-	ss << stmt;
-	BOOST_CHECK(ss.str() == sql);
+	BOOST_CHECK(s == "INSERT INTO table( id, name) VALUES (null, 'foo')");
     return 0;
 }
+
+

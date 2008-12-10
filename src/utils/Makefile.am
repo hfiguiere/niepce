@@ -4,12 +4,12 @@ DIST_SUBDIR = db
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
 TESTS = testmoniker testfiles testgeometry testxmp testufrawmeta \
-	teststringutils test_db
+	teststringutils test_db test_db2 test_db3 test_db4
 
 EXTRA_DIST = test.xmp test2.ufraw
 
 check_PROGRAMS = testmoniker testfiles testgeometry testxmp testufrawmeta \
-	teststringutils test_db
+	teststringutils test_db test_db2 test_db3 test_db4
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.a \
@@ -20,7 +20,8 @@ testfiles_LDADD = libniepceutils.a \
 	@BOOST_FILESYSTEM_LIBS@ @BOOST_THREAD_LIBS@
 
 testgeometry_SOURCES = testgeometry.cpp
-testgeometry_LDADD = libniepceutils.a
+testgeometry_LDADD = libniepceutils.a \
+	@BOOST_THREAD_LIBS@
 
 testxmp_SOURCES = testxmp.cpp
 testxmp_LDADD = libniepceutils.a \
@@ -37,7 +38,21 @@ teststringutils_LDADD =
 
 test_db_SOURCES = db/test_db.cpp
 test_db_LDADD = libniepceutils.a \
-	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
+	@BOOST_THREAD_LIBS@\
+	@SQLITE3_LIBS@
+
+test_db2_SOURCES = db/test_db2.cpp
+test_db2_LDADD = libniepceutils.a \
+	@BOOST_THREAD_LIBS@\
+	@SQLITE3_LIBS@
+
+test_db3_SOURCES = db/test_db3.cpp
+test_db3_LDADD = libniepceutils.a \
+	@BOOST_THREAD_LIBS@\
+	@SQLITE3_LIBS@
+
+test_db4_SOURCES = db/test_db4.cpp
+test_db4_LDADD = libniepceutils.a \
 	@BOOST_THREAD_LIBS@\
 	@SQLITE3_LIBS@
 

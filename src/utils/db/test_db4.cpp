@@ -33,24 +33,30 @@
 #include <boost/test/minimal.hpp>
 
 
-//sqlstatement_test
+//connection_test
 int test_main(int, char *[])
 {
-	BOOST_CHECK(1);
+	try {
+		db::IConnectionManagerDriver::Ptr mgr(new db::sqlite::SqliteCnxMgrDrv());
+		
+		db::DBDesc desc("", 0, "test.db");
+		db::IConnectionDriver::Ptr drv(mgr->connect_to_db(desc, "", ""));
 
-	const char * sql = "SELECT * FROM foo WHERE bar='1'";
-	db::SQLStatement stmt(sql);
-
-	BOOST_CHECK(stmt.to_string() == sql);
-
-	db::SQLStatement stmt2 = stmt;
-
-	BOOST_CHECK(stmt2.to_string() == sql);
-	
-	BOOST_CHECK(db::SQLStatement::escape_string("d'oh") == "d''oh");
-
-	std::ostringstream ss;
-	ss << stmt;
-	BOOST_CHECK(ss.str() == sql);
+		db::SQLStatement schemacreate("CREATE TABLE foo "
+									  "(bar TEXT NOT NULL)");
+		BOOST_CHECK(drv->execute_statement(schemacreate));
+		
+		const char * sql = "SELECT * FROM foo WHERE bar='1'";
+		db::SQLStatement stmt(sql);
+		
+		BOOST_CHECK(drv->execute_statement(stmt));
+		BOOST_CHECK(drv->should_have_data());
+		BOOST_CHECK(unlink("test.db") != -1);
+	}
+	catch(...) 
+	{
+		BOOST_CHECK(0);
+	}
     return 0;
 }
+
