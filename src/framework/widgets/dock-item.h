@@ -103,7 +103,6 @@ private:
     bool _grab_focus_on_realize;   //< if the dock item should grab focus on the next realize
 
     GtkWidget *_gdl_dock_item;
-    Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
 
     /** Interface widgets, will be packed like 
      * gdl_dock_item -> _frame -> _dock_item_box -> (_dock_item_action_area) 

@@ -50,7 +50,6 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
         Glib::RefPtr<Gdk::Pixbuf> icon(icon_theme->load_icon(icon_name, 16, Gtk::ICON_LOOKUP_USE_BUILTIN));
 
         if (icon) {
-            _icon_pixbuf = icon;
             _gdl_dock_item =
                 gdl_dock_item_new_with_pixbuf_icon(name.c_str(), 
                                                    long_name.c_str(),
