@@ -1688,7 +1688,7 @@ gdl_dock_item_new_with_pixbuf_icon (const gchar         *name,
     item = GDL_DOCK_ITEM (g_object_new (GDL_TYPE_DOCK_ITEM, 
                                         "name", name, 
                                         "long-name", long_name,
-                                        "pixbuf-icon", g_object_ref(pixbuf_icon),
+                                        "pixbuf-icon", pixbuf_icon,
                                         "behavior", behavior,
                                         NULL));
 
