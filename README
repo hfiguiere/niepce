@@ -73,12 +73,11 @@ Getting the code
 
 Obviously you have it.
 
-To get the most recent code, it is hosted on Gna.org Subversion servers.
-All you need is to check the following page:
-http://gna.org/svn/?group=niepce
+The most recent code is hosted on GNOME's Subversion server. All you need is:
 
+$ svn checkout http://svn.gnome.org/svn/niepce/trunk niepce
 
 Website
 -------
 
-http://home.gna.org/niepce/
+http://live.gnome.org/Niepce
