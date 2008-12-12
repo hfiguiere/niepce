@@ -17,73 +17,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../src/ui/niepcewindow.cpp:131
+#: ../src/niepce/ui/niepcewindow.cpp:131
 msgid "Ready"
 msgstr "Prêt"
 
-#: ../src/ui/niepcewindow.cpp:144
+#: ../src/niepce/ui/niepcewindow.cpp:144
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../src/ui/niepcewindow.cpp:145
+#: ../src/niepce/ui/niepcewindow.cpp:145
 msgid "_Import..."
 msgstr "_Importer..."
 
-#: ../src/ui/niepcewindow.cpp:155
+#: ../src/niepce/ui/niepcewindow.cpp:155
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../src/ui/niepcewindow.cpp:169
+#: ../src/niepce/ui/niepcewindow.cpp:169
 msgid "Import picture folder"
 msgstr "Importer un dossier d'images"
 
-#: ../src/ui/niepcewindow.cpp:173
+#: ../src/niepce/ui/niepcewindow.cpp:173
 msgid "Import"
 msgstr "Importer"
 
-#: ../src/ui/niepcewindow.cpp:256
+#: ../src/niepce/ui/niepcewindow.cpp:256
 msgid "Create library"
 msgstr "Créer une bibliothèque"
 
-#: ../src/ui/niepcewindow.cpp:260
+#: ../src/niepce/ui/niepcewindow.cpp:260
 msgid "Create"
 msgstr "Créer"
 
-#: ../src/ui/niepcewindow.cpp:326
+#: ../src/niepce/ui/niepcewindow.cpp:326
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
-#: ../src/ui/librarymainviewcontroller.cpp:111
+#: ../src/niepce/ui/librarymainviewcontroller.cpp:111
 msgid "Library"
 msgstr "Bibliothèque"
 
-#: ../src/ui/librarymainviewcontroller.cpp:118
+#: ../src/niepce/ui/librarymainviewcontroller.cpp:118
 msgid "Darkroom"
 msgstr "Chambre Noire"
 
-#: ../src/ui/workspacecontroller.cpp:191
+#: ../src/niepce/ui/workspacecontroller.cpp:191
 msgid "Pictures"
 msgstr "Images"
 
-#: ../src/ui/workspacecontroller.cpp:195
+#: ../src/niepce/ui/workspacecontroller.cpp:195
 msgid "Projects"
 msgstr "Projets"
 
-#: ../src/ui/workspacecontroller.cpp:199
+#: ../src/niepce/ui/workspacecontroller.cpp:199
 msgid "Keywords"
 msgstr "Mots clés"
 
 #. TODO make it a mnemonic
-#: ../src/ui/workspacecontroller.cpp:212
+#: ../src/niepce/ui/workspacecontroller.cpp:212
 msgid "_Workspace"
 msgstr "_Workspace"
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:423
+#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:423
 msgid "pixel"
 msgid_plural "pixels"
 msgstr[0] "pixel"
 msgstr[1] "pixels"
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:434
+#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:434
 msgid "Taken on"
 msgstr "Prise le"

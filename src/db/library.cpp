@@ -30,13 +30,13 @@
 #include "niepce/notifications.h"
 #include "library.h"
 #include "metadata.h"
-#include "utils/exception.h"
-#include "utils/exempi.h"
-#include "utils/db/sqlite/sqlitecnxmgrdrv.h"
-#include "utils/db/sqlite/sqlitecnxdrv.h"
-#include "utils/db/sqlstatement.h"
-#include "framework/notificationcenter.h"
-#include "framework/mimetype.h"
+#include "fwk/utils/exception.h"
+#include "fwk/utils/exempi.h"
+#include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.h"
+#include "fwk/utils/db/sqlite/sqlitecnxdrv.h"
+#include "fwk/utils/db/sqlstatement.h"
+#include "fwk/toolkit/notificationcenter.h"
+#include "fwk/toolkit/mimetype.h"
 
 using framework::NotificationCenter;
 

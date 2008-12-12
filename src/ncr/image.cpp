@@ -30,7 +30,7 @@ extern "C" {
 #include <geglmm/node.h>
 #include <geglmm/operation.h>
 
-#include "utils/debug.h"
+#include "fwk/utils/debug.h"
 #include "ncr.h"
 #include "image.h"
 

@@ -24,8 +24,8 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/weak_ptr.hpp>
 
-#include "utils/worker.h"
-#include "framework/notificationcenter.h"
+#include "fwk/utils/worker.h"
+#include "fwk/toolkit/notificationcenter.h"
 #include "db/libfile.h"
 
 namespace library {

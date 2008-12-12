@@ -10,8 +10,8 @@ TEST_LIBS =  \
 	liblibraryclient.a \
         ../library/libniepcelibrary.a \
 	../db/libniepcedb.a \
-        ../utils/libniepceutils.a \
-	../framework/libniepceframework.a \
+        ../fwk/utils/libniepceutils.a \
+	../fwk/toolkit/libniepceframework.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \

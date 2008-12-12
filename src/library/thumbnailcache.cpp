@@ -27,9 +27,9 @@
 #include <libopenraw-gnome/gdkpixbuf.h>
 
 #include "niepce/notifications.h"
-#include "utils/debug.h"
-#include "framework/mimetype.h"
-#include "framework/gdkutils.h"
+#include "fwk/utils/debug.h"
+#include "fwk/toolkit/mimetype.h"
+#include "fwk/toolkit/gdkutils.h"
 #include "thumbnailcache.h"
 #include "thumbnailnotification.h"
 

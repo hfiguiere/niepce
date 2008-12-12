@@ -19,7 +19,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include "utils/moniker.h"
+#include "fwk/utils/moniker.h"
 
 #include "libraryclient.h"
 #include "clientimpl.h"

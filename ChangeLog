@@ -1,4 +1,15 @@
+2008-12-12  Hubert Figuiere  <hub@figuiere.net>
+
+	* Large reorganisation of the code: 
+	src/framework -> src/fwk/toolkit
+	src/utils -> src/fwk/utils
+	src/ui -> src/niepce/ui
+	src/main -> src/niepce
+	src/modules -> src/niepce/modules
+	Fixed includes, build and test.
+
 2008-12-12 09:40  aprokoudine
+	
 	* ChangeLog: ported ChangeLog from the obsolete SVN
 	  README: fixed URLs
 

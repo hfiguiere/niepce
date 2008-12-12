@@ -23,7 +23,7 @@
 #define __NIEPCE_LIBRARY_OPQUEUE_H__
 
 
-#include "utils/mtqueue.h"
+#include "fwk/utils/mtqueue.h"
 #include "op.h"
 
 namespace library {

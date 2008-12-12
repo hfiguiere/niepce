@@ -8,8 +8,8 @@ TESTS = test_library
 
 TEST_LIBS =  \
 	libniepcedb.a \
-	../utils/libniepceutils.a \
-	../framework/libniepceframework.a \
+	$(top_builddir)/src/fwk/utils/libniepceutils.a \
+	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	@LIBGTKMM_LIBS@ @GNOMEVFS_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@ \

@@ -18,13 +18,13 @@
  */
 
 
-#include "utils/fsutils.h"
+#include "fwk/utils/fsutils.h"
 
 #define BOOST_AUTO_TEST_MAIN
 #include "locallibraryserver.h"
 
 #include <boost/bind.hpp>
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/minimal.hpp>
 
 
 using namespace library;
@@ -35,7 +35,8 @@ void foo(const db::Library::Ptr &)
 }
 
 
-BOOST_AUTO_TEST_CASE(worker_test)
+//BOOST_AUTO_TEST_CASE(worker_test)
+int test_main(int, char *[])
 {
 	char templ[] = "/tmp/niepce-tmpXXXXXX";
 	char *ptempl =  mkdtemp(templ);

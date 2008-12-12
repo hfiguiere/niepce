@@ -21,7 +21,7 @@
 #ifndef _NIEPCE_XMP_H_
 #define _NIEPCE_XMP_H_
 
-#include "utils/exempi.h"
+#include "fwk/utils/exempi.h"
 
 namespace niepce {
 

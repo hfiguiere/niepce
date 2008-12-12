@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "framework/mimetype.h"
+#include "fwk/toolkit/mimetype.h"
 #include "db/keyword.h"
 #include "db/storage.h"
 

@@ -22,8 +22,8 @@
 #include "opqueue.h"
 
 #include <boost/bind.hpp>
-#define BOOST_AUTO_TEST_MAIN
-#include <boost/test/auto_unit_test.hpp>
+
+#include <boost/test/minimal.hpp>
 
 using namespace library;
 
@@ -32,7 +32,8 @@ void foo(const db::Library::Ptr &)
 }
 
 
-BOOST_AUTO_TEST_CASE(opqueue_test)
+//BOOST_AUTO_TEST_CASE(opqueue_test)
+int test_main(int, char *[])
 {
 	OpQueue q;
 
@@ -47,5 +48,6 @@ BOOST_AUTO_TEST_CASE(opqueue_test)
 	BOOST_CHECK(p2 == p);
 	BOOST_CHECK(p2->id() == p->id());
 	BOOST_CHECK(q.empty());	
+	return 0;
 }
 

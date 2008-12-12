@@ -20,21 +20,21 @@
  */
 
 
-#include "utils/db/sqlstatement.h"
-#include "utils/db/iconnectiondriver.h"
+#include "fwk/utils/db/sqlstatement.h"
+#include "fwk/utils/db/iconnectiondriver.h"
 #include "library.h"
 #include "libfile.h"
 #include "libfolder.h"
 
-#define BOOST_AUTO_TEST_MAIN
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/minimal.hpp>
 
 
-BOOST_AUTO_TEST_CASE(library_test)
+//BOOST_AUTO_TEST_CASE(library_test)
+int test_main(int, char *[])
 {
 	db::Library lib("./", framework::NotificationCenter::Ptr());
 
-	BOOST_CHECK_EQUAL(lib.checkDatabaseVersion(), 1);
+	BOOST_CHECK(lib.checkDatabaseVersion() == 1);
 
 	db::IConnectionDriver::Ptr db(lib.dbDriver());
 	
@@ -50,4 +50,5 @@ BOOST_AUTO_TEST_CASE(library_test)
 
 
 	BOOST_CHECK(unlink(lib.dbName().string().c_str()) != -1);
+	return 0;
 }

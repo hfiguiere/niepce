@@ -13,24 +13,24 @@ msgstr ""
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/ui/importdialog.cpp:76
+#: ../src/niepce/ui/importdialog.cpp:76
 msgid "Import picture folder"
 msgstr "Импорт каталога со снимками"
 
-#: ../src/ui/importdialog.cpp:80
-#: ../src/ui/importdialog.glade.h:5
+#: ../src/niepce/ui/importdialog.cpp:80
+#: ../src/niepce/ui/importdialog.glade.h:5
 msgid "Import"
 msgstr "Импортировать"
 
-#: ../src/ui/importdialog.glade.h:1
+#: ../src/niepce/ui/importdialog.glade.h:1
 msgid "..."
 msgstr "..."
 
-#: ../src/ui/importdialog.glade.h:2
+#: ../src/niepce/ui/importdialog.glade.h:2
 msgid "<b>Date:</b>"
 msgstr "<b>Дата:</b>"
 
-#: ../src/ui/importdialog.glade.h:3
+#: ../src/niepce/ui/importdialog.glade.h:3
 msgid ""
 "Date is local\n"
 "Date is UTC"
@@ -38,128 +38,128 @@ msgstr ""
 "Местная дата\n"
 "Дата по UTC"
 
-#: ../src/ui/importdialog.glade.h:6
+#: ../src/niepce/ui/importdialog.glade.h:6
 msgid "Import Raw_Studio"
 msgstr "Импортировать метаданные Raw_studio"
 
-#: ../src/ui/importdialog.glade.h:7
+#: ../src/niepce/ui/importdialog.glade.h:7
 msgid "Import _UFRaw"
 msgstr "Импортировать метаданные _UFRaw"
 
-#: ../src/ui/importdialog.glade.h:8
+#: ../src/niepce/ui/importdialog.glade.h:8
 msgid "You can still change this after importing the pictures."
 msgstr "Вы сможете изменить это после импорта снимков"
 
-#: ../src/ui/importdialog.glade.h:9
+#: ../src/niepce/ui/importdialog.glade.h:9
 msgid "_Directory:"
 msgstr "_Папка:"
 
-#: ../src/ui/importdialog.glade.h:10
+#: ../src/niepce/ui/importdialog.glade.h:10
 msgid "_Folders"
 msgstr "_Папки"
 
-#: ../src/ui/importdialog.glade.h:11
+#: ../src/niepce/ui/importdialog.glade.h:11
 msgid "_Import"
 msgstr "_Импортировать"
 
-#: ../src/ui/importdialog.glade.h:12
+#: ../src/niepce/ui/importdialog.glade.h:12
 msgid "_Options"
 msgstr "П_араметры"
 
-#: ../src/ui/importdialog.glade.h:13
+#: ../src/niepce/ui/importdialog.glade.h:13
 msgid "gtk-cancel"
 msgstr "gtk-cancel"
 
-#: ../src/ui/librarymainviewcontroller.cpp:109
+#: ../src/niepce/ui/librarymainviewcontroller.cpp:109
 msgid "Library"
 msgstr "Библиотека"
 
-#: ../src/ui/librarymainviewcontroller.cpp:115
+#: ../src/niepce/ui/librarymainviewcontroller.cpp:115
 msgid "Darkroom"
 msgstr "Проявочная"
 
-#: ../src/ui/metadatapanecontroller.cpp:39
+#: ../src/niepce/ui/metadatapanecontroller.cpp:39
 msgid "Make:"
 msgstr "Производитель:"
 
-#: ../src/ui/metadatapanecontroller.cpp:40
+#: ../src/niepce/ui/metadatapanecontroller.cpp:40
 msgid "Model:"
 msgstr "Модель:"
 
-#: ../src/ui/metadatapanecontroller.cpp:41
+#: ../src/niepce/ui/metadatapanecontroller.cpp:41
 msgid "Lens:"
 msgstr "Объектив:"
 
-#: ../src/ui/metadatapanecontroller.cpp:45
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Exposure Program:"
 msgstr "Программа экспозиции:"
 
-#: ../src/ui/metadatapanecontroller.cpp:46
+#: ../src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "Speed:"
 msgstr "Выдержка:"
 
-#: ../src/ui/metadatapanecontroller.cpp:47
+#: ../src/niepce/ui/metadatapanecontroller.cpp:47
 msgid "Aperture:"
 msgstr "Апертура:"
 
-#: ../src/ui/metadatapanecontroller.cpp:48
+#: ../src/niepce/ui/metadatapanecontroller.cpp:48
 msgid "ISO:"
 msgstr "ISO:"
 
-#: ../src/ui/metadatapanecontroller.cpp:49
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
 msgid "Exposure Bias:"
 msgstr "Коррекция экспозиции:"
 
 #. this one is fishy as it hardcode the prefix.
-#: ../src/ui/metadatapanecontroller.cpp:51
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Flash:"
 msgstr "Вспышка:"
 
-#: ../src/ui/metadatapanecontroller.cpp:52
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Flash compensation:"
 msgstr "Компенсация вспышки:"
 
-#: ../src/ui/metadatapanecontroller.cpp:53
+#: ../src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "Focal length:"
 msgstr "Фокусное расстояние:"
 
-#: ../src/ui/metadatapanecontroller.cpp:54
+#: ../src/niepce/ui/metadatapanecontroller.cpp:54
 msgid "White balance:"
 msgstr "Баланс белого:"
 
-#: ../src/ui/metadatapanecontroller.cpp:55
+#: ../src/niepce/ui/metadatapanecontroller.cpp:55
 msgid "Date:"
 msgstr "Дата:"
 
-#: ../src/ui/metadatapanecontroller.cpp:59
+#: ../src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Rating:"
 msgstr "Оценка:"
 
-#: ../src/ui/metadatapanecontroller.cpp:60
+#: ../src/niepce/ui/metadatapanecontroller.cpp:60
 msgid "Label:"
 msgstr "Метка:"
 
-#: ../src/ui/metadatapanecontroller.cpp:61
+#: ../src/niepce/ui/metadatapanecontroller.cpp:61
 msgid "Keywords:"
 msgstr "Ключевые слова:"
 
-#: ../src/ui/metadatapanecontroller.cpp:65
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Camera Information"
 msgstr "О камере"
 
-#: ../src/ui/metadatapanecontroller.cpp:68
+#: ../src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Shooting Information"
 msgstr "О снимке"
 
-#: ../src/ui/metadatapanecontroller.cpp:71
+#: ../src/niepce/ui/metadatapanecontroller.cpp:71
 msgid "IPTC"
 msgstr "IPTC"
 
-#: ../src/ui/metadatapanecontroller.cpp:74
+#: ../src/niepce/ui/metadatapanecontroller.cpp:74
 msgid "Rights"
 msgstr "Права"
 
-#: ../src/ui/niepceapplication.cpp:60
+#: ../src/niepce/ui/niepceapplication.cpp:60
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -169,103 +169,103 @@ msgstr ""
 "\n"
 "Параметры сборки: "
 
-#: ../src/ui/niepcewindow.cpp:138
+#: ../src/niepce/ui/niepcewindow.cpp:138
 msgid "Ready"
 msgstr "Готово"
 
-#: ../src/ui/niepcewindow.cpp:232
+#: ../src/niepce/ui/niepcewindow.cpp:232
 msgid "_Library"
 msgstr "_Библиотека"
 
-#: ../src/ui/niepcewindow.cpp:238
+#: ../src/niepce/ui/niepcewindow.cpp:238
 msgid "New _Folder..."
 msgstr "Создать _папку..."
 
-#: ../src/ui/niepcewindow.cpp:239
+#: ../src/niepce/ui/niepcewindow.cpp:239
 msgid "New _Project..."
 msgstr "Создать про_ект..."
 
-#: ../src/ui/niepcewindow.cpp:241
+#: ../src/niepce/ui/niepcewindow.cpp:241
 msgid "_Import..."
 msgstr "_Импортировать..."
 
-#: ../src/ui/niepcewindow.cpp:251
+#: ../src/niepce/ui/niepcewindow.cpp:251
 msgid "_Edit"
 msgstr "_Правка"
 
-#: ../src/ui/niepcewindow.cpp:280
+#: ../src/niepce/ui/niepcewindow.cpp:280
 msgid "_Image"
 msgstr "_Снимок"
 
-#: ../src/ui/niepcewindow.cpp:300
+#: ../src/niepce/ui/niepcewindow.cpp:300
 msgid "Set _Label"
 msgstr "По_метить"
 
-#: ../src/ui/niepcewindow.cpp:301
+#: ../src/niepce/ui/niepcewindow.cpp:301
 msgid "Label _6"
 msgstr "Метка _6"
 
-#: ../src/ui/niepcewindow.cpp:306
+#: ../src/niepce/ui/niepcewindow.cpp:306
 msgid "Label _7"
 msgstr "Метка _7"
 
-#: ../src/ui/niepcewindow.cpp:311
+#: ../src/niepce/ui/niepcewindow.cpp:311
 msgid "Label _8"
 msgstr "Метка _8"
 
-#: ../src/ui/niepcewindow.cpp:316
+#: ../src/niepce/ui/niepcewindow.cpp:316
 msgid "Label _9"
 msgstr "Метка _9"
 
-#: ../src/ui/niepcewindow.cpp:322
+#: ../src/niepce/ui/niepcewindow.cpp:322
 msgid "Set _Rating"
 msgstr "Дать _оценку"
 
-#: ../src/ui/niepcewindow.cpp:323
+#: ../src/niepce/ui/niepcewindow.cpp:323
 msgid "_No Rating"
 msgstr "_Без оценки"
 
-#: ../src/ui/niepcewindow.cpp:327
+#: ../src/niepce/ui/niepcewindow.cpp:327
 msgid "_1 Star"
 msgstr "_1 звезда"
 
-#: ../src/ui/niepcewindow.cpp:331
+#: ../src/niepce/ui/niepcewindow.cpp:331
 msgid "_2 Stars"
 msgstr "_2 звезды"
 
-#: ../src/ui/niepcewindow.cpp:335
+#: ../src/niepce/ui/niepcewindow.cpp:335
 msgid "_3 Stars"
 msgstr "_3 звезды"
 
-#: ../src/ui/niepcewindow.cpp:339
+#: ../src/niepce/ui/niepcewindow.cpp:339
 msgid "_4 Stars"
 msgstr "_4 звезды"
 
-#: ../src/ui/niepcewindow.cpp:343
+#: ../src/niepce/ui/niepcewindow.cpp:343
 msgid "_5 Stars"
 msgstr "_5 звезд"
 
-#: ../src/ui/niepcewindow.cpp:350
+#: ../src/niepce/ui/niepcewindow.cpp:350
 msgid "_Help"
 msgstr "Спр_авка"
 
-#: ../src/ui/niepcewindow.cpp:367
+#: ../src/niepce/ui/niepcewindow.cpp:367
 msgid "Undo "
 msgstr "Отменить"
 
-#: ../src/ui/niepcewindow.cpp:376
+#: ../src/niepce/ui/niepcewindow.cpp:376
 msgid "Redo "
 msgstr "Вернуть"
 
-#: ../src/ui/niepcewindow.cpp:437
+#: ../src/niepce/ui/niepcewindow.cpp:437
 msgid "Create library"
 msgstr "Создать библиотеку"
 
-#: ../src/ui/niepcewindow.cpp:441
+#: ../src/niepce/ui/niepcewindow.cpp:441
 msgid "Create"
 msgstr "Создать"
 
-#: ../src/ui/niepcewindow.cpp:510
+#: ../src/niepce/ui/niepcewindow.cpp:510
 msgid "Niepce Digital - "
 msgstr "Niepce Digital — "
 
@@ -278,7 +278,7 @@ msgstr "Niepce Digital — "
 #. fill-column:80
 #. End:
 #.
-#: ../src/ui/preferences.glade.h:1
+#: ../src/niepce/ui/preferences.glade.h:1
 msgid ""
 "System\n"
 "Dark"
@@ -286,55 +286,55 @@ msgstr ""
 "Системная\n"
 "Темная"
 
-#: ../src/ui/preferences.glade.h:3
+#: ../src/niepce/ui/preferences.glade.h:3
 msgid "_General"
 msgstr "О_бщие"
 
-#: ../src/ui/preferences.glade.h:4
+#: ../src/niepce/ui/preferences.glade.h:4
 msgid "_Reopen Library"
 msgstr "_Повторно открыть библиотеку"
 
-#: ../src/ui/preferences.glade.h:5
+#: ../src/niepce/ui/preferences.glade.h:5
 msgid "_Theme:\t"
 msgstr "_Тема:\t"
 
-#: ../src/ui/preferences.glade.h:6
+#: ../src/niepce/ui/preferences.glade.h:6
 msgid "_User Interface"
 msgstr "_Интерфейс"
 
-#: ../src/ui/selectioncontroller.cpp:184
+#: ../src/niepce/ui/selectioncontroller.cpp:184
 msgid "Set Label"
 msgstr "Установить метку"
 
-#: ../src/ui/selectioncontroller.cpp:205
+#: ../src/niepce/ui/selectioncontroller.cpp:205
 msgid "Set Rating"
 msgstr "Оценить"
 
-#: ../src/ui/workspacecontroller.cpp:197
+#: ../src/niepce/ui/workspacecontroller.cpp:197
 msgid "Pictures"
 msgstr "Снимки"
 
-#: ../src/ui/workspacecontroller.cpp:201
+#: ../src/niepce/ui/workspacecontroller.cpp:201
 msgid "Projects"
 msgstr "Проекты"
 
-#: ../src/ui/workspacecontroller.cpp:205
+#: ../src/niepce/ui/workspacecontroller.cpp:205
 msgid "Keywords"
 msgstr "Ключевые слова"
 
 #. TODO make it a mnemonic
-#: ../src/ui/workspacecontroller.cpp:218
+#: ../src/niepce/ui/workspacecontroller.cpp:218
 msgid "_Workspace"
 msgstr "_Рабочий стол"
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:425
+#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:425
 msgid "pixel"
 msgid_plural "pixels"
 msgstr[0] "пиксел"
 msgstr[1] "пиксела"
 msgstr[2] "пикселов"
 
-#: ../src/ui/thumb-view/eog-thumb-view.cpp:436
+#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:436
 msgid "Taken on"
 msgstr "Снято"
 
@@ -346,56 +346,56 @@ msgstr "Повернуть в_лево"
 msgid "Rotate R_ight"
 msgstr "Повернуть в_право"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:39
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:39
 msgid "Crop"
 msgstr "Кадрирование"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:42
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:42
 msgid "Tilt"
 msgstr "Выравнивание"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:44
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:44
 msgid "White balance"
 msgstr "Баланс белого"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:47
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:47
 msgid "Color temperature"
 msgstr "Температура цвета"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:49
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:49
 msgid "Tone and colour"
 msgstr "Тон и цвет"
 
 #. s->signal_value_changed().connect();
-#: ../src/modules/darkroom/toolboxcontroller.cpp:53
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:53
 msgid "Exposure"
 msgstr "Экспозиция"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:55
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:55
 msgid "Recovery"
 msgstr "Восстановление"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:57
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:57
 msgid "Fill Light"
 msgstr "Заполняющий свет"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:59
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
 msgid "Blacks"
 msgstr "Темные тона"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:61
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
 msgid "Brightness"
 msgstr "Яркость"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:63
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:63
 msgid "Contrast"
 msgstr "Контраст"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:65
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
 msgid "Saturation"
 msgstr "Насыщенность"
 
-#: ../src/modules/darkroom/toolboxcontroller.cpp:67
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
 msgid "Vibrance"
 msgstr "Живость"
 

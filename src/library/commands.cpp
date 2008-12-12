@@ -24,7 +24,7 @@
 #include <boost/filesystem/path.hpp>
 
 
-#include "utils/debug.h"
+#include "fwk/utils/debug.h"
 #include "db/library.h"
 #include "db/libfolder.h"
 #include "db/libfile.h"
