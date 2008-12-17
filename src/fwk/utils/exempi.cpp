@@ -33,17 +33,29 @@
 
 namespace bfs = boost::filesystem;
 
+namespace xmp {
+
+const char * UFRAW_INTEROP_NAMESPACE = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
+const char * UFRAW_INTEROP_NS_PREFIX = "ufrint";
+
+}
+
 namespace utils {
 
 ExempiManager::ExempiManager(const ns_defs_t* namespaces)
 {
-    if(xmp_init() && (namespaces != NULL)) {
-        const ns_defs_t* iter = namespaces;
-        for( ; iter->ns != NULL; iter++)	
-        {
-            // TODO check the return code
-            xmp_register_namespace(iter->ns,
-                                   iter->prefix, NULL);
+    if(xmp_init()) {
+        xmp_register_namespace(xmp::UFRAW_INTEROP_NAMESPACE,
+                               xmp::UFRAW_INTEROP_NS_PREFIX, NULL);
+        
+        if(namespaces != NULL) {
+            const ns_defs_t* iter = namespaces;
+            for( ; iter->ns != NULL; iter++)	
+            {
+                // TODO check the return code
+                xmp_register_namespace(iter->ns,
+                                       iter->prefix, NULL);
+            }
         }
     }
 }
@@ -240,6 +252,6 @@ const std::vector< std::string > & XmpMeta::keywords() const
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */

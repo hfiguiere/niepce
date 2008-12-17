@@ -1,7 +1,7 @@
 /*
- * niepce - utils/ufrawmeta.h
+ * niepce - utils/ufrawmeta.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "niepce/xmp.h"
 #include "debug.h"
 #include "ufrawmeta.h"
+#include "exempi.h"
 
 
 namespace bfs = boost::filesystem;
@@ -337,7 +337,7 @@ namespace utils {
 			DBG_OUT("file not found %s", m_id_file.string().c_str());
 		}
 		if(has_data) {
-			xmp_set_property_bool(xmp, niepce::NIEPCE_XMP_NAMESPACE, 
+			xmp_set_property_bool(xmp, xmp::UFRAW_INTEROP_NAMESPACE, 
 								  "ImportedFromUFraw", true, 0);
 		}
 		return has_data;

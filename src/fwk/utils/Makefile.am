@@ -4,14 +4,12 @@ DIST_SUBDIR = db
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
 TESTS = testmoniker testfiles testgeometry testxmp \
-	teststringutils test_db test_db2 test_db3 test_db4
-#testufrawmeta
+	teststringutils test_db test_db2 test_db3 test_db4 testufrawmeta
 
 EXTRA_DIST = test.xmp test2.ufraw
 
 check_PROGRAMS = testmoniker testfiles testgeometry testxmp \
-	teststringutils test_db test_db2 test_db3 test_db4
-#testufrawmeta
+	teststringutils test_db test_db2 test_db3 test_db4 testufrawmeta
 
 testmoniker_SOURCES = testmoniker.cpp
 testmoniker_LDADD = libniepceutils.a \

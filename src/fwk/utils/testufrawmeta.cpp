@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testxmp.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "niepce/xmp.h"
 #include "debug.h"
 #include "exempi.h"
 #include "ufrawmeta.h"
@@ -40,7 +39,7 @@ int test_main( int, char *[] )             // note the name!
 	else {
 		dir = pdir;
 	}
-	utils::ExempiManager xmpManager(niepce::xmp_namespaces);
+	utils::ExempiManager xmpManager(NULL);
 
     xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
 
@@ -96,7 +95,7 @@ int test_main( int, char *[] )             // note the name!
 	BOOST_CHECK(aDim == 3321);
 
 	bool imported = false;
-	BOOST_CHECK(xmp_get_property_bool(xmp, niepce::NIEPCE_XMP_NAMESPACE,
+	BOOST_CHECK(xmp_get_property_bool(xmp, xmp::UFRAW_INTEROP_NAMESPACE,
 									  "ImportedFromUFraw", &imported, NULL));
 	BOOST_CHECK(imported);
 

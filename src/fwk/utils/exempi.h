@@ -99,7 +99,9 @@ struct MetaDataSectionFormat {
     const char * section;
     const MetaDataFormat * formats;
 };
-	
+
+extern const char * UFRAW_INTEROP_NAMESPACE;	
+extern const char * UFRAW_INTEROP_NS_PREFIX;	
 
 }
 
