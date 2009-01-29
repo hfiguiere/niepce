@@ -13,7 +13,7 @@ INCLUDES = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
-	@GNOMEVFS_CFLAGS@ @LIBGCONFMM_CFLAGS@ \
+	@GNOMEVFS_CFLAGS@ @GCONF_CFLAGS@ \
 	@GOOCANVASMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@
 

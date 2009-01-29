@@ -25,7 +25,7 @@ A C++ compiler
 gtk+ 2.8
 cairo 1.1
 gtkmm 2.10
-gconfmm 2.6 (this will be removed)
+gconf 2.x
 cairomm
 gnome-vfs >= 2.14
 sqlite3
@@ -48,7 +48,7 @@ UNIX systems.
 Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
-aptitude install libglademm-2.4-dev libgconfmm-2.6-dev libgnomevfs2-dev \
+aptitude install libglademm-2.4-dev gconf2-dev libgnomevfs2-dev \
 > libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev \
 > libgoocanvas-dev
 

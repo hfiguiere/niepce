@@ -3,7 +3,7 @@
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
-	@LIBGCONFMM_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@ \
+	@GCONF_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a

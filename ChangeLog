@@ -1,6 +1,17 @@
 2008-12-26  Hubert Figuiere  <hub@figuiere.net>
 
 	* README:
+	* configure.ac:
+	* src/fwk/toolkit/Makefile.am:
+	* src/fwk/toolkit/application.cpp:
+	* src/fwk/toolkit/configuration.cpp:
+	* src/fwk/toolkit/configuration.h:
+	* src/niepce/Makefile.am:
+	* src/niepce/modules/darkroom/Makefile.am:
+	* src/niepce/ui/Makefile.am:
+	Remove gconfmm dependency.
+	
+	* README:
 	* configure.ac: 
 	Check explicitely for gegl 0.0.20
 

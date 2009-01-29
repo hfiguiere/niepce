@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "gconf_proxy_header.h"
+#include <gconf/gconf-client.h>
 
 #include "fwk/utils/debug.h"
 #include "configuration.h"
@@ -29,7 +29,7 @@
 namespace framework {
 
 	Configuration::Configuration(const Glib::ustring & root)
-		: m_gconf(Gnome::Conf::Client::get_default_client()),
+		: m_gconf(gconf_client_get_default()),
 		  m_root(root)
 	{
 	}
@@ -45,14 +45,16 @@ namespace framework {
 		//
 		bool found = true;
 
-		try {
-			m_gconf->get(m_root + "/" + key);
-		}
-		catch(Gnome::Conf::Error & err) {
+        GConfValue * v = gconf_client_get(m_gconf,
+                                          Glib::ustring(m_root + "/" + key).c_str(),
+                                          NULL);
+        found = (v != NULL);
+        if(v) {
+            gconf_value_free(v);
+        }
+        else {
 			DBG_OUT("key %s not found", key.c_str());
-			DBG_OUT("exception is %s", err.what().c_str());
-			found = false;
-		}
+        }
 
 		return found;
 	}
@@ -62,13 +64,22 @@ namespace framework {
 												const Glib::ustring & def) const
 	{
 		Glib::ustring value;
-		try {
-			value = m_gconf->get_string(m_root + "/" + key);
+        GError *err = NULL;
+        gchar* v = gconf_client_get_string(m_gconf,
+                                           Glib::ustring(m_root + "/" + key).c_str(),
+                                           &err);
+
+        if(!v) {
+            value = def;
+            if(err) {
+                DBG_OUT("Exception raised: %s", err->message);
+                g_error_free(err);
+            }
 		}
-		catch(Gnome::Conf::Error &err) {
-			value = def;
-			DBG_OUT("Exception raised: %s", err.what().c_str());
-		}
+        else {
+            value = v;
+            g_free(v);
+        }
 
 		return value;
 	}
@@ -76,11 +87,14 @@ namespace framework {
 	void Configuration::setValue(const Glib::ustring & key, 
 								 const Glib::ustring & value)
 	{
-		try {
-			m_gconf->set(m_root + "/" + key, value);
-		}
-		catch(Gnome::Conf::Error & err) {
-			DBG_OUT("Exception raised: %s", err.what().c_str());
+        GError *err = NULL;
+        gboolean ret = gconf_client_set_string(m_gconf, 
+                                               Glib::ustring(m_root + "/" + key).c_str(), 
+                                               value.c_str(), &err);
+        
+        if(ret && err) {
+            DBG_OUT("Exception raised: %s", err->message);
+            g_error_free(err);
 		}
 	}
 

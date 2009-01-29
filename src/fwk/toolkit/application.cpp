@@ -26,6 +26,7 @@
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/rc.h>
+#include <gconf/gconf.h>
 
 #include "fwk/utils/debug.h"
 #include "application.h"
@@ -108,7 +109,8 @@ void Application::register_theme(const Glib::ustring & label,
 int Application::main(boost::function<Application::Ptr (void)> constructor, 
                       int argc, char **argv)
 {
-    Gnome::Conf::init();
+    // TODO fix error check
+    gconf_init(argc, argv, NULL);
     if(!Glib::thread_supported()) {
         DBG_OUT("thread init");
         Glib::thread_init();

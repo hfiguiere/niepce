@@ -21,10 +21,10 @@
 #ifndef _FRAMEWORK_CONFIGURATION_H_
 #define _FRAMEWORK_CONFIGURATION_H_
 
+#include <gconf/gconf-client.h>
+
 #include <glibmm/ustring.h>
 #include <glibmm/refptr.h>
-
-#include "fwk/toolkit/gconf_proxy_header.h"
 
 
 namespace framework {
@@ -41,7 +41,7 @@ namespace framework {
 
 		void setValue(const Glib::ustring & key, const Glib::ustring & value);
 	private:
-		Glib::RefPtr< Gnome::Conf::Client > m_gconf;
+        GConfClient *                       m_gconf;
 		Glib::ustring                       m_root;
 	};
 
