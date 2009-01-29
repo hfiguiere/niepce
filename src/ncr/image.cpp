@@ -69,7 +69,7 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
     priv->m_node->set("format", babl_format("RGB u16"));
 
     if(!is_raw) {
-        load_file = priv->m_node->new_child("operation", "load");
+        load_file = priv->m_node->new_child("operation", "gegl:load");
         load_file->set("path", p.string());
         priv->m_rgb = load_file;
     }
@@ -78,16 +78,16 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
         or_get_extract_rawdata(p.string().c_str(), 0, &rawdata);
         Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
         // @todo can return a NULL buffer if load failed. Deal with that.
-        load_file = priv->m_node->new_child("operation", "load-buffer");
+        load_file = priv->m_node->new_child("operation", "gegl:load-buffer");
         load_file->set("buffer", buffer);
         or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);
         or_rawdata_release(rawdata);
 
         Glib::RefPtr<Gegl::Node> stretch = priv->m_node->new_child(
-            "operation", "stretch-contrast");
+            "operation", "gegl:stretch-contrast");
         
         Glib::RefPtr<Gegl::Node> demosaic = priv->m_node->new_child(
-            "operation", "demosaic-bimedian");
+            "operation", "gegl:demosaic-bimedian");
         // @todo refactor somewhere.
         int npattern = 0;
         switch(pattern) {
@@ -147,18 +147,18 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
     Glib::RefPtr<Gegl::Node> rotate;
     if(flip) {
         // @todo find a test case.
-        rotate =  priv->m_node->new_child("operation", "reflect");
+        rotate =  priv->m_node->new_child("operation", "gegl:reflect");
         rotate->set("x", -1.0);
         current = priv->m_rgb->link(rotate);
     }
     else {
         current = priv->m_rgb;
     }
-    rotate = priv->m_node->new_child("operation", "rotate");
+    rotate = priv->m_node->new_child("operation", "gegl:rotate");
     rotate->set("degrees", degrees);
     current = current->link(rotate);
 
-    priv->m_scale = priv->m_node->new_child("operation", "scale");
+    priv->m_scale = priv->m_node->new_child("operation", "gegl:scale");
     set_scale(0.25);
     current->link(priv->m_scale);
     priv->m_output = priv->m_scale;
