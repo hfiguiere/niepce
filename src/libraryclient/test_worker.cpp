@@ -50,5 +50,6 @@ int test_main(int, char *[])
 		Op::Ptr p(new Op(0, boost::bind(&foo, db::Library::Ptr())));
 		w.schedule(p);
 	}
+    return 0;
 }
 
