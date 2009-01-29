@@ -1,3 +1,8 @@
+2008-12-30  Pedro Kiefer <pedro@kiefer.com.br>
+
+	* src/niepce/ui/selectioncontroller.cpp:
+	Test iterator for current selection before incrementing it
+
 2008-12-26  Hubert Figuiere  <hub@figuiere.net>
 
 	* README:

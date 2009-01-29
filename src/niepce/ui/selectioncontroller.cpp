@@ -103,26 +103,28 @@ void SelectionController::_selection_move(bool backwards)
 {
     int selection = get_selection();
     Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
-    if(backwards) {
-        if(iter != m_imageliststore->children().begin()) {
-            iter--;
-        }
-    }
-    else {
-        iter++;
-    }
     if(iter) {
-        // make sure the iterator is valid...
-        db::LibFile::Ptr libfile 
-            = (*iter)[m_imageliststore->columns().m_libfile];
-        selection = libfile->id();
+        if(backwards) {
+            if(iter != m_imageliststore->children().begin()) {
+                iter--;
+            }
+        }
+        else {
+            iter++;
+        }
+        if(iter) {
+            // make sure the iterator is valid...
+            db::LibFile::Ptr libfile 
+                = (*iter)[m_imageliststore->columns().m_libfile];
+            selection = libfile->id();
 
-        utils::AutoFlag f(m_in_handler);
+            utils::AutoFlag f(m_in_handler);
         
-        std::for_each(m_selectables.begin(), m_selectables.end(),
-                      boost::bind(&IImageSelectable::select_image, _1,  
-                                  selection));
-        signal_selected(selection);
+            std::for_each(m_selectables.begin(), m_selectables.end(),
+                          boost::bind(&IImageSelectable::select_image, _1,  
+                                      selection));
+            signal_selected(selection);
+        }
     }
 }
 
