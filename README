@@ -34,9 +34,10 @@ boost 1.33
  -boost thread
  -boost filesystem
  -boost test (for the unit test)
-exempi 2.0.0
-libopenraw 0.0.4
-geglmm 0.0.17
+exempi >= 2.0.0
+libopenraw >= 0.0.4
+geglmm >= 0.0.17
+gegl >= 0.0.20
 babl
 goocanvasmm 0.10.0
 
