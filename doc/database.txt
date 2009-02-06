@@ -14,6 +14,7 @@ version :       The version of the database. Current = 1.
 Files in the library
 
 files           id             Unique ID in the database
+		main_file      ID in fsfiles for the main file.
 		path           The absolute path to the file
 		parent_id      The ID on the containing folder (= folders.id)
 		orientation    The Exif orientation of the file
@@ -28,6 +29,10 @@ files           id             Unique ID in the database
 		xmp            The XMP blob
 		xmp_data       The date the XMP is rewritten on disk (time_t)
 
+Filesystem files in the library
+
+fsfiles         id             Unique ID in the database
+                path           The absolute path
 
 Folders for the library "storage"
 

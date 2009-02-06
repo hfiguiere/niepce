@@ -1,7 +1,7 @@
 /*
  * niepce - db/libfile.h
  *
- * Copyright (C) 2007, 2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "fwk/toolkit/mimetype.h"
 #include "db/keyword.h"
 #include "db/storage.h"
+#include "db/fsfile.h"
 
 namespace db {
 
@@ -49,7 +50,8 @@ public:
 
     static FileType mimetype_to_filetype(framework::MimeType mime);
 
-    LibFile(int id, int folderId, const boost::filesystem::path & p,
+    LibFile(int id, int folderId, int fsfileid, 
+            const boost::filesystem::path & p,
             const std::string & name );
     virtual ~LibFile();
 
@@ -60,7 +62,7 @@ public:
     const std::string & name() const
         { return m_name; }
     const boost::filesystem::path & path() const
-        { return m_path; }
+        { return m_main_file.path(); }
 
 //		Storage::Ptr storage() const;
 
@@ -94,7 +96,7 @@ public:
      * because the Gtk stuff want that.
      */
     const std::string uri() const
-        { return std::string("file://") + m_path.string(); }
+        { return std::string("file://") + m_main_file.path().string(); }
     /** check is the library file is at uri
      * @return true of the uri match
      * @todo
@@ -105,7 +107,8 @@ private:
     int         m_id;           /**< file ID */
     int         m_folderId;     /**< parent folder */
     std::string m_name;         /**< name */
-    boost::filesystem::path  m_path;/**< path name relative to the folder */
+    FsFile      m_main_file;
+//    boost::filesystem::path  m_path;/**< path name relative to the folder */
 //		std::string m_type;
     int32_t     m_orientation;  /**< Exif orientatoin */
     int32_t     m_rating;       /**< rating */

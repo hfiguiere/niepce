@@ -1,7 +1,7 @@
 /*
  * niepce - db/test_library.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,16 @@ int test_main(int, char *[])
 {
 	db::Library lib("./", framework::NotificationCenter::Ptr());
 
-	BOOST_CHECK(lib.checkDatabaseVersion() == 1);
+	BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
 
 	db::IConnectionDriver::Ptr db(lib.dbDriver());
 	
-	lib.addFolder("foo");
+    db::LibFolder::Ptr folder_added(lib.addFolder("foo"));
+    BOOST_CHECK(folder_added);
+    BOOST_CHECK(folder_added->id() > 0);
 	db::LibFolder::Ptr f(lib.getFolder("foo"));
 	BOOST_CHECK(f);
+    BOOST_CHECK(f->id() == folder_added->id());
 	lib.addFolder("bar");
 	BOOST_CHECK(lib.getFolder("bar"));
 
@@ -48,7 +51,19 @@ int test_main(int, char *[])
 	lib.getAllFolders( l );
 	BOOST_CHECK( l->size() == 2 );
 
+    int file_id = lib.addFile(folder_added->id(), "foo/myfile", false);
+    BOOST_CHECK(file_id > 0);
 
 	BOOST_CHECK(unlink(lib.dbName().string().c_str()) != -1);
 	return 0;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

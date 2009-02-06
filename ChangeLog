@@ -1,3 +1,14 @@
+2009-01-30  Hubert Figuiere  <hub@figuiere.net>
+
+	* doc/database.txt:
+	* src/db/Makefile.am:
+	* src/db/fsfile.{cpp,h}:
+	* src/db/libfile.{cpp,h}:
+	* src/db/library.{cpp,h}: 
+	* src/db/test_library.cpp:
+	Implement the FsFiles.
+	Also check the DB version.
+
 2009-01-28  Hubert Figuiere  <hub@figuiere.net>
 
 	* configure.in

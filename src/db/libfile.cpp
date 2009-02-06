@@ -1,7 +1,7 @@
 /*
  * niepce - db/libfile.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@ namespace bfs = boost::filesystem;
 
 namespace db {
 	
-LibFile::LibFile(int _id, int _folderId, const bfs::path & p,
+LibFile::LibFile(int _id, int _folderId, int _fsfileid, const bfs::path & p,
                  const std::string & _name )
 	: m_id(_id), m_folderId(_folderId),
-	  m_name(_name), m_path(p),
+	  m_name(_name), 
+      m_main_file(_fsfileid, p),
 	  m_orientation(0), m_rating(0), m_label(0),
       m_file_type(FILE_TYPE_UNKNOWN)
 {

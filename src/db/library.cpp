@@ -1,7 +1,7 @@
 /*
  * niepce - db/library.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 #include "metadata.h"
 #include "fwk/utils/exception.h"
 #include "fwk/utils/exempi.h"
+#include "fwk/utils/debug.h"
 #include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.h"
 #include "fwk/utils/db/sqlite/sqlitecnxdrv.h"
 #include "fwk/utils/db/sqlstatement.h"
@@ -45,7 +46,6 @@ namespace bfs = boost::filesystem;
 namespace db {
 
 const char * s_databaseName = "niepcelibrary.db";
-
 
 
 Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
@@ -109,6 +109,9 @@ bool Library::init()
         DBG_OUT("version == 0");
         return _initDb();
     }
+    else if(version != DB_SCHEMA_VERSION)
+    {
+    }
     return true;
 }
 
@@ -116,19 +119,22 @@ bool Library::_initDb()
 {
     SQLStatement adminTable("CREATE TABLE admin (key TEXT NOT NULL,"
                             " value TEXT)");
-    SQLStatement adminVersion("INSERT INTO admin (key, value) "
-                              " VALUES ('version', '1')");
+    SQLStatement adminVersion(boost::format("INSERT INTO admin (key, value) "
+                                            " VALUES ('version', '%1%')") %
+                              DB_SCHEMA_VERSION);
     SQLStatement vaultTable("CREATE TABLE vaults (id INTEGER PRIMARY KEY,"
                             " path TEXT)");
     SQLStatement folderTable("CREATE TABLE folders (id INTEGER PRIMARY KEY,"
                              " path TEXT, name TEXT, vault_id INTEGER, "
                              " parent_id INTEGER)");
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
-                           " path TEXT, name TEXT, parent_id INTEGER,"
+                           " main_file INTEGER, name TEXT, parent_id INTEGER,"
                            " orientation INTEGER, file_type INTEGER, "
                            " file_date INTEGER, rating INTEGER, label INTEGER,"
                            " import_date INTEGER, mod_date INTEGER, "
                            " xmp TEXT, xmp_date INTEGER)");
+    SQLStatement fsFileTable("CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,"
+                             " path TEXT)");
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
                               " keyword TEXT, parent_id INTEGER)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
@@ -157,6 +163,7 @@ bool Library::_initDb()
     m_dbdrv->execute_statement(vaultTable);
     m_dbdrv->execute_statement(folderTable);
     m_dbdrv->execute_statement(fileTable);
+    m_dbdrv->execute_statement(fsFileTable);
     m_dbdrv->execute_statement(keywordTable);
     m_dbdrv->execute_statement(keywordingTable);
     m_dbdrv->execute_statement(xmpUpdateQueueTable);
@@ -203,6 +210,22 @@ int Library::checkDatabaseVersion()
 }
 
 
+int Library::addFsFile(const bfs::path & file)
+{
+    int ret = -1;
+
+    SQLStatement sql(boost::format("INSERT INTO fsfiles (path)"
+                                   " VALUES ('%1%')") 
+                     % file.string());
+    if(m_dbdrv->execute_statement(sql)) {
+        int64_t id = m_dbdrv->last_row_id();
+        DBG_OUT("last row inserted %d", (int)id);
+        ret = id;
+    }
+    return ret;
+}
+
+
 int Library::addFile(int folder_id, const bfs::path & file, bool manage)
 {
     int ret = -1;
@@ -223,8 +246,12 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
             creation_date = 0;
         }
 
+        int fs_file_id = addFsFile(file);
+        if(fs_file_id <= 0) {
+            throw(utils::Exception("add fsfile failed"));
+        }
         SQLStatement sql(boost::format("INSERT INTO files ("
-                                       " path, name, parent_id, "
+                                       " main_file, name, parent_id, "
                                        " import_date, mod_date, "
                                        " orientation, file_date, rating, label, file_type,"
                                        " xmp) "
@@ -233,7 +260,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
                                        " '%4%', '%4%',"
                                        " '%5%', '%6%', '%7%', '%8%', '%9%',"
                                        " ?1);") 
-                         % file.string() % file.leaf() % folder_id
+                         % fs_file_id % file.leaf() % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
                          % folder_id % file_type);
@@ -258,10 +285,12 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
     catch(const utils::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
+        ret = -1;
     }
     catch(const std::exception & e)
     {
         DBG_OUT("unknown exception %s", e.what());
+        ret = -1;
     }
     return ret;
 }
@@ -351,14 +380,17 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
 {
     int32_t id;
     int32_t fid;
+    int32_t fsfid;
     std::string pathname;
     std::string name;
+    DBG_ASSERT(dbdrv->get_number_of_columns() == 9, "wrong number of columns");
     dbdrv->get_column_content(0, id);
     dbdrv->get_column_content(1, fid);
     dbdrv->get_column_content(2, pathname);
     dbdrv->get_column_content(3, name);
+    dbdrv->get_column_content(8, fsfid);
     DBG_OUT("found %s", pathname.c_str());
-    LibFile::Ptr f(new LibFile(id, fid,
+    LibFile::Ptr f(new LibFile(id, fid, fsfid,
                                bfs::path(pathname), 
                                name));
     int32_t val;
@@ -379,9 +411,13 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
 
 void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
 {
-    SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
-                                   "orientation,rating,label,file_type FROM files "
-                                   " WHERE parent_id='%1%'")
+    SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
+                                   "name,"
+                                   "orientation,rating,label,file_type,"
+                                   "fsfiles.id"
+                                   " FROM files,fsfiles "
+                                   " WHERE parent_id='%1%' "
+                                   " AND files.main_file=fsfiles.id")
                      % folder_id);
     try {
         if(m_dbdrv->execute_statement(sql)) {
@@ -493,11 +529,14 @@ bool Library::assignKeyword(int kw_id, int file_id)
 
 void Library::getKeywordContent(int keyword_id, const LibFile::ListPtr & fl)
 {
-    SQLStatement sql(boost::format("SELECT id,parent_id,path,name,"
-                                   "orientation,rating,label FROM files "
-                                   " WHERE id IN "
+    SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
+                                   "name,orientation,rating,label,file_type,"
+                                   " fsfiles.id "
+                                   " FROM files,fsfiles "
+                                   " WHERE files.id IN "
                                    " (SELECT file_id FROM keywording "
-                                   " WHERE keyword_id='%1%');")
+                                   " WHERE keyword_id='%1%') "
+                                   " AND fsfiles.id = files.main_file;")
                      % keyword_id);
     try {
         if(m_dbdrv->execute_statement(sql)) {

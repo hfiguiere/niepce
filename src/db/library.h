@@ -1,7 +1,7 @@
 /*
  * niepce - db/library.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,9 @@
 #include "db/libmetadata.h"
 #include "db/keyword.h"
 
+// The database schema version. Increase at each change.
+// Some will be persistent and have a conversion TBD.
+#define DB_SCHEMA_VERSION 2
 
 namespace db {
 
@@ -83,6 +86,13 @@ namespace db {
 		 */
 		int addFileAndFolder(const boost::filesystem::path & folder, 
 							 const boost::filesystem::path & file, bool manage);
+
+        /** add a fs file to the library  
+		 * @param file the file path
+         * @return the id of the fs_file, -1 in case of error
+         */
+        int addFsFile(const boost::filesystem::path & file);
+
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path
