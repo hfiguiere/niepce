@@ -1,0 +1,25 @@
+Code organization
+
+
+Here are the different directories for the source code:
+
+* src
+    * ext - external code
+        * libgdl - "stolen" from Inkscape, a fork of libgdl
+	           from Anjuta. Has matching C++ code in 
+                   the framework.
+    * fwk - the framework
+        * utils - utilities
+            * db - database access code. currently only support
+	           sqlite3.
+        * toolkit - the UI toolkit (Gtkmm based)
+            * widgets - reusable widgets
+    * db - the database storage
+    * library - the library ("server" side). Relies on DB
+                for the data storage.
+    * libraryclient - the library client
+    * ncr - Niepce Camera RAW: the RAW processing engine
+    * niepce - The application
+        * ui - the UI code
+        * modules - The different application modules
+            * darkroom - The darkroom module
