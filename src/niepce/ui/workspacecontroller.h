@@ -31,7 +31,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treestore.h>
 
-#include "db/libfolder.h"
+#include "engine/db/libfolder.h"
 #include "fwk/toolkit/controller.h"
 #include "fwk/toolkit/notification.h"
 

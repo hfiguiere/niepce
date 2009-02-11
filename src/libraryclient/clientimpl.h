@@ -24,7 +24,7 @@
 #include <string>
 
 #include "fwk/utils/moniker.h"
-#include "library/clienttypes.h"
+#include "engine/library/clienttypes.h"
 
 
 namespace libraryclient {

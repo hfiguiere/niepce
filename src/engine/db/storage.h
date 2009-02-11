@@ -23,7 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "db/keyword.h"
+#include "engine/db/keyword.h"
 
 namespace db {
 
@@ -39,5 +39,15 @@ namespace db {
 	};
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 
 #endif

@@ -23,12 +23,12 @@
 #define EOG_THUMB_VIEW_H
 
 #include <gtk/gtkiconview.h>
-#include "ui/imageliststore.h"
+#include "niepce/ui/imageliststore.h"
 
 /*#include "eog-image.h"*/
 //#include "eog-list-store.h"
 
-#include "db/libfile.h"
+#include "engine/db/libfile.h"
 
 G_BEGIN_DECLS
 

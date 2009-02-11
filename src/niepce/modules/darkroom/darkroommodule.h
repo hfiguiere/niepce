@@ -30,7 +30,7 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "fwk/toolkit/controller.h"
-#include "db/libfile.h"
+#include "engine/db/libfile.h"
 #include "libraryclient/libraryclient.h"
 #include "ncr/image.h"
 #include "modules/darkroom/imagecanvas.h"

@@ -24,8 +24,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 
-#include "library/clienttypes.h"
-#include "db/library.h"
+#include "engine/library/clienttypes.h"
+#include "engine/db/library.h"
 
 namespace library {
 

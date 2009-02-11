@@ -23,9 +23,9 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "library/clienttypes.h"
-#include "library/thumbnailcache.h"
-#include "db/storage.h"
+#include "engine/library/clienttypes.h"
+#include "engine/library/thumbnailcache.h"
+#include "engine/db/storage.h"
 
 namespace utils {
 	class Moniker;

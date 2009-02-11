@@ -25,11 +25,11 @@
 
 
 #include "fwk/utils/debug.h"
-#include "db/library.h"
-#include "db/libfolder.h"
-#include "db/libfile.h"
-#include "db/libmetadata.h"
-#include "db/keyword.h"
+#include "engine/db/library.h"
+#include "engine/db/libfolder.h"
+#include "engine/db/libfile.h"
+#include "engine/db/libmetadata.h"
+#include "engine/db/keyword.h"
 #include "commands.h"
 
 namespace bfs = boost::filesystem;

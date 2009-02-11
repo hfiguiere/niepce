@@ -29,7 +29,7 @@
 #include <gtkmm/paned.h>
 
 #include "librarymainview.h"
-#include "db/libfile.h"
+#include "engine/db/libfile.h"
 #include "libraryclient/libraryclient.h"
 #include "fwk/toolkit/controller.h"
 #include "fwk/toolkit/notification.h"

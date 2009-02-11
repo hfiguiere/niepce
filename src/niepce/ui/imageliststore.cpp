@@ -24,8 +24,8 @@
 #include "fwk/toolkit/application.h"
 #include "fwk/toolkit/gdkutils.h"
 #include "niepce/notifications.h"
-#include "db/library.h"
-#include "library/thumbnailnotification.h"
+#include "engine/db/library.h"
+#include "engine/library/thumbnailnotification.h"
 #include "niepcewindow.h"
 
 namespace ui {

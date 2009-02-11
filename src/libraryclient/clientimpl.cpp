@@ -20,8 +20,8 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/utils/files.h"
-#include "library/op.h"
-#include "library/commands.h"
+#include "engine/library/op.h"
+#include "engine/library/commands.h"
 #include "libraryclient.h"
 #include "clientimpl.h"
 #include "locallibraryserver.h"

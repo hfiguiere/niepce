@@ -35,7 +35,7 @@
 #include "fwk/utils/debug.h"
 #include "fwk/utils/moniker.h"
 #include "fwk/utils/boost.h"
-#include "db/library.h"
+#include "engine/db/library.h"
 #include "libraryclient/libraryclient.h"
 #include "fwk/toolkit/application.h"
 #include "fwk/toolkit/configuration.h"

@@ -11,12 +11,12 @@ niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@	@GCONF_CFLAGS@
 niepce_LDFLAGS = -Wl,--as-needed @BOOST_FILESYSTEM_LDFLAGS@ \
 	@BOOST_THREAD_LDFLAGS@ @BOOST_SIGNALS_LDFLAGS@
 niepce_LDADD = \
-	$(top_builddir)/src/db/libniepcedb.a \
+	$(top_builddir)/src/engine/db/libniepcedb.a \
 	$(top_builddir)/src/niepce/ui/libniepceui.a \
-	$(top_builddir)/src/library/libniepcelibrary.a \
+	$(top_builddir)/src/engine/library/libniepcelibrary.a \
 	$(top_builddir)/src/libraryclient/liblibraryclient.a \
-	$(top_builddir)/src/library/libniepcelibrary.a \
-	$(top_builddir)/src/db/libniepcedb.a \
+	$(top_builddir)/src/engine/library/libniepcelibrary.a \
+	$(top_builddir)/src/engine/db/libniepcedb.a \
 	$(top_builddir)/src/niepce/modules/darkroom/libmoduledarkroom.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \

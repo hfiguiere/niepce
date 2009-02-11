@@ -27,7 +27,7 @@
 #include "fwk/toolkit/undo.h"
 #include "fwk/toolkit/command.h"
 #include "fwk/toolkit/application.h"
-#include "db/metadata.h"
+#include "engine/db/metadata.h"
 #include "libraryclient/libraryclient.h"
 #include "niepcewindow.h"
 #include "selectioncontroller.h"

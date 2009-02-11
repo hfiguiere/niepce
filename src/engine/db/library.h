@@ -32,10 +32,10 @@
 #include "fwk/toolkit/notificationcenter.h"
 #include "fwk/utils/db/iconnectiondriver.h"
 #include "fwk/utils/db/iconnectionmanagerdriver.h"
-#include "db/libfolder.h"
-#include "db/libfile.h"
-#include "db/libmetadata.h"
-#include "db/keyword.h"
+#include "engine/db/libfolder.h"
+#include "engine/db/libfile.h"
+#include "engine/db/libmetadata.h"
+#include "engine/db/keyword.h"
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.

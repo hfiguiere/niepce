@@ -28,7 +28,7 @@
 
 #include "fwk/utils/debug.h"
 #include "niepce/notifications.h"
-#include "db/library.h"
+#include "engine/db/library.h"
 #include "fwk/toolkit/application.h"
 #include "fwk/toolkit/widgets/dock.h"
 #include "librarymainviewcontroller.h"

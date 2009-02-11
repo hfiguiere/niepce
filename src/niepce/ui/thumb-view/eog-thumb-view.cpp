@@ -40,7 +40,7 @@
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 #include "fwk/utils/boost.h"
-#include "db/libfile.h"
+#include "engine/db/libfile.h"
 
 #define EOG_THUMB_VIEW_SPACING 0
 
