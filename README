@@ -5,7 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files maybe under GPL version 2 or later.
 
-(c) 2006-2008 Hubert Figuière
+(c) 2006-2009 Hubert Figuière
 Some portions are written by other people.
 
 libgdl has been copied from Inkscape. Still wondering why
@@ -76,9 +76,9 @@ Getting the code
 
 Obviously you have it.
 
-The most recent code is hosted on GNOME's Subversion server. All you need is:
+The most recent code is hosted on GNOME's git server. See:
 
-$ svn checkout http://svn.gnome.org/svn/niepce/trunk niepce
+http://git.gnome.org/cgit/niepce/
 
 Website
 -------

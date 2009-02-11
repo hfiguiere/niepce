@@ -1,5 +1,7 @@
 2009-02-11  Hubert Figuiere  <hub@figuiere.net>
 
+	* README: Moved to git.
+
 	* src/db -> src/engine/db
 	* src/library -> src/engine/library
 	move to engine subdir.
