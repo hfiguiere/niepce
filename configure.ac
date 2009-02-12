@@ -155,6 +155,7 @@ AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string 
 
 AC_CONFIG_FILES([
 Makefile
+art/Makefile
 doc/Doxyfile
 doc/Makefile
 doc/doxygen/Makefile
