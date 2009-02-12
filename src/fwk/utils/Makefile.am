@@ -59,7 +59,7 @@ test_db4_LDADD = libniepceutils.a \
 noinst_LIBRARIES = libniepceutils.a
 
 libniepceutils_a_SOURCES = exception.h exception.cpp \
-	mtqueue.h string.h \
+	mtqueue.h stringutils.h \
 	autoflag.h \
 	exempi.h exempi.cpp \
 	ufrawmeta.h ufrawmeta.cpp \
