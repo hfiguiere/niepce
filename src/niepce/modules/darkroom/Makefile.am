@@ -3,6 +3,7 @@
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce -I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
+	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @GCONF_CFLAGS@ \
 	@GOOCANVASMM_CFLAGS@  \

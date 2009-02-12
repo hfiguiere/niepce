@@ -2,6 +2,7 @@
 
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
+	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
 	@GCONF_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@ \
 	$(NULL)

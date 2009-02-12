@@ -3,7 +3,7 @@ SUBDIRS = ui modules
 
 INCLUDES = -DDATADIR=\"$(datadir)\" \
 	-I$(top_srcdir)/src/niepce -I$(top_srcdir)/src  \
-	@EXEMPI_CFLAGS@ @LIBGTKMM_CFLAGS@
+	@EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
 
 bin_PROGRAMS = niepce
 
@@ -22,6 +22,7 @@ niepce_LDADD = \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libgdl/libgdl.a \
+	@LIBGLIBMM_LIBS@ \
 	@LIBGTKMM_LIBS@ @LIBGLADEMM_LIBS@ @SQLITE3_LIBS@ \
 	@GNOMEVFS_LIBS@ @GCONF_LIBS@ @BOOST_THREAD_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@  @BOOST_SIGNALS_LIBS@ \
