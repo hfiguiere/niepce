@@ -1,3 +1,7 @@
+2009-02-12  Hans Ulrich Niedermann <hun@n-dimensional.de>
+
+	* Fix make dist.
+
 2009-02-11  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/libraryclient/Makefile.am (TEST_LIBS):

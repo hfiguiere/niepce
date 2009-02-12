@@ -16,7 +16,7 @@ TEST_LIBS =  \
 
 noinst_LIBRARIES = libniepcelibrary.a
 
-test_opqueue_SOURCES = test_opqueue.cpp
+test_opqueue_SOURCES = test_opqueue.cpp opqueue.h
 test_opqueue_LDADD = $(TEST_LIBS)
 
 
