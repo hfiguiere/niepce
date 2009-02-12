@@ -1,5 +1,9 @@
 2009-02-11  Hubert Figuiere  <hub@figuiere.net>
 
+	* src/libraryclient/Makefile.am (TEST_LIBS):
+	* src/engine/library/Makefile.am (TEST_LIBS):
+	Fix make check.
+
 	* README: Moved to git.
 
 	* src/db -> src/engine/db

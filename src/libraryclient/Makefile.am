@@ -8,10 +8,10 @@ check_PROGRAMS = test_worker
 TESTS = test_worker
 TEST_LIBS =  \
 	liblibraryclient.a \
-        ../library/libniepcelibrary.a \
-	../db/libniepcedb.a \
-        ../fwk/utils/libniepceutils.a \
-	../fwk/toolkit/libniepceframework.a \
+        $(top_builddir)/src/engine/library/libniepcelibrary.a \
+	$(top_builddir)/src/engine/db/libniepcedb.a \
+        $(top_builddir)/src/fwk/utils/libniepceutils.a \
+	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
