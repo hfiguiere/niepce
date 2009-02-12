@@ -1,3 +1,3 @@
 
 
-DIST_SUBDIR = sqlite
+DIST_SUBDIRS = sqlite

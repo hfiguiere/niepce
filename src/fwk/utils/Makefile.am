@@ -1,5 +1,5 @@
 
-DIST_SUBDIR = db
+DIST_SUBDIRS = db
 
 INCLUDES = -I$(top_srcdir)/src/ @EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
