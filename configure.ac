@@ -119,7 +119,7 @@ if test "$GCC" = "yes"; then
         NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
                       -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
-                      -Wunused -Wpointer-arith -Wshadow ; do
+                      -Wunused -Wpointer-arith -Wshadow -fshow-column ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
 		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "
@@ -153,8 +153,12 @@ AC_SUBST(NIEPCE_LOCALEDIR)
 
 AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
 
+SHAVE_INIT
+
 AC_CONFIG_FILES([
 Makefile
+shave
+shave-libtool
 art/Makefile
 doc/Doxyfile
 doc/Makefile

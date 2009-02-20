@@ -19,6 +19,8 @@ ltmain.sh
 stamp-*
 autom4te.cache
 intltool-*.in
+shave
+shave-libtool
 *.o
 *.lo
 *.la
