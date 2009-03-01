@@ -132,7 +132,8 @@ bool Library::_initDb()
                            " orientation INTEGER, file_type INTEGER, "
                            " file_date INTEGER, rating INTEGER, label INTEGER,"
                            " import_date INTEGER, mod_date INTEGER, "
-                           " xmp TEXT, xmp_date INTEGER)");
+                           " xmp TEXT, xmp_date INTEGER, xmp_file INTEGER,"
+                           " jpeg_file INTEGER)");
     SQLStatement fsFileTable("CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,"
                              " path TEXT)");
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
@@ -306,7 +307,65 @@ int Library::addFileAndFolder(const bfs::path & folder, const bfs::path & file,
     }
     return addFile(f ? f->id() : -1, file, manage);
 }
-	
+
+int Library::addBundle(int folder_id, const db::FileBundle::Ptr & bundle, 
+                       bool manage)
+{
+    int file_id = 0;
+    file_id = addFile(folder_id, bundle->main_file(), manage);
+    if(file_id > 0) {
+        int fsfile_id;
+        bool success;
+        // addXmpSidecar
+        if(!bundle->sidecar().empty()) {
+            fsfile_id = addFsFile(bundle->sidecar());
+            if(fsfile_id > 0) {
+                success = addSidecarFileToBundle(file_id, fsfile_id);
+            }
+        }
+        // addJpeg
+        if(!bundle->jpeg().empty()) {
+            fsfile_id = addFsFile(bundle->jpeg());
+            if(fsfile_id > 0) {
+                success = addJpegFileToBundle(file_id, fsfile_id);
+            }         
+        }
+    }
+    return file_id;
+}
+
+bool Library::addSidecarFileToBundle(int file_id, int fsfile_id)
+{
+    SQLStatement sql(boost::format("UPDATE files SET xmp_file='%2%'"
+                                   " WHERE id='%1%';") 
+                     % file_id % fsfile_id);
+    try {
+        return m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return false;
+}
+
+
+bool Library::addJpegFileToBundle(int file_id, int fsfile_id)
+{
+    SQLStatement sql(boost::format("UPDATE files SET jpeg_file='%2%',"
+                                   " file_type='%3%' "
+                                   " WHERE id='%1%';") 
+                     % file_id % fsfile_id % LibFile::FILE_TYPE_RAW_JPEG);
+    try {
+        return m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return false;
+}
+
 
 LibFolder::Ptr Library::getFolder(const bfs::path & folder)
 {

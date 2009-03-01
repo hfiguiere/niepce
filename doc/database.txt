@@ -28,6 +28,9 @@ files           id             Unique ID in the database
 		mod_date       The date modified (time_t)
 		xmp            The XMP blob
 		xmp_data       The date the XMP is rewritten on disk (time_t)
+		xmp_file       The id of the fsfile that represent the XMP (int)
+		jpeg_file      The id of the JPEG for RAW+JPEG. Implies 
+                               file_type is LibFile::FILE_TYPE_RAW_JPEG (int)
 
 Filesystem files in the library
 

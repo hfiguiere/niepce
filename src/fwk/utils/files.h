@@ -60,6 +60,10 @@ namespace utils {
 			{ return _impltype_t::end(); }
 		size_type size() const
 			{ return _impltype_t::size(); }
+		void sort()
+			{ _impltype_t::sort(); }
+		void push_back(const value_type & v)
+			{ _impltype_t::push_back(v); }
 	};
 }
 

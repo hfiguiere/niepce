@@ -4,7 +4,7 @@ SUBDIRS =
 
 INCLUDES = -I$(top_srcdir)/src/  @EXEMPI_CFLAGS@
 
-TESTS = test_library
+TESTS = test_library test_filebundle
 
 TEST_LIBS =  \
 	libniepcedb.a \
@@ -16,10 +16,13 @@ TEST_LIBS =  \
 	@BOOST_THREAD_LIBS@ \
 	@SQLITE3_LIBS@ @EXEMPI_LIBS@
 
-check_PROGRAMS = test_library
+check_PROGRAMS = test_library test_filebundle
 
 test_library_SOURCES = test_library.cpp
 test_library_LDADD = $(TEST_LIBS)  
+
+test_filebundle_SOURCES = test_filebundle.cpp
+test_filebundle_LDADD = $(TEST_LIBS)  
 
 noinst_LIBRARIES = libniepcedb.a
 
@@ -32,4 +35,5 @@ libniepcedb_a_SOURCES = library.cpp \
 	keyword.h keyword.cpp \
 	storage.h storage.cpp \
 	fsfile.h fsfile.cpp \
+	filebundle.h filebundle.cpp \
 	metadata.h

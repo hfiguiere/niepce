@@ -35,6 +35,7 @@
 #include "engine/db/libfolder.h"
 #include "engine/db/libfile.h"
 #include "engine/db/libmetadata.h"
+#include "engine/db/filebundle.hpp"
 #include "engine/db/keyword.h"
 
 // The database schema version. Increase at each change.
@@ -87,11 +88,11 @@ namespace db {
 		int addFileAndFolder(const boost::filesystem::path & folder, 
 							 const boost::filesystem::path & file, bool manage);
 
-        /** add a fs file to the library  
-		 * @param file the file path
-         * @return the id of the fs_file, -1 in case of error
-         */
-        int addFsFile(const boost::filesystem::path & file);
+    /** add a fs file to the library  
+     * @param file the file path
+     * @return the id of the fs_file, -1 in case of error
+     */
+    int addFsFile(const boost::filesystem::path & file);
 
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
@@ -100,12 +101,33 @@ namespace db {
 		 */
 		int addFile(int folder_id, const boost::filesystem::path & file, 
 					bool manage);
+
+		/** add a bundle of files to the library
+		 * @param folder_id the id of the containing folder
+		 * @param bundle the bundle
+		 * @param manage pass true it the library *manage* the file. Currently unsupported.
+		 */
+    int addBundle(int folder_id, const db::FileBundle::Ptr & bundle, 
+                    bool manage);
+    /** add a sidecar fsfile to a bundle (file)
+     * @param file_id the id of the file bundle
+     * @param fsfile_id the id of the fsfile
+     * @return true if success
+     */
+    bool addSidecarFileToBundle(int file_id, int fsfile_id);
+    /** add a jpeg fsfile to a bundle (file)
+     * @param file_id the id of the file bundle
+     * @param fsfile_id the id of the fsfile
+     * @return true if success
+     */
+    bool addJpegFileToBundle(int file_id, int fsfile_id);
 		
 		/** Get a specific folder id from the library
 		 * @param folder the folder path to check
 		 * @return the folder, NULL if not found
 		 */
 		LibFolder::Ptr getFolder(const boost::filesystem::path & folder);
+
 		/** Add a folder
 		 * @param folder the folder path
 		 */

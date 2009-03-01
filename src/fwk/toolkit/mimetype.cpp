@@ -1,7 +1,7 @@
 /*
  * niepce - framework/mimetype.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@ namespace bfs = boost::filesystem;
 
 namespace framework {
 
-	MimeType::MimeType(const char * filename)
-	{
+MimeType::MimeType(const char * filename)
+    : m_path(filename)
+{
 #if HAVE_GNOME_VFS_2_14
 		m_type = gnome_vfs_get_mime_type_for_name(filename);
 #else
@@ -38,10 +39,11 @@ namespace framework {
 		f += filename;
 		m_type = gnome_vfs_get_mime_type(f.c_str());
 #endif
-	}
+}
 
-	MimeType::MimeType(const boost::filesystem::path & filename)
-	{
+MimeType::MimeType(const boost::filesystem::path & filename)
+    : m_path(filename)
+{
 #if HAVE_GNOME_VFS_2_14
 		m_type = gnome_vfs_get_mime_type_for_name(filename.string().c_str());
 #else
@@ -49,27 +51,42 @@ namespace framework {
 		f += filename.string();
 		m_type = gnome_vfs_get_mime_type(f.c_str());
 #endif
-	}
-
-	bool MimeType::isDigicamRaw() const
-	{
-		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), 
-													"image/x-dcraw") 
-				!= GNOME_VFS_MIME_UNRELATED);
-	}
-
-
-	bool MimeType::isImage() const
-	{
-		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), "image/*") 
-				!= GNOME_VFS_MIME_UNRELATED);
-	}
-	
-
-	bool MimeType::isUnknown() const
-	{
-		return (m_type == GNOME_VFS_MIME_TYPE_UNKNOWN);
-	}
-
 }
 
+bool MimeType::isDigicamRaw() const
+{
+		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), 
+                                                "image/x-dcraw") 
+            != GNOME_VFS_MIME_UNRELATED);
+}
+
+
+bool MimeType::isImage() const
+{
+		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), "image/*") 
+            != GNOME_VFS_MIME_UNRELATED);
+}
+	
+
+bool MimeType::isUnknown() const
+{
+		return (m_type == GNOME_VFS_MIME_TYPE_UNKNOWN);
+}
+
+
+bool MimeType::isXmp() const
+{
+    return m_path.extension() == ".xmp";
+}
+	
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

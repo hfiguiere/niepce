@@ -1,3 +1,7 @@
+2009-02-28  Hubert Figuiere  <hub@figuiere.net>
+
+	* Support bundles for RAW+JPEG.
+
 2009-02-20  Hubert Figuiere  <hub@figuiere.net>
 
 	* configure.ac:

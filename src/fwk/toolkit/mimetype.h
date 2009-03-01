@@ -1,7 +1,7 @@
 /*
  * niepce - framework/mimetype.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,10 +35,12 @@ namespace framework {
 		bool isDigicamRaw() const;
 		bool isImage() const;
 		bool isUnknown() const;
+		bool isXmp() const;
 
 		const std::string & string() const
 			{ return m_type; }
 	private:
+		boost::filesystem::path m_path;
 		std::string m_type;
 	};
 

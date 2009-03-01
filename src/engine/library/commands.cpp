@@ -1,7 +1,7 @@
 /*
  * niepce - library/commands.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "engine/db/libfolder.h"
 #include "engine/db/libfile.h"
 #include "engine/db/libmetadata.h"
+#include "engine/db/filebundle.hpp"
 #include "engine/db/keyword.h"
 #include "commands.h"
 
@@ -68,6 +69,9 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
                               const FileList::Ptr & files, bool manage)
 {
     DBG_ASSERT(!manage, "managing file is currently unsupported");
+
+    db::FileBundle::ListPtr bundles = db::FileBundle::filter_bundles(files);
+
     LibFolder::Ptr pf;
     pf = lib->getFolder(folder);
     if(pf == NULL)
@@ -78,8 +82,8 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
         lib->notify(Library::NOTIFY_ADDED_FOLDERS,
                     boost::any(l));
     }
-    std::for_each( files->begin(), files->end(),
-                   bind(&Library::addFile, boost::ref(lib),
+    std::for_each( bundles->begin(), bundles->end(),
+                   bind(&Library::addBundle, boost::ref(lib),
                         pf->id(), _1, manage) );
     lib->notify(Library::NOTIFY_ADDED_FILES,
                 boost::any()); 
