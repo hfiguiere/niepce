@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/image.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -134,13 +134,13 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
         flip = true;
         // fall through
     case 6:
-        degrees = 90;
+        degrees = 270;
         break;
     case 7:
         flip = true;
         // fall through
     case 8:
-        degrees = 270;
+        degrees = 90;
         break;
     }
     // @todo ideally we would have a plain GEGL op for that.
