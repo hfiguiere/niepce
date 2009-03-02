@@ -1,5 +1,7 @@
 2009-03-01  Hubert Figuiere  <hub@figuiere.net>
 
+	* Now display some rational EXIF values as decimal.
+
 	* Add fraction utilities.
 
 	* src/ncr/image.cpp: Fix rotation.

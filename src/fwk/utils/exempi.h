@@ -83,6 +83,7 @@ enum MetaDataType {
     META_DT_STRING,
     META_DT_STRING_ARRAY,
     META_DT_DATE,
+    META_DT_FRAC, 
     META_DT_STAR_RATING
 };
 	

@@ -1,7 +1,7 @@
 /*
- * niepce - ui/metadatapanecontroller.cpp
+ * niepce - niepce/ui/metadatapanecontroller.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,13 +48,13 @@ namespace ui {
 		static const MetaDataFormat s_shootinginfo_format[] = {
 			{ _("Exposure Program:"), NS_EXIF, "ExposureProgram", META_DT_STRING, true },
 			{ _("Speed:"), NS_EXIF, "ExposureTime", META_DT_STRING, true },
-			{ _("Aperture:"), NS_EXIF, "FNumber", META_DT_STRING, true },
+			{ _("Aperture:"), NS_EXIF, "FNumber", META_DT_FRAC, true },
 			{ _("ISO:"), NS_EXIF, "ISOSpeedRatings", META_DT_STRING_ARRAY, true },
-			{ _("Exposure Bias:"), NS_EXIF, "ExposureBiasValue", META_DT_STRING, true },
+			{ _("Exposure Bias:"), NS_EXIF, "ExposureBiasValue", META_DT_FRAC, true },
 			// this one is fishy as it hardcode the prefix.
 			{ _("Flash:"), NS_EXIF, "Flash/exif:Fired", META_DT_STRING, true },
 			{ _("Flash compensation:"), NS_EXIF_AUX, "FlashCompensation", META_DT_STRING, true },
-			{ _("Focal length:"), NS_EXIF, "FocalLength", META_DT_STRING, true },
+			{ _("Focal length:"), NS_EXIF, "FocalLength", META_DT_FRAC, true },
 			{ _("White balance:"), NS_EXIF, "WhiteBalance", META_DT_STRING, true },
 			{ _("Date:"), NS_EXIF, "DateTimeOriginal", META_DT_DATE, false },
 			{ NULL, NULL, NULL, META_DT_NONE, true }

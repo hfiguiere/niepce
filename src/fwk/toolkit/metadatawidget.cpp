@@ -1,7 +1,7 @@
 /*
- * niepce - framework/metadatawidget.cpp
+ * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 
+#include "fwk/utils/fractions.hpp"
 #include "fwk/utils/exempi.h"
 #include "fwk/utils/stringutils.h"
 #include "fwk/utils/debug.h"
@@ -113,7 +114,7 @@ void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
 void MetaDataWidget::add_data(const std::string & id, 
                               const std::string & label,
                               const char * value,
-                              xmp::MetaDataType /*type*/)
+                              xmp::MetaDataType type)
 {
     Gtk::Label *w = NULL;
     int n_row;
@@ -146,7 +147,18 @@ void MetaDataWidget::add_data(const std::string & id,
     else {
         w = static_cast<Gtk::Label*>(iter->second);
     }
-    w->set_text(value);
+    switch(type) {
+    case xmp::META_DT_FRAC:
+    {
+        double decimal = fwk::fraction_to_decimal(value);
+        std::string frac = boost::lexical_cast<std::string>(decimal);
+        w->set_text(frac);
+        break;
+    }
+    default:
+        w->set_text(value);
+        break;
+    }
     m_table.show_all();
 }
 
