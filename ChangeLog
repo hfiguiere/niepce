@@ -1,3 +1,9 @@
+2009-03-02  Hubert Figuiere  <hub@figuiere.net>
+
+	* Add the XMP sidecard if needed to the fsfiles.
+	* Don't filter out the XMP sidecars when listing 
+	the files to import.
+
 2009-03-01  Hubert Figuiere  <hub@figuiere.net>
 
 	* Now display some rational EXIF values as decimal.

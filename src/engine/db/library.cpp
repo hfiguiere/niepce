@@ -226,6 +226,28 @@ int Library::addFsFile(const bfs::path & file)
     return ret;
 }
 
+boost::filesystem::path Library::getFsFile(int id)
+{
+    boost::filesystem::path p;
+    SQLStatement sql(boost::format("SELECT path FROM fsfiles"
+                                   " WHERE id='%1%'") 
+                     % id);
+    try {
+        if(m_dbdrv->execute_statement(sql) &&
+           m_dbdrv->read_next_row()) {
+            std::string path;
+            m_dbdrv->get_column_content(0, path);
+            p = path;
+        }
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+
+    return p;
+}
+
 
 int Library::addFile(int folder_id, const bfs::path & file, bool manage)
 {
@@ -753,7 +775,7 @@ bool Library::rewriteXmpForId(int id)
 {
     SQLStatement del(boost::format("DELETE FROM xmp_update_queue "
                                    " WHERE id='%1%';") % id);
-    SQLStatement getxmp(boost::format("SELECT xmp, path FROM files "
+    SQLStatement getxmp(boost::format("SELECT xmp, main_file, xmp_file FROM files "
                                    " WHERE id='%1%';") % id);
     try {
         
@@ -761,12 +783,22 @@ bool Library::rewriteXmpForId(int id)
            && m_dbdrv->execute_statement(getxmp)) {
             while(m_dbdrv->read_next_row()) {
                 std::string xmp_buffer;
-                std::string spath;
+                int main_file_id;
+                int xmp_file_id;
                 m_dbdrv->get_column_content(0, xmp_buffer);
-                m_dbdrv->get_column_content(1, spath);
+                m_dbdrv->get_column_content(1, main_file_id);
+                m_dbdrv->get_column_content(2, xmp_file_id);
+                boost::filesystem::path spath = getFsFile(main_file_id);
+                DBG_ASSERT(!spath.empty(), "couldn't find the main file");
                 boost::filesystem::path p;
-                p = boost::filesystem::change_extension(spath, ".xmp");
-                DBG_ASSERT(p.string() != spath, "path must have been changed");
+                if(xmp_file_id > 0) {
+                    p = getFsFile(xmp_file_id);
+                    DBG_ASSERT(!p.empty(), "couldn't find the xmp file path");
+                }
+                if(p.empty()) {
+                    p = boost::filesystem::change_extension(spath, ".xmp");
+                    DBG_ASSERT(p != spath, "path must have been changed");
+                }
                 if(exists(p)) {
                     DBG_OUT("%s already exist", p.string().c_str());
                     // TODO backup
@@ -781,6 +813,12 @@ bool Library::rewriteXmpForId(int id)
                     fwrite(sidecar.c_str(), sizeof(std::string::value_type),
                            sidecar.size(), f);
                     fclose(f);
+                    if(xmp_file_id <= 0) {
+                        xmp_file_id = addFsFile(p);
+                        DBG_ASSERT(xmp_file_id > 0, "couldn't add xmp_file");
+                        bool res = addSidecarFileToBundle(id, xmp_file_id);
+                        DBG_ASSERT(res, "addSidecarFileToBundle failed");
+                    }
                 }
                 // TODO rewrite the modified date in the files table
                 // caveat: this will trigger this rewrite recursively.

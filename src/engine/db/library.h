@@ -94,6 +94,12 @@ namespace db {
      */
     int addFsFile(const boost::filesystem::path & file);
 
+    /** Get a FsFile from an id
+     * @param id the id of the FsFile
+     * @return the path. Empty if not found.
+     */
+    boost::filesystem::path getFsFile(int id);
+
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path

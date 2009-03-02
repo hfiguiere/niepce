@@ -1,7 +1,7 @@
 /*
- * niepce - libraryclient/libraryclient.cpp
+ * niepce - libraryclient/clientimpl.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
     FileList::Ptr files;
 	
     files = FileList::getFilesFromDirectory(dir, 
-                                            boost::bind(&utils::filter_xmp_out, _1));
+                                            boost::bind(&utils::filter_none, _1));
     
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdImportFiles,
