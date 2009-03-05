@@ -1,7 +1,7 @@
 /*
- * niepce - ui/importdialog.cpp
+ * niepce - niepce/ui/importdialog.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,19 +18,20 @@
  */
 
 
-#include <boost/bind.hpp>
-
 #include <glibmm/i18n.h>
-#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/button.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
+#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/label.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/builder.h>
 
+#include "fwk/utils/debug.h"
 #include "fwk/toolkit/configuration.h"
 #include "fwk/toolkit/application.h"
-#include "importdialog.h"
+#include "importdialog.hpp"
 
 using framework::Configuration;
 using framework::Application;
@@ -41,62 +42,82 @@ ImportDialog::ImportDialog()
 	: m_date_tz_combo(NULL),
 	  m_ufraw_import_check(NULL),
 	  m_rawstudio_import_check(NULL),
-	  m_directory_name(NULL)
+	  m_directory_name(NULL),
+    m_folderList(NULL)
 {
 }
 
 
 Gtk::Widget * ImportDialog::buildWidget()
 {
-	Glib::RefPtr<Gnome::Glade::Xml> xml 
-		= Gnome::Glade::Xml::create(GLADEDIR"importdialog.glade");
-	Gtk::Dialog *dlg = NULL;
-	dlg = xml->get_widget("importDialog", dlg);
+    Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file(GLADEDIR"importdialog.ui");
+    Gtk::Dialog *dlg = NULL;
+    builder->get_widget("importDialog", dlg);
 
-	Gtk::Button *select_directories = xml->get_widget("select_directories",
-													  select_directories);
-	select_directories->signal_clicked().connect(
-			boost::bind(&ImportDialog::do_select_directories, this));
-	m_date_tz_combo = xml->get_widget("date_tz_combo", m_date_tz_combo);
-	m_ufraw_import_check = xml->get_widget("ufraw_import_check", 
-										   m_ufraw_import_check);
-	m_rawstudio_import_check = xml->get_widget("rawstudio_import_check",
-											   m_rawstudio_import_check);
-	m_directory_name = xml->get_widget("directory_name",
-									   m_directory_name);
-	
-	return dlg;
+    Gtk::Button *select_directories = NULL;
+    builder->get_widget("select_directories", select_directories);
+    select_directories->signal_clicked().connect(
+        sigc::mem_fun(*this, &ImportDialog::do_select_directories));
+    builder->get_widget("date_tz_combo", m_date_tz_combo);
+    builder->get_widget("ufraw_import_check", m_ufraw_import_check);
+    builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
+    builder->get_widget("directory_name", m_directory_name);
+    builder->get_widget("folderList", m_folderList);
+    m_folderListModel.inject(*m_folderList);
+    return dlg;
 }
 
 
 void ImportDialog::do_select_directories()
 {
-	Configuration & cfg = Application::app()->config();
+    Configuration & cfg = Application::app()->config();
 	
-	Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
-								  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
+                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	
-	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
+    dialog.set_select_multiple(true);
+    std::string last_import_location;
+    last_import_location = cfg.getValue("last_import_location", "");
+    if(!last_import_location.empty()) {
+        dialog.set_filename(last_import_location);
+    }
 	
-	std::string last_import_location;
-	last_import_location = cfg.getValue("last_import_location", "");
-	if(!last_import_location.empty()) {
-		dialog.set_filename(last_import_location);
-	}
-	
-	int result = dialog.run();
-	switch(result)
-	{
-	case Gtk::RESPONSE_OK:
-		m_to_import = dialog.get_filename();
-		m_directory_name->set_label(m_to_import);
-		break;
-	default:
-		break;
-	}
+    int result = dialog.run();
+    switch(result)
+    {
+    case Gtk::RESPONSE_OK:
+        set_to_import(dialog.get_filenames());
+//        m_directory_name->set_label(m_to_import);
+        break;
+    default:
+        break;
+    }
 }
 
+void ImportDialog::set_to_import(const Glib::SListHandle<Glib::ustring> & l)
+{
+    m_list_to_import = l;
+    Glib::RefPtr<Gtk::ListStore> store 
+        = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_folderList->get_model());
+    store->clear();
+    for(std::list<std::string>::const_iterator i = m_list_to_import.begin();
+        i != m_list_to_import.end(); ++i) {
+        DBG_OUT("selected %s", i->c_str());
+        Gtk::TreeIter iter = store->append();
+        iter->set_value(m_folderListModel.m_col1, *i);
+    }
+}
 
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

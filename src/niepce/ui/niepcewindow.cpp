@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 #include "eog-thumb-view.h"
 #include "niepcewindow.h"
 #include "librarymainviewcontroller.h"
-#include "importdialog.h"
+#include "importdialog.hpp"
 #include "selectioncontroller.h"
 
 using libraryclient::LibraryClient;
@@ -399,12 +399,15 @@ void NiepceWindow::on_action_file_import()
     case 0:
     {
         // import
-        const Glib::ustring & to_import(import_dialog->to_import());
+        const std::list<std::string> & to_import(import_dialog->to_import());
         if(!to_import.empty()) {
-            cfg.setValue("last_import_location", to_import);
+            cfg.setValue("last_import_location", to_import.front());
 			
-            DBG_OUT("%s", to_import.c_str());
-            m_libClient->importFromDirectory(to_import, false);
+            //DBG_OUT("%s", to_import.c_str());
+            std::for_each(to_import.begin(), to_import.end(),
+                          boost::bind(&LibraryClient::importFromDirectory,
+                                      m_libClient, _1, false));
+//            m_libClient->importFromDirectory(to_import, false);
         }
         break;
     }

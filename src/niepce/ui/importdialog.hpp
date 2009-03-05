@@ -1,7 +1,7 @@
 /*
- * niepce - ui/importdialog.h
+ * niepce - niepce/ui/importdialog.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,15 +23,19 @@
 #ifndef __UI_IMPORTDIALOG_H__
 #define __UI_IMPORTDIALOG_H__
 
-#include <glibmm/refptr.h>
-#include <libglademm/xml.h>
+#include <list>
+#include <string>
 
+#include <glibmm/refptr.h>
+
+#include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/frame.h"
 
 namespace Gtk {
 	class Dialog;
 	class ComboBox;
 	class CheckButton;
+	class TreeView;
 }
 
 namespace ui {
@@ -46,19 +50,25 @@ public:
 
  	Gtk::Widget * buildWidget();
 
-	const Glib::ustring & to_import() const
-		{ return m_to_import; }
+//	const Glib::ustring & to_import() const
+//		{ return m_to_import; }
+	const std::list<std::string> & to_import() const
+		{ return m_list_to_import; }
+	void set_to_import(const Glib::SListHandle<Glib::ustring> & l);
 
 private:
 	class ImportParam;
 
 	void do_select_directories();
 	
-	Glib::ustring m_to_import;
+//	Glib::ustring m_to_import;
+	std::list<std::string> m_list_to_import;
 	Gtk::ComboBox *m_date_tz_combo;
 	Gtk::CheckButton *m_ufraw_import_check;
 	Gtk::CheckButton *m_rawstudio_import_check;
 	Gtk::Label *m_directory_name;
+	Gtk::TreeView *m_folderList;
+	fwk::TextTreeviewModel m_folderListModel;
 };
 
 }

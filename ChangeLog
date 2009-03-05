@@ -1,3 +1,7 @@
+2009-03-04  Hubert Figuiere  <hub@figuiere.net>
+
+	* List the folders to import in the import dialog.
+
 2009-03-02  Hubert Figuiere  <hub@figuiere.net>
 
 	* Add the XMP sidecard if needed to the fsfiles.

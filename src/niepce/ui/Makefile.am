@@ -3,7 +3,7 @@
 DIST_SUBDIRS = thumb-view
 
 gladefiles = preferences.glade \
-	importdialog.glade	
+	importdialog.ui
 
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)

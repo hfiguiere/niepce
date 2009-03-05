@@ -21,6 +21,7 @@ libniepceframework_a_SOURCES = configuration.cpp \
 	notificationcenter.h notificationcenter.cpp \
 	configdatabinder.h configdatabinder.cpp \
 	gdkutils.h gdkutils.cpp \
+	gtkutils.hpp gtkutils.cpp \
 	widgets/toolboxitemwidget.h widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.h widgets/editablehscale.cpp \
 	widgets/dock-item.cpp widgets/dock-item.h \
