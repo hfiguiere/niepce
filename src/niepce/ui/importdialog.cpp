@@ -30,7 +30,7 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/configuration.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "importdialog.hpp"
 
 using framework::Configuration;
@@ -39,7 +39,8 @@ using framework::Application;
 namespace ui {
 
 ImportDialog::ImportDialog()
-	: m_date_tz_combo(NULL),
+    : framework::Frame(GLADEDIR"importdialog.ui", "importDialog"),
+    m_date_tz_combo(NULL),
 	  m_ufraw_import_check(NULL),
 	  m_rawstudio_import_check(NULL),
 	  m_directory_name(NULL),
@@ -50,21 +51,18 @@ ImportDialog::ImportDialog()
 
 Gtk::Widget * ImportDialog::buildWidget()
 {
-    Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file(GLADEDIR"importdialog.ui");
-    Gtk::Dialog *dlg = NULL;
-    builder->get_widget("importDialog", dlg);
-
+    Glib::RefPtr<Gtk::Builder> _builder = builder();
     Gtk::Button *select_directories = NULL;
-    builder->get_widget("select_directories", select_directories);
+    _builder->get_widget("select_directories", select_directories);
     select_directories->signal_clicked().connect(
         sigc::mem_fun(*this, &ImportDialog::do_select_directories));
-    builder->get_widget("date_tz_combo", m_date_tz_combo);
-    builder->get_widget("ufraw_import_check", m_ufraw_import_check);
-    builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
-    builder->get_widget("directory_name", m_directory_name);
-    builder->get_widget("folderList", m_folderList);
+    _builder->get_widget("date_tz_combo", m_date_tz_combo);
+    _builder->get_widget("ufraw_import_check", m_ufraw_import_check);
+    _builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
+    _builder->get_widget("directory_name", m_directory_name);
+    _builder->get_widget("folderList", m_folderList);
     m_folderListModel.inject(*m_folderList);
-    return dlg;
+    return &gtkWindow();
 }
 
 

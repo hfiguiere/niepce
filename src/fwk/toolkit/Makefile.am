@@ -3,14 +3,14 @@
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@LIBGTKMM_CFLAGS@ \
 	@GCONF_CFLAGS@  @GNOMEVFS_CFLAGS@ @EXEMPI_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a
 
-noinst_HEADERS = configuration.h application.h \
-	frame.h controller.h goocanvas_proxy_header.h \
+noinst_HEADERS = configuration.h application.hpp \
+	frame.hpp controller.h goocanvas_proxy_header.h \
 	gconf_proxy_header.h
 
 libniepceframework_a_SOURCES = configuration.cpp \

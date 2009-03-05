@@ -2,7 +2,7 @@
 
 DIST_SUBDIRS = thumb-view
 
-gladefiles = preferences.glade \
+gladefiles = preferences.ui \
 	importdialog.ui
 
 gladedir = @datarootdir@/niepce/glade/
@@ -13,7 +13,7 @@ INCLUDES = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@LIBGTKMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @GCONF_CFLAGS@ \
 	@GOOCANVASMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@
@@ -24,7 +24,7 @@ noinst_LIBRARIES = libniepceui.a
 
 libniepceui_a_CPPFLAGS = 
 libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
-	niepceapplication.h niepceapplication.cpp \
+	niepceapplication.hpp niepceapplication.cpp \
 	librarymainview.h librarymainview.cpp \
 	librarycellrenderer.h librarycellrenderer.cpp \
 	librarymainviewcontroller.h librarymainviewcontroller.cpp \

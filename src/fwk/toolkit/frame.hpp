@@ -25,8 +25,8 @@
 #include <boost/function.hpp>
 
 #include <sigc++/signal.h>
-#include <libglademm/xml.h>
 #include <gtkmm/toggleaction.h>
+#include <gtkmm/builder.h>
 
 #include "fwk/toolkit/controller.h"
 
@@ -36,23 +36,23 @@ namespace Gtk {
 
 namespace framework {
 
-	class Frame 
+class Frame 
 		: public Controller
-	{
-	public:
+{
+public:
 		typedef boost::shared_ptr<Frame> Ptr;
 
 		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
-			  const std::string & layout_cfg_key = "");
+          const std::string & layout_cfg_key = "");
 		Frame(const std::string & layout_cfg_key = "");
 		~Frame();
 
 		Gtk::Window & gtkWindow()
-			{
-				return *m_window; 
-			}
-		Glib::RefPtr<Gnome::Glade::Xml> & glade()
-			{ return m_glade; }
+        {
+            return *m_window; 
+        }
+    Glib::RefPtr<Gtk::Builder> & builder()
+        { return m_builder; }
 
 		/** set the title of the window.
 		 * @param title the title of the window.
@@ -71,28 +71,29 @@ namespace framework {
 		 */
 		int show_modal_dialog(Gtk::Dialog & dlg);
 		int show_modal_dialog(const char *gladefile,
-							  const char *widgetname,
-							  boost::function<void (const Glib::RefPtr<Gnome::Glade::Xml> &, Gtk::Dialog *)> setup = NULL);
+                          const char *widgetname,
+                          boost::function<void (const Glib::RefPtr<Gtk::Builder> &, 
+                                                Gtk::Dialog *)> setup = NULL);
 
         
-        void toggle_tools_visible();
+    void toggle_tools_visible();
 
-        sigc::signal<void> signal_hide_tools;
-        sigc::signal<void> signal_show_tools;
-	protected:
+    sigc::signal<void> signal_hide_tools;
+    sigc::signal<void> signal_show_tools;
+protected:
 		/** close signal handler */
 		virtual bool _close();
-        Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
+    Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
 
-	private:
+private:
 		void connectSignals();
 		void frameRectFromConfig();
 		void frameRectToConfig();
 
 		Gtk::Window *m_window;
-		Glib::RefPtr<Gnome::Glade::Xml> m_glade;
+    Glib::RefPtr<Gtk::Builder> m_builder;
 		std::string m_layout_cfg_key;
-	};
+};
 
 }
 

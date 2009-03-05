@@ -20,7 +20,7 @@
 //#include "inkscape.h"
 //#include "prefs-utils.h"
 #include "fwk/toolkit/widgets/dock.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 //#include "widgets/icon.h"
 
 

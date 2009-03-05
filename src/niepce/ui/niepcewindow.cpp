@@ -37,14 +37,14 @@
 #include "fwk/utils/boost.h"
 #include "engine/db/library.h"
 #include "libraryclient/libraryclient.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.h"
 #include "fwk/toolkit/notificationcenter.h"
 #include "fwk/toolkit/configdatabinder.h"
 #include "fwk/toolkit/undo.h"
 
 #include "eog-thumb-view.h"
-#include "niepcewindow.h"
+#include "niepcewindow.hpp"
 #include "librarymainviewcontroller.h"
 #include "importdialog.hpp"
 #include "selectioncontroller.h"
@@ -477,7 +477,8 @@ void NiepceWindow::on_open_library()
 }
 
 
-void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> & xml, Gtk::Dialog * dialog)
+void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> & xml, 
+                                           Gtk::Dialog * dialog)
 {
     Gtk::ComboBox * theme_combo = NULL;
     Gtk::CheckButton * reopen_checkbutton = NULL;
@@ -486,7 +487,7 @@ void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml>
     dialog->signal_hide().connect(boost::bind(&utils::DataBinderPool::destroy, 
                                               binder_pool));
 		
-    theme_combo = xml->get_widget("theme_combo", theme_combo);
+    xml->get_widget("theme_combo", theme_combo);
  
 // Why are ComboBox so complicated to use?
 //    class Columns : 
@@ -515,7 +516,7 @@ void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml>
                     framework::Application::app(),
                     theme_combo->property_active()));
 
-    reopen_checkbutton = xml->get_widget("reopen_checkbutton", reopen_checkbutton);
+    xml->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new framework::ConfigDataBinder<bool>(
                                 reopen_checkbutton->property_active(),
                                 framework::Application::app()->config(),
@@ -526,7 +527,7 @@ void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml>
 void NiepceWindow::on_preferences()
 {
     DBG_OUT("on_preferences");
-    show_modal_dialog(GLADEDIR"preferences.glade", "preferences",
+    show_modal_dialog(GLADEDIR"preferences.ui", "preferences",
                       boost::bind(&NiepceWindow::preference_dialog_setup,
                                   this, _1, _2));
     DBG_OUT("end on_preferences");

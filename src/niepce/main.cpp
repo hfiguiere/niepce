@@ -25,7 +25,7 @@
 
 #include "fwk/utils/exempi.h"
 #include "xmp.h"
-#include "ui/niepceapplication.h"
+#include "ui/niepceapplication.hpp"
 
 namespace bfs = boost::filesystem;
 using utils::ExempiManager;

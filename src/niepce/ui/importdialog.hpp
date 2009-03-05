@@ -29,7 +29,7 @@
 #include <glibmm/refptr.h>
 
 #include "fwk/toolkit/gtkutils.hpp"
-#include "fwk/toolkit/frame.h"
+#include "fwk/toolkit/frame.hpp"
 
 namespace Gtk {
 	class Dialog;

@@ -1,5 +1,7 @@
 2009-03-04  Hubert Figuiere  <hub@figuiere.net>
 
+	* Remove glade to use GtkBuilder. Rename a few headers.
+
 	* List the folders to import in the import dialog.
 
 2009-03-02  Hubert Figuiere  <hub@figuiere.net>

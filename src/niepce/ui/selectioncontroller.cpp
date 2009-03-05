@@ -26,10 +26,10 @@
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/undo.h"
 #include "fwk/toolkit/command.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "engine/db/metadata.h"
 #include "libraryclient/libraryclient.h"
-#include "niepcewindow.h"
+#include "niepcewindow.hpp"
 #include "selectioncontroller.h"
 
 namespace ui {

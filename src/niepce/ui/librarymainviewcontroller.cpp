@@ -29,10 +29,10 @@
 #include "fwk/utils/debug.h"
 #include "niepce/notifications.h"
 #include "engine/db/library.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/widgets/dock.h"
 #include "librarymainviewcontroller.h"
-#include "niepcewindow.h"
+#include "niepcewindow.hpp"
 #include "metadatapanecontroller.h"
 #include "librarycellrenderer.h"
 

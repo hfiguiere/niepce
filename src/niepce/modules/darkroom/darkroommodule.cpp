@@ -22,7 +22,7 @@
 #include <gtkmm/stock.h>
 
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.h"
 #include "fwk/toolkit/widgets/dock.h"
 #include "ncr/ncr.h"

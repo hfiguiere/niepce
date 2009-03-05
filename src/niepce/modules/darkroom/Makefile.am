@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce -I$(top_srcdir)/src/ex
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ @LIBGLADEMM_CFLAGS@ \
+	@LIBGTKMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@ @GCONF_CFLAGS@ \
 	@GOOCANVASMM_CFLAGS@  \
 	@GEGLMM_CFLAGS@ @EXEMPI_CFLAGS@ @OPENRAW_CFLAGS@

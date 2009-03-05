@@ -29,8 +29,8 @@
 #include <gconf/gconf.h>
 
 #include "fwk/utils/debug.h"
-#include "application.h"
-#include "frame.h"
+#include "application.hpp"
+#include "frame.hpp"
 
 
 namespace framework {

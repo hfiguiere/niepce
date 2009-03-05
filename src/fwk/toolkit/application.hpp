@@ -28,7 +28,7 @@
 #include <gtkmm/icontheme.h>
 
 #include "fwk/toolkit/configuration.h"
-#include "fwk/toolkit/frame.h"
+#include "fwk/toolkit/frame.hpp"
 #include "fwk/toolkit/undo.h"
 
 

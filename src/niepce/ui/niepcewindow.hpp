@@ -30,7 +30,7 @@
 #include <gtkmm/statusbar.h>
 #include <gtkmm/paned.h>
 
-#include "fwk/toolkit/frame.h"
+#include "fwk/toolkit/frame.hpp"
 #include "fwk/toolkit/notificationcenter.h"
 #include "fwk/toolkit/configdatabinder.h"
 #include "libraryclient/libraryclient.h"
@@ -70,7 +70,7 @@ private:
     void on_action_file_open();
     void on_open_library();
 
-    void preference_dialog_setup(const Glib::RefPtr<Gnome::Glade::Xml> &,
+    void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
                                  Gtk::Dialog *);
     void on_preferences();
 

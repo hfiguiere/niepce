@@ -21,12 +21,12 @@
 
 #include "imageliststore.h"
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/application.h"
+#include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.h"
 #include "niepce/notifications.h"
 #include "engine/db/library.h"
 #include "engine/library/thumbnailnotification.h"
-#include "niepcewindow.h"
+#include "niepcewindow.hpp"
 
 namespace ui {
 
