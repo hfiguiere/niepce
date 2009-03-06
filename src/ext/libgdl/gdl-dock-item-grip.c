@@ -45,7 +45,7 @@ struct _GdlDockItemGripPrivate {
 };
  
 GDL_CLASS_BOILERPLATE (GdlDockItemGrip, gdl_dock_item_grip,
-		       GtkContainer, GTK_TYPE_CONTAINER);
+		       GtkContainer, GTK_TYPE_CONTAINER)
 
 /* must be called after size_allocate */
 static void
@@ -135,7 +135,7 @@ gdl_dock_item_grip_expose (GtkWidget      *widget,
     gint             layout_height;
     gint             text_x;
     gint             text_y;
-    gboolean         item_or_child_has_focus;
+/*    gboolean         item_or_child_has_focus;*/
 
     grip = GDL_DOCK_ITEM_GRIP (widget);
     gdl_dock_item_grip_get_title_area (grip, &title_area);

@@ -60,7 +60,7 @@ static void gdl_switcher_add_button  (GdlSwitcher *switcher,
                                       const gchar *stock_id,
                                       const GdkPixbuf *pixbuf_icon,
                                       gint switcher_id);
-static void gdl_switcher_remove_button (GdlSwitcher *switcher, gint switcher_id);
+/*static void gdl_switcher_remove_button (GdlSwitcher *switcher, gint switcher_id);*/
 static void gdl_switcher_select_page (GdlSwitcher *switcher, gint switcher_id);
 static void gdl_switcher_select_button (GdlSwitcher *switcher, gint switcher_id);
 static void gdl_switcher_set_show_buttons (GdlSwitcher *switcher, gboolean show);
@@ -524,6 +524,7 @@ gdl_switcher_expose (GtkWidget *widget, GdkEventExpose *event)
     }
     GDL_CALL_PARENT_WITH_DEFAULT (GTK_WIDGET_CLASS, expose_event,
                                   (widget, event), FALSE);
+    return 0;
 }
 
 static void
@@ -628,7 +629,6 @@ gdl_switcher_switch_page_cb (GtkNotebook *nb, GtkNotebookPage *page,
                              gint page_num, GdlSwitcher *switcher)
 {
     GtkWidget       *page_widget;
-    GtkWidget       *tablabel;
     gint             switcher_id;
     
     /* Change switcher button */
@@ -684,7 +684,6 @@ gdl_switcher_select_page (GdlSwitcher *switcher, gint id)
 static void
 gdl_switcher_class_init (GdlSwitcherClass *klass)
 {
-    GtkNotebookClass *notebook_class = GTK_NOTEBOOK_CLASS (klass);
     GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -820,6 +819,7 @@ gdl_switcher_add_button (GdlSwitcher *switcher, const gchar *label,
     gtk_widget_queue_resize (GTK_WIDGET (switcher));
 }
 
+#if 0
 static void
 gdl_switcher_remove_button (GdlSwitcher *switcher, gint switcher_id)
 {
@@ -837,6 +837,7 @@ gdl_switcher_remove_button (GdlSwitcher *switcher, gint switcher_id)
     }
     gtk_widget_queue_resize (GTK_WIDGET (switcher));
 }
+#endif
 
 static void
 gdl_switcher_select_button (GdlSwitcher *switcher, gint switcher_id)

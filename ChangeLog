@@ -1,3 +1,7 @@
+2009-03-05  Hubert Figuiere  <hub@figuiere.net>
+
+	* Kill some warnings in libgdl.
+
 2009-03-04  Hubert Figuiere  <hub@figuiere.net>
 
 	* Remove glade to use GtkBuilder. Rename a few headers.

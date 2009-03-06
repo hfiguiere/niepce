@@ -147,7 +147,7 @@ static guint dock_signals [LAST_SIGNAL] = { 0 };
 
 /* ----- Private functions ----- */
 
-GDL_CLASS_BOILERPLATE (GdlDock, gdl_dock, GdlDockObject, GDL_TYPE_DOCK_OBJECT);
+GDL_CLASS_BOILERPLATE (GdlDock, gdl_dock, GdlDockObject, GDL_TYPE_DOCK_OBJECT)
 
 static void
 gdl_dock_class_init (GdlDockClass *klass)
@@ -1218,7 +1218,7 @@ gdl_dock_add_item (GdlDock          *dock,
         /* Non-floating item. */
         if (dock->root) {
             GdlDockPlacement local_placement;
-            GtkRequisition preferred_size;
+            /*GtkRequisition preferred_size;*/
             
             best_dock_item =
                 gdl_dock_find_best_placement_item (GDL_DOCK_ITEM (dock->root),

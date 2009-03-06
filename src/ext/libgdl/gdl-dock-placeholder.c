@@ -120,7 +120,7 @@ struct _GdlDockPlaceholderPrivate {
 /* ----- Private interface ----- */
 
 GDL_CLASS_BOILERPLATE (GdlDockPlaceholder, gdl_dock_placeholder,
-                       GdlDockObject, GDL_TYPE_DOCK_OBJECT);
+                       GdlDockObject, GDL_TYPE_DOCK_OBJECT)
 
 static void 
 gdl_dock_placeholder_class_init (GdlDockPlaceholderClass *klass)

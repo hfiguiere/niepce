@@ -89,7 +89,7 @@ enum {
 
 /* ----- Private functions ----- */
 
-GDL_CLASS_BOILERPLATE (GdlDockPaned, gdl_dock_paned, GdlDockItem, GDL_TYPE_DOCK_ITEM);
+GDL_CLASS_BOILERPLATE (GdlDockPaned, gdl_dock_paned, GdlDockItem, GDL_TYPE_DOCK_ITEM)
 
 static void
 gdl_dock_paned_class_init (GdlDockPanedClass *klass)
@@ -178,11 +178,12 @@ gdl_dock_paned_resize_paned_ancestors (GdlDockPaned       *paned,
 
                      if (!GDL_IS_DOCK_OBJECT(widget->parent)) {
                          GtkRequisition requisition;
+                         gint new_height;
                          GtkAllocation allocation = paned->child1->allocation;
 
                          gtk_widget_size_request (paned->child1, &requisition);
 
-                         gint new_height =
+                         new_height =
                              (allocation.height > requisition.height && diff > 0 ?
                               allocation.height : requisition.height) + diff;
 

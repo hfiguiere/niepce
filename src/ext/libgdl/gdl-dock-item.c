@@ -197,7 +197,7 @@ struct _GdlDockItemPrivate {
 
 /* ----- Private functions ----- */
 
-GDL_CLASS_BOILERPLATE (GdlDockItem, gdl_dock_item, GdlDockObject, GDL_TYPE_DOCK_OBJECT);
+GDL_CLASS_BOILERPLATE (GdlDockItem, gdl_dock_item, GdlDockObject, GDL_TYPE_DOCK_OBJECT)
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,

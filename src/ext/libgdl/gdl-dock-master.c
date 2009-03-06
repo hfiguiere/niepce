@@ -126,7 +126,7 @@ static guint master_signals [LAST_SIGNAL] = { 0 };
 
 /* ----- Private interface ----- */
 
-GDL_CLASS_BOILERPLATE (GdlDockMaster, gdl_dock_master, GObject, G_TYPE_OBJECT);
+GDL_CLASS_BOILERPLATE (GdlDockMaster, gdl_dock_master, GObject, G_TYPE_OBJECT)
 
 static void
 gdl_dock_master_class_init (GdlDockMasterClass *klass)
@@ -609,11 +609,11 @@ _gdl_dock_master_foreach (gpointer key,
                           gpointer value,
                           gpointer user_data)
 {
-    (void)key;
     struct {
         GFunc    function;
         gpointer user_data;
     } *data = user_data;
+    (void)key;
 
     (* data->function) (GTK_WIDGET (value), data->user_data);
 }
@@ -624,6 +624,7 @@ gdl_dock_master_xor_rect (GdlDockMaster *master)
     gint8         dash_list [2];
     GdkWindow    *window;
     GdkRectangle *rect;
+    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
     
     if (!master->_priv || !master->_priv->drag_request)
         return;
@@ -649,16 +650,13 @@ gdl_dock_master_xor_rect (GdlDockMaster *master)
     };
 
 #ifdef WIN32    
-    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
     if (is_os_vista())
     {
-        // On Vista the dash-line is increadibly slow to draw, it takes several minutes to draw the tracking lines
-        // With GDK_LINE_SOLID it is parts of a second
-        // No performance issue on WinXP
+        /* On Vista the dash-line is increadibly slow to draw, it takes several minutes to draw the tracking lines
+         * With GDK_LINE_SOLID it is parts of a second
+         * No performance issue on WinXP */
         lineStyle = GDK_LINE_SOLID;
     }
-#else
-    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
 #endif
     gdk_gc_set_line_attributes (master->_priv->root_xor_gc, 1,
                                 lineStyle,
