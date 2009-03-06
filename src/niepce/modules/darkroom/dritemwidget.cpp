@@ -24,7 +24,7 @@
 namespace darkroom {
 
 DrItemWidget::DrItemWidget(const Glib::ustring & title)
-    : framework::ToolboxItemWidget(title)
+    : fwk::ToolboxItemWidget(title)
 {
     add(m_box);
     m_box.set_border_width(6);

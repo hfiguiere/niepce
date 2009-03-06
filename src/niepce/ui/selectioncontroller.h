@@ -25,7 +25,7 @@
 
 #include <boost/signal.hpp>
 
-#include "fwk/toolkit/controller.h"
+#include "fwk/toolkit/controller.hpp"
 #include "ui/imageliststore.h"
 
 namespace Gtk {
@@ -53,7 +53,7 @@ public:
 
 
 class SelectionController
-	: public framework::Controller
+	: public fwk::Controller
 {
 public:
 	typedef boost::shared_ptr<SelectionController> Ptr;

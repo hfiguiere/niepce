@@ -1,5 +1,5 @@
 /*
- * niepce - frawework/gdkutils.cpp
+ * niepce - fwk/toolkit/gdkutils.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gdkutils.h"
+#include "gdkutils.hpp"
 
 
 
-namespace framework {
+namespace fwk {
 
 	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_scale_to_fit(const Glib::RefPtr<Gdk::Pixbuf> & pix,
 													 int dim)

@@ -35,9 +35,9 @@ namespace libraryclient {
 	{
 	public:
 		static ClientImpl *makeClientImpl(const utils::Moniker & moniker, 
-										  const framework::NotificationCenter::Ptr & nc);
+										  const fwk::NotificationCenter::Ptr & nc);
 		
-		ClientImpl(const utils::Moniker & moniker, const framework::NotificationCenter::Ptr & nc);
+		ClientImpl(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~ClientImpl();
 
 		library::tid_t getAllKeywords();

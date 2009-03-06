@@ -24,13 +24,13 @@
 
 #include <gtkmm/box.h>
 
-#include "fwk/toolkit/widgets/toolboxitemwidget.h"
+#include "fwk/toolkit/widgets/toolboxitemwidget.hpp"
 
 namespace darkroom {
 
 /** Generic Darkroom item for the toolbox. */
 class DrItemWidget
-    : public framework::ToolboxItemWidget
+    : public fwk::ToolboxItemWidget
 {
 public:
     DrItemWidget(const Glib::ustring & title);

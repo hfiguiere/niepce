@@ -1,5 +1,5 @@
 /*
- * niepce - framework/imageloader.h
+ * niepce - fwk/command.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,24 +18,31 @@
  */
 
 
-#ifndef __FRAMEWORK_IMAGELOADER_H__
-#define __FRAMEWORK_IMAGELOADER_H__
+#ifndef __FWK_COMMAND_H_
+#define __FWK_COMMAND_H_
 
-#include <boost/filesystem/path.hpp>
+#include <boost/function.hpp>
 
-#include <gdkmm/pixbuf.h>
+namespace fwk {
 
-namespace framework {
-
-class ImageLoader
+class Command
 {
 public:
-	ImageLoader(const boost::filesystem::path & file);
-	Glib::RefPtr<Gdk::Pixbuf> get_pixbuf();
-private:
-	boost::filesystem::path m_file;
+    boost::function<void (void)> undo;
+    boost::function<void (void)> redo;
 };
+
+
+#endif
 
 }
 
-#endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

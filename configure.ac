@@ -170,6 +170,7 @@ src/Makefile
 src/ext/Makefile
 src/ext/libgdl/Makefile
 src/niepce/ui/Makefile
+src/niepce/ui/dialogs/Makefile
 src/niepce/ui/thumb-view/Makefile
 src/niepce/modules/Makefile
 src/niepce/modules/darkroom/Makefile

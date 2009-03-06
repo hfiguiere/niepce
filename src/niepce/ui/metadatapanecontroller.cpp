@@ -28,8 +28,8 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/utils/exempi.h"
-#include "fwk/toolkit/metadatawidget.h"
-#include "metadatapanecontroller.h"
+#include "fwk/toolkit/metadatawidget.hpp"
+#include "metadatapanecontroller.hpp"
 
 using namespace xmp;
 
@@ -84,7 +84,7 @@ namespace ui {
 		return s_format;
 	}
 
-	MetaDataPaneController::MetaDataPaneController(framework::Dock &dock)
+	MetaDataPaneController::MetaDataPaneController(fwk::Dock &dock)
 		: Dockable(dock, "Metadata", _("Image Properties"), 
                    Gtk::Stock::PROPERTIES.id, DockItem::DOCKED_STATE),
           m_fileid(0)
@@ -103,7 +103,7 @@ namespace ui {
 		
 		const MetaDataSectionFormat * current = formats;
 		while(current->section) {
-			framework::MetaDataWidget *w = Gtk::manage(new framework::MetaDataWidget(current->section));
+			fwk::MetaDataWidget *w = Gtk::manage(new fwk::MetaDataWidget(current->section));
             DockItem::get_vbox()->pack_start(*w, Gtk::PACK_SHRINK, 0);
 			w->set_data_format(current);
 			m_widgets.push_back(w);
@@ -119,7 +119,7 @@ namespace ui {
         m_fileid = file_id;
 		DBG_OUT("displaying metadata");
 		std::for_each(m_widgets.begin(), m_widgets.end(),
-					  boost::bind(&framework::MetaDataWidget::set_data_source,
+					  boost::bind(&fwk::MetaDataWidget::set_data_source,
 								  _1, meta));
 	}
 

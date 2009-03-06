@@ -1,5 +1,5 @@
 /*
- * niepce - framework/imageloader.cpp
+ * niepce - fwk/imageloader.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -21,10 +21,10 @@
 
 #include <gdkmm/pixbufloader.h>
 
-#include "imageloader.h"
-#include "fwk/toolkit/mimetype.h"
+#include "imageloader.hpp"
+#include "fwk/toolkit/mimetype.hpp"
 
-namespace framework {
+namespace fwk {
 
 ImageLoader::ImageLoader(const boost::filesystem::path & file)
 	: m_file(file)
@@ -34,7 +34,7 @@ ImageLoader::ImageLoader(const boost::filesystem::path & file)
 Glib::RefPtr<Gdk::Pixbuf> ImageLoader::get_pixbuf()
 {
 	// TODO split get_pixbuf and the real load.
-	framework::MimeType mime_type(m_file);
+	fwk::MimeType mime_type(m_file);
 	
 	Glib::RefPtr<Gdk::PixbufLoader> loader =  
 		Gdk::PixbufLoader::create(mime_type.string(), true);

@@ -1,7 +1,7 @@
 /*
- * niepce - framework/undo.h
+ * niepce - fwk/toolkit/undo.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #include <boost/signal.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace framework {
+namespace fwk {
 
 class Command;
 

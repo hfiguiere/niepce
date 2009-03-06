@@ -13,11 +13,11 @@
 //#include "prefs-utils.h"
 //#include "desktop.h"
 
-#include "dock.h"
+#include "dock.hpp"
 
 #include <gtkmm/adjustment.h>
 
-namespace framework {
+namespace fwk {
 
 namespace {
 
@@ -96,7 +96,7 @@ Dock::Dock(Gtk::Orientation orientation)
     g_signal_connect(_paned->gobj(), "button-press-event", G_CALLBACK(_on_paned_button_event), (void *)this);
     g_signal_connect(_paned->gobj(), "button-release-event", G_CALLBACK(_on_paned_button_event), (void *)this);
 
-    signal_layout_changed().connect(sigc::mem_fun(*this, &framework::Dock::_onLayoutChanged));
+    signal_layout_changed().connect(sigc::mem_fun(*this, &Dock::_onLayoutChanged));
 }
 
 Dock::~Dock()

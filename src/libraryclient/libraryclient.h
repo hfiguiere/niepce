@@ -31,7 +31,7 @@ namespace utils {
 	class Moniker;
 }
 
-namespace framework {
+namespace fwk {
 	class NotificationCenter;
 }
 
@@ -45,7 +45,7 @@ namespace libraryclient {
 	public:
 		typedef boost::shared_ptr< LibraryClient > Ptr;
 
-		LibraryClient(const utils::Moniker & moniker, const framework::NotificationCenter::Ptr & nc);
+		LibraryClient(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~LibraryClient();
 
 		static library::tid_t newTid();

@@ -1,5 +1,5 @@
 /*
- * niepce - darkroom/toolboxcontroller.h
+ * niepce - modules/darkroom/toolboxcontroller.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -21,20 +21,20 @@
 #ifndef _DARKROOM_TOOLBOXCONTROLLER_H__
 #define _DARKROOM_TOOLBOXCONTROLLER_H__
 
-#include "fwk/toolkit/dockable.h"
+#include "fwk/toolkit/dockable.hpp"
 
-namespace framework {
+namespace fwk {
 class Dock;
 }
 
 namespace darkroom {
 
 class ToolboxController
-    : public framework::Dockable
+    : public fwk::Dockable
 {
 public:
     typedef boost::shared_ptr<ToolboxController> Ptr;
-    ToolboxController(framework::Dock &);
+    ToolboxController(fwk::Dock &);
     virtual Gtk::Widget * buildWidget();
 };
 

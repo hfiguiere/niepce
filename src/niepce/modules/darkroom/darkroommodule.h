@@ -29,21 +29,21 @@
 #include <gtkmm/actiongroup.h>
 #include <gtkmm/scrolledwindow.h>
 
-#include "fwk/toolkit/controller.h"
+#include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.h"
 #include "libraryclient/libraryclient.h"
 #include "ncr/image.h"
 #include "modules/darkroom/imagecanvas.h"
 #include "modules/darkroom/toolboxcontroller.h"
 	
-namespace framework {
+namespace fwk {
 class Dock;
 }
 
 namespace darkroom {
 
 class DarkroomModule
-	: public framework::Controller
+	: public fwk::Controller
 {
 public:
 	typedef boost::shared_ptr<DarkroomModule> Ptr;
@@ -71,7 +71,7 @@ private:
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
     libraryclient::LibraryClient::Ptr m_libClient;
-    framework::Dock              *m_dock;
+    fwk::Dock                   *m_dock;
 };
 
 

@@ -1,5 +1,5 @@
 /*
- * niepce - framework/widgets/editablehscale.h
+ * niepce - fwk/widgets/editablehscale.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FRAMEWORK_EDITABLEHSCALE_H_
-#define _FRAMEWORK_EDITABLEHSCALE_H_
+#ifndef _FWK_EDITABLEHSCALE_H_
+#define _FWK_EDITABLEHSCALE_H_
 
 
 #include <gtkmm/box.h>
@@ -27,7 +27,7 @@
 #include <gtkmm/scale.h>
 
 
-namespace framework {
+namespace fwk {
 
 /** A widget similar to a Gtk::HScale with a edit box */
 class EditableHScale

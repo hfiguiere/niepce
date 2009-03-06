@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
 
 	ExempiManager ex_manager(niepce::xmp_namespaces);
 	
-	return framework::Application::main(
+	return fwk::Application::main(
 		boost::bind(&ui::NiepceApplication::create),
 		argc, argv);
 }

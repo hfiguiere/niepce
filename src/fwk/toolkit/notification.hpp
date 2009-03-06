@@ -1,5 +1,5 @@
 /*
- * niepce - framework/notification.h
+ * niepce - fwk/notification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -21,14 +21,14 @@
 
 
 
-#ifndef __FRAMEWORK_NOTIFICATION_H__
-#define __FRAMEWORK_NOTIFICATION_H__
+#ifndef __FWK_NOTIFICATION_H__
+#define __FWK_NOTIFICATION_H__
 
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
-namespace framework {
+namespace fwk {
 
 	/** A notification to post to the notification center */
 	class Notification

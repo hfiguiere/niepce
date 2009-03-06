@@ -30,11 +30,11 @@
 #include "fwk/utils/stringutils.h"
 #include "fwk/utils/debug.h"
 
-#include "metadatawidget.h"
+#include "metadatawidget.hpp"
 
 
 
-namespace framework {
+namespace fwk {
 
 MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     : ToolboxItemWidget(title),

@@ -31,22 +31,22 @@
 #include <gtkmm/paned.h>
 
 #include "fwk/toolkit/frame.hpp"
-#include "fwk/toolkit/notificationcenter.h"
-#include "fwk/toolkit/configdatabinder.h"
+#include "fwk/toolkit/notificationcenter.hpp"
+#include "fwk/toolkit/configdatabinder.hpp"
 #include "libraryclient/libraryclient.h"
 #include "ui/librarymainviewcontroller.h"
 #include "ui/workspacecontroller.h"
 #include "ui/selectioncontroller.h"
 #include "ui/filmstripcontroller.h"
 
-namespace framework {
+namespace fwk {
 	class NotificatioCenter;
 }
 
 namespace ui {
 
 class NiepceWindow
-    : public framework::Frame
+    : public fwk::Frame
 {
 public:
     NiepceWindow();
@@ -69,6 +69,7 @@ private:
     void on_action_file_quit();
     void on_action_file_open();
     void on_open_library();
+    void on_action_edit_labels();
 
     void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
                                  Gtk::Dialog *);
@@ -79,7 +80,7 @@ private:
 
     void open_library(const std::string & libMoniker);
 		
-    framework::NotificationCenter::Ptr  m_lib_notifcenter;
+    fwk::NotificationCenter::Ptr  m_lib_notifcenter;
 
     Gtk::VBox                      m_vbox;
     Gtk::HPaned                    m_hbox;

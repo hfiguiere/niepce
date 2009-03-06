@@ -1,5 +1,5 @@
 /*
- * niepce - framework/goocanvas_proxy_header.h
+ * niepce - fwk/toolkit/goocanvas_proxy_header.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *

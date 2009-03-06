@@ -36,10 +36,10 @@
 #include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.h"
 #include "fwk/utils/db/sqlite/sqlitecnxdrv.h"
 #include "fwk/utils/db/sqlstatement.h"
-#include "fwk/toolkit/notificationcenter.h"
-#include "fwk/toolkit/mimetype.h"
+#include "fwk/toolkit/notificationcenter.hpp"
+#include "fwk/toolkit/mimetype.hpp"
 
-using framework::NotificationCenter;
+using fwk::NotificationCenter;
 
 namespace bfs = boost::filesystem;
 
@@ -77,12 +77,12 @@ void Library::triggerRewriteXmp(void)
 
 void Library::notify(NotifyType t, const boost::any & param)
 {
-    framework::NotificationCenter::Ptr nc(m_notif_center.lock());
+    fwk::NotificationCenter::Ptr nc(m_notif_center.lock());
     if(nc) {
         DBG_OUT("notif");
         // pass the notification
-        framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_LIB));
-        framework::Notification::mutex_t::scoped_lock lock(n->mutex());
+        fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_LIB));
+        fwk::Notification::mutex_t::scoped_lock lock(n->mutex());
         LibNotification ln;
         ln.type = t;
         ln.param = param;
@@ -257,7 +257,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
     try {
         int32_t rating, label_id, orientation;
         std::string label;  
-        framework::MimeType mime = framework::MimeType(file);
+        fwk::MimeType mime = fwk::MimeType(file);
         db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
         utils::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
         label_id = 0;

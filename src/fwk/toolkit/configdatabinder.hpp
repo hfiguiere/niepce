@@ -1,7 +1,7 @@
 /*
- * niepce - framework/configdatabinder.h
+ * niepce - fwk/toolkit/configdatabinder.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/utils/databinder.h"
-#include "fwk/toolkit//configuration.h"
+#include "fwk/toolkit/configuration.hpp"
 
-namespace framework {
+namespace fwk {
 
 class ConfigDataBinderBase
 	: public utils::DataBinderBase

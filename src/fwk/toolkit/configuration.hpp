@@ -1,7 +1,7 @@
 /*
- * niepce - framework/configuration.h
+ * niepce - fwk/toolkit/configuration.hpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,24 +27,33 @@
 #include <glibmm/refptr.h>
 
 
-namespace framework {
+namespace fwk {
 
-	class Configuration
-	{
-	public:
+class Configuration
+{
+public:
 		Configuration(const Glib::ustring & root);
 		~Configuration();
 
 		bool hasKey(const Glib::ustring & key) const;
 		const Glib::ustring getValue(const Glib::ustring & key,
-									 const Glib::ustring & def) const;
+                                 const Glib::ustring & def) const;
 
 		void setValue(const Glib::ustring & key, const Glib::ustring & value);
-	private:
-        GConfClient *                       m_gconf;
+private:
+    GConfClient *                       m_gconf;
 		Glib::ustring                       m_root;
-	};
+};
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

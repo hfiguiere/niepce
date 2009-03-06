@@ -24,8 +24,8 @@
 
 #include "fwk/utils/autoflag.h"
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/undo.h"
-#include "fwk/toolkit/command.h"
+#include "fwk/toolkit/undo.hpp"
+#include "fwk/toolkit/command.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "engine/db/metadata.h"
 #include "libraryclient/libraryclient.h"
@@ -158,9 +158,9 @@ void SelectionController::rotate(int angle)
 bool SelectionController::_set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
                                         int meta, int old_value, int new_value)
 {
-    framework::UndoTransaction *undo = new framework::UndoTransaction(undo_label);
-    framework::Application::app()->undo_history().add(undo);
-    framework::Command *cmd = new framework::Command;
+    fwk::UndoTransaction *undo = new fwk::UndoTransaction(undo_label);
+    fwk::Application::app()->undo_history().add(undo);
+    fwk::Command *cmd = new fwk::Command;
     cmd->redo = boost::bind(&libraryclient::LibraryClient::setMetadata,
                             getLibraryClient(), file->id(), 
                             meta, new_value);

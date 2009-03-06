@@ -94,7 +94,7 @@ void LibFile::setMetaData(int meta, int32_t v)
  * @return the filetype
  * @todo: add the Video, JPEG+RAW file types.
  */
-LibFile::FileType LibFile::mimetype_to_filetype(framework::MimeType mime)
+LibFile::FileType LibFile::mimetype_to_filetype(fwk::MimeType mime)
 {
     if(mime.isDigicamRaw())
     {

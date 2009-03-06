@@ -22,8 +22,8 @@
 #ifndef __UI_FILMSTRIPCONTROLLER_H_
 #define __UI_FILMSTRIPCONTROLLER_H_
 
-#include "fwk/toolkit/controller.h"
-#include "fwk/toolkit/notificationcenter.h"
+#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/notificationcenter.hpp"
 #include "ui/selectioncontroller.h"
 
 namespace Gtk {
@@ -34,7 +34,7 @@ namespace ui {
 
 
 class FilmStripController
-	: public framework::Controller,
+	: public fwk::Controller,
 	  public IImageSelectable
 {
 public:

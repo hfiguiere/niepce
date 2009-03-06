@@ -25,13 +25,13 @@
 #include <gtkmm/stock.h>
 
 #include "toolboxcontroller.h"
-#include "fwk/toolkit/widgets/editablehscale.h"
-#include "fwk/toolkit/widgets/dock-item.h"
+#include "fwk/toolkit/widgets/editablehscale.hpp"
+#include "fwk/toolkit/widgets/dock-item.hpp"
 #include "dritemwidget.h"
 
 namespace darkroom {
 
-ToolboxController::ToolboxController(framework::Dock &dock)
+ToolboxController::ToolboxController(fwk::Dock &dock)
     : Dockable(dock,"tools", _("Develop"), Gtk::Stock::APPLY.id, 
                DockItem::DOCKED_STATE)
 {
@@ -41,38 +41,38 @@ ToolboxController::ToolboxController(framework::Dock &dock)
 Gtk::Widget * ToolboxController::buildWidget()
 {
     DrItemWidget *item = NULL;
-    framework::EditableHScale *s = NULL;
+    fwk::EditableHScale *s = NULL;
     Gtk::VBox *toolbox = DockItem::get_vbox();
     m_widget = &DockItem::getWidget();
 
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
-    s = Gtk::manage(new framework::EditableHScale(-45.0, 45.0, 0.5));    
+    s = Gtk::manage(new fwk::EditableHScale(-45.0, 45.0, 0.5));    
     item->add_widget(_("Tilt"), *s);
 
     item = manage(new DrItemWidget(_("White balance")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
-    s = Gtk::manage(new framework::EditableHScale(0.0, 100.0, 1.0));
+    s = Gtk::manage(new fwk::EditableHScale(0.0, 100.0, 1.0));
     item->add_widget(_("Color temperature"), *s);
 
     item = manage(new DrItemWidget(_("Tone and colour")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
-    s = Gtk::manage(new framework::EditableHScale(-5.0, 5.0, 0.1));
+    s = Gtk::manage(new fwk::EditableHScale(-5.0, 5.0, 0.1));
 //    s->signal_value_changed().connect();
     item->add_widget(_("Exposure"), *s);
-    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(0, 100, 1));
     item->add_widget(_("Recovery"), *s);
-    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(0, 100, 1));
     item->add_widget(_("Fill Light"), *s);
-    s = Gtk::manage(new framework::EditableHScale(0, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(0, 100, 1));
     item->add_widget(_("Blacks"), *s);
-    s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(-100, 100, 1));
     item->add_widget(_("Brightness"), *s);
-    s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(-100, 100, 1));
     item->add_widget(_("Contrast"), *s);
-    s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(-100, 100, 1));
     item->add_widget(_("Saturation"), *s);
-    s = Gtk::manage(new framework::EditableHScale(-100, 100, 1));
+    s = Gtk::manage(new fwk::EditableHScale(-100, 100, 1));
     item->add_widget(_("Vibrance"), *s);
 
     return m_widget;

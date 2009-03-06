@@ -15,16 +15,16 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/icontheme.h>
 
-#include "dock-item.h"
+#include "dock-item.hpp"
 //#include "desktop.h"
 //#include "inkscape.h"
 //#include "prefs-utils.h"
-#include "fwk/toolkit/widgets/dock.h"
+#include "fwk/toolkit/widgets/dock.hpp"
 #include "fwk/toolkit/application.hpp"
 //#include "widgets/icon.h"
 
 
-namespace framework {
+namespace fwk {
 
 DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& long_name,
                    const Glib::ustring& icon_name, State state) :
@@ -68,13 +68,13 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     _frame.add(_dock_item_box);
     _dock_item_box.set_border_width(3);
 
-    signal_drag_begin().connect(sigc::mem_fun(*this, &framework::DockItem::_onDragBegin));
-    signal_drag_end().connect(sigc::mem_fun(*this, &framework::DockItem::_onDragEnd));
-    signal_hide().connect(sigc::mem_fun(*this, &framework::DockItem::_onHide), false);
-    signal_show().connect(sigc::mem_fun(*this, &framework::DockItem::_onShow), false);
-    signal_state_changed().connect(sigc::mem_fun(*this, &framework::DockItem::_onStateChanged));
-    signal_delete_event().connect(sigc::mem_fun(*this, &framework::DockItem::_onDeleteEvent));
-    signal_realize().connect(sigc::mem_fun(*this, &framework::DockItem::_onRealize));
+    signal_drag_begin().connect(sigc::mem_fun(*this, &DockItem::_onDragBegin));
+    signal_drag_end().connect(sigc::mem_fun(*this, &DockItem::_onDragEnd));
+    signal_hide().connect(sigc::mem_fun(*this, &DockItem::_onHide), false);
+    signal_show().connect(sigc::mem_fun(*this, &DockItem::_onShow), false);
+    signal_state_changed().connect(sigc::mem_fun(*this, &DockItem::_onStateChanged));
+    signal_delete_event().connect(sigc::mem_fun(*this, &DockItem::_onDeleteEvent));
+    signal_realize().connect(sigc::mem_fun(*this, &DockItem::_onRealize));
 
     _dock.addItem(*this, (_prev_state == FLOATING_STATE ? FLOATING : TOP));
 
@@ -391,9 +391,9 @@ DockItem::_onStateChanged(State /*prev_state*/, State new_state)
     _window = getWindow();
 
     if (new_state == FLOATING_STATE && _window) {
-        _window->signal_hide().connect(sigc::mem_fun(*this, &framework::DockItem::_onHideWindow));
+        _window->signal_hide().connect(sigc::mem_fun(*this, &fwk::DockItem::_onHideWindow));
         _signal_key_press_event_connection =
-            _window->signal_key_press_event().connect(sigc::mem_fun(*this, &framework::DockItem::_onKeyPress));
+            _window->signal_key_press_event().connect(sigc::mem_fun(*this, &fwk::DockItem::_onKeyPress));
     }
 }
 

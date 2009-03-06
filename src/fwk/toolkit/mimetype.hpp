@@ -1,5 +1,5 @@
 /*
- * niepce - framework/mimetype.h
+ * niepce - fwk/mimetype.h
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -18,13 +18,13 @@
  */
 
 
-#ifndef _FRAMEWORK_MIMETYPE_H_
-#define _FRAMEWORK_MIMETYPE_H_
+#ifndef _FWK_MIMETYPE_H_
+#define _FWK_MIMETYPE_H_
 
 #include <string>
 #include <boost/filesystem/path.hpp>
 
-namespace framework {
+namespace fwk {
 
 	class MimeType
 	{

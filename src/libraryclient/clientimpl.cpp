@@ -34,12 +34,12 @@ using library::tid_t;
 namespace libraryclient {
 	
 ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker, 
-                                       const framework::NotificationCenter::Ptr & nc)
+                                       const fwk::NotificationCenter::Ptr & nc)
 {
     return new ClientImpl(moniker, nc);
 }
 
-ClientImpl::ClientImpl(const utils::Moniker & moniker, const framework::NotificationCenter::Ptr & nc)
+ClientImpl::ClientImpl(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc)
     : m_moniker(moniker),
       m_localLibrary(NULL)
 {

@@ -22,7 +22,7 @@
 #include "imageliststore.h"
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/application.hpp"
-#include "fwk/toolkit/gdkutils.h"
+#include "fwk/toolkit/gdkutils.hpp"
 #include "niepce/notifications.h"
 #include "engine/db/library.h"
 #include "engine/library/thumbnailnotification.h"
@@ -64,7 +64,7 @@ Gtk::TreePath ImageListStore::get_path_from_id(int id)
 }
 
 
-void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
+void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
 {
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
                "wrong notification type");
@@ -77,7 +77,7 @@ void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
             db::LibFile::ListPtr l 
                 = boost::any_cast<db::LibFile::ListPtr>(ln.param);
             DBG_OUT("received folder content file # %d", l->size());
-            Glib::RefPtr< Gtk::IconTheme > icon_theme(framework::Application::app()->getIconTheme());
+            Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
             clear();
             m_idmap.clear();
             db::LibFile::List::const_iterator iter = l->begin();
@@ -90,7 +90,7 @@ void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
                     Glib::ustring("image-loading"), 32,
                     Gtk::ICON_LOOKUP_USE_BUILTIN);
                 row[m_columns.m_libfile] = *iter;
-                row[m_columns.m_strip_thumb] = framework::gdkpixbuf_scale_to_fit(row[m_columns.m_pix], 100);
+                row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(row[m_columns.m_pix], 100);
                 m_idmap[(*iter)->id()] = riter;
             }
             // at that point clear the cache because the icon view is populated.
@@ -123,7 +123,7 @@ void ImageListStore::on_lib_notification(const framework::Notification::Ptr &n)
     }
 }
 
-void ImageListStore::on_tnail_notification(const framework::Notification::Ptr &n)
+void ImageListStore::on_tnail_notification(const fwk::Notification::Ptr &n)
 {
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, 
                "wrong notification type");
@@ -136,7 +136,7 @@ void ImageListStore::on_tnail_notification(const framework::Notification::Ptr &n
             // found the icon view item
             Gtk::TreeRow row = *(iter->second);
             row[m_columns.m_pix] = tn.pixmap;
-            row[m_columns.m_strip_thumb] = framework::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
+            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
         }
         else {
             DBG_OUT("row %d not found", tn.id);

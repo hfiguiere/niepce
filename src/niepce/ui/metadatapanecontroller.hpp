@@ -1,7 +1,7 @@
 /*
  * niepce - ui/metadatapanecontroller.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,36 +23,36 @@
 #include <gtkmm/box.h>
 
 #include "fwk/utils/exempi.h"
-#include "fwk/toolkit/dockable.h"
+#include "fwk/toolkit/dockable.hpp"
 
 namespace xmp {
-	struct MetaDataSectionFormat;
+struct MetaDataSectionFormat;
 }
-namespace framework {
-	class MetaDataWidget;
-    class Dock;
+namespace fwk {
+class MetaDataWidget;
+class Dock;
 }
 
 namespace ui {
 	
-	class MetaDataPaneController
-		: public framework::Dockable
-	{
-	public:
+class MetaDataPaneController
+		: public fwk::Dockable
+{
+public:
 		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
-		MetaDataPaneController(framework::Dock &);
-        ~MetaDataPaneController();
+		MetaDataPaneController(fwk::Dock &);
+    ~MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();
 		void display(int file_id, const utils::XmpMeta * meta);
-        int displayed_file() const 
-            { return m_fileid; }
-	private:
-		std::vector<framework::MetaDataWidget *> m_widgets;
+    int displayed_file() const 
+        { return m_fileid; }
+private:
+		std::vector<fwk::MetaDataWidget *> m_widgets;
 
 		static const xmp::MetaDataSectionFormat * get_format();
 
-        int m_fileid;
-	};
+    int m_fileid;
+};
 
 }
 

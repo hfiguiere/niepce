@@ -41,7 +41,7 @@ namespace Gtk {
 namespace ui {
 
 class ImportDialog 
-	: public framework::Frame
+	: public fwk::Frame
 {
 public:
 	typedef boost::shared_ptr<ImportDialog> Ptr;

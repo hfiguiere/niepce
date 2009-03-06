@@ -1,7 +1,7 @@
 /*
- * niepce - framework/gconf_proxy_header.h
+ * niepce - fwk/imageloader.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @brief Wrap Gconfmm to be warning free. */
 
-#ifndef __GCONF_PROXY_HEADER_H__
-#define __GCONF_PROXY_HEADER_H__
+#ifndef __FWK_IMAGELOADER_H__
+#define __FWK_IMAGELOADER_H__
 
-/*
- * Insert here the work around for the warning disabling to your taste.
- */
-#if __GNUC__
-#pragma GCC system_header
-#endif
-#include <gconfmm.h>
+#include <boost/filesystem/path.hpp>
 
+#include <gdkmm/pixbuf.h>
+
+namespace fwk {
+
+class ImageLoader
+{
+public:
+	ImageLoader(const boost::filesystem::path & file);
+	Glib::RefPtr<Gdk::Pixbuf> get_pixbuf();
+private:
+	boost::filesystem::path m_file;
+};
+
+}
 
 #endif

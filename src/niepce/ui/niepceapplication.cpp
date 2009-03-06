@@ -26,8 +26,8 @@
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
 
-using framework::Frame;
-using framework::Application;
+using fwk::Frame;
+using fwk::Application;
 
 namespace ui {
 

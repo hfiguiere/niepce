@@ -1,9 +1,9 @@
 
 
-DIST_SUBDIRS = thumb-view
+DIST_SUBDIRS = thumb-view dialogs
 
 gladefiles = preferences.ui \
-	importdialog.ui
+	dialogs/importdialog.ui
 
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
@@ -23,16 +23,17 @@ EXTRA_DIST = $(gladefiles)
 noinst_LIBRARIES = libniepceui.a
 
 libniepceui_a_CPPFLAGS = 
-libniepceui_a_SOURCES = niepcewindow.h niepcewindow.cpp \
+libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \
 	librarymainview.h librarymainview.cpp \
 	librarycellrenderer.h librarycellrenderer.cpp \
 	librarymainviewcontroller.h librarymainviewcontroller.cpp \
 	imageliststore.h imageliststore.cpp\
 	workspacecontroller.h workspacecontroller.cpp \
-	metadatapanecontroller.h metadatapanecontroller.cpp \
-	importdialog.h importdialog.cpp \
+	metadatapanecontroller.hpp metadatapanecontroller.cpp \
+	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \
 	filmstripcontroller.h filmstripcontroller.cpp \
+	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
 	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h

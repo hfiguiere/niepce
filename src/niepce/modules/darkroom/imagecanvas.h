@@ -21,7 +21,7 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/bin.h>
 
-#include "fwk/toolkit/goocanvas_proxy_header.h"
+#include "fwk/toolkit/goocanvas_proxy_header.hpp"
 
 namespace darkroom {
 

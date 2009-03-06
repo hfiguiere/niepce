@@ -22,10 +22,10 @@
 #include <boost/checked_delete.hpp>
 
 #include "fwk/utils/debug.h"
-#include "command.h"
-#include "undo.h"
+#include "command.hpp"
+#include "undo.hpp"
 
-namespace framework {
+namespace fwk {
 
 UndoTransaction::UndoTransaction(const std::string & n)
     : m_name(n)

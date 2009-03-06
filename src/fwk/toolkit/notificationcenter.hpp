@@ -1,7 +1,7 @@
 /*
- * niepce - framework/notification.h
+ * niepce - fwk/toolkit/notification.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@
 
 
 
-#ifndef __FRAMEWORK_NOTIFICATIONCENTER_H__
-#define __FRAMEWORK_NOTIFICATIONCENTER_H__
+#ifndef __FWK_NOTIFICATIONCENTER_H__
+#define __FWK_NOTIFICATIONCENTER_H__
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "fwk/toolkit/notification.h"
+#include "fwk/toolkit/notification.hpp"
 
-namespace framework {
+namespace fwk {
 
 	class NotificationCenter
 	{

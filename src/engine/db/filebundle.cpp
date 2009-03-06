@@ -21,7 +21,7 @@
 
 #include "filebundle.hpp"
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/mimetype.h"
+#include "fwk/toolkit/mimetype.hpp"
 
 
 namespace db {
@@ -30,7 +30,7 @@ void
 FileBundle::add(const boost::filesystem::path & path)
 {
     // TODO make it more reliable with more tests.
-    framework::MimeType type(path);
+    fwk::MimeType type(path);
     
     if(type.isImage()) {
         if(type.isDigicamRaw()) {

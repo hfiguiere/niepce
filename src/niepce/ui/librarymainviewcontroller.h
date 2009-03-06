@@ -31,9 +31,9 @@
 #include "librarymainview.h"
 #include "engine/db/libfile.h"
 #include "libraryclient/libraryclient.h"
-#include "fwk/toolkit/controller.h"
-#include "fwk/toolkit/notification.h"
-#include "metadatapanecontroller.h"
+#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/notification.hpp"
+#include "metadatapanecontroller.hpp"
 #include "selectioncontroller.h"
 #include "modules/darkroom/darkroommodule.h"
 #include "imageliststore.h"
@@ -41,28 +41,28 @@
 namespace Gtk {
 	class Widget;
 }
-namespace framework {
+namespace fwk {
 class Dock;
 }
 
 namespace ui {
 
-	class LibraryMainViewController
-		: public framework::Controller,
+class LibraryMainViewController
+		: public fwk::Controller,
 		  public IImageSelectable
-	{
-	public:
+{
+public:
 		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
 		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
 
 		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions,
-								  const Glib::RefPtr<ImageListStore> & store)
-			: m_actionGroup(actions),
-			  m_model(store)
-			{
-			}
+                              const Glib::RefPtr<ImageListStore> & store)
+        : m_actionGroup(actions),
+          m_model(store)
+        {
+        }
 
-		void on_lib_notification(const framework::Notification::Ptr &);
+		void on_lib_notification(const fwk::Notification::Ptr &);
 
 		/** called when somehing is selected by the shared selection */
 		void on_selected(int id);
@@ -71,10 +71,10 @@ namespace ui {
 		virtual Gtk::IconView * image_list();
 		virtual int get_selected();
 		virtual void select_image(int id);
-	protected:
+protected:
 		virtual Gtk::Widget * buildWidget();
 		virtual void on_ready();
-	private:
+private:
 		libraryclient::LibraryClient::Ptr getLibraryClient();
 		Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
 
@@ -84,13 +84,13 @@ namespace ui {
 		Gtk::ScrolledWindow          m_scrollview;
 		// library split view
 		Gtk::HPaned                  m_lib_splitview;
-        framework::Dock              *m_dock;
+    fwk::Dock                   *m_dock;
 		MetaDataPaneController::Ptr  m_metapanecontroller;
 
-        darkroom::DarkroomModule::Ptr m_darkroom;
+    darkroom::DarkroomModule::Ptr m_darkroom;
 
 		Glib::RefPtr<ImageListStore> m_model;
-	};
+};
 
 }
 

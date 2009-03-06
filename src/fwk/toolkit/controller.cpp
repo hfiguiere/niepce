@@ -1,7 +1,7 @@
 /*
- * niepce - framework/controller.cpp
+ * niepce - fwk/toolkit/controller.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #include <gtkmm/widget.h>
 
 #include "fwk/utils/debug.h"
-#include "controller.h"
+#include "controller.hpp"
 
 
-namespace framework {
+namespace fwk {
 
 Controller::Controller()
     : m_widget(NULL)

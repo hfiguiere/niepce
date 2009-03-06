@@ -4,7 +4,7 @@
 /*
  * niepce - ui/niepceapplication.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@
 namespace ui {
 
 	class NiepceApplication
-		: public framework::Application
+		: public fwk::Application
 	{
 	public:
-		static framework::Application::Ptr create();
+		static fwk::Application::Ptr create();
 
-		virtual framework::Frame::Ptr makeMainFrame();
+		virtual fwk::Frame::Ptr makeMainFrame();
 	protected:
 		NiepceApplication();
 		virtual void on_about();

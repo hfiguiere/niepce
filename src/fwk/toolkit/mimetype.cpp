@@ -1,5 +1,5 @@
 /*
- * niepce - framework/mimetype.cpp
+ * niepce - fwk/mimetype.cpp
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -23,11 +23,11 @@
 
 #include "config.h"
 
-#include "mimetype.h"
+#include "mimetype.hpp"
 
 namespace bfs = boost::filesystem;
 
-namespace framework {
+namespace fwk {
 
 MimeType::MimeType(const char * filename)
     : m_path(filename)

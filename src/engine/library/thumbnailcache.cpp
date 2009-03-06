@@ -28,8 +28,8 @@
 
 #include "niepce/notifications.h"
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/mimetype.h"
-#include "fwk/toolkit/gdkutils.h"
+#include "fwk/toolkit/mimetype.hpp"
+#include "fwk/toolkit/gdkutils.hpp"
 #include "thumbnailcache.h"
 #include "thumbnailnotification.h"
 
@@ -38,7 +38,7 @@ using db::LibFile;
 namespace library {
 
 	ThumbnailCache::ThumbnailCache(const boost::filesystem::path & dir,
-								   const framework::NotificationCenter::Ptr & nc)
+								   const fwk::NotificationCenter::Ptr & nc)
 		: m_cacheDir(dir),
 		  m_notif_center(nc)
 	{
@@ -71,7 +71,7 @@ namespace library {
         w = task->width();
         h = task->height();
 
-		framework::MimeType mime_type(filename);
+		fwk::MimeType mime_type(filename);
 
 
 		DBG_OUT("MIME type %s", mime_type.string().c_str());
@@ -91,7 +91,7 @@ namespace library {
             try {
                 pix = Gdk::Pixbuf::create_from_file(filename, w, h, true);
                 if(pix) {
-                    pix = framework::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
+                    pix = fwk::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
                 }
             }
             catch(const Glib::Error & e) 
@@ -109,12 +109,12 @@ namespace library {
 		if(pix)
 		{
             if((w < pix->get_width()) || (h < pix->get_height())) {
-                pix = framework::gdkpixbuf_scale_to_fit(pix, std::min(w,h));
+                pix = fwk::gdkpixbuf_scale_to_fit(pix, std::min(w,h));
             }
-			framework::NotificationCenter::Ptr nc(m_notif_center);
+			fwk::NotificationCenter::Ptr nc(m_notif_center);
 			if(nc) {
 				// pass the notification
-				framework::Notification::Ptr n(new framework::Notification(niepce::NOTIFICATION_THUMBNAIL));
+				fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
 				ThumbnailNotification tn;
 				tn.id = task->file()->id();
 				tn.width = pix->get_width();

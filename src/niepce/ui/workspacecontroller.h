@@ -32,8 +32,8 @@
 #include <gtkmm/treestore.h>
 
 #include "engine/db/libfolder.h"
-#include "fwk/toolkit/controller.h"
-#include "fwk/toolkit/notification.h"
+#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/notification.hpp"
 
 namespace Gtk {
 }
@@ -42,7 +42,7 @@ namespace Gtk {
 namespace ui {
 
 	class WorkspaceController
-		: public framework::Controller
+		: public fwk::Controller
 	{
 	public:
 		typedef boost::shared_ptr<WorkspaceController> Ptr;
@@ -79,8 +79,8 @@ namespace ui {
 
 		virtual void on_ready();
 
-		void on_lib_notification(const framework::Notification::Ptr &);
-		void on_count_notification(const framework::Notification::Ptr &);
+		void on_lib_notification(const fwk::Notification::Ptr &);
+		void on_count_notification(const fwk::Notification::Ptr &);
 		void on_libtree_selection();
 
 	protected:

@@ -27,12 +27,12 @@
 #include <gtkmm/uimanager.h>
 #include <gtkmm/icontheme.h>
 
-#include "fwk/toolkit/configuration.h"
+#include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/frame.hpp"
-#include "fwk/toolkit/undo.h"
+#include "fwk/toolkit/undo.hpp"
 
 
-namespace framework {
+namespace fwk {
 
 class Application 
     : public Controller

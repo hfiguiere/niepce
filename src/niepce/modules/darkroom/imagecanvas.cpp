@@ -18,7 +18,7 @@
  */
 
 /* remove this when we require a version that does not barf warnings */
-#include "fwk/toolkit/goocanvas_proxy_header.h"
+#include "fwk/toolkit/goocanvas_proxy_header.hpp"
 //#include <goocanvasmm/canvas.h>
 #include "fwk/utils/debug.h"
 #include "fwk/utils/geometry.h"

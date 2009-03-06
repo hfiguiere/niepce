@@ -1,12 +1,12 @@
 src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/application.cpp
-src/niepce/ui/importdialog.cpp
-src/niepce/ui/importdialog.glade
+src/niepce/ui/dialogs/importdialog.cpp
+src/niepce/ui/dialogs/importdialog.ui
 src/niepce/ui/librarymainviewcontroller.cpp
 src/niepce/ui/metadatapanecontroller.cpp
 src/niepce/ui/niepceapplication.cpp
 src/niepce/ui/niepcewindow.cpp
-src/niepce/ui/preferences.glade
+src/niepce/ui/preferences.ui
 src/niepce/ui/selectioncontroller.cpp
 src/niepce/ui/workspacecontroller.cpp
 src/niepce/ui/thumb-view/eog-thumb-view.cpp

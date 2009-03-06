@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "fwk/toolkit/mimetype.h"
+#include "fwk/toolkit/mimetype.hpp"
 #include "engine/db/keyword.h"
 #include "engine/db/storage.h"
 #include "engine/db/fsfile.h"
@@ -48,7 +48,7 @@ public:
         FILE_TYPE_VIDEO = 4
     };
 
-    static FileType mimetype_to_filetype(framework::MimeType mime);
+    static FileType mimetype_to_filetype(fwk::MimeType mime);
 
     LibFile(int id, int folderId, int fsfileid, 
             const boost::filesystem::path & p,

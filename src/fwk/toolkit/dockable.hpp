@@ -1,5 +1,5 @@
 /*
- * niepce - framework/toolboxitemwidget.h
+ * niepce - fwk/toolkit/dockable.hpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,24 +18,30 @@
  */
 
 
+#ifndef __FRAMEWORK_DOCKABLE_H__
+#define __FRAMEWORK_DOCKABLE_H__
 
-#ifndef __FRAMEWORK_TOOLBOXITEMWIDGET_H_
-#define __FRAMEWORK_TOOLBOXITEMWIDGET_H_
+#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/widgets/dock-item.hpp"
 
-#include <gtkmm/expander.h>
+namespace fwk {
 
-namespace framework {
 
-class ToolboxItemWidget
-	: public Gtk::Expander
+/** A dockable item controller
+ */
+class Dockable
+    : public Controller,
+      protected DockItem
 {
 public:
-    ToolboxItemWidget(const Glib::ustring & title);
+    Dockable(fwk::Dock & dock, const Glib::ustring& name, 
+             const Glib::ustring& long_name, 
+             const Glib::ustring& icon_name, DockItem::State state);
+
 };
 
-}
 
-#endif
+}
 /*
   Local Variables:
   mode:c++
@@ -45,4 +51,6 @@ public:
   fill-column:80
   End:
 */
+
+#endif
 

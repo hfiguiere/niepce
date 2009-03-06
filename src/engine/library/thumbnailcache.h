@@ -25,7 +25,7 @@
 #include <boost/weak_ptr.hpp>
 
 #include "fwk/utils/worker.h"
-#include "fwk/toolkit/notificationcenter.h"
+#include "fwk/toolkit/notificationcenter.hpp"
 #include "engine/db/libfile.h"
 
 namespace library {
@@ -58,7 +58,7 @@ namespace library {
 	{
 	public:
 		ThumbnailCache(const boost::filesystem::path & dir,
-					   const framework::NotificationCenter::Ptr & nc);
+					   const fwk::NotificationCenter::Ptr & nc);
 		~ThumbnailCache();
 
 		void request(const db::LibFile::ListPtr & fl);
@@ -68,7 +68,7 @@ namespace library {
 		virtual void execute(const  ThumbnailTask::Ptr & task);
 	private:
 		boost::filesystem::path         m_cacheDir;
-		boost::weak_ptr<framework::NotificationCenter> m_notif_center;
+		boost::weak_ptr<fwk::NotificationCenter> m_notif_center;
 	};
 
 }

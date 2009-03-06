@@ -26,8 +26,8 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/liststore.h>
 
-#include "fwk/toolkit/notification.h"
-#include "fwk/toolkit/controller.h"
+#include "fwk/toolkit/notification.hpp"
+#include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.h"
 #include "libraryclient/libraryclient.h"
 
@@ -65,11 +65,11 @@ public:
 
     static Glib::RefPtr<ImageListStore> create();
 
-    void set_parent_controller(const framework::Controller::WeakPtr & ctrl)
+    void set_parent_controller(const fwk::Controller::WeakPtr & ctrl)
         { m_controller = ctrl; }
 
-    void on_lib_notification(const framework::Notification::Ptr &n);
-    void on_tnail_notification(const framework::Notification::Ptr &n);
+    void on_lib_notification(const fwk::Notification::Ptr &n);
+    void on_tnail_notification(const fwk::Notification::Ptr &n);
 protected:
     ImageListStore(const Columns& columns);
 private:
@@ -77,7 +77,7 @@ private:
 
     const Columns           & m_columns;
     std::map<int, Gtk::TreeIter> m_idmap;
-    framework::Controller::WeakPtr m_controller;
+    fwk::Controller::WeakPtr m_controller;
 };
 
 }

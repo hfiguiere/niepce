@@ -29,17 +29,17 @@
 #include <gtkmm/builder.h>
 
 #include "fwk/utils/debug.h"
-#include "fwk/toolkit/configuration.h"
+#include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "importdialog.hpp"
 
-using framework::Configuration;
-using framework::Application;
+using fwk::Configuration;
+using fwk::Application;
 
 namespace ui {
 
 ImportDialog::ImportDialog()
-    : framework::Frame(GLADEDIR"importdialog.ui", "importDialog"),
+    : fwk::Frame(GLADEDIR"importdialog.ui", "importDialog"),
     m_date_tz_combo(NULL),
 	  m_ufraw_import_check(NULL),
 	  m_rawstudio_import_check(NULL),

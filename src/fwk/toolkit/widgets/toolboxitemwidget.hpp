@@ -1,5 +1,5 @@
 /*
- * niepce - frawework/gdkutils.h
+ * niepce - fwk/toolboxitemwidget.h
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,22 +18,31 @@
  */
 
 
-#ifndef __FRAMEWORK_GDKUTILS_H__
-#define __FRAMEWORK_GDKUTILS_H__
 
-#include <gdkmm/pixbuf.h>
+#ifndef __FWK_TOOLBOXITEMWIDGET_H_
+#define __FWK_TOOLBOXITEMWIDGET_H_
 
+#include <gtkmm/expander.h>
 
-namespace framework {
-	
-	/** scale the pixbuf to fit in the square 
-	 * @param dim the dimension of the square
-	 */
-	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_scale_to_fit(const Glib::RefPtr<Gdk::Pixbuf> & pix,
-													 int dim);
-	/** Rotate a pixbuf following the Exif rotation (may mirror too) */
-	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_exif_rotate(const Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-													int exif_orientation);
+namespace fwk {
+
+class ToolboxItemWidget
+	: public Gtk::Expander
+{
+public:
+    ToolboxItemWidget(const Glib::ustring & title);
+};
+
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
+

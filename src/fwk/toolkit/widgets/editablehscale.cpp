@@ -1,5 +1,5 @@
 /*
- * niepce - framework/widgets/editablehscale.cpp
+ * niepce - fwk/widgets/editablehscale.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -22,10 +22,10 @@
 #include <glibmm/property.h>
 
 #include "fwk/utils/debug.h"
-#include "editablehscale.h"
+#include "editablehscale.hpp"
 
 
-namespace framework {
+namespace fwk {
 
 EditableHScale::EditableHScale(double min, double max, double step)
     : m_adj(0, min, max, step),

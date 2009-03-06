@@ -21,7 +21,7 @@
 
 #include "libgdl/libgdl.h"
 
-namespace framework {
+namespace fwk {
 
 class Dock;
 

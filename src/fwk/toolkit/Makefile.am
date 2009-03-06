@@ -9,25 +9,26 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 
 noinst_LIBRARIES = libniepceframework.a
 
-noinst_HEADERS = configuration.h application.hpp \
-	frame.hpp controller.h goocanvas_proxy_header.h \
-	gconf_proxy_header.h
+noinst_HEADERS =   \
+	  goocanvas_proxy_header.hpp
 
-libniepceframework_a_SOURCES = configuration.cpp \
-	application.cpp frame.cpp controller.cpp \
-	notification.h \
-	mimetype.h mimetype.cpp \
-	imageloader.h imageloader.cpp \
-	notificationcenter.h notificationcenter.cpp \
-	configdatabinder.h configdatabinder.cpp \
-	gdkutils.h gdkutils.cpp \
+libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
+	application.hpp application.cpp \
+	frame.hpp frame.cpp \
+	controller.hpp controller.cpp \
+	notification.hpp \
+	mimetype.hpp mimetype.cpp \
+	imageloader.hpp imageloader.cpp \
+	notificationcenter.hpp notificationcenter.cpp \
+	configdatabinder.hpp configdatabinder.cpp \
+	gdkutils.hpp gdkutils.cpp \
 	gtkutils.hpp gtkutils.cpp \
-	widgets/toolboxitemwidget.h widgets/toolboxitemwidget.cpp \
-	widgets/editablehscale.h widgets/editablehscale.cpp \
-	widgets/dock-item.cpp widgets/dock-item.h \
-	widgets/dock.cpp widgets/dock.h \
-	dockable.h dockable.cpp \
-	metadatawidget.h metadatawidget.cpp \
-	undo.h undo.cpp \
-	command.h \
+	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
+	widgets/editablehscale.hpp widgets/editablehscale.cpp \
+	widgets/dock-item.cpp widgets/dock-item.hpp \
+	widgets/dock.cpp widgets/dock.hpp \
+	dockable.hpp dockable.cpp \
+	metadatawidget.hpp metadatawidget.cpp \
+	undo.hpp undo.cpp \
+	command.hpp \
 	$(NULL)

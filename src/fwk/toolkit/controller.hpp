@@ -34,7 +34,7 @@ namespace Gtk {
 	class Widget;
 }
 
-namespace framework {
+namespace fwk {
 
 	/** Generic controller class
 	 */

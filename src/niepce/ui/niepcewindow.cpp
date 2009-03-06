@@ -38,28 +38,28 @@
 #include "engine/db/library.h"
 #include "libraryclient/libraryclient.h"
 #include "fwk/toolkit/application.hpp"
-#include "fwk/toolkit/configuration.h"
-#include "fwk/toolkit/notificationcenter.h"
-#include "fwk/toolkit/configdatabinder.h"
-#include "fwk/toolkit/undo.h"
+#include "fwk/toolkit/configuration.hpp"
+#include "fwk/toolkit/notificationcenter.hpp"
+#include "fwk/toolkit/configdatabinder.hpp"
+#include "fwk/toolkit/undo.hpp"
 
 #include "eog-thumb-view.h"
 #include "niepcewindow.hpp"
 #include "librarymainviewcontroller.h"
-#include "importdialog.hpp"
+#include "dialogs/importdialog.hpp"
 #include "selectioncontroller.h"
 
 using libraryclient::LibraryClient;
-using framework::Application;
-using framework::Configuration;
-using framework::NotificationCenter;
-using framework::UndoHistory;
+using fwk::Application;
+using fwk::Configuration;
+using fwk::NotificationCenter;
+using fwk::UndoHistory;
 
 namespace ui {
 
 
 NiepceWindow::NiepceWindow()
-    : framework::Frame("mainWindow-frame")
+    : fwk::Frame("mainWindow-frame")
 {
 }
 
@@ -117,7 +117,7 @@ NiepceWindow::buildWidget()
     m_hbox.set_border_width(4);
     m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
     m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
-    m_databinders.add_binder(new framework::ConfigDataBinder<int>(m_hbox.property_position(),
+    m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
 
@@ -204,6 +204,8 @@ void NiepceWindow::init_ui()
         "        <menuitem action='SetLabel7'/>"
         "        <menuitem action='SetLabel8'/>"
         "        <menuitem action='SetLabel9'/>"
+        "        <separator/>"
+        "        <menuitem action='EditLabels'/>"
         "      </menu>"
         "      <separator/>"
         "      <menuitem action='DeleteImage'/>"
@@ -322,6 +324,8 @@ void NiepceWindow::init_actions()
                           boost::bind(&SelectionController::set_label, 
                                       BIND_SHARED_PTR(SelectionController, m_selection_controller)
                                       , 4));
+    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("Edit Labels...")),
+                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
     
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
@@ -371,7 +375,7 @@ void NiepceWindow::init_actions()
 
 void NiepceWindow::undo_state(const Glib::RefPtr<Gtk::Action> & action)
 {
-    framework::UndoHistory & history(Application::app()->undo_history());
+    fwk::UndoHistory & history(Application::app()->undo_history());
     action->set_sensitive(history.has_undo());
     std::string s = history.next_undo();
     action->property_label() = Glib::ustring(_("Undo ")) + s;
@@ -380,7 +384,7 @@ void NiepceWindow::undo_state(const Glib::RefPtr<Gtk::Action> & action)
 
 void NiepceWindow::redo_state(const Glib::RefPtr<Gtk::Action> & action)
 {
-    framework::UndoHistory & history(Application::app()->undo_history());
+    fwk::UndoHistory & history(Application::app()->undo_history());
     action->set_sensitive(history.has_redo());
     std::string s = history.next_redo();
     action->property_label() = Glib::ustring(_("Redo ")) + s;
@@ -502,24 +506,24 @@ void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> & xm
 //    Glib::RefPtr<Gtk::ListStore> model(Gtk::ListStore::create(columns));
 
 //    theme_combo->set_model(model);
-//    const std::vector<framework::Application::ThemeDesc> & themes = framework::Application::app()->get_available_themes();
-//    std::vector<framework::Application::ThemeDesc>::const_iterator i;
+//    const std::vector<fwk::Application::ThemeDesc> & themes = fwk::Application::app()->get_available_themes();
+//    std::vector<fwk::Application::ThemeDesc>::const_iterator i;
 //    for(i = themes.begin(); i != themes.end(); ++i) {
 //        DBG_OUT("adding %s", i->first.c_str());
 //        Gtk::TreeIter iter = model->append();
 //        (*iter).set_value(columns.label, i->first); 
 //    }
-    theme_combo->set_active(framework::Application::app()
+    theme_combo->set_active(fwk::Application::app()
                             ->get_use_custom_theme());
     theme_combo->signal_changed().connect(
-        boost::bind(&framework::Application::set_use_custom_theme,
-                    framework::Application::app(),
+        boost::bind(&fwk::Application::set_use_custom_theme,
+                    fwk::Application::app(),
                     theme_combo->property_active()));
 
     xml->get_widget("reopen_checkbutton", reopen_checkbutton);
-    binder_pool->add_binder(new framework::ConfigDataBinder<bool>(
+    binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
                                 reopen_checkbutton->property_active(),
-                                framework::Application::app()->config(),
+                                fwk::Application::app()->config(),
                                 "reopen_last_library"));
 }
 
@@ -541,6 +545,10 @@ void NiepceWindow::open_library(const std::string & libMoniker)
     set_title(libMoniker);
 }
 
+void NiepceWindow::on_action_edit_labels()
+{
+    DBG_OUT("edit labels");
+}
 
 void NiepceWindow::set_title(const std::string & title)
 {

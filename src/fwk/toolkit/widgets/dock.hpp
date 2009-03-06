@@ -18,11 +18,11 @@
 
 #include <list>
 
-#include "fwk/toolkit/widgets/dock-item.h"
+#include "fwk/toolkit/widgets/dock-item.hpp"
 
 #include "libgdl/libgdl.h"
 
-namespace framework {
+namespace fwk {
 
 class Dock {
 

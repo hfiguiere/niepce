@@ -33,7 +33,7 @@
 #include "frame.hpp"
 
 
-namespace framework {
+namespace fwk {
 
 Application::Ptr Application::m_application;
 

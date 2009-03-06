@@ -1,5 +1,5 @@
 /*
- * niepce - framework/toolboxitemwidget.cpp
+ * niepce - fwk/toolboxitemwidget.cpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -18,9 +18,9 @@
  */
 
 
-#include "toolboxitemwidget.h"
+#include "toolboxitemwidget.hpp"
 
-namespace framework {
+namespace fwk {
 
 ToolboxItemWidget::ToolboxItemWidget(const Glib::ustring & title)
     : Gtk::Expander(Glib::ustring("<b>") + title + "</b>")

@@ -29,7 +29,7 @@
 #include <boost/any.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "fwk/toolkit/notificationcenter.h"
+#include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/utils/db/iconnectiondriver.h"
 #include "fwk/utils/db/iconnectionmanagerdriver.h"
 #include "engine/db/libfolder.h"
@@ -63,7 +63,7 @@ namespace db {
 			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
-		Library(const std::string & dir, const framework::NotificationCenter::Ptr & nc);
+		Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~Library();
 
 		bool ok()
@@ -197,7 +197,7 @@ namespace db {
 		boost::filesystem::path           m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
-		boost::weak_ptr<framework::NotificationCenter>  m_notif_center;
+		boost::weak_ptr<fwk::NotificationCenter>  m_notif_center;
 		bool                              m_inited;
 	};
 

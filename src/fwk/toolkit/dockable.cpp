@@ -1,7 +1,7 @@
 /*
- * niepce - ui/dockable.h
+ * niepce - fwk/toolkit/dockable.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
  */
 
 
-#include "dockable.h"
+#include "dockable.hpp"
 
-namespace framework {
+namespace fwk {
 
-Dockable::Dockable(framework::Dock & dock, const Glib::ustring& name, 
+Dockable::Dockable(Dock & dock, const Glib::ustring& name, 
              const Glib::ustring& long_name, 
              const Glib::ustring& icon_name, DockItem::State state)
     : DockItem(dock, name, long_name, icon_name, state)

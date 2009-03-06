@@ -23,8 +23,8 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/application.hpp"
-#include "fwk/toolkit/configdatabinder.h"
-#include "fwk/toolkit/widgets/dock.h"
+#include "fwk/toolkit/configdatabinder.hpp"
+#include "fwk/toolkit/widgets/dock.hpp"
 #include "ncr/ncr.h"
 #include "darkroommodule.h"
 
@@ -75,12 +75,12 @@ Gtk::Widget * DarkroomModule::buildWidget()
 
 	m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
-    m_dock = new framework::Dock();
+    m_dock = new fwk::Dock();
     m_dr_splitview.pack2(m_dock->getWidget(), Gtk::SHRINK);
 
-    m_databinders.add_binder(new framework::ConfigDataBinder<int>(
+    m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                                  m_dr_splitview.property_position(),
-                                 framework::Application::app()->config(),
+                                 fwk::Application::app()->config(),
                                  "dr_toolbox_pane_splitter"));
 
     m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController(*m_dock));

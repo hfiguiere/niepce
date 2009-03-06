@@ -32,7 +32,7 @@
 //BOOST_AUTO_TEST_CASE(library_test)
 int test_main(int, char *[])
 {
-	db::Library lib("./", framework::NotificationCenter::Ptr());
+	db::Library lib("./", fwk::NotificationCenter::Ptr());
 
 	BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
 

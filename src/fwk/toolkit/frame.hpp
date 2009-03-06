@@ -1,5 +1,5 @@
 /*
- * niepce - framework/frame.h
+ * niepce - fwk/toolkit/frame.hpp
  *
  * Copyright (C) 2007-2008 Hubert Figuiere
  *
@@ -28,13 +28,13 @@
 #include <gtkmm/toggleaction.h>
 #include <gtkmm/builder.h>
 
-#include "fwk/toolkit/controller.h"
+#include "fwk/toolkit/controller.hpp"
 
 namespace Gtk {
 	class Dialog;
 }
 
-namespace framework {
+namespace fwk {
 
 class Frame 
 		: public Controller

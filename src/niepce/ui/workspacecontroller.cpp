@@ -34,12 +34,12 @@
 #include "workspacecontroller.h"
 
 
-using framework::Application;
+using fwk::Application;
 
 namespace ui {
 
 	WorkspaceController::WorkspaceController()
-		: framework::Controller()
+		: fwk::Controller()
 	{
 		Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());
 		try {
@@ -68,7 +68,7 @@ namespace ui {
 	}
 
 
-	void WorkspaceController::on_lib_notification(const framework::Notification::Ptr &n)
+	void WorkspaceController::on_lib_notification(const fwk::Notification::Ptr &n)
 	{
 		DBG_OUT("notification for workspace");
 		if(n->type() == niepce::NOTIFICATION_LIB) {
@@ -121,7 +121,7 @@ namespace ui {
 		}
 	}
 
-	void WorkspaceController::on_count_notification(const framework::Notification::Ptr &n)
+	void WorkspaceController::on_count_notification(const fwk::Notification::Ptr &n)
 	{
 		if(n->type() == niepce::NOTIFICATION_COUNT) {
 			DBG_OUT("received NOTIFICATION_COUNT");

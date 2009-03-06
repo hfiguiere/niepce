@@ -30,15 +30,15 @@
 #include "niepce/notifications.h"
 #include "engine/db/library.h"
 #include "fwk/toolkit/application.hpp"
-#include "fwk/toolkit/widgets/dock.h"
+#include "fwk/toolkit/widgets/dock.hpp"
 #include "librarymainviewcontroller.h"
 #include "niepcewindow.hpp"
-#include "metadatapanecontroller.h"
+#include "metadatapanecontroller.hpp"
 #include "librarycellrenderer.h"
 
 namespace ui {
 
-void LibraryMainViewController::on_lib_notification(const framework::Notification::Ptr &n)
+void LibraryMainViewController::on_lib_notification(const fwk::Notification::Ptr &n)
 {
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
                "wrong notification type");
@@ -96,15 +96,15 @@ Gtk::Widget * LibraryMainViewController::buildWidget()
     m_scrollview.add(m_librarylistview);
     m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     m_lib_splitview.pack1(m_scrollview);
-    m_dock = new framework::Dock();
+    m_dock = new fwk::Dock();
     m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController(*m_dock));
     add(m_metapanecontroller);
     m_lib_splitview.pack2(m_dock->getWidget());
     (void)m_metapanecontroller->buildWidget();
 
-    m_databinders.add_binder(new framework::ConfigDataBinder<int>(
+    m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                                  m_lib_splitview.property_position(),
-                                 framework::Application::app()->config(),
+                                 fwk::Application::app()->config(),
                                  "meta_pane_splitter"));
 		
     m_mainview.append_page(m_lib_splitview, _("Library"));

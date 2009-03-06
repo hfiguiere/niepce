@@ -1,5 +1,5 @@
 /*
- * niepce - framework/notification.h
+ * niepce - fwk/notification.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -28,9 +28,9 @@
 #include <glibmm/dispatcher.h>
 
 #include "fwk/utils/mtqueue.h"
-#include "notificationcenter.h"
+#include "notificationcenter.hpp"
 
-namespace framework {
+namespace fwk {
 
 	class NotificationCenter::Priv
 	{
