@@ -39,7 +39,7 @@ using fwk::Application;
 namespace ui {
 
 ImportDialog::ImportDialog()
-    : fwk::Frame(GLADEDIR"importdialog.ui", "importDialog"),
+    : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog"),
     m_date_tz_combo(NULL),
 	  m_ufraw_import_check(NULL),
 	  m_rawstudio_import_check(NULL),
@@ -49,8 +49,11 @@ ImportDialog::ImportDialog()
 }
 
 
-Gtk::Widget * ImportDialog::buildWidget()
+void ImportDialog::setup_widget()
 {
+    if(m_is_setup) {
+        return;
+    }
     Glib::RefPtr<Gtk::Builder> _builder = builder();
     Gtk::Button *select_directories = NULL;
     _builder->get_widget("select_directories", select_directories);
@@ -62,7 +65,7 @@ Gtk::Widget * ImportDialog::buildWidget()
     _builder->get_widget("directory_name", m_directory_name);
     _builder->get_widget("folderList", m_folderList);
     m_folderListModel.inject(*m_folderList);
-    return &gtkWindow();
+    m_is_setup = true;
 }
 
 

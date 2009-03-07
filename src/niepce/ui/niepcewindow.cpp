@@ -28,7 +28,6 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
-#include <gtkmm/combobox.h>
 
 #include "niepce/notifications.h"
 #include "niepce/stock.h"
@@ -47,6 +46,7 @@
 #include "niepcewindow.hpp"
 #include "librarymainviewcontroller.h"
 #include "dialogs/importdialog.hpp"
+#include "dialogs/preferencesdialog.hpp"
 #include "selectioncontroller.h"
 
 using libraryclient::LibraryClient;
@@ -397,8 +397,8 @@ void NiepceWindow::on_action_file_import()
 	
     ImportDialog::Ptr import_dialog(new ImportDialog());
 
-    result = show_modal_dialog(
-        *static_cast<Gtk::Dialog*>(import_dialog->buildWidget()));
+    result = import_dialog->run_modal(
+        boost::static_pointer_cast<fwk::Frame>(shared_from_this()));
     switch(result) {
     case 0:
     {
@@ -481,59 +481,18 @@ void NiepceWindow::on_open_library()
 }
 
 
-void NiepceWindow::preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> & xml, 
-                                           Gtk::Dialog * dialog)
-{
-    Gtk::ComboBox * theme_combo = NULL;
-    Gtk::CheckButton * reopen_checkbutton = NULL;
-    utils::DataBinderPool * binder_pool = new utils::DataBinderPool();
-
-    dialog->signal_hide().connect(boost::bind(&utils::DataBinderPool::destroy, 
-                                              binder_pool));
-		
-    xml->get_widget("theme_combo", theme_combo);
- 
-// Why are ComboBox so complicated to use?
-//    class Columns : 
-//            public Gtk::TreeModel::ColumnRecord
-//    {
-//    public:
-//        Gtk::TreeModelColumn<Glib::ustring>  label;
-//        Columns() { add(label); }
-//    };
-
-//    Columns columns;
-//    Glib::RefPtr<Gtk::ListStore> model(Gtk::ListStore::create(columns));
-
-//    theme_combo->set_model(model);
-//    const std::vector<fwk::Application::ThemeDesc> & themes = fwk::Application::app()->get_available_themes();
-//    std::vector<fwk::Application::ThemeDesc>::const_iterator i;
-//    for(i = themes.begin(); i != themes.end(); ++i) {
-//        DBG_OUT("adding %s", i->first.c_str());
-//        Gtk::TreeIter iter = model->append();
-//        (*iter).set_value(columns.label, i->first); 
-//    }
-    theme_combo->set_active(fwk::Application::app()
-                            ->get_use_custom_theme());
-    theme_combo->signal_changed().connect(
-        boost::bind(&fwk::Application::set_use_custom_theme,
-                    fwk::Application::app(),
-                    theme_combo->property_active()));
-
-    xml->get_widget("reopen_checkbutton", reopen_checkbutton);
-    binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
-                                reopen_checkbutton->property_active(),
-                                fwk::Application::app()->config(),
-                                "reopen_last_library"));
-}
 
 
 void NiepceWindow::on_preferences()
 {
     DBG_OUT("on_preferences");
-    show_modal_dialog(GLADEDIR"preferences.ui", "preferences",
-                      boost::bind(&NiepceWindow::preference_dialog_setup,
-                                  this, _1, _2));
+
+    fwk::Dialog::Ptr dlg(new PreferencesDialog());
+    dlg->run_modal(boost::static_pointer_cast<Frame>(shared_from_this()));
+
+//    show_modal_dialog(GLADEDIR"preferences.ui", "preferences",
+//                      boost::bind(&NiepceWindow::preference_dialog_setup,
+//                                  this, _1, _2));
     DBG_OUT("end on_preferences");
 }
 

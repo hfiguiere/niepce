@@ -29,7 +29,7 @@
 #include <glibmm/refptr.h>
 
 #include "fwk/toolkit/gtkutils.hpp"
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/dialog.hpp"
 
 namespace Gtk {
 	class Dialog;
@@ -41,14 +41,14 @@ namespace Gtk {
 namespace ui {
 
 class ImportDialog 
-	: public fwk::Frame
+	: public fwk::Dialog
 {
 public:
 	typedef boost::shared_ptr<ImportDialog> Ptr;
 
 	ImportDialog();
 
- 	Gtk::Widget * buildWidget();
+ 	virtual void setup_widget();
 
 //	const Glib::ustring & to_import() const
 //		{ return m_to_import; }
@@ -72,6 +72,16 @@ private:
 };
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 
 #endif
 

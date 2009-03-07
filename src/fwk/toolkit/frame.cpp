@@ -103,31 +103,6 @@ void Frame::set_title(const std::string & title)
 		gtkWindow().set_title(Glib::ustring(title));
 }
 
-int Frame::show_modal_dialog(Gtk::Dialog & dlg)
-{
-		int result;
-		dlg.set_transient_for(*m_window);
-		dlg.set_default_response(Gtk::RESPONSE_CLOSE);
-		result = dlg.run();
-		dlg.hide();
-		return result;
-}
-
-int Frame::show_modal_dialog(const char *gladefile,
-                             const char *widgetname,
-                             boost::function<void (const Glib::RefPtr<Gtk::Builder> &, 
-                                                   Gtk::Dialog *)> setup)
-{
-		Glib::RefPtr<Gtk::Builder> dialogBuilder 
-        = Gtk::Builder::create_from_file(gladefile);
-		Gtk::Dialog *dlg = NULL;
-
-		dialogBuilder->get_widget(widgetname, dlg);
-		if(setup) {
-        setup(dialogBuilder, dlg);
-		}
-		return show_modal_dialog(*dlg);
-}
 
 void Frame::toggle_tools_visible()
 {
@@ -184,6 +159,10 @@ void Frame::frameRectToConfig()
 		}
 }
 
+Gtk::Widget *Frame::buildWidget()
+{
+    return m_window;
+}
 /*
   Local Variables:
   mode:c++

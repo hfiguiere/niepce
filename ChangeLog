@@ -1,5 +1,8 @@
 2009-03-06  Hubert Figuiere  <hub@figuiere.net>
 
+	* Dialog framework. Move the dialogs in their subdir
+	and convert the code.
+	
 	* Rename framework namespace to fwk.
 	* Move dialogs in their directory
 	* Rename some .h to .hpp

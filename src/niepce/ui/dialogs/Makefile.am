@@ -1,2 +1,3 @@
 
-EXTRA_DIST = importdialog.glade
+EXTRA_DIST = importdialog.glade preferences.glade
+

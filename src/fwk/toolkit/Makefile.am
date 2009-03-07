@@ -14,6 +14,7 @@ noinst_HEADERS =   \
 
 libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	application.hpp application.cpp \
+	dialog.hpp dialog.cpp \
 	frame.hpp frame.cpp \
 	controller.hpp controller.cpp \
 	notification.hpp \

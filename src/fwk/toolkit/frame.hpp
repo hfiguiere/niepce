@@ -65,17 +65,6 @@ public:
 		 */
 		void set_icon_from_theme(const Glib::ustring & name);
 
-		/** show a model dialog
-		 * @param dlg the dialog to show.
-		 * @return the result from Dialog::run()
-		 */
-		int show_modal_dialog(Gtk::Dialog & dlg);
-		int show_modal_dialog(const char *gladefile,
-                          const char *widgetname,
-                          boost::function<void (const Glib::RefPtr<Gtk::Builder> &, 
-                                                Gtk::Dialog *)> setup = NULL);
-
-        
     void toggle_tools_visible();
 
     sigc::signal<void> signal_hide_tools;
@@ -86,6 +75,10 @@ protected:
     Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
 
 private:
+    /** frame have the widget set at construction time
+     * from a ui file or directly.
+     */
+    virtual Gtk::Widget *buildWidget();
 		void connectSignals();
 		void frameRectFromConfig();
 		void frameRectToConfig();
