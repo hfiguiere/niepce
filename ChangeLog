@@ -1,5 +1,7 @@
 2009-03-07  Hubert Figuiere  <hub@figuiere.net>
 
+	* Update po files.
+
 	* Tweak UI files. Don't hardcode the list of themes
 	available in the application.
 	* More Gtk utilities for ComboBox and TreeModel.
