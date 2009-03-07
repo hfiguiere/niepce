@@ -39,7 +39,7 @@ class Application
 {
 public:
     typedef boost::shared_ptr<Application> Ptr;
-    typedef std::pair<Glib::ustring, std::string> ThemeDesc;
+    typedef std::pair<std::string, std::string> ThemeDesc;
 
     virtual ~Application();
 

@@ -1,3 +1,10 @@
+2009-03-07  Hubert Figuiere  <hub@figuiere.net>
+
+	* Tweak UI files. Don't hardcode the list of themes
+	available in the application.
+	* More Gtk utilities for ComboBox and TreeModel.
+	* Update POTFILES lists.
+
 2009-03-06  Hubert Figuiere  <hub@figuiere.net>
 
 	* Dialog framework. Move the dialogs in their subdir

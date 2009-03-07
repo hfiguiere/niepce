@@ -23,12 +23,25 @@
 
 namespace fwk {
 
-void TextTreeviewModel::inject(Gtk::TreeView & treeview)
+Glib::RefPtr<Gtk::ListStore> 
+TextTreeviewModel::inject(Gtk::TreeView & treeview)
 {
-    treeview.set_model(Gtk::ListStore::create(*this));
-    treeview.append_column("", m_col1);
+    Glib::RefPtr<Gtk::ListStore> model = Gtk::ListStore::create(*this);
+    treeview.set_model(model);
+    treeview.append_column("text", m_col1);
+    return model;
 }
 
+
+Glib::RefPtr<Gtk::ListStore> 
+TextPairTreeviewModel::inject(Gtk::ComboBox & combo)
+{
+    Glib::RefPtr<Gtk::ListStore> model = Gtk::ListStore::create(*this);
+    combo.set_model(model);
+		static_cast<Gtk::CellLayout&>(combo).clear();
+		combo.pack_start(m_col1);
+    return model;
+}
 
 }
 /*

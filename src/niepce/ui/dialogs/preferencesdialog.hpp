@@ -34,6 +34,8 @@ public:
         }
     virtual void setup_widget();
 
+private:
+    fwk::TextPairTreeviewModel m_theme_combo_model;
 };
 
 

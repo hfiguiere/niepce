@@ -68,7 +68,8 @@ private:
 	Gtk::CheckButton *m_rawstudio_import_check;
 	Gtk::Label *m_directory_name;
 	Gtk::TreeView *m_folderList;
-	fwk::TextTreeviewModel m_folderListModel;
+	fwk::TextTreeviewModel m_folderListModelRecord;
+	Glib::RefPtr<Gtk::ListStore> m_folderListModel;
 };
 
 }

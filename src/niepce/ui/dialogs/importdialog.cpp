@@ -64,7 +64,7 @@ void ImportDialog::setup_widget()
     _builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
     _builder->get_widget("directory_name", m_directory_name);
     _builder->get_widget("folderList", m_folderList);
-    m_folderListModel.inject(*m_folderList);
+    m_folderListModel = m_folderListModelRecord.inject(*m_folderList);
     m_is_setup = true;
 }
 
@@ -100,14 +100,12 @@ void ImportDialog::do_select_directories()
 void ImportDialog::set_to_import(const Glib::SListHandle<Glib::ustring> & l)
 {
     m_list_to_import = l;
-    Glib::RefPtr<Gtk::ListStore> store 
-        = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_folderList->get_model());
-    store->clear();
+    m_folderListModel->clear();
     for(std::list<std::string>::const_iterator i = m_list_to_import.begin();
         i != m_list_to_import.end(); ++i) {
         DBG_OUT("selected %s", i->c_str());
-        Gtk::TreeIter iter = store->append();
-        iter->set_value(m_folderListModel.m_col1, *i);
+        Gtk::TreeIter iter = m_folderListModel->append();
+        iter->set_value(m_folderListModelRecord.m_col1, *i);
     }
 }
 

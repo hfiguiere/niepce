@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <interface>
+  <!-- interface-requires gtk+ 2.12 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="model1">
     <columns>
+      <!-- column-name gchararray -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -17,8 +20,10 @@
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Import</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="default_width">300</property>
+    <property name="default_height">300</property>
+    <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
@@ -42,6 +47,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -56,10 +62,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="select_directories">
+                    <property name="label" translatable="yes">...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">...</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -69,6 +76,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -89,8 +97,8 @@
               <object class="GtkScrolledWindow" id="scroller1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTreeView" id="folderList">
                     <property name="visible">True</property>
@@ -113,23 +121,26 @@
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkCheckButton" id="ufraw_import_check">
+                        <property name="label" translatable="yes">Import _UFRaw</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Import _UFRaw</property>
+                        <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="rawstudio_import_check">
+                        <property name="label" translatable="yes">Import Raw_Studio</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Import Raw_Studio</property>
+                        <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -143,7 +154,7 @@
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="label_xalign">0</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
+                        <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkVBox" id="vbox1">
                             <property name="visible">True</property>
@@ -153,8 +164,8 @@
                               <object class="GtkComboBox" id="date_tz_combo">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
-                                <property name="active">0</property>
                                 <property name="model">model1</property>
+                                <property name="active">0</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="renderer1"/>
                                   <attributes>
@@ -162,6 +173,9 @@
                                   </attributes>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label5">
@@ -215,24 +229,28 @@
           <object class="GtkHButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button3">
+                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
               </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="GtkButton" id="button4">
+                <property name="label" translatable="yes">_Import</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="label" translatable="yes">_Import</property>
-                <property name="use_underline">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -241,7 +259,8 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>

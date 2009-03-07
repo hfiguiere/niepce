@@ -23,6 +23,7 @@
 
 #include <string>
 #include <gtkmm/treeview.h>
+#include <gtkmm/combobox.h>
 
 
 namespace fwk {
@@ -35,9 +36,30 @@ public:
         { add(m_col1); }
 
     /** "inject" the model to the TreeView */
-    void inject(Gtk::TreeView & treeview);
+    Glib::RefPtr<Gtk::ListStore> inject(Gtk::TreeView & treeview);
+    /** "inject" the model to the ComboBox */
+    Glib::RefPtr<Gtk::ListStore> inject(Gtk::ComboBox & combox);
 
     Gtk::TreeModelColumn<std::string> m_col1;
+};
+
+class TextPairTreeviewModel
+    : public Gtk::TreeModelColumnRecord
+{
+public:
+    TextPairTreeviewModel()
+        {
+            add(m_col1);
+            add(m_col2);
+        }
+
+    /** "inject" the model to the TreeView */
+    Glib::RefPtr<Gtk::ListStore> inject(Gtk::TreeView & treeview);
+    /** "inject" the model to the ComboBox */
+    Glib::RefPtr<Gtk::ListStore> inject(Gtk::ComboBox & combox);
+
+    Gtk::TreeModelColumn<std::string> m_col1;
+    Gtk::TreeModelColumn<std::string> m_col2;
 };
 
 }

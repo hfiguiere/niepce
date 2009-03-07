@@ -19,11 +19,14 @@
 
 #include <boost/bind.hpp>
 
+#include <glibmm/i18n.h>
 #include <gtkmm/combobox.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/checkbutton.h>
 
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 
 
 #include "preferencesdialog.hpp"
@@ -45,32 +48,24 @@ void PreferencesDialog::setup_widget()
 		
     builder()->get_widget("theme_combo", theme_combo);
  
-// Why are ComboBox so complicated to use?
-//    class Columns : 
-//            public Gtk::TreeModel::ColumnRecord
-//    {
-//    public:
-//        Gtk::TreeModelColumn<Glib::ustring>  label;
-//        Columns() { add(label); }
-//    };
+		Glib::RefPtr<Gtk::ListStore> model = m_theme_combo_model.inject(*theme_combo);
+		
+		const std::vector<fwk::Application::ThemeDesc> & themes 
+			= fwk::Application::app()->get_available_themes();
+    std::vector<fwk::Application::ThemeDesc>::const_iterator i;
+    for(i = themes.begin(); i != themes.end(); ++i) {
+        DBG_OUT("adding %s", i->first.c_str());
+        Gtk::TreeIter iter = model->append();
+        iter->set_value(m_theme_combo_model.m_col1, i->first); 
+        iter->set_value(m_theme_combo_model.m_col2, i->second); 
+    }
 
-//    Columns columns;
-//    Glib::RefPtr<Gtk::ListStore> model(Gtk::ListStore::create(columns));
-
-//    theme_combo->set_model(model);
-//    const std::vector<fwk::Application::ThemeDesc> & themes = fwk::Application::app()->get_available_themes();
-//    std::vector<fwk::Application::ThemeDesc>::const_iterator i;
-//    for(i = themes.begin(); i != themes.end(); ++i) {
-//        DBG_OUT("adding %s", i->first.c_str());
-//        Gtk::TreeIter iter = model->append();
-//        (*iter).set_value(columns.label, i->first); 
-//    }
     theme_combo->set_active(fwk::Application::app()
                             ->get_use_custom_theme());
     theme_combo->signal_changed().connect(
-        boost::bind(&fwk::Application::set_use_custom_theme,
-                    fwk::Application::app(),
-                    theme_combo->property_active()));
+			boost::bind(&fwk::Application::set_use_custom_theme,
+									fwk::Application::app(),
+									theme_combo->property_active()));
 
     builder()->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
