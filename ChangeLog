@@ -1,5 +1,7 @@
 2009-03-07  Hubert Figuiere  <hub@figuiere.net>
 
+	* Refactor the ModelRecord for Gtk a bit.
+
 	* Update po files.
 
 	* Tweak UI files. Don't hardcode the list of themes

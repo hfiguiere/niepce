@@ -24,41 +24,53 @@
 #include <string>
 #include <gtkmm/treeview.h>
 #include <gtkmm/combobox.h>
+#include <gtkmm/liststore.h>
 
 
 namespace fwk {
 
-class TextTreeviewModel
+
+/** a simple model record with one text column. 
+ * This class is "abstract".
+ */
+class ModelRecord
     : public Gtk::TreeModelColumnRecord
 {
 public:
-    TextTreeviewModel()
-        { add(m_col1); }
-
+    virtual ~ModelRecord()
+        {
+        }
     /** "inject" the model to the TreeView */
-    Glib::RefPtr<Gtk::ListStore> inject(Gtk::TreeView & treeview);
+    virtual Glib::RefPtr<Gtk::ListStore> inject(Gtk::TreeView & treeview);
     /** "inject" the model to the ComboBox */
-    Glib::RefPtr<Gtk::ListStore> inject(Gtk::ComboBox & combox);
+    virtual Glib::RefPtr<Gtk::ListStore> inject(Gtk::ComboBox & combox);
 
     Gtk::TreeModelColumn<std::string> m_col1;
+protected:
+    ModelRecord()
+        {}
 };
 
-class TextPairTreeviewModel
-    : public Gtk::TreeModelColumnRecord
+
+class TextModelRecord
+    : public ModelRecord
 {
 public:
-    TextPairTreeviewModel()
+    TextModelRecord()
+        { add(m_col1); }
+
+};
+
+class TextPairModelRecord
+    : public ModelRecord
+{
+public:
+    TextPairModelRecord()
         {
             add(m_col1);
             add(m_col2);
         }
 
-    /** "inject" the model to the TreeView */
-    Glib::RefPtr<Gtk::ListStore> inject(Gtk::TreeView & treeview);
-    /** "inject" the model to the ComboBox */
-    Glib::RefPtr<Gtk::ListStore> inject(Gtk::ComboBox & combox);
-
-    Gtk::TreeModelColumn<std::string> m_col1;
     Gtk::TreeModelColumn<std::string> m_col2;
 };
 

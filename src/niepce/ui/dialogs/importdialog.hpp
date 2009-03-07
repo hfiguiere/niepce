@@ -1,5 +1,5 @@
 /*
- * niepce - niepce/ui/importdialog.h
+ * niepce - niepce/ui/dialogs/importdialog.h
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -50,8 +50,6 @@ public:
 
  	virtual void setup_widget();
 
-//	const Glib::ustring & to_import() const
-//		{ return m_to_import; }
 	const std::list<std::string> & to_import() const
 		{ return m_list_to_import; }
 	void set_to_import(const Glib::SListHandle<Glib::ustring> & l);
@@ -61,14 +59,13 @@ private:
 
 	void do_select_directories();
 	
-//	Glib::ustring m_to_import;
 	std::list<std::string> m_list_to_import;
 	Gtk::ComboBox *m_date_tz_combo;
 	Gtk::CheckButton *m_ufraw_import_check;
 	Gtk::CheckButton *m_rawstudio_import_check;
 	Gtk::Label *m_directory_name;
 	Gtk::TreeView *m_folderList;
-	fwk::TextTreeviewModel m_folderListModelRecord;
+	fwk::TextModelRecord m_folderListModelRecord;
 	Glib::RefPtr<Gtk::ListStore> m_folderListModel;
 };
 

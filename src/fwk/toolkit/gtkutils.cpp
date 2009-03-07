@@ -17,14 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gtkmm/liststore.h>
 
 #include "gtkutils.hpp"
 
 namespace fwk {
 
 Glib::RefPtr<Gtk::ListStore> 
-TextTreeviewModel::inject(Gtk::TreeView & treeview)
+ModelRecord::inject(Gtk::TreeView & treeview)
 {
     Glib::RefPtr<Gtk::ListStore> model = Gtk::ListStore::create(*this);
     treeview.set_model(model);
@@ -32,13 +31,12 @@ TextTreeviewModel::inject(Gtk::TreeView & treeview)
     return model;
 }
 
-
 Glib::RefPtr<Gtk::ListStore> 
-TextPairTreeviewModel::inject(Gtk::ComboBox & combo)
+ModelRecord::inject(Gtk::ComboBox & combo)
 {
     Glib::RefPtr<Gtk::ListStore> model = Gtk::ListStore::create(*this);
     combo.set_model(model);
-		static_cast<Gtk::CellLayout&>(combo).clear();
+		combo.clear();
 		combo.pack_start(m_col1);
     return model;
 }
