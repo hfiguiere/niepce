@@ -286,7 +286,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
                          % fs_file_id % file.leaf() % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
-                         % folder_id % file_type);
+                         % label_id % file_type);
         std::string buf = meta.serialize_inline();
         sql.bind(1, buf);
         if(m_dbdrv->execute_statement(sql)) {

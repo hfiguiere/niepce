@@ -1,3 +1,8 @@
+2009-03-08  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/engine/db/library.cpp (Library::addFile): 
+	Pass label_id instead of folder_id for the label.
+
 2009-03-07  Hubert Figuiere  <hub@figuiere.net>
 
 	* Refactor the ModelRecord for Gtk a bit.
