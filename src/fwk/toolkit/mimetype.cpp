@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include <boost/version.hpp>
+
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 
 #include "config.h"
@@ -76,7 +78,11 @@ bool MimeType::isUnknown() const
 
 bool MimeType::isXmp() const
 {
+#if BOOST_VERSION >= 103600
     return m_path.extension() == ".xmp";
+#else
+    return extension(m_path) == ".xmp";
+#endif
 }
 	
 }

@@ -1,3 +1,8 @@
+2009-04-09  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/fwk/toolkit/mimetype.cpp: Check boost version
+	for deprecated functions.
+
 2009-03-08  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/engine/db/library.cpp (Library::addFile): 
