@@ -3,7 +3,9 @@
 DIST_SUBDIRS = thumb-view dialogs
 
 gladefiles = dialogs/preferences.ui \
-	dialogs/importdialog.ui
+	dialogs/importdialog.ui \
+	dialogs/editlabels.ui \
+	$(NULL)
 
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
@@ -31,6 +33,7 @@ libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	imageliststore.h imageliststore.cpp\
 	workspacecontroller.h workspacecontroller.cpp \
 	metadatapanecontroller.hpp metadatapanecontroller.cpp \
+	dialogs/editlabels.hpp dialogs/editlabels.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	dialogs/preferencesdialog.hpp dialogs/preferencesdialog.cpp \
 	selectioncontroller.h selectioncontroller.cpp \

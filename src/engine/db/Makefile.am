@@ -31,6 +31,7 @@ noinst_HEADERS = library.h
 libniepcedb_a_SOURCES = library.cpp \
 	libfile.h libfile.cpp \
 	libfolder.h \
+	label.hpp \
 	libmetadata.h libmetadata.cpp \
 	keyword.h keyword.cpp \
 	storage.h storage.cpp \

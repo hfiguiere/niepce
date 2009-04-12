@@ -45,7 +45,13 @@ public:
 		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "");
 		Frame(const std::string & layout_cfg_key = "");
-		~Frame();
+		virtual ~Frame();
+
+    /** convenience to return the Frame::Ptr from this */
+    Ptr shared_frame_ptr()
+        {
+            return boost::static_pointer_cast<Frame>(shared_from_this());
+        }
 
 		Gtk::Window & gtkWindow()
         {

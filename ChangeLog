@@ -1,3 +1,7 @@
+2009-04-11  Hubert Figuiere  <hub@figuiere.net>
+
+	* Implement labels, at least partially.
+
 2009-04-09  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/fwk/toolkit/mimetype.cpp: Check boost version

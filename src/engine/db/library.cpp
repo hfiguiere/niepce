@@ -140,6 +140,8 @@ bool Library::_initDb()
                               " keyword TEXT, parent_id INTEGER)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
                                  " keyword_id INTEGER)");
+    SQLStatement labelTable("CREATE TABLE labels (id INTEGER PRIMARY KEY,"
+                            " name TEXT, color TEXT)");
     SQLStatement xmpUpdateQueueTable("CREATE TABLE xmp_update_queue "
                                      " (id INTEGER UNIQUE)");
 //		SQLStatement collsTable("CREATE TABLE collections (id INTEGER PRIMARY KEY,"
@@ -167,6 +169,7 @@ bool Library::_initDb()
     m_dbdrv->execute_statement(fsFileTable);
     m_dbdrv->execute_statement(keywordTable);
     m_dbdrv->execute_statement(keywordingTable);
+    m_dbdrv->execute_statement(labelTable);
     m_dbdrv->execute_statement(xmpUpdateQueueTable);
 //		m_dbdrv->execute_statement(collsTable);
 //		m_dbdrv->execute_statement(collectingTable);

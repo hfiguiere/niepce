@@ -40,7 +40,7 @@
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.
-#define DB_SCHEMA_VERSION 2
+#define DB_SCHEMA_VERSION 3
 
 namespace db {
 
@@ -58,8 +58,8 @@ namespace db {
 			NOTIFY_FOLDER_CONTENT_QUERIED,
 			NOTIFY_KEYWORD_CONTENT_QUERIED,
 			NOTIFY_METADATA_QUERIED,
-            NOTIFY_METADATA_CHANGED,
-            NOTIFY_XMP_NEEDS_UPDATE,
+      NOTIFY_METADATA_CHANGED,
+      NOTIFY_XMP_NEEDS_UPDATE,
 			NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 

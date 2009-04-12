@@ -47,6 +47,7 @@
 #include "librarymainviewcontroller.h"
 #include "dialogs/importdialog.hpp"
 #include "dialogs/preferencesdialog.hpp"
+#include "dialogs/editlabels.hpp"
 #include "selectioncontroller.h"
 
 using libraryclient::LibraryClient;
@@ -324,7 +325,7 @@ void NiepceWindow::init_actions()
                           boost::bind(&SelectionController::set_label, 
                                       BIND_SHARED_PTR(SelectionController, m_selection_controller)
                                       , 4));
-    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("Edit Labels...")),
+    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("_Edit Labels...")),
                           sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
     
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
@@ -397,8 +398,7 @@ void NiepceWindow::on_action_file_import()
 	
     ImportDialog::Ptr import_dialog(new ImportDialog());
 
-    result = import_dialog->run_modal(
-        boost::static_pointer_cast<fwk::Frame>(shared_from_this()));
+    result = import_dialog->run_modal(shared_frame_ptr());
     switch(result) {
     case 0:
     {
@@ -411,7 +411,6 @@ void NiepceWindow::on_action_file_import()
             std::for_each(to_import.begin(), to_import.end(),
                           boost::bind(&LibraryClient::importFromDirectory,
                                       m_libClient, _1, false));
-//            m_libClient->importFromDirectory(to_import, false);
         }
         break;
     }
@@ -488,11 +487,8 @@ void NiepceWindow::on_preferences()
     DBG_OUT("on_preferences");
 
     fwk::Dialog::Ptr dlg(new PreferencesDialog());
-    dlg->run_modal(boost::static_pointer_cast<Frame>(shared_from_this()));
+    dlg->run_modal(shared_frame_ptr());
 
-//    show_modal_dialog(GLADEDIR"preferences.ui", "preferences",
-//                      boost::bind(&NiepceWindow::preference_dialog_setup,
-//                                  this, _1, _2));
     DBG_OUT("end on_preferences");
 }
 
@@ -507,11 +503,25 @@ void NiepceWindow::open_library(const std::string & libMoniker)
 void NiepceWindow::on_action_edit_labels()
 {
     DBG_OUT("edit labels");
+    // get the labels.
+    EditLabels::Ptr dlg(new EditLabels(get_labels()));
+    int result = dlg->run_modal(shared_frame_ptr());
+    switch(result) {
+    case 0:
+        // ok
+        // update the labels.
+        break;
+    case 1:
+        // cancel
+        break;
+    default:
+        break;
+    }
 }
 
 void NiepceWindow::set_title(const std::string & title)
 {
-    Frame::set_title(std::string(_("Niepce Digital - ")) + title);
+    Frame::set_title(_("Niepce Digital - ") + title);
 }
 
 
