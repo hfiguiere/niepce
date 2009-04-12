@@ -22,7 +22,6 @@
 #define _UI_NIEPCEWINDOW_H_
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/signals.hpp>
 
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>
@@ -35,10 +34,10 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.h"
-#include "ui/librarymainviewcontroller.h"
+#include "ui/librarymainviewcontroller.hpp"
 #include "ui/workspacecontroller.h"
-#include "ui/selectioncontroller.h"
-#include "ui/filmstripcontroller.h"
+#include "ui/selectioncontroller.hpp"
+#include "ui/filmstripcontroller.hpp"
 
 namespace fwk {
 	class NotificatioCenter;
@@ -62,8 +61,8 @@ protected:
     virtual Gtk::Widget * buildWidget();
 
 private:
-    void undo_state(const Glib::RefPtr<Gtk::Action> & action);
-    void redo_state(const Glib::RefPtr<Gtk::Action> & action);
+    void undo_state();
+    void redo_state();
 
     void on_action_file_import();
 
@@ -93,11 +92,10 @@ private:
     ui::SelectionController::Ptr   m_selection_controller;
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+    Glib::RefPtr<Gtk::Action>      m_undo_action;
+    Glib::RefPtr<Gtk::Action>      m_redo_action;
     libraryclient::LibraryClient::Ptr m_libClient;
     eng::Label::List               m_labels;
-    // connections
-    boost::signals::scoped_connection m_undostate_conn;
-    boost::signals::scoped_connection m_redostate_conn;
 };
 
 }

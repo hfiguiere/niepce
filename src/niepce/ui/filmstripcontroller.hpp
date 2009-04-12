@@ -24,7 +24,7 @@
 
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
-#include "ui/selectioncontroller.h"
+#include "ui/selectioncontroller.hpp"
 
 namespace Gtk {
 	class IconView;

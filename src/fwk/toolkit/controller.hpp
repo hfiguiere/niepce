@@ -28,6 +28,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include "sigc++/trackable.h"
+
 #include "fwk/utils/databinder.h"
 
 namespace Gtk {
@@ -39,7 +41,8 @@ namespace fwk {
 	/** Generic controller class
 	 */
 	class Controller
-		: public boost::enable_shared_from_this<Controller>
+      : public boost::enable_shared_from_this<Controller>
+      , public sigc::trackable
 	{
 	public:
 		typedef boost::shared_ptr<Controller> Ptr;

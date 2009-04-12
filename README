@@ -30,14 +30,14 @@ cairomm
 gnome-vfs >= 2.14
 sqlite3
 libxml > 2.5.0
-boost 1.33
+boost 1.34
  -boost thread
  -boost filesystem
  -boost test (for the unit test)
 exempi >= 2.0.0
-libopenraw >= 0.0.4
-geglmm >= 0.0.17
-gegl >= 0.0.20
+libopenraw >= 0.0.5
+geglmm >= 0.0.22
+gegl >= 0.0.22
 babl
 goocanvasmm 0.10.0
 

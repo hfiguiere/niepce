@@ -71,7 +71,9 @@ void UndoTransaction::redo()
 
 UndoHistory::~UndoHistory()
 {
-    clear();
+    // DO NOT CALL UndoHistory::clear() !!!
+    clear(m_undos);
+    clear(m_redos);
 }
 
 void UndoHistory::add(UndoTransaction* t)
@@ -79,7 +81,7 @@ void UndoHistory::add(UndoTransaction* t)
     m_undos.push_front(t);
     clear(m_redos);
 
-    changed();
+    signal_changed();
 }
 
 void UndoHistory::undo()
@@ -91,7 +93,7 @@ void UndoHistory::undo()
             t->undo();
             m_undos.pop_front();
             m_redos.push_front(t);
-            changed();
+            signal_changed();
         }
     }
 }
@@ -105,7 +107,7 @@ void UndoHistory::redo()
             t->redo();
             m_redos.pop_front();
             m_undos.push_front(t);
-            changed();
+            signal_changed();
         }
     }
 }
@@ -113,10 +115,8 @@ void UndoHistory::redo()
 
 void UndoHistory::clear()
 {
-    clear(m_undos);
-    clear(m_redos);
 
-    changed();
+    signal_changed();
 }
 
 std::string UndoHistory::next_undo() const

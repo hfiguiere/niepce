@@ -24,8 +24,9 @@
 #include <list>
 #include <stack>
 #include <string>
-#include <boost/signal.hpp>
 #include <boost/noncopyable.hpp>
+
+#include <sigc++/signal.h>
 
 namespace fwk {
 
@@ -65,7 +66,7 @@ public:
     std::string next_redo() const;
 
     // called when the undo history change.
-    boost::signal<void (void)> changed;
+    sigc::signal<void> signal_changed;
 private:
     void clear(std::list<UndoTransaction*> & l);
 

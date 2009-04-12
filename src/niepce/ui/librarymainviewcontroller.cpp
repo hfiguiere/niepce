@@ -31,7 +31,7 @@
 #include "engine/db/library.h"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
-#include "librarymainviewcontroller.h"
+#include "librarymainviewcontroller.hpp"
 #include "niepcewindow.hpp"
 #include "metadatapanecontroller.hpp"
 #include "librarycellrenderer.h"

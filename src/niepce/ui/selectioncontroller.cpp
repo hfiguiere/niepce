@@ -30,7 +30,7 @@
 #include "engine/db/metadata.h"
 #include "libraryclient/libraryclient.h"
 #include "niepcewindow.hpp"
-#include "selectioncontroller.h"
+#include "selectioncontroller.hpp"
 
 namespace ui {
 

@@ -29,15 +29,15 @@ libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \
 	librarymainview.h librarymainview.cpp \
 	librarycellrenderer.h librarycellrenderer.cpp \
-	librarymainviewcontroller.h librarymainviewcontroller.cpp \
+	librarymainviewcontroller.hpp librarymainviewcontroller.cpp \
 	imageliststore.h imageliststore.cpp\
 	workspacecontroller.h workspacecontroller.cpp \
 	metadatapanecontroller.hpp metadatapanecontroller.cpp \
 	dialogs/editlabels.hpp dialogs/editlabels.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	dialogs/preferencesdialog.hpp dialogs/preferencesdialog.cpp \
-	selectioncontroller.h selectioncontroller.cpp \
-	filmstripcontroller.h filmstripcontroller.cpp \
+	selectioncontroller.hpp selectioncontroller.cpp \
+	filmstripcontroller.hpp filmstripcontroller.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
 	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h

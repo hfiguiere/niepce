@@ -34,7 +34,7 @@
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
 #include "metadatapanecontroller.hpp"
-#include "selectioncontroller.h"
+#include "selectioncontroller.hpp"
 #include "modules/darkroom/darkroommodule.h"
 #include "imageliststore.h"
 

@@ -27,7 +27,7 @@
 
 #include "eog-thumb-nav.h"
 #include "eog-thumb-view.h"
-#include "filmstripcontroller.h"
+#include "filmstripcontroller.hpp"
 
 namespace ui {
 

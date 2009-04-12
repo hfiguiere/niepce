@@ -23,7 +23,7 @@
 
 #include <gtk/gtkiconview.h>
 
-#include <boost/signal.hpp>
+#include <sigc++/signal.h>
 
 #include "fwk/toolkit/controller.hpp"
 #include "ui/imageliststore.h"
@@ -70,10 +70,10 @@ public:
 		{ return m_imageliststore; }
 
 	// the signal to call when selection is changed.
-	boost::signal<void (int)> signal_selected;
+    sigc::signal<void, int> signal_selected;
 
 	// signal for when the item is activated (ie double-click)
-	boost::signal<void (int)> signal_activated;
+    sigc::signal<void, int> signal_activated;
 
     /////////
     /** select the previous image. Emit the signal */
