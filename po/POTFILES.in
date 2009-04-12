@@ -1,5 +1,7 @@
 src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/application.cpp
+src/niepce/ui/dialogs/editlabels.cpp
+src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
 src/niepce/ui/dialogs/importdialog.ui
 src/niepce/ui/dialogs/preferences.ui

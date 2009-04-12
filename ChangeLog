@@ -1,5 +1,7 @@
 2009-04-12  Hubert Figuiere  <hub@figuiere.net>
 
+	* configure.ac: Add sv locale.
+
 	* Add headers to dialogs.
 
 2009-04-11  Hubert Figuiere  <hub@figuiere.net>
