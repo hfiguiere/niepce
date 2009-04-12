@@ -168,6 +168,7 @@ data/themes/Makefile
 src/Makefile
 src/ext/Makefile
 src/ext/libgdl/Makefile
+src/ext/libview/Makefile
 src/niepce/ui/Makefile
 src/niepce/ui/dialogs/Makefile
 src/niepce/ui/thumb-view/Makefile

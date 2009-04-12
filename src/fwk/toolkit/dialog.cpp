@@ -17,12 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "libview/header.hh"
+
 #include "dialog.hpp"
 
 
 namespace fwk {
 
 
+
+void Dialog::add_header(const Glib::ustring & label)
+{
+    Gtk::VBox * vbox;
+
+    builder()->get_widget("dialog-vbox1", vbox);
+    view::Header * header = manage(new view::Header(label));
+    header->show();
+    vbox->pack_start(*header, false, true);
+}
 
 int Dialog::run_modal(const Frame::Ptr & parent)
 {

@@ -39,6 +39,8 @@ void PreferencesDialog::setup_widget()
         return;
     }
 
+    add_header(_("Preferences"));
+
     Gtk::ComboBox * theme_combo = NULL;
     Gtk::CheckButton * reopen_checkbutton = NULL;
     utils::DataBinderPool * binder_pool = new utils::DataBinderPool();

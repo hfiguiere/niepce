@@ -49,6 +49,11 @@ public:
     virtual void setup_widget() = 0;
     Gtk::Dialog & gtkDialog()
         { return static_cast<Gtk::Dialog&>(gtkWindow()); }
+
+    /** add a header widget at the top of the "dialog-vbox1"
+     */
+    void add_header(const Glib::ustring & label);
+
     int run_modal();
     int run_modal(const Frame::Ptr & parent);
 protected:

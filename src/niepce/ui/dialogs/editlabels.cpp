@@ -20,6 +20,7 @@
 
 #include <boost/format.hpp>
 
+#include <glibmm/i18n.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
@@ -38,6 +39,9 @@ EditLabels::EditLabels(const eng::Label::List & labels)
 void EditLabels::setup_widget()
 {
     Glib::RefPtr<Gtk::Builder> _builder = builder();
+
+    add_header(_("<b>Edit Labels</b>"));
+
     const char * color_fmt = "color%1%";
     const char * value_fmt = "value%1%";
     for(size_t i = 0; i < 5; i++) {

@@ -54,8 +54,12 @@ void ImportDialog::setup_widget()
     if(m_is_setup) {
         return;
     }
+
+    add_header(_("Import"));
+
     Glib::RefPtr<Gtk::Builder> _builder = builder();
     Gtk::Button *select_directories = NULL;
+
     _builder->get_widget("select_directories", select_directories);
     select_directories->signal_clicked().connect(
         sigc::mem_fun(*this, &ImportDialog::do_select_directories));

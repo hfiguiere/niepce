@@ -12,6 +12,9 @@
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
+          <placeholder/>
+        </child>
+        <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="label_xalign">0</property>
@@ -212,14 +215,15 @@
             <child type="label">
               <object class="GtkLabel" id="dialog_title">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Edit Labels&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Labels&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="position">1</property>
+            <property name="pack_type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child internal-child="action_area">
@@ -227,22 +231,11 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button2">
-                <property name="label" translatable="yes">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="label" translatable="yes">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -264,7 +257,6 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">button2</action-widget>
       <action-widget response="0">button1</action-widget>
     </action-widgets>
   </object>
