@@ -20,11 +20,11 @@
 
 #include "fwk/utils/debug.h"
 #include "fwk/utils/files.h"
-#include "engine/library/op.h"
-#include "engine/library/commands.h"
-#include "libraryclient.h"
-#include "clientimpl.h"
-#include "locallibraryserver.h"
+#include "engine/library/op.hpp"
+#include "engine/library/commands.hpp"
+#include "libraryclient.hpp"
+#include "clientimpl.hpp"
+#include "locallibraryserver.hpp"
 
 using utils::FileList;
 using library::Op;
@@ -117,6 +117,35 @@ tid_t ClientImpl::setMetadata(int file_id, int meta, int value)
                                       file_id, meta, value)));
     m_localLibrary->schedule(op);
     return id;
+}
+
+
+tid_t ClientImpl::getAllLabels()
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdListAllLabels,
+                                      _1)));
+    m_localLibrary->schedule(op);
+    return id;    
+}
+
+
+tid_t ClientImpl::createLabel(const std::string & s, const std::string & color)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdCreateLabel,
+                                      _1, s, color)));
+    m_localLibrary->schedule(op);
+    return id;    
+}
+
+tid_t ClientImpl::renameLabel(int label_id, const std::string & new_name)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdRenameLabel,
+                                      _1, label_id, new_name)));
+    m_localLibrary->schedule(op);
+    return id;    
 }
 
 

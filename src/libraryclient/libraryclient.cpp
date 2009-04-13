@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 
 #include "fwk/utils/moniker.h"
 
-#include "libraryclient.h"
-#include "clientimpl.h"
+#include "libraryclient.hpp"
+#include "clientimpl.hpp"
 
 using library::tid_t;
 
@@ -88,6 +88,23 @@ library::tid_t LibraryClient::requestMetadata(int id)
 library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
 {
     return m_pImpl->setMetadata(id, meta, value);
+}
+
+library::tid_t LibraryClient::getAllLabels()
+{
+    return m_pImpl->getAllLabels();
+}
+
+
+library::tid_t LibraryClient::createLabel(const std::string & s, const std::string & color)
+{
+    return m_pImpl->createLabel(s, color);
+}
+
+
+library::tid_t LibraryClient::renameLabel(int id, const std::string & new_name)
+{
+    return m_pImpl->renameLabel(id, new_name);
 }
 
 library::tid_t LibraryClient::processXmpUpdateQueue()

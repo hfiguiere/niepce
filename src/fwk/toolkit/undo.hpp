@@ -28,20 +28,27 @@
 
 #include <sigc++/signal.h>
 
+#include "fwk/toolkit/command.hpp"
+
 namespace fwk {
 
-class Command;
 
 class UndoTransaction
 {
 public:
     UndoTransaction(const std::string & n);
     ~UndoTransaction();
-    void add(Command *);
+    Command *new_command(const Command::Function &, const Command::Function &);
     void undo();
     void redo();
+    /** execute the transaction after adding it. (calls %undo) */
+    void execute()
+        { redo(); }
     const std::string & name() const
         { return m_name; }
+protected:
+    /** add the command. Use %new_command instead */
+    void add(Command *);
 private:
     std::list<Command *> m_operations;
     std::string m_name;

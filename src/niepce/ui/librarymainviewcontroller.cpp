@@ -1,7 +1,7 @@
 /*
- * niepce - ui/librarymainviewcontroller.cpp
+ * niepce - niepce/ui/librarymainviewcontroller.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 
 #include "fwk/utils/debug.h"
 #include "niepce/notifications.h"
-#include "engine/db/library.h"
+#include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
 #include "librarymainviewcontroller.hpp"

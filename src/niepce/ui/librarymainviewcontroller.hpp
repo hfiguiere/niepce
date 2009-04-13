@@ -30,7 +30,7 @@
 
 #include "librarymainview.h"
 #include "engine/db/libfile.h"
-#include "libraryclient/libraryclient.h"
+#include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
 #include "metadatapanecontroller.hpp"

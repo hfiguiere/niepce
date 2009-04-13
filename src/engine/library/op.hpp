@@ -1,7 +1,7 @@
 /*
- * niepce - library/op.h
+ * niepce - engine/library/op.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <boost/function.hpp>
 
 #include "engine/library/clienttypes.h"
-#include "engine/db/library.h"
+#include "engine/db/library.hpp"
 
 namespace library {
 

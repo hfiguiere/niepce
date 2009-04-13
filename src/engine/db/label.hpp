@@ -38,6 +38,7 @@ class Label
 public:
     typedef std::tr1::shared_ptr<Label> Ptr;
     typedef std::vector<Ptr> List;
+    typedef std::tr1::shared_ptr<List> ListPtr;
 
     Label(int _id, const std::string & _label, const std::string & _colorstring)
         : m_id(_id), m_label(_label)

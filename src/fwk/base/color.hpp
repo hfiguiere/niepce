@@ -35,7 +35,7 @@ namespace fwk {
   {
   public:
     RgbColor(value_type r = 0, value_type g = 0, value_type b = 0);
-    RgbColor(const std::string & );
+    explicit RgbColor(const std::string & );
     
     std::string to_string() const;
   };

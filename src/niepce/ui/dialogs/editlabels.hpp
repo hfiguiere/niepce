@@ -24,6 +24,7 @@
 #include <gtkmm/label.h>
 
 #include "engine/db/label.hpp"
+#include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/dialog.hpp"
 
 namespace ui {
@@ -34,12 +35,13 @@ class EditLabels
 {
 public:
     typedef boost::shared_ptr<EditLabels> Ptr;
-    EditLabels(const eng::Label::List &);
+    EditLabels(const eng::Label::List &, const libraryclient::LibraryClient::Ptr &);
 
     virtual void setup_widget();
 private:
     void label_name_changed(Gtk::Entry *, size_t idx);
     eng::Label::List m_labels;
+    libraryclient::LibraryClient::Ptr m_lib_client;
 };
 
 

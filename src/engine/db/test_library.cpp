@@ -1,5 +1,5 @@
 /*
- * niepce - db/test_library.cpp
+ * niepce - engine/db/test_library.cpp
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -22,7 +22,7 @@
 
 #include "fwk/utils/db/sqlstatement.h"
 #include "fwk/utils/db/iconnectiondriver.h"
-#include "library.h"
+#include "library.hpp"
 #include "libfile.h"
 #include "libfolder.h"
 

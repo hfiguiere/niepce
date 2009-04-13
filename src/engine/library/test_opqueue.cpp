@@ -18,7 +18,7 @@
  */
 
 
-#include "op.h"
+#include "op.hpp"
 #include "opqueue.h"
 
 #include <boost/bind.hpp>

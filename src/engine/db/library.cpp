@@ -1,5 +1,5 @@
 /*
- * niepce - db/library.cpp
+ * niepce - engine/db/library.cpp
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -27,8 +27,9 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/convenience.hpp>
 
+#include "fwk/base/color.hpp"
 #include "niepce/notifications.h"
-#include "library.h"
+#include "library.hpp"
 #include "metadata.h"
 #include "fwk/utils/exception.h"
 #include "fwk/utils/exempi.h"
@@ -40,6 +41,7 @@
 #include "fwk/toolkit/mimetype.hpp"
 
 using fwk::NotificationCenter;
+using eng::Label;
 
 namespace bfs = boost::filesystem;
 
@@ -176,6 +178,7 @@ bool Library::_initDb()
 
     m_dbdrv->execute_statement(fileUpdateTrigger);
     m_dbdrv->execute_statement(xmpUpdateTrigger);
+    notify(NOTIFY_NEW_LIBRARY_CREATED, boost::any());
     return true;
 }
 
@@ -750,6 +753,66 @@ bool Library::setMetaData(int file_id, int meta,
     retval = metablock->touch();
     retval = setMetaData(file_id, metablock);
     return retval;
+}
+
+void Library::getAllLabels(const Label::ListPtr & l)
+{
+    SQLStatement sql("SELECT id,name,color FROM labels ORDER BY id");
+    try {
+        if(m_dbdrv->execute_statement(sql)) {
+            while(m_dbdrv->read_next_row()) {
+                int32_t id;
+                std::string name;
+                std::string color;
+                m_dbdrv->get_column_content(0, id);
+                m_dbdrv->get_column_content(1, name);
+                m_dbdrv->get_column_content(2, color);
+                l->push_back(Label::Ptr(new Label(id, name, color)));
+            }
+        }
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+}
+
+
+int Library::addLabel(const std::string & name, const std::string & color)
+{
+    int ret = -1;
+
+    SQLStatement sql(boost::format("INSERT INTO labels (name,color)"
+                                   " VALUES ('%1%', '%2%')") 
+                     % name % color);
+    if(m_dbdrv->execute_statement(sql)) {
+        int64_t id = m_dbdrv->last_row_id();
+        DBG_OUT("last row inserted %d", (int)id);
+        ret = id;
+    }
+    return ret;
+}
+
+
+int Library::addLabel(const std::string & name, const fwk::RgbColor & c)
+{
+    return addLabel(name, c.to_string());
+}
+
+
+bool Library::renameLabel(int label_id, const std::string & name)
+{
+    SQLStatement sql(boost::format("UPDATE labels SET name='%2%'"
+                                   " WHERE id='%1%';") 
+                     % label_id % name);
+    try {
+        return m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return false;
 }
 
 

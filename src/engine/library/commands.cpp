@@ -25,17 +25,16 @@
 
 
 #include "fwk/utils/debug.h"
-#include "engine/db/library.h"
+#include "engine/db/library.hpp"
 #include "engine/db/libfolder.h"
 #include "engine/db/libfile.h"
 #include "engine/db/libmetadata.h"
 #include "engine/db/filebundle.hpp"
 #include "engine/db/keyword.h"
-#include "commands.h"
+#include "engine/db/label.hpp"
+#include "commands.hpp"
 
 namespace bfs = boost::filesystem;
-
-using boost::any_cast;
 
 using db::Library;
 using db::LibFolder;
@@ -131,6 +130,32 @@ void Commands::cmdSetMetadata(const db::Library::Ptr & lib,
     lib->setMetaData(file_id, meta, value);
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
 }
+
+void Commands::cmdListAllLabels(const db::Library::Ptr & lib)
+{
+    eng::Label::ListPtr l(new eng::Label::List);
+    lib->getAllLabels(l);
+    lib->notify(Library::NOTIFY_ADDED_LABELS, boost::any(l));
+}
+
+void Commands::cmdCreateLabel(const db::Library::Ptr & lib,
+                              const std::string & s, const std::string & color)
+{
+    int id = lib->addLabel(s, color);
+    if(id != -1) {
+        eng::Label::ListPtr l(new eng::Label::List);
+        l->push_back(eng::Label::Ptr(new eng::Label(id, s, color)));
+        lib->notify(Library::NOTIFY_ADDED_LABELS, boost::any(l));
+    }
+}
+
+void Commands::cmdRenameLabel(const db::Library::Ptr & lib,
+                               int label_id, const std::string & name)
+{
+    lib->renameLabel(label_id, name);
+    lib->notify(Library::NOTIFY_LABEL_CHANGED, boost::any(label_id));
+}
+
 
 void Commands::cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib)
 {

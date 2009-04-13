@@ -21,7 +21,7 @@
 #include "fwk/utils/fsutils.h"
 
 #define BOOST_AUTO_TEST_MAIN
-#include "locallibraryserver.h"
+#include "locallibraryserver.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/test/minimal.hpp>

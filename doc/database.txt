@@ -56,6 +56,12 @@ keywording	file_id	       The file ID it is linked to (= files.id)
 
 There shouldn't be more than one pair of identical (file_id,keyword_id)
 
+Labels for the file. There are very few of these.
+
+labels          id             The ID of the label
+                name           The name of the label (user displayed)
+		color          The RGB8 color in "R G B" format.
+
 The update queue for XMP. When an XMP is changed in the DB it is
 queued in the table.
 

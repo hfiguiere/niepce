@@ -12,6 +12,7 @@ TEST_LIBS =  \
 	$(top_builddir)/src/engine/db/libniepcedb.a \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
+	$(top_builddir)/src/fwk/libfwk.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
@@ -20,6 +21,6 @@ TEST_LIBS =  \
 test_worker_SOURCES = test_worker.cpp
 test_worker_LDADD = $(TEST_LIBS)
 
-liblibraryclient_a_SOURCES = libraryclient.h  libraryclient.cpp \
-	clientimpl.h clientimpl.cpp \
-	locallibraryserver.h locallibraryserver.cpp
+liblibraryclient_a_SOURCES = libraryclient.hpp  libraryclient.cpp \
+	clientimpl.hpp clientimpl.cpp \
+	locallibraryserver.hpp locallibraryserver.cpp

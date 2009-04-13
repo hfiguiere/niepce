@@ -31,7 +31,7 @@
 
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.h"
-#include "libraryclient/libraryclient.h"
+#include "libraryclient/libraryclient.hpp"
 #include "ncr/image.h"
 #include "modules/darkroom/imagecanvas.h"
 #include "modules/darkroom/toolboxcontroller.h"

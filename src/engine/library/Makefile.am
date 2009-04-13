@@ -21,7 +21,7 @@ test_opqueue_LDADD = $(TEST_LIBS)
 
 
 libniepcelibrary_a_SOURCES = clienttypes.h \
-	op.h op.cpp  \
-	commands.h commands.cpp \
+	op.hpp op.cpp  \
+	commands.hpp commands.cpp \
 	thumbnailcache.h thumbnailcache.cpp \
 	thumbnailnotification.h

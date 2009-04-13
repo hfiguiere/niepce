@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/command.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@ namespace fwk {
 class Command
 {
 public:
-    boost::function<void (void)> undo;
-    boost::function<void (void)> redo;
+    typedef boost::function<void (void)> Function;
+    Function undo;
+    Function redo;
 };
 
+}
 
 #endif
-
-}
 
 /*
   Local Variables:

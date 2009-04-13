@@ -10,6 +10,7 @@ TEST_LIBS =  \
 	libniepcedb.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
+	$(top_builddir)/src/fwk/libfwk.a \
 	@LIBGTKMM_LIBS@ @GNOMEVFS_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@ \
@@ -26,9 +27,7 @@ test_filebundle_LDADD = $(TEST_LIBS)
 
 noinst_LIBRARIES = libniepcedb.a
 
-noinst_HEADERS = library.h 
-
-libniepcedb_a_SOURCES = library.cpp \
+libniepcedb_a_SOURCES = library.hpp library.cpp \
 	libfile.h libfile.cpp \
 	libfolder.h \
 	label.hpp \

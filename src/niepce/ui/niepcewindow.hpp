@@ -33,7 +33,7 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
-#include "libraryclient/libraryclient.h"
+#include "libraryclient/libraryclient.hpp"
 #include "ui/librarymainviewcontroller.hpp"
 #include "ui/workspacecontroller.h"
 #include "ui/selectioncontroller.hpp"
@@ -74,6 +74,9 @@ private:
     void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
                                  Gtk::Dialog *);
     void on_preferences();
+
+    void create_initial_labels();
+    void on_lib_notification(const fwk::Notification::Ptr &n);
 
     void init_ui();
     void init_actions();

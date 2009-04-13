@@ -174,6 +174,15 @@ void Application::on_about()
     dlg.run();
 }
 
+UndoTransaction * Application::begin_undo(const std::string & label)
+{
+    fwk::UndoTransaction *undo = new fwk::UndoTransaction(label);
+    undo_history().add(undo);
+    return undo;
+}
+
+
+
 }
 
 

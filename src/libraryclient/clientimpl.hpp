@@ -1,5 +1,5 @@
 /*
- * niepce - libraryclient/clientimpl.h
+ * niepce - libraryclient/clientimpl.hpp
  *
  * Copyright (C) 2007-2008 Hubert Figuiere
  *
@@ -29,13 +29,13 @@
 
 namespace libraryclient {
 
-	class LocalLibraryServer;
+class LocalLibraryServer;
 
-	class ClientImpl
-	{
-	public:
-		static ClientImpl *makeClientImpl(const utils::Moniker & moniker, 
-										  const fwk::NotificationCenter::Ptr & nc);
+class ClientImpl
+{
+public:
+    static ClientImpl *makeClientImpl(const utils::Moniker & moniker, 
+                                      const fwk::NotificationCenter::Ptr & nc);
 		
 		ClientImpl(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~ClientImpl();
@@ -46,16 +46,20 @@ namespace libraryclient {
 		library::tid_t queryFolderContent(int id);
 		library::tid_t countFolder(int id);
 		library::tid_t requestMetadata(int id);
-        library::tid_t setMetadata(int id, int meta, int value);
+    library::tid_t setMetadata(int id, int meta, int value);
 
-        library::tid_t processXmpUpdateQueue();
+    library::tid_t getAllLabels();
+    library::tid_t createLabel(const std::string & s, const std::string & color);
+    library::tid_t renameLabel(int id, const std::string & new_name);
+
+    library::tid_t processXmpUpdateQueue();
 
 		library::tid_t importFromDirectory(const std::string & dir, bool manage);
 
-	protected:
+protected:
 		const utils::Moniker m_moniker;
 		LocalLibraryServer *m_localLibrary;
-	};
+};
 
 }
 

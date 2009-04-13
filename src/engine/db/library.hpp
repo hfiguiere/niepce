@@ -1,5 +1,5 @@
 /*
- * niepce - db/library.h
+ * niepce - engine/db/library.h
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -37,46 +37,54 @@
 #include "engine/db/libmetadata.h"
 #include "engine/db/filebundle.hpp"
 #include "engine/db/keyword.h"
+#include "engine/db/label.hpp"
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.
 #define DB_SCHEMA_VERSION 3
 
+namespace fwk {
+class RgbColor;
+}
+
 namespace db {
 
-	class Library
-	{
-	public:
+class Library
+{
+public:
 		typedef boost::shared_ptr<Library> Ptr;
 
 		typedef enum {
-			NOTIFY_NONE = 0,
-			NOTIFY_ADDED_FOLDERS,
-			NOTIFY_ADDED_FILES,
-			NOTIFY_ADDED_KEYWORDS,
-			NOTIFY_ADDED_KEYWORD,
-			NOTIFY_FOLDER_CONTENT_QUERIED,
-			NOTIFY_KEYWORD_CONTENT_QUERIED,
-			NOTIFY_METADATA_QUERIED,
-      NOTIFY_METADATA_CHANGED,
-      NOTIFY_XMP_NEEDS_UPDATE,
-			NOTIFY_FOLDER_COUNTED
+        NOTIFY_NONE = 0,
+        NOTIFY_NEW_LIBRARY_CREATED,
+        NOTIFY_ADDED_FOLDERS,
+        NOTIFY_ADDED_FILES,
+        NOTIFY_ADDED_KEYWORDS,
+        NOTIFY_ADDED_KEYWORD,
+        NOTIFY_ADDED_LABELS,
+        NOTIFY_FOLDER_CONTENT_QUERIED,
+        NOTIFY_KEYWORD_CONTENT_QUERIED,
+        NOTIFY_METADATA_QUERIED,
+        NOTIFY_METADATA_CHANGED,
+        NOTIFY_LABEL_CHANGED,
+        NOTIFY_XMP_NEEDS_UPDATE,
+        NOTIFY_FOLDER_COUNTED
 		} NotifyType;
 
 		Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~Library();
 
 		bool ok()
-			{ return m_inited; }
+        { return m_inited; }
 		/** set the main library directory */
 //		void setMainDir(const std::string & dir)
 //			{ m_maindir = dir; }
 		/** return the main directory */
 		const boost::filesystem::path & mainDir() const
-			{ return m_maindir; }
+        { return m_maindir; }
 		/** get the path to the DB file */
 		const boost::filesystem::path & dbName() const
-			{ return m_dbname; }
+        { return m_dbname; }
 
 		void notify(NotifyType t, const boost::any & param);
 
@@ -86,7 +94,7 @@ namespace db {
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
 		int addFileAndFolder(const boost::filesystem::path & folder, 
-							 const boost::filesystem::path & file, bool manage);
+                         const boost::filesystem::path & file, bool manage);
 
     /** add a fs file to the library  
      * @param file the file path
@@ -106,7 +114,7 @@ namespace db {
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
 		int addFile(int folder_id, const boost::filesystem::path & file, 
-					bool manage);
+                bool manage);
 
 		/** add a bundle of files to the library
 		 * @param folder_id the id of the containing folder
@@ -114,7 +122,7 @@ namespace db {
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
     int addBundle(int folder_id, const db::FileBundle::Ptr & bundle, 
-                    bool manage);
+                  bool manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle
      * @param fsfile_id the id of the fsfile
@@ -151,14 +159,19 @@ namespace db {
 		int countFolder(int folder_id);
 		void getAllKeywords(const Keyword::ListPtr & l);
 		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
-        /** get the metadata block (XMP) */
+    /** get the metadata block (XMP) */
 		void getMetaData(int file_id, const LibMetadata::Ptr & );
-        /** set the metadata block (XMP) */
-        bool setMetaData(int file_id, const LibMetadata::Ptr & );
-        bool setMetaData(int file_id, int meta, const boost::any & value);
+    /** set the metadata block (XMP) */
+    bool setMetaData(int file_id, const LibMetadata::Ptr & );
+    bool setMetaData(int file_id, int meta, const boost::any & value);
 
-        /** Trigger the processing of the XMP update queue */
-        bool processXmpUpdateQueue();
+		void getAllLabels(const eng::Label::ListPtr & l);
+    int addLabel(const std::string & name, const std::string & color);
+    int addLabel(const std::string & name, const fwk::RgbColor & c);
+    bool renameLabel(int label_id, const std::string & name);
+
+    /** Trigger the processing of the XMP update queue */
+    bool processXmpUpdateQueue();
 
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate
@@ -176,22 +189,22 @@ namespace db {
 		int checkDatabaseVersion();
 		
 		db::IConnectionDriver::Ptr dbDriver()
-			{ return m_dbdrv; }
-	private:
+        { return m_dbdrv; }
+private:
 		bool init();
 		bool _initDb();
 
-        /** external sqlite fucntion to trigger the rewrite of the XMP */
-        void triggerRewriteXmp(void);
-        bool getXmpIdsInQueue(std::vector<int> & ids);
-        /** rewrite the XMP sidecar for the file whose id is %id
-         * and remove it from the queue.
-         */
-        bool rewriteXmpForId(int id);
+    /** external sqlite fucntion to trigger the rewrite of the XMP */
+    void triggerRewriteXmp(void);
+    bool getXmpIdsInQueue(std::vector<int> & ids);
+    /** rewrite the XMP sidecar for the file whose id is %id
+     * and remove it from the queue.
+     */
+    bool rewriteXmpForId(int id);
 
-        /** set an "internal" metadata of type int */
-        bool setInternalMetaDataInt(int file_id, const char* col,
-                                    int32_t value);
+    /** set an "internal" metadata of type int */
+    bool setInternalMetaDataInt(int file_id, const char* col,
+                                int32_t value);
 
 		boost::filesystem::path           m_maindir;
 		boost::filesystem::path           m_dbname;
@@ -199,14 +212,14 @@ namespace db {
 		db::IConnectionDriver::Ptr        m_dbdrv;
 		boost::weak_ptr<fwk::NotificationCenter>  m_notif_center;
 		bool                              m_inited;
-	};
+};
 
 	
-	struct LibNotification
-	{
+struct LibNotification
+{
 		Library::NotifyType type;
 		boost::any          param;
-	};
+};
 
 }
 

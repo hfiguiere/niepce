@@ -27,8 +27,8 @@
 
 #include "fwk/utils/debug.h"
 #include "niepce/notifications.h"
-#include "engine/db/library.h" // FIXME uh oh. this shouldn't be
-#include "libraryclient/libraryclient.h"
+#include "engine/db/library.hpp" // FIXME uh oh. this shouldn't be
+#include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
 #include "workspacecontroller.h"

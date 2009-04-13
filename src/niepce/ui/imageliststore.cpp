@@ -24,7 +24,7 @@
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
 #include "niepce/notifications.h"
-#include "engine/db/library.h"
+#include "engine/db/library.hpp"
 #include "engine/library/thumbnailnotification.h"
 #include "niepcewindow.hpp"
 

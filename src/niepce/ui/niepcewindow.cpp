@@ -34,8 +34,7 @@
 #include "fwk/utils/debug.h"
 #include "fwk/utils/moniker.h"
 #include "fwk/utils/boost.h"
-#include "engine/db/library.h"
-#include "libraryclient/libraryclient.h"
+#include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -88,6 +87,9 @@ NiepceWindow::buildWidget()
     Glib::ustring name("camera");
     set_icon_from_theme(name);		
 
+    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
+                                 boost::bind(&NiepceWindow::on_lib_notification, 
+                                             this, _1));
     m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
                                  boost::bind(&ImageListStore::on_lib_notification, 
                                              m_selection_controller->list_store(), _1));
@@ -490,18 +492,58 @@ void NiepceWindow::on_preferences()
 }
 
 
+
+void NiepceWindow::create_initial_labels()
+{
+    m_libClient->createLabel(_("Label 1"), "");
+    m_libClient->createLabel(_("Label 2"), "");
+    m_libClient->createLabel(_("Label 3"), "");
+    m_libClient->createLabel(_("Label 4"), "");
+    m_libClient->createLabel(_("Label 5"), "");
+}
+
+
+void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
+{
+    DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
+               "wrong notification type");
+    if(n->type() == niepce::NOTIFICATION_LIB) {
+        db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+        switch(ln.type) {
+        case db::Library::NOTIFY_NEW_LIBRARY_CREATED:
+            create_initial_labels();
+            break;
+        case db::Library::NOTIFY_ADDED_LABELS:
+        {
+            eng::Label::ListPtr l 
+                = boost::any_cast<eng::Label::ListPtr>(ln.param);
+            for(eng::Label::List::const_iterator iter = l->begin();
+                iter != l->end(); ++iter) {
+                
+                m_labels.push_back(*iter);
+            }
+            break;
+            }
+        default:
+            break;
+        }
+    }
+}
+
+
 void NiepceWindow::open_library(const std::string & libMoniker)
 {
     m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker),
                                                        m_lib_notifcenter));
     set_title(libMoniker);
+    m_libClient->getAllLabels();
 }
 
 void NiepceWindow::on_action_edit_labels()
 {
     DBG_OUT("edit labels");
     // get the labels.
-    EditLabels::Ptr dlg(new EditLabels(get_labels()));
+    EditLabels::Ptr dlg(new EditLabels(get_labels(), getLibraryClient()));
     int result = dlg->run_modal(shared_frame_ptr());
     switch(result) {
     case 0:

@@ -21,7 +21,7 @@
 #include <gtkmm/iconview.h>
 
 #include "niepce/notifications.h"
-#include "engine/db/library.h"
+#include "engine/db/library.hpp"
 #include "engine/library/thumbnailnotification.h"
 #include "fwk/utils/debug.h"
 

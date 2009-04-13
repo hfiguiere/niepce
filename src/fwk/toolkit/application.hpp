@@ -77,6 +77,7 @@ public:
 
     UndoHistory & undo_history()
         { return m_undo; }
+    UndoTransaction * begin_undo(const std::string & label);
 protected:
     Application(const char *);
     static Application::Ptr m_application; 

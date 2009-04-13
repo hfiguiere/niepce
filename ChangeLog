@@ -1,3 +1,8 @@
+2009-04-13  Hubert Figuiere  <hub@figuiere.net>
+
+	* Make undo easier to use.
+	* Finished implementing labels.
+
 2009-04-12  Hubert Figuiere  <hub@figuiere.net>
 
 	* configure.ac: Add sv locale.

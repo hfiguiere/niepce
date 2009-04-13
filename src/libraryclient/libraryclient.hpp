@@ -1,7 +1,7 @@
 /*
- * niepce - libraryclient/libraryclient.h
+ * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,11 +63,17 @@ namespace libraryclient {
 		library::tid_t countFolder(int id);
 		library::tid_t requestMetadata(int id);
 
-        /** set the metadata */
-        library::tid_t setMetadata(int id, int meta, int value);
+    /** set the metadata */
+    library::tid_t setMetadata(int id, int meta, int value);
 
-        /** tell to process the Xmp update Queue */
-        library::tid_t processXmpUpdateQueue();
+    /** get all the labels */
+    library::tid_t getAllLabels();
+    library::tid_t createLabel(const std::string & s, const std::string & color);
+    /** rename a label */
+    library::tid_t renameLabel(int id, const std::string & new_name);
+
+    /** tell to process the Xmp update Queue */
+    library::tid_t processXmpUpdateQueue();
 
 		/** Import files from a directory
 		 * @param dir the directory

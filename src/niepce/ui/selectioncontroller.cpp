@@ -28,7 +28,7 @@
 #include "fwk/toolkit/command.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "engine/db/metadata.h"
-#include "libraryclient/libraryclient.h"
+#include "libraryclient/libraryclient.hpp"
 #include "niepcewindow.hpp"
 #include "selectioncontroller.hpp"
 
@@ -158,17 +158,12 @@ void SelectionController::rotate(int angle)
 bool SelectionController::_set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
                                         int meta, int old_value, int new_value)
 {
-    fwk::UndoTransaction *undo = new fwk::UndoTransaction(undo_label);
-    fwk::Application::app()->undo_history().add(undo);
-    fwk::Command *cmd = new fwk::Command;
-    cmd->redo = boost::bind(&libraryclient::LibraryClient::setMetadata,
-                            getLibraryClient(), file->id(), 
-                            meta, new_value);
-    cmd->undo = boost::bind(&libraryclient::LibraryClient::setMetadata,
-                            getLibraryClient(), file->id(),
-                            meta, old_value);
-    undo->add(cmd);
-    undo->redo();
+    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
+    undo->new_command(boost::bind(&libraryclient::LibraryClient::setMetadata,
+                                  getLibraryClient(), file->id(), meta, new_value),
+                      boost::bind(&libraryclient::LibraryClient::setMetadata,
+                                  getLibraryClient(), file->id(), meta, old_value));
+    undo->execute();
     return true;
 }
 

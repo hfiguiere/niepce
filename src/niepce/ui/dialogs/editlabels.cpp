@@ -18,20 +18,28 @@
  */
 
 
+#include <boost/bind.hpp>
 #include <boost/format.hpp>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
+#include "fwk/utils/debug.h"
 #include "editlabels.hpp"
+#include "libraryclient/libraryclient.hpp"
+#include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/undo.hpp"
 
+
+using libraryclient::LibraryClient;
 
 namespace ui {
 
-EditLabels::EditLabels(const eng::Label::List & labels)
+EditLabels::EditLabels(const eng::Label::List & labels, const LibraryClient::Ptr & libclient)
     : fwk::Dialog(GLADEDIR"editlabels.ui", "editLabels")
     , m_labels(labels)
+    , m_lib_client(libclient)
 {
 }
 
@@ -52,16 +60,25 @@ void EditLabels::setup_widget()
         Gtk::Entry *labelentry;
         _builder->get_widget(str(boost::format(color_fmt) % (i+1)), colorlbl);
         _builder->get_widget(str(boost::format(value_fmt) % (i+1)), labelentry);
+        DBG_ASSERT(labelentry, "couldn't find label");
         labelentry->set_text(m_labels[i]->label());
         labelentry->signal_changed().connect(
-            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_name_changed), labelentry, i+1));
+            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_name_changed), labelentry, i));
     }
 }
 
 
 void EditLabels::label_name_changed(Gtk::Entry *w, size_t idx)
 {
-    m_labels[idx]->set_label(w->get_text());
+    std::string current_name = m_labels[idx]->label();
+    std::string new_name = w->get_text();
+    DBG_OUT("setting to %s", new_name.c_str());
+    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(_("Change Label name"));
+    undo->new_command(boost::bind(&libraryclient::LibraryClient::renameLabel, 
+                                  m_lib_client, m_labels[idx]->id(), new_name),
+                      boost::bind(&libraryclient::LibraryClient::renameLabel, 
+                                  m_lib_client, m_labels[idx]->id(), current_name));
+    undo->execute();
 }
 
 /*

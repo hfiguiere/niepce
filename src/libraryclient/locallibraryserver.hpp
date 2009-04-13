@@ -25,8 +25,8 @@
 #define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
 #include "fwk/utils/worker.h"
-#include "engine/library/op.h"
-#include "engine/db/library.h"
+#include "engine/library/op.hpp"
+#include "engine/db/library.hpp"
 
 namespace libraryclient {
 
