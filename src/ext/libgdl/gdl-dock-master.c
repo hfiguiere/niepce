@@ -505,7 +505,7 @@ gdl_dock_master_drag_motion (GdlDockItem *item,
         if (GTK_IS_WIDGET (widget)) {
             while (widget && (!GDL_IS_DOCK (widget) || 
 	           GDL_DOCK_OBJECT_GET_MASTER (widget) != master))
-                widget = widget->parent;
+                widget = gtk_widget_get_parent(widget);
             if (widget) {
                 gint win_w, win_h;
                 

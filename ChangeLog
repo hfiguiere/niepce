@@ -1,5 +1,8 @@
 2009-04-14  Hubert Figuiere  <hub@figuiere.net>
 
+	* Use accessors instead of struct field on GdlDock
+	in planning for GSEAL_ENABLE.
+
 	* fwk::Dialog::add_header() does the markup.
 
 	* Edited labels only update when closing the dialog.
