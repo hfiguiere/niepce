@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include <boost/format.hpp>
 #include "libview/header.hh"
 
 #include "dialog.hpp"
@@ -26,12 +28,13 @@ namespace fwk {
 
 
 
-void Dialog::add_header(const Glib::ustring & label)
+void Dialog::add_header(const std::string & label)
 {
     Gtk::VBox * vbox;
 
     builder()->get_widget("dialog-vbox1", vbox);
-    view::Header * header = manage(new view::Header(label));
+    std::string markup = str(boost::format("<span size=\"x-large\">%1%</span>") % label);
+    view::Header * header = manage(new view::Header(markup));
     header->show();
     vbox->pack_start(*header, false, true);
 }

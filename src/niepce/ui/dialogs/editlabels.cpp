@@ -51,7 +51,7 @@ void EditLabels::setup_widget()
 {
     Glib::RefPtr<Gtk::Builder> _builder = builder();
 
-    add_header(_("<b>Edit Labels</b>"));
+    add_header(_("Edit Labels"));
 
     const char * color_fmt = "color%1%";
     const char * value_fmt = "value%1%";

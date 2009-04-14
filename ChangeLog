@@ -1,5 +1,7 @@
 2009-04-14  Hubert Figuiere  <hub@figuiere.net>
 
+	* fwk::Dialog::add_header() does the markup.
+
 	* Edited labels only update when closing the dialog.
 
 2009-04-13  Hubert Figuiere  <hub@figuiere.net>
