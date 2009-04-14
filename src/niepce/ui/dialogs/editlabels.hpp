@@ -21,6 +21,9 @@
 #ifndef __UI_EDITLABELS_HPP__
 #define __UI_EDITLABELS_HPP__
 
+#include <tr1/array>
+
+#include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
 #include "engine/db/label.hpp"
@@ -39,8 +42,11 @@ public:
 
     virtual void setup_widget();
 private:
-    void label_name_changed(Gtk::Entry *, size_t idx);
-    eng::Label::List m_labels;
+    void label_name_changed(size_t idx);
+    void update_labels(int /*response*/);
+    eng::Label::List                  m_labels;
+    std::tr1::array<Gtk::Entry*, 5>   m_entries;
+    std::tr1::array<bool, 5>          m_status;
     libraryclient::LibraryClient::Ptr m_lib_client;
 };
 

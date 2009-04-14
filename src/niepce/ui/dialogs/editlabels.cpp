@@ -18,6 +18,8 @@
  */
 
 
+#include <algorithm>
+
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
 
@@ -41,6 +43,7 @@ EditLabels::EditLabels(const eng::Label::List & labels, const LibraryClient::Ptr
     , m_labels(labels)
     , m_lib_client(libclient)
 {
+    std::fill(m_status.begin(), m_status.end(), false);
 }
 
 
@@ -62,23 +65,40 @@ void EditLabels::setup_widget()
         _builder->get_widget(str(boost::format(value_fmt) % (i+1)), labelentry);
         DBG_ASSERT(labelentry, "couldn't find label");
         labelentry->set_text(m_labels[i]->label());
-        labelentry->signal_changed().connect(
-            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_name_changed), labelentry, i));
+        labelentry->property_text().signal_changed().connect(
+            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_name_changed), i));
+        m_entries[i] = labelentry;
     }
+    gtkDialog().signal_response().connect(sigc::mem_fun(*this, &EditLabels::update_labels));
 }
 
 
-void EditLabels::label_name_changed(Gtk::Entry *w, size_t idx)
+void EditLabels::label_name_changed(size_t idx)
 {
-    std::string current_name = m_labels[idx]->label();
-    std::string new_name = w->get_text();
-    DBG_OUT("setting to %s", new_name.c_str());
-    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(_("Change Label name"));
-    undo->new_command(boost::bind(&libraryclient::LibraryClient::renameLabel, 
-                                  m_lib_client, m_labels[idx]->id(), new_name),
-                      boost::bind(&libraryclient::LibraryClient::renameLabel, 
-                                  m_lib_client, m_labels[idx]->id(), current_name));
-    undo->execute();
+    m_status[idx] = true;
+}
+
+
+void EditLabels::update_labels(int /*response*/)
+{
+    fwk::UndoTransaction *undo = NULL;
+    for(int i = 0; i < 5; i++) {
+        if(m_status[i]) {
+            DBG_OUT("updating label %d", i);
+            std::string current_name = m_labels[i]->label();
+            std::string new_name = m_entries[i]->get_text();
+            if(!undo) {
+                undo = fwk::Application::app()->begin_undo(_("Change Label name"));
+            }
+            undo->new_command(boost::bind(&libraryclient::LibraryClient::renameLabel, 
+                                          m_lib_client, m_labels[i]->id(), new_name),
+                              boost::bind(&libraryclient::LibraryClient::renameLabel, 
+                                          m_lib_client, m_labels[i]->id(), current_name));
+        }
+    }
+    if(undo) {
+        undo->execute();
+    }
 }
 
 /*

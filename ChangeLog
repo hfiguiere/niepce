@@ -1,3 +1,7 @@
+2009-04-14  Hubert Figuiere  <hub@figuiere.net>
+
+	* Edited labels only update when closing the dialog.
+
 2009-04-13  Hubert Figuiere  <hub@figuiere.net>
 
 	* Make undo easier to use.
