@@ -159,10 +159,12 @@ bool SelectionController::_set_metadata(const std::string & undo_label, const db
                                         int meta, int old_value, int new_value)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
-    undo->new_command(boost::bind(&libraryclient::LibraryClient::setMetadata,
-                                  getLibraryClient(), file->id(), meta, new_value),
-                      boost::bind(&libraryclient::LibraryClient::setMetadata,
-                                  getLibraryClient(), file->id(), meta, old_value));
+    undo->new_command<void>(
+        boost::bind(&libraryclient::LibraryClient::setMetadata,
+                    getLibraryClient(), file->id(), meta, new_value),
+        boost::bind(&libraryclient::LibraryClient::setMetadata,
+                    getLibraryClient(), file->id(), meta, old_value)
+        );
     undo->execute();
     return true;
 }

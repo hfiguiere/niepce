@@ -50,7 +50,9 @@ public:
 
     library::tid_t getAllLabels();
     library::tid_t createLabel(const std::string & s, const std::string & color);
-    library::tid_t renameLabel(int id, const std::string & new_name);
+    library::tid_t deleteLabel(int id);
+    library::tid_t updateLabel(int id, const std::string & new_name,
+                               const std::string & new_color);
 
     library::tid_t processXmpUpdateQueue();
 

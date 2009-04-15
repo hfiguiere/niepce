@@ -38,7 +38,9 @@ class UndoTransaction
 public:
     UndoTransaction(const std::string & n);
     ~UndoTransaction();
-    Command *new_command(const Command::Function &, const Command::Function &);
+    template <typename _RetType>
+    Command *new_command(const typename CommandWithArg<_RetType>::RedoFunction &,
+                         const typename CommandWithArg<_RetType>::UndoFunction &);
     void undo();
     void redo();
     /** execute the transaction after adding it. (calls %undo) */
@@ -53,6 +55,16 @@ private:
     std::list<Command *> m_operations;
     std::string m_name;
 };
+
+template <typename _ArgType>
+Command *UndoTransaction::new_command(const typename CommandWithArg<_ArgType>::RedoFunction & _redo,
+                                      const typename CommandWithArg<_ArgType>::UndoFunction & _undo)
+{
+    Command *cmd = new CommandWithArg<_ArgType>(_redo, _undo);
+    add(cmd);
+    return cmd;
+}
+
 
 class UndoHistory
     : public boost::noncopyable

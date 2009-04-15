@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/gdkutils.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,5 +73,21 @@ namespace fwk {
 		}
 		return pixbuf;
 	}
+
+
+  Gdk::Color rgbcolor_to_gdkcolor(const fwk::RgbColor & color)
+  {
+    Gdk::Color gdkcolor;
+    gdkcolor.set_rgb(color[0], color[1], color[2]);
+    return gdkcolor;
+  }
+
+
+  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::Color & color)
+  {
+    fwk::RgbColor rgbcolor(color.get_red(), color.get_green(), color.get_blue());
+    return rgbcolor;
+  }
+
 
 }

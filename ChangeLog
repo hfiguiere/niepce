@@ -1,3 +1,8 @@
+2009-04-15  Hubert Figuiere  <hub@figuiere.net>
+
+	* Handle label color. Create a new label if need. Implement
+	undo/redo for label creation.
+
 2009-04-14  Hubert Figuiere  <hub@figuiere.net>
 
 	* Use accessors instead of struct field on GdlDock

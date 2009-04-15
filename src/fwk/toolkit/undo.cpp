@@ -38,15 +38,6 @@ UndoTransaction::~UndoTransaction()
                   boost::bind(&boost::checked_delete<Command>, _1));
 }
 
-Command *UndoTransaction::new_command(const Command::Function & _redo, 
-                                      const Command::Function & _undo)
-{
-    fwk::Command *cmd = new fwk::Command;
-    cmd->redo = _redo;
-    cmd->undo = _undo;
-    add(cmd);
-    return cmd;
-}
 
 void UndoTransaction::add(Command * cmd)
 {

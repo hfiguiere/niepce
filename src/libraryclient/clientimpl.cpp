@@ -139,11 +139,21 @@ tid_t ClientImpl::createLabel(const std::string & s, const std::string & color)
     return id;    
 }
 
-tid_t ClientImpl::renameLabel(int label_id, const std::string & new_name)
+tid_t ClientImpl::deleteLabel(int label_id)
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdRenameLabel,
-                                      _1, label_id, new_name)));
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdDeleteLabel,
+                                      _1, label_id)));
+    m_localLibrary->schedule(op);
+    return id;    
+}
+
+tid_t ClientImpl::updateLabel(int label_id, const std::string & new_name,
+                              const std::string & new_color)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, boost::bind(&Commands::cmdUpdateLabel,
+                                      _1, label_id, new_name, new_color)));
     m_localLibrary->schedule(op);
     return id;    
 }

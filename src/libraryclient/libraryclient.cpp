@@ -102,9 +102,16 @@ library::tid_t LibraryClient::createLabel(const std::string & s, const std::stri
 }
 
 
-library::tid_t LibraryClient::renameLabel(int id, const std::string & new_name)
+library::tid_t LibraryClient::deleteLabel(int id)
 {
-    return m_pImpl->renameLabel(id, new_name);
+    return m_pImpl->deleteLabel(id);
+}
+
+
+library::tid_t LibraryClient::updateLabel(int id, const std::string & new_name,
+                                          const std::string & new_color)
+{
+    return m_pImpl->updateLabel(id, new_name, new_color);
 }
 
 library::tid_t LibraryClient::processXmpUpdateQueue()

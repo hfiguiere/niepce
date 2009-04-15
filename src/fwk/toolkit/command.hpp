@@ -29,12 +29,66 @@ class Command
 {
 public:
     typedef boost::function<void (void)> Function;
-    Function undo;
-    Function redo;
+    virtual void undo() = 0;
+    virtual void redo() = 0;
+};
+
+template <typename _ArgType>
+class CommandWithArg
+    : public Command
+{
+public:
+    typedef boost::function<void (_ArgType)> UndoFunction;
+    typedef boost::function<_ArgType (void)> RedoFunction;
+    CommandWithArg(const RedoFunction & _redo,
+                   const UndoFunction & _undo)
+        : m_redo(_redo)
+        , m_undo(_undo)
+        {
+        }
+        
+    virtual void undo()
+        {
+            m_undo(m_argstorage);
+        }
+    virtual void redo()
+        {
+            m_argstorage = m_redo();
+        }
+private:
+    RedoFunction m_redo;
+    UndoFunction m_undo;
+    _ArgType     m_argstorage;
+};
+
+template <>
+class CommandWithArg<void>
+    : public Command
+{
+public:
+    typedef boost::function<void (void)> UndoFunction;
+    typedef boost::function<void (void)> RedoFunction;
+    CommandWithArg(const RedoFunction & _redo,
+                   const UndoFunction & _undo)
+        : m_redo(_redo)
+        , m_undo(_undo)
+        {
+        }
+        
+    virtual void undo()
+        {
+            m_undo();
+        }
+    virtual void redo()
+        {
+            m_redo();
+        }
+private:
+    RedoFunction m_redo;
+    UndoFunction m_undo;
 };
 
 }
-
 #endif
 
 /*

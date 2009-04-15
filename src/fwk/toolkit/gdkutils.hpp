@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/toolkit/gdkutils.h
+ * niepce - fwk/toolkit/gdkutils.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <gdkmm/pixbuf.h>
 
+#include "fwk/base/color.hpp"
 
 namespace fwk {
 	
@@ -34,6 +35,10 @@ namespace fwk {
 	/** Rotate a pixbuf following the Exif rotation (may mirror too) */
 	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_exif_rotate(const Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
 													int exif_orientation);
+
+  Gdk::Color rgbcolor_to_gdkcolor(const fwk::RgbColor & color);
+  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::Color & color);
+
 }
 
 #endif

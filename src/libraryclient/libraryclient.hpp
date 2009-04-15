@@ -69,8 +69,10 @@ namespace libraryclient {
     /** get all the labels */
     library::tid_t getAllLabels();
     library::tid_t createLabel(const std::string & s, const std::string & color);
-    /** rename a label */
-    library::tid_t renameLabel(int id, const std::string & new_name);
+    library::tid_t deleteLabel(int id);
+    /** update a label */
+    library::tid_t updateLabel(int id, const std::string & new_name, 
+                               const std::string & new_color);
 
     /** tell to process the Xmp update Queue */
     library::tid_t processXmpUpdateQueue();

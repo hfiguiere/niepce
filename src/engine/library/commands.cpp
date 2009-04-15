@@ -149,11 +149,22 @@ void Commands::cmdCreateLabel(const db::Library::Ptr & lib,
     }
 }
 
-void Commands::cmdRenameLabel(const db::Library::Ptr & lib,
-                               int label_id, const std::string & name)
+
+void Commands::cmdDeleteLabel(const db::Library::Ptr & lib,
+                              int label_id)
 {
-    lib->renameLabel(label_id, name);
-    lib->notify(Library::NOTIFY_LABEL_CHANGED, boost::any(label_id));
+    lib->deleteLabel(label_id);
+    lib->notify(Library::NOTIFY_LABEL_DELETED, boost::any(label_id));
+}
+
+
+void Commands::cmdUpdateLabel(const db::Library::Ptr & lib,
+                              int label_id, const std::string & name,
+                              const std::string & color)
+{
+    lib->updateLabel(label_id, name, color);
+    eng::Label::Ptr label(new eng::Label(label_id, name, color));
+    lib->notify(Library::NOTIFY_LABEL_CHANGED, boost::any(label));
 }
 
 

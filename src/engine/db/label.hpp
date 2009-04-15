@@ -54,6 +54,8 @@ public:
         { m_label = l; }
     const fwk::RgbColor color() const
         { return m_color; }
+    void set_color(const fwk::RgbColor & c)
+        { m_color = c; }
 private:
     int              m_id;
     std::string      m_label;

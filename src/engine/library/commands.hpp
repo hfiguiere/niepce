@@ -56,8 +56,11 @@ public:
     static void cmdListAllLabels(const db::Library::Ptr & lib);
     static void cmdCreateLabel(const db::Library::Ptr & lib, const std::string & s, 
                                const std::string & color);
-    static void cmdRenameLabel(const db::Library::Ptr & lib,
-                               int label_id, const std::string & name);
+    static void cmdDeleteLabel(const db::Library::Ptr & lib,
+                               int label_id);
+    static void cmdUpdateLabel(const db::Library::Ptr & lib,
+                               int label_id, const std::string & name,
+                               const std::string & color);
 		static void cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib);
 };
 

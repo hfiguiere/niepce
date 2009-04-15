@@ -800,11 +800,27 @@ int Library::addLabel(const std::string & name, const fwk::RgbColor & c)
 }
 
 
-bool Library::renameLabel(int label_id, const std::string & name)
+bool Library::updateLabel(int label_id, const std::string & name, const std::string & color)
 {
-    SQLStatement sql(boost::format("UPDATE labels SET name='%2%'"
+    SQLStatement sql(boost::format("UPDATE labels SET name='%2%', color='%3%'"
                                    " WHERE id='%1%';") 
-                     % label_id % name);
+                     % label_id % name % color);
+    try {
+        return m_dbdrv->execute_statement(sql);
+    }
+    catch(utils::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return false;
+}
+
+
+bool Library::deleteLabel(int label_id)
+{
+    
+    SQLStatement sql(boost::format("DELETE FROM labels "
+                                   " WHERE id='%1%';") % label_id);
     try {
         return m_dbdrv->execute_statement(sql);
     }

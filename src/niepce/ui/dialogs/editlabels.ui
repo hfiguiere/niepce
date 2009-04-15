@@ -168,13 +168,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color1">
+                      <object class="GtkColorButton" id="colorbutton1">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="color">#000000000000</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color2">
+                      <object class="GtkColorButton" id="colorbutton2">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="color">#000000000000</property>
                       </object>
                       <packing>
                         <property name="top_attach">1</property>
@@ -182,8 +188,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color3">
+                      <object class="GtkColorButton" id="colorbutton3">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="color">#000000000000</property>
                       </object>
                       <packing>
                         <property name="top_attach">2</property>
@@ -191,8 +200,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color4">
+                      <object class="GtkColorButton" id="colorbutton4">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="color">#000000000000</property>
                       </object>
                       <packing>
                         <property name="top_attach">3</property>
@@ -200,8 +212,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color5">
+                      <object class="GtkColorButton" id="colorbutton5">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="color">#000000000000</property>
                       </object>
                       <packing>
                         <property name="top_attach">4</property>

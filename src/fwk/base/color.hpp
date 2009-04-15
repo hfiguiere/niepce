@@ -27,11 +27,11 @@
 
 namespace fwk {
 
-  /** A RgbColor tuple (3 components, 8bpp)
+  /** A RgbColor tuple (3 components, 16bpp)
    *  To be used only for UI.
    */
   class RgbColor
-    : public std::tr1::array<uint8_t, 3>
+    : public std::tr1::array<uint16_t, 3>
   {
   public:
     RgbColor(value_type r = 0, value_type g = 0, value_type b = 0);

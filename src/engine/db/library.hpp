@@ -67,6 +67,7 @@ public:
         NOTIFY_METADATA_QUERIED,
         NOTIFY_METADATA_CHANGED,
         NOTIFY_LABEL_CHANGED,
+        NOTIFY_LABEL_DELETED,
         NOTIFY_XMP_NEEDS_UPDATE,
         NOTIFY_FOLDER_COUNTED
 		} NotifyType;
@@ -168,7 +169,8 @@ public:
 		void getAllLabels(const eng::Label::ListPtr & l);
     int addLabel(const std::string & name, const std::string & color);
     int addLabel(const std::string & name, const fwk::RgbColor & c);
-    bool renameLabel(int label_id, const std::string & name);
+    bool updateLabel(int label_id, const std::string & name, const std::string & color);
+    bool deleteLabel(int label_id);
 
     /** Trigger the processing of the XMP update queue */
     bool processXmpUpdateQueue();

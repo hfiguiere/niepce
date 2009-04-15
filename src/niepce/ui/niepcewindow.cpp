@@ -495,10 +495,10 @@ void NiepceWindow::on_preferences()
 
 void NiepceWindow::create_initial_labels()
 {
-    m_libClient->createLabel(_("Label 1"), "");
-    m_libClient->createLabel(_("Label 2"), "");
-    m_libClient->createLabel(_("Label 3"), "");
-    m_libClient->createLabel(_("Label 4"), "");
+    m_libClient->createLabel(_("Label 1"), "255 0 0");
+    m_libClient->createLabel(_("Label 2"), "0 255 0");
+    m_libClient->createLabel(_("Label 3"), "0 0 255");
+    m_libClient->createLabel(_("Label 4"), "100 100 100");
     m_libClient->createLabel(_("Label 5"), "");
 }
 
@@ -523,7 +523,37 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
                 m_labels.push_back(*iter);
             }
             break;
+        }
+        case db::Library::NOTIFY_LABEL_CHANGED:
+        {
+            eng::Label::Ptr & l 
+                = boost::any_cast<eng::Label::Ptr &>(ln.param);
+            // TODO: will work as long as we have 5 labels or something.
+            for(eng::Label::List::iterator iter = m_labels.begin();
+                iter != m_labels.end(); ++iter) {
+
+                if((*iter)->id() == l->id()) {
+                    (*iter)->set_label(l->label());
+                    (*iter)->set_color(l->color());
+                }
             }
+            break;
+        }
+        case db::Library::NOTIFY_LABEL_DELETED:
+        {
+            int id = boost::any_cast<int>(ln.param);
+            // TODO: will work as long as we have 5 labels or something.
+            for(eng::Label::List::iterator iter = m_labels.begin();
+                iter != m_labels.end(); ++iter) {
+
+                if((*iter)->id() == id) {
+                    DBG_OUT("remove label %d", id);
+                    iter = m_labels.erase(iter);
+                    break;
+                }
+            }
+            break;
+        }
         default:
             break;
         }
@@ -544,18 +574,7 @@ void NiepceWindow::on_action_edit_labels()
     DBG_OUT("edit labels");
     // get the labels.
     EditLabels::Ptr dlg(new EditLabels(get_labels(), getLibraryClient()));
-    int result = dlg->run_modal(shared_frame_ptr());
-    switch(result) {
-    case 0:
-        // ok
-        // update the labels.
-        break;
-    case 1:
-        // cancel
-        break;
-    default:
-        break;
-    }
+    dlg->run_modal(shared_frame_ptr());
 }
 
 void NiepceWindow::set_title(const std::string & title)
