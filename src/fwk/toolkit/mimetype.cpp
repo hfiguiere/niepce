@@ -20,6 +20,7 @@
 #include <string>
 
 #include <boost/version.hpp>
+#include <boost/filesystem/convenience.hpp>
 
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 

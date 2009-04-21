@@ -1,3 +1,7 @@
+2009-04-21  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/fwk/toolkit/mimetype.cpp: Fix a build breakage.
+
 2009-04-15  Hubert Figuiere  <hub@figuiere.net>
 
 	* Handle label color. Create a new label if need. Implement
