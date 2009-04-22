@@ -18,6 +18,8 @@
  */
 
 
+#include <boost/version.hpp>
+#include <boost/filesystem/convenience.hpp>
 
 #include "filebundle.hpp"
 #include "fwk/utils/debug.h"
@@ -69,7 +71,12 @@ FileBundle::filter_bundles(const utils::FileList::Ptr & files)
     for(utils::FileList::const_iterator iter = files->begin();
         iter != files->end(); ++iter)
     {
-        std::string basename = iter->stem();
+        std::string basename;
+#if BOOST_VERSION >= 103600
+        basename = iter->stem();
+#else
+        basename = boost::filesystem::basename(*iter);
+#endif
         if(basename != current_base) {
             current_base = basename;
             current_bundle = FileBundle::Ptr(new FileBundle());

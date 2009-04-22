@@ -1,5 +1,8 @@
 2009-04-21  Hubert Figuiere  <hub@figuiere.net>
 
+	* src/engine/db/filebundle.cpp: path::stem() is not
+	available on older version of boost.
+
 	* Initialize gettext properly.
 
 	* src/fwk/toolkit/mimetype.cpp: Fix a build breakage.
