@@ -21,6 +21,7 @@
 #include <boost/rational.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include "debug.h"
 #include "fractions.hpp"
 
 namespace fwk {
@@ -28,8 +29,16 @@ namespace fwk {
 
 double fraction_to_decimal(const std::string & value)
 {
-    boost::rational<int> r = boost::lexical_cast<boost::rational<int> >(value);
-    return boost::rational_cast<double>(r);
+    double v = 0.0;
+
+    try {
+        boost::rational<int> r = boost::lexical_cast<boost::rational<int> >(value);
+        v = boost::rational_cast<double>(r);
+    }
+    catch(const std::exception & e) {
+        ERR_OUT("unable to cast fraction '%s': %s", value.c_str(), e.what());
+    }
+    return v;
 }
 
 
