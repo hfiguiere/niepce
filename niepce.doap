@@ -18,7 +18,7 @@
   <maintainer>
     <foaf:Person>
       <foaf:name>Hubert Figuiere</foaf:name>
-      <foaf:mbox rdf:resource="hub@figuiere.net" />
+      <foaf:mbox rdf:resource="mailto:hub@figuiere.net" />
       <gnome:userid>hub</gnome:userid>
     </foaf:Person>
   </maintainer>
