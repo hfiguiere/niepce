@@ -22,6 +22,8 @@
 #ifndef __FWK_BASE_COLOR_HPP_
 #define __FWK_BASE_COLOR_HPP_
 
+#include <stdint.h>
+
 #include <string>
 #include <tr1/array>
 
