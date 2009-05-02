@@ -23,7 +23,7 @@
 #define __NIEPCE_UTILS_MTQUEUE_H__
 
 #include <deque>
-#include <boost/thread/recursive_mutex.hpp>
+#include <glibmm/thread.h>
 
 namespace utils {
 
@@ -36,8 +36,8 @@ namespace utils {
 	class MtQueue
 	{
 	public:
-		typedef boost::recursive_mutex mutex_t;
-		typedef T                      value_type;
+		typedef Glib::RecMutex mutex_t;
+		typedef T              value_type;
 
 		MtQueue();
 		virtual ~MtQueue();
@@ -64,13 +64,13 @@ namespace utils {
 	template < class T >
 	MtQueue<T>::~MtQueue()
 	{
-		mutex_t::scoped_lock lock(m_mutex);		
+		mutex_t::Lock lock(m_mutex);		
 	}
 
 	template < class T > void
 	MtQueue<T>::add(const T &op)
 	{
-		mutex_t::scoped_lock lock(m_mutex);
+		mutex_t::Lock lock(m_mutex);
 		m_queue.push_back(op);
 	}
 
@@ -79,7 +79,7 @@ namespace utils {
 	T MtQueue<T>::pop()
 	{
 		T elem;
-		mutex_t::scoped_lock lock(m_mutex);		
+		mutex_t::Lock lock(m_mutex);		
 		elem = m_queue.front();
 		m_queue.pop_front();
 		return elem;
@@ -89,14 +89,14 @@ namespace utils {
 	template < class T >
 	bool MtQueue<T>::empty() const
 	{
-		mutex_t::scoped_lock lock(m_mutex);
+		mutex_t::Lock lock(m_mutex);
 		return m_queue.empty();
 	}
 
 	template < class T >
 	void MtQueue<T>::clear() 
 	{
-		mutex_t::scoped_lock lock(m_mutex);
+		mutex_t::Lock lock(m_mutex);
 		m_queue.clear();
 	}
 }

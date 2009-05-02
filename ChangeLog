@@ -1,3 +1,7 @@
+2009-05-02  Hubert Figuiere  <hub@figuiere.net>
+
+	* Remove boost::thread and use Glibmm instead.
+
 2009-05-01  Hubert Figuiere  <hub@figuiere.net>
 
 	* Gtk header cleanup. See 

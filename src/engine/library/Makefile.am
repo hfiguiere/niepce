@@ -11,7 +11,7 @@ TEST_LIBS =  \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
-	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
+	@LIBGLIBMM_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@
 
 noinst_LIBRARIES = libniepcelibrary.a

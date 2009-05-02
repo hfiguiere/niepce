@@ -84,7 +84,7 @@ void Library::notify(NotifyType t, const boost::any & param)
         DBG_OUT("notif");
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_LIB));
-        fwk::Notification::mutex_t::scoped_lock lock(n->mutex());
+        fwk::Notification::mutex_t::Lock lock(n->mutex());
         LibNotification ln;
         ln.type = t;
         ln.param = param;

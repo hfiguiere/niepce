@@ -26,6 +26,7 @@
 #include <boost/bind.hpp>
 #include <boost/test/minimal.hpp>
 
+#include <glibmm/thread.h>
 
 using namespace library;
 using namespace libraryclient;
@@ -38,6 +39,9 @@ void foo(const db::Library::Ptr &)
 //BOOST_AUTO_TEST_CASE(worker_test)
 int test_main(int, char *[])
 {
+  if(!Glib::thread_supported()) 
+    Glib::thread_init();
+
 	char templ[] = "/tmp/niepce-tmpXXXXXX";
 	char *ptempl =  mkdtemp(templ);
 	BOOST_CHECK(ptempl);

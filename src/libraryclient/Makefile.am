@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src @EXEMPI_CFLAGS@
+INCLUDES = -I$(top_srcdir)/src @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
 
 noinst_LIBRARIES = liblibraryclient.a
 
@@ -14,7 +14,7 @@ TEST_LIBS =  \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/libfwk.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
-	@BOOST_THREAD_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
+	@LIBGLIBMM_LIBS@ @BOOST_FILESYSTEM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
 	@EXEMPI_LIBS@ @GNOMEVFS_LIBS@
 

@@ -79,7 +79,7 @@ namespace fwk {
 	{
 		Notification::Ptr notif( p->m_notificationQueue.pop() );
 
-		Notification::mutex_t::scoped_lock lock(notif->mutex());
+		Notification::mutex_t::Lock lock(notif->mutex());
 		const Priv::SubscriberList & subscriber_list(p->m_subscribers[notif->type()]);
 		std::for_each(subscriber_list.begin(), subscriber_list.end(), 
 					  bind(boost::apply<void>(), _1, boost::ref(notif)));

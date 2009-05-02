@@ -18,8 +18,6 @@
  */
 
 
-#include <boost/bind.hpp>
-
 #include "thread.h"
 
 namespace utils {
@@ -53,8 +51,7 @@ namespace utils {
 
 	void Thread::start()
 	{
-		m_thrd = m_threads.create_thread(
-			boost::bind(&Thread::main, this));
+		m_thrd = Glib::Thread::create(sigc::mem_fun(*this, &Thread::main), true);
 // TODO add this thread to a manager for task management.
 //		thrd->join();
 	}

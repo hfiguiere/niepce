@@ -28,7 +28,8 @@
 #define __NEMIVER_SQLITE_CNX_DRV_H__
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/thread/recursive_mutex.hpp>
+
+#include <glibmm/thread.h>
 
 #include "fwk/utils/db/iconnectiondriver.h"
 
@@ -43,7 +44,7 @@ class SqliteCnxDrv: public db::IConnectionDriver {
     struct Priv ;
     friend class SqliteCnxMgrDrv ;
     boost::scoped_ptr<Priv> m_priv ;
-    mutable boost::recursive_mutex m_mutex;
+    mutable Glib::RecMutex m_mutex;
 
     friend void boost::checked_delete<SqliteCnxDrv>(SqliteCnxDrv * x);
 

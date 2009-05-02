@@ -2,7 +2,7 @@
 
 SUBDIRS = 
 
-INCLUDES = -I$(top_srcdir)/src/  @EXEMPI_CFLAGS@
+INCLUDES = -I$(top_srcdir)/src/  @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
 
 TESTS = test_library test_filebundle
 
@@ -14,7 +14,7 @@ TEST_LIBS =  \
 	@LIBGTKMM_LIBS@ @GNOMEVFS_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@ \
-	@BOOST_THREAD_LIBS@ \
+	@LIBGLIBMM_LIBS@ \
 	@SQLITE3_LIBS@ @EXEMPI_LIBS@
 
 check_PROGRAMS = test_library test_filebundle

@@ -23,7 +23,8 @@
 
 
 #include <string>
-#include <boost/thread.hpp>
+
+#include <glibmm/thread.h>
 
 
 namespace utils {
@@ -43,8 +44,7 @@ namespace utils {
 		virtual void main() = 0;
 		volatile bool m_terminated;
 	private:
-		boost::thread *       m_thrd;
-		boost::thread_group   m_threads;
+    Glib::Thread *       m_thrd;
 	};
 
 }

@@ -26,6 +26,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <glibmm/i18n.h>
+#include <glibmm/thread.h>
 
 #include "fwk/utils/exempi.h"
 #include "xmp.h"
@@ -46,7 +47,10 @@ int main(int argc, char ** argv)
 	bfs::path::default_name_check(&bfs::native);
 
 	ExempiManager ex_manager(niepce::xmp_namespaces);
-	
+
+  if(!Glib::thread_supported()) 
+    Glib::thread_init();
+
 	return fwk::Application::main(
 		boost::bind(&ui::NiepceApplication::create),
 		argc, argv);

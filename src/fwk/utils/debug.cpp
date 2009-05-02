@@ -34,7 +34,7 @@
 #define NDEBUG _SAVENDEBUG
 #endif
 
-#include <boost/thread/recursive_mutex.hpp>
+#include <glibmm/thread.h>
 
 #include "debug.h"
 
@@ -107,8 +107,8 @@ namespace utils {
 	static void _vprint(const char *prefix, const char *fmt, 
 							const char* func,	va_list marker)
 	{
-		static boost::recursive_mutex mutex;
-		boost::recursive_mutex::scoped_lock lock(mutex);
+		static Glib::RecMutex mutex;
+    Glib::RecMutex::Lock lock(mutex);
 		char buf[128];
 		snprintf(buf, 128, "(%d) ", (int)pthread_self());
 		fwrite(buf, 1, strlen(buf), stderr);

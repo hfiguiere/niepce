@@ -26,7 +26,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
-#include <boost/thread/recursive_mutex.hpp>
+
+#include <glibmm/thread.h>
 
 namespace fwk {
 
@@ -35,13 +36,13 @@ namespace fwk {
 	{
 	public:
 		typedef boost::shared_ptr<Notification> Ptr;
-		typedef boost::recursive_mutex mutex_t;
+		typedef Glib::RecMutex mutex_t;
 
 		Notification(int _type)
 			: m_type(_type)
 			{}
 		~Notification()
-			{ mutex_t::scoped_lock lock(m_mutex); }
+			{ mutex_t::Lock lock(m_mutex); }
 		mutex_t & mutex() const
 			{ return m_mutex; }
 		int type() const
