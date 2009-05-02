@@ -18,9 +18,10 @@
  */
 
 
+#include <tr1/array>
+
 #include <boost/any.hpp>
 #include <boost/bind.hpp>
-#include <boost/array.hpp>
 #include <boost/filesystem/path.hpp>
 
 
@@ -124,7 +125,7 @@ void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
 void Commands::cmdSetMetadata(const db::Library::Ptr & lib,
                               int file_id, int meta, int value)
 {
-    boost::array<int, 3> m;
+    std::tr1::array<int, 3> m;
     m[0] = file_id;
     m[1] = meta;
     m[2] = value;

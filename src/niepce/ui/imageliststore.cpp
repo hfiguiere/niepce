@@ -99,7 +99,7 @@ void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
         }
         case db::Library::NOTIFY_METADATA_CHANGED:
         {
-            boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
+            std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
             DBG_OUT("metadata changed");
             Gtk::TreeRow row;
             std::map<int, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m[0]);

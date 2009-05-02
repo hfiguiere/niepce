@@ -22,7 +22,7 @@
 #ifndef __UI_WORKSPACECONTROLLER_H__
 #define __UI_WORKSPACECONTROLLER_H__
 
-#include <boost/array.hpp>
+#include <tr1/array>
 
 #include <glibmm/ustring.h>
 
@@ -112,7 +112,7 @@ namespace ui {
 			ICON_KEYWORD,
 			_ICON_SIZE
 		};
-		boost::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
+		std::tr1::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
 		WorkspaceTreeColumns           m_librarycolumns;
 		Gtk::VBox                      m_vbox;
 		Gtk::Label                     m_label;

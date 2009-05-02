@@ -56,7 +56,7 @@ void LibraryMainViewController::on_lib_notification(const fwk::Notification::Ptr
         case db::Library::NOTIFY_METADATA_CHANGED:
         {
             DBG_OUT("metadata changed");
-            boost::array<int, 3> m = boost::any_cast<boost::array<int, 3> >(ln.param);
+            std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
             if(m[0] == m_metapanecontroller->displayed_file()) {
                 // FIXME: actually just update the metadata
                 getLibraryClient()->requestMetadata(m[0]);

@@ -21,7 +21,7 @@
 #ifndef __UTILS_GEOMETRY_H__
 #define __UTILS_GEOMETRY_H__
 
-#include <boost/array.hpp>
+#include <tr1/array>
 #include <string>
 
 namespace utils {
@@ -69,7 +69,7 @@ private:
         W,
         H			
     };
-    boost::array<int, 4> _r;
+    std::tr1::array<int, 4> _r;
 };
 
 }
