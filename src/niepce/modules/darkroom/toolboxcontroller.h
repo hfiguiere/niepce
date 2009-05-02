@@ -33,7 +33,7 @@ class ToolboxController
     : public fwk::Dockable
 {
 public:
-    typedef boost::shared_ptr<ToolboxController> Ptr;
+    typedef std::tr1::shared_ptr<ToolboxController> Ptr;
     ToolboxController(fwk::Dock &);
     virtual Gtk::Widget * buildWidget();
 };

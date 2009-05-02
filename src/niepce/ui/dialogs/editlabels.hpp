@@ -38,7 +38,7 @@ class EditLabels
     : public fwk::Dialog
 {
 public:
-    typedef boost::shared_ptr<EditLabels> Ptr;
+    typedef std::tr1::shared_ptr<EditLabels> Ptr;
     EditLabels(const eng::Label::List &, const libraryclient::LibraryClient::Ptr &);
 
     virtual void setup_widget();

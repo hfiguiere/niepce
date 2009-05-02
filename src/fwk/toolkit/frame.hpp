@@ -40,7 +40,7 @@ class Frame
 		: public Controller
 {
 public:
-		typedef boost::shared_ptr<Frame> Ptr;
+		typedef std::tr1::shared_ptr<Frame> Ptr;
 
 		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "");
@@ -50,7 +50,7 @@ public:
     /** convenience to return the Frame::Ptr from this */
     Ptr shared_frame_ptr()
         {
-            return boost::static_pointer_cast<Frame>(shared_from_this());
+            return std::tr1::static_pointer_cast<Frame>(shared_from_this());
         }
 
 		Gtk::Window & gtkWindow()

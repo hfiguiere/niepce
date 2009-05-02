@@ -25,8 +25,8 @@
 
 #include <list>
 #include <string>
+#include <tr1/memory>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -39,7 +39,7 @@ namespace utils {
 		: private std::list< boost::filesystem::path >
 	{
 	public:
-		typedef boost::shared_ptr< FileList > Ptr;
+		typedef std::tr1::shared_ptr< FileList > Ptr;
 
 		typedef std::list< boost::filesystem::path >    _impltype_t;
 		typedef _impltype_t::value_type       value_type;

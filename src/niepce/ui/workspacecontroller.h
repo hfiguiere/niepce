@@ -23,7 +23,6 @@
 #define __UI_WORKSPACECONTROLLER_H__
 
 #include <boost/array.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <glibmm/ustring.h>
 
@@ -45,7 +44,7 @@ namespace ui {
 		: public fwk::Controller
 	{
 	public:
-		typedef boost::shared_ptr<WorkspaceController> Ptr;
+		typedef std::tr1::shared_ptr<WorkspaceController> Ptr;
 
 		enum {
 			FOLDERS_ITEM,

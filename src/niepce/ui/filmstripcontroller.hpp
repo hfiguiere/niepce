@@ -38,8 +38,8 @@ class FilmStripController
 	  public IImageSelectable
 {
 public:
-	typedef boost::shared_ptr<FilmStripController> Ptr;
-	typedef boost::weak_ptr<FilmStripController> WeakPtr;
+	typedef std::tr1::shared_ptr<FilmStripController> Ptr;
+	typedef std::tr1::weak_ptr<FilmStripController> WeakPtr;
 
 	FilmStripController(const Glib::RefPtr<ImageListStore> & store);
 

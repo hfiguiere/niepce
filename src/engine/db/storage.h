@@ -21,7 +21,7 @@
 #ifndef __NIEPCE_LIBRARY_STORAGE_H__
 #define __NIEPCE_LIBRARY_STORAGE_H__
 
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 #include "engine/db/keyword.h"
 
@@ -31,7 +31,7 @@ namespace db {
 	class Storage
 	{
 	public:
-		typedef boost::shared_ptr<Storage> Ptr;
+		typedef std::tr1::shared_ptr<Storage> Ptr;
 
 		virtual ~Storage();
 

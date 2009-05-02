@@ -23,16 +23,16 @@
 
 #include <string>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 namespace db {
 
 	class Keyword
 	{
 	public:
-		typedef boost::shared_ptr<Keyword> Ptr;
+		typedef std::tr1::shared_ptr<Keyword> Ptr;
 		typedef std::vector<Ptr> List;
-		typedef boost::shared_ptr<List> ListPtr;
+		typedef std::tr1::shared_ptr<List> ListPtr;
 		typedef std::vector<int> IdList;
 
 		Keyword(int id, const std::string & keyword);

@@ -24,8 +24,7 @@
 
 #include <string>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <tr1/memory>
 #include <boost/any.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -52,7 +51,7 @@ namespace db {
 class Library
 {
 public:
-		typedef boost::shared_ptr<Library> Ptr;
+		typedef std::tr1::shared_ptr<Library> Ptr;
 
 		typedef enum {
         NOTIFY_NONE = 0,
@@ -212,7 +211,7 @@ private:
 		boost::filesystem::path           m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
-		boost::weak_ptr<fwk::NotificationCenter>  m_notif_center;
+		std::tr1::weak_ptr<fwk::NotificationCenter>  m_notif_center;
 		bool                              m_inited;
 };
 

@@ -39,7 +39,7 @@ class MetaDataPaneController
 		: public fwk::Dockable
 {
 public:
-		typedef boost::shared_ptr<MetaDataPaneController> Ptr;
+		typedef std::tr1::shared_ptr<MetaDataPaneController> Ptr;
 		MetaDataPaneController(fwk::Dock &);
     ~MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();

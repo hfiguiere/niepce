@@ -1,7 +1,7 @@
 /*
  * niepce - ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <glibmm/i18n.h>
 
 #include "fwk/utils/autoflag.h"
+#include "fwk/utils/boost.h"
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/undo.hpp"
 #include "fwk/toolkit/command.hpp"
@@ -89,7 +90,7 @@ void SelectionController::selected(IImageSelectable * selectable)
 
 libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
 {
-    return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
 
 inline int SelectionController::get_selection()
@@ -106,7 +107,7 @@ void SelectionController::_selection_move(bool backwards)
     if(iter) {
         if(backwards) {
             if(iter != m_imageliststore->children().begin()) {
-                iter--;
+                --iter;
             }
         }
         else {

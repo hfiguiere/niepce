@@ -24,7 +24,7 @@
 #define __FWK_NOTIFICATIONCENTER_H__
 
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 #include "fwk/toolkit/notification.hpp"
 
@@ -33,7 +33,7 @@ namespace fwk {
 	class NotificationCenter
 	{
 	public:
-		typedef boost::shared_ptr< NotificationCenter > Ptr;
+		typedef std::tr1::shared_ptr< NotificationCenter > Ptr;
 		typedef boost::function< void (Notification::Ptr) > subscriber_t;
 
 		NotificationCenter();

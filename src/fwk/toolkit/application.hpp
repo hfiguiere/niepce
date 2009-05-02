@@ -38,7 +38,7 @@ class Application
     : public Controller
 {
 public:
-    typedef boost::shared_ptr<Application> Ptr;
+    typedef std::tr1::shared_ptr<Application> Ptr;
     typedef std::pair<std::string, std::string> ThemeDesc;
 
     virtual ~Application();

@@ -44,7 +44,7 @@ class ImportDialog
 	: public fwk::Dialog
 {
 public:
-	typedef boost::shared_ptr<ImportDialog> Ptr;
+  typedef std::tr1::shared_ptr<ImportDialog> Ptr;
 
 	ImportDialog();
 

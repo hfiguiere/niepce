@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/image.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,8 +23,7 @@
 #ifndef _NCR_IMAGE_H_
 #define _NCR_IMAGE_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
+#include <tr1/memory>
 #include <boost/filesystem/path.hpp>
 
 #include <gdkmm/pixbuf.h>
@@ -32,10 +31,10 @@
 namespace ncr {
 
 class Image 
-    : public boost::enable_shared_from_this<Image>
+    : public std::tr1::enable_shared_from_this<Image>
 {
 public:
-    typedef boost::shared_ptr<Image> Ptr;
+    typedef std::tr1::shared_ptr<Image> Ptr;
 
     Image();
     virtual ~Image();

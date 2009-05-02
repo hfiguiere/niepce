@@ -27,7 +27,8 @@
 #define __NEMIVER_I_CONNECTION_DRIVER_H__
 
 #include <stdint.h>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
+
 #include <boost/function.hpp>
 
 namespace utils {
@@ -53,7 +54,7 @@ class SQLStatement;
 class IConnectionDriver {
 
 public:
-    typedef boost::shared_ptr<IConnectionDriver> Ptr;
+    typedef std::tr1::shared_ptr<IConnectionDriver> Ptr;
 
     typedef boost::function<void (void)> f0_t;
 

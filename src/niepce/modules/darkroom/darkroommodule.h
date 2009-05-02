@@ -46,7 +46,7 @@ class DarkroomModule
 	: public fwk::Controller
 {
 public:
-	typedef boost::shared_ptr<DarkroomModule> Ptr;
+	typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
 
 	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
                    const libraryclient::LibraryClient::Ptr & client)

@@ -146,7 +146,7 @@ void ImageListStore::on_tnail_notification(const fwk::Notification::Ptr &n)
 
 libraryclient::LibraryClient::Ptr ImageListStore::getLibraryClient()
 {
-    return	boost::dynamic_pointer_cast<NiepceWindow>(m_controller.lock())->getLibraryClient();
+    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_controller.lock())->getLibraryClient();
 }
 
 }

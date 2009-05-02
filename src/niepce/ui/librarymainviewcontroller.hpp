@@ -52,8 +52,8 @@ class LibraryMainViewController
 		  public IImageSelectable
 {
 public:
-		typedef boost::shared_ptr<LibraryMainViewController> Ptr;
-		typedef boost::weak_ptr<LibraryMainViewController> WeakPtr;
+		typedef std::tr1::shared_ptr<LibraryMainViewController> Ptr;
+		typedef std::tr1::weak_ptr<LibraryMainViewController> WeakPtr;
 
 		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions,
                               const Glib::RefPtr<ImageListStore> & store)

@@ -27,6 +27,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
+#include "fwk/utils/boost.h"
 #include "fwk/utils/debug.h"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"

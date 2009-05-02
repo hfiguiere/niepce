@@ -151,7 +151,7 @@ void LibraryMainViewController::on_image_activated(int id)
 
 libraryclient::LibraryClient::Ptr LibraryMainViewController::getLibraryClient()
 {
-    return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
 
 

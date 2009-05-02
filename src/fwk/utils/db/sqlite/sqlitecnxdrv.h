@@ -46,16 +46,14 @@ class SqliteCnxDrv: public db::IConnectionDriver {
     boost::scoped_ptr<Priv> m_priv ;
     mutable Glib::RecMutex m_mutex;
 
-    friend void boost::checked_delete<SqliteCnxDrv>(SqliteCnxDrv * x);
-
     //forbid copy
     SqliteCnxDrv (const SqliteCnxDrv &) ;
     SqliteCnxDrv& operator= (const SqliteCnxDrv &) ;
 
     SqliteCnxDrv (sqlite3 *a_sqlite_handle) ;
 
-    virtual ~SqliteCnxDrv () ;
 public:
+    virtual ~SqliteCnxDrv () ;
     sqlite3* sqlite_handle() const;
     const char* get_last_error () const ;
 

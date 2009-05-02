@@ -26,7 +26,6 @@
 
 #include <boost/filesystem/path.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <exempi/xmp.h>
 

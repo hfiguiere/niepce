@@ -1,7 +1,7 @@
 /*
  * niepce - ui/selectioncontroller.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ class SelectionController
 	: public fwk::Controller
 {
 public:
-	typedef boost::shared_ptr<SelectionController> Ptr;
+	typedef std::tr1::shared_ptr<SelectionController> Ptr;
 	SelectionController();
 
 	void add_selectable(IImageSelectable *);

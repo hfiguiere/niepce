@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 #include <boost/any.hpp>
 
 #include "fwk/utils/exempi.h"
@@ -34,7 +34,7 @@ namespace db {
 		: public utils::XmpMeta
 	{
 	public:
-		typedef boost::shared_ptr<LibMetadata> Ptr;
+		typedef std::tr1::shared_ptr<LibMetadata> Ptr;
 
 		LibMetadata(int _id);
 

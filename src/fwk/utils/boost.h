@@ -1,7 +1,7 @@
 /*
  * niepce - utils/boost.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@
 #ifndef _UTILS_BOOST_H_
 #define _UTILS_BOOST_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <tr1/memory>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+
+#include <glibmm/refptr.h>
 
 namespace Glib {
 
@@ -38,15 +39,29 @@ namespace Glib {
 
 }
 
+
+namespace std {
+namespace tr1 {
+
+template< class T_CppObject > inline
+T_CppObject *get_pointer(const shared_ptr< T_CppObject > &p)
+{
+    return p.get();
+}
+
+
+}
+}
+
 namespace utils {
 
 /** function to make a shared_ptr<> form a weak_ptr<> 
  * idea from http://lists.boost.org/boost-users/2007/01/24384.php
  */
 template<class T> 
-boost::shared_ptr<T> shared_ptr_from( boost::weak_ptr<T> const & wpt )
+std::tr1::shared_ptr<T> shared_ptr_from( std::tr1::weak_ptr<T> const & wpt )
 {
-    return boost::shared_ptr<T>( wpt ); // throws on wpt.expired()
+    return std::tr1::shared_ptr<T>( wpt ); // throws on wpt.expired()
 } 
 
 }
@@ -55,7 +70,16 @@ boost::shared_ptr<T> shared_ptr_from( boost::weak_ptr<T> const & wpt )
  * this allow breaking some circular references.
  */
 #define BIND_SHARED_PTR(_type, _spt) \
-    boost::bind(&utils::shared_ptr_from<_type>, boost::weak_ptr<_type>(_spt))
+    boost::bind(&utils::shared_ptr_from<_type>, std::tr1::weak_ptr<_type>(_spt))
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

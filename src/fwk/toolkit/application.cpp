@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <glibmm/i18n.h>
@@ -28,6 +27,7 @@
 #include <gtkmm/rc.h>
 #include <gconf/gconf.h>
 
+#include "fwk/utils/boost.h"
 #include "fwk/utils/debug.h"
 #include "application.hpp"
 #include "frame.hpp"
@@ -127,7 +127,7 @@ int Application::main(boost::function<Application::Ptr (void)> constructor,
         }
     }
 
-    kit.signal_run().connect(sigc::mem_fun(get_pointer(app), 
+    kit.signal_run().connect(sigc::mem_fun(*app,
                                            &Application::_ready));
     Frame::Ptr window(app->makeMainFrame());
     app->add(window);
@@ -143,7 +143,7 @@ void Application::terminate()
     std::for_each(m_subs.begin(), m_subs.end(),
                   boost::bind(&Controller::terminate, _1));
     std::for_each(m_subs.begin(), m_subs.end(),
-                  boost::bind(&Controller::clearParent, _1));		
+                  boost::bind(&Controller::clearParent, _1));
     m_subs.clear();
 }
 

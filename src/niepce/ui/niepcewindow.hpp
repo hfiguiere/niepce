@@ -21,7 +21,6 @@
 #ifndef _UI_NIEPCEWINDOW_H_
 #define _UI_NIEPCEWINDOW_H_
 
-#include <boost/scoped_ptr.hpp>
 
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>

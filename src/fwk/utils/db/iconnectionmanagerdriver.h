@@ -27,7 +27,6 @@
 #define __NEMIVER_I_CONNECTION_MANAGER_DRIVER_H__
 
 #include <string>
-#include <boost/shared_ptr.hpp>
 
 #include "iconnectiondriver.h"
 
@@ -90,7 +89,7 @@ public:
 
 class  IConnectionManagerDriver {
 public:
-    typedef boost::shared_ptr<IConnectionManagerDriver> Ptr;
+    typedef std::tr1::shared_ptr<IConnectionManagerDriver> Ptr;
     IConnectionManagerDriver()
     {
     }

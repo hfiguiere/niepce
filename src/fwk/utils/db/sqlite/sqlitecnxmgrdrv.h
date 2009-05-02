@@ -26,8 +26,6 @@
 #ifndef __NEMIVER_SQLITE_CNX_MGR_DRV_H__
 #define __NEMIVER_SQLITE_CNX_MGR_DRV_H__
 
-#include <boost/shared_ptr.hpp>
-
 #include "fwk/utils/db/iconnectionmanagerdriver.h"
 #include "fwk/utils/db/iconnectiondriver.h"
 

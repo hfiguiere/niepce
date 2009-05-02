@@ -22,7 +22,7 @@
 #define _LIBRARY_THUMBNAILCACHE_H__
 
 #include <boost/filesystem/path.hpp>
-#include <boost/weak_ptr.hpp>
+#include <tr1/memory>
 
 #include "fwk/utils/worker.h"
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -34,7 +34,7 @@ namespace library {
 	class ThumbnailTask
 	{
 	public:
-		typedef boost::shared_ptr< ThumbnailTask > Ptr;
+		typedef std::tr1::shared_ptr< ThumbnailTask > Ptr;
 		
 		ThumbnailTask(const db::LibFile::Ptr & f, int w, int h)
 			: m_file(f), m_width(w), m_height(h)
@@ -68,7 +68,7 @@ namespace library {
 		virtual void execute(const  ThumbnailTask::Ptr & task);
 	private:
 		boost::filesystem::path         m_cacheDir;
-		boost::weak_ptr<fwk::NotificationCenter> m_notif_center;
+		std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
 	};
 
 }

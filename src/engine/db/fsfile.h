@@ -21,7 +21,7 @@
 #define __NIEPCE_DB_FSFILE_H__
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 #include <boost/filesystem/path.hpp>
 
 
@@ -31,7 +31,7 @@ namespace db {
 class FsFile
 {
 public:
-    typedef boost::shared_ptr< FsFile > Ptr;
+    typedef std::tr1::shared_ptr< FsFile > Ptr;
 
     FsFile(int id, const boost::filesystem::path & path);
 

@@ -64,7 +64,7 @@ namespace ui {
 
 	libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
 	{
-		return	boost::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+		return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 	}
 
 

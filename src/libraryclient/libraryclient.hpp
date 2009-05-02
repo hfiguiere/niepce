@@ -21,7 +21,7 @@
 #define _LIBRARYCLIENT_H_
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 #include "engine/library/clienttypes.h"
 #include "engine/library/thumbnailcache.h"
@@ -43,7 +43,7 @@ namespace libraryclient {
 		: public db::Storage
 	{
 	public:
-		typedef boost::shared_ptr< LibraryClient > Ptr;
+		typedef std::tr1::shared_ptr< LibraryClient > Ptr;
 
 		LibraryClient(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~LibraryClient();

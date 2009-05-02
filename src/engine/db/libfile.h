@@ -22,7 +22,7 @@
 
 #include <string>
 #include <list>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 #include <boost/filesystem/path.hpp>
 
 #include "fwk/toolkit/mimetype.hpp"
@@ -36,9 +36,9 @@ namespace db {
 class LibFile
 {
 public:
-    typedef boost::shared_ptr< LibFile > Ptr;
+    typedef std::tr1::shared_ptr< LibFile > Ptr;
     typedef std::list< Ptr > List;
-    typedef boost::shared_ptr< List > ListPtr;
+    typedef std::tr1::shared_ptr< List > ListPtr;
 
     enum FileType {
         FILE_TYPE_UNKNOWN = 0,

@@ -24,16 +24,16 @@
 
 #include <string>
 #include <list>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 namespace db {
 
 	class LibFolder
 	{
 	public:
-		typedef boost::shared_ptr< LibFolder > Ptr;
+		typedef std::tr1::shared_ptr< LibFolder > Ptr;
 		typedef std::list< Ptr > List;
-		typedef boost::shared_ptr< List > ListPtr;
+		typedef std::tr1::shared_ptr< List > ListPtr;
 
 		LibFolder(int _id, std::string _name)
 			: m_id(_id), m_name(_name)
