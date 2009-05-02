@@ -22,7 +22,7 @@
 #ifndef __GDL_STOCK_H__
 #define __GDL_STOCK_H__
 
-#include <glib/gmacros.h>   /* G_BEGIN_DECLS*/
+#include <glib.h>   /* G_BEGIN_DECLS*/
 
 G_BEGIN_DECLS
 

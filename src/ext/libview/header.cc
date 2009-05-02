@@ -29,9 +29,7 @@
 
 #include <gtkmm/settings.h>
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkrc.h>
+#include <gtk/gtk.h>
 
 #include <libview/header.hh>
 

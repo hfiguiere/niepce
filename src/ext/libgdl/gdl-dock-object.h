@@ -30,7 +30,7 @@
 #pragma GCC system_header
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

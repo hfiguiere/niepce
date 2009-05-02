@@ -22,7 +22,7 @@
 #ifndef EOG_THUMB_VIEW_H
 #define EOG_THUMB_VIEW_H
 
-#include <gtk/gtkiconview.h>
+#include <gtk/gtk.h>
 #include "niepce/ui/imageliststore.h"
 
 /*#include "eog-image.h"*/

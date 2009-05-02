@@ -31,7 +31,7 @@
 #endif
 
 #include <glib.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 /* FIXME: Toggle this */
 

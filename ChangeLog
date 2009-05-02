@@ -1,5 +1,8 @@
 2009-05-01  Hubert Figuiere  <hub@figuiere.net>
 
+	* Gtk header cleanup. See 
+	http://live.gnome.org/GnomeGoals/CleanupGTKIncludes
+
 	* src/fwk/base/color.hpp: Missing header for gcc 4.4
 
 2009-04-24  Hubert Figuiere  <hub@figuiere.net>

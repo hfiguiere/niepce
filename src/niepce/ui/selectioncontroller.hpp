@@ -21,7 +21,7 @@
 #ifndef _UI_SELECTIONCONTROLLER_H__
 #define _UI_SELECTIONCONTROLLER_H__
 
-#include <gtk/gtkiconview.h>
+#include <gtk/gtk.h>
 
 #include <sigc++/signal.h>
 

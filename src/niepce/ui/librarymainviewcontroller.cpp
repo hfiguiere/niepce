@@ -18,7 +18,7 @@
  */
 
 
-#include <gtk/gtkcelllayout.h>
+#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
