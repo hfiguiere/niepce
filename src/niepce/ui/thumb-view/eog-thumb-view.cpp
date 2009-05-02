@@ -36,8 +36,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include <libgnomevfs/gnome-vfs-mime-utils.h>
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 #include "fwk/utils/boost.hpp"
 #include "engine/db/libfile.hpp"

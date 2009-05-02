@@ -1,5 +1,7 @@
 2009-05-02  Hubert Figuiere  <hub@figuiere.net>
 
+	* Get rid of gnomevfs.
+
 	* Rename all C++ .h to .hpp
 
 	* Remove boost::array and use tr1 instead.

@@ -18,71 +18,55 @@
  */
 
 #include <string>
-
-#include <boost/version.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/filesystem/convenience.hpp>
-
-#include <libgnomevfs/gnome-vfs-mime-utils.h>
+#include <giomm/contenttype.h>
 
 #include "config.h"
 
 #include "mimetype.hpp"
 
-namespace bfs = boost::filesystem;
-
 namespace fwk {
 
-MimeType::MimeType(const char * filename)
-    : m_path(filename)
+MimeType::MimeType(const std::string & filename)
 {
-#if HAVE_GNOME_VFS_2_14
-		m_type = gnome_vfs_get_mime_type_for_name(filename);
-#else
-		std::string f("file:///");
-		f += filename;
-		m_type = gnome_vfs_get_mime_type(f.c_str());
-#endif
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
+    m_fileinfo = file->query_info();
+		m_type = m_fileinfo->get_content_type();
 }
 
-MimeType::MimeType(const boost::filesystem::path & filename)
-    : m_path(filename)
+MimeType::MimeType(const Glib::RefPtr<Gio::File> & file)
 {
-#if HAVE_GNOME_VFS_2_14
-		m_type = gnome_vfs_get_mime_type_for_name(filename.string().c_str());
-#else
-		std::string f("file:///");
-		f += filename.string();
-		m_type = gnome_vfs_get_mime_type(f.c_str());
-#endif
+    m_fileinfo = file->query_info();
+		m_type = m_fileinfo->get_content_type();
 }
 
 bool MimeType::isDigicamRaw() const
 {
-		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), 
-                                                "image/x-dcraw") 
-            != GNOME_VFS_MIME_UNRELATED);
+		return Gio::content_type_is_a(m_type, "image/x-dcraw");
 }
 
 
 bool MimeType::isImage() const
 {
-		return (gnome_vfs_mime_type_get_equivalence(m_type.c_str(), "image/*") 
-            != GNOME_VFS_MIME_UNRELATED);
+		return Gio::content_type_is_a(m_type, "image/*");
 }
 	
 
 bool MimeType::isUnknown() const
 {
-		return (m_type == GNOME_VFS_MIME_TYPE_UNKNOWN);
+		return Gio::content_type_is_unknown(m_type);
 }
 
 
 bool MimeType::isXmp() const
 {
+    boost::filesystem::path path = m_fileinfo->get_name();
+    
 #if BOOST_VERSION >= 103600
-    return m_path.extension() == ".xmp";
+    return path.extension() == ".xmp";
 #else
-    return extension(m_path) == ".xmp";
+    return extension(path) == ".xmp";
 #endif
 }
 	

@@ -25,9 +25,9 @@ A C++ compiler
 gtk+ 2.8
 cairo 1.1
 gtkmm 2.12
+giomm
 gconf 2.x
 cairomm
-gnome-vfs >= 2.14
 sqlite3
 libxml > 2.5.0
 boost 1.34
@@ -47,7 +47,7 @@ UNIX systems.
 Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
-aptitude install gconf2-dev libgnomevfs2-dev \
+aptitude install gconf2-dev \
 > libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev \
 > libgoocanvas-dev
 
@@ -61,8 +61,6 @@ Working on SUSE
 To install the up to date dependencies, add the following repostitory to
 zypper using "zypper ar"
 
-For openSUSE 10.3
-http://download.opensuse.org/repositories/home:/hfiguiere/openSUSE_10.3/
 For openSUSE 11.0
 http://download.opensuse.org/repositories/home:/hfiguiere/openSUSE_11.0/
 For openSUSE 11.1

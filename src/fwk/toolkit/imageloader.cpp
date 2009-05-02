@@ -34,7 +34,7 @@ ImageLoader::ImageLoader(const boost::filesystem::path & file)
 Glib::RefPtr<Gdk::Pixbuf> ImageLoader::get_pixbuf()
 {
 	// TODO split get_pixbuf and the real load.
-	fwk::MimeType mime_type(m_file);
+	fwk::MimeType mime_type(m_file.string());
 	
 	Glib::RefPtr<Gdk::PixbufLoader> loader =  
 		Gdk::PixbufLoader::create(mime_type.string(), true);

@@ -263,7 +263,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
     try {
         int32_t rating, label_id, orientation;
         std::string label;  
-        fwk::MimeType mime = fwk::MimeType(file);
+        fwk::MimeType mime = fwk::MimeType(file.string());
         db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
         utils::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
         label_id = 0;

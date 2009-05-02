@@ -32,7 +32,7 @@ void
 FileBundle::add(const boost::filesystem::path & path)
 {
     // TODO make it more reliable with more tests.
-    fwk::MimeType type(path);
+    fwk::MimeType type(path.string());
     
     if(type.isImage()) {
         if(type.isDigicamRaw()) {

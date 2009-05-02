@@ -11,7 +11,7 @@ TEST_LIBS =  \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/libfwk.a \
-	@LIBGTKMM_LIBS@ @GNOMEVFS_LIBS@ \
+	@LIBGTKMM_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@BOOST_FILESYSTEM_LIBS@ \
 	@LIBGLIBMM_LIBS@ \

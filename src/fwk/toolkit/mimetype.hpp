@@ -22,15 +22,17 @@
 #define _FWK_MIMETYPE_H_
 
 #include <string>
-#include <boost/filesystem/path.hpp>
+
+#include <giomm/file.h>
+#include <giomm/fileinfo.h>
 
 namespace fwk {
 
 	class MimeType
 	{
 	public:
-		MimeType(const char *filename);
-		MimeType(const boost::filesystem::path & filename);
+		MimeType(const std::string & filename);
+    MimeType(const Glib::RefPtr<Gio::File> & file);
 
 		bool isDigicamRaw() const;
 		bool isImage() const;
@@ -40,7 +42,7 @@ namespace fwk {
 		const std::string & string() const
 			{ return m_type; }
 	private:
-		boost::filesystem::path m_path;
+    Glib::RefPtr<Gio::FileInfo> m_fileinfo;
 		std::string m_type;
 	};
 
