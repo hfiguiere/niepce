@@ -50,8 +50,8 @@ G_DEFINE_TYPE (EogThumbView, eog_thumb_view, GTK_TYPE_ICON_VIEW)
 //static EogImage* eog_thumb_view_get_image_from_path (EogThumbView      *tb,
 //						     GtkTreePath       *path);
 
-static void      eog_thumb_view_popup_menu          (EogThumbView      *widget, 
-						     GdkEventButton    *event);
+//static void      eog_thumb_view_popup_menu          (EogThumbView      *widget, 
+//						     GdkEventButton    *event);
 
 struct _EogThumbViewPrivate {
 	gint start_thumb; /* the first visible thumbnail */
@@ -761,7 +761,6 @@ eog_thumb_view_set_thumbnail_popup (EogThumbView *tb,
 			  G_CALLBACK (tb_on_button_press_event_cb), NULL);
 	
 }
-#endif
 
 
 static void 
@@ -783,3 +782,4 @@ eog_thumb_view_popup_menu (EogThumbView *tb, GdkEventButton *event)
 	gtk_menu_popup (GTK_MENU (popup), NULL, NULL, NULL, NULL, 
 			button, event_time);
 }
+#endif
