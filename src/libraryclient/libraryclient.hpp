@@ -23,9 +23,9 @@
 #include <string>
 #include <tr1/memory>
 
-#include "engine/library/clienttypes.h"
-#include "engine/library/thumbnailcache.h"
-#include "engine/db/storage.h"
+#include "engine/library/clienttypes.hpp"
+#include "engine/library/thumbnailcache.hpp"
+#include "engine/db/storage.hpp"
 
 namespace utils {
 	class Moniker;

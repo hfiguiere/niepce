@@ -23,8 +23,8 @@
 #include "config.h"
 #endif
 
-#include "eog-thumb-nav.h"
-#include "eog-thumb-view.h"
+#include "eog-thumb-nav.hpp"
+#include "eog-thumb-view.hpp"
 
 #include <glib.h>
 #include <glib/gi18n.h>

@@ -24,9 +24,9 @@
  *See COPYRIGHT file copyright information.
  */
 
-#include "fwk/utils/exception.h"
-#include "fwk/utils/logstreamutils.h"
-#include "sqlstatement.h"
+#include "fwk/utils/exception.hpp"
+#include "fwk/utils/logstreamutils.hpp"
+#include "sqlstatement.hpp"
 
 #include <string>
 

@@ -1,5 +1,5 @@
 /*
- * niepce - db/storage.h
+ * niepce - niepce/xmp.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,36 +18,17 @@
  */
 
 
-#ifndef __NIEPCE_LIBRARY_STORAGE_H__
-#define __NIEPCE_LIBRARY_STORAGE_H__
+#ifndef _NIEPCE_XMP_H_
+#define _NIEPCE_XMP_H_
 
-#include <tr1/memory>
+#include "fwk/utils/exempi.hpp"
 
-#include "engine/db/keyword.h"
+namespace niepce {
 
-namespace db {
-
-	/** @brief the interface for a storage */
-	class Storage
-	{
-	public:
-		typedef std::tr1::shared_ptr<Storage> Ptr;
-
-		virtual ~Storage();
-
-		virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
-	};
+	extern const char NIEPCE_XMP_NAMESPACE[];
+	extern const char NIEPCE_XMP_NS_PREFIX[];
+	extern const utils::ExempiManager::ns_defs_t xmp_namespaces[];
 
 }
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
 
 #endif

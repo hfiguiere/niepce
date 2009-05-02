@@ -35,11 +35,11 @@
 #include <boost/function.hpp>
 
 #include <sqlite3.h>
-#include "fwk/utils/exception.h"
-#include "fwk/utils/buffer.h"
-#include "fwk/utils/debug.h"
-#include "fwk/utils/db/sqlstatement.h"
-#include "sqlitecnxdrv.h"
+#include "fwk/utils/exception.hpp"
+#include "fwk/utils/buffer.hpp"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/db/sqlstatement.hpp"
+#include "sqlitecnxdrv.hpp"
 
 namespace db { namespace sqlite {
 	

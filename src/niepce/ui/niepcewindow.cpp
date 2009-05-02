@@ -29,11 +29,11 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
 
-#include "niepce/notifications.h"
-#include "niepce/stock.h"
-#include "fwk/utils/debug.h"
-#include "fwk/utils/moniker.h"
-#include "fwk/utils/boost.h"
+#include "niepce/notifications.hpp"
+#include "niepce/stock.hpp"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/moniker.hpp"
+#include "fwk/utils/boost.hpp"
 #include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
@@ -41,7 +41,7 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/undo.hpp"
 
-#include "eog-thumb-view.h"
+#include "eog-thumb-view.hpp"
 #include "niepcewindow.hpp"
 #include "dialogs/importdialog.hpp"
 #include "dialogs/preferencesdialog.hpp"

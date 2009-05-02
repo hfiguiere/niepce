@@ -22,13 +22,13 @@
 #include <gtkmm/iconview.h>
 #include <glibmm/i18n.h>
 
-#include "fwk/utils/autoflag.h"
-#include "fwk/utils/boost.h"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/autoflag.hpp"
+#include "fwk/utils/boost.hpp"
+#include "fwk/utils/debug.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "fwk/toolkit/command.hpp"
 #include "fwk/toolkit/application.hpp"
-#include "engine/db/metadata.h"
+#include "engine/db/metadata.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "niepcewindow.hpp"
 #include "selectioncontroller.hpp"

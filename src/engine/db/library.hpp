@@ -29,13 +29,13 @@
 #include <boost/filesystem/path.hpp>
 
 #include "fwk/toolkit/notificationcenter.hpp"
-#include "fwk/utils/db/iconnectiondriver.h"
-#include "fwk/utils/db/iconnectionmanagerdriver.h"
-#include "engine/db/libfolder.h"
-#include "engine/db/libfile.h"
-#include "engine/db/libmetadata.h"
+#include "fwk/utils/db/iconnectiondriver.hpp"
+#include "fwk/utils/db/iconnectionmanagerdriver.hpp"
+#include "engine/db/libfolder.hpp"
+#include "engine/db/libfile.hpp"
+#include "engine/db/libmetadata.hpp"
 #include "engine/db/filebundle.hpp"
-#include "engine/db/keyword.h"
+#include "engine/db/keyword.hpp"
 #include "engine/db/label.hpp"
 
 // The database schema version. Increase at each change.

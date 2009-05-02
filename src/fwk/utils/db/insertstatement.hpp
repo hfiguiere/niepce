@@ -26,7 +26,7 @@
 #ifndef __NEMIVER_INSERT_STATEMENT_H__
 #define __NEMIVER_INSERT_STATEMENT_H__
 
-#include "sqlstatement.h"
+#include "sqlstatement.hpp"
 
 namespace db {
 

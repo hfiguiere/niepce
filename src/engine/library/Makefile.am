@@ -16,12 +16,12 @@ TEST_LIBS =  \
 
 noinst_LIBRARIES = libniepcelibrary.a
 
-test_opqueue_SOURCES = test_opqueue.cpp opqueue.h
+test_opqueue_SOURCES = test_opqueue.cpp opqueue.hpp
 test_opqueue_LDADD = $(TEST_LIBS)
 
 
-libniepcelibrary_a_SOURCES = clienttypes.h \
+libniepcelibrary_a_SOURCES = clienttypes.hpp \
 	op.hpp op.cpp  \
 	commands.hpp commands.cpp \
-	thumbnailcache.h thumbnailcache.cpp \
-	thumbnailnotification.h
+	thumbnailcache.hpp thumbnailcache.cpp \
+	thumbnailnotification.hpp

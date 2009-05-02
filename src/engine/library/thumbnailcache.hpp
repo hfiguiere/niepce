@@ -24,9 +24,9 @@
 #include <boost/filesystem/path.hpp>
 #include <tr1/memory>
 
-#include "fwk/utils/worker.h"
+#include "fwk/utils/worker.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
-#include "engine/db/libfile.h"
+#include "engine/db/libfile.hpp"
 
 namespace library {
 

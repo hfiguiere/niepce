@@ -59,23 +59,23 @@ test_db4_LDADD = libniepceutils.a \
 
 noinst_LIBRARIES = libniepceutils.a
 
-libniepceutils_a_SOURCES = exception.h exception.cpp \
-	fsutils.cpp fsutils.h \
+libniepceutils_a_SOURCES = exception.hpp exception.cpp \
+	fsutils.cpp fsutils.hpp \
 	fractions.cpp fractions.hpp \
-	mtqueue.h stringutils.h \
-	autoflag.h \
-	exempi.h exempi.cpp \
-	ufrawmeta.h ufrawmeta.cpp \
-	buffer.h logstreamutils.h \
-	moniker.h moniker.cpp \
-	debug.h debug.cpp boost.h \
-	files.h files.cpp \
-	geometry.h geometry.cpp \
-	thread.h thread.cpp worker.h \
-	databinder.h databinder.cpp \
-	db/iconnectiondriver.h db/iconnectionmanagerdriver.h \
-	db/insertstatement.cpp db/insertstatement.h\
-	db/sqlstatement.cpp db/sqlstatement.h\
-	db/sqlite/sqlitecnxdrv.cpp db/sqlite/sqlitecnxdrv.h \
-	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.h
+	mtqueue.hpp stringutils.hpp \
+	autoflag.hpp \
+	exempi.hpp exempi.cpp \
+	ufrawmeta.hpp ufrawmeta.cpp \
+	buffer.hpp logstreamutils.hpp \
+	moniker.hpp moniker.cpp \
+	debug.hpp debug.cpp boost.hpp \
+	files.hpp files.cpp \
+	geometry.hpp geometry.cpp \
+	thread.hpp thread.cpp worker.hpp \
+	databinder.hpp databinder.cpp \
+	db/iconnectiondriver.hpp db/iconnectionmanagerdriver.hpp \
+	db/insertstatement.cpp db/insertstatement.hpp \
+	db/sqlstatement.cpp db/sqlstatement.hpp \
+	db/sqlite/sqlitecnxdrv.cpp db/sqlite/sqlitecnxdrv.hpp \
+	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.hpp
 

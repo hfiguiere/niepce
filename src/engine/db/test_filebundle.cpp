@@ -21,7 +21,7 @@
 #include "filebundle.hpp"
 
 
-#include "fwk/utils/files.h"
+#include "fwk/utils/files.hpp"
 
 #include <boost/test/minimal.hpp>
 

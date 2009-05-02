@@ -26,8 +26,8 @@
 #ifndef __NEMIVER_SQLITE_CNX_MGR_DRV_H__
 #define __NEMIVER_SQLITE_CNX_MGR_DRV_H__
 
-#include "fwk/utils/db/iconnectionmanagerdriver.h"
-#include "fwk/utils/db/iconnectiondriver.h"
+#include "fwk/utils/db/iconnectionmanagerdriver.hpp"
+#include "fwk/utils/db/iconnectiondriver.hpp"
 
 namespace db {
 namespace sqlite {

@@ -25,13 +25,13 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/box.h>
 
-#include "fwk/utils/debug.h"
-#include "niepce/notifications.h"
+#include "fwk/utils/debug.hpp"
+#include "niepce/notifications.hpp"
 #include "engine/db/library.hpp" // FIXME uh oh. this shouldn't be
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
-#include "workspacecontroller.h"
+#include "workspacecontroller.hpp"
 
 
 using fwk::Application;

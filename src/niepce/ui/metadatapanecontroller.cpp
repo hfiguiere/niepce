@@ -26,8 +26,8 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "fwk/utils/debug.h"
-#include "fwk/utils/exempi.h"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
 #include "metadatapanecontroller.hpp"
 

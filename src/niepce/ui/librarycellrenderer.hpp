@@ -25,7 +25,7 @@
 #include <gtkmm/cellrendererpixbuf.h>
 #include <cairomm/surface.h>
 
-#include "engine/db/libfile.h"
+#include "engine/db/libfile.hpp"
 
 namespace ui {
 

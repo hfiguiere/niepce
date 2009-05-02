@@ -22,8 +22,8 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "debug.h"
-#include "files.h"
+#include "debug.hpp"
+#include "files.hpp"
 
 namespace bfs = boost::filesystem;
 

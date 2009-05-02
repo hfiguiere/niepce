@@ -27,11 +27,11 @@ noinst_LIBRARIES = libniepceui.a
 libniepceui_a_CPPFLAGS = 
 libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \
-	librarymainview.h librarymainview.cpp \
-	librarycellrenderer.h librarycellrenderer.cpp \
+	librarymainview.hpp librarymainview.cpp \
+	librarycellrenderer.hpp librarycellrenderer.cpp \
 	librarymainviewcontroller.hpp librarymainviewcontroller.cpp \
-	imageliststore.h imageliststore.cpp\
-	workspacecontroller.h workspacecontroller.cpp \
+	imageliststore.hpp imageliststore.cpp\
+	workspacecontroller.hpp workspacecontroller.cpp \
 	metadatapanecontroller.hpp metadatapanecontroller.cpp \
 	dialogs/editlabels.hpp dialogs/editlabels.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
@@ -39,5 +39,5 @@ libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	selectioncontroller.hpp selectioncontroller.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
-	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.h \
-	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.h
+	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.hpp \
+	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.hpp

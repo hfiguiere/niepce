@@ -19,13 +19,13 @@
 
 #include <gtkmm/icontheme.h>
 
-#include "imageliststore.h"
-#include "fwk/utils/debug.h"
+#include "imageliststore.hpp"
+#include "fwk/utils/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
-#include "niepce/notifications.h"
+#include "niepce/notifications.hpp"
 #include "engine/db/library.hpp"
-#include "engine/library/thumbnailnotification.h"
+#include "engine/library/thumbnailnotification.hpp"
 #include "niepcewindow.hpp"
 
 namespace ui {

@@ -34,6 +34,6 @@ niepce_LDADD = \
 
 
 niepce_SOURCES = xmp.cpp \
-	stock.h stock.cpp \
-        notifications.h xmp.h \
+	stock.hpp stock.cpp \
+        notifications.hpp xmp.hpp \
 	main.cpp

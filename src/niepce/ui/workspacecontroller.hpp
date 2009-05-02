@@ -30,7 +30,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treestore.h>
 
-#include "engine/db/libfolder.h"
+#include "engine/db/libfolder.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
 

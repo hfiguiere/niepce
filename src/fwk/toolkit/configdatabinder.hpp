@@ -28,8 +28,8 @@
 
 #include <glibmm/propertyproxy.h>
 
-#include "fwk/utils/debug.h"
-#include "fwk/utils/databinder.h"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/databinder.hpp"
 #include "fwk/toolkit/configuration.hpp"
 
 namespace fwk {

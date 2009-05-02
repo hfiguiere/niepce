@@ -22,8 +22,8 @@
 #include <boost/range.hpp>
 #include <boost/algorithm/string/find.hpp>
 
-#include "debug.h"
-#include "moniker.h"
+#include "debug.hpp"
+#include "moniker.hpp"
 
 namespace utils {
 

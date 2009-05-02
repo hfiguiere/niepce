@@ -20,10 +20,10 @@
 /* remove this when we require a version that does not barf warnings */
 #include "fwk/toolkit/goocanvas_proxy_header.hpp"
 //#include <goocanvasmm/canvas.h>
-#include "fwk/utils/debug.h"
-#include "fwk/utils/geometry.h"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/geometry.hpp"
 
-#include "imagecanvas.h"
+#include "imagecanvas.hpp"
 
 namespace darkroom {
 

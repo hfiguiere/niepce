@@ -22,7 +22,7 @@
 #ifndef __EOG_THUMB_NAV_H__
 #define __EOG_THUMB_NAV_H__
 
-#include "eog-thumb-view.h"
+#include "eog-thumb-view.hpp"
 
 #include <gtk/gtk.h>
 #include <glib.h>

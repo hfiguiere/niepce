@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 
-#include "files.h"
+#include "files.hpp"
 
 using utils::FileList;
 

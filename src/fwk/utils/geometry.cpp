@@ -23,8 +23,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-#include "debug.h"
-#include "geometry.h"
+#include "debug.hpp"
+#include "geometry.hpp"
 
 namespace utils {
 

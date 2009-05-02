@@ -29,9 +29,9 @@
 
 #include <sqlite3.h>
 
-#include "fwk/utils/exception.h"
-#include "sqlitecnxdrv.h"
-#include "sqlitecnxmgrdrv.h"
+#include "fwk/utils/exception.hpp"
+#include "sqlitecnxdrv.hpp"
+#include "sqlitecnxmgrdrv.hpp"
 
 
 

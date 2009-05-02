@@ -24,7 +24,7 @@
 #include <tr1/memory>
 #include <boost/function.hpp>
 
-#include "engine/library/clienttypes.h"
+#include "engine/library/clienttypes.hpp"
 #include "engine/db/library.hpp"
 
 namespace library {

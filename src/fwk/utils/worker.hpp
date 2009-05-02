@@ -24,8 +24,8 @@
 
 #include <string>
 
-#include "fwk/utils/thread.h"
-#include "fwk/utils/mtqueue.h"
+#include "fwk/utils/thread.hpp"
+#include "fwk/utils/mtqueue.hpp"
 
 namespace utils {
 

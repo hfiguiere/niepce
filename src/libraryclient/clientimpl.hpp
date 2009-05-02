@@ -23,8 +23,8 @@
 
 #include <string>
 
-#include "fwk/utils/moniker.h"
-#include "engine/library/clienttypes.h"
+#include "fwk/utils/moniker.hpp"
+#include "engine/library/clienttypes.hpp"
 
 
 namespace libraryclient {

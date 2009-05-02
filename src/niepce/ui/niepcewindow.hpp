@@ -34,7 +34,7 @@
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "ui/librarymainviewcontroller.hpp"
-#include "ui/workspacecontroller.h"
+#include "ui/workspacecontroller.hpp"
 #include "ui/selectioncontroller.hpp"
 #include "ui/filmstripcontroller.hpp"
 

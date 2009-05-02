@@ -25,14 +25,14 @@
 #include <boost/filesystem/path.hpp>
 
 
-#include "fwk/utils/boost.h"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/boost.hpp"
+#include "fwk/utils/debug.hpp"
 #include "engine/db/library.hpp"
-#include "engine/db/libfolder.h"
-#include "engine/db/libfile.h"
-#include "engine/db/libmetadata.h"
+#include "engine/db/libfolder.hpp"
+#include "engine/db/libfile.hpp"
+#include "engine/db/libmetadata.hpp"
 #include "engine/db/filebundle.hpp"
-#include "engine/db/keyword.h"
+#include "engine/db/keyword.hpp"
 #include "engine/db/label.hpp"
 #include "commands.hpp"
 

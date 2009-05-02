@@ -22,7 +22,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/aboutdialog.h>
 
-#include "niepce/stock.h"
+#include "niepce/stock.hpp"
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
 

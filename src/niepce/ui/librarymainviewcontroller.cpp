@@ -26,15 +26,15 @@
 #include <gtkmm/celllayout.h>
 #include <gtkmm/cellrenderer.h>
 
-#include "fwk/utils/debug.h"
-#include "niepce/notifications.h"
+#include "fwk/utils/debug.hpp"
+#include "niepce/notifications.hpp"
 #include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
 #include "librarymainviewcontroller.hpp"
 #include "niepcewindow.hpp"
 #include "metadatapanecontroller.hpp"
-#include "librarycellrenderer.h"
+#include "librarycellrenderer.hpp"
 
 namespace ui {
 

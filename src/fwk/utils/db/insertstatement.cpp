@@ -24,9 +24,9 @@
  *See COPYRIGHT file copyright information.
  */
 
-#include "fwk/utils/logstreamutils.h"
-#include "fwk/utils/exception.h"
-#include "insertstatement.h"
+#include "fwk/utils/logstreamutils.hpp"
+#include "fwk/utils/exception.hpp"
+#include "insertstatement.hpp"
 
 namespace db {
 

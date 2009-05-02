@@ -23,7 +23,7 @@
 #define __LIBRARY_COMMANDS_H__
 
 #include "op.hpp"
-#include "fwk/utils/files.h"
+#include "fwk/utils/files.hpp"
 #include "engine/db/library.hpp"
 
 namespace library {

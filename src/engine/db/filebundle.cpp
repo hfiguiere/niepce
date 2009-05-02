@@ -22,7 +22,7 @@
 #include <boost/filesystem/convenience.hpp>
 
 #include "filebundle.hpp"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/debug.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 
 

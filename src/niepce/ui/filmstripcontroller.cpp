@@ -20,13 +20,13 @@
 
 #include <gtkmm/iconview.h>
 
-#include "niepce/notifications.h"
+#include "niepce/notifications.hpp"
 #include "engine/db/library.hpp"
-#include "engine/library/thumbnailnotification.h"
-#include "fwk/utils/debug.h"
+#include "engine/library/thumbnailnotification.hpp"
+#include "fwk/utils/debug.hpp"
 
-#include "eog-thumb-nav.h"
-#include "eog-thumb-view.h"
+#include "eog-thumb-nav.hpp"
+#include "eog-thumb-view.hpp"
 #include "filmstripcontroller.hpp"
 
 namespace ui {

@@ -23,9 +23,9 @@
 
 #include <gtkmm/dialog.h>
 
-#include "fwk/utils/debug.h"
-#include "fwk/utils/boost.h"
-#include "fwk/utils/geometry.h"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/boost.hpp"
+#include "fwk/utils/geometry.hpp"
 #include "frame.hpp"
 #include "application.hpp"
 

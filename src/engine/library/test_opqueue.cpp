@@ -19,7 +19,7 @@
 
 
 #include "op.hpp"
-#include "opqueue.h"
+#include "opqueue.hpp"
 
 #include <boost/bind.hpp>
 

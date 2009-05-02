@@ -30,9 +30,9 @@ extern "C" {
 #include <geglmm/node.h>
 #include <geglmm/operation.h>
 
-#include "fwk/utils/debug.h"
-#include "ncr.h"
-#include "image.h"
+#include "fwk/utils/debug.hpp"
+#include "ncr.hpp"
+#include "image.hpp"
 
 namespace ncr {
 

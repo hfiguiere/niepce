@@ -21,8 +21,8 @@
 #include <time.h>
 #include <exempi/xmpconsts.h>
 
-#include "fwk/utils/debug.h"
-#include "libmetadata.h"
+#include "fwk/utils/debug.hpp"
+#include "libmetadata.hpp"
 
 namespace db {
 

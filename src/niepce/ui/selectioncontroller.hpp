@@ -26,7 +26,7 @@
 #include <sigc++/signal.h>
 
 #include "fwk/toolkit/controller.hpp"
-#include "ui/imageliststore.h"
+#include "ui/imageliststore.hpp"
 
 namespace Gtk {
 	class IconView;

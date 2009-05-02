@@ -26,9 +26,9 @@
 #include <gtkmm/label.h>
 
 #include "fwk/utils/fractions.hpp"
-#include "fwk/utils/exempi.h"
-#include "fwk/utils/stringutils.h"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/exempi.hpp"
+#include "fwk/utils/stringutils.hpp"
+#include "fwk/utils/debug.hpp"
 
 #include "metadatawidget.hpp"
 

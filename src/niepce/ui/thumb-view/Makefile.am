@@ -4,7 +4,7 @@ INCLUDES = -I$(srcdir) -I$(top_srcdir)/src
 
 noinst_LTLIBRARIES = libthumbview.la
 
-noinst_HEADERS = eog-thumb-nav.h eog-thumb-view.h 
+noinst_HEADERS = eog-thumb-nav.hpp eog-thumb-view.hpp 
 
 libthumbview_la_CPPFLAGS =  @LIBGTKMM_CFLAGS@ \
 	@GNOMEVFS_CFLAGS@

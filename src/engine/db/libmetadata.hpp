@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/utils/fractions.hpp
+ * niepce - db/libmetadata.h
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __DB_LIBMETADATA_H_
+#define __DB_LIBMETADATA_H_
 
-#include <boost/rational.hpp>
-#include <boost/lexical_cast.hpp>
+#include <vector>
+#include <string>
+#include <tr1/memory>
+#include <boost/any.hpp>
 
-#include "debug.hpp"
-#include "fractions.hpp"
+#include "fwk/utils/exempi.hpp"
+#include "engine/db/metadata.hpp"
 
-namespace fwk {
+namespace db {
 
+	class LibMetadata
+		: public utils::XmpMeta
+	{
+	public:
+		typedef std::tr1::shared_ptr<LibMetadata> Ptr;
 
-double fraction_to_decimal(const std::string & value)
-{
-    double v = 0.0;
+		LibMetadata(int _id);
 
-    try {
-        boost::rational<int> r = boost::lexical_cast<boost::rational<int> >(value);
-        v = boost::rational_cast<double>(r);
-    }
-    catch(const std::exception & e) {
-        ERR_OUT("unable to cast fraction '%s': %s", value.c_str(), e.what());
-    }
-    return v;
+        int id() const
+            { return m_id; }
+        bool setMetaData(int meta, const boost::any & value);
+        /** do like the unix "touch". Update the MetadataDate 
+         * to the current time, in UTC.
+         */
+        bool touch();
+    private:
+        LibMetadata(const LibMetadata &);
+        int m_id;
+	};
+
 }
 
+#endif
 
-}
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:80
+  fill-column:99
   End:
 */

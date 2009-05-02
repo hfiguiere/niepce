@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include "geometry.h"
+#include "geometry.hpp"
 
 using utils::Rect;
 

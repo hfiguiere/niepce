@@ -28,7 +28,7 @@
 
 #include "fwk/toolkit/notification.hpp"
 #include "fwk/toolkit/controller.hpp"
-#include "engine/db/libfile.h"
+#include "engine/db/libfile.hpp"
 #include "libraryclient/libraryclient.hpp"
 
 namespace ui {

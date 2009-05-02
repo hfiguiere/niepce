@@ -25,7 +25,7 @@
 #include "config.h"
 #endif
 
-#include "eog-thumb-view.h"
+#include "eog-thumb-view.hpp"
 //#include "eog-list-store.h"
 
 #ifdef HAVE_EXIF
@@ -39,8 +39,8 @@
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
-#include "fwk/utils/boost.h"
-#include "engine/db/libfile.h"
+#include "fwk/utils/boost.hpp"
+#include "engine/db/libfile.hpp"
 
 #define EOG_THUMB_VIEW_SPACING 0
 

@@ -26,7 +26,7 @@
 #include <string>
 
 
-#include "stringutils.h"
+#include "stringutils.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {

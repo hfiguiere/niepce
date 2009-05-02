@@ -24,7 +24,7 @@ extern "C" {
 
 #include <geglmm/init.h>
 
-#include "ncr.h"
+#include "ncr.hpp"
 
 namespace ncr {
 

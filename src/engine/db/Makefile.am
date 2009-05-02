@@ -28,12 +28,12 @@ test_filebundle_LDADD = $(TEST_LIBS)
 noinst_LIBRARIES = libniepcedb.a
 
 libniepcedb_a_SOURCES = library.hpp library.cpp \
-	libfile.h libfile.cpp \
-	libfolder.h \
+	libfile.hpp libfile.cpp \
+	libfolder.hpp \
 	label.hpp \
-	libmetadata.h libmetadata.cpp \
-	keyword.h keyword.cpp \
-	storage.h storage.cpp \
-	fsfile.h fsfile.cpp \
+	libmetadata.hpp libmetadata.cpp \
+	keyword.hpp keyword.cpp \
+	storage.hpp storage.cpp \
+	fsfile.hpp fsfile.cpp \
 	filebundle.hpp filebundle.cpp \
-	metadata.h
+	metadata.hpp

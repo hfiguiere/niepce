@@ -24,10 +24,10 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/stock.h>
 
-#include "toolboxcontroller.h"
+#include "toolboxcontroller.hpp"
 #include "fwk/toolkit/widgets/editablehscale.hpp"
 #include "fwk/toolkit/widgets/dock-item.hpp"
-#include "dritemwidget.h"
+#include "dritemwidget.hpp"
 
 namespace darkroom {
 

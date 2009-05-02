@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include "exempi.h"
+#include "exempi.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {

@@ -28,7 +28,7 @@
 
 #include "sigc++/trackable.h"
 
-#include "fwk/utils/databinder.h"
+#include "fwk/utils/databinder.hpp"
 
 namespace Gtk {
 	class Widget;

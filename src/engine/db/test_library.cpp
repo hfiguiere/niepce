@@ -20,11 +20,11 @@
  */
 
 
-#include "fwk/utils/db/sqlstatement.h"
-#include "fwk/utils/db/iconnectiondriver.h"
+#include "fwk/utils/db/sqlstatement.hpp"
+#include "fwk/utils/db/iconnectiondriver.hpp"
 #include "library.hpp"
-#include "libfile.h"
-#include "libfolder.h"
+#include "libfile.hpp"
+#include "libfolder.hpp"
 
 #include <boost/test/minimal.hpp>
 

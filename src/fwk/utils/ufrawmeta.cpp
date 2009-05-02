@@ -28,9 +28,9 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "debug.h"
-#include "ufrawmeta.h"
-#include "exempi.h"
+#include "debug.hpp"
+#include "ufrawmeta.hpp"
+#include "exempi.hpp"
 
 
 namespace bfs = boost::filesystem;

@@ -24,7 +24,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/checkbutton.h>
 
-#include "fwk/utils/boost.h"
+#include "fwk/utils/boost.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gtkutils.hpp"

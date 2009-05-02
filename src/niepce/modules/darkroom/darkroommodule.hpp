@@ -30,11 +30,11 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "fwk/toolkit/controller.hpp"
-#include "engine/db/libfile.h"
+#include "engine/db/libfile.hpp"
 #include "libraryclient/libraryclient.hpp"
-#include "ncr/image.h"
-#include "modules/darkroom/imagecanvas.h"
-#include "modules/darkroom/toolboxcontroller.h"
+#include "ncr/image.hpp"
+#include "modules/darkroom/imagecanvas.hpp"
+#include "modules/darkroom/toolboxcontroller.hpp"
 	
 namespace fwk {
 class Dock;

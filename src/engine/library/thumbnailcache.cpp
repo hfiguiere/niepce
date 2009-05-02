@@ -26,12 +26,12 @@
 #include <gdkmm/pixbuf.h>
 #include <libopenraw-gnome/gdkpixbuf.h>
 
-#include "niepce/notifications.h"
-#include "fwk/utils/debug.h"
+#include "niepce/notifications.hpp"
+#include "fwk/utils/debug.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
-#include "thumbnailcache.h"
-#include "thumbnailnotification.h"
+#include "thumbnailcache.hpp"
+#include "thumbnailnotification.hpp"
 
 using db::LibFile;
 

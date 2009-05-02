@@ -22,7 +22,7 @@
 
 #include <gconf/gconf-client.h>
 
-#include "fwk/utils/debug.h"
+#include "fwk/utils/debug.hpp"
 #include "configuration.hpp"
 
 

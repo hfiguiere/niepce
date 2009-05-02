@@ -25,9 +25,9 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "debug.h"
-#include "exempi.h"
-#include "ufrawmeta.h"
+#include "debug.hpp"
+#include "exempi.hpp"
+#include "ufrawmeta.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {

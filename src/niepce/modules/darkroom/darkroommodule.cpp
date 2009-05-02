@@ -21,12 +21,12 @@
 #include <gtkmm/toolbar.h>
 #include <gtkmm/stock.h>
 
-#include "fwk/utils/debug.h"
+#include "fwk/utils/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
-#include "ncr/ncr.h"
-#include "darkroommodule.h"
+#include "ncr/ncr.hpp"
+#include "darkroommodule.hpp"
 
 namespace darkroom {
 

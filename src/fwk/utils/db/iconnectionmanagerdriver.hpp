@@ -28,7 +28,7 @@
 
 #include <string>
 
-#include "iconnectiondriver.h"
+#include "iconnectiondriver.hpp"
 
 namespace db {
 

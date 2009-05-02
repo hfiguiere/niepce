@@ -28,15 +28,15 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/paned.h>
 
-#include "librarymainview.h"
-#include "engine/db/libfile.h"
+#include "librarymainview.hpp"
+#include "engine/db/libfile.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
 #include "metadatapanecontroller.hpp"
 #include "selectioncontroller.hpp"
-#include "modules/darkroom/darkroommodule.h"
-#include "imageliststore.h"
+#include "modules/darkroom/darkroommodule.hpp"
+#include "imageliststore.hpp"
 
 namespace Gtk {
 	class Widget;

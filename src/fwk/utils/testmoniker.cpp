@@ -21,7 +21,7 @@
 
 #include <boost/test/minimal.hpp>
 
-#include "moniker.h"
+#include "moniker.hpp"
 
 
 int test_main( int, char *[] )             // note the name!

@@ -19,7 +19,7 @@
 
 #include <gtkmm/label.h>
 
-#include "dritemwidget.h"
+#include "dritemwidget.hpp"
 
 namespace darkroom {
 

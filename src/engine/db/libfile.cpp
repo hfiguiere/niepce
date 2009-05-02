@@ -18,9 +18,9 @@
  */
 
 
-#include "fwk/utils/debug.h"
-#include "libfile.h"
-#include "metadata.h"
+#include "fwk/utils/debug.hpp"
+#include "libfile.hpp"
+#include "metadata.hpp"
 
 namespace bfs = boost::filesystem;
 

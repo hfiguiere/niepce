@@ -28,8 +28,8 @@
 #include <exempi/xmp.h>
 #include <exempi/xmpconsts.h>
 
-#include "debug.h"
-#include "exempi.h"
+#include "debug.hpp"
+#include "exempi.hpp"
 
 namespace bfs = boost::filesystem;
 

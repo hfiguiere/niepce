@@ -26,9 +26,9 @@
 #include <boost/filesystem/path.hpp>
 
 #include "fwk/toolkit/mimetype.hpp"
-#include "engine/db/keyword.h"
-#include "engine/db/storage.h"
-#include "engine/db/fsfile.h"
+#include "engine/db/keyword.hpp"
+#include "engine/db/storage.hpp"
+#include "engine/db/fsfile.hpp"
 
 namespace db {
 

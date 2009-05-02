@@ -36,7 +36,7 @@
 
 #include <glibmm/thread.h>
 
-#include "debug.h"
+#include "debug.hpp"
 
 
 

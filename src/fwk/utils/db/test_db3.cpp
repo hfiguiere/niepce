@@ -21,14 +21,14 @@
 #include <sstream>
 #include <boost/scoped_ptr.hpp>
 
-#include "fwk/utils/buffer.h"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/buffer.hpp"
+#include "fwk/utils/debug.hpp"
 
-#include "sqlstatement.h"
-#include "insertstatement.h"
-#include "iconnectiondriver.h"
-#include "iconnectionmanagerdriver.h"
-#include "sqlite/sqlitecnxmgrdrv.h"
+#include "sqlstatement.hpp"
+#include "insertstatement.hpp"
+#include "iconnectiondriver.hpp"
+#include "iconnectionmanagerdriver.hpp"
+#include "sqlite/sqlitecnxmgrdrv.hpp"
 
 #include <boost/test/minimal.hpp>
 

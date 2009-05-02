@@ -1,7 +1,7 @@
 /*
- * niepce - db/libmetadata.h
+ * niepce - db/storage.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2007 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,42 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DB_LIBMETADATA_H_
-#define __DB_LIBMETADATA_H_
 
-#include <vector>
-#include <string>
+#ifndef __NIEPCE_LIBRARY_STORAGE_H__
+#define __NIEPCE_LIBRARY_STORAGE_H__
+
 #include <tr1/memory>
-#include <boost/any.hpp>
 
-#include "fwk/utils/exempi.h"
-#include "engine/db/metadata.h"
+#include "engine/db/keyword.hpp"
 
 namespace db {
 
-	class LibMetadata
-		: public utils::XmpMeta
+	/** @brief the interface for a storage */
+	class Storage
 	{
 	public:
-		typedef std::tr1::shared_ptr<LibMetadata> Ptr;
+		typedef std::tr1::shared_ptr<Storage> Ptr;
 
-		LibMetadata(int _id);
+		virtual ~Storage();
 
-        int id() const
-            { return m_id; }
-        bool setMetaData(int meta, const boost::any & value);
-        /** do like the unix "touch". Update the MetadataDate 
-         * to the current time, in UTC.
-         */
-        bool touch();
-    private:
-        LibMetadata(const LibMetadata &);
-        int m_id;
+		virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
 	};
 
 }
-
-#endif
 
 /*
   Local Variables:
@@ -63,3 +49,5 @@ namespace db {
   fill-column:99
   End:
 */
+
+#endif

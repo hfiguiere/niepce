@@ -28,15 +28,15 @@
 #include <boost/filesystem/convenience.hpp>
 
 #include "fwk/base/color.hpp"
-#include "niepce/notifications.h"
+#include "niepce/notifications.hpp"
 #include "library.hpp"
-#include "metadata.h"
-#include "fwk/utils/exception.h"
-#include "fwk/utils/exempi.h"
-#include "fwk/utils/debug.h"
-#include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.h"
-#include "fwk/utils/db/sqlite/sqlitecnxdrv.h"
-#include "fwk/utils/db/sqlstatement.h"
+#include "metadata.hpp"
+#include "fwk/utils/exception.hpp"
+#include "fwk/utils/exempi.hpp"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.hpp"
+#include "fwk/utils/db/sqlite/sqlitecnxdrv.hpp"
+#include "fwk/utils/db/sqlstatement.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 

@@ -27,7 +27,7 @@
 
 #include <glibmm/dispatcher.h>
 
-#include "fwk/utils/mtqueue.h"
+#include "fwk/utils/mtqueue.hpp"
 #include "notificationcenter.hpp"
 
 namespace fwk {

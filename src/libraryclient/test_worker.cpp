@@ -18,7 +18,7 @@
  */
 
 
-#include "fwk/utils/fsutils.h"
+#include "fwk/utils/fsutils.hpp"
 
 #define BOOST_AUTO_TEST_MAIN
 #include "locallibraryserver.hpp"

@@ -25,8 +25,8 @@
 #include <tr1/memory>
 #include <boost/filesystem/path.hpp>
 
-#include "fwk/utils/files.h"
-#include "engine/db/libfile.h"
+#include "fwk/utils/files.hpp"
+#include "engine/db/libfile.hpp"
 
 namespace db {
 

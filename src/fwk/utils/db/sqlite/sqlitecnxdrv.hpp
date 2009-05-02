@@ -31,7 +31,7 @@
 
 #include <glibmm/thread.h>
 
-#include "fwk/utils/db/iconnectiondriver.h"
+#include "fwk/utils/db/iconnectiondriver.hpp"
 
 struct sqlite3;
 

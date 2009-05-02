@@ -19,8 +19,8 @@
 
 #include <boost/bind.hpp>
 
-#include "fwk/utils/debug.h"
-#include "fwk/utils/files.h"
+#include "fwk/utils/debug.hpp"
+#include "fwk/utils/files.hpp"
 #include "engine/library/op.hpp"
 #include "engine/library/commands.hpp"
 #include "libraryclient.hpp"

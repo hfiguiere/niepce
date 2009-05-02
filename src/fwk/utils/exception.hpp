@@ -34,7 +34,7 @@
 #include <string>
 #include <iostream>
 
-#include "logstreamutils.h"
+#include "logstreamutils.hpp"
 
 namespace utils {
 

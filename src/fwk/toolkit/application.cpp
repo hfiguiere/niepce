@@ -27,8 +27,8 @@
 #include <gtkmm/rc.h>
 #include <gconf/gconf.h>
 
-#include "fwk/utils/boost.h"
-#include "fwk/utils/debug.h"
+#include "fwk/utils/boost.hpp"
+#include "fwk/utils/debug.hpp"
 #include "application.hpp"
 #include "frame.hpp"
 

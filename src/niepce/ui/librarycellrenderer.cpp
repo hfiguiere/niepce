@@ -20,8 +20,8 @@
 
 #include <gdkmm/general.h>
 
-#include "fwk/utils/debug.h"
-#include "librarycellrenderer.h"
+#include "fwk/utils/debug.hpp"
+#include "librarycellrenderer.hpp"
 
 #ifndef DATADIR
 #error DATADIR is not defined

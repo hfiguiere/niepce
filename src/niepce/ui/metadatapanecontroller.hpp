@@ -22,7 +22,7 @@
 
 #include <gtkmm/box.h>
 
-#include "fwk/utils/exempi.h"
+#include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/dockable.hpp"
 
 namespace xmp {

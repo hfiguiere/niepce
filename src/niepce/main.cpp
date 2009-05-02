@@ -28,8 +28,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/thread.h>
 
-#include "fwk/utils/exempi.h"
-#include "xmp.h"
+#include "fwk/utils/exempi.hpp"
+#include "xmp.hpp"
 #include "ui/niepceapplication.hpp"
 
 namespace bfs = boost::filesystem;

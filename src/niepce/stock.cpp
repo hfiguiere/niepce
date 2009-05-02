@@ -23,8 +23,8 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/stockitem.h>
 
-#include "fwk/utils/debug.h"
-#include "stock.h"
+#include "fwk/utils/debug.hpp"
+#include "stock.hpp"
 
 #ifndef DATADIR
 #error DATADIR is not defined

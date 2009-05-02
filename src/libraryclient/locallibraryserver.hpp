@@ -24,7 +24,7 @@
 #ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 #define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
-#include "fwk/utils/worker.h"
+#include "fwk/utils/worker.hpp"
 #include "engine/library/op.hpp"
 #include "engine/db/library.hpp"
 

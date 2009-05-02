@@ -37,8 +37,8 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/any.hpp>
 
-#include "fwk/utils/buffer.h"
-#include "fwk/utils/db/iconnectiondriver.h"
+#include "fwk/utils/buffer.hpp"
+#include "fwk/utils/db/iconnectiondriver.hpp"
 
 namespace db
 {
