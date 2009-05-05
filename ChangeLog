@@ -1,3 +1,9 @@
+2009-05-05  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/engine/db/test_filebundle.cpp: 
+	* src/engine/db/test_filebundle.cpp:
+	Initialize Gio...
+
 2009-05-02  Hubert Figuiere  <hub@figuiere.net>
 
 	* eog-thumb-view.cpp: Fix a warning.

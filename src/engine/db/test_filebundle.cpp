@@ -18,6 +18,8 @@
  */
 
 
+#include <giomm/init.h>
+
 #include "filebundle.hpp"
 
 
@@ -28,6 +30,7 @@
 
 int test_main(int, char *[])
 {
+    Gio::init();
     utils::FileList::Ptr thelist(new utils::FileList());
     
     thelist->push_back("/foo/bar/img_0001.cr2");

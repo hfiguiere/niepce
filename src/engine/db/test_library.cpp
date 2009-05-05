@@ -20,6 +20,8 @@
  */
 
 
+#include <giomm/init.h>
+
 #include "fwk/utils/db/sqlstatement.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
 #include "library.hpp"
@@ -32,6 +34,7 @@
 //BOOST_AUTO_TEST_CASE(library_test)
 int test_main(int, char *[])
 {
+    Gio::init();
 	db::Library lib("./", fwk::NotificationCenter::Ptr());
 
 	BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
