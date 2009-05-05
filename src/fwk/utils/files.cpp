@@ -17,27 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
 #include <boost/algorithm/string.hpp>
+
+#include <giomm/file.h>
 
 #include "debug.hpp"
 #include "files.hpp"
+#include "pathutils.hpp"
 
-namespace bfs = boost::filesystem;
 
 namespace utils {
 
-	bool filter_none(const boost::filesystem::path & )
+	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & )
 	{
 		return true;
 	}
 
 
-	bool filter_xmp_out(const bfs::path & file)
+	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
 	{
-		std::string ext = extension(file);
+		std::string ext = fwk::path_extension(file->get_name());
 		boost::to_lower(ext);
 		if(ext == ".xmp") {
 			return false;
@@ -51,33 +50,41 @@ namespace utils {
 	{
 	}
 
-	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, boost::function<bool (const value_type &)> filter)
+	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, boost::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter)
 	{
-		if(!exists( p ) ) {
-			DBG_OUT( "directory %s do not exist", p.string().c_str() );
-			return Ptr();
-		}
+//		if(!exists( p ) ) {
+//			DBG_OUT( "directory %s do not exist", p.c_str() );
+//			return Ptr();
+//		}
 		try
 		{
 			FileList::Ptr l( new FileList() );
 			
-			bfs::directory_iterator end_itr; 
-			for ( bfs::directory_iterator itr( p );
-				  itr != end_itr;
-				  ++itr )
+      Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(p);
+      Glib::RefPtr<Gio::FileEnumerator> enumerator = dir->enumerate_children();
+
+			for( Glib::RefPtr<Gio::FileInfo> itr = enumerator->next_file();
+            itr ; itr = enumerator->next_file() )
 			{
-				if ( !is_directory(*itr) )
+        Gio::FileType ftype = itr->get_file_type();
+				if ((ftype == Gio::FILE_TYPE_REGULAR)  || (ftype == Gio::FILE_TYPE_SYMBOLIC_LINK))
 				{
-					if( filter(*itr) ) {
-						l->push_back(*itr);
-						DBG_OUT( "found file %s", itr->string().c_str() );
+					if( filter(itr) ) {
+            std::string fullname = Glib::build_filename(dir->get_path(), itr->get_name());
+						l->push_back(fullname);
+						DBG_OUT( "found file %s", fullname.c_str() );
 					}
 				}
 			}
+      enumerator->close();
 			l->sort();
 			return l;
 		}
-		catch( std::exception & e )
+    catch(const Glib::Error & e)
+    {
+			ERR_OUT( "Exception: %s", e.what().c_str() );
+    }
+		catch(const std::exception & e )
 		{
 			ERR_OUT( "Exception: %s", e.what() );
 		}

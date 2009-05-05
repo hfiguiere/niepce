@@ -5,11 +5,13 @@ INCLUDES = -I$(top_srcdir)/src/ @LIBGLIBMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@
 
 TESTS = testmoniker testfiles testgeometry testxmp \
+	testpathutils \
 	teststringutils test_db test_db2 test_db3 test_db4 testufrawmeta
 
 EXTRA_DIST = test.xmp test2.ufraw
 
 check_PROGRAMS = testmoniker testfiles testgeometry testxmp \
+	testpathutils \
 	teststringutils test_db test_db2 test_db3 test_db4 testufrawmeta
 
 testmoniker_SOURCES = testmoniker.cpp
@@ -18,7 +20,7 @@ testmoniker_LDADD = libniepceutils.a \
 
 testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.a \
-	@BOOST_FILESYSTEM_LIBS@ @LIBGLIBMM_LIBS@
+	@LIBGLIBMM_LIBS@
 
 testgeometry_SOURCES = testgeometry.cpp
 testgeometry_LDADD = libniepceutils.a \
@@ -26,16 +28,21 @@ testgeometry_LDADD = libniepceutils.a \
 
 testxmp_SOURCES = testxmp.cpp
 testxmp_LDADD = libniepceutils.a \
-	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @LIBGLIBMM_LIBS@
+	@EXEMPI_LIBS@ @LIBGLIBMM_LIBS@
 
 testufrawmeta_SOURCES = testufrawmeta.cpp
 testufrawmeta_CXXFLAGS =  -g -O0
 testufrawmeta_LDADD = libniepceutils.a \
-	@EXEMPI_LIBS@ @BOOST_FILESYSTEM_LIBS@ @LIBXML2_LIBS@ \
+	@EXEMPI_LIBS@ @LIBXML2_LIBS@ \
 	@LIBGLIBMM_LIBS@
 
 teststringutils_SOURCES = teststringutils.cpp
 teststringutils_LDADD = 
+
+testpathutils_SOURCES = t/testpathutils.cpp
+testpathutils_LDADD = libniepceutils.a \
+	@LIBGLIBMM_LIBS@
+
 
 test_db_SOURCES = db/test_db.cpp
 test_db_LDADD = libniepceutils.a \
@@ -72,6 +79,7 @@ libniepceutils_a_SOURCES = exception.hpp exception.cpp \
 	files.hpp files.cpp \
 	geometry.hpp geometry.cpp \
 	thread.hpp thread.cpp worker.hpp \
+	pathutils.hpp pathutils.cpp \
 	databinder.hpp databinder.cpp \
 	db/iconnectiondriver.hpp db/iconnectionmanagerdriver.hpp \
 	db/insertstatement.cpp db/insertstatement.hpp \

@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <boost/bind.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <glibmm/i18n.h>
 #include <glibmm/thread.h>
@@ -32,7 +31,6 @@
 #include "xmp.hpp"
 #include "ui/niepceapplication.hpp"
 
-namespace bfs = boost::filesystem;
 using utils::ExempiManager;
 
 
@@ -41,10 +39,6 @@ int main(int argc, char ** argv)
   bindtextdomain(GETTEXT_PACKAGE, NIEPCE_LOCALEDIR);
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
   textdomain(GETTEXT_PACKAGE);
-
-	// we need to init boost::filesystem to use native path checks.
-	// note: this is not the case in the tests.
-	bfs::path::default_name_check(&bfs::native);
 
 	ExempiManager ex_manager(niepce::xmp_namespaces);
 

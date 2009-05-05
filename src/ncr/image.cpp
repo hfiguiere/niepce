@@ -60,7 +60,7 @@ Image::~Image()
     delete priv;
 }
 
-void Image::reload(const boost::filesystem::path & p, bool is_raw,
+void Image::reload(const std::string & p, bool is_raw,
     int orientation)
 {
     Glib::RefPtr<Gegl::Node> load_file;
@@ -70,12 +70,12 @@ void Image::reload(const boost::filesystem::path & p, bool is_raw,
 
     if(!is_raw) {
         load_file = priv->m_node->new_child("operation", "gegl:load");
-        load_file->set("path", p.string());
+        load_file->set("path", p);
         priv->m_rgb = load_file;
     }
     else {
         ORRawDataRef rawdata;
-        or_get_extract_rawdata(p.string().c_str(), 0, &rawdata);
+        or_get_extract_rawdata(p.c_str(), 0, &rawdata);
         Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
         // @todo can return a NULL buffer if load failed. Deal with that.
         load_file = priv->m_node->new_child("operation", "gegl:load-buffer");

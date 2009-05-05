@@ -24,8 +24,6 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 #include "fwk/base/color.hpp"
 #include "niepce/notifications.hpp"
@@ -34,6 +32,7 @@
 #include "fwk/utils/exception.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxdrv.hpp"
 #include "fwk/utils/db/sqlstatement.hpp"
@@ -43,7 +42,6 @@
 using fwk::NotificationCenter;
 using eng::Label;
 
-namespace bfs = boost::filesystem;
 
 namespace db {
 
@@ -52,13 +50,13 @@ const char * s_databaseName = "niepcelibrary.db";
 
 Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
     : m_maindir(dir),
-      m_dbname(m_maindir / s_databaseName),
+      m_dbname(m_maindir + "/" + s_databaseName),
       m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
       m_notif_center(nc),
       m_inited(false)
 {
     DBG_OUT("dir = %s", dir.c_str());
-    db::DBDesc desc("", 0, m_dbname.string());
+    db::DBDesc desc("", 0, m_dbname);
     m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
     m_inited = init();
 
@@ -217,13 +215,13 @@ int Library::checkDatabaseVersion()
 }
 
 
-int Library::addFsFile(const bfs::path & file)
+int Library::addFsFile(const std::string & file)
 {
     int ret = -1;
 
     SQLStatement sql(boost::format("INSERT INTO fsfiles (path)"
                                    " VALUES ('%1%')") 
-                     % file.string());
+                     % file);
     if(m_dbdrv->execute_statement(sql)) {
         int64_t id = m_dbdrv->last_row_id();
         DBG_OUT("last row inserted %d", (int)id);
@@ -232,9 +230,9 @@ int Library::addFsFile(const bfs::path & file)
     return ret;
 }
 
-boost::filesystem::path Library::getFsFile(int id)
+std::string Library::getFsFile(int id)
 {
-    boost::filesystem::path p;
+    std::string p;
     SQLStatement sql(boost::format("SELECT path FROM fsfiles"
                                    " WHERE id='%1%'") 
                      % id);
@@ -255,7 +253,7 @@ boost::filesystem::path Library::getFsFile(int id)
 }
 
 
-int Library::addFile(int folder_id, const bfs::path & file, bool manage)
+int Library::addFile(int folder_id, const std::string & file, bool manage)
 {
     int ret = -1;
     DBG_ASSERT(!manage, "manage not supported");
@@ -263,7 +261,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
     try {
         int32_t rating, label_id, orientation;
         std::string label;  
-        fwk::MimeType mime = fwk::MimeType(file.string());
+        fwk::MimeType mime = fwk::MimeType(file);
         db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
         utils::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
         label_id = 0;
@@ -289,7 +287,7 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
                                        " '%4%', '%4%',"
                                        " '%5%', '%6%', '%7%', '%8%', '%9%',"
                                        " ?1);") 
-                         % fs_file_id % file.leaf() % folder_id
+                         % fs_file_id % fwk::path_basename(file) % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
                          % label_id % file_type);
@@ -325,13 +323,13 @@ int Library::addFile(int folder_id, const bfs::path & file, bool manage)
 }
 
 
-int Library::addFileAndFolder(const bfs::path & folder, const bfs::path & file, 
+int Library::addFileAndFolder(const std::string & folder, const std::string & file, 
                               bool manage)
 {
     LibFolder::Ptr f;
     f = getFolder(folder);
     if(f == NULL) {
-        ERR_OUT("Folder %s not found", folder.string().c_str());
+        ERR_OUT("Folder %s not found", folder.c_str());
     }
     return addFile(f ? f->id() : -1, file, manage);
 }
@@ -395,12 +393,12 @@ bool Library::addJpegFileToBundle(int file_id, int fsfile_id)
 }
 
 
-LibFolder::Ptr Library::getFolder(const bfs::path & folder)
+LibFolder::Ptr Library::getFolder(const std::string & folder)
 {
     LibFolder::Ptr f;
     SQLStatement sql(boost::format("SELECT id,name "
                                    "FROM folders WHERE path='%1%'") 
-                     % folder.string());
+                     % folder);
 		
     try {
         if(m_dbdrv->execute_statement(sql)) {
@@ -421,18 +419,19 @@ LibFolder::Ptr Library::getFolder(const bfs::path & folder)
 }
 
 
-LibFolder::Ptr Library::addFolder(const bfs::path & folder)
+LibFolder::Ptr Library::addFolder(const std::string & folder)
 {
     LibFolder::Ptr f;
     SQLStatement sql(boost::format("INSERT INTO folders "
                                    "(path,name,vault_id,parent_id) "
                                    "VALUES('%1%', '%2%', '0', '0')") 
-                     % folder.string() % folder.leaf());
+                     % folder % fwk::path_basename(folder));
     try {
         if(m_dbdrv->execute_statement(sql)) {
             int64_t id = m_dbdrv->last_row_id();
             DBG_OUT("last row inserted %d", (int)id);
-            f = LibFolder::Ptr(new LibFolder((int)id, folder.leaf()));
+            f = LibFolder::Ptr(new LibFolder((int)id, 
+                                             fwk::path_basename(folder)));
         }
     }
     catch(utils::Exception & e)
@@ -478,8 +477,7 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
     dbdrv->get_column_content(8, fsfid);
     DBG_OUT("found %s", pathname.c_str());
     LibFile::Ptr f(new LibFile(id, fid, fsfid,
-                               bfs::path(pathname), 
-                               name));
+                               pathname, name));
     int32_t val;
     dbdrv->get_column_content(4, val);
     f->setOrientation(val);
@@ -870,26 +868,26 @@ bool Library::rewriteXmpForId(int id)
                 m_dbdrv->get_column_content(0, xmp_buffer);
                 m_dbdrv->get_column_content(1, main_file_id);
                 m_dbdrv->get_column_content(2, xmp_file_id);
-                boost::filesystem::path spath = getFsFile(main_file_id);
+                std::string spath = getFsFile(main_file_id);
                 DBG_ASSERT(!spath.empty(), "couldn't find the main file");
-                boost::filesystem::path p;
+                std::string p;
                 if(xmp_file_id > 0) {
                     p = getFsFile(xmp_file_id);
                     DBG_ASSERT(!p.empty(), "couldn't find the xmp file path");
                 }
                 if(p.empty()) {
-                    p = boost::filesystem::change_extension(spath, ".xmp");
+                    p = fwk::path_replace_extension(spath, ".xmp");
                     DBG_ASSERT(p != spath, "path must have been changed");
                 }
-                if(exists(p)) {
-                    DBG_OUT("%s already exist", p.string().c_str());
+                if(fwk::path_exists(p)) {
+                    DBG_OUT("%s already exist", p.c_str());
                     // TODO backup
                 }
                 // TODO probably a faster way to do that
                 utils::XmpMeta xmppacket;
                 xmppacket.unserialize(xmp_buffer.c_str());
                 // TODO use different API
-                FILE * f = fopen(p.string().c_str(), "w");
+                FILE * f = fopen(p.c_str(), "w");
                 if(f) {
                     std::string sidecar = xmppacket.serialize();
                     fwrite(sidecar.c_str(), sizeof(std::string::value_type),

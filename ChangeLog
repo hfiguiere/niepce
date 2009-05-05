@@ -3,6 +3,8 @@
 	* src/fwk/toolkit/dialog.hpp (fwk): Remove a leftover
 	boost::shared_ptr<>
 
+	* Remove boost::filesystem.
+
 2009-05-07  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/fwk/toolkit/mimetype.{cpp,hpp}:

@@ -21,8 +21,8 @@
 #define __UTILS_FSUTILS_H__
 
 #include <string>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+
+#include "fwk/utils/pathutils.hpp"
 
 namespace utils {
 
@@ -35,7 +35,7 @@ public:
 		}
 	~DirectoryDisposer()
 		{
-			boost::filesystem::remove_all(m_dir);
+      fwk::path_remove_recursive(m_dir);
 		}
 private:
 	std::string m_dir;

@@ -23,12 +23,17 @@
 
 #include <stdlib.h>
 
+#include <giomm/init.h>
+#include <glibmm/init.h>
+
 #include "files.hpp"
 
 using utils::FileList;
 
 int test_main( int, char *[] )             // note the name!
 {
+  Glib::init();
+  Gio::init();
 	system( "mkdir -p AAtest/sub" );
 	system( "touch AAtest/1" );
 	system( "touch AAtest/2" );

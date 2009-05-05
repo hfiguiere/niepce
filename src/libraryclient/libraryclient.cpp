@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/filesystem/path.hpp>
 
 #include "fwk/utils/moniker.hpp"
 
@@ -26,7 +25,6 @@
 
 using library::tid_t;
 
-namespace bfs = boost::filesystem;
 
 namespace libraryclient {
 
@@ -35,7 +33,7 @@ const char * s_thumbcacheDirname = "thumbcache";
 LibraryClient::LibraryClient(const utils::Moniker & moniker, 
                              const fwk::NotificationCenter::Ptr & nc)
     : m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
-      m_thumbnailCache(bfs::path(moniker.path()) / s_thumbcacheDirname, nc)
+      m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
 {
 
 }

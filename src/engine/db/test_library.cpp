@@ -35,30 +35,30 @@
 int test_main(int, char *[])
 {
     Gio::init();
-	db::Library lib("./", fwk::NotificationCenter::Ptr());
+    db::Library lib("./", fwk::NotificationCenter::Ptr());
 
-	BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
+    BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
 
-	db::IConnectionDriver::Ptr db(lib.dbDriver());
+    db::IConnectionDriver::Ptr db(lib.dbDriver());
 	
     db::LibFolder::Ptr folder_added(lib.addFolder("foo"));
     BOOST_CHECK(folder_added);
     BOOST_CHECK(folder_added->id() > 0);
-	db::LibFolder::Ptr f(lib.getFolder("foo"));
-	BOOST_CHECK(f);
+    db::LibFolder::Ptr f(lib.getFolder("foo"));
+    BOOST_CHECK(f);
     BOOST_CHECK(f->id() == folder_added->id());
-	lib.addFolder("bar");
-	BOOST_CHECK(lib.getFolder("bar"));
+    lib.addFolder("bar");
+    BOOST_CHECK(lib.getFolder("bar"));
 
-	db::LibFolder::ListPtr l( new db::LibFolder::List );
-	lib.getAllFolders( l );
-	BOOST_CHECK( l->size() == 2 );
-
+    db::LibFolder::ListPtr l( new db::LibFolder::List );
+    lib.getAllFolders( l );
+    BOOST_CHECK( l->size() == 2 );
+    
     int file_id = lib.addFile(folder_added->id(), "foo/myfile", false);
     BOOST_CHECK(file_id > 0);
-
-	BOOST_CHECK(unlink(lib.dbName().string().c_str()) != -1);
-	return 0;
+    
+    BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
+    return 0;
 }
 
 /*

@@ -22,17 +22,16 @@
 #include "libfile.hpp"
 #include "metadata.hpp"
 
-namespace bfs = boost::filesystem;
 
 namespace db {
 	
-LibFile::LibFile(int _id, int _folderId, int _fsfileid, const bfs::path & p,
+LibFile::LibFile(int _id, int _folderId, int _fsfileid, const std::string & p,
                  const std::string & _name )
 	: m_id(_id), m_folderId(_folderId),
 	  m_name(_name), 
-      m_main_file(_fsfileid, p),
+    m_main_file(_fsfileid, p),
 	  m_orientation(0), m_rating(0), m_label(0),
-      m_file_type(FILE_TYPE_UNKNOWN)
+    m_file_type(FILE_TYPE_UNKNOWN)
 {
     
 }

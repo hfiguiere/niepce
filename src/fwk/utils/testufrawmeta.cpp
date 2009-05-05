@@ -21,9 +21,12 @@
 #include <boost/test/minimal.hpp>
 
 #include <stdlib.h>
+#include <string>
 #include <vector>
 
 #include <exempi/xmpconsts.h>
+
+#include <giomm/init.h>
 
 #include "debug.hpp"
 #include "exempi.hpp"
@@ -31,7 +34,8 @@
 
 int test_main( int, char *[] )             // note the name!
 {
-	boost::filesystem::path dir;
+  Gio::init();
+  std::string dir;
 	const char * pdir = getenv("srcdir");
 	if(pdir == NULL) {
 		dir = ".";
@@ -41,13 +45,13 @@ int test_main( int, char *[] )             // note the name!
 	}
 	utils::ExempiManager xmpManager(NULL);
 
-    xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
+  xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
 
-	utils::UfrawMeta ufraw(dir / "test2.ufraw");
+	utils::UfrawMeta ufraw(dir + "/test2.ufraw");
 
 	BOOST_CHECK(ufraw.ufraw_to_xmp(xmp));
 
-    xmp::ScopedPtr<XmpStringPtr> property(xmp_string_new());
+  xmp::ScopedPtr<XmpStringPtr> property(xmp_string_new());
 	BOOST_CHECK(property != NULL);
 	BOOST_CHECK(xmp_get_property(xmp, NS_CAMERA_RAW_SETTINGS,
 								 "WhiteBalance", property, NULL));

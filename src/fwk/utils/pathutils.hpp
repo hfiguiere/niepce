@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/imageloader.hpp
+ * niepce - fwk/utils/pathutils.hpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,25 +18,40 @@
  */
 
 
-#ifndef __FWK_IMAGELOADER_H__
-#define __FWK_IMAGELOADER_H__
+
+#ifndef __FWK_PATHUTILS_HPP_
+#define __FWK_PATHUTILS_HPP_
 
 #include <string>
 
-#include <gdkmm/pixbuf.h>
-
 namespace fwk {
 
-class ImageLoader
-{
-public:
-	ImageLoader(const std::string & file);
-	Glib::RefPtr<Gdk::Pixbuf> get_pixbuf();
-private:
-  std::string m_file;
-};
+/** return the basename of a path. Example:
+    /foo/bar/baz.txt returns baz.txt
+ */
+std::string path_basename(const std::string & path);
+
+/** return the stem of a path, ie basename minus extension
+    /foo/bar/baz.txt returns baz
+ */
+std::string path_stem(const std::string & path);
+
+
+/** return the extension of a path
+    /foo/bar/baz.txt returns .txt
+    It always return the "." if any. No extension = "".
+ */
+std::string path_extension(const std::string & path);
+
+std::string path_replace_extension(const std::string & path, const char * ext);
+
+
+bool path_exists(const std::string & path);
+
+void path_remove_recursive(const std::string & path);
 
 }
+
 
 /*
   Local Variables:
@@ -44,8 +59,7 @@ private:
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:80
+  fill-column:99
   End:
 */
-
 #endif

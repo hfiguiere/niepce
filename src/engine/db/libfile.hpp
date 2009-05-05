@@ -23,7 +23,6 @@
 #include <string>
 #include <list>
 #include <tr1/memory>
-#include <boost/filesystem/path.hpp>
 
 #include "fwk/toolkit/mimetype.hpp"
 #include "engine/db/keyword.hpp"
@@ -51,7 +50,7 @@ public:
     static FileType mimetype_to_filetype(fwk::MimeType mime);
 
     LibFile(int id, int folderId, int fsfileid, 
-            const boost::filesystem::path & p,
+            const std::string & p,
             const std::string & name );
     virtual ~LibFile();
 
@@ -61,7 +60,7 @@ public:
         { return m_folderId; }
     const std::string & name() const
         { return m_name; }
-    const boost::filesystem::path & path() const
+    const std::string & path() const
         { return m_main_file.path(); }
 
 //		Storage::Ptr storage() const;
@@ -96,7 +95,7 @@ public:
      * because the Gtk stuff want that.
      */
     const std::string uri() const
-        { return std::string("file://") + m_main_file.path().string(); }
+        { return std::string("file://") + m_main_file.path(); }
     /** check is the library file is at uri
      * @return true of the uri match
      * @todo

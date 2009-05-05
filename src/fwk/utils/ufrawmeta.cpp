@@ -21,7 +21,6 @@
 #include <vector>
 #include <utility>
 
-#include <boost/filesystem/operations.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/lexical_cast.hpp>
@@ -31,9 +30,8 @@
 #include "debug.hpp"
 #include "ufrawmeta.hpp"
 #include "exempi.hpp"
+#include "pathutils.hpp"
 
-
-namespace bfs = boost::filesystem;
 
 namespace utils {
 
@@ -91,7 +89,7 @@ namespace utils {
 	};
 
 
-	UfrawMeta::UfrawMeta(const bfs::path & file)
+	UfrawMeta::UfrawMeta(const std::string & file)
 		: m_id_file(file),
 		  m_hasSettings(false),
 		  m_startDepth(-1)
@@ -315,9 +313,9 @@ namespace utils {
 	bool UfrawMeta::ufraw_to_xmp(XmpPtr xmp)
 	{
 		bool has_data = false;
-		if(exists(m_id_file)) {
+		if(fwk::path_exists(m_id_file)) {
 			xmlTextReaderPtr reader;
-			reader = xmlNewTextReaderFilename(m_id_file.string().c_str());
+			reader = xmlNewTextReaderFilename(m_id_file.c_str());
 			if(reader != NULL) {
 				int ret = xmlTextReaderRead(reader);
 				while(ret == 1) {
@@ -334,7 +332,7 @@ namespace utils {
 			}
 		}
 		else {
-			DBG_OUT("file not found %s", m_id_file.string().c_str());
+			DBG_OUT("file not found %s", m_id_file.c_str());
 		}
 		if(has_data) {
 			xmp_set_property_bool(xmp, xmp::UFRAW_INTEROP_NAMESPACE, 

@@ -24,7 +24,7 @@
 
 namespace db {
 
-FsFile::FsFile(int _id, const boost::filesystem::path & _path)
+FsFile::FsFile(int _id, const std::string & _path)
     : m_id(_id), m_path(_path)
 {
 }

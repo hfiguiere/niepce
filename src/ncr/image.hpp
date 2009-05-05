@@ -24,7 +24,6 @@
 #define _NCR_IMAGE_H_
 
 #include <tr1/memory>
-#include <boost/filesystem/path.hpp>
 
 #include <gdkmm/pixbuf.h>
 
@@ -40,7 +39,7 @@ public:
     virtual ~Image();
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf_for_display();
-    void reload(const boost::filesystem::path & p, bool is_raw,
+    void reload(const std::string & p, bool is_raw,
         int orientation);
     void set_scale(double scale);
 

@@ -21,9 +21,8 @@
 #define __DB_FILEBUNDLE_H_
 
 #include <list>
-
+#include <string>
 #include <tr1/memory>
-#include <boost/filesystem/path.hpp>
 
 #include "fwk/utils/files.hpp"
 #include "engine/db/libfile.hpp"
@@ -39,20 +38,20 @@ public:
     typedef std::tr1::shared_ptr<List> ListPtr;
 
     /** add a file to a bundle. Will determine what type it is. */
-    void add(const boost::filesystem::path & path);
-    const boost::filesystem::path & main_file() const
+    void add(const std::string & path);
+    const std::string & main_file() const
         { return m_main; }
-    const boost::filesystem::path & jpeg() const
+    const std::string & jpeg() const
         { return m_jpeg; }
-    const boost::filesystem::path & sidecar() const
+    const std::string & sidecar() const
         { return m_xmp_sidecar; }
     
     static ListPtr filter_bundles(const utils::FileList::Ptr & files);
 private:
-    boost::filesystem::path m_main;
-    boost::filesystem::path m_xmp_sidecar;
-    boost::filesystem::path m_jpeg;
-    boost::filesystem::path m_thumbnail;
+    std::string m_main;
+    std::string m_xmp_sidecar;
+    std::string m_jpeg;
+    std::string m_thumbnail;
 };
 
 

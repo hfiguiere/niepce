@@ -22,7 +22,6 @@
 
 #include <boost/any.hpp>
 #include <boost/bind.hpp>
-#include <boost/filesystem/path.hpp>
 
 
 #include "fwk/utils/boost.hpp"
@@ -35,8 +34,6 @@
 #include "engine/db/keyword.hpp"
 #include "engine/db/label.hpp"
 #include "commands.hpp"
-
-namespace bfs = boost::filesystem;
 
 using db::Library;
 using db::LibFolder;
@@ -66,7 +63,7 @@ void Commands::cmdListAllFolders(const Library::Ptr & lib)
 }
 	
 void Commands::cmdImportFiles(const Library::Ptr & lib, 
-                              const bfs::path & folder, 
+                              const std::string & folder, 
                               const FileList::Ptr & files, bool manage)
 {
     DBG_ASSERT(!manage, "managing file is currently unsupported");

@@ -26,7 +26,6 @@
 
 #include <tr1/memory>
 #include <boost/any.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
@@ -80,10 +79,10 @@ public:
 //		void setMainDir(const std::string & dir)
 //			{ m_maindir = dir; }
 		/** return the main directory */
-		const boost::filesystem::path & mainDir() const
+		const std::string & mainDir() const
         { return m_maindir; }
 		/** get the path to the DB file */
-		const boost::filesystem::path & dbName() const
+		const std::string & dbName() const
         { return m_dbname; }
 
 		void notify(NotifyType t, const boost::any & param);
@@ -93,28 +92,27 @@ public:
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFileAndFolder(const boost::filesystem::path & folder, 
-                         const boost::filesystem::path & file, bool manage);
+		int addFileAndFolder(const std::string & folder, 
+                         const std::string & file, bool manage);
 
     /** add a fs file to the library  
      * @param file the file path
      * @return the id of the fs_file, -1 in case of error
      */
-    int addFsFile(const boost::filesystem::path & file);
+    int addFsFile(const std::string & file);
 
     /** Get a FsFile from an id
      * @param id the id of the FsFile
      * @return the path. Empty if not found.
      */
-    boost::filesystem::path getFsFile(int id);
+    std::string getFsFile(int id);
 
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFile(int folder_id, const boost::filesystem::path & file, 
-                bool manage);
+		int addFile(int folder_id, const std::string & file, bool manage);
 
 		/** add a bundle of files to the library
 		 * @param folder_id the id of the containing folder
@@ -140,12 +138,12 @@ public:
 		 * @param folder the folder path to check
 		 * @return the folder, NULL if not found
 		 */
-		LibFolder::Ptr getFolder(const boost::filesystem::path & folder);
+		LibFolder::Ptr getFolder(const std::string & folder);
 
 		/** Add a folder
 		 * @param folder the folder path
 		 */
-		LibFolder::Ptr addFolder(const boost::filesystem::path & folder);
+		LibFolder::Ptr addFolder(const std::string & folder);
 		/** List all the folders.
 		 * @param l the list of LibFolder
 		 */
@@ -207,8 +205,8 @@ private:
     bool setInternalMetaDataInt(int file_id, const char* col,
                                 int32_t value);
 
-		boost::filesystem::path           m_maindir;
-		boost::filesystem::path           m_dbname;
+    std::string                       m_maindir;
+    std::string                       m_dbname;
 		db::IConnectionManagerDriver::Ptr m_dbmgr;
 		db::IConnectionDriver::Ptr        m_dbdrv;
 		std::tr1::weak_ptr<fwk::NotificationCenter>  m_notif_center;

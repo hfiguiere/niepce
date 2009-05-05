@@ -40,7 +40,7 @@ public:
 		static void cmdListAllFolders(const db::Library::Ptr & lib);
 		static void cmdListAllKeywords(const db::Library::Ptr & lib);
 		static void cmdImportFiles(const db::Library::Ptr & lib, 
-                               const boost::filesystem::path & folder, 
+                               const std::string & folder, 
                                const utils::FileList::Ptr & files, 
                                bool manage);
 		static void cmdQueryFolderContent(const db::Library::Ptr & lib, 

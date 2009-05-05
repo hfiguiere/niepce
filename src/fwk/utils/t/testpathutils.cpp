@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/imageloader.hpp
+ * niepce - utils/testpathutils.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,34 +18,24 @@
  */
 
 
-#ifndef __FWK_IMAGELOADER_H__
-#define __FWK_IMAGELOADER_H__
+
+#include <boost/test/minimal.hpp>
 
 #include <string>
 
-#include <gdkmm/pixbuf.h>
 
-namespace fwk {
+#include "pathutils.hpp"
 
-class ImageLoader
+int test_main( int, char *[] )             // note the name!
 {
-public:
-	ImageLoader(const std::string & file);
-	Glib::RefPtr<Gdk::Pixbuf> get_pixbuf();
-private:
-  std::string m_file;
-};
+  BOOST_CHECK(fwk::path_basename("/foo/bar/baz.txt") == "baz.txt");
 
+  BOOST_CHECK(fwk::path_stem("/foo/bar/baz.txt") == "/foo/bar/baz");
+  
+  BOOST_CHECK(fwk::path_extension("/foo/bar/baz.txt") == ".txt");
+
+  BOOST_CHECK(fwk::path_replace_extension("/foo/bar/baz.txt", ".xmp") == "/foo/bar/baz.xmp");
+
+	return 0;
 }
 
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:80
-  End:
-*/
-
-#endif

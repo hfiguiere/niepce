@@ -18,20 +18,20 @@
  */
 
 
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
-#include <boost/filesystem/convenience.hpp>
 #include <boost/lexical_cast.hpp>
+
+#include <glib.h>
+#include <giomm/file.h>
 
 #include <exempi/xmp.h>
 #include <exempi/xmpconsts.h>
 
 #include "debug.hpp"
 #include "exempi.hpp"
-
-namespace bfs = boost::filesystem;
+#include "pathutils.hpp"
 
 namespace xmp {
 
@@ -79,14 +79,14 @@ XmpMeta::XmpMeta()
  * @param sidecar_only we only want the sidecar.
  * It will locate the XMP sidecar for the file.
  */
-XmpMeta::XmpMeta(const bfs::path & file, bool sidecar_only)
+XmpMeta::XmpMeta(const std::string & file, bool sidecar_only)
     : m_xmp(NULL),
       m_keyword_fetched(false)
 {
     if(!sidecar_only) {
         DBG_OUT("trying to load the XMP from the file");
         xmp::ScopedPtr<XmpFilePtr> 
-            xmpfile(xmp_files_open_new(file.string().c_str(), XMP_OPEN_READ));
+            xmpfile(xmp_files_open_new(file.c_str(), XMP_OPEN_READ));
         if(xmpfile != NULL) {
             m_xmp = xmp_files_get_new_xmp(xmpfile);
             if(xmpfile == NULL) {
@@ -96,27 +96,26 @@ XmpMeta::XmpMeta(const bfs::path & file, bool sidecar_only)
     }
 		
     if(m_xmp == NULL) {
-        size_t len;
-        char * buffer;
-        bfs::path sidecar = file.branch_path()
-            / (basename(file) + ".xmp");
+        gsize len = 0;
+        char * buffer = NULL;
+        std::string sidecar = fwk::path_replace_extension(file, ".xmp");
 			
-        DBG_OUT("creating xmpmeta from %s", sidecar.string().c_str());
-        FILE * f = fopen(sidecar.string().c_str(), "rb");
-			
-        if (f != NULL) {
-            fseek(f, 0, SEEK_END);
-            len = ftell(f);
-            fseek(f, 0, SEEK_SET);
-				
-            buffer = (char*)malloc(len + 1);
-            /*size_t rlen =*/ fread(buffer, 1, len, f);
+        try {
+            DBG_OUT("creating xmpmeta from %s", sidecar.c_str());
+            Glib::RefPtr<Gio::File> f = Gio::File::create_for_path(sidecar);
+            std::string etag_out;
+            f->load_contents(buffer, len, etag_out);
+        }
+        catch(const Glib::Exception & e) {
+            ERR_OUT("loading XMP failed: %s", e.what().c_str());
+        }
+        if(buffer) {
             m_xmp = xmp_new_empty();
             if(!xmp_parse(m_xmp, buffer, len)) {
                 xmp_free(m_xmp);
                 m_xmp = NULL;
             }
-            free(buffer);
+            g_free(buffer);
         }
     }
 }

@@ -24,7 +24,6 @@
 #include <vector>
 #include <string>
 
-#include <boost/filesystem/path.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <exempi/xmp.h>
@@ -126,7 +125,7 @@ class XmpMeta
 {
 public:
     XmpMeta();
-    XmpMeta(const boost::filesystem::path & for_file, bool sidecar_only);
+    XmpMeta(const std::string & for_file, bool sidecar_only);
     virtual ~XmpMeta();
 
     bool isOk() const 

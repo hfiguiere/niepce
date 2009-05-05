@@ -21,7 +21,6 @@
 #ifndef _LIBRARY_THUMBNAILCACHE_H__
 #define _LIBRARY_THUMBNAILCACHE_H__
 
-#include <boost/filesystem/path.hpp>
 #include <tr1/memory>
 
 #include "fwk/utils/worker.hpp"
@@ -57,7 +56,7 @@ namespace library {
 		: private utils::Worker< ThumbnailTask::Ptr >
 	{
 	public:
-		ThumbnailCache(const boost::filesystem::path & dir,
+		ThumbnailCache(const std::string & dir,
 					   const fwk::NotificationCenter::Ptr & nc);
 		~ThumbnailCache();
 
@@ -67,7 +66,7 @@ namespace library {
 	protected:
 		virtual void execute(const  ThumbnailTask::Ptr & task);
 	private:
-		boost::filesystem::path         m_cacheDir;
+    std::string                                 m_cacheDir;
 		std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
 	};
 

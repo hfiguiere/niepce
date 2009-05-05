@@ -22,14 +22,12 @@
 #include <exempi/xmp.h>
 #include <libxml/xmlreader.h>
 
-#include <boost/filesystem/path.hpp>
-
 namespace utils {
 
 	class UfrawMeta
 	{
 	public:
-		UfrawMeta(const boost::filesystem::path & file);
+		UfrawMeta(const std::string & file);
 
 		/** convert the .ufraw file to a XMP meta. Scrap the Exif
 		 * @param file the name of the ufraw filename.
@@ -41,7 +39,7 @@ namespace utils {
 		static int get_tag_id(const xmlChar *name);
 		bool ufraw_process_xml_node(xmlTextReaderPtr reader, XmpPtr xmp);
 		
-		boost::filesystem::path m_id_file; /**< the ufraw ID file */
+    std::string m_id_file; /**< the ufraw ID file */
 
 		std::string m_input;
 		std::string m_output;

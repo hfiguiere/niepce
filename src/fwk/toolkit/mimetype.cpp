@@ -18,13 +18,12 @@
  */
 
 #include <string>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/convenience.hpp>
 #include <giomm/contenttype.h>
 
 #include "config.h"
 
 #include "fwk/utils/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "mimetype.hpp"
 
 namespace fwk {
@@ -75,13 +74,7 @@ bool MimeType::isUnknown() const
 
 bool MimeType::isXmp() const
 {
-    boost::filesystem::path path = m_name;
-    
-#if BOOST_VERSION >= 103600
-    return path.extension() == ".xmp";
-#else
-    return extension(path) == ".xmp";
-#endif
+    return fwk::path_extension(m_name) == ".xmp";
 }
 	
 }

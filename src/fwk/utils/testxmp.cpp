@@ -23,11 +23,15 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <glibmm/init.h>
+
 #include "exempi.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {
-	boost::filesystem::path dir;
+  Glib::init();
+
+  std::string dir;
 	const char * pdir = getenv("srcdir");
 	if(pdir == NULL) {
 		dir = ".";
@@ -37,7 +41,7 @@ int test_main( int, char *[] )             // note the name!
 	}
 	utils::ExempiManager xmpManager;
 
-	utils::XmpMeta meta(dir / "test.xmp", true);
+	utils::XmpMeta meta(dir + "/test.xmp", true);
 	BOOST_CHECK(meta.isOk());
 	BOOST_CHECK(meta.orientation() == 1);
 	const std::vector< std::string > & keywords(meta.keywords());

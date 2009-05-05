@@ -22,7 +22,6 @@
 
 #include <string>
 #include <tr1/memory>
-#include <boost/filesystem/path.hpp>
 
 
 namespace db {
@@ -33,15 +32,15 @@ class FsFile
 public:
     typedef std::tr1::shared_ptr< FsFile > Ptr;
 
-    FsFile(int id, const boost::filesystem::path & path);
+    FsFile(int id, const std::string & path);
 
     int id()
         { return m_id; }
-    const boost::filesystem::path & path() const
+    const std::string & path() const
         { return m_path; }
 private:
     int m_id;
-    boost::filesystem::path m_path; /**< absolute path */
+    std::string m_path; /**< absolute path */
 };
 
 }

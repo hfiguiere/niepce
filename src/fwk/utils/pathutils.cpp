@@ -1,0 +1,139 @@
+/*
+ * niepce - fwk/utils/pathutils.cpp
+ *
+ * Copyright (C) 2009 Hubert Figuiere
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+#include <giomm/file.h>
+
+#include "pathutils.hpp"
+
+namespace fwk {
+
+/** return the basename of a path. Example:
+    /foo/bar/baz.txt returns baz.txt
+ */
+std::string path_basename(const std::string & path)
+{
+    std::string::size_type slash_idx = path.find_last_of("/");
+    if(slash_idx == std::string::npos) {
+        return path;
+    }
+    return std::string(path.begin() + slash_idx + 1, path.end());
+}
+
+static
+std::string::size_type _path_extension_pos(const std::string &path)
+{
+    std::string::size_type idx = path.find_last_of(".");
+    if(idx == std::string::npos) {
+        return std::string::npos;
+    }
+    std::string::size_type slash_idx = path.find_last_of("/");
+    // if the '.' is not part of the last component
+    if(idx < slash_idx) {
+        return std::string::npos;
+    }
+
+    return idx;
+}
+
+/** return the stem of a path, ie basename minus extension
+    /foo/bar/baz.txt returns /foo/bar/baz
+ */
+std::string path_stem(const std::string & path)
+{
+    std::string stem;
+    std::string::size_type idx;
+    idx = _path_extension_pos(path);
+    if(idx == std::string::npos) {
+        return path;
+    }
+    return std::string(path.begin(), path.begin() + idx);
+}
+
+
+/** return the extension of a path
+    /foo/bar/baz.txt returns .txt
+    It always return the "." if any. No extension = "".
+ */
+std::string path_extension(const std::string & path)
+{
+    std::string extension;
+    std::string::size_type idx = _path_extension_pos(path);
+    if(idx != std::string::npos) {
+        extension = std::string(path.begin() + idx, path.end());
+    }
+
+    return extension;
+}
+
+
+std::string path_replace_extension(const std::string & path, const char * ext)
+{ 
+    std::string result = path;
+    std::string::size_type idx = _path_extension_pos(result);
+    if(idx != std::string::npos) {
+        result.replace(result.begin() + idx, result.end(), ext);
+    }
+    return result;
+}
+
+bool path_exists(const std::string & path)
+{
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(path);
+    return file->query_exists();
+}
+
+
+void _path_remove_recursive(const Glib::RefPtr<Gio::File> & dir)
+{
+    Glib::RefPtr<Gio::FileEnumerator> enumerator = dir->enumerate_children();
+    Glib::RefPtr<Gio::FileInfo> file_info;
+    while(file_info = enumerator->next_file()) {
+        Glib::RefPtr<Gio::File> child;
+        child = dir->get_child(file_info->get_name());
+        if(file_info->get_type() == Gio::FILE_TYPE_DIRECTORY) {
+            _path_remove_recursive(child);
+        }
+        child->remove();
+    }
+}
+
+
+void path_remove_recursive(const std::string & path)
+{
+    Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(path);
+    _path_remove_recursive(dir);
+    dir->remove();
+}
+
+
+
+}
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+

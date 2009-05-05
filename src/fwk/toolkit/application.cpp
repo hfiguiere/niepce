@@ -22,6 +22,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <glibmm/i18n.h>
+#include <giomm/init.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/rc.h>
@@ -115,6 +116,7 @@ int Application::main(boost::function<Application::Ptr (void)> constructor,
         DBG_OUT("thread init");
         Glib::thread_init();
     }
+    Gio::init();
 
     Gtk::Main kit(argc, argv);
     Application::Ptr app = constructor();

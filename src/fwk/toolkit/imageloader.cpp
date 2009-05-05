@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-
+#include <giomm/inputstream.h>
+#include <giomm/file.h>
 #include <gdkmm/pixbufloader.h>
 
 #include "imageloader.hpp"
@@ -26,7 +26,7 @@
 
 namespace fwk {
 
-ImageLoader::ImageLoader(const boost::filesystem::path & file)
+ImageLoader::ImageLoader(const std::string & file)
 	: m_file(file)
 {
 }
@@ -34,24 +34,25 @@ ImageLoader::ImageLoader(const boost::filesystem::path & file)
 Glib::RefPtr<Gdk::Pixbuf> ImageLoader::get_pixbuf()
 {
 	// TODO split get_pixbuf and the real load.
-	fwk::MimeType mime_type(m_file.string());
+	fwk::MimeType mime_type(m_file);
 	
 	Glib::RefPtr<Gdk::PixbufLoader> loader =  
-		Gdk::PixbufLoader::create(mime_type.string(), true);
+    Gdk::PixbufLoader::create(mime_type.string(), true);
 
 	// TODO this code is ugly.
-	FILE * f = fopen(m_file.string().c_str(), "rb");
-    if(f) {
-        size_t byte_read;
-        guint8 buffer[128*1024];
-        do {
-            byte_read = fread((void*)buffer, 1, 128*1024, f);
-            if(byte_read) {
-                loader->write(buffer, byte_read);
-            }
-        } while(byte_read);
+  Glib::RefPtr<Gio::File> f = Gio::File::create_for_path(m_file);
+  Glib::RefPtr<Gio::FileInputStream> stream = f->read();
+  if(f) {
+    size_t byte_read;
+    guint8 buffer[128*1024];
+    do {
+      byte_read = stream->read((void*)buffer, 128*1024);
+      if(byte_read) {
+        loader->write(buffer, byte_read);
+      }
+    } while(byte_read);
 	}
-    loader->close();
+  loader->close();
 
 	return loader->get_pixbuf();
 }
@@ -59,3 +60,12 @@ Glib::RefPtr<Gdk::Pixbuf> ImageLoader::get_pixbuf()
 
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

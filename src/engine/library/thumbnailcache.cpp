@@ -37,7 +37,7 @@ using db::LibFile;
 
 namespace library {
 
-	ThumbnailCache::ThumbnailCache(const boost::filesystem::path & dir,
+	ThumbnailCache::ThumbnailCache(const std::string & dir,
 								   const fwk::NotificationCenter::Ptr & nc)
 		: m_cacheDir(dir),
 		  m_notif_center(nc)
@@ -65,11 +65,11 @@ namespace library {
 
 	void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
 	{
-		const char *filename = task->file()->path().string().c_str();
-		DBG_OUT("creating thumbnail for %s",filename);
-        int w, h;
-        w = task->width();
-        h = task->height();
+    const std::string & filename = task->file()->path();
+		DBG_OUT("creating thumbnail for %s",filename.c_str());
+    int w, h;
+    w = task->width();
+    h = task->height();
 
 		fwk::MimeType mime_type(filename);
 
@@ -77,7 +77,7 @@ namespace library {
 		DBG_OUT("MIME type %s", mime_type.string().c_str());
 
 		if(mime_type.isUnknown()) {
-			DBG_OUT("unknown file type", filename);
+			DBG_OUT("unknown file type", filename.c_str());
 			return;
 		}
 		if(!mime_type.isImage()) {
@@ -100,7 +100,7 @@ namespace library {
             }
 		}	
 		else {	
-			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename, 
+			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename.c_str(), 
 																	   std::min(w, h));
 			if(pixbuf) {
 				 pix = Glib::wrap(pixbuf, true); // take ownership
@@ -127,7 +127,7 @@ namespace library {
 		}
 		else 
 		{
-			DBG_OUT("couldn't get the thumbnail for %s", filename);
+			DBG_OUT("couldn't get the thumbnail for %s", filename.c_str());
 		}
 	}
 

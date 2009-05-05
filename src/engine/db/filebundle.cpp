@@ -18,21 +18,19 @@
  */
 
 
-#include <boost/version.hpp>
-#include <boost/filesystem/convenience.hpp>
-
 #include "filebundle.hpp"
 #include "fwk/utils/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 
 
 namespace db {
 
 void 
-FileBundle::add(const boost::filesystem::path & path)
+FileBundle::add(const std::string & path)
 {
     // TODO make it more reliable with more tests.
-    fwk::MimeType type(path.string());
+    fwk::MimeType type(path);
     
     if(type.isImage()) {
         if(type.isDigicamRaw()) {
@@ -54,7 +52,7 @@ FileBundle::add(const boost::filesystem::path & path)
         m_xmp_sidecar = path;
     }
     else {
-        DBG_OUT("Unkown file %s\n", path.string().c_str());
+        DBG_OUT("Unkown file %s\n", path.c_str());
     }
 }
 
@@ -71,12 +69,8 @@ FileBundle::filter_bundles(const utils::FileList::Ptr & files)
     for(utils::FileList::const_iterator iter = files->begin();
         iter != files->end(); ++iter)
     {
-        std::string basename;
-#if BOOST_VERSION >= 103600
-        basename = iter->stem();
-#else
-        basename = boost::filesystem::basename(*iter);
-#endif
+        std::string basename = fwk::path_stem(*iter);
+
         if(basename != current_base) {
             current_base = basename;
             current_bundle = FileBundle::Ptr(new FileBundle());
