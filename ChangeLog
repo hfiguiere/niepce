@@ -1,3 +1,11 @@
+2009-05-07  Hubert Figuiere  <hub@figuiere.net>
+
+	* configure.ac: 
+	Check for gthread.
+	
+	* src/libraryclient/Makefile.am:
+	Remove last references to GnomeVFS.
+
 2009-05-05  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/engine/db/test_filebundle.cpp: 
