@@ -24,20 +24,34 @@
 
 #include "config.h"
 
+#include "fwk/utils/debug.hpp"
 #include "mimetype.hpp"
 
 namespace fwk {
 
 MimeType::MimeType(const std::string & filename)
+    : m_name(filename)
 {
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
-    m_fileinfo = file->query_info();
-		m_type = m_fileinfo->get_content_type();
+    try {
+        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
+        m_fileinfo = file->query_info();
+        m_type = m_fileinfo->get_content_type();
+    }
+    catch(const Glib::Exception &e) {
+        gboolean uncertainty = false;
+        gchar *content_type = g_content_type_guess(filename.c_str(),
+                                                         NULL, 0, &uncertainty);
+        m_type = content_type;
+        
+        g_free(content_type);
+    }
 }
 
 MimeType::MimeType(const Glib::RefPtr<Gio::File> & file)
 {
+    DBG_ASSERT(file, "file can't be NULL");
     m_fileinfo = file->query_info();
+    m_name = m_fileinfo->get_name();
 		m_type = m_fileinfo->get_content_type();
 }
 
@@ -61,7 +75,7 @@ bool MimeType::isUnknown() const
 
 bool MimeType::isXmp() const
 {
-    boost::filesystem::path path = m_fileinfo->get_name();
+    boost::filesystem::path path = m_name;
     
 #if BOOST_VERSION >= 103600
     return path.extension() == ".xmp";

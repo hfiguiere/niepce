@@ -1,5 +1,9 @@
 2009-05-07  Hubert Figuiere  <hub@figuiere.net>
 
+	* src/fwk/toolkit/mimetype.{cpp,hpp}:
+	Fix MimeType to make it work if the file do 
+	not exist.
+
 	* configure.ac: 
 	Check for gthread.
 	

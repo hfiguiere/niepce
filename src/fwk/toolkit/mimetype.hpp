@@ -43,6 +43,7 @@ namespace fwk {
 			{ return m_type; }
 	private:
     Glib::RefPtr<Gio::FileInfo> m_fileinfo;
+    std::string m_name;
 		std::string m_type;
 	};
 
