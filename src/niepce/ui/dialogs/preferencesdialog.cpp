@@ -44,9 +44,9 @@ void PreferencesDialog::setup_widget()
 
     Gtk::ComboBox * theme_combo = NULL;
     Gtk::CheckButton * reopen_checkbutton = NULL;
-    utils::DataBinderPool * binder_pool = new utils::DataBinderPool();
+    fwk::DataBinderPool * binder_pool = new fwk::DataBinderPool();
 
-    gtkDialog().signal_hide().connect(boost::bind(&utils::DataBinderPool::destroy, 
+    gtkDialog().signal_hide().connect(boost::bind(&fwk::DataBinderPool::destroy, 
                                               binder_pool));
 		
     builder()->get_widget("theme_combo", theme_combo);

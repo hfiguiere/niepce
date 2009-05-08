@@ -1,7 +1,7 @@
 /*
- * niepce - utils/databinder.cpp
+ * niepce - fwk/utils/init.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "debug.hpp"
-#include "databinder.hpp"
+#ifndef _FWK_INIT_HPP_
+#define _FWK_INIT_HPP_
 
 namespace fwk {
+namespace utils {
 
-DataBinderPool::~DataBinderPool()
-{
-	for(iterator iter = begin(); iter != end(); iter++)
-	{
-		boost::checked_delete(*iter);
-	}
-}
-
-
-void DataBinderPool::add_binder(DataBinderBase *binder)
-{
-	push_back(binder);
-}
-
-void DataBinderPool::destroy(DataBinderPool *pool)
-{
-	delete pool;
-}
-
+void init();
 
 }
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
+
+
+#endif

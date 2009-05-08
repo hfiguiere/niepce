@@ -18,6 +18,7 @@
  */
 
 
+#include "fwk/utils/init.hpp"
 #include "fwk/utils/fsutils.hpp"
 
 #define BOOST_AUTO_TEST_MAIN
@@ -26,8 +27,6 @@
 #include <boost/bind.hpp>
 #include <boost/test/minimal.hpp>
 
-#include <giomm/init.h>
-#include <glibmm/thread.h>
 
 using namespace library;
 using namespace libraryclient;
@@ -39,10 +38,8 @@ void foo(const db::Library::Ptr &)
 
 //BOOST_AUTO_TEST_CASE(worker_test)
 int test_main(int, char *[])
-{
-  Gio::init();
-  if(!Glib::thread_supported()) 
-    Glib::thread_init();
+{                                               
+  fwk::utils::init();
 
 	char templ[] = "/tmp/niepce-tmpXXXXXX";
 	char *ptempl =  mkdtemp(templ);

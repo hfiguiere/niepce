@@ -1,5 +1,8 @@
 2009-05-08  Hubert Figuiere  <hub@figuiere.net>
 
+	* Refactor init to fwk::utils::init()
+	Some namespace changes required.
+
 	* src/fwk/toolkit/dialog.hpp (fwk): Remove a leftover
 	boost::shared_ptr<>
 

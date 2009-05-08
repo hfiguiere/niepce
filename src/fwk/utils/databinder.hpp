@@ -28,7 +28,7 @@
 #include <boost/utility.hpp>
 
 
-namespace utils {
+namespace fwk {
 
 /** @brief the base class for all the data binders */
 class DataBinderBase

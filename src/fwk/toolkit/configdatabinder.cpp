@@ -25,7 +25,7 @@ namespace fwk {
 ConfigDataBinderBase::ConfigDataBinderBase(const property_t & property,
 										   Configuration & config, 
 										   const std::string & key)
-	: utils::DataBinderBase(),
+	: DataBinderBase(),
 	  m_property(property),
 	  m_config_key(key),
 	  m_config(config)

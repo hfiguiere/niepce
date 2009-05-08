@@ -35,7 +35,7 @@
 namespace fwk {
 
 class ConfigDataBinderBase
-	: public utils::DataBinderBase
+	: public DataBinderBase
 {
 public:
 	typedef Glib::PropertyProxy_Base property_t;

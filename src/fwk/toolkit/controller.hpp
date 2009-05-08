@@ -78,7 +78,7 @@ namespace fwk {
 		WeakPtr          m_parent;
 		std::list<Ptr> m_subs; /**< sub controllers */
 
-		utils::DataBinderPool m_databinders;
+		DataBinderPool m_databinders;
 	};
 
 }

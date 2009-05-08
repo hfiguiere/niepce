@@ -26,15 +26,15 @@
 
 #include <exempi/xmpconsts.h>
 
-#include <giomm/init.h>
-
+#include "init.hpp"
 #include "debug.hpp"
 #include "exempi.hpp"
 #include "ufrawmeta.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {
-  Gio::init();
+  fwk::utils::init();
+
   std::string dir;
 	const char * pdir = getenv("srcdir");
 	if(pdir == NULL) {

@@ -1,7 +1,7 @@
 /*
- * niepce - utils/databinder.cpp
+ * niepce - fwk/utils/init.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "debug.hpp"
-#include "databinder.hpp"
+
+#include <glibmm/thread.h>
+#include <giomm/init.h>
+
+
+#include "init.hpp"
 
 namespace fwk {
+namespace utils {
 
-DataBinderPool::~DataBinderPool()
+
+void init()
 {
-	for(iterator iter = begin(); iter != end(); iter++)
-	{
-		boost::checked_delete(*iter);
-	}
+  Gio::init();
+  if(!Glib::thread_supported()) {
+    Glib::thread_init();
+  }
 }
 
 
-void DataBinderPool::add_binder(DataBinderBase *binder)
-{
-	push_back(binder);
+
 }
-
-void DataBinderPool::destroy(DataBinderPool *pool)
-{
-	delete pool;
-}
-
-
 }

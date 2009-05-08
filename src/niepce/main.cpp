@@ -25,8 +25,8 @@
 #include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
-#include <glibmm/thread.h>
 
+#include "fwk/utils/init.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "xmp.hpp"
 #include "ui/niepceapplication.hpp"
@@ -40,10 +40,9 @@ int main(int argc, char ** argv)
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
   textdomain(GETTEXT_PACKAGE);
 
-	ExempiManager ex_manager(niepce::xmp_namespaces);
+  fwk::utils::init();
 
-  if(!Glib::thread_supported()) 
-    Glib::thread_init();
+	ExempiManager ex_manager(niepce::xmp_namespaces);
 
 	return fwk::Application::main(
 		boost::bind(&ui::NiepceApplication::create),

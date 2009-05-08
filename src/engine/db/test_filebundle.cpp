@@ -18,11 +18,10 @@
  */
 
 
-#include <giomm/init.h>
-
 #include "filebundle.hpp"
 
 
+#include "fwk/utils/init.hpp"
 #include "fwk/utils/files.hpp"
 
 #include <boost/test/minimal.hpp>
@@ -30,7 +29,8 @@
 
 int test_main(int, char *[])
 {
-    Gio::init();
+    fwk::utils::init();
+
     utils::FileList::Ptr thelist(new utils::FileList());
     
     thelist->push_back("/foo/bar/img_0001.cr2");
