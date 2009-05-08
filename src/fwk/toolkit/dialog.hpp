@@ -34,7 +34,7 @@ class Dialog
 	: public fwk::Frame
 {
 public:
-    typedef boost::shared_ptr<Dialog> Ptr;
+    typedef std::tr1::shared_ptr<Dialog> Ptr;
 
 		Dialog(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "")

@@ -1,3 +1,8 @@
+2009-05-08  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/fwk/toolkit/dialog.hpp (fwk): Remove a leftover
+	boost::shared_ptr<>
+
 2009-05-07  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/fwk/toolkit/mimetype.{cpp,hpp}:
