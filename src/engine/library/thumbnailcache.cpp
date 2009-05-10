@@ -33,9 +33,7 @@
 #include "thumbnailcache.hpp"
 #include "thumbnailnotification.hpp"
 
-using db::LibFile;
-
-namespace library {
+namespace eng {
 
 	ThumbnailCache::ThumbnailCache(const std::string & dir,
 								   const fwk::NotificationCenter::Ptr & nc)

@@ -56,7 +56,7 @@ public:
 		{
 		}
 
-	void set_image(const db::LibFile::Ptr & file);
+	void set_image(const eng::LibFile::Ptr & file);
 
 protected:
 	virtual Gtk::Widget * buildWidget();

@@ -54,7 +54,7 @@ public:
                 add(m_strip_thumb);
             }
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-        Gtk::TreeModelColumn<db::LibFile::Ptr> m_libfile;
+        Gtk::TreeModelColumn<eng::LibFile::Ptr> m_libfile;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
     };
 

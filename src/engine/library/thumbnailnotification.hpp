@@ -23,7 +23,7 @@
 
 #include <gdkmm/pixbuf.h>
 
-namespace library {
+namespace eng {
 
 	struct ThumbnailNotification
 	{

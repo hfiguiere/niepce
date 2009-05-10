@@ -1,5 +1,5 @@
 /*
- * niepce - db/metadata.h
+ * niepce - eng/db/metadata.hpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -22,7 +22,7 @@
 #ifndef _DB_METADATA_H_
 #define _DB_METADATA_H_
 
-namespace db {
+namespace eng {
 
 enum {
     META_NS_XMPCORE = 0,

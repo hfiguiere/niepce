@@ -1,5 +1,5 @@
 /*
- * niepce - db/libmetadata.h
+ * niepce - eng/db/libmetadata.hpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -28,7 +28,7 @@
 #include "fwk/utils/exempi.hpp"
 #include "engine/db/metadata.hpp"
 
-namespace db {
+namespace eng {
 
 	class LibMetadata
 		: public fwk::XmpMeta

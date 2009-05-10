@@ -25,9 +25,9 @@
 
 #include <boost/test/minimal.hpp>
 
-using namespace library;
+using namespace eng;
 
-void foo(const db::Library::Ptr &)
+void foo(const eng::Library::Ptr &)
 {
 }
 
@@ -37,7 +37,7 @@ int test_main(int, char *[])
 {
 	OpQueue q;
 
-	Op::Ptr p(new Op(1, boost::bind(&foo, db::Library::Ptr())));
+	Op::Ptr p(new Op(1, boost::bind(&foo, eng::Library::Ptr())));
 
 	BOOST_CHECK(q.empty());
 

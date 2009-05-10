@@ -45,7 +45,7 @@ namespace fwk {
 class RgbColor;
 }
 
-namespace db {
+namespace eng {
 
 class Library
 {
@@ -119,7 +119,7 @@ public:
 		 * @param bundle the bundle
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-    int addBundle(int folder_id, const db::FileBundle::Ptr & bundle, 
+    int addBundle(int folder_id, const eng::FileBundle::Ptr & bundle, 
                   bool manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle

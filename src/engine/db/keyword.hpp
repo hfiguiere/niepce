@@ -1,5 +1,5 @@
 /*
- * niepce - library/keyword.h
+ * niepce - eng/db/keyword.hpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -25,7 +25,7 @@
 #include <vector>
 #include <tr1/memory>
 
-namespace db {
+namespace eng {
 
 	class Keyword
 	{

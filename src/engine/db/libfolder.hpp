@@ -1,5 +1,5 @@
 /*
- * niepce - db/libfolder.h
+ * niepce - eng/db/libfolder.hpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -26,7 +26,7 @@
 #include <list>
 #include <tr1/memory>
 
-namespace db {
+namespace eng {
 
 	class LibFolder
 	{

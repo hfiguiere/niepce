@@ -115,7 +115,7 @@ void SelectionController::_selection_move(bool backwards)
         }
         if(iter) {
             // make sure the iterator is valid...
-            db::LibFile::Ptr libfile 
+            eng::LibFile::Ptr libfile 
                 = (*iter)[m_imageliststore->columns().m_libfile];
             selection = libfile->id();
 
@@ -156,7 +156,7 @@ void SelectionController::rotate(int angle)
 }
 
 
-bool SelectionController::_set_metadata(const std::string & undo_label, const db::LibFile::Ptr & file,
+bool SelectionController::_set_metadata(const std::string & undo_label, const eng::LibFile::Ptr & file,
                                         int meta, int old_value, int new_value)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
@@ -178,11 +178,11 @@ void SelectionController::set_label(int label)
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            db::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
             DBG_OUT("old label is %d", file->label());
             int old_value = file->label();
             _set_metadata(_("Set Label"), file, 
-                          MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL), 
+                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL), 
                           old_value, label);
             // we need to set the label here so that undo/redo works
             // consistently.
@@ -199,11 +199,11 @@ void SelectionController::set_rating(int rating)
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            db::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
             DBG_OUT("old rating is %d", file->rating());
             int old_value = file->rating();
             _set_metadata(_("Set Rating"), file, 
-                          MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING), 
+                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING), 
                           old_value, rating);
             // we need to set the rating here so that undo/redo works
             // consistently.

@@ -69,18 +69,18 @@ void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
                "wrong notification type");
     if(n->type() == niepce::NOTIFICATION_LIB) {
-        db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
         switch(ln.type) {
-        case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-        case db::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
+        case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+        case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
         {
-            db::LibFile::ListPtr l 
-                = boost::any_cast<db::LibFile::ListPtr>(ln.param);
+            eng::LibFile::ListPtr l 
+                = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
             DBG_OUT("received folder content file # %d", l->size());
             Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
             clear();
             m_idmap.clear();
-            db::LibFile::List::const_iterator iter = l->begin();
+            eng::LibFile::List::const_iterator iter = l->begin();
             for( ; iter != l->end(); iter++ )
             {
                 Gtk::TreeModel::iterator riter = append();
@@ -97,7 +97,7 @@ void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
             getLibraryClient()->thumbnailCache().request(l);
             break;
         }
-        case db::Library::NOTIFY_METADATA_CHANGED:
+        case eng::Library::NOTIFY_METADATA_CHANGED:
         {
             std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
             DBG_OUT("metadata changed");
@@ -106,13 +106,13 @@ void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
             if(iter != m_idmap.end()) {
                 row = *(iter->second);
                 //
-                db::LibFile::Ptr file = row[m_columns.m_libfile];
+                eng::LibFile::Ptr file = row[m_columns.m_libfile];
                 file->setMetaData(m[1], m[2]);
                 row[m_columns.m_libfile] = file;
             }
             break;
         }
-        case db::Library::NOTIFY_XMP_NEEDS_UPDATE:
+        case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
         {
             getLibraryClient()->processXmpUpdateQueue();
             break;
@@ -128,8 +128,8 @@ void ImageListStore::on_tnail_notification(const fwk::Notification::Ptr &n)
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, 
                "wrong notification type");
     if(n->type() == niepce::NOTIFICATION_THUMBNAIL) {
-        library::ThumbnailNotification tn 
-            = boost::any_cast<library::ThumbnailNotification>(n->data());
+        eng::ThumbnailNotification tn 
+            = boost::any_cast<eng::ThumbnailNotification>(n->data());
         std::map<int, Gtk::TreeIter>::iterator iter
             = m_idmap.find( tn.id );
         if(iter != m_idmap.end()) {

@@ -21,7 +21,7 @@
 
 #include "locallibraryserver.hpp"
 
-using library::Op;
+using eng::Op;
 
 namespace libraryclient {
 

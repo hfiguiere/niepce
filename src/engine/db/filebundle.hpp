@@ -1,5 +1,5 @@
 /*
- * niepce - engine/db/filebundle.h
+ * niepce - engine/db/filebundle.hpp
  *
  * Copyright (C) 2009 Hubert Figuiere
  *
@@ -27,7 +27,7 @@
 #include "fwk/utils/files.hpp"
 #include "engine/db/libfile.hpp"
 
-namespace db {
+namespace eng {
 
 
 class FileBundle

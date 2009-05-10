@@ -23,7 +23,7 @@
 #include "metadata.hpp"
 
 
-namespace db {
+namespace eng {
 	
 LibFile::LibFile(int _id, int _folderId, int _fsfileid, const std::string & p,
                  const std::string & _name )
@@ -74,10 +74,10 @@ void LibFile::setFileType(FileType v)
 void LibFile::setMetaData(int meta, int32_t v)
 {
     switch(meta) {
-    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
         setRating(v);
         break;
-    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
         setOrientation(v);
         break;
     default:

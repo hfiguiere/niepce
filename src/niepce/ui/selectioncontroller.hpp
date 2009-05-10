@@ -95,7 +95,7 @@ private:
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label, 
-                       const db::LibFile::Ptr & file,
+                       const eng::LibFile::Ptr & file,
                        int meta, int old_value, int new_value);
     /** move the selection and emit the signal 
      * @param backwards true if the move is backwards.

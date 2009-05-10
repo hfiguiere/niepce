@@ -22,7 +22,7 @@
 #include "keyword.hpp"
 
 
-namespace db {
+namespace eng {
 
 	Keyword::Keyword(int _id, const std::string & _keyword)
 		: m_id(_id), m_keyword(_keyword)

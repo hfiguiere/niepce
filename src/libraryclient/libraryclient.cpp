@@ -23,7 +23,7 @@
 #include "libraryclient.hpp"
 #include "clientimpl.hpp"
 
-using library::tid_t;
+using eng::tid_t;
 
 
 namespace libraryclient {
@@ -35,7 +35,6 @@ LibraryClient::LibraryClient(const fwk::Moniker & moniker,
     : m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
       m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
 {
-
 }
 
 LibraryClient::~LibraryClient()
@@ -72,47 +71,47 @@ tid_t LibraryClient::queryKeywordContent(int id)
     return m_pImpl->queryKeywordContent(id);
 }
 
-library::tid_t LibraryClient::countFolder(int id)
+eng::tid_t LibraryClient::countFolder(int id)
 {
     return m_pImpl->countFolder(id);
 }
 
-library::tid_t LibraryClient::requestMetadata(int id)
+eng::tid_t LibraryClient::requestMetadata(int id)
 {
     return m_pImpl->requestMetadata(id);
 }
 
 /** set the metadata */
-library::tid_t LibraryClient::setMetadata(int id, int meta, int value)
+eng::tid_t LibraryClient::setMetadata(int id, int meta, int value)
 {
     return m_pImpl->setMetadata(id, meta, value);
 }
 
-library::tid_t LibraryClient::getAllLabels()
+eng::tid_t LibraryClient::getAllLabels()
 {
     return m_pImpl->getAllLabels();
 }
 
 
-library::tid_t LibraryClient::createLabel(const std::string & s, const std::string & color)
+eng::tid_t LibraryClient::createLabel(const std::string & s, const std::string & color)
 {
     return m_pImpl->createLabel(s, color);
 }
 
 
-library::tid_t LibraryClient::deleteLabel(int id)
+eng::tid_t LibraryClient::deleteLabel(int id)
 {
     return m_pImpl->deleteLabel(id);
 }
 
 
-library::tid_t LibraryClient::updateLabel(int id, const std::string & new_name,
+eng::tid_t LibraryClient::updateLabel(int id, const std::string & new_name,
                                           const std::string & new_color)
 {
     return m_pImpl->updateLabel(id, new_name, new_color);
 }
 
-library::tid_t LibraryClient::processXmpUpdateQueue()
+eng::tid_t LibraryClient::processXmpUpdateQueue()
 {
     return m_pImpl->processXmpUpdateQueue();
 }
@@ -123,7 +122,7 @@ void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
 }
 
 bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
-                                         db::Keyword::IdList & /*keywords*/)
+                                         eng::Keyword::IdList & /*keywords*/)
 {
     // TODO
     return false;

@@ -26,7 +26,7 @@
 #include "fwk/utils/files.hpp"
 #include "engine/db/library.hpp"
 
-namespace library {
+namespace eng {
 
 /** Marshalling and demarshalling of commands ops */ 
 class Commands 
@@ -34,34 +34,34 @@ class Commands
 public:
 
 		// commands: execute an op
-//		static void cmdQueryFiles(const db::Library::Ptr & lib);
-//		static void cmdUpdateFiles(const db::Library::Ptr & lib);
+//		static void cmdQueryFiles(const Library::Ptr & lib);
+//		static void cmdUpdateFiles(const Library::Ptr & lib);
 
-		static void cmdListAllFolders(const db::Library::Ptr & lib);
-		static void cmdListAllKeywords(const db::Library::Ptr & lib);
-		static void cmdImportFiles(const db::Library::Ptr & lib, 
+		static void cmdListAllFolders(const Library::Ptr & lib);
+		static void cmdListAllKeywords(const Library::Ptr & lib);
+		static void cmdImportFiles(const Library::Ptr & lib, 
                                const std::string & folder, 
                                const fwk::FileList::Ptr & files, 
                                bool manage);
-		static void cmdQueryFolderContent(const db::Library::Ptr & lib, 
+		static void cmdQueryFolderContent(const Library::Ptr & lib, 
                                       int folder_id);
-		static void cmdCountFolder(const db::Library::Ptr & lib, 
+		static void cmdCountFolder(const Library::Ptr & lib, 
                                int folder_id);
-		static void cmdQueryKeywordContent(const db::Library::Ptr & lib, 
+		static void cmdQueryKeywordContent(const Library::Ptr & lib, 
                                        int keyword_id);
-		static void cmdRequestMetadata(const db::Library::Ptr & lib,
+		static void cmdRequestMetadata(const Library::Ptr & lib,
                                    int file_id);
-    static void cmdSetMetadata(const db::Library::Ptr & lib,
+    static void cmdSetMetadata(const Library::Ptr & lib,
                                int file_id, int meta, int value);
-    static void cmdListAllLabels(const db::Library::Ptr & lib);
-    static void cmdCreateLabel(const db::Library::Ptr & lib, const std::string & s, 
+    static void cmdListAllLabels(const Library::Ptr & lib);
+    static void cmdCreateLabel(const Library::Ptr & lib, const std::string & s, 
                                const std::string & color);
-    static void cmdDeleteLabel(const db::Library::Ptr & lib,
+    static void cmdDeleteLabel(const Library::Ptr & lib,
                                int label_id);
-    static void cmdUpdateLabel(const db::Library::Ptr & lib,
+    static void cmdUpdateLabel(const Library::Ptr & lib,
                                int label_id, const std::string & name,
                                const std::string & color);
-		static void cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib);
+		static void cmdProcessXmpUpdateQueue(const Library::Ptr & lib);
 };
 
 }

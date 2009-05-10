@@ -24,7 +24,7 @@
 #include "fwk/base/debug.hpp"
 #include "libmetadata.hpp"
 
-namespace db {
+namespace eng {
 
 
 LibMetadata::LibMetadata(int _id)
@@ -39,15 +39,15 @@ bool xmpPropertyNameFromIndex(int meta, std::string & ns, std::string & property
 {
     bool found = true;
     switch(meta) {
-    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
         ns = NS_XAP;
         property = "Rating";
         break;
-    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
+    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
         ns = NS_XAP;
         property = "Label";
         break;
-    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
         ns = NS_TIFF;
         property = "Orientation";
         break;

@@ -1,5 +1,5 @@
 /*
- * niepce - db/libfile.h
+ * niepce - eng/db/libfile.h
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -29,7 +29,7 @@
 #include "engine/db/storage.hpp"
 #include "engine/db/fsfile.hpp"
 
-namespace db {
+namespace eng {
 
 
 class LibFile

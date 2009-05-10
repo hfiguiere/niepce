@@ -28,10 +28,10 @@
 #include <boost/test/minimal.hpp>
 
 
-using namespace library;
+using namespace eng;
 using namespace libraryclient;
 
-void foo(const db::Library::Ptr &)
+void foo(const Library::Ptr &)
 {
 }
 
@@ -50,7 +50,7 @@ int test_main(int, char *[])
 		
 		BOOST_CHECK(w._tasks().empty());
 		
-		Op::Ptr p(new Op(0, boost::bind(&foo, db::Library::Ptr())));
+		Op::Ptr p(new Op(0, boost::bind(&foo, eng::Library::Ptr())));
 		w.schedule(p);
 	}
     return 0;

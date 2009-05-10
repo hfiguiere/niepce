@@ -35,14 +35,9 @@
 #include "engine/db/label.hpp"
 #include "commands.hpp"
 
-using db::Library;
-using db::LibFolder;
-using db::LibFile;
-using db::LibMetadata;
-using db::Keyword;
 using fwk::FileList;
 
-namespace library {
+namespace eng {
 
 void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 {
@@ -68,7 +63,7 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 {
     DBG_ASSERT(!manage, "managing file is currently unsupported");
 
-    db::FileBundle::ListPtr bundles = db::FileBundle::filter_bundles(files);
+    FileBundle::ListPtr bundles = FileBundle::filter_bundles(files);
 
     LibFolder::Ptr pf;
     pf = lib->getFolder(folder);
@@ -96,7 +91,7 @@ void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
     lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
 }
 
-void Commands::cmdCountFolder(const db::Library::Ptr & lib, 
+void Commands::cmdCountFolder(const Library::Ptr & lib, 
                               int folder_id)
 {
     int count = lib->countFolder(folder_id);
@@ -111,7 +106,7 @@ void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
     lib->notify(Library::NOTIFY_KEYWORD_CONTENT_QUERIED, boost::any(fl));		
 }
 
-void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
+void Commands::cmdRequestMetadata(const Library::Ptr & lib,
                                   int file_id)
 {
     LibMetadata::Ptr lm(new LibMetadata(file_id));
@@ -119,7 +114,7 @@ void Commands::cmdRequestMetadata(const db::Library::Ptr & lib,
     lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
 }
 
-void Commands::cmdSetMetadata(const db::Library::Ptr & lib,
+void Commands::cmdSetMetadata(const Library::Ptr & lib,
                               int file_id, int meta, int value)
 {
     std::tr1::array<int, 3> m;
@@ -130,14 +125,14 @@ void Commands::cmdSetMetadata(const db::Library::Ptr & lib,
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
 }
 
-void Commands::cmdListAllLabels(const db::Library::Ptr & lib)
+void Commands::cmdListAllLabels(const Library::Ptr & lib)
 {
     eng::Label::ListPtr l(new eng::Label::List);
     lib->getAllLabels(l);
     lib->notify(Library::NOTIFY_ADDED_LABELS, boost::any(l));
 }
 
-void Commands::cmdCreateLabel(const db::Library::Ptr & lib,
+void Commands::cmdCreateLabel(const Library::Ptr & lib,
                               const std::string & s, const std::string & color)
 {
     int id = lib->addLabel(s, color);
@@ -149,7 +144,7 @@ void Commands::cmdCreateLabel(const db::Library::Ptr & lib,
 }
 
 
-void Commands::cmdDeleteLabel(const db::Library::Ptr & lib,
+void Commands::cmdDeleteLabel(const Library::Ptr & lib,
                               int label_id)
 {
     lib->deleteLabel(label_id);
@@ -157,7 +152,7 @@ void Commands::cmdDeleteLabel(const db::Library::Ptr & lib,
 }
 
 
-void Commands::cmdUpdateLabel(const db::Library::Ptr & lib,
+void Commands::cmdUpdateLabel(const Library::Ptr & lib,
                               int label_id, const std::string & name,
                               const std::string & color)
 {
@@ -167,7 +162,7 @@ void Commands::cmdUpdateLabel(const db::Library::Ptr & lib,
 }
 
 
-void Commands::cmdProcessXmpUpdateQueue(const db::Library::Ptr & lib)
+void Commands::cmdProcessXmpUpdateQueue(const Library::Ptr & lib)
 {
     lib->processXmpUpdateQueue();
 }

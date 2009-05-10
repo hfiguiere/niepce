@@ -40,23 +40,23 @@ public:
 		ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~ClientImpl();
 
-		library::tid_t getAllKeywords();
-		library::tid_t queryKeywordContent(int id);
-		library::tid_t getAllFolders();
-		library::tid_t queryFolderContent(int id);
-		library::tid_t countFolder(int id);
-		library::tid_t requestMetadata(int id);
-    library::tid_t setMetadata(int id, int meta, int value);
+		eng::tid_t getAllKeywords();
+		eng::tid_t queryKeywordContent(int id);
+		eng::tid_t getAllFolders();
+		eng::tid_t queryFolderContent(int id);
+		eng::tid_t countFolder(int id);
+		eng::tid_t requestMetadata(int id);
+    eng::tid_t setMetadata(int id, int meta, int value);
 
-    library::tid_t getAllLabels();
-    library::tid_t createLabel(const std::string & s, const std::string & color);
-    library::tid_t deleteLabel(int id);
-    library::tid_t updateLabel(int id, const std::string & new_name,
+    eng::tid_t getAllLabels();
+    eng::tid_t createLabel(const std::string & s, const std::string & color);
+    eng::tid_t deleteLabel(int id);
+    eng::tid_t updateLabel(int id, const std::string & new_name,
                                const std::string & new_color);
 
-    library::tid_t processXmpUpdateQueue();
+    eng::tid_t processXmpUpdateQueue();
 
-		library::tid_t importFromDirectory(const std::string & dir, bool manage);
+		eng::tid_t importFromDirectory(const std::string & dir, bool manage);
 
 protected:
 		const fwk::Moniker m_moniker;

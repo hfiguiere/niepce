@@ -26,7 +26,7 @@
 #include "fwk/utils/mtqueue.hpp"
 #include "op.hpp"
 
-namespace library {
+namespace eng {
 
 	typedef fwk::MtQueue< Op::Ptr > OpQueue;
 

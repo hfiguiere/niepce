@@ -1,5 +1,5 @@
 /*
- * niepce - db/storage.h
+ * niepce - eng/db/storage.hpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -25,7 +25,7 @@
 
 #include "engine/db/keyword.hpp"
 
-namespace db {
+namespace eng {
 
 	/** @brief the interface for a storage */
 	class Storage

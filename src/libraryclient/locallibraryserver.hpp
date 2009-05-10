@@ -31,22 +31,22 @@
 namespace libraryclient {
 
 	class LocalLibraryServer
-		: public fwk::Worker< library::Op::Ptr >
+		: public fwk::Worker< eng::Op::Ptr >
 	{
 	public:
 		/** create the local server for the library whose dir is specified */
 		LocalLibraryServer(const std::string & dir, 
 						   const fwk::NotificationCenter::Ptr & nc)
-			: fwk::Worker< library::Op::Ptr >()
-			, m_library(db::Library::Ptr(new db::Library(dir, nc)))
+			: fwk::Worker< eng::Op::Ptr >()
+			, m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
 			{
 			}
 
 	protected:
-		virtual void execute(const library::Op::Ptr & _op);
+		virtual void execute(const eng::Op::Ptr & _op);
 
 	private:
-		db::Library::Ptr m_library;
+		eng::Library::Ptr m_library;
 	};
 
 }

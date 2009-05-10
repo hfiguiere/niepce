@@ -34,22 +34,22 @@
 int test_main(int, char *[])
 {
     fwk::utils::init();
-    db::Library lib("./", fwk::NotificationCenter::Ptr());
+    eng::Library lib("./", fwk::NotificationCenter::Ptr());
 
     BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
 
     db::IConnectionDriver::Ptr db(lib.dbDriver());
 	
-    db::LibFolder::Ptr folder_added(lib.addFolder("foo"));
+    eng::LibFolder::Ptr folder_added(lib.addFolder("foo"));
     BOOST_CHECK(folder_added);
     BOOST_CHECK(folder_added->id() > 0);
-    db::LibFolder::Ptr f(lib.getFolder("foo"));
+    eng::LibFolder::Ptr f(lib.getFolder("foo"));
     BOOST_CHECK(f);
     BOOST_CHECK(f->id() == folder_added->id());
     lib.addFolder("bar");
     BOOST_CHECK(lib.getFolder("bar"));
 
-    db::LibFolder::ListPtr l( new db::LibFolder::List );
+    eng::LibFolder::ListPtr l( new eng::LibFolder::List );
     lib.getAllFolders( l );
     BOOST_CHECK( l->size() == 2 );
     

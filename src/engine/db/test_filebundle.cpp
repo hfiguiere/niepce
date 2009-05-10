@@ -43,12 +43,12 @@ int test_main(int, char *[])
 
 //    thelist->push_back("/tmp/some/file");
 
-    db::FileBundle::ListPtr bundles_list = 
-        db::FileBundle::filter_bundles(thelist);
+    eng::FileBundle::ListPtr bundles_list = 
+        eng::FileBundle::filter_bundles(thelist);
 
     BOOST_CHECK(bundles_list->size() == 2);
-    db::FileBundle::List::const_iterator iter = bundles_list->begin();
-    db::FileBundle::Ptr b = *iter;
+    eng::FileBundle::List::const_iterator iter = bundles_list->begin();
+    eng::FileBundle::Ptr b = *iter;
     BOOST_CHECK(b->main_file() == "/foo/bar/dcs_0001.nef");
     BOOST_CHECK(b->jpeg() == "/foo/bar/dcs_0001.jpg");
     BOOST_CHECK(b->sidecar() == "/foo/bar/dcs_0001.xmp");

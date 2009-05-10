@@ -21,7 +21,7 @@
 #include "op.hpp"
 
 
-namespace library {
+namespace eng {
 
 Op::Op(tid_t _id, const function_t & func)
     : m_id(_id),
@@ -29,7 +29,7 @@ Op::Op(tid_t _id, const function_t & func)
 {
 }
 
-void Op::operator() (const db::Library::Ptr &l)
+void Op::operator() (const Library::Ptr &l)
 {
     if(m_function) {
         m_function(l);

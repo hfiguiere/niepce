@@ -193,7 +193,7 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 	r.x += xpad;
 	r.y += ypad;
 
-	db::LibFile::Ptr file = m_libfileproperty.get_value();
+	eng::LibFile::Ptr file = m_libfileproperty.get_value();
 
 	Gdk::Color color;
 	if(flags & Gtk::CELL_RENDERER_SELECTED) {
@@ -219,16 +219,16 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 //    DBG_OUT("the filetype: %i", file->fileType());
     
     switch(file->fileType()) {
-    case db::LibFile::FILE_TYPE_RAW:
+    case eng::LibFile::FILE_TYPE_RAW:
         emblem = m_raw_format_emblem;
         break;
-    case db::LibFile::FILE_TYPE_RAW_JPEG:
+    case eng::LibFile::FILE_TYPE_RAW_JPEG:
         emblem = m_rawjpeg_format_emblem;
         break;
-    case db::LibFile::FILE_TYPE_IMAGE:
+    case eng::LibFile::FILE_TYPE_IMAGE:
         emblem = m_img_format_emblem;
         break;
-    case db::LibFile::FILE_TYPE_VIDEO:
+    case eng::LibFile::FILE_TYPE_VIDEO:
         emblem = m_video_format_emblem;
         break;
     default:
@@ -244,17 +244,17 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 
 
 
-Glib::PropertyProxy_ReadOnly<db::LibFile::Ptr> 	
+Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> 	
 LibraryCellRenderer::property_libfile() const
 {
-	return Glib::PropertyProxy_ReadOnly<db::LibFile::Ptr>(this, "libfile");
+	return Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr>(this, "libfile");
 }
 
 
-Glib::PropertyProxy<db::LibFile::Ptr> 	
+Glib::PropertyProxy<eng::LibFile::Ptr> 	
 LibraryCellRenderer::property_libfile()
 {
-	return Glib::PropertyProxy<db::LibFile::Ptr>(this, "libfile");
+	return Glib::PropertyProxy<eng::LibFile::Ptr>(this, "libfile");
 }
 
 

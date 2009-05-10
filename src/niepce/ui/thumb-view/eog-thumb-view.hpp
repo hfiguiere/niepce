@@ -80,7 +80,7 @@ void        eog_thumb_view_select_single 	    (EogThumbView *view,
 						     EogThumbViewSelectionChange change);
 
 void        eog_thumb_view_set_current_image	    (EogThumbView *view, 
-						     const db::LibFile::Ptr&     image,
+						     const eng::LibFile::Ptr&     image,
 						     gboolean     deselect_other);
 
 //void        eog_thumb_view_set_thumbnail_popup      (EogThumbView *view, 

@@ -1,5 +1,5 @@
 /*
- * niepce - db/fsfile.h
+ * niepce - eng/db/fsfile.hpp
  *
  * Copyright (C) 2009 Hubert Figuiere
  *
@@ -24,7 +24,7 @@
 #include <tr1/memory>
 
 
-namespace db {
+namespace eng {
 
 /** @brief describe a file on file system */
 class FsFile

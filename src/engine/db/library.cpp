@@ -29,9 +29,9 @@
 #include "niepce/notifications.hpp"
 #include "library.hpp"
 #include "metadata.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/exception.hpp"
 #include "fwk/utils/exempi.hpp"
-#include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxdrv.hpp"
@@ -39,11 +39,10 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 
-using fwk::NotificationCenter;
-using eng::Label;
+using ::fwk::NotificationCenter;
+using ::db::SQLStatement;
 
-
-namespace db {
+namespace eng {
 
 const char * s_databaseName = "niepcelibrary.db";
 
@@ -262,8 +261,8 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
         int32_t rating, label_id, orientation;
         std::string label;  
         fwk::MimeType mime = fwk::MimeType(file);
-        db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
-        fwk::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
+        eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
+        fwk::XmpMeta meta(file, file_type == eng::LibFile::FILE_TYPE_RAW);
         label_id = 0;
         orientation = meta.orientation();
         rating = meta.rating();
@@ -334,7 +333,7 @@ int Library::addFileAndFolder(const std::string & folder, const std::string & fi
     return addFile(f ? f->id() : -1, file, manage);
 }
 
-int Library::addBundle(int folder_id, const db::FileBundle::Ptr & bundle, 
+int Library::addBundle(int folder_id, const eng::FileBundle::Ptr & bundle, 
                        bool manage)
 {
     int file_id = 0;
@@ -490,7 +489,7 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
      * of #define for integers.
      */
     dbdrv->get_column_content(7, val);
-    f->setFileType((db::LibFile::FileType)val);
+    f->setFileType((eng::LibFile::FileType)val);
     return f;
 }
 
@@ -716,22 +715,22 @@ bool Library::setMetaData(int file_id, int meta,
     bool retval = false;
     DBG_OUT("setting metadata in column %x", meta);
     switch(meta) {
-    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
-    case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
-    case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
+    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
+    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
         if(value.type() == typeid(int32_t)) {
             // internal.
             int32_t nvalue = boost::any_cast<int32_t>(value);
             // make the column mapping more generic.
             const char * col = NULL;
             switch(meta) {
-            case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_RATING):
+            case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
                 col = "rating";
                 break;
-            case MAKE_METADATA_IDX(db::META_NS_TIFF, db::META_TIFF_ORIENTATION):
+            case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
                 col = "orientation";
                 break;
-            case MAKE_METADATA_IDX(db::META_NS_XMPCORE, db::META_XMPCORE_LABEL):
+            case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
                 col = "label";
                 break;
             }

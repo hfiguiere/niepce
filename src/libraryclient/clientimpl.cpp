@@ -28,9 +28,9 @@
 #include "locallibraryserver.hpp"
 
 using fwk::FileList;
-using library::Op;
-using library::Commands;
-using library::tid_t;
+using eng::Op;
+using eng::Commands;
+using eng::tid_t;
 
 namespace libraryclient {
 	

@@ -27,7 +27,7 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "engine/db/libfile.hpp"
 
-namespace library {
+namespace eng {
 
 
 	class ThumbnailTask
@@ -35,18 +35,18 @@ namespace library {
 	public:
 		typedef std::tr1::shared_ptr< ThumbnailTask > Ptr;
 		
-		ThumbnailTask(const db::LibFile::Ptr & f, int w, int h)
+		ThumbnailTask(const LibFile::Ptr & f, int w, int h)
 			: m_file(f), m_width(w), m_height(h)
 			{ }
 		
-		const db::LibFile::Ptr & file()
+		const LibFile::Ptr & file()
 			{ return m_file; }
 		int width() const
 			{ return m_width; }
 		int height() const
 			{ return m_height; }
 	private:
-		const db::LibFile::Ptr m_file;
+		const LibFile::Ptr m_file;
 		int m_width;
 		int m_height;
 	};
@@ -60,8 +60,8 @@ namespace library {
 					   const fwk::NotificationCenter::Ptr & nc);
 		~ThumbnailCache();
 
-		void request(const db::LibFile::ListPtr & fl);
-		void requestForFile(const db::LibFile::Ptr & f);
+		void request(const LibFile::ListPtr & fl);
+		void requestForFile(const LibFile::Ptr & f);
 
 	protected:
 		virtual void execute(const  ThumbnailTask::Ptr & task);

@@ -321,7 +321,7 @@ tb_on_drag_data_get_cb (GtkWidget        *widget,
 {
 	GList *list;
 	GList *node;
-	db::LibFile *image;
+	eng::LibFile *image;
 	const char *str;
 	gchar *uris = NULL;
 	gchar *tmp_str;
@@ -329,7 +329,7 @@ tb_on_drag_data_get_cb (GtkWidget        *widget,
 	list = eog_thumb_view_get_selected_images (EOG_THUMB_VIEW (widget));
 
 	for (node = list; node != NULL; node = node->next) {
-		image = static_cast<db::LibFile*>(node->data);
+		image = static_cast<eng::LibFile*>(node->data);
 		str = image->uri().c_str();
 		
 		/* build the "text/uri-list" string */
@@ -653,7 +653,7 @@ eog_thumb_view_get_selected_images (EogThumbView *tb)
 #if 0
 void
 eog_thumb_view_set_current_image (EogThumbView *tb, 
-								  const db::LibFile::Ptr &image,
+								  const eng::LibFile::Ptr &image,
 								  gboolean deselect_other)
 {
 	GtkTreePath *path;

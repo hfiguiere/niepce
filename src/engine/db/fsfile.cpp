@@ -1,5 +1,5 @@
 /*
- * niepce - db/fsfile.cpp
+ * niepce - eng/db/fsfile.cpp
  *
  * Copyright (C) 2009 Hubert Figuiere
  *
@@ -22,7 +22,7 @@
 #include "fsfile.hpp"
 
 
-namespace db {
+namespace eng {
 
 FsFile::FsFile(int _id, const std::string & _path)
     : m_id(_id), m_path(_path)

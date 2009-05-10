@@ -63,7 +63,7 @@ int FilmStripController::get_selected()
 		Gtk::TreeRow row = *(m_store->get_iter(path));
 		if(row) {
 			DBG_OUT("found row");
-            db::LibFile::Ptr libfile = row[m_store->columns().m_libfile];
+            eng::LibFile::Ptr libfile = row[m_store->columns().m_libfile];
             if(libfile) {
                 id = libfile->id();
             }
@@ -85,13 +85,13 @@ void FilmStripController::on_lib_notification(const framework::Notification::Ptr
 {
 	DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, "wrong notification type");
 	if(n->type() == niepce::NOTIFICATION_LIB) {
-		db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+		eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
 		switch(ln.type) {
-		case db::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-		case db::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
+		case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+		case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
 		{
-			db::LibFile::ListPtr l 
-				= boost::any_cast<db::LibFile::ListPtr>(ln.param);
+			eng::LibFile::ListPtr l 
+				= boost::any_cast<eng::LibFile::ListPtr>(ln.param);
 			DBG_OUT("received folder content file # %d", l->size());
 			
 			Glib::RefPtr<EogListStore> store(new EogListStore( *l ));

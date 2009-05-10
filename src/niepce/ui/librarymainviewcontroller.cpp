@@ -43,17 +43,17 @@ void LibraryMainViewController::on_lib_notification(const fwk::Notification::Ptr
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
                "wrong notification type");
     if(n->type() == niepce::NOTIFICATION_LIB) {
-        db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
         switch(ln.type) {
-        case db::Library::NOTIFY_METADATA_QUERIED:
+        case eng::Library::NOTIFY_METADATA_QUERIED:
         {
-            db::LibMetadata::Ptr lm
-                = boost::any_cast<db::LibMetadata::Ptr>(ln.param);
+            eng::LibMetadata::Ptr lm
+                = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
             DBG_OUT("received metadata");
             m_metapanecontroller->display(lm->id(), lm.get());
             break;
         }
-        case db::Library::NOTIFY_METADATA_CHANGED:
+        case eng::Library::NOTIFY_METADATA_CHANGED:
         {
             DBG_OUT("metadata changed");
             std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
@@ -142,7 +142,7 @@ void LibraryMainViewController::on_image_activated(int id)
     DBG_OUT("on image activated %d", id);
     Gtk::TreeIter iter = m_model->get_iter_from_id(id);
     if(iter) {
-        db::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
+        eng::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
         m_darkroom->set_image(libfile);
         m_mainview.activate_page(1);
     }
@@ -172,7 +172,7 @@ int LibraryMainViewController::get_selected()
         Gtk::TreeRow row = *(m_model->get_iter(path));
         if(row) {
             DBG_OUT("found row");
-            db::LibFile::Ptr libfile = row[m_model->columns().m_libfile];
+            eng::LibFile::Ptr libfile = row[m_model->columns().m_libfile];
             if(libfile) {
                 id = libfile->id();
             }

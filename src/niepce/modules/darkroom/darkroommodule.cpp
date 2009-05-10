@@ -31,10 +31,10 @@
 namespace darkroom {
 
 
-void DarkroomModule::set_image(const db::LibFile::Ptr & file)
+void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
 {
     m_image->reload(file->path(), 
-                    file->fileType() == db::LibFile::FILE_TYPE_RAW,
+                    file->fileType() == eng::LibFile::FILE_TYPE_RAW,
                     file->orientation());
 /*    int w, h;
     w = m_imagecanvas->get_width();

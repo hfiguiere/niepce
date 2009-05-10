@@ -508,12 +508,12 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
     DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
                "wrong notification type");
     if(n->type() == niepce::NOTIFICATION_LIB) {
-        db::LibNotification ln = boost::any_cast<db::LibNotification>(n->data());
+        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
         switch(ln.type) {
-        case db::Library::NOTIFY_NEW_LIBRARY_CREATED:
+        case eng::Library::NOTIFY_NEW_LIBRARY_CREATED:
             create_initial_labels();
             break;
-        case db::Library::NOTIFY_ADDED_LABELS:
+        case eng::Library::NOTIFY_ADDED_LABELS:
         {
             eng::Label::ListPtr l 
                 = boost::any_cast<eng::Label::ListPtr>(ln.param);
@@ -524,7 +524,7 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
             }
             break;
         }
-        case db::Library::NOTIFY_LABEL_CHANGED:
+        case eng::Library::NOTIFY_LABEL_CHANGED:
         {
             eng::Label::Ptr & l 
                 = boost::any_cast<eng::Label::Ptr &>(ln.param);
@@ -539,7 +539,7 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
             }
             break;
         }
-        case db::Library::NOTIFY_LABEL_DELETED:
+        case eng::Library::NOTIFY_LABEL_DELETED:
         {
             int id = boost::any_cast<int>(ln.param);
             // TODO: will work as long as we have 5 labels or something.

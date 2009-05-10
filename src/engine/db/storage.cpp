@@ -1,5 +1,5 @@
 /*
- * niepce - db/storage.cpp
+ * niepce - eng/db/storage.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -19,7 +19,7 @@
 
 #include "storage.hpp"
 
-namespace db {
+namespace eng {
 
 	Storage::~Storage()
 	{

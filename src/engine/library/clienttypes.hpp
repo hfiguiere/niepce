@@ -20,7 +20,7 @@
 #ifndef _LIBRARY_CLIENTTYPES_H_
 #define _LIBRARY_CLIENTTYPES_H_
 
-namespace library {
+namespace eng {
 
 	typedef int tid_t; /**< transaction ID */
 

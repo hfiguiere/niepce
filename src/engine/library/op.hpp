@@ -27,21 +27,21 @@
 #include "engine/library/clienttypes.hpp"
 #include "engine/db/library.hpp"
 
-namespace library {
+namespace eng {
 
 	/** a library operation */
 	class Op
 	{
 	public:
 		typedef std::tr1::shared_ptr< Op > Ptr;
-		typedef boost::function<void (const db::Library::Ptr &)> function_t;
+		typedef boost::function<void (const Library::Ptr &)> function_t;
 
 		Op(tid_t id, const function_t & func);
 
 		tid_t id() const 
 			{ return m_id; }
 
-        void operator() (const db::Library::Ptr &);
+        void operator() (const Library::Ptr &);
 		const function_t & fn() const
 			{ return m_function; }
 	protected:

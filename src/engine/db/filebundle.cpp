@@ -24,7 +24,7 @@
 #include "fwk/toolkit/mimetype.hpp"
 
 
-namespace db {
+namespace eng {
 
 void 
 FileBundle::add(const std::string & path)

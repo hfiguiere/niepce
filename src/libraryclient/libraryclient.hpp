@@ -37,7 +37,7 @@ namespace libraryclient {
 	class ClientImpl;
 
 	class LibraryClient
-		: public db::Storage
+		: public eng::Storage
 	{
 	public:
 		typedef std::tr1::shared_ptr< LibraryClient > Ptr;
@@ -45,34 +45,34 @@ namespace libraryclient {
 		LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~LibraryClient();
 
-		static library::tid_t newTid();
+		static eng::tid_t newTid();
 		/** get all the keywords 
 		 * @return transaction ID
 		 */
-		library::tid_t getAllKeywords();
+		eng::tid_t getAllKeywords();
 		/** get all the folder
 		 * @return transaction ID
 		 */
-		library::tid_t getAllFolders();
+		eng::tid_t getAllFolders();
 
-		library::tid_t queryFolderContent(int id);
-		library::tid_t queryKeywordContent(int id);
-		library::tid_t countFolder(int id);
-		library::tid_t requestMetadata(int id);
+		eng::tid_t queryFolderContent(int id);
+		eng::tid_t queryKeywordContent(int id);
+		eng::tid_t countFolder(int id);
+		eng::tid_t requestMetadata(int id);
 
     /** set the metadata */
-    library::tid_t setMetadata(int id, int meta, int value);
+    eng::tid_t setMetadata(int id, int meta, int value);
 
     /** get all the labels */
-    library::tid_t getAllLabels();
-    library::tid_t createLabel(const std::string & s, const std::string & color);
-    library::tid_t deleteLabel(int id);
+    eng::tid_t getAllLabels();
+    eng::tid_t createLabel(const std::string & s, const std::string & color);
+    eng::tid_t deleteLabel(int id);
     /** update a label */
-    library::tid_t updateLabel(int id, const std::string & new_name, 
+    eng::tid_t updateLabel(int id, const std::string & new_name, 
                                const std::string & new_color);
 
     /** tell to process the Xmp update Queue */
-    library::tid_t processXmpUpdateQueue();
+    eng::tid_t processXmpUpdateQueue();
 
 		/** Import files from a directory
 		 * @param dir the directory
@@ -80,16 +80,16 @@ namespace libraryclient {
 		 */
 		void importFromDirectory(const std::string & dir, bool manage);
 		
-		library::ThumbnailCache & thumbnailCache()
+		eng::ThumbnailCache & thumbnailCache()
 			{ return m_thumbnailCache; }
 
 		/* sync call */
-		virtual bool fetchKeywordsForFile(int file, db::Keyword::IdList &keywords);
+		virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords);
 
 	private:
 		ClientImpl* m_pImpl;
 
-		library::ThumbnailCache                    m_thumbnailCache;
+		eng::ThumbnailCache                    m_thumbnailCache;
 
 		LibraryClient(const LibraryClient &);
 		LibraryClient & operator=(const LibraryClient &);
