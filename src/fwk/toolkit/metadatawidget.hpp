@@ -28,14 +28,13 @@
 
 #include "fwk/toolkit/widgets/toolboxitemwidget.hpp"
 
-namespace utils {
-	class XmpMeta;
-}
 namespace xmp {
 	struct MetaDataSectionFormat;
 }
 
 namespace fwk {
+
+class XmpMeta;
 
 
 class MetaDataWidget 
@@ -47,7 +46,7 @@ public:
 	void add_data(const std::string & id, const std::string & label,
 				  const char * value, xmp::MetaDataType type);
 	void set_data_format(const xmp::MetaDataSectionFormat * fmt);
-	void set_data_source(const utils::XmpMeta * xmp);
+	void set_data_source(const fwk::XmpMeta * xmp);
 protected:
 private:
 	Gtk::Table    m_table;

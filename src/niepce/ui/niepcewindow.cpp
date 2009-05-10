@@ -31,8 +31,8 @@
 
 #include "niepce/notifications.hpp"
 #include "niepce/stock.hpp"
-#include "fwk/utils/debug.hpp"
-#include "fwk/utils/moniker.hpp"
+#include "fwk/base/debug.hpp"
+#include "fwk/base/moniker.hpp"
 #include "fwk/utils/boost.hpp"
 #include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -563,7 +563,7 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
 
 void NiepceWindow::open_library(const std::string & libMoniker)
 {
-    m_libClient = LibraryClient::Ptr(new LibraryClient(utils::Moniker(libMoniker),
+    m_libClient = LibraryClient::Ptr(new LibraryClient(fwk::Moniker(libMoniker),
                                                        m_lib_notifcenter));
     set_title(libMoniker);
     m_libClient->getAllLabels();

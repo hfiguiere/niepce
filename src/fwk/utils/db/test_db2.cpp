@@ -22,7 +22,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "fwk/utils/buffer.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 
 #include "sqlstatement.hpp"
 #include "insertstatement.hpp"

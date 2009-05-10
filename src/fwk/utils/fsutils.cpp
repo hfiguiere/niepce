@@ -1,5 +1,5 @@
 /*
- * niepce - utils/fsutils.cpp
+ * niepce - fwk/utils/fsutils.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -23,7 +23,7 @@
 
 #include "fsutils.hpp"
 
-namespace utils {
+namespace fwk {
 
 
 

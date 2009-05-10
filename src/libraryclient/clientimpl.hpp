@@ -23,7 +23,7 @@
 
 #include <string>
 
-#include "fwk/utils/moniker.hpp"
+#include "fwk/base/moniker.hpp"
 #include "engine/library/clienttypes.hpp"
 
 
@@ -34,10 +34,10 @@ class LocalLibraryServer;
 class ClientImpl
 {
 public:
-    static ClientImpl *makeClientImpl(const utils::Moniker & moniker, 
+    static ClientImpl *makeClientImpl(const fwk::Moniker & moniker, 
                                       const fwk::NotificationCenter::Ptr & nc);
 		
-		ClientImpl(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+		ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~ClientImpl();
 
 		library::tid_t getAllKeywords();
@@ -59,7 +59,7 @@ public:
 		library::tid_t importFromDirectory(const std::string & dir, bool manage);
 
 protected:
-		const utils::Moniker m_moniker;
+		const fwk::Moniker m_moniker;
 		LocalLibraryServer *m_localLibrary;
 };
 

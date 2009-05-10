@@ -1,5 +1,5 @@
 /*
- * niepce - utils/geometry.h
+ * niepce - fwk/base/geometry.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -18,13 +18,13 @@
  */
 
 
-#ifndef __UTILS_GEOMETRY_H__
-#define __UTILS_GEOMETRY_H__
+#ifndef __FWK_BASE_GEOMETRY_H__
+#define __FWK_BASE_GEOMETRY_H__
 
 #include <tr1/array>
 #include <string>
 
-namespace utils {
+namespace fwk {
 
 class Rect
 {

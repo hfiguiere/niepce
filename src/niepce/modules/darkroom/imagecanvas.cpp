@@ -20,8 +20,8 @@
 /* remove this when we require a version that does not barf warnings */
 #include "fwk/toolkit/goocanvas_proxy_header.hpp"
 //#include <goocanvasmm/canvas.h>
-#include "fwk/utils/debug.hpp"
-#include "fwk/utils/geometry.hpp"
+#include "fwk/base/debug.hpp"
+#include "fwk/base/geometry.hpp"
 
 #include "imagecanvas.hpp"
 
@@ -77,10 +77,10 @@ void ImageCanvas::_redisplay(bool force)
         // the position and dimension of the image frame
         double x, y, w, h;
 
-        utils::Rect dest(0,0, m_imagecanvas->get_width() - 8,
+        fwk::Rect dest(0,0, m_imagecanvas->get_width() - 8,
             m_imagecanvas->get_height() - 8);
-        utils::Rect source(0,0, img->get_width(), img->get_height());
-        utils::Rect frame;
+        fwk::Rect source(0,0, img->get_width(), img->get_height());
+        fwk::Rect frame;
         switch(m_zoom_mode)
         {
         case ZOOM_MODE_FIT:

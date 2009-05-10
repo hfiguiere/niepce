@@ -31,7 +31,7 @@
 #include "metadata.hpp"
 #include "fwk/utils/exception.hpp"
 #include "fwk/utils/exempi.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxmgrdrv.hpp"
 #include "fwk/utils/db/sqlite/sqlitecnxdrv.hpp"
@@ -197,7 +197,7 @@ int Library::checkDatabaseVersion()
             }
         }
     }
-    catch(const utils::Exception & e)
+    catch(const fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         v = -1;
@@ -244,7 +244,7 @@ std::string Library::getFsFile(int id)
             p = path;
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -263,7 +263,7 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
         std::string label;  
         fwk::MimeType mime = fwk::MimeType(file);
         db::LibFile::FileType file_type = db::LibFile::mimetype_to_filetype(mime);
-        utils::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
+        fwk::XmpMeta meta(file, file_type == db::LibFile::FILE_TYPE_RAW);
         label_id = 0;
         orientation = meta.orientation();
         rating = meta.rating();
@@ -275,7 +275,7 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
 
         int fs_file_id = addFsFile(file);
         if(fs_file_id <= 0) {
-            throw(utils::Exception("add fsfile failed"));
+            throw(fwk::Exception("add fsfile failed"));
         }
         SQLStatement sql(boost::format("INSERT INTO files ("
                                        " main_file, name, parent_id, "
@@ -309,7 +309,7 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
             }
         }
     }
-    catch(const utils::Exception & e)
+    catch(const fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         ret = -1;
@@ -368,7 +368,7 @@ bool Library::addSidecarFileToBundle(int file_id, int fsfile_id)
     try {
         return m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -385,7 +385,7 @@ bool Library::addJpegFileToBundle(int file_id, int fsfile_id)
     try {
         return m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -411,7 +411,7 @@ LibFolder::Ptr Library::getFolder(const std::string & folder)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -434,7 +434,7 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
                                              fwk::path_basename(folder)));
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -456,7 +456,7 @@ void Library::getAllFolders(const LibFolder::ListPtr & l)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -512,7 +512,7 @@ void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -530,7 +530,7 @@ int Library::countFolder(int folder_id)
             }
         }			
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -551,7 +551,7 @@ void Library::getAllKeywords(const Keyword::ListPtr & l)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -570,7 +570,7 @@ int Library::makeKeyword(const std::string & keyword)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -585,7 +585,7 @@ int Library::makeKeyword(const std::string & keyword)
                 notify(NOTIFY_ADDED_KEYWORD, boost::any(kw));
             }
         }
-        catch(utils::Exception & e)
+        catch(fwk::Exception & e)
         {
             DBG_OUT("db exception %s", e.what());
         }
@@ -604,7 +604,7 @@ bool Library::assignKeyword(int kw_id, int file_id)
     try {
         ret = m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -631,7 +631,7 @@ void Library::getKeywordContent(int keyword_id, const LibFile::ListPtr & fl)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -652,7 +652,7 @@ void Library::getMetaData(int file_id, const LibMetadata::Ptr & meta)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -672,7 +672,7 @@ bool Library::setInternalMetaDataInt(int file_id, const char* col,
     try {
         ret = m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         ret = false;
@@ -695,7 +695,7 @@ bool Library::setMetaData(int file_id, const LibMetadata::Ptr & meta)
     try {
         ret = m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         ret = false;
@@ -769,7 +769,7 @@ void Library::getAllLabels(const Label::ListPtr & l)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -806,7 +806,7 @@ bool Library::updateLabel(int label_id, const std::string & name, const std::str
     try {
         return m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -822,7 +822,7 @@ bool Library::deleteLabel(int label_id)
     try {
         return m_dbdrv->execute_statement(sql);
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
     }
@@ -842,7 +842,7 @@ bool Library::getXmpIdsInQueue(std::vector<int> & ids)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         return false;
@@ -884,7 +884,7 @@ bool Library::rewriteXmpForId(int id)
                     // TODO backup
                 }
                 // TODO probably a faster way to do that
-                utils::XmpMeta xmppacket;
+                fwk::XmpMeta xmppacket;
                 xmppacket.unserialize(xmp_buffer.c_str());
                 // TODO use different API
                 FILE * f = fopen(p.c_str(), "w");
@@ -905,7 +905,7 @@ bool Library::rewriteXmpForId(int id)
             }
         }
     }
-    catch(utils::Exception & e)
+    catch(fwk::Exception & e)
     {
         DBG_OUT("db exception %s", e.what());
         return false;

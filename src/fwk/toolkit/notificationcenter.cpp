@@ -38,7 +38,7 @@ namespace fwk {
 		typedef std::list< subscriber_t > SubscriberList;
 		Glib::Dispatcher                     m_dispatcher;
 		sigc::connection                     m_dispatchConn;
-		utils::MtQueue< Notification::Ptr >  m_notificationQueue;
+		fwk::MtQueue< Notification::Ptr >    m_notificationQueue;
 		std::map< int, SubscriberList >      m_subscribers;
 	};
 

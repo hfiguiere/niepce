@@ -105,7 +105,7 @@ extern const char * UFRAW_INTEROP_NS_PREFIX;
 }
 
 
-namespace utils {
+namespace fwk {
 
 class ExempiManager
     : public boost::noncopyable

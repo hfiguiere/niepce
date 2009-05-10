@@ -31,9 +31,6 @@
 #include "xmp.hpp"
 #include "ui/niepceapplication.hpp"
 
-using utils::ExempiManager;
-
-
 int main(int argc, char ** argv)
 {
   bindtextdomain(GETTEXT_PACKAGE, NIEPCE_LOCALEDIR);
@@ -42,7 +39,7 @@ int main(int argc, char ** argv)
 
   fwk::utils::init();
 
-	ExempiManager ex_manager(niepce::xmp_namespaces);
+  fwk::ExempiManager ex_manager(niepce::xmp_namespaces);
 
 	return fwk::Application::main(
 		boost::bind(&ui::NiepceApplication::create),

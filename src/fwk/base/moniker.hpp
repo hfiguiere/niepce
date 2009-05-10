@@ -1,7 +1,7 @@
 /*
- * niepce - utils/moniker.h
+ * niepce - fwk/base/moniker.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
  */
 
 
-#ifndef __UTILS_MONIKER_H__
-#define __UTILS_MONIKER_H__
+#ifndef __FWK_BASE_MONIKER_H__
+#define __FWK_BASE_MONIKER_H__
 
 #include <ostream>
 #include <string>
 
 
-namespace utils {
+namespace fwk {
 
 	/** Moniker are URL like specifiers
 			In the form of scheme:path.

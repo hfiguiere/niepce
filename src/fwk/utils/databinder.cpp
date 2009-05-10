@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "databinder.hpp"
 
 namespace fwk {

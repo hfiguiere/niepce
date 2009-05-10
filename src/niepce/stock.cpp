@@ -23,7 +23,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/stockitem.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "stock.hpp"
 
 #ifndef DATADIR

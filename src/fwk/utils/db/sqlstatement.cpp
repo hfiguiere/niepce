@@ -71,7 +71,7 @@ SQLStatement::bind(int idx, const std::string & text)
 
 
 bool 
-SQLStatement::bind(int idx, const utils::Buffer & blob)
+SQLStatement::bind(int idx, const fwk::Buffer & blob)
 {
     m_bindings.push_back(binder_t(COLUMN_TYPE_BLOB, idx, 
                                       boost::any(&blob)));

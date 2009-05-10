@@ -1,7 +1,7 @@
 /*
- * niepce - utils/testmoniker.cpp
+ * niepce - fwk/base/fractions.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/** @brief Unit test for the Moniker class */
 
 
-#include <boost/test/minimal.hpp>
 
-#include "moniker.hpp"
+#ifndef __FWK_FRACTIONS_HPP__
+#define __FWK_FRACTIONS_HPP__
+
+#include <string>
+
+namespace fwk {
 
 
-int test_main( int, char *[] )             // note the name!
-{
-	utils::Moniker moniker("foo:/bar/test");
+/** convert a fraction string to a decimal */
+double fraction_to_decimal(const std::string & value);
 
-	BOOST_CHECK(moniker.scheme() == "foo");
-	BOOST_CHECK(moniker.path() == "/bar/test");
-
-	BOOST_CHECK(strcmp(moniker.c_str(), "foo:/bar/test") == 0);
-	return 0;
 }
 
+#endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

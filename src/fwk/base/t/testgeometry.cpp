@@ -22,10 +22,9 @@
 
 #include <stdlib.h>
 #include <vector>
+#include "fwk/base/geometry.hpp"
 
-#include "geometry.hpp"
-
-using utils::Rect;
+using fwk::Rect;
 
 int test_main( int, char *[] )             // note the name!
 {

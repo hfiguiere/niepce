@@ -28,7 +28,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/builder.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "importdialog.hpp"

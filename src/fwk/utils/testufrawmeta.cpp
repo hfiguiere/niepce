@@ -27,7 +27,7 @@
 #include <exempi/xmpconsts.h>
 
 #include "init.hpp"
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "exempi.hpp"
 #include "ufrawmeta.hpp"
 
@@ -43,11 +43,11 @@ int test_main( int, char *[] )             // note the name!
 	else {
 		dir = pdir;
 	}
-	utils::ExempiManager xmpManager(NULL);
+	fwk::ExempiManager xmpManager(NULL);
 
   xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
 
-	utils::UfrawMeta ufraw(dir + "/test2.ufraw");
+	fwk::UfrawMeta ufraw(dir + "/test2.ufraw");
 
 	BOOST_CHECK(ufraw.ufraw_to_xmp(xmp));
 

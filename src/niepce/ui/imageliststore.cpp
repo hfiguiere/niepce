@@ -20,7 +20,7 @@
 #include <gtkmm/icontheme.h>
 
 #include "imageliststore.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
 #include "niepce/notifications.hpp"

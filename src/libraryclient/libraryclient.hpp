@@ -27,11 +27,8 @@
 #include "engine/library/thumbnailcache.hpp"
 #include "engine/db/storage.hpp"
 
-namespace utils {
-	class Moniker;
-}
-
 namespace fwk {
+	class Moniker;
 	class NotificationCenter;
 }
 
@@ -45,7 +42,7 @@ namespace libraryclient {
 	public:
 		typedef std::tr1::shared_ptr< LibraryClient > Ptr;
 
-		LibraryClient(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+		LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~LibraryClient();
 
 		static library::tid_t newTid();

@@ -1,5 +1,5 @@
 /*
- * niepce - utils/ufrawmeta.h
+ * niepce - fwk/utils/ufrawmeta.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -22,7 +22,7 @@
 #include <exempi/xmp.h>
 #include <libxml/xmlreader.h>
 
-namespace utils {
+namespace fwk {
 
 	class UfrawMeta
 	{

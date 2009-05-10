@@ -22,9 +22,9 @@
 #include <gtkmm/iconview.h>
 #include <glibmm/i18n.h>
 
-#include "fwk/utils/autoflag.hpp"
+#include "fwk/base/autoflag.hpp"
 #include "fwk/utils/boost.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "fwk/toolkit/command.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -62,7 +62,7 @@ void SelectionController::add_selectable(IImageSelectable * selectable)
 void SelectionController::activated(const Gtk::TreeModel::Path & /*path*/,
 									IImageSelectable * selectable)
 {
-	utils::AutoFlag f(m_in_handler);
+	fwk::AutoFlag f(m_in_handler);
 	int selection = selectable->get_selected();
 	DBG_OUT("item activated %d", selection);
 	signal_activated(selection);
@@ -75,7 +75,7 @@ void SelectionController::selected(IImageSelectable * selectable)
 		return;
 	}
 
-	utils::AutoFlag f(m_in_handler);
+	fwk::AutoFlag f(m_in_handler);
 
 	int selection = selectable->get_selected();
 	std::vector<IImageSelectable *>::iterator iter;
@@ -119,7 +119,7 @@ void SelectionController::_selection_move(bool backwards)
                 = (*iter)[m_imageliststore->columns().m_libfile];
             selection = libfile->id();
 
-            utils::AutoFlag f(m_in_handler);
+            fwk::AutoFlag f(m_in_handler);
         
             std::for_each(m_selectables.begin(), m_selectables.end(),
                           boost::bind(&IImageSelectable::select_image, _1,  

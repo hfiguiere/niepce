@@ -1,5 +1,5 @@
 /*
- * niepce - utils/fsutils.h
+ * niepce - fwk/utils/fsutils.h
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -24,7 +24,7 @@
 
 #include "fwk/utils/pathutils.hpp"
 
-namespace utils {
+namespace fwk {
 
 class DirectoryDisposer
 {

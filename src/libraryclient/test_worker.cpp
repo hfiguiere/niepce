@@ -45,7 +45,7 @@ int test_main(int, char *[])
 	char *ptempl =  mkdtemp(templ);
 	BOOST_CHECK(ptempl);
 	{
-		utils::DirectoryDisposer d(ptempl);
+		fwk::DirectoryDisposer d(ptempl);
 		LocalLibraryServer w(std::string("") + ptempl, fwk::NotificationCenter::Ptr());
 		
 		BOOST_CHECK(w._tasks().empty());

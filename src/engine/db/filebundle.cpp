@@ -19,7 +19,7 @@
 
 
 #include "filebundle.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 
@@ -58,7 +58,7 @@ FileBundle::add(const std::string & path)
 
 
 FileBundle::ListPtr 
-FileBundle::filter_bundles(const utils::FileList::Ptr & files)
+FileBundle::filter_bundles(const fwk::FileList::Ptr & files)
 {
     FileBundle::ListPtr bundles(new FileBundle::List());
     FileBundle::Ptr current_bundle;
@@ -66,7 +66,7 @@ FileBundle::filter_bundles(const utils::FileList::Ptr & files)
 
     files->sort();
 
-    for(utils::FileList::const_iterator iter = files->begin();
+    for(fwk::FileList::const_iterator iter = files->begin();
         iter != files->end(); ++iter)
     {
         std::string basename = fwk::path_stem(*iter);

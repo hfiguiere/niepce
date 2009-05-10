@@ -46,7 +46,7 @@ public:
     const std::string & sidecar() const
         { return m_xmp_sidecar; }
     
-    static ListPtr filter_bundles(const utils::FileList::Ptr & files);
+    static ListPtr filter_bundles(const fwk::FileList::Ptr & files);
 private:
     std::string m_main;
     std::string m_xmp_sidecar;

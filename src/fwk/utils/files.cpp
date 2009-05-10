@@ -1,5 +1,5 @@
 /*
- * niepce - utils/files.cpp
+ * niepce - fwk/utils/files.cpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -21,12 +21,12 @@
 
 #include <giomm/file.h>
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "files.hpp"
 #include "pathutils.hpp"
 
 
-namespace utils {
+namespace fwk {
 
 	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & )
 	{

@@ -18,7 +18,7 @@
  */
 
 
-#include "fwk/utils/moniker.hpp"
+#include "fwk/base/moniker.hpp"
 
 #include "libraryclient.hpp"
 #include "clientimpl.hpp"
@@ -30,7 +30,7 @@ namespace libraryclient {
 
 const char * s_thumbcacheDirname = "thumbcache";
 
-LibraryClient::LibraryClient(const utils::Moniker & moniker, 
+LibraryClient::LibraryClient(const fwk::Moniker & moniker, 
                              const fwk::NotificationCenter::Ptr & nc)
     : m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
       m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)

@@ -78,10 +78,10 @@ public:
     bool get_column_type (uint32_t a_offset,
                           enum db::ColumnType &a_type) const ;
 
-    bool get_column_name (uint32_t a_offset, utils::Buffer &a_name) const ;
+    bool get_column_name (uint32_t a_offset, fwk::Buffer &a_name) const ;
 
     bool get_column_content (uint32_t a_offset,
-                             utils::Buffer &a_column_content) const ;
+                             fwk::Buffer &a_column_content) const ;
 
     bool get_column_content (uint32_t a_offset,
                              int32_t &a_column_content) const ;

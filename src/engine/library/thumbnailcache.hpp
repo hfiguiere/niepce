@@ -53,7 +53,7 @@ namespace library {
 
 
 	class ThumbnailCache
-		: private utils::Worker< ThumbnailTask::Ptr >
+		: private fwk::Worker< ThumbnailTask::Ptr >
 	{
 	public:
 		ThumbnailCache(const std::string & dir,

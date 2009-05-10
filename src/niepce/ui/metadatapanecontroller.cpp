@@ -26,7 +26,7 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
 #include "metadatapanecontroller.hpp"
@@ -114,7 +114,7 @@ namespace ui {
 	}
 
 
-	void MetaDataPaneController::display(int file_id, const utils::XmpMeta * meta)
+	void MetaDataPaneController::display(int file_id, const fwk::XmpMeta * meta)
 	{
         m_fileid = file_id;
 		DBG_OUT("displaying metadata");

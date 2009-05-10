@@ -28,7 +28,7 @@
 
 #include <glibmm/propertyproxy.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/databinder.hpp"
 #include "fwk/toolkit/configuration.hpp"
 

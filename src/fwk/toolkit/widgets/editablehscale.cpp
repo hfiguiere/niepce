@@ -21,7 +21,7 @@
 
 #include <glibmm/property.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "editablehscale.hpp"
 
 

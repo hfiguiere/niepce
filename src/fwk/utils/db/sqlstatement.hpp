@@ -119,7 +119,7 @@ public:
     static std::string escape_string (const std::string &a_sql_string) ;
 
 	bool bind(int idx, const std::string & text);
-	bool bind(int idx, const utils::Buffer & blob);
+	bool bind(int idx, const fwk::Buffer & blob);
 
     operator const char* () const ;
     friend std::iostream& operator<< (std::iostream&, const SQLStatement&) ;

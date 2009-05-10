@@ -25,7 +25,7 @@
 
 
 #include "fwk/utils/boost.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/libfolder.hpp"
 #include "engine/db/libfile.hpp"
@@ -40,7 +40,7 @@ using db::LibFolder;
 using db::LibFile;
 using db::LibMetadata;
 using db::Keyword;
-using utils::FileList;
+using fwk::FileList;
 
 namespace library {
 

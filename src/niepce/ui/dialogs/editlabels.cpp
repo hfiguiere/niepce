@@ -28,7 +28,7 @@
 #include <gtkmm/label.h>
 
 #include "fwk/utils/boost.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
 #include "fwk/toolkit/undo.hpp"

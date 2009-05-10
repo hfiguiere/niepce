@@ -39,9 +39,9 @@ int test_main( int, char *[] )             // note the name!
 	else {
 		dir = pdir;
 	}
-	utils::ExempiManager xmpManager;
+	fwk::ExempiManager xmpManager;
 
-	utils::XmpMeta meta(dir + "/test.xmp", true);
+	fwk::XmpMeta meta(dir + "/test.xmp", true);
 	BOOST_CHECK(meta.isOk());
 	BOOST_CHECK(meta.orientation() == 1);
 	const std::vector< std::string > & keywords(meta.keywords());

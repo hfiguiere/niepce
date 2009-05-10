@@ -20,7 +20,7 @@
 
 #include <gdkmm/general.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "librarycellrenderer.hpp"
 
 #ifndef DATADIR

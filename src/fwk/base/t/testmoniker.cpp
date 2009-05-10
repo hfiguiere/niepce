@@ -1,7 +1,7 @@
 /*
- * niepce - utils/autoflag.h
+ * niepce - utils/testmoniker.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2007 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/** @brief Unit test for the Moniker class */
 
 
-#ifndef _UTILS_AUTOFLAG_H_
-#define _UTILS_AUTOFLAG_H_
+#include <boost/test/minimal.hpp>
 
-namespace utils {
+#include "fwk/base/moniker.hpp"
 
-class AutoFlag
+
+int test_main( int, char *[] )             // note the name!
 {
-public:
-	AutoFlag(bool & f)
-		: m_flag(f)
-		{
-			m_flag = true;
-		}
-	~AutoFlag()
-		{
-			m_flag = false;
-		}
+	fwk::Moniker moniker("foo:/bar/test");
 
-private:
-	bool & m_flag;
-};
+	BOOST_CHECK(moniker.scheme() == "foo");
+	BOOST_CHECK(moniker.path() == "/bar/test");
 
+	BOOST_CHECK(strcmp(moniker.c_str(), "foo:/bar/test") == 0);
+	return 0;
 }
 
-#endif

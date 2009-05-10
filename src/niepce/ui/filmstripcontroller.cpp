@@ -23,7 +23,7 @@
 #include "niepce/notifications.hpp"
 #include "engine/db/library.hpp"
 #include "engine/library/thumbnailnotification.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 
 #include "eog-thumb-nav.hpp"
 #include "eog-thumb-view.hpp"

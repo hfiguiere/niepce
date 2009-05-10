@@ -37,7 +37,7 @@
 #include <sqlite3.h>
 #include "fwk/utils/exception.hpp"
 #include "fwk/utils/buffer.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/db/sqlstatement.hpp"
 #include "sqlitecnxdrv.hpp"
 
@@ -319,7 +319,7 @@ namespace db { namespace sqlite {
 			case COLUMN_TYPE_BLOB:
 			{
 			  try {
-				const utils::Buffer* blob(boost::any_cast<const utils::Buffer*>(iter->get<2>()));
+				const fwk::Buffer* blob(boost::any_cast<const fwk::Buffer*>(iter->get<2>()));
 				sqlite3_bind_blob(m_priv->cur_stmt, idx, blob->get_data(), 
 								  blob->get_len(), SQLITE_STATIC);
 			  }
@@ -413,7 +413,7 @@ namespace db { namespace sqlite {
 
 		bool
 		SqliteCnxDrv::get_column_content (uint32_t a_offset,
-										  utils::Buffer &a_column_content) const
+										  fwk::Buffer &a_column_content) const
 		{
       Glib::RecMutex::Lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
@@ -536,7 +536,7 @@ namespace db { namespace sqlite {
 		}
 
 		bool
-		SqliteCnxDrv::get_column_name (uint32_t a_offset, utils::Buffer &a_name) const
+		SqliteCnxDrv::get_column_name (uint32_t a_offset, fwk::Buffer &a_name) const
 		{
       Glib::RecMutex::Lock lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;

@@ -26,7 +26,7 @@
 #include "files.hpp"
 #include "init.hpp"
 
-using utils::FileList;
+using fwk::FileList;
 
 int test_main( int, char *[] )             // note the name!
 {
@@ -39,10 +39,10 @@ int test_main( int, char *[] )             // note the name!
 
 	FileList::Ptr files;
 	
-	files = FileList::getFilesFromDirectory( "foo", boost::bind(utils::filter_none, _1) );
+	files = FileList::getFilesFromDirectory( "foo", boost::bind(fwk::filter_none, _1) );
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "AAtest", boost::bind(utils::filter_none, _1));
+	files = FileList::getFilesFromDirectory( "AAtest", boost::bind(fwk::filter_none, _1));
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	

@@ -31,7 +31,7 @@
 
 #include <boost/function.hpp>
 
-namespace utils {
+namespace fwk {
 class Buffer ;
 //class UString ;
 }
@@ -87,10 +87,10 @@ public:
                                   enum ColumnType &) const = 0;
 
     virtual bool get_column_name (uint32_t a_offset,
-                                  utils::Buffer &a_name) const = 0;
+                                  fwk::Buffer &a_name) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
-                                     utils::Buffer &a_column_content) const = 0;
+                                     fwk::Buffer &a_column_content) const = 0;
 
     virtual bool get_column_content (uint32_t a_offset,
                                      int32_t &a_column_content) const = 0;

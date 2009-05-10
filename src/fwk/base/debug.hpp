@@ -1,7 +1,7 @@
 /*
- * niepce - utils/debug.h
+ * niepce - fwk/base/debug.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UTILS_DEBUG_H__
-#define __UTILS_DEBUG_H__
+#ifndef __FWK_BASE_DEBUG_H__
+#define __FWK_BASE_DEBUG_H__
 
 #ifdef __GNUC__
 // we have too mark this as a system header because otherwise GCC barfs 
@@ -26,25 +26,25 @@
 #pragma GCC system_header
 #endif
 
-namespace utils {
+namespace fwk {
 
 #ifdef DEBUG
 #define DBG_OUT(x, ...) \
-	utils::dbg_print(x,  __FUNCTION__, ## __VA_ARGS__)
+	fwk::dbg_print(x,  __FUNCTION__, ## __VA_ARGS__)
 #else
 #define DBG_OUT(x, ...) 	
 #endif
 
 #ifdef DEBUG
 #define DBG_ASSERT(cond, reason)	\
-	utils::dbg_assert(cond, #cond, __FILE__, __LINE__, reason)
+	fwk::dbg_assert(cond, #cond, __FILE__, __LINE__, reason)
 #else
 #define DBG_ASSERT(cond, reason)	\
 	assert(cond)
 #endif
 
 #define ERR_OUT(x, ...) \
-	utils::err_print(x,  __FUNCTION__, ## __VA_ARGS__)
+	fwk::err_print(x,  __FUNCTION__, ## __VA_ARGS__)
 
 
 	/** print debug messages. printf format.

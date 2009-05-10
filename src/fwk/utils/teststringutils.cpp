@@ -35,7 +35,7 @@ int test_main( int, char *[] )             // note the name!
 	v.push_back("b");
 	v.push_back("c");
 
-	std::string s = utils::join(v, ", ");
+	std::string s = fwk::join(v, ", ");
 
 	BOOST_CHECK(s == "a, b, c");
 

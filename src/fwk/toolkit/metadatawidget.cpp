@@ -25,10 +25,10 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 
-#include "fwk/utils/fractions.hpp"
+#include "fwk/base/debug.hpp"
+#include "fwk/base/fractions.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
-#include "fwk/utils/debug.hpp"
 
 #include "metadatawidget.hpp"
 
@@ -60,7 +60,7 @@ void clear_widget(std::pair<const std::string, Gtk::Widget *> & p)
 }
 }
 
-void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
+void MetaDataWidget::set_data_source(const fwk::XmpMeta * xmp)
 {
     DBG_OUT("set data source");
     if(!m_data_map.empty()) {
@@ -89,7 +89,7 @@ void MetaDataWidget::set_data_source(const utils::XmpMeta * xmp)
             while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                 vec.push_back(xmp_string_cstr(value));
             }
-            std::string v = utils::join(vec, ", ");
+            std::string v = fwk::join(vec, ", ");
             add_data(id, current->label, v.c_str(), current->type);
         }
         else {

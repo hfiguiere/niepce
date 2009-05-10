@@ -41,7 +41,7 @@ public:
 		static void cmdListAllKeywords(const db::Library::Ptr & lib);
 		static void cmdImportFiles(const db::Library::Ptr & lib, 
                                const std::string & folder, 
-                               const utils::FileList::Ptr & files, 
+                               const fwk::FileList::Ptr & files, 
                                bool manage);
 		static void cmdQueryFolderContent(const db::Library::Ptr & lib, 
                                       int folder_id);

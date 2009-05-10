@@ -1,5 +1,5 @@
 /*
- * niepce - fwk/utils/fractions.hpp
+ * niepce - fwk/base/fractions.cpp
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -18,21 +18,31 @@
  */
 
 
+#include <boost/rational.hpp>
+#include <boost/lexical_cast.hpp>
 
-#ifndef __FWK_FRACTIONS_HPP__
-#define __FWK_FRACTIONS_HPP__
-
-#include <string>
+#include "debug.hpp"
+#include "fractions.hpp"
 
 namespace fwk {
 
 
-/** convert a fraction string to a decimal */
-double fraction_to_decimal(const std::string & value);
+double fraction_to_decimal(const std::string & value)
+{
+    double v = 0.0;
 
+    try {
+        boost::rational<int> r = boost::lexical_cast<boost::rational<int> >(value);
+        v = boost::rational_cast<double>(r);
+    }
+    catch(const std::exception & e) {
+        ERR_OUT("unable to cast fraction '%s': %s", value.c_str(), e.what());
+    }
+    return v;
 }
 
-#endif
+
+}
 /*
   Local Variables:
   mode:c++

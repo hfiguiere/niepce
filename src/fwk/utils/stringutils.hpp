@@ -1,5 +1,5 @@
 /*
- * niepce - utils/stringutils.h
+ * niepce - fwk/utils/stringutils.hpp
  *
  * Copyright (C) 2008 Hubert Figuiere
  *
@@ -23,7 +23,7 @@
 
 #include <boost/range/value_type.hpp>
 
-namespace utils {
+namespace fwk {
 
 /** join elements with a separator 
  * boost has such an algorithm in later versions. This is not it, but does a

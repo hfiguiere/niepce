@@ -22,7 +22,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "fwk/utils/buffer.hpp"
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 
 #include "sqlstatement.hpp"
 #include "insertstatement.hpp"
@@ -52,7 +52,7 @@ int test_main(int, char *[])
 		const char * sql = "INSERT INTO foo (bar, baz) VALUES(?1, ?2);";
 		db::SQLStatement stmt(sql);
 		std::string s("zaphod");
-		utils::Buffer b("beeblebrox'", 11);
+		fwk::Buffer b("beeblebrox'", 11);
 		BOOST_CHECK(stmt.bind(1, s));
 		BOOST_CHECK(stmt.bind(2, b));
 		
@@ -65,7 +65,7 @@ int test_main(int, char *[])
 		BOOST_CHECK(drv->should_have_data());
 		BOOST_CHECK(drv->read_next_row());
 		std::string s2;
-		utils::Buffer b2;
+		fwk::Buffer b2;
 		BOOST_CHECK(drv->get_column_content(0, s2));
 		BOOST_CHECK(s == s2);
 		BOOST_CHECK(drv->get_column_content(1, b2));

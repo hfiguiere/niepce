@@ -1,5 +1,5 @@
 /*
- * niepce - utils/files.h
+ * niepce - fwk/utils/files.hpp
  *
  * Copyright (C) 2007 Hubert Figuiere
  *
@@ -31,7 +31,7 @@
 
 #include <giomm/fileinfo.h>
 
-namespace utils {
+namespace fwk {
 
 	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
 	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);

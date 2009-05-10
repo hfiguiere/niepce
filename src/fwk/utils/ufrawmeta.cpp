@@ -1,5 +1,5 @@
 /*
- * niepce - utils/ufrawmeta.cpp
+ * niepce - fwk/utils/ufrawmeta.cpp
  *
  * Copyright (C) 2007-2008 Hubert Figuiere
  *
@@ -27,13 +27,13 @@
 
 #include <exempi/xmpconsts.h>
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "ufrawmeta.hpp"
 #include "exempi.hpp"
 #include "pathutils.hpp"
 
 
-namespace utils {
+namespace fwk {
 
 	static const struct string_pair_t {
 		const char *first;

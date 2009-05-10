@@ -21,7 +21,7 @@
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "command.hpp"
 #include "undo.hpp"
 

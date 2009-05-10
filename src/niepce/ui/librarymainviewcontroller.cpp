@@ -26,7 +26,7 @@
 #include <gtkmm/celllayout.h>
 #include <gtkmm/cellrenderer.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
 #include "engine/db/library.hpp"
 #include "fwk/toolkit/application.hpp"

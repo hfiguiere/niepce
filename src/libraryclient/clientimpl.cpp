@@ -19,7 +19,7 @@
 
 #include <boost/bind.hpp>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/files.hpp"
 #include "engine/library/op.hpp"
 #include "engine/library/commands.hpp"
@@ -27,20 +27,20 @@
 #include "clientimpl.hpp"
 #include "locallibraryserver.hpp"
 
-using utils::FileList;
+using fwk::FileList;
 using library::Op;
 using library::Commands;
 using library::tid_t;
 
 namespace libraryclient {
 	
-ClientImpl *ClientImpl::makeClientImpl(const utils::Moniker & moniker, 
+ClientImpl *ClientImpl::makeClientImpl(const fwk::Moniker & moniker, 
                                        const fwk::NotificationCenter::Ptr & nc)
 {
     return new ClientImpl(moniker, nc);
 }
 
-ClientImpl::ClientImpl(const utils::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc)
+ClientImpl::ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc)
     : m_moniker(moniker),
       m_localLibrary(NULL)
 {
@@ -175,7 +175,7 @@ tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
     FileList::Ptr files;
 	
     files = FileList::getFilesFromDirectory(dir, 
-                                            boost::bind(&utils::filter_none, _1));
+                                            boost::bind(&fwk::filter_none, _1));
     
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdImportFiles,

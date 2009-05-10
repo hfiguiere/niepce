@@ -1,7 +1,7 @@
 /*
- * niepce - utils/thread.h
+ * niepce - fwk/utils/thread.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __UTILS_THREAD_H__
-#define __UTILS_THREAD_H__
+#ifndef __FWK_UTILS_THREAD_H__
+#define __FWK_UTILS_THREAD_H__
 
 
 #include <string>
@@ -27,7 +27,7 @@
 #include <glibmm/thread.h>
 
 
-namespace utils {
+namespace fwk {
 
 	/** thread */
 	class Thread

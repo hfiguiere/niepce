@@ -43,7 +43,7 @@ public:
 		MetaDataPaneController(fwk::Dock &);
     ~MetaDataPaneController();
 		virtual Gtk::Widget * buildWidget();
-		void display(int file_id, const utils::XmpMeta * meta);
+		void display(int file_id, const fwk::XmpMeta * meta);
     int displayed_file() const 
         { return m_fileid; }
 private:

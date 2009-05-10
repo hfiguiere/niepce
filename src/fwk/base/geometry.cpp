@@ -1,5 +1,5 @@
 /*
- * niepce - utils/geometry.cpp
+ * niepce - fwk/base/geometry.cpp
  *
  * Copyright (C) 2007-2008 Hubert Figuiere
  *
@@ -23,10 +23,10 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "geometry.hpp"
 
-namespace utils {
+namespace fwk {
 
 Rect::Rect()
 {

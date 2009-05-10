@@ -1,5 +1,5 @@
 /*
- * niepce - utils/mtqueue.h
+ * niepce - fwk/utils/mtqueue.h
  *
  * Copyright (C) 2007-2008 Hubert Figuiere
  *
@@ -19,13 +19,13 @@
 
 
 
-#ifndef __NIEPCE_UTILS_MTQUEUE_H__
-#define __NIEPCE_UTILS_MTQUEUE_H__
+#ifndef __FWK_UTILS_MTQUEUE_H__
+#define __FWK_UTILS_MTQUEUE_H__
 
 #include <deque>
 #include <glibmm/thread.h>
 
-namespace utils {
+namespace fwk {
 
 	/** This class implement a simple deque protected 
 	 * by mutexes.

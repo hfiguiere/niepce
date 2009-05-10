@@ -21,8 +21,8 @@
 
 #include <gtkmm/widget.h>
 
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/boost.hpp"
-#include "fwk/utils/debug.hpp"
 #include "controller.hpp"
 
 

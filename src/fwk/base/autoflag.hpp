@@ -1,5 +1,5 @@
 /*
- * niepce - fwk/utils/fractions.hpp
+ * niepce - fwk/base/autoflag.hpp
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -18,37 +18,28 @@
  */
 
 
-#include <boost/rational.hpp>
-#include <boost/lexical_cast.hpp>
-
-#include "debug.hpp"
-#include "fractions.hpp"
+#ifndef _FWK_BASE_AUTOFLAG_HPP_
+#define _FWK_BASE_AUTOFLAG_HPP_
 
 namespace fwk {
 
-
-double fraction_to_decimal(const std::string & value)
+class AutoFlag
 {
-    double v = 0.0;
+public:
+	AutoFlag(bool & f)
+		: m_flag(f)
+		{
+			m_flag = true;
+		}
+	~AutoFlag()
+		{
+			m_flag = false;
+		}
 
-    try {
-        boost::rational<int> r = boost::lexical_cast<boost::rational<int> >(value);
-        v = boost::rational_cast<double>(r);
-    }
-    catch(const std::exception & e) {
-        ERR_OUT("unable to cast fraction '%s': %s", value.c_str(), e.what());
-    }
-    return v;
+private:
+	bool & m_flag;
+};
+
 }
 
-
-}
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:80
-  End:
-*/
+#endif

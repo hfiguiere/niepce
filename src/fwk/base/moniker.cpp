@@ -1,7 +1,7 @@
 /*
- * niepce - utils/moniker.cpp
+ * niepce - fwk/base/moniker.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #include <boost/range.hpp>
 #include <boost/algorithm/string/find.hpp>
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "moniker.hpp"
 
-namespace utils {
+namespace fwk {
 
 	Moniker::Moniker(const std::string & s)
 	{

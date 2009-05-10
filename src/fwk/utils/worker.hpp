@@ -1,7 +1,7 @@
 /*
- * niepce - utils/worker.h
+ * niepce - fwk/utils/worker.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __UTILS_WORKER_H__
-#define __UTILS_WORKER_H__
+#ifndef __FWK_UTILS_WORKER_H__
+#define __FWK_UTILS_WORKER_H__
 
 
 #include <string>
@@ -27,7 +27,7 @@
 #include "fwk/utils/thread.hpp"
 #include "fwk/utils/mtqueue.hpp"
 
-namespace utils {
+namespace fwk {
 
 	/** worker thread for the library */
 	template <class T>

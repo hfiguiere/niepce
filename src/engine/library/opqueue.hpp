@@ -28,7 +28,7 @@
 
 namespace library {
 
-	typedef utils::MtQueue< Op::Ptr > OpQueue;
+	typedef fwk::MtQueue< Op::Ptr > OpQueue;
 
 }
 

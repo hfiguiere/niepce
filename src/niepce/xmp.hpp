@@ -27,7 +27,7 @@ namespace niepce {
 
 	extern const char NIEPCE_XMP_NAMESPACE[];
 	extern const char NIEPCE_XMP_NS_PREFIX[];
-	extern const utils::ExempiManager::ns_defs_t xmp_namespaces[];
+	extern const fwk::ExempiManager::ns_defs_t xmp_namespaces[];
 
 }
 

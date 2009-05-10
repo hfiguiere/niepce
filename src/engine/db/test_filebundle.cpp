@@ -31,7 +31,7 @@ int test_main(int, char *[])
 {
     fwk::utils::init();
 
-    utils::FileList::Ptr thelist(new utils::FileList());
+    fwk::FileList::Ptr thelist(new fwk::FileList());
     
     thelist->push_back("/foo/bar/img_0001.cr2");
     thelist->push_back("/foo/bar/img_0001.jpg");

@@ -19,7 +19,7 @@
 
 #include <gtkmm/togglebutton.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "ui/librarymainview.hpp"
 
 namespace ui {

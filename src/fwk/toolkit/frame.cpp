@@ -23,9 +23,9 @@
 
 #include <gtkmm/dialog.h>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
+#include "fwk/base/geometry.hpp"
 #include "fwk/utils/boost.hpp"
-#include "fwk/utils/geometry.hpp"
 #include "frame.hpp"
 #include "application.hpp"
 
@@ -132,7 +132,7 @@ void Frame::frameRectFromConfig()
         val = cfg.getValue(m_layout_cfg_key, "");
         if(!val.empty()) {
             try {
-                utils::Rect r(val);
+                fwk::Rect r(val);
                 m_window->move(r.x(), r.y());
                 m_window->resize(r.w(), r.h());				
             }
@@ -154,7 +154,7 @@ void Frame::frameRectToConfig()
         x = y = w = h = 0;
         m_window->get_position(x, y);
         m_window->get_size(w, h);
-        utils::Rect r(x, y, w, h);
+        fwk::Rect r(x, y, w, h);
         cfg.setValue(m_layout_cfg_key, r.to_string());
 		}
 }

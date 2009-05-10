@@ -36,7 +36,7 @@
 
 #include "logstreamutils.hpp"
 
-namespace utils {
+namespace fwk {
 
 class Exception: public std::runtime_error
 {
@@ -53,14 +53,14 @@ public:
 #define THROW_IF_FAIL(a_cond) \
 if (!(a_cond)) { \
 LOG_EXCEPTION (std::string("condition (") + #a_cond + ") failed; raising exception" ) ;\
-throw utils::Exception \
+throw fwk::Exception \
     (std::string ("Assertion failed: ") + #a_cond)  ;\
 }
 
 #define THROW_IF_FAIL2(a_cond, a_reason) \
 if (!(a_cond)) { \
 LOG_EXCEPTION (std::string("condition (") + #a_cond + ") failed; raising exception " + a_reason);\
-throw utils::Exception (a_reason)  ;\
+throw fwk::Exception (a_reason)  ;\
 }
 
 #define THROW_IF_FAIL3(a_cond, type, a_reason) \
@@ -76,7 +76,7 @@ LOG_EXCEPTION ("condition (" << #a_cond << ") failed; raising exception " << a_r
 
 #define THROW(a_reason) \
 LOG_EXCEPTION (std::string("raised exception: ") + std::string(a_reason)); \
-throw utils::Exception (std::string (a_reason))  ;
+throw fwk::Exception (std::string (a_reason))  ;
 
 #define THROW_EMPTY \
 LOG_EXCEPTION ("raised empty exception " << endl) ; \

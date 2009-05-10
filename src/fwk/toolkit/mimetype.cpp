@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "mimetype.hpp"
 

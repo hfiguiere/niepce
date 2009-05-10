@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "fwk/utils/debug.hpp"
+#include "fwk/base/debug.hpp"
 
 #define NMV_DEFAULT_DOMAIN __FILE__
 

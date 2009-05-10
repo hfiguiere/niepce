@@ -53,7 +53,7 @@ T_CppObject *get_pointer(const shared_ptr< T_CppObject > &p)
 }
 }
 
-namespace utils {
+namespace fwk {
 
 /** function to make a shared_ptr<> form a weak_ptr<> 
  * idea from http://lists.boost.org/boost-users/2007/01/24384.php
@@ -70,7 +70,7 @@ std::tr1::shared_ptr<T> shared_ptr_from( std::tr1::weak_ptr<T> const & wpt )
  * this allow breaking some circular references.
  */
 #define BIND_SHARED_PTR(_type, _spt) \
-    boost::bind(&utils::shared_ptr_from<_type>, std::tr1::weak_ptr<_type>(_spt))
+    boost::bind(&fwk::shared_ptr_from<_type>, std::tr1::weak_ptr<_type>(_spt))
 
 
 #endif

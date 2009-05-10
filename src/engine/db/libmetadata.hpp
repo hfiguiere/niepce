@@ -31,7 +31,7 @@
 namespace db {
 
 	class LibMetadata
-		: public utils::XmpMeta
+		: public fwk::XmpMeta
 	{
 	public:
 		typedef std::tr1::shared_ptr<LibMetadata> Ptr;

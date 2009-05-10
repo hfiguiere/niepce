@@ -29,7 +29,7 @@
 #include <exempi/xmp.h>
 #include <exempi/xmpconsts.h>
 
-#include "debug.hpp"
+#include "fwk/base/debug.hpp"
 #include "exempi.hpp"
 #include "pathutils.hpp"
 
@@ -40,7 +40,7 @@ const char * UFRAW_INTEROP_NS_PREFIX = "ufrint";
 
 }
 
-namespace utils {
+namespace fwk {
 
 ExempiManager::ExempiManager(const ns_defs_t* namespaces)
 {

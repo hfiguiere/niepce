@@ -1,7 +1,7 @@
 /*
- * niepce - utils/debug.cpp
+ * niepce - fwk/base/debug.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,12 @@
 #define NDEBUG _SAVENDEBUG
 #endif
 
-#include <glibmm/thread.h>
 
 #include "debug.hpp"
 
 
 
-namespace utils {
+namespace fwk {
 
 	static void _vprint(const char *prefix, const char *fmt, 
 										 const char* func,	va_list marker);
@@ -107,8 +106,6 @@ namespace utils {
 	static void _vprint(const char *prefix, const char *fmt, 
 							const char* func,	va_list marker)
 	{
-		static Glib::RecMutex mutex;
-    Glib::RecMutex::Lock lock(mutex);
 		char buf[128];
 		snprintf(buf, 128, "(%d) ", (int)pthread_self());
 		fwrite(buf, 1, strlen(buf), stderr);
