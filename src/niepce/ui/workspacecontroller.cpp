@@ -68,64 +68,59 @@ namespace ui {
 	}
 
 
-	void WorkspaceController::on_lib_notification(const fwk::Notification::Ptr &n)
+	void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 	{
 		DBG_OUT("notification for workspace");
-		if(n->type() == niepce::NOTIFICATION_LIB) {
-			eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
-			switch(ln.type) {
-			case eng::Library::NOTIFY_ADDED_FOLDERS:
-			{
-				eng::LibFolder::ListPtr l 
-					= boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
-				DBG_OUT("received added folders # %d", l->size());
-				for_each(l->begin(), l->end(), 
-						 boost::bind(&WorkspaceController::add_folder_item, 
-									 this, _1));
-				break;
-			}
-			case eng::Library::NOTIFY_ADDED_KEYWORD:
-			{
-				eng::Keyword::Ptr k
-					= boost::any_cast<eng::Keyword::Ptr>(ln.param);
-				DBG_ASSERT(k, "keyword must not be NULL");
-				add_keyword_item(k);
-				break;
-			}
-			case eng::Library::NOTIFY_ADDED_KEYWORDS:
-			{
-				eng::Keyword::ListPtr l
-					= boost::any_cast<eng::Keyword::ListPtr>(ln.param);
-				DBG_ASSERT(l, "keyword list must not be NULL");
-				for_each(l->begin(), l->end(), 
-						 boost::bind(&WorkspaceController::add_keyword_item, 
-									 this, _1));
-				break;
-			}
-			case eng::Library::NOTIFY_FOLDER_COUNTED:
-			{
-				std::pair<int,int> count(boost::any_cast<std::pair<int,int> >(ln.param));
-				DBG_OUT("count for folder %d is %d", count.first, count.second);
-				std::map<int, Gtk::TreeIter>::iterator iter
-					= m_folderidmap.find( count.first );
-				if(iter != m_folderidmap.end()) {
-					Gtk::TreeRow row = *(iter->second);
-					row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(count.second);
-				}
+    switch(ln.type) {
+    case eng::Library::NOTIFY_ADDED_FOLDERS:
+    {
+      eng::LibFolder::ListPtr l 
+        = boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
+      DBG_OUT("received added folders # %d", l->size());
+      for_each(l->begin(), l->end(), 
+               boost::bind(&WorkspaceController::add_folder_item, 
+                           this, _1));
+      break;
+    }
+    case eng::Library::NOTIFY_ADDED_KEYWORD:
+    {
+      eng::Keyword::Ptr k
+        = boost::any_cast<eng::Keyword::Ptr>(ln.param);
+      DBG_ASSERT(k, "keyword must not be NULL");
+      add_keyword_item(k);
+      break;
+    }
+    case eng::Library::NOTIFY_ADDED_KEYWORDS:
+    {
+      eng::Keyword::ListPtr l
+        = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
+      DBG_ASSERT(l, "keyword list must not be NULL");
+      for_each(l->begin(), l->end(), 
+               boost::bind(&WorkspaceController::add_keyword_item, 
+                           this, _1));
+      break;
+    }
+    case eng::Library::NOTIFY_FOLDER_COUNTED:
+    {
+      std::pair<int,int> count(boost::any_cast<std::pair<int,int> >(ln.param));
+      DBG_OUT("count for folder %d is %d", count.first, count.second);
+      std::map<int, Gtk::TreeIter>::iterator iter
+        = m_folderidmap.find( count.first );
+      if(iter != m_folderidmap.end()) {
+        Gtk::TreeRow row = *(iter->second);
+        row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(count.second);
+      }
 
-				break;
-			}
-			default:
-				break;
-			}
-		}
+      break;
+    }
+    default:
+      break;
+    }
 	}
 
-	void WorkspaceController::on_count_notification(const fwk::Notification::Ptr &n)
+	void WorkspaceController::on_count_notification(int)
 	{
-		if(n->type() == niepce::NOTIFICATION_COUNT) {
-			DBG_OUT("received NOTIFICATION_COUNT");
-		}
+    DBG_OUT("received NOTIFICATION_COUNT");
 	}
 
 

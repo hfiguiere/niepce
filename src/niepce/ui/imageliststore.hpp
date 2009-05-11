@@ -26,9 +26,10 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/liststore.h>
 
-#include "fwk/toolkit/notification.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.hpp"
+#include "engine/db/library.hpp"
+#include "engine/library/thumbnailnotification.hpp"
 #include "libraryclient/libraryclient.hpp"
 
 namespace ui {
@@ -68,8 +69,8 @@ public:
     void set_parent_controller(const fwk::Controller::WeakPtr & ctrl)
         { m_controller = ctrl; }
 
-    void on_lib_notification(const fwk::Notification::Ptr &n);
-    void on_tnail_notification(const fwk::Notification::Ptr &n);
+    void on_lib_notification(const eng::LibNotification &n);
+    void on_tnail_notification(const eng::ThumbnailNotification &n);
 protected:
     ImageListStore(const Columns& columns);
 private:

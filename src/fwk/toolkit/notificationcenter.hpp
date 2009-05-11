@@ -23,7 +23,6 @@
 #ifndef __FWK_NOTIFICATIONCENTER_H__
 #define __FWK_NOTIFICATIONCENTER_H__
 
-#include <boost/function.hpp>
 #include <tr1/memory>
 
 #include "fwk/toolkit/notification.hpp"
@@ -31,10 +30,11 @@
 namespace fwk {
 
 	class NotificationCenter
+    : public sigc::trackable
 	{
 	public:
 		typedef std::tr1::shared_ptr< NotificationCenter > Ptr;
-		typedef boost::function< void (Notification::Ptr) > subscriber_t;
+    typedef sigc::slot<void, Notification::Ptr> subscriber_t;
 
 		NotificationCenter();
 		~NotificationCenter();
@@ -47,6 +47,8 @@ namespace fwk {
 		void unsubscribe(int type, const subscriber_t & );
 		
 	private:
+		typedef sigc::signal<void, Notification::Ptr> subscription_t;
+
 		void _dispatch(void);
 
 		class Priv;

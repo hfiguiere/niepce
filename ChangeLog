@@ -1,3 +1,12 @@
+2009-05-10  Hubert Figuiere  <hub@figuiere.net>
+
+	* Refactor NotificationCenter to not have to decode
+	the notification every time.
+
+	* collapse db:: and library:: to eng::
+
+	* replace the utils namespace by the fwk namespace
+
 2009-05-08  Hubert Figuiere  <hub@figuiere.net>
 
 	* Refactor init to fwk::utils::init()

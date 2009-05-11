@@ -29,7 +29,6 @@
 #include <gtkmm/paned.h>
 
 #include "fwk/toolkit/frame.hpp"
-#include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
@@ -37,6 +36,7 @@
 #include "ui/workspacecontroller.hpp"
 #include "ui/selectioncontroller.hpp"
 #include "ui/filmstripcontroller.hpp"
+#include "notificationcenter.hpp"
 
 namespace fwk {
 	class NotificatioCenter;
@@ -56,9 +56,9 @@ public:
 
     libraryclient::LibraryClient::Ptr getLibraryClient()
         { return m_libClient; }
+
 protected:
     virtual Gtk::Widget * buildWidget();
-
 private:
     void undo_state();
     void redo_state();
@@ -75,7 +75,7 @@ private:
     void on_preferences();
 
     void create_initial_labels();
-    void on_lib_notification(const fwk::Notification::Ptr &n);
+    void on_lib_notification(const eng::LibNotification & n);
 
     void init_ui();
     void init_actions();
@@ -84,7 +84,7 @@ private:
     eng::Label::List &   get_labels()
         { return m_labels; }
 		
-    fwk::NotificationCenter::Ptr  m_lib_notifcenter;
+    niepce::NotificationCenter::Ptr m_notifcenter;
 
     Gtk::VBox                      m_vbox;
     Gtk::HPaned                    m_hbox;

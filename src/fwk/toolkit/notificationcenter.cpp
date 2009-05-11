@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/notification.h
+ * niepce - fwk/toolkit/notification.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 #include <map>
 #include <functional>
 
-#include <boost/bind.hpp>
-#include <boost/bind/apply.hpp>
-#include <boost/function_equal.hpp>
-
 #include <glibmm/dispatcher.h>
 
 #include "fwk/utils/mtqueue.hpp"
@@ -32,57 +28,65 @@
 
 namespace fwk {
 
-	class NotificationCenter::Priv
-	{
-	public:
-		typedef std::list< subscriber_t > SubscriberList;
+class NotificationCenter::Priv
+{
+public:
 		Glib::Dispatcher                     m_dispatcher;
-		sigc::connection                     m_dispatchConn;
 		fwk::MtQueue< Notification::Ptr >    m_notificationQueue;
-		std::map< int, SubscriberList >      m_subscribers;
-	};
+		std::map< int, subscription_t >      m_subscribers;
+};
 
 
-	NotificationCenter::NotificationCenter()
+NotificationCenter::NotificationCenter()
 		: p( new Priv )
-	{
-		p->m_dispatchConn = p->m_dispatcher.connect(
-			sigc::mem_fun(this, &NotificationCenter::_dispatch));
-	}
+{
+		p->m_dispatcher.connect(
+        sigc::mem_fun(this, &NotificationCenter::_dispatch));
+}
 
-	NotificationCenter::~NotificationCenter()
-	{
-		p->m_dispatchConn.disconnect();
+NotificationCenter::~NotificationCenter()
+{
 		delete p;
-	}
+}
 
 
-	void NotificationCenter::subscribe(int type, const subscriber_t & s)
-	{
-		
+void NotificationCenter::subscribe(int type, const subscriber_t & s)
+{
 		// TODO make sure it is not yet subscribed
-		p->m_subscribers[type].push_back(s);
-	}
+		p->m_subscribers[type].connect(s);
+}
 
-	void NotificationCenter::unsubscribe(int /*type*/, const subscriber_t & /*s*/)
-	{
+void NotificationCenter::unsubscribe(int /*type*/, const subscriber_t & /*s*/)
+{
 //		m_subscribers.remove_if(boost::bind(&boost::function_equal, _1, s));
-	}
+}
 
-	void NotificationCenter::post(const Notification::Ptr & n)
-	{ 
+void NotificationCenter::post(const Notification::Ptr & n)
+{
+    /* called out of thread */
+    /* MUST be thread safe */
 		p->m_notificationQueue.add(n);
 		p->m_dispatcher.emit();
-	}
+}
 	
-	void NotificationCenter::_dispatch(void)
-	{
+void NotificationCenter::_dispatch(void)
+{
+    /* this is not pop() like in STL. */
 		Notification::Ptr notif( p->m_notificationQueue.pop() );
 
 		Notification::mutex_t::Lock lock(notif->mutex());
-		const Priv::SubscriberList & subscriber_list(p->m_subscribers[notif->type()]);
-		std::for_each(subscriber_list.begin(), subscriber_list.end(), 
-					  bind(boost::apply<void>(), _1, boost::ref(notif)));
-	}
+    p->m_subscribers[notif->type()](notif);
 }
 
+
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

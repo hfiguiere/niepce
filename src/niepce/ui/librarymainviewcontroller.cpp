@@ -38,34 +38,30 @@
 
 namespace ui {
 
-void LibraryMainViewController::on_lib_notification(const fwk::Notification::Ptr &n)
+void 
+LibraryMainViewController::on_lib_notification(const eng::LibNotification &ln)
 {
-    DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
-               "wrong notification type");
-    if(n->type() == niepce::NOTIFICATION_LIB) {
-        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
-        switch(ln.type) {
-        case eng::Library::NOTIFY_METADATA_QUERIED:
-        {
-            eng::LibMetadata::Ptr lm
-                = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
-            DBG_OUT("received metadata");
-            m_metapanecontroller->display(lm->id(), lm.get());
-            break;
+    switch(ln.type) {
+    case eng::Library::NOTIFY_METADATA_QUERIED:
+    {
+        eng::LibMetadata::Ptr lm
+            = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
+        DBG_OUT("received metadata");
+        m_metapanecontroller->display(lm->id(), lm.get());
+        break;
+    }
+    case eng::Library::NOTIFY_METADATA_CHANGED:
+    {
+        DBG_OUT("metadata changed");
+        std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
+        if(m[0] == m_metapanecontroller->displayed_file()) {
+            // FIXME: actually just update the metadata
+            getLibraryClient()->requestMetadata(m[0]);
         }
-        case eng::Library::NOTIFY_METADATA_CHANGED:
-        {
-            DBG_OUT("metadata changed");
-            std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
-            if(m[0] == m_metapanecontroller->displayed_file()) {
-                // FIXME: actually just update the metadata
-                getLibraryClient()->requestMetadata(m[0]);
-            }
-            break;
-        }
-        default:
-            break;
-        }
+        break;
+    }
+    default:
+        break;
     }
 }
 

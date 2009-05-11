@@ -30,6 +30,7 @@
 #include <gtkmm/filechooserdialog.h>
 
 #include "niepce/notifications.hpp"
+#include "niepce/notificationcenter.hpp"
 #include "niepce/stock.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/base/moniker.hpp"
@@ -51,7 +52,6 @@
 using libraryclient::LibraryClient;
 using fwk::Application;
 using fwk::Configuration;
-using fwk::NotificationCenter;
 using fwk::UndoHistory;
 
 namespace ui {
@@ -82,38 +82,41 @@ NiepceWindow::buildWidget()
     init_actions();
     init_ui();
 
-    m_lib_notifcenter.reset(new NotificationCenter());
+    m_notifcenter.reset(new niepce::NotificationCenter());
 
     Glib::ustring name("camera");
     set_icon_from_theme(name);		
 
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
-                                 boost::bind(&NiepceWindow::on_lib_notification, 
-                                             this, _1));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
-                                 boost::bind(&ImageListStore::on_lib_notification, 
-                                             m_selection_controller->list_store(), _1));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_THUMBNAIL,
-                                 boost::bind(&ImageListStore::on_tnail_notification, 
-                                             m_selection_controller->list_store(), _1));
+
+    m_notifcenter->signal_lib_notification.connect(
+        sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));
+
+
+    m_notifcenter->signal_lib_notification
+        .connect(sigc::mem_fun(
+                     *get_pointer(m_selection_controller->list_store()),
+                     &ImageListStore::on_lib_notification));
+    m_notifcenter->signal_thumbnail_notification
+        .connect(sigc::mem_fun(
+                     *get_pointer(m_selection_controller->list_store()), 
+                     &ImageListStore::on_tnail_notification));
 
     // main view
     m_mainviewctrl = LibraryMainViewController::Ptr(
         new LibraryMainViewController(m_refActionGroup,
                                       m_selection_controller->list_store()));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
-                                 boost::bind(&LibraryMainViewController::on_lib_notification, 
-                                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
-                                             , _1));
+    m_notifcenter->signal_lib_notification
+        .connect(sigc::mem_fun(
+                     *m_mainviewctrl,
+                     &LibraryMainViewController::on_lib_notification));
+
     add(m_mainviewctrl);
     // workspace treeview
     m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_LIB,
-                                 boost::bind(&WorkspaceController::on_lib_notification, 
-                                             m_workspacectrl, _1));
-    m_lib_notifcenter->subscribe(niepce::NOTIFICATION_COUNT,
-                                 boost::bind(&WorkspaceController::on_count_notification,
-                                             m_workspacectrl, _1));
+
+    m_notifcenter->signal_lib_notification
+        .connect(sigc::mem_fun(*m_workspacectrl,
+                               &WorkspaceController::on_lib_notification));
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
@@ -503,60 +506,55 @@ void NiepceWindow::create_initial_labels()
 }
 
 
-void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
+void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
 {
-    DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
-               "wrong notification type");
-    if(n->type() == niepce::NOTIFICATION_LIB) {
-        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
-        switch(ln.type) {
-        case eng::Library::NOTIFY_NEW_LIBRARY_CREATED:
-            create_initial_labels();
-            break;
-        case eng::Library::NOTIFY_ADDED_LABELS:
-        {
-            eng::Label::ListPtr l 
-                = boost::any_cast<eng::Label::ListPtr>(ln.param);
-            for(eng::Label::List::const_iterator iter = l->begin();
-                iter != l->end(); ++iter) {
+    switch(ln.type) {
+    case eng::Library::NOTIFY_NEW_LIBRARY_CREATED:
+        create_initial_labels();
+        break;
+    case eng::Library::NOTIFY_ADDED_LABELS:
+    {
+        eng::Label::ListPtr l 
+            = boost::any_cast<eng::Label::ListPtr>(ln.param);
+        for(eng::Label::List::const_iterator iter = l->begin();
+            iter != l->end(); ++iter) {
                 
-                m_labels.push_back(*iter);
-            }
-            break;
+            m_labels.push_back(*iter);
         }
-        case eng::Library::NOTIFY_LABEL_CHANGED:
-        {
-            eng::Label::Ptr & l 
-                = boost::any_cast<eng::Label::Ptr &>(ln.param);
-            // TODO: will work as long as we have 5 labels or something.
-            for(eng::Label::List::iterator iter = m_labels.begin();
-                iter != m_labels.end(); ++iter) {
+        break;
+    }
+    case eng::Library::NOTIFY_LABEL_CHANGED:
+    {
+        const eng::Label::Ptr & l 
+            = boost::any_cast<const eng::Label::Ptr &>(ln.param);
+        // TODO: will work as long as we have 5 labels or something.
+        for(eng::Label::List::iterator iter = m_labels.begin();
+            iter != m_labels.end(); ++iter) {
 
-                if((*iter)->id() == l->id()) {
-                    (*iter)->set_label(l->label());
-                    (*iter)->set_color(l->color());
-                }
+            if((*iter)->id() == l->id()) {
+                (*iter)->set_label(l->label());
+                (*iter)->set_color(l->color());
             }
-            break;
         }
-        case eng::Library::NOTIFY_LABEL_DELETED:
-        {
-            int id = boost::any_cast<int>(ln.param);
-            // TODO: will work as long as we have 5 labels or something.
-            for(eng::Label::List::iterator iter = m_labels.begin();
-                iter != m_labels.end(); ++iter) {
+        break;
+    }
+    case eng::Library::NOTIFY_LABEL_DELETED:
+    {
+        int id = boost::any_cast<int>(ln.param);
+        // TODO: will work as long as we have 5 labels or something.
+        for(eng::Label::List::iterator iter = m_labels.begin();
+            iter != m_labels.end(); ++iter) {
 
-                if((*iter)->id() == id) {
-                    DBG_OUT("remove label %d", id);
-                    iter = m_labels.erase(iter);
-                    break;
-                }
+            if((*iter)->id() == id) {
+                DBG_OUT("remove label %d", id);
+                iter = m_labels.erase(iter);
+                break;
             }
-            break;
         }
-        default:
-            break;
-        }
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -564,7 +562,7 @@ void NiepceWindow::on_lib_notification(const fwk::Notification::Ptr &n)
 void NiepceWindow::open_library(const std::string & libMoniker)
 {
     m_libClient = LibraryClient::Ptr(new LibraryClient(fwk::Moniker(libMoniker),
-                                                       m_lib_notifcenter));
+                                                       m_notifcenter));
     set_title(libMoniker);
     m_libClient->getAllLabels();
 }

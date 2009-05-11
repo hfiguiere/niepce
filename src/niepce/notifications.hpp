@@ -25,8 +25,7 @@ namespace niepce {
 
 	enum {
 		NOTIFICATION_LIB = 0,
-		NOTIFICATION_THUMBNAIL,
-		NOTIFICATION_COUNT                    /**< Notification a counted items */
+		NOTIFICATION_THUMBNAIL
 	};
 
 }

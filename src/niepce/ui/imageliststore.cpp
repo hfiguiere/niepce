@@ -24,8 +24,6 @@
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
 #include "niepce/notifications.hpp"
-#include "engine/db/library.hpp"
-#include "engine/library/thumbnailnotification.hpp"
 #include "niepcewindow.hpp"
 
 namespace ui {
@@ -64,83 +62,72 @@ Gtk::TreePath ImageListStore::get_path_from_id(int id)
 }
 
 
-void ImageListStore::on_lib_notification(const fwk::Notification::Ptr &n)
+void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
-    DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, 
-               "wrong notification type");
-    if(n->type() == niepce::NOTIFICATION_LIB) {
-        eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
-        switch(ln.type) {
-        case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-        case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
+    switch(ln.type) {
+    case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
+    case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
+    {
+        eng::LibFile::ListPtr l 
+            = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
+        DBG_OUT("received folder content file # %d", l->size());
+        Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
+        clear();
+        m_idmap.clear();
+        eng::LibFile::List::const_iterator iter = l->begin();
+        for( ; iter != l->end(); iter++ )
         {
-            eng::LibFile::ListPtr l 
-                = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
-            DBG_OUT("received folder content file # %d", l->size());
-            Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
-            clear();
-            m_idmap.clear();
-            eng::LibFile::List::const_iterator iter = l->begin();
-            for( ; iter != l->end(); iter++ )
-            {
-                Gtk::TreeModel::iterator riter = append();
-                Gtk::TreeRow row = *riter;
-                // locate it in local cache...
-                row[m_columns.m_pix] = icon_theme->load_icon(
-                    Glib::ustring("image-loading"), 32,
-                    Gtk::ICON_LOOKUP_USE_BUILTIN);
-                row[m_columns.m_libfile] = *iter;
-                row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(row[m_columns.m_pix], 100);
-                m_idmap[(*iter)->id()] = riter;
-            }
-            // at that point clear the cache because the icon view is populated.
-            getLibraryClient()->thumbnailCache().request(l);
-            break;
+            Gtk::TreeModel::iterator riter = append();
+            Gtk::TreeRow row = *riter;
+            // locate it in local cache...
+            row[m_columns.m_pix] = icon_theme->load_icon(
+                Glib::ustring("image-loading"), 32,
+                Gtk::ICON_LOOKUP_USE_BUILTIN);
+            row[m_columns.m_libfile] = *iter;
+            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(row[m_columns.m_pix], 100);
+            m_idmap[(*iter)->id()] = riter;
         }
-        case eng::Library::NOTIFY_METADATA_CHANGED:
-        {
-            std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
-            DBG_OUT("metadata changed");
-            Gtk::TreeRow row;
-            std::map<int, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m[0]);
-            if(iter != m_idmap.end()) {
-                row = *(iter->second);
-                //
-                eng::LibFile::Ptr file = row[m_columns.m_libfile];
-                file->setMetaData(m[1], m[2]);
-                row[m_columns.m_libfile] = file;
-            }
-            break;
+        // at that point clear the cache because the icon view is populated.
+        getLibraryClient()->thumbnailCache().request(l);
+        break;
+    }
+    case eng::Library::NOTIFY_METADATA_CHANGED:
+    {
+        std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
+        DBG_OUT("metadata changed");
+        Gtk::TreeRow row;
+        std::map<int, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m[0]);
+        if(iter != m_idmap.end()) {
+            row = *(iter->second);
+            //
+            eng::LibFile::Ptr file = row[m_columns.m_libfile];
+            file->setMetaData(m[1], m[2]);
+            row[m_columns.m_libfile] = file;
         }
-        case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
-        {
-            getLibraryClient()->processXmpUpdateQueue();
-            break;
-        }
-        default:
-            break;
-        }
+        break;
+    }
+    case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
+    {
+        getLibraryClient()->processXmpUpdateQueue();
+        break;
+    }
+    default:
+        break;
     }
 }
 
-void ImageListStore::on_tnail_notification(const fwk::Notification::Ptr &n)
+void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
 {
-    DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, 
-               "wrong notification type");
-    if(n->type() == niepce::NOTIFICATION_THUMBNAIL) {
-        eng::ThumbnailNotification tn 
-            = boost::any_cast<eng::ThumbnailNotification>(n->data());
-        std::map<int, Gtk::TreeIter>::iterator iter
-            = m_idmap.find( tn.id );
-        if(iter != m_idmap.end()) {
-            // found the icon view item
-            Gtk::TreeRow row = *(iter->second);
-            row[m_columns.m_pix] = tn.pixmap;
-            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
-        }
-        else {
-            DBG_OUT("row %d not found", tn.id);
-        }
+    std::map<int, Gtk::TreeIter>::iterator iter
+        = m_idmap.find( tn.id );
+    if(iter != m_idmap.end()) {
+        // found the icon view item
+        Gtk::TreeRow row = *(iter->second);
+        row[m_columns.m_pix] = tn.pixmap;
+        row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
+    }
+    else {
+        DBG_OUT("row %d not found", tn.id);
     }
 }
 

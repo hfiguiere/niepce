@@ -30,6 +30,7 @@
 
 #include "librarymainview.hpp"
 #include "engine/db/libfile.hpp"
+#include "engine/db/library.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
@@ -62,7 +63,7 @@ public:
         {
         }
 
-		void on_lib_notification(const fwk::Notification::Ptr &);
+		void on_lib_notification(const eng::LibNotification &);
 
 		/** called when somehing is selected by the shared selection */
 		void on_selected(int id);

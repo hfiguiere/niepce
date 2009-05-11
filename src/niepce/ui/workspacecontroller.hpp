@@ -78,8 +78,8 @@ namespace ui {
 
 		virtual void on_ready();
 
-		void on_lib_notification(const fwk::Notification::Ptr &);
-		void on_count_notification(const fwk::Notification::Ptr &);
+		void on_lib_notification(const eng::LibNotification &);
+		void on_count_notification(int);
 		void on_libtree_selection();
 
 	protected:
