@@ -1,5 +1,8 @@
 2009-05-10  Hubert Figuiere  <hub@figuiere.net>
 
+	* src/niepce/ui/workspacecontroller.cpp: 
+	Remove engine/db/library.hpp include.
+
 	* Don't use boost::bind() for signals.
 	* Make the UndoManager sigc::trackable.
 	

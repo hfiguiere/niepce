@@ -27,7 +27,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
-#include "engine/db/library.hpp" // FIXME uh oh. this shouldn't be
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
