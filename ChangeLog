@@ -1,5 +1,8 @@
 2009-05-10  Hubert Figuiere  <hub@figuiere.net>
 
+	* Don't use boost::bind() for signals.
+	* Make the UndoManager sigc::trackable.
+	
 	* Refactor NotificationCenter to not have to decode
 	the notification every time.
 

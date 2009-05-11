@@ -27,6 +27,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <sigc++/signal.h>
+#include <sigc++/trackable.h>
 
 #include "fwk/toolkit/command.hpp"
 
@@ -68,6 +69,7 @@ Command *UndoTransaction::new_command(const typename CommandWithArg<_ArgType>::R
 
 class UndoHistory
     : public boost::noncopyable
+    , public sigc::trackable
 {
 public:
     ~UndoHistory();

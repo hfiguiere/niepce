@@ -1,5 +1,5 @@
 /*
- * niepce - ui/selectioncontroller.cpp
+ * niepce - niepce/ui/selectioncontroller.cpp
  *
  * Copyright (C) 2008-2009 Hubert Figuiere
  *
@@ -50,22 +50,23 @@ void SelectionController::_added()
 void SelectionController::add_selectable(IImageSelectable * selectable)
 { 
     DBG_OUT("added %lx", selectable);
-	m_selectables.push_back(selectable);
-	selectable->image_list()->signal_selection_changed().connect(
-		boost::bind(&SelectionController::selected, 
-					this, selectable));
-	selectable->image_list()->signal_item_activated().connect(
-		boost::bind(&SelectionController::activated, this, _1, selectable));
+    m_selectables.push_back(selectable);
+    selectable->image_list()->signal_selection_changed().connect(
+        sigc::bind(sigc::mem_fun(*this, &SelectionController::selected),
+                   selectable));
+    selectable->image_list()->signal_item_activated().connect(
+        sigc::bind(sigc::mem_fun(*this, &SelectionController::activated),
+                   selectable));
 }
 
 
 void SelectionController::activated(const Gtk::TreeModel::Path & /*path*/,
 									IImageSelectable * selectable)
 {
-	fwk::AutoFlag f(m_in_handler);
-	int selection = selectable->get_selected();
-	DBG_OUT("item activated %d", selection);
-	signal_activated(selection);
+    fwk::AutoFlag f(m_in_handler);
+    int selection = selectable->get_selected();
+    DBG_OUT("item activated %d", selection);
+    signal_activated(selection);
 }
 
 void SelectionController::selected(IImageSelectable * selectable)

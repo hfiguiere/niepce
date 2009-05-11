@@ -145,14 +145,12 @@ NiepceWindow::buildWidget()
     m_selection_controller->add_selectable(m_filmstrip.get());
     m_selection_controller->add_selectable(m_mainviewctrl.get());
     m_selection_controller->signal_selected
-        .connect(boost::bind(&LibraryMainViewController::on_selected,
-                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
-                             , _1));
+        .connect(sigc::mem_fun(*m_mainviewctrl,
+                               &LibraryMainViewController::on_selected));
 
     m_selection_controller->signal_activated
-        .connect(boost::bind(&LibraryMainViewController::on_image_activated,
-                             BIND_SHARED_PTR(LibraryMainViewController, m_mainviewctrl)
-                             , _1));
+        .connect(sigc::mem_fun(*m_mainviewctrl,
+                               &LibraryMainViewController::on_image_activated));
 
     win.set_size_request(600, 400);
     win.show_all_children();
@@ -243,14 +241,14 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("MenuLibrary", _("_Library")));
     m_refActionGroup->add(Gtk::Action::create("NewLibrary", Gtk::Stock::NEW));
     m_refActionGroup->add(Gtk::Action::create("OpenLibrary", Gtk::Stock::OPEN),
-                          boost::bind(&NiepceWindow::on_action_file_open,
-                                      this));
+                          sigc::mem_fun(*this, 
+                                        &NiepceWindow::on_action_file_open));
 
     m_refActionGroup->add(Gtk::Action::create("NewFolder", _("New _Folder...")));
     m_refActionGroup->add(Gtk::Action::create("NewProject", _("New _Project...")));
 
     m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-                          sigc::mem_fun(this, 
+                          sigc::mem_fun(*this, 
                                         &NiepceWindow::on_action_file_import));
     m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
                           sigc::mem_fun(gtkWindow(), 
@@ -262,15 +260,15 @@ void NiepceWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
     m_undo_action = Gtk::Action::create("Undo", Gtk::Stock::UNDO);
     m_refActionGroup->add(m_undo_action, Gtk::AccelKey("<control>Z"),
-                          boost::bind(&UndoHistory::undo,
-                                      boost::ref(Application::app()->undo_history())));
+                          sigc::mem_fun(Application::app()->undo_history(),
+                                        &UndoHistory::undo));
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &NiepceWindow::undo_state));
     undo_state();
     m_redo_action = Gtk::Action::create("Redo", Gtk::Stock::REDO);
     m_refActionGroup->add(m_redo_action, Gtk::AccelKey("<control><shift>Z"),
-                          boost::bind(&UndoHistory::redo,
-                                      boost::ref(Application::app()->undo_history())));
+                          sigc::mem_fun(Application::app()->undo_history(),
+                                        &UndoHistory::redo));
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &NiepceWindow::redo_state));
     redo_state();
@@ -283,79 +281,84 @@ void NiepceWindow::init_actions()
 
     m_refActionGroup->add(Gtk::Action::create("Preferences", 
                                               Gtk::Stock::PREFERENCES),
-                          sigc::mem_fun(this,
+                          sigc::mem_fun(*this,
                                         &NiepceWindow::on_preferences));
 
     m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
     m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
                           Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)),
-                          boost::bind(&SelectionController::select_previous, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)));
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::select_previous));
     m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
                           Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)),
-                          boost::bind(&SelectionController::select_next, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)));
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::select_next));
     
     an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
-    m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
-                                                 BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                                 , -90));
+    m_refActionGroup->add(an_action, sigc::bind(
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::rotate), -90));
     an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
-    m_refActionGroup->add(an_action, boost::bind(&SelectionController::rotate, 
-                                                 BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                                 , 90));
+    m_refActionGroup->add(an_action, sigc::bind(
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::rotate), 90));
     
     m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
     m_refActionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
-                          Gtk::AccelKey("6"),
-                          boost::bind(&SelectionController::set_label, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                      , 1));
+                          Gtk::AccelKey("6"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              1));
     m_refActionGroup->add(Gtk::Action::create("SetLabel7", _("Label _7")),
-                          Gtk::AccelKey("7"),
-                          boost::bind(&SelectionController::set_label, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                      , 2));
+                          Gtk::AccelKey("7"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              2));
     m_refActionGroup->add(Gtk::Action::create("SetLabel8", _("Label _8")),
-                          Gtk::AccelKey("8"),
-                          boost::bind(&SelectionController::set_label, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                      , 3));
+                          Gtk::AccelKey("8"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              3));
     m_refActionGroup->add(Gtk::Action::create("SetLabel9", _("Label _9")),
-                          Gtk::AccelKey("9"),
-                          boost::bind(&SelectionController::set_label, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller)
-                                      , 4));
+                          Gtk::AccelKey("9"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              4));
     m_refActionGroup->add(Gtk::Action::create("EditLabels", _("_Edit Labels...")),
                           sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
     
     m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
-                          Gtk::AccelKey("0"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 0));
+                          Gtk::AccelKey("0"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              0));
     m_refActionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
-                          Gtk::AccelKey("1"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 1));
+                          Gtk::AccelKey("1"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              1));
     m_refActionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
-                          Gtk::AccelKey("2"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 2));
+                          Gtk::AccelKey("2"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              2));
     m_refActionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
-                          Gtk::AccelKey("3"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 3));
+                          Gtk::AccelKey("3"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              3));
     m_refActionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
-                          Gtk::AccelKey("4"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 4));
+                          Gtk::AccelKey("4"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              4));
     m_refActionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
-                          Gtk::AccelKey("5"),
-                          boost::bind(&SelectionController::set_rating, 
-                                      BIND_SHARED_PTR(SelectionController, m_selection_controller), 5));
-
+                          Gtk::AccelKey("5"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              5));
     m_refActionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
     m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
