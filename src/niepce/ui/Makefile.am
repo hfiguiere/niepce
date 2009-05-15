@@ -17,7 +17,6 @@ INCLUDES = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \
 	@GCONF_CFLAGS@ \
-	@GOOCANVASMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@
 
 EXTRA_DIST = $(gladefiles)

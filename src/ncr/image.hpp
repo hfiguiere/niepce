@@ -38,7 +38,17 @@ public:
     Image();
     virtual ~Image();
 
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf_for_display();
+    /* get a cairo surface to display the resulting image */
+    Cairo::RefPtr<Cairo::Surface> cairo_surface_for_display();
+
+    /* the dimensions of the original image */
+    int get_original_width() const;
+    int get_original_height() const;
+
+    /* the dimension of the output image, after scale */
+    int get_output_width() const;
+    int get_output_height() const;
+
     void reload(const std::string & p, bool is_raw,
         int orientation);
     void set_scale(double scale);
@@ -51,7 +61,9 @@ public:
     void set_saturation(int saturation);
     void set_vibrance(int vibrance);
 
-    sigc::signal<void, Image::Ptr> signal_update;
+    /** this signal is emitted each time the
+        image is changed. */
+    sigc::signal<void> signal_update;
 private:
     class Private;
     Private *priv;

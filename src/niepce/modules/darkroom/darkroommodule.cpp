@@ -36,12 +36,7 @@ void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
     m_image->reload(file->path(), 
                     file->fileType() == eng::LibFile::FILE_TYPE_RAW,
                     file->orientation());
-/*    int w, h;
-    w = m_imagecanvas->get_width();
-    h = m_imagecanvas->get_height();
-    m_image->set_scale_to_dim(w, h);
-*/
-    m_imagecanvas->set_image(m_image->pixbuf_for_display());
+
 }
 
 
@@ -51,30 +46,25 @@ Gtk::Widget * DarkroomModule::buildWidget()
     m_imagecanvas = Gtk::manage(new ImageCanvas());
 // TODO set a proper canvas size
 //    m_canvas_scroll.add(*m_imagecanvas);
-	m_vbox.pack_start(*m_imagecanvas, Gtk::PACK_EXPAND_WIDGET);
+    m_vbox.pack_start(*m_imagecanvas, Gtk::PACK_EXPAND_WIDGET);
 
-//    int w,h;
-//    w = h = 0;
-//    m_canvas_scroll.get_size_request(w, h);
-//    DBG_OUT("scroll size %d %d", w, h);
-//    m_imagecanvas->set_size_request(w, h);
-    m_imagecanvas->set_bounds(0, 0, 1000, 1000);
+    m_imagecanvas->set_image(m_image);
 
-	// build the toolbar.
-	Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
+    // build the toolbar.
+    Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
 
-	Glib::RefPtr<Gtk::Action> an_action;
-	an_action = m_actionGroup->get_action("PrevImage");
-	toolbar->append(*(an_action->create_tool_item()));
-	an_action = m_actionGroup->get_action("NextImage");
-	toolbar->append(*(an_action->create_tool_item()));
-	an_action = m_actionGroup->get_action("RotateLeft");
-	toolbar->append(*(an_action->create_tool_item()));
-	an_action = m_actionGroup->get_action("RotateRight");
-	toolbar->append(*(an_action->create_tool_item()));
+    Glib::RefPtr<Gtk::Action> an_action;
+    an_action = m_actionGroup->get_action("PrevImage");
+    toolbar->append(*(an_action->create_tool_item()));
+    an_action = m_actionGroup->get_action("NextImage");
+    toolbar->append(*(an_action->create_tool_item()));
+    an_action = m_actionGroup->get_action("RotateLeft");
+    toolbar->append(*(an_action->create_tool_item()));
+    an_action = m_actionGroup->get_action("RotateRight");
+    toolbar->append(*(an_action->create_tool_item()));
 
-	m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
-	m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
+    m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
+    m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
     m_dock = new fwk::Dock();
     m_dr_splitview.pack2(m_dock->getWidget(), Gtk::SHRINK);
 
@@ -87,8 +77,8 @@ Gtk::Widget * DarkroomModule::buildWidget()
     add(m_toolbox_ctrl);
     (void)m_toolbox_ctrl->buildWidget();
 
-	m_widget = &m_dr_splitview;
-	return m_widget;
+    m_widget = &m_dr_splitview;
+    return m_widget;
 }
 
 

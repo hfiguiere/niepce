@@ -37,7 +37,6 @@ libopenraw >= 0.0.5
 geglmm >= 0.0.22
 gegl >= 0.0.22
 babl
-goocanvasmm 0.10.0
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
@@ -47,13 +46,11 @@ Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
 aptitude install gconf2-dev \
-> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev \
-> libgoocanvas-dev
+> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev 
 
 Debian (nor Ubuntu) do not still pack geglmm nor libgoocanvasmm-dev. In order
 to get them visit to get the latest version:
 http://ftp.gnome.org/pub/gnome/sources/geglmm/
-http://ftp.gnome.org/pub/gnome/sources/goocanvasmm/
 
 Working on SUSE
 ~~~~~~~~~~~~~~~

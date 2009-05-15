@@ -23,8 +23,6 @@ extern "C" {
 #include <babl/babl.h>
 }
 
-#include <boost/bind.hpp>
-
 #include <libopenraw/libopenraw.h>
 
 #include <geglmm/node.h>
@@ -43,7 +41,7 @@ struct Image::Private {
         {
         }
 
-    int m_width, m_height; /**< the native dimension */
+    int m_width, m_height; /**< the native dimension, with orientation */
     Glib::RefPtr<Gegl::Node> m_node;
     Glib::RefPtr<Gegl::Node> m_rgb;    /**< RGB pixmap */
     Glib::RefPtr<Gegl::Node> m_scale;
@@ -116,6 +114,7 @@ void Image::reload(const std::string & p, bool is_raw,
 
     DBG_OUT("rotation is %d", orientation);
     int degrees = 0;
+    bool vertical = false;
     bool flip = false;
     switch(orientation) {
     case 0:
@@ -135,12 +134,14 @@ void Image::reload(const std::string & p, bool is_raw,
         // fall through
     case 6:
         degrees = 270;
+        vertical = true;
         break;
     case 7:
         flip = true;
         // fall through
     case 8:
         degrees = 90;
+        vertical = true;
         break;
     }
     // @todo ideally we would have a plain GEGL op for that.
@@ -159,7 +160,6 @@ void Image::reload(const std::string & p, bool is_raw,
     current = current->link(rotate);
 
     priv->m_scale = priv->m_node->new_child("operation", "gegl:scale");
-    set_scale(0.25);
     current->link(priv->m_scale);
     priv->m_output = priv->m_scale;
     
@@ -169,8 +169,16 @@ void Image::reload(const std::string & p, bool is_raw,
     width = rect.gobj()->width;
     height = rect.gobj()->height;
     DBG_OUT("width %d height %d", width, height);
-    priv->m_width = width;
-    priv->m_height = height;
+    if(vertical) {
+        priv->m_width = height;
+        priv->m_height = width;
+    }
+    else {
+        priv->m_width = width;
+        priv->m_height = height;
+    }
+
+    signal_update();
 }
 
 void Image::set_scale(double scale)
@@ -178,37 +186,59 @@ void Image::set_scale(double scale)
     DBG_OUT("scale %f", scale);
     priv->m_scale->set("x", scale);
     priv->m_scale->set("y", scale);    
+
+    signal_update();
 }
 
 
-namespace {
-
-/** callback to free the buffer */
-void _free_buf(const guint8* p) 
-{
-    g_free(const_cast<guint8*>(p));
-}
-
-}
-
-Glib::RefPtr<Gdk::Pixbuf> Image::pixbuf_for_display()
+Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
 {
     priv->m_output->process();
     Gegl::Rectangle roi = priv->m_output->get_bounding_box();
     int w, h;
     w = roi.gobj()->width;
     h = roi.gobj()->height;
-    guint8* buf = (guint8*)g_malloc (w * h * 3);
-    priv->m_output->blit(1.0, roi, babl_format ("R'G'B' u8"),
-                       (void*)buf, GEGL_AUTO_ROWSTRIDE,
-                       (Gegl::BlitFlags)(GEGL_BLIT_CACHE | GEGL_BLIT_DIRTY));
-    Glib::RefPtr<Gdk::Pixbuf> pix 
-        = Gdk::Pixbuf::create_from_data(buf,
-                                        Gdk::COLORSPACE_RGB,
-                                        false, 8, w, h,
-                                        w * 3, boost::bind(&_free_buf, _1));
-    return pix;
+    // TODO not endian neutral
+    const Babl * format = babl_format_new(babl_model("R'G'B'A"),
+                                          babl_type ("u8"),
+                                          babl_component ("B'"),
+                                          babl_component ("G'"),
+                                          babl_component ("R'"),
+                                          babl_component ("A"),
+                                          NULL);
+    Cairo::RefPtr<Cairo::ImageSurface> surface 
+        = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, w, h);
+    priv->m_output->blit(1.0, roi, format,
+                         (void*)surface->get_data(), surface->get_stride(),
+                         (Gegl::BlitFlags)(GEGL_BLIT_CACHE | GEGL_BLIT_DIRTY));
+    return surface;
 }
+
+int Image::get_original_width() const
+{
+    return priv->m_width;
+}
+
+
+int Image::get_original_height() const
+{
+    return priv->m_height;
+}
+
+
+int Image::get_output_width() const
+{
+    Gegl::Rectangle roi = priv->m_output->get_bounding_box();
+    return roi.gobj()->width;
+}
+
+
+int Image::get_output_height() const
+{
+    Gegl::Rectangle roi = priv->m_output->get_bounding_box();
+    return roi.gobj()->height;
+}
+
 
 }
 

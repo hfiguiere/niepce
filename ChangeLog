@@ -1,3 +1,19 @@
+2009-05-14  Hubert Figuiere  <hub@figuiere.net>
+
+	* README:
+	* configure.ac:
+	* src/fwk/base/geometry.hpp:
+	* src/ncr/image.cpp:
+	* src/ncr/image.hpp:
+	* src/niepce/Makefile.am:
+	* src/niepce/modules/darkroom/Makefile.am:
+	* src/niepce/modules/darkroom/darkroommodule.cpp:
+	* src/niepce/modules/darkroom/imagecanvas.cpp:
+	* src/niepce/modules/darkroom/imagecanvas.hpp:
+	* src/niepce/ui/Makefile.am:
+	Remove goocanvas and use cairo directly for the
+	ImageCanvas. Dependencies-=2
+
 2009-05-10  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/niepce/ui/workspacecontroller.cpp: 

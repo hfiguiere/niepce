@@ -21,8 +21,11 @@
 #ifndef __FWK_BASE_GEOMETRY_H__
 #define __FWK_BASE_GEOMETRY_H__
 
+#include <exception>
 #include <tr1/array>
 #include <string>
+
+#include <boost/lexical_cast.hpp>
 
 namespace fwk {
 

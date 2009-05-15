@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* remove this when we require a version that does not barf warnings */
-#include "fwk/toolkit/goocanvas_proxy_header.hpp"
-//#include <goocanvasmm/canvas.h>
+#include <cairomm/context.h>
+#include <gdkmm/general.h>
+
+
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
 
@@ -28,27 +29,37 @@
 namespace darkroom {
 
 ImageCanvas::ImageCanvas()
-    : Goocanvas::Canvas(),
-      m_need_redisplay(true),
+    : m_need_redisplay(true),
       m_zoom_mode(ZOOM_MODE_FIT)
 {
-    m_imagecanvas = this;
-    Glib::RefPtr<Goocanvas::Item> root;
-    root = m_imagecanvas->get_root_item ();
-    
-    m_frameitem = Goocanvas::Rect::create(0,0,0,0);
-    m_imageitem = Goocanvas::Image::create(0,0);
-    
-    root->add_child(m_frameitem);
-    root->add_child(m_imageitem);
 }
 
 
-void ImageCanvas::set_image(const Glib::RefPtr<Gdk::Pixbuf> & img)
+void ImageCanvas::set_image(const ncr::Image::Ptr & img)
 {
     m_need_redisplay = true;
+    m_image_reloaded_cid.disconnect();
     m_image = img;
-    _redisplay();
+    m_image_reloaded_cid = m_image->signal_update.connect(
+        sigc::mem_fun(*this, &ImageCanvas::on_image_reloaded));
+}
+
+
+void ImageCanvas::on_image_reloaded()
+{
+    m_need_redisplay = true;
+}
+
+
+double ImageCanvas::_calc_image_scale(int img_w, int img_h)
+{
+    double b_w, b_h;
+    b_w = get_width();
+    b_h = get_height();
+
+    double scale_w = b_w / img_w;
+    double scale_h = b_h / img_h;
+    return std::min(scale_w, scale_h);
 }
 
 
@@ -57,8 +68,8 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
                                    double & width, double & height)
 {
     double b_w, b_h;
-    b_w = m_imagecanvas->get_width();
-    b_h = m_imagecanvas->get_height();
+    b_w = get_width();
+    b_h = get_height();
 //    DBG_OUT("bounds %f %f", b_w, b_h);
     x = (b_w - img_w) / 2;
     y = (b_h - img_h) / 2;
@@ -67,49 +78,87 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
 //    DBG_OUT("image frame %f %f %f %f", x, y, width, height);  
 }
 
-
-void ImageCanvas::_redisplay(bool force)
+bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
 {
-    if(m_need_redisplay || force) {
-        Glib::RefPtr<Gdk::Pixbuf> img = m_image;
-        DBG_OUT("set image w %d h %d", img->get_width(), img->get_height());
-        
-        // the position and dimension of the image frame
-        double x, y, w, h;
+    Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
 
-        fwk::Rect dest(0,0, m_imagecanvas->get_width() - 8,
-            m_imagecanvas->get_height() - 8);
-        fwk::Rect source(0,0, img->get_width(), img->get_height());
-        fwk::Rect frame;
-        switch(m_zoom_mode)
-        {
-        case ZOOM_MODE_FIT:
-            frame = source.fit_into(dest);
-            break;
-        case ZOOM_MODE_FILL:
-            frame = source.fill_into(dest);
-            break;
-        default:
-            frame = source;
-            break;
-        }
-        
-        _calc_image_frame(frame.w(), frame.h(),
-                          x,y,w,h);
+    context->rectangle(ev->area.x, ev->area.y, ev->area.width, ev->area.height);
+    context->clip();
 
-        m_imageitem->property_x() = x;
-        m_imageitem->property_y() = y;
-        m_imageitem->property_width() = w;
-        m_imageitem->property_height() = h;
-        m_imageitem->property_pixbuf() = img->scale_simple(w, h, 
-                                                           Gdk::INTERP_BILINEAR);
+    if(m_need_redisplay) {
+        _redisplay();
 
-        m_frameitem->property_x() = x;
-        m_frameitem->property_y() = y;
-        m_frameitem->property_width() = w;
-        m_frameitem->property_height() = h;        
+        // calculate the image scale
+        int img_w, img_h;
+        img_w = m_image->get_original_width();
+        img_h = m_image->get_original_height();
+        DBG_OUT("image w = %d ; h = %d", img_w, img_h);
+        double scale = _calc_image_scale(img_w, img_h);
+        DBG_OUT("scale = %f", scale);
+        m_image->set_scale(scale);
+
+
+        // query the image.
+        Cairo::RefPtr<Cairo::Surface> img_s 
+            = m_image->cairo_surface_for_display();
+
+        int canvas_h, canvas_w;
+        canvas_h = get_height();
+        canvas_w = get_width();
+        DBG_OUT("canvas w = %d ; h = %d", canvas_w, canvas_h);
+
+        m_backingstore 
+            = Cairo::Surface::create(img_s, Cairo::CONTENT_COLOR, 
+                                     canvas_w, canvas_h);
+        Cairo::RefPtr<Cairo::Context> sc 
+            = Cairo::Context::create(m_backingstore);
+
+        // paint the background
+        sc->rectangle(0, 0, canvas_w, canvas_h);
+        Gdk::Cairo::set_source_color(sc, 
+                                     get_style()->get_bg(Gtk::STATE_NORMAL));
+        sc->fill();
+
+
+
+        double x = (canvas_w - (img_w*scale)) / 2;
+        double y = (canvas_h - (img_h*scale)) / 2;
+        DBG_OUT("x = %f ; y = %f", x, y);
+
+        sc->set_source(img_s, x, y);
+        sc->paint();
 
         m_need_redisplay = false;
+    }
+
+    context->set_source(m_backingstore, 0, 0);
+    context->paint();
+
+    return true;
+}
+
+
+void ImageCanvas::_redisplay()
+{
+    int img_w, img_h; 
+    img_w = m_image->get_original_width();
+    img_h = m_image->get_original_height();
+    DBG_OUT("set image w %d h %d", img_w, img_h);
+        
+    fwk::Rect dest(0,0, get_width() - 8, get_height() - 8);
+    fwk::Rect source(0,0, img_w, img_h);
+    fwk::Rect frame;
+    switch(m_zoom_mode)
+    {
+    case ZOOM_MODE_FIT:
+        frame = source.fit_into(dest);
+        break;
+    case ZOOM_MODE_FILL:
+        frame = source.fill_into(dest);
+        break;
+    default:
+        frame = source;
+        break;
     }
 }
 

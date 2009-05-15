@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,18 @@
  */
 
 
-#include <gdkmm/pixbuf.h>
-#include <gtkmm/bin.h>
 
-#include "fwk/toolkit/goocanvas_proxy_header.hpp"
+#include <gdk/gdk.h>
+#include <gdkmm/pixbuf.h>
+#include <gtkmm/drawingarea.h>
+#include <cairomm/surface.h>
+
+#include "ncr/image.hpp"
 
 namespace darkroom {
 
 class ImageCanvas
-    : public Goocanvas::Canvas
+    : public Gtk::DrawingArea
 {
 public:
     typedef enum {
@@ -38,7 +41,7 @@ public:
     } ZoomMode;
     ImageCanvas();
 
-    void set_image(const Glib::RefPtr<Gdk::Pixbuf> & img);
+    void set_image(const ncr::Image::Ptr & img);
     void set_zoom_mode(ZoomMode mode)
         {
             if(m_zoom_mode != mode) {
@@ -50,20 +53,24 @@ public:
         {
             return m_zoom_mode;
         }
+protected:
+    virtual bool on_expose_event(GdkEventExpose *);
 private:
+    void on_image_reloaded();
+
     void _calc_image_frame(int img_w, int img_h,
-                          double & x, double & y,
-                          double & width, double & height);
-    /** cause to "recalulate" the content. 
-        Only if m_need_display of force */
-    void _redisplay(bool force = false);
+                           double & x, double & y,
+                           double & width, double & height);
+    double _calc_image_scale(int img_w, int img_h);
+    /** cause to "recalulate" the content. */
+    void _redisplay();
 
     bool                           m_need_redisplay;
     ZoomMode                       m_zoom_mode;
-    Glib::RefPtr<Gdk::Pixbuf>      m_image;
-    Glib::RefPtr<Goocanvas::Image> m_imageitem;
-    Glib::RefPtr<Goocanvas::Rect>  m_frameitem;
-    Goocanvas::Canvas*             m_imagecanvas;
+    ncr::Image::Ptr                m_image;
+    Cairo::RefPtr<Cairo::Surface>  m_backingstore;
+
+    sigc::connection               m_image_reloaded_cid;
 };
 
 }
