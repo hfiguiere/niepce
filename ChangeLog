@@ -1,3 +1,10 @@
+2009-05-15  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/ncr/image.cpp
+	* src/ncr/image.hpp
+	* src/niepce/modules/darkroom/imagecanvas.cpp:
+	Cosmetic enhancement to the canvas.
+
 2009-05-14  Hubert Figuiere  <hub@figuiere.net>
 
 	* README:

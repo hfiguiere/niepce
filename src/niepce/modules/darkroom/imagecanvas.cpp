@@ -28,6 +28,12 @@
 
 namespace darkroom {
 
+
+
+#define IMAGE_INSET 6
+#define SHADOW_OFFSET 3
+
+
 ImageCanvas::ImageCanvas()
     : m_need_redisplay(true),
       m_zoom_mode(ZOOM_MODE_FIT)
@@ -54,8 +60,8 @@ void ImageCanvas::on_image_reloaded()
 double ImageCanvas::_calc_image_scale(int img_w, int img_h)
 {
     double b_w, b_h;
-    b_w = get_width();
-    b_h = get_height();
+    b_w = get_width() - (IMAGE_INSET * 2);
+    b_h = get_height() - (IMAGE_INSET * 2);
 
     double scale_w = b_w / img_w;
     double scale_h = b_h / img_h;
@@ -95,7 +101,7 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
         DBG_OUT("image w = %d ; h = %d", img_w, img_h);
         double scale = _calc_image_scale(img_w, img_h);
         DBG_OUT("scale = %f", scale);
-        m_image->set_scale(scale);
+        m_image->set_output_scale(scale);
 
 
         // query the image.
@@ -113,6 +119,9 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
         Cairo::RefPtr<Cairo::Context> sc 
             = Cairo::Context::create(m_backingstore);
 
+
+//        sc->set_antialias(Cairo::ANTIALIAS_NONE);
+
         // paint the background
         sc->rectangle(0, 0, canvas_w, canvas_h);
         Gdk::Cairo::set_source_color(sc, 
@@ -120,13 +129,24 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
         sc->fill();
 
 
-
-        double x = (canvas_w - (img_w*scale)) / 2;
-        double y = (canvas_h - (img_h*scale)) / 2;
+        double out_w = (img_w * scale);
+        double out_h = (img_h * scale);
+        double x = (canvas_w - out_w) / 2;
+        double y = (canvas_h - out_h) / 2;
         DBG_OUT("x = %f ; y = %f", x, y);
+
+        sc->rectangle(x + SHADOW_OFFSET, y + SHADOW_OFFSET + 1, out_w, out_h);
+        sc->set_source_rgb(0.0, 0.0, 0.0);
+        sc->fill();
 
         sc->set_source(img_s, x, y);
         sc->paint();
+
+//        sc->set_source_rgb(1.0, 1.0, 1.0);
+//        sc->set_line_width(1.0);
+//        sc->rectangle(x, y, out_w, out_h);
+//        sc->stroke();
+		
 
         m_need_redisplay = false;
     }

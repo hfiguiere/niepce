@@ -30,7 +30,7 @@
 namespace ncr {
 
 class Image 
-    : public std::tr1::enable_shared_from_this<Image>
+//    : public std::tr1::enable_shared_from_this<Image>
 {
 public:
     typedef std::tr1::shared_ptr<Image> Ptr;
@@ -51,7 +51,8 @@ public:
 
     void reload(const std::string & p, bool is_raw,
         int orientation);
-    void set_scale(double scale);
+    /** set the output scale */
+    void set_output_scale(double scale);
 
     void set_tilt(double angle);
     void set_color_temp(int temp);

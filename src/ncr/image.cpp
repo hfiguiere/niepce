@@ -181,7 +181,7 @@ void Image::reload(const std::string & p, bool is_raw,
     signal_update();
 }
 
-void Image::set_scale(double scale)
+void Image::set_output_scale(double scale)
 {
     DBG_OUT("scale %f", scale);
     priv->m_scale->set("x", scale);
