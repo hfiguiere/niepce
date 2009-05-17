@@ -34,6 +34,32 @@ extern "C" {
 
 namespace ncr {
 
+namespace {
+
+const Babl * format_for_cairo_argb32()
+{
+    // TODO not endian neutral
+    return babl_format_new(babl_model("R'G'B'A"),
+                           babl_type ("u8"),
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+                           babl_component ("B'"),
+                           babl_component ("G'"),
+                           babl_component ("R'"),
+                           babl_component ("A"),
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+                           babl_component ("A"),
+                           babl_component ("R'"),
+                           babl_component ("G'"),
+                           babl_component ("B'"),
+#else
+#error unknown endian
+#endif
+                           NULL);
+}
+
+
+}
+
 struct Image::Private {
     Private()
         : m_width(0),
@@ -198,19 +224,14 @@ Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
     int w, h;
     w = roi.gobj()->width;
     h = roi.gobj()->height;
-    // TODO not endian neutral
-    const Babl * format = babl_format_new(babl_model("R'G'B'A"),
-                                          babl_type ("u8"),
-                                          babl_component ("B'"),
-                                          babl_component ("G'"),
-                                          babl_component ("R'"),
-                                          babl_component ("A"),
-                                          NULL);
+
+    const Babl * format = format_for_cairo_argb32();
+
     Cairo::RefPtr<Cairo::ImageSurface> surface 
         = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, w, h);
     priv->m_output->blit(1.0, roi, format,
                          (void*)surface->get_data(), surface->get_stride(),
-                         (Gegl::BlitFlags)(GEGL_BLIT_CACHE | GEGL_BLIT_DIRTY));
+                         (Gegl::BLIT_CACHE | Gegl::BLIT_DIRTY));
     return surface;
 }
 
@@ -238,6 +259,8 @@ int Image::get_output_height() const
     Gegl::Rectangle roi = priv->m_output->get_bounding_box();
     return roi.gobj()->height;
 }
+
+
 
 
 }

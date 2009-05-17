@@ -1,3 +1,9 @@
+2009-05-17  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/ncr/image.cpp
+	Make the cairo surface to BABL code endian
+	safe, theorically.
+
 2009-05-15  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/ncr/image.cpp
