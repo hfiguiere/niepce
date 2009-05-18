@@ -1,3 +1,8 @@
+2009-05-18  Hubert Figuiere  <hub@figuiere.net>
+
+	* Refactor / split the library view code
+	for the modules.
+
 2009-05-17  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/ncr/image.cpp

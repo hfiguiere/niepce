@@ -39,6 +39,10 @@ void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
 
 }
 
+void DarkroomModule::dispatch_action(const std::string & /*action_name*/)
+{
+}
+
 
 Gtk::Widget * DarkroomModule::buildWidget()
 {
@@ -54,14 +58,22 @@ Gtk::Widget * DarkroomModule::buildWidget()
     Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
 
     Glib::RefPtr<Gtk::Action> an_action;
+    Gtk::ToolItem * tool_item;
     an_action = m_actionGroup->get_action("PrevImage");
-    toolbar->append(*(an_action->create_tool_item()));
+    tool_item = an_action->create_tool_item();
+    toolbar->append(*manage(tool_item));
+
     an_action = m_actionGroup->get_action("NextImage");
-    toolbar->append(*(an_action->create_tool_item()));
+    tool_item = an_action->create_tool_item();
+    toolbar->append(*manage(tool_item));
+
     an_action = m_actionGroup->get_action("RotateLeft");
-    toolbar->append(*(an_action->create_tool_item()));
+    tool_item = an_action->create_tool_item();
+    toolbar->append(*manage(tool_item));
+
     an_action = m_actionGroup->get_action("RotateRight");
-    toolbar->append(*(an_action->create_tool_item()));
+    tool_item = an_action->create_tool_item();
+    toolbar->append(*manage(tool_item));
 
     m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
     m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);

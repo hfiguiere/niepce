@@ -23,9 +23,13 @@ EXTRA_DIST = $(gladefiles)
 
 noinst_LIBRARIES = libniepceui.a
 
+PUBLICHEADERS = ilibrarymodule.hpp
+
 libniepceui_a_CPPFLAGS = 
-libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
+libniepceui_a_SOURCES = \
+	niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \
+	gridviewmodule.hpp gridviewmodule.cpp \
 	librarymainview.hpp librarymainview.cpp \
 	librarycellrenderer.hpp librarycellrenderer.cpp \
 	librarymainviewcontroller.hpp librarymainviewcontroller.cpp \
@@ -39,4 +43,6 @@ libniepceui_a_SOURCES = niepcewindow.hpp niepcewindow.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.hpp \
-	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.hpp
+	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.hpp \
+	$(PUBLICHEADERS) \
+	$(NULL)

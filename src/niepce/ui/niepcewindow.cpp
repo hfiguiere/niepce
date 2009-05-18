@@ -103,12 +103,14 @@ NiepceWindow::buildWidget()
 
     // main view
     m_mainviewctrl = LibraryMainViewController::Ptr(
-        new LibraryMainViewController(m_refActionGroup,
+        new LibraryMainViewController(sigc::mem_fun(
+                                          *this, &NiepceWindow::getLibraryClient),
+                                      m_refActionGroup,
                                       m_selection_controller->list_store()));
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(
-                     *m_mainviewctrl,
-                     &LibraryMainViewController::on_lib_notification));
+                     *m_mainviewctrl->get_gridview(),
+                     &GridViewModule::on_lib_notification));
 
     add(m_mainviewctrl);
     // workspace treeview
@@ -143,7 +145,7 @@ NiepceWindow::buildWidget()
     m_statusBar.push(Glib::ustring(_("Ready")));
 
     m_selection_controller->add_selectable(m_filmstrip.get());
-    m_selection_controller->add_selectable(m_mainviewctrl.get());
+    m_selection_controller->add_selectable(m_mainviewctrl->get_gridview().get());
     m_selection_controller->signal_selected
         .connect(sigc::mem_fun(*m_mainviewctrl,
                                &LibraryMainViewController::on_selected));

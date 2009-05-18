@@ -18,8 +18,6 @@
  */
 
 
-
-
 #ifndef _DARKROOM_MODULE_H__
 #define _DARKROOM_MODULE_H__
 
@@ -33,6 +31,7 @@
 #include "engine/db/libfile.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "ncr/image.hpp"
+#include "niepce/ui/ilibrarymodule.hpp"
 #include "modules/darkroom/imagecanvas.hpp"
 #include "modules/darkroom/toolboxcontroller.hpp"
 	
@@ -43,20 +42,22 @@ class Dock;
 namespace darkroom {
 
 class DarkroomModule
-	: public fwk::Controller
+    : public ui::ILibraryModule
 {
 public:
 	typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
 
 	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
-                   const libraryclient::LibraryClient::Ptr & client)
+                   const sigc::slot<libraryclient::LibraryClient::Ptr> & getclient)
         : m_actionGroup(action_group),
           m_image(new ncr::Image),
-          m_libClient(client)
+          m_getClient(getclient)
 		{
 		}
 
 	void set_image(const eng::LibFile::Ptr & file);
+
+  virtual void dispatch_action(const std::string & action_name);
 
 protected:
 	virtual Gtk::Widget * buildWidget();
@@ -70,7 +71,7 @@ private:
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
-    libraryclient::LibraryClient::Ptr m_libClient;
+    sigc::slot<libraryclient::LibraryClient::Ptr> m_getClient;
     fwk::Dock                   *m_dock;
 };
 

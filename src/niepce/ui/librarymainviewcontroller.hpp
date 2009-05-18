@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarymainviewcontroller.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,75 +22,62 @@
 #define __UI_LIBRARYMAINVIEWCONTROLLER_H__
 
 
-#include <gtkmm/iconview.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/paned.h>
 
 #include "librarymainview.hpp"
-#include "engine/db/libfile.hpp"
-#include "engine/db/library.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
-#include "metadatapanecontroller.hpp"
-#include "selectioncontroller.hpp"
+#include "niepce/ui/gridviewmodule.hpp"
 #include "modules/darkroom/darkroommodule.hpp"
 #include "imageliststore.hpp"
 
 namespace Gtk {
 	class Widget;
 }
-namespace fwk {
-class Dock;
-}
 
 namespace ui {
 
 class LibraryMainViewController
-		: public fwk::Controller,
-		  public IImageSelectable
+		: public fwk::Controller
 {
 public:
 		typedef std::tr1::shared_ptr<LibraryMainViewController> Ptr;
 		typedef std::tr1::weak_ptr<LibraryMainViewController> WeakPtr;
 
-		LibraryMainViewController(const Glib::RefPtr<Gtk::ActionGroup> & actions,
+		LibraryMainViewController(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client,
+                              const Glib::RefPtr<Gtk::ActionGroup> & actions,
                               const Glib::RefPtr<ImageListStore> & store)
-        : m_actionGroup(actions),
-          m_model(store)
+        : m_getclient(get_client)
+        , m_actionGroup(actions)
+        , m_model(store)
         {
         }
 
-		void on_lib_notification(const eng::LibNotification &);
+
+    const GridViewModule::Ptr & get_gridview() const
+        {
+            return m_gridview;
+        }
 
 		/** called when somehing is selected by the shared selection */
 		void on_selected(int id);
 		void on_image_activated(int id);
 
-		virtual Gtk::IconView * image_list();
-		virtual int get_selected();
-		virtual void select_image(int id);
 protected:
 		virtual Gtk::Widget * buildWidget();
+    virtual void add_library_module(const ILibraryModule::Ptr & module,
+                                    const std::string & label);
 		virtual void on_ready();
 private:
-		libraryclient::LibraryClient::Ptr getLibraryClient();
+		sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
 		Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    Glib::RefPtr<ImageListStore> m_model;
 
 		// managed widgets...
-		LibraryMainView              m_mainview;
-		Gtk::IconView                m_librarylistview;
-		Gtk::ScrolledWindow          m_scrollview;
-		// library split view
-		Gtk::HPaned                  m_lib_splitview;
-    fwk::Dock                   *m_dock;
-		MetaDataPaneController::Ptr  m_metapanecontroller;
+		LibraryMainView               m_mainview;
 
+    GridViewModule::Ptr           m_gridview;
     darkroom::DarkroomModule::Ptr m_darkroom;
-
-		Glib::RefPtr<ImageListStore> m_model;
 };
 
 }
