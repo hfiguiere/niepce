@@ -30,9 +30,9 @@ libniepceui_a_SOURCES = \
 	niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \
 	gridviewmodule.hpp gridviewmodule.cpp \
-	librarymainview.hpp librarymainview.cpp \
+	moduleshell.hpp moduleshell.cpp \
+	moduleshellwidget.hpp moduleshellwidget.cpp \
 	librarycellrenderer.hpp librarycellrenderer.cpp \
-	librarymainviewcontroller.hpp librarymainviewcontroller.cpp \
 	imageliststore.hpp imageliststore.cpp\
 	workspacecontroller.hpp workspacecontroller.cpp \
 	metadatapanecontroller.hpp metadatapanecontroller.cpp \

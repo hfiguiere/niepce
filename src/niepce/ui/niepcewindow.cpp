@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <string>
 #include <boost/bind.hpp>
 
@@ -102,17 +101,17 @@ NiepceWindow::buildWidget()
                      &ImageListStore::on_tnail_notification));
 
     // main view
-    m_mainviewctrl = LibraryMainViewController::Ptr(
-        new LibraryMainViewController(sigc::mem_fun(
-                                          *this, &NiepceWindow::getLibraryClient),
-                                      m_refActionGroup,
-                                      m_selection_controller->list_store()));
+    m_moduleshell = ModuleShell::Ptr(
+        new ModuleShell(sigc::mem_fun(
+                            *this, &NiepceWindow::getLibraryClient),
+                        m_refActionGroup,
+                        m_selection_controller->list_store()));
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(
-                     *m_mainviewctrl->get_gridview(),
+                     *m_moduleshell->get_gridview(),
                      &GridViewModule::on_lib_notification));
 
-    add(m_mainviewctrl);
+    add(m_moduleshell);
     // workspace treeview
     m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
 
@@ -123,7 +122,7 @@ NiepceWindow::buildWidget()
 
     m_hbox.set_border_width(4);
     m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
-    m_hbox.pack2(*(m_mainviewctrl->widget()), Gtk::EXPAND);
+    m_hbox.pack2(*(m_moduleshell->widget()), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
@@ -145,14 +144,14 @@ NiepceWindow::buildWidget()
     m_statusBar.push(Glib::ustring(_("Ready")));
 
     m_selection_controller->add_selectable(m_filmstrip.get());
-    m_selection_controller->add_selectable(m_mainviewctrl->get_gridview().get());
+    m_selection_controller->add_selectable(m_moduleshell->get_gridview().get());
     m_selection_controller->signal_selected
-        .connect(sigc::mem_fun(*m_mainviewctrl,
-                               &LibraryMainViewController::on_selected));
+        .connect(sigc::mem_fun(*m_moduleshell,
+                               &ModuleShell::on_selected));
 
     m_selection_controller->signal_activated
-        .connect(sigc::mem_fun(*m_mainviewctrl,
-                               &LibraryMainViewController::on_image_activated));
+        .connect(sigc::mem_fun(*m_moduleshell,
+                               &ModuleShell::on_image_activated));
 
     win.set_size_request(600, 400);
     win.show_all_children();

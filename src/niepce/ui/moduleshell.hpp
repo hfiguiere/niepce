@@ -1,5 +1,5 @@
 /*
- * niepce - ui/librarymainviewcontroller.h
+ * niepce - ui/moduleshell.hpp
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -18,12 +18,12 @@
  */
 
 
-#ifndef __UI_LIBRARYMAINVIEWCONTROLLER_H__
-#define __UI_LIBRARYMAINVIEWCONTROLLER_H__
+#ifndef __UI_MODULESHELL_HPP__
+#define __UI_MODULESHELL_HPP__
 
 
 
-#include "librarymainview.hpp"
+#include "moduleshellwidget.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "fwk/toolkit/notification.hpp"
@@ -37,19 +37,20 @@ namespace Gtk {
 
 namespace ui {
 
-class LibraryMainViewController
+class ModuleShell
 		: public fwk::Controller
 {
 public:
-		typedef std::tr1::shared_ptr<LibraryMainViewController> Ptr;
-		typedef std::tr1::weak_ptr<LibraryMainViewController> WeakPtr;
+		typedef std::tr1::shared_ptr<ModuleShell> Ptr;
+		typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
 
-		LibraryMainViewController(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client,
+		ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client,
                               const Glib::RefPtr<Gtk::ActionGroup> & actions,
                               const Glib::RefPtr<ImageListStore> & store)
         : m_getclient(get_client)
         , m_actionGroup(actions)
         , m_model(store)
+        , m_gridview(new GridViewModule(m_getclient, m_model))
         {
         }
 
@@ -74,7 +75,7 @@ private:
     Glib::RefPtr<ImageListStore> m_model;
 
 		// managed widgets...
-		LibraryMainView               m_mainview;
+		ModuleShellWidget             m_shell;
 
     GridViewModule::Ptr           m_gridview;
     darkroom::DarkroomModule::Ptr m_darkroom;

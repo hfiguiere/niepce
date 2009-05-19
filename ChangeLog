@@ -1,5 +1,8 @@
 2009-05-18  Hubert Figuiere  <hub@figuiere.net>
 
+	* Rename LibraryMainViewController -> ModuleShell
+	LibraryMainView -> ModuleShellWidget
+
 	* Refactor / split the library view code
 	for the modules.
 

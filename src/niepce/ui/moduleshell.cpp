@@ -1,5 +1,5 @@
 /*
- * niepce - niepce/ui/librarymainviewcontroller.cpp
+ * niepce - niepce/ui/moduleshell.cpp
  *
  * Copyright (C) 2007-2009 Hubert Figuiere
  *
@@ -18,8 +18,6 @@
  */
 
 
-#include <gtk/gtk.h>
-
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
 
@@ -31,7 +29,7 @@
 #include "engine/db/library.hpp"
 #include "engine/db/libfile.hpp"
 #include "fwk/toolkit/application.hpp"
-#include "librarymainviewcontroller.hpp"
+#include "moduleshell.hpp"
 #include "niepcewindow.hpp"
 #include "metadatapanecontroller.hpp"
 
@@ -40,9 +38,8 @@ namespace ui {
 
 
 
-Gtk::Widget * LibraryMainViewController::buildWidget()
+Gtk::Widget * ModuleShell::buildWidget()
 {
-    m_gridview = GridViewModule::Ptr(new GridViewModule(m_getclient, m_model));
     add_library_module(m_gridview, _("Library"));
 
 
@@ -52,23 +49,23 @@ Gtk::Widget * LibraryMainViewController::buildWidget()
 
     // TODO PrintModuleController
     // add_library_module(, _("Print"));
-    return &m_mainview;
+    return &m_shell;
 }
 
 
-void LibraryMainViewController::add_library_module(const ILibraryModule::Ptr & module,
+void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
                                                    const std::string & label)
 {
     add(module);
-    m_mainview.append_page(*module->widget(), label);
+    m_shell.append_page(*module->widget(), label);
 }
 
-void LibraryMainViewController::on_ready()
+void ModuleShell::on_ready()
 {
 }
 
 
-void LibraryMainViewController::on_selected(int id)
+void ModuleShell::on_selected(int id)
 {
     DBG_OUT("selected callback %d", id);
     if(id > 0) {
@@ -79,14 +76,14 @@ void LibraryMainViewController::on_selected(int id)
     }
 }
 
-void LibraryMainViewController::on_image_activated(int id)
+void ModuleShell::on_image_activated(int id)
 {
     DBG_OUT("on image activated %d", id);
     Gtk::TreeIter iter = m_model->get_iter_from_id(id);
     if(iter) {
         eng::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
         m_darkroom->set_image(libfile);
-        m_mainview.activate_page(1);
+        m_shell.activate_page(1);
     }
 }
 

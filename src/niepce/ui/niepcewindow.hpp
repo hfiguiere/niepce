@@ -1,7 +1,7 @@
 /*
- * niepce - ui/niepcewindow.h
+ * niepce - ui/niepcewindow.hpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
-#include "ui/librarymainviewcontroller.hpp"
+#include "ui/moduleshell.hpp"
 #include "ui/workspacecontroller.hpp"
 #include "ui/selectioncontroller.hpp"
 #include "ui/filmstripcontroller.hpp"
@@ -88,7 +88,7 @@ private:
 
     Gtk::VBox                      m_vbox;
     Gtk::HPaned                    m_hbox;
-    LibraryMainViewController::Ptr m_mainviewctrl; // the main views stacked.
+    ModuleShell::Ptr               m_moduleshell; // the main views stacked.
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
     ui::SelectionController::Ptr   m_selection_controller;

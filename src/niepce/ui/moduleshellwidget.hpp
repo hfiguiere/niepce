@@ -1,7 +1,7 @@
 /*
- * niepce - ui/librarymainview.h
+ * niepce - ui/moduleshellwidget.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBRARY_MAIN_VIEW_H__
-#define __LIBRARY_MAIN_VIEW_H__
+#ifndef __MODULE_SHELL_WIDGET_H__
+#define __MODULE_SHELL_WIDGET_H__
 
 #include <vector>
 #include <utility>
@@ -34,11 +34,11 @@ namespace Gtk {
 namespace ui {
 
 
-	class LibraryMainView
+	class ModuleShellWidget
 		: public Gtk::VBox
 	{
 	public:
-		LibraryMainView();
+		ModuleShellWidget();
 
 		int append_page(Gtk::Widget & w, const Glib::ustring & label);
 		void activate_page(int);
