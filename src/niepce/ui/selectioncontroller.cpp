@@ -49,7 +49,7 @@ void SelectionController::_added()
 
 void SelectionController::add_selectable(IImageSelectable * selectable)
 { 
-    DBG_OUT("added %lx", selectable);
+    DBG_OUT("added %p", (void*)selectable);
     m_selectables.push_back(selectable);
     selectable->image_list()->signal_selection_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &SelectionController::selected),
@@ -72,7 +72,7 @@ void SelectionController::activated(const Gtk::TreeModel::Path & /*path*/,
 void SelectionController::selected(IImageSelectable * selectable)
 {
 	if(m_in_handler) {
-		DBG_OUT("%lx already in handler", this);
+		DBG_OUT("%p already in handler", (void*)this);
 		return;
 	}
 

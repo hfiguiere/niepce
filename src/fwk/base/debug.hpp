@@ -53,7 +53,8 @@ namespace fwk {
 	 * @param fmt the formt string, printf style
 	 * @param func the func name
 	 */
-	void dbg_print(const char* fmt, const char* func, ...);
+	void dbg_print(const char* fmt, const char* func, ...)
+    __attribute__ ((format (printf, 1, 3)));
 
 	/** assert 
 	 * @param condvalue the value of the assert, true, assert
@@ -70,7 +71,8 @@ namespace fwk {
 	 * @param fmt the formt string, printf style
 	 * @param func the func name
 	 */
-	void err_print(const char *fmt, const char* func, ...);
+	void err_print(const char *fmt, const char* func, ...)
+    __attribute__ ((format (printf, 1, 3)));
 
 }
 
