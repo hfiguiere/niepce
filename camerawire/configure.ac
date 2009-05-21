@@ -1,4 +1,4 @@
-AC_INIT(niepce, 0.0.1)
+AC_INIT(camerawire, 0.0.1)
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR(README)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
@@ -24,7 +24,6 @@ LIBGTKMM_VERSION=2.12.0
 LIBGCONF_VERSION=2.0.0
 LIBGNOMEUI_VERSION=2.0.0
 EXEMPI_VERSION=2.0.0
-SQLITE_VERSION=3.0
 GEGL_VERSION=0.0.22
 GEGLMM_VERSION=0.0.22
 LIBOPENRAW_VERSION=0.0.5
@@ -67,7 +66,6 @@ PKG_CHECK_MODULES(LIBGLIBMM, [glibmm-2.4 >= $LIBGLIBMM_VERSION giomm-2.4 >= $LIB
 PKG_CHECK_MODULES(LIBGTKMM, [gtkmm-2.4 >= $LIBGTKMM_VERSION])
 dnl PKG_CHECK_MODULES(LIBGCONFMM, [gconfmm-2.6 >= $LIBGCONFMM_VERSION])
 PKG_CHECK_MODULES(GCONF, [gconf-2.0 >= $LIBGCONF_VERSION])
-PKG_CHECK_MODULES(SQLITE3, [sqlite3 >= $SQLITE_VERSION])
 PKG_CHECK_MODULES(EXEMPI, [exempi-2.0 >= $EXEMPI_VERSION])
 PKG_CHECK_MODULES(LIBXML2, [libxml-2.0 >= $LIBXML2_VERSION])
 PKG_CHECK_MODULES(BABL, babl)
@@ -95,13 +93,13 @@ BOOST_TEST([s])
 
 AC_LANG_PUSH(C++)
 if test "$GCC" = "yes"; then
-        NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
+        CW_BUILD_CONFIG="$CW_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
                       -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
                       -Wunused -Wpointer-arith -Wshadow -fshow-column ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
-		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "
+		CW_BUILD_CONFIG="$CW_BUILD_CONFIG$option "
                 AC_MSG_CHECKING([whether gcc understands $option])
                 AC_TRY_COMPILE([], [],
                         has_option=yes,
@@ -120,52 +118,24 @@ AC_LANG_POP
 
 IT_PROG_INTLTOOL([0.35.0])
 
-GETTEXT_PACKAGE=niepce
+GETTEXT_PACKAGE=camerawire
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
                    [The domain to use with gettext])
 AM_GLIB_GNU_GETTEXT
 
-NIEPCE_LOCALEDIR=[${datadir}/locale]
-AC_SUBST(NIEPCE_LOCALEDIR)
+CW_LOCALEDIR=[${datadir}/locale]
+AC_SUBST(CW_LOCALEDIR)
 
-AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
+AC_DEFINE_UNQUOTED([CW_BUILD_CONFIG], ["$CW_BUILD_CONFIG"], [The string used to hardcode the build config.])
 
 SHAVE_INIT
-
-AC_CONFIG_SUBDIRS(camerawire)
 
 AC_CONFIG_FILES([
 Makefile
 shave
 shave-libtool
-art/Makefile
-doc/Doxyfile
-doc/Makefile
-doc/doxygen/Makefile
-data/Makefile
-data/icons/Makefile
-data/themes/Makefile
 src/Makefile
-src/ext/Makefile
-src/ext/libgdl/Makefile
-src/ext/libview/Makefile
-src/niepce/ui/Makefile
-src/niepce/ui/dialogs/Makefile
-src/niepce/ui/thumb-view/Makefile
-src/niepce/modules/Makefile
-src/niepce/modules/darkroom/Makefile
-src/niepce/Makefile
-src/fwk/Makefile
-src/fwk/utils/Makefile
-src/fwk/utils/db/Makefile
-src/fwk/utils/db/sqlite/Makefile
-src/fwk/toolkit/Makefile
-src/engine/Makefile
-src/engine/db/Makefile
-src/engine/library/Makefile
-src/libraryclient/Makefile
-src/ncr/Makefile
 po/Makefile.in
 po/Makefile
 ])

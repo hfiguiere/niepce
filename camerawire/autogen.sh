@@ -38,9 +38,6 @@ autoheader --force
 $AUTOCONF
 $AUTOMAKE --add-missing --copy --foreign 
 
-cd camerawire
-NOCONFIGURE=1 ./autogen.sh $@
-
 cd $builddir
 
 if test -z "$NOCONFIGURE" ; then 
