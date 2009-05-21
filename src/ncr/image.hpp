@@ -54,7 +54,16 @@ public:
     /** set the output scale */
     void set_output_scale(double scale);
 
+    /** tile the image in degrees. */
     void set_tilt(double angle);
+
+    /** rotate the image left */
+    void rotate_left();
+    /** rotate the image right */
+    void rotate_right();
+    /** rotate 180 degres */
+    void rotate_half();
+
     void set_color_temp(int temp);
     void set_exposure(double exposure);
     void set_brightness(int brightness);
@@ -66,6 +75,12 @@ public:
         image is changed. */
     sigc::signal<void> signal_update;
 private:
+
+    /** rotate by x degrees (orientation) 
+     *  ensure the end results is within 0..359.
+     */
+    void rotate_by(int degree);
+
     class Private;
     Private *priv;
 };

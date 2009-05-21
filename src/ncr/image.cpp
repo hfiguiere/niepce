@@ -62,14 +62,21 @@ const Babl * format_for_cairo_argb32()
 
 struct Image::Private {
     Private()
-        : m_width(0),
-          m_height(0)
+        : m_width(0)
+        , m_height(0)
+        , m_orientation(0)
+        , m_flip(false)
+        , m_tilt(0.0)
         {
         }
 
     int m_width, m_height; /**< the native dimension, with orientation */
+    int m_orientation;     /**< EXIF orientation in degrees */
+    bool m_flip;           /**< EXIF flip */
+    double m_tilt;         /**< User rotation */
     Glib::RefPtr<Gegl::Node> m_node;
     Glib::RefPtr<Gegl::Node> m_rgb;    /**< RGB pixmap */
+    Glib::RefPtr<Gegl::Node> m_rotate_n;
     Glib::RefPtr<Gegl::Node> m_scale;
     Glib::RefPtr<Gegl::Node> m_output;
 };
@@ -139,51 +146,49 @@ void Image::reload(const std::string & p, bool is_raw,
     Glib::RefPtr<Gegl::Node> current;
 
     DBG_OUT("rotation is %d", orientation);
-    int degrees = 0;
     bool vertical = false;
-    bool flip = false;
     switch(orientation) {
     case 0:
     case 1:
         break;
     case 2:
-        flip = true;
+        priv->m_flip = true;
         break;
     case 4:
-        flip = true;
+        priv->m_flip = true;
         // fall through
     case 3:
-        degrees = 180;
+        priv->m_orientation = 180;
         break;
     case 5:
-        flip = true;
+        priv->m_flip = true;
         // fall through
     case 6:
-        degrees = 270;
+        priv->m_orientation = 270;
         vertical = true;
         break;
     case 7:
-        flip = true;
+        priv->m_flip = true;
         // fall through
     case 8:
-        degrees = 90;
+        priv->m_orientation = 90;
         vertical = true;
         break;
     }
     // @todo ideally we would have a plain GEGL op for that.
-    Glib::RefPtr<Gegl::Node> rotate;
-    if(flip) {
+    if(priv->m_flip) {
         // @todo find a test case.
-        rotate =  priv->m_node->new_child("operation", "gegl:reflect");
-        rotate->set("x", -1.0);
-        current = priv->m_rgb->link(rotate);
+        priv->m_rotate_n =  priv->m_node->new_child("operation", 
+                                                    "gegl:reflect");
+        priv->m_rotate_n->set("x", -1.0);
+        current = priv->m_rgb->link(priv->m_rotate_n);
     }
     else {
         current = priv->m_rgb;
     }
-    rotate = priv->m_node->new_child("operation", "gegl:rotate");
-    rotate->set("degrees", degrees);
-    current = current->link(rotate);
+    priv->m_rotate_n = priv->m_node->new_child("operation", "gegl:rotate");
+    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
+    current = current->link(priv->m_rotate_n);
 
     priv->m_scale = priv->m_node->new_child("operation", "gegl:scale");
     current->link(priv->m_scale);
@@ -215,6 +220,49 @@ void Image::set_output_scale(double scale)
 
     signal_update();
 }
+
+
+
+void Image::set_tilt(double angle)
+{
+    priv->m_tilt = angle;
+    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
+
+    signal_update();    
+}
+
+
+void Image::rotate_left()
+{
+    rotate_by(-90);
+}
+
+void Image::rotate_right()
+{
+    rotate_by(90);
+}
+
+void Image::rotate_half()
+{
+    rotate_by(180);
+}
+
+
+void Image::rotate_by(int degree)
+{
+    priv->m_orientation += degree;
+    if(priv->m_orientation < 0) {
+        // negative values aren't good
+        priv->m_orientation += 360;
+    }
+    else {
+        // within 0..359 degrees anyway
+        priv->m_orientation %= 360;
+    }
+    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
+    signal_update();
+}
+
 
 
 Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
