@@ -75,7 +75,7 @@ namespace eng {
 		DBG_OUT("MIME type %s", mime_type.string().c_str());
 
 		if(mime_type.isUnknown()) {
-			DBG_OUT("unknown file type", filename.c_str());
+			DBG_OUT("unknown file type %s", filename.c_str());
 			return;
 		}
 		if(!mime_type.isImage()) {
@@ -86,16 +86,16 @@ namespace eng {
 		Glib::RefPtr<Gdk::Pixbuf> pix;
 		if(!mime_type.isDigicamRaw()) {
 			DBG_OUT("not a raw type, trying GdkPixbuf loaders");
-            try {
-                pix = Gdk::Pixbuf::create_from_file(filename, w, h, true);
-                if(pix) {
-                    pix = fwk::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
-                }
-            }
-            catch(const Glib::Error & e) 
-            {
-                ERR_OUT("exception %s", e.what().c_str());
-            }
+      try {
+        pix = Gdk::Pixbuf::create_from_file(filename, w, h, true);
+        if(pix) {
+          pix = fwk::gdkpixbuf_exif_rotate(pix, task->file()->orientation());
+        }
+      }
+      catch(const Glib::Error & e) 
+      {
+        ERR_OUT("exception %s", e.what().c_str());
+      }
 		}	
 		else {	
 			GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename.c_str(), 

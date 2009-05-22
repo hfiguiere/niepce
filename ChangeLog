@@ -1,5 +1,8 @@
 2009-05-22  Hubert Figuiere  <hub@figuiere.net>
 
+	* src/engine/library/thumbnailcache.cpp:
+	Fix format warning.
+
 	* src/fwk/utils/gphoto.{hpp,cpp}:
 	GpDevice implementation.
 
