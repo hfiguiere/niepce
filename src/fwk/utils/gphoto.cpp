@@ -34,6 +34,14 @@ namespace fwk {
     DBG_OUT("%s failed with %d",#op,x); }
 
 
+GpDevice::GpDevice(const std::string & model, const std::string & path)
+  : m_model(model)
+  , m_path(path)
+{
+}
+
+
+
 GpDeviceList::GpDeviceList()
   : m_abilities(NULL)
   , m_ports(NULL)
@@ -104,6 +112,8 @@ void GpDeviceList::detect()
   }
   ::gp_list_free(cameraList);
 }
+
+
 
 
 }

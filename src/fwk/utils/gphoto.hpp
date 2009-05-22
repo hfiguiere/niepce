@@ -42,8 +42,16 @@ class GpDevice
 public:
   typedef std::tr1::shared_ptr<GpDevice> Ptr;
 
-  GpDevice(const std::string & m_model, const std::string & m_path);
+  GpDevice(const std::string & model, const std::string & path);
 
+  const std::string & get_model() const
+    {
+      return m_model;
+    }
+  const std::string & get_path() const
+    {
+      return m_path;
+    }
 private:
   std::string m_model;
   std::string m_path;
@@ -53,15 +61,17 @@ private:
 
 class GpDeviceList
   : public fwk::Singleton<GpDeviceList>
-  , private std::list<GpDevice::Ptr>
+  , public std::list<GpDevice::Ptr>
 {
 public:
   ~GpDeviceList();
 
   void reload();
   void detect();
-private:
+protected:
+  friend class fwk::Singleton<GpDeviceList>;
   GpDeviceList();
+private:
 
   void _gp_cleanup();
   ::CameraAbilitiesList *m_abilities;
