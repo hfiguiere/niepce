@@ -1,3 +1,14 @@
+2009-05-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* src/fwk/utils/gphoto.{hpp,cpp}:
+	* src/fwk/utils/Makefile.am:
+	* configure.ac
+	* README
+	Gphoto utils. Now depends on libgphoto2.
+
+	* src/fwk/base/singleton.hpp
+	Singleton class.
+
 2009-05-21  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/fwk/toolkit/frame.{hpp,cpp}

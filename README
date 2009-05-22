@@ -37,6 +37,7 @@ libopenraw >= 0.0.5
 geglmm >= 0.0.22
 gegl >= 0.0.22
 babl
+libgphoto2
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.

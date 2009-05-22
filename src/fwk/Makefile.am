@@ -25,4 +25,5 @@ libfwk_a_SOURCES = base/color.hpp base/color.cpp \
 	base/fractions.hpp base/fractions.cpp \
 	base/moniker.hpp base/moniker.cpp \
 	base/geometry.hpp base/geometry.cpp \
+	base/singleton.hpp
 	$(NULL)
