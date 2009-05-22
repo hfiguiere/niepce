@@ -53,6 +53,15 @@ Gtk::Widget * CwWindow::buildWidget()
 
   Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
   m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
+  m_vbox.pack_start(m_hbox, true, true);
+
+  m_camera_tree_model = Gtk::ListStore::create(m_camera_tree_record);
+  Gtk::TreeView *treeview = manage(new Gtk::TreeView(m_camera_tree_model));
+  treeview->append_column("", m_camera_tree_record.m_icon);
+  treeview->append_column(_("Camera"), m_camera_tree_record.m_label);
+  m_hbox.pack_start(*treeview, false, true);
+
+  reload_camera_list();
 
   win.set_size_request(600, 400);
   win.show_all_children();
@@ -94,6 +103,10 @@ void CwWindow::init_actions()
                                         &CwWindow::on_preferences));
 
     m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
+    m_refActionGroup->add(Gtk::Action::create("ReloadCameras",
+                                              Gtk::Stock::REFRESH),
+                          Gtk::AccelKey("F5"),
+                          sigc::mem_fun(*this, &CwWindow::reload_camera_list));
     m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
                                                     _("_Hide tools"));
     m_refActionGroup->add(m_hide_tools_action,
@@ -136,6 +149,8 @@ void CwWindow::init_ui()
     "      <menuitem action='Preferences'/>"
     "    </menu>"
     "    <menu action='MenuTools'>"
+    "      <menuitem action='ReloadCameras' />"
+    "      <separator/>"        
     "      <menuitem action='ToggleToolsVisible'/>"
     "      <separator/>"        
     "    </menu>"
@@ -160,6 +175,21 @@ void CwWindow::on_action_import()
 
 void CwWindow::on_preferences()
 {
+}
+
+
+void CwWindow::reload_camera_list()
+{
+  using fwk::GpDeviceList;
+
+  GpDeviceList::obj().detect();
+  for(GpDeviceList::const_iterator iter = GpDeviceList::obj().begin();
+      iter != GpDeviceList::obj().end(); ++iter) {
+
+    Gtk::TreeIter treeiter = m_camera_tree_model->append();
+    treeiter->set_value(m_camera_tree_record.m_label, (*iter)->get_model());
+    treeiter->set_value(m_camera_tree_record.m_camera, *iter);
+  }
 }
 
 

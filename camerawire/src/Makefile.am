@@ -7,7 +7,8 @@ bin_PROGRAMS = camerawire
 
 INCLUDES = -DDATADIR=\"$(datadir)\" \
 	-I$(top_srcdir)/../src/ -I$(top_srcdir)/src  \
-	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@ @GCONF_CFLAGS@ 
+	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@ @GCONF_CFLAGS@ \
+	@GPHOTO_CFLAGS@
 
 
 camerawire_SOURCES = \
@@ -16,7 +17,7 @@ camerawire_SOURCES = \
 	main.cpp
 
 camerawire_LDADD = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ \
-	@GCONF_LIBS@ \
+	@GCONF_LIBS@ @GPHOTO_LIBS@ \
 	$(top_builddir)/../src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/../src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/../src/fwk/libfwk.a \

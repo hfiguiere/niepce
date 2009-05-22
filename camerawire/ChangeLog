@@ -1,5 +1,10 @@
 2009-05-22  Hubert Figuiere  <hub@figuiere.net>
 
+	* configure.ac
+	* src/Makefile.am
+	* src/cwwindow.{hpp,cpp}
+	Basic gphoto functionnality: list connected cameras.
+
 	* Makefile.am: 
 	Fix maintainer mode build.
 
