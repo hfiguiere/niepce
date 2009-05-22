@@ -53,13 +53,21 @@ Gtk::Widget * CwWindow::buildWidget()
 
   Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
   m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
-  m_vbox.pack_start(m_hbox, true, true);
+  m_vbox.pack_start(m_hbox, true, true, 4);
 
   m_camera_tree_model = Gtk::ListStore::create(m_camera_tree_record);
   Gtk::TreeView *treeview = manage(new Gtk::TreeView(m_camera_tree_model));
-  treeview->append_column("", m_camera_tree_record.m_icon);
-  treeview->append_column(_("Camera"), m_camera_tree_record.m_label);
-  m_hbox.pack_start(*treeview, false, true);
+  Gtk::TreeViewColumn *column;
+
+  column = manage(new Gtk::TreeViewColumn(_("Camera")));
+  Gtk::CellRendererToggle *cell = manage(new Gtk::CellRendererToggle);
+  column->pack_start(*cell, false);
+  column->add_attribute(cell->property_active(), 
+                        m_camera_tree_record.m_persistent);
+  column->pack_start(m_camera_tree_record.m_icon, false);
+  column->pack_start(m_camera_tree_record.m_label);
+  treeview->append_column(*column);
+  m_hbox.pack_start(*treeview, false, true, 4);
 
   reload_camera_list();
 
@@ -182,6 +190,8 @@ void CwWindow::reload_camera_list()
 {
   using fwk::GpDeviceList;
 
+  m_camera_tree_model->clear();
+  
   GpDeviceList::obj().detect();
   for(GpDeviceList::const_iterator iter = GpDeviceList::obj().begin();
       iter != GpDeviceList::obj().end(); ++iter) {
@@ -189,6 +199,7 @@ void CwWindow::reload_camera_list()
     Gtk::TreeIter treeiter = m_camera_tree_model->append();
     treeiter->set_value(m_camera_tree_record.m_label, (*iter)->get_model());
     treeiter->set_value(m_camera_tree_record.m_camera, *iter);
+    treeiter->set_value(m_camera_tree_record.m_persistent, false);
   }
 }
 
