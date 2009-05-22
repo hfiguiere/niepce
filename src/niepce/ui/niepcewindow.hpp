@@ -60,9 +60,6 @@ public:
 protected:
     virtual Gtk::Widget * buildWidget();
 private:
-    void undo_state();
-    void redo_state();
-
     void on_action_file_import();
 
     void on_action_file_quit();
@@ -94,8 +91,6 @@ private:
     ui::SelectionController::Ptr   m_selection_controller;
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
-    Glib::RefPtr<Gtk::Action>      m_undo_action;
-    Glib::RefPtr<Gtk::Action>      m_redo_action;
     libraryclient::LibraryClient::Ptr m_libClient;
     eng::Label::List               m_labels;
 };

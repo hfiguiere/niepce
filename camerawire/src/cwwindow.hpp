@@ -17,29 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __CW_APPLICATION_HPP_
-#define __CW_APPLICATION_HPP_
 
+#ifndef __CW_WINDOW_HPP_
+#define __CW_WINDOW_HPP_
 
-#include "fwk/toolkit/application.hpp"
+#include <gtkmm/action.h>
+#include <gtkmm/actiongroup.h>
+#include <gtkmm/box.h>
 
-
+#include "fwk/toolkit/frame.hpp"
 
 namespace cw {
 
-class CwApplication
-  : public fwk::Application
+class CwWindow
+  : public fwk::Frame
 {
 public:
-  static fwk::Application::Ptr create();
+  CwWindow();
 
-  virtual fwk::Frame::Ptr makeMainFrame();
 protected:
-  CwApplication();
+  virtual Gtk::Widget * buildWidget();
 
+private:
+  void init_ui();
+  void init_actions();
+  void on_action_import();
+  void on_preferences();
+
+  Gtk::VBox                      m_vbox;
+  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 };
 
 }
 
-
 #endif
+

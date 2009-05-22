@@ -259,20 +259,9 @@ void NiepceWindow::init_actions()
                                         &Application::quit));	
 
     m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
-    m_undo_action = Gtk::Action::create("Undo", Gtk::Stock::UNDO);
-    m_refActionGroup->add(m_undo_action, Gtk::AccelKey("<control>Z"),
-                          sigc::mem_fun(Application::app()->undo_history(),
-                                        &UndoHistory::undo));
-    Application::app()->undo_history().signal_changed.connect(
-        sigc::mem_fun(*this, &NiepceWindow::undo_state));
-    undo_state();
-    m_redo_action = Gtk::Action::create("Redo", Gtk::Stock::REDO);
-    m_refActionGroup->add(m_redo_action, Gtk::AccelKey("<control><shift>Z"),
-                          sigc::mem_fun(Application::app()->undo_history(),
-                                        &UndoHistory::redo));
-    Application::app()->undo_history().signal_changed.connect(
-        sigc::mem_fun(*this, &NiepceWindow::redo_state));
-    redo_state();
+
+    create_undo_action(m_refActionGroup);
+    create_redo_action(m_refActionGroup);
 
     // FIXME: bind
     m_refActionGroup->add(Gtk::Action::create("Cut", Gtk::Stock::CUT));
@@ -380,22 +369,6 @@ void NiepceWindow::init_actions()
                                 ->uiManager()->get_accel_group());
 }
 
-void NiepceWindow::undo_state()
-{
-    fwk::UndoHistory & history(Application::app()->undo_history());
-    m_undo_action->set_sensitive(history.has_undo());
-    std::string s = history.next_undo();
-    m_undo_action->property_label() = Glib::ustring(_("Undo ")) + s;
-}
-
-
-void NiepceWindow::redo_state()
-{
-    fwk::UndoHistory & history(Application::app()->undo_history());
-    m_redo_action->set_sensitive(history.has_redo());
-    std::string s = history.next_redo();
-    m_redo_action->property_label() = Glib::ustring(_("Redo ")) + s;
-}
 
 void NiepceWindow::on_action_file_import()
 {

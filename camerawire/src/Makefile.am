@@ -12,6 +12,7 @@ INCLUDES = -DDATADIR=\"$(datadir)\" \
 
 camerawire_SOURCES = \
 	cwapplication.hpp cwapplication.cpp \
+	cwwindow.hpp cwwindow.cpp \
 	main.cpp
 
 camerawire_LDADD = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ \

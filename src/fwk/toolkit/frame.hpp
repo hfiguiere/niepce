@@ -76,9 +76,17 @@ public:
     sigc::signal<void> signal_hide_tools;
     sigc::signal<void> signal_show_tools;
 protected:
+
+    void undo_state();
+    void redo_state();
+    Glib::RefPtr<Gtk::Action> create_undo_action(const Glib::RefPtr<Gtk::ActionGroup> & g);
+    Glib::RefPtr<Gtk::Action> create_redo_action(const Glib::RefPtr<Gtk::ActionGroup> & g);
+
 		/** close signal handler */
 		virtual bool _close();
     Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
+    Glib::RefPtr<Gtk::Action>      m_undo_action;
+    Glib::RefPtr<Gtk::Action>      m_redo_action;
 
 private:
     /** frame have the widget set at construction time
