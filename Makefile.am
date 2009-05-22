@@ -11,5 +11,5 @@ DISTCLEANFILES = intltool-extract \
                  intltool-update \
                  po/.intltool-merge-cache
 
-SUBDIRS = po data src
+SUBDIRS = po data src camerawire
 DIST_SUBDIRS = po art data doc src

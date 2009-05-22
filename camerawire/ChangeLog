@@ -1,3 +1,8 @@
+2009-05-22  Hubert Figuiere  <hub@figuiere.net>
+
+	* Makefile.am: 
+	Fix maintainer mode build.
+
 2009-05-21  Hubert Figuiere  <hub@figuiere.net>
 
 	* Initial UI shell.
