@@ -20,6 +20,10 @@
 #ifndef __FWK_BASE_DEBUG_H__
 #define __FWK_BASE_DEBUG_H__
 
+#ifndef DEBUG
+#include <assert.h>
+#endif
+
 #ifdef __GNUC__
 // we have too mark this as a system header because otherwise GCC barfs 
 // on variadic macros.
