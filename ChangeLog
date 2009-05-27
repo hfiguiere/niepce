@@ -1,5 +1,8 @@
 2009-05-26  Hubert Figuiere  <hub@figuiere.net>
 
+	* README: 
+	More info in the README.
+
 	* src/fwk/base/debug.hpp: 
 	Needs assert.h as an include (when building non debug).
 

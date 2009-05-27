@@ -49,8 +49,8 @@ In order to get Niepce working on Debian you should have to install:
 aptitude install gconf2-dev \
 > libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev 
 
-Debian (nor Ubuntu) do not still pack geglmm nor libgoocanvasmm-dev. In order
-to get them visit to get the latest version:
+Debian (nor Ubuntu) do not still pack geglmm. In order to get it visit 
+to get the latest version:
 http://ftp.gnome.org/pub/gnome/sources/geglmm/
 
 Working on SUSE
@@ -78,3 +78,13 @@ Website
 -------
 
 http://live.gnome.org/Niepce
+
+IRC
+---
+
+#niepce on irc.gnome.org
+
+Mailing list
+------------
+
+https://mail.gna.org/listinfo/niepce-devel/
