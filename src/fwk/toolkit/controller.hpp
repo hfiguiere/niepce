@@ -26,14 +26,10 @@
 #include <list>
 #include <tr1/memory>
 
-#include <gtkmm/uimanager.h>
 #include <sigc++/trackable.h>
 
 #include "fwk/utils/databinder.hpp"
 
-namespace Gtk {
-	class Widget;
-}
 
 namespace fwk {
 
@@ -61,10 +57,6 @@ public:
 		/** signal that the controller needs to terminate */
 		virtual void terminate();
 
-		/** return the widget controlled (construct it if needed) */
-		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager) = 0;
-		Gtk::Widget * widget() const;
-
 		/** called when everything is ready 
 		 * subclasses should reimplement if needed
 		 */
@@ -74,7 +66,6 @@ protected:
 		virtual void _added();
 
 		void _ready();
-		Gtk::Widget* m_widget;
 
 		WeakPtr          m_parent;
 		std::list<Ptr> m_subs; /**< sub controllers */

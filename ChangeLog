@@ -1,5 +1,8 @@
 2009-07-13  Hubert Figuiere  <hub@figuiere.net>
 
+	* Add UiController. Properly merge and unmerge UI and split
+	actions from NiepceWindow to the ModuleShell.
+
 	* API change in fwk::Controller to pass a Gtk::UIManager
 	to buildWidget()
 

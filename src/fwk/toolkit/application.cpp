@@ -30,6 +30,7 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/boost.hpp"
 #include "application.hpp"
+#include "uicontroller.hpp"
 #include "frame.hpp"
 
 
@@ -39,7 +40,7 @@ Application::Ptr Application::m_application;
 
 Application::Application(const char * name)
     : m_config(Glib::ustring("/apps/") + name),
-      m_refUIManager()
+      m_refUIManager(Gtk::UIManager::create())
 {
     register_theme(_("System"), "");
 }
@@ -49,11 +50,6 @@ Application::~Application()
 {
 }
 
-/** no widget for applications */
-Gtk::Widget * Application::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
-{
-    return NULL;
-}
 
 Application::Ptr Application::app()
 {
@@ -161,7 +157,10 @@ void Application::about()
 void Application::add(const Controller::Ptr & sub)
 {
     Controller::add(sub);
-    sub->buildWidget(uiManager());
+    UiController::Ptr uictrl = std::tr1::dynamic_pointer_cast<UiController>(sub);
+    if(uictrl) {
+        uictrl->buildWidget(uiManager());
+    }
 }
 
 void Application::on_about()

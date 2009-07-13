@@ -17,6 +17,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	dialog.hpp dialog.cpp \
 	frame.hpp frame.cpp \
 	controller.hpp controller.cpp \
+	uicontroller.hpp uicontroller.cpp \
 	notification.hpp \
 	mimetype.hpp mimetype.cpp \
 	imageloader.hpp imageloader.cpp \

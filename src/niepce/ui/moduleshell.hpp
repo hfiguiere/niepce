@@ -25,7 +25,7 @@
 
 #include "moduleshellwidget.hpp"
 #include "libraryclient/libraryclient.hpp"
-#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notification.hpp"
 #include "niepce/ui/gridviewmodule.hpp"
 #include "modules/darkroom/darkroommodule.hpp"
@@ -38,19 +38,15 @@ namespace Gtk {
 namespace ui {
 
 class ModuleShell
-		: public fwk::Controller
+		: public fwk::UiController
 {
 public:
 		typedef std::tr1::shared_ptr<ModuleShell> Ptr;
 		typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
 
-		ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client,
-                              const Glib::RefPtr<Gtk::ActionGroup> & actions,
-                              const Glib::RefPtr<ImageListStore> & store)
+		ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client)
         : m_getclient(get_client)
-        , m_actionGroup(actions)
-        , m_model(store)
-        , m_gridview(new GridViewModule(m_getclient, m_model))
+        , m_actionGroup(Gtk::ActionGroup::create("ModuleShell"))
         {
         }
 
@@ -58,6 +54,18 @@ public:
     const GridViewModule::Ptr & get_gridview() const
         {
             return m_gridview;
+        }
+    const Glib::RefPtr<ImageListStore> & get_list_store() const
+        { 
+            return m_selection_controller->get_list_store(); 
+        }
+    const SelectionController::Ptr & get_selection_controller() const
+        {
+            return m_selection_controller;
+        }
+    libraryclient::LibraryClient::Ptr getLibraryClient() const
+        {
+            return m_getclient();
         }
 
 		/** called when somehing is selected by the shared selection */
@@ -72,12 +80,12 @@ protected:
 private:
 		sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
 		Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
-    Glib::RefPtr<ImageListStore> m_model;
 
 		// managed widgets...
 		ModuleShellWidget             m_shell;
     Glib::RefPtr<Gtk::UIManager>  m_ui_manager;
 
+    ui::SelectionController::Ptr  m_selection_controller;
     GridViewModule::Ptr           m_gridview;
     darkroom::DarkroomModule::Ptr m_darkroom;
 };

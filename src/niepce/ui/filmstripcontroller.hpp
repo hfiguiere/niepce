@@ -22,7 +22,7 @@
 #ifndef __UI_FILMSTRIPCONTROLLER_H_
 #define __UI_FILMSTRIPCONTROLLER_H_
 
-#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "ui/selectioncontroller.hpp"
 
@@ -34,7 +34,7 @@ namespace ui {
 
 
 class FilmStripController
-	: public fwk::Controller,
+	: public fwk::UiController,
 	  public IImageSelectable
 {
 public:

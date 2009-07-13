@@ -29,7 +29,6 @@
 namespace fwk {
 
 Controller::Controller()
-    : m_widget(NULL)
 {
 }
 
@@ -39,11 +38,6 @@ Controller::~Controller()
 //    DBG_OUT("destroy Controllers");
 }
 
-Gtk::Widget * Controller::widget() const
-{
-    DBG_ASSERT(!m_parent.expired(), "must be attached");
-    return m_widget;
-}
 
 void
 Controller::add(const Controller::Ptr & sub)

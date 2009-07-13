@@ -1,5 +1,5 @@
 /*
- * niepce - niepce/ui/niepcelibrarymodule.hpp
+ * niepce - fwk/toolkit/uicontroller.hpp
  *
  * Copyright (C) 2009 Hubert Figuiere
  *
@@ -17,30 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "fwk/base/debug.hpp"
+#include "uicontroller.hpp"
 
-#ifndef __NIEPCE_UI_ILIBRARYMODULE_HPP_
-#define __NIEPCE_UI_ILIBRARYMODULE_HPP_
+namespace fwk {
 
-#include <string>
-#include <tr1/memory>
-
-#include "fwk/toolkit/uicontroller.hpp"
-
-namespace ui {
-
-/** interface to implement a library module */
-class ILibraryModule
-  : public fwk::UiController
+UiController::UiController()
+    : m_widget(NULL)
+    , m_ui_merge_id(0)
 {
-public:
-  typedef std::tr1::shared_ptr<ILibraryModule> Ptr;
+}
 
-  /** dispatch action by name to the controller */
-  virtual void dispatch_action(const std::string & action_name) = 0;
-};
+UiController::~UiController()
+{
+    if(m_uimanager && m_ui_merge_id) {
+        m_uimanager->remove_ui(m_ui_merge_id);
+    }
+}
 
+
+Gtk::Widget * UiController::widget() const
+{
+    DBG_ASSERT(!m_parent.expired(), "must be attached");
+    return m_widget;
+}
 
 }
 
 
-#endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

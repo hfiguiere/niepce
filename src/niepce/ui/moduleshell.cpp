@@ -23,9 +23,11 @@
 
 #include <gtkmm/celllayout.h>
 #include <gtkmm/cellrenderer.h>
+#include <gtkmm/stock.h>
 
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
+#include "niepce/stock.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/libfile.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -43,9 +45,137 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     if(m_widget) {
         return m_widget;
     }
+    DBG_ASSERT(manager, "manager is NULL");
+
     m_widget = &m_shell;
     m_ui_manager = manager;
+
+    m_selection_controller = SelectionController::Ptr(new SelectionController);
+    add(m_selection_controller);
+
+    Glib::RefPtr<Gtk::Action> an_action;
+
+    m_actionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
+
+    m_actionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
+                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)),
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::select_previous));
+    m_actionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
+                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)),
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::select_next));
+    
+    an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
+    m_actionGroup->add(an_action, sigc::bind(
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::rotate), -90));
+    an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
+    m_actionGroup->add(an_action, sigc::bind(
+                          sigc::mem_fun(*m_selection_controller,
+                                        &SelectionController::rotate), 90));
+    
+    m_actionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
+    m_actionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
+                          Gtk::AccelKey("6"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              1));
+    m_actionGroup->add(Gtk::Action::create("SetLabel7", _("Label _7")),
+                          Gtk::AccelKey("7"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              2));
+    m_actionGroup->add(Gtk::Action::create("SetLabel8", _("Label _8")),
+                          Gtk::AccelKey("8"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              3));
+    m_actionGroup->add(Gtk::Action::create("SetLabel9", _("Label _9")),
+                          Gtk::AccelKey("9"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller, 
+                                            &SelectionController::set_label),
+                              4));
+    
+    m_actionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
+    m_actionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
+                          Gtk::AccelKey("0"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              0));
+    m_actionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
+                          Gtk::AccelKey("1"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              1));
+    m_actionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
+                          Gtk::AccelKey("2"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              2));
+    m_actionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
+                          Gtk::AccelKey("3"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              3));
+    m_actionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
+                          Gtk::AccelKey("4"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              4));
+    m_actionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
+                          Gtk::AccelKey("5"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_rating),
+                              5));
+    m_actionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
+
+    manager->insert_action_group(m_actionGroup);
+
+
+    Glib::ustring ui_info =
+        "<ui>"
+        "  <menubar>"
+        "    <placeholder action='MenuImage'>"
+        "      <menuitem action='PrevImage'/>"
+        "      <menuitem action='NextImage'/>"
+        "      <separator/>"
+        "      <menuitem action='RotateLeft'/>"
+        "      <menuitem action='RotateRight'/>"			
+        "      <separator/>"
+        "      <menu action='SetRating'>"
+        "        <menuitem action='SetRating0'/>"
+        "        <menuitem action='SetRating1'/>"
+        "        <menuitem action='SetRating2'/>"
+        "        <menuitem action='SetRating3'/>"
+        "        <menuitem action='SetRating4'/>"
+        "        <menuitem action='SetRating5'/>"
+        "      </menu>"
+        "      <menu action='SetLabel'>"
+        "        <menuitem action='SetLabel6'/>"
+        "        <menuitem action='SetLabel7'/>"
+        "        <menuitem action='SetLabel8'/>"
+        "        <menuitem action='SetLabel9'/>"
+        "        <separator/>"
+        "      </menu>"
+        "      <separator/>"
+        "      <menuitem action='DeleteImage'/>"
+        "    </placeholder>"
+        "  </menubar>"
+        "</ui>";
+    m_ui_merge_id = manager->add_ui_from_string(ui_info);
+
+
+    m_gridview = GridViewModule::Ptr(
+        new GridViewModule(m_getclient, 
+                           m_selection_controller->get_list_store()));
     add_library_module(m_gridview, _("Library"));
+
+    m_selection_controller->add_selectable(m_gridview.get());
+    m_selection_controller->signal_selected
+        .connect(sigc::mem_fun(*this, &ModuleShell::on_selected));
+    m_selection_controller->signal_activated
+        .connect(sigc::mem_fun(*this, &ModuleShell::on_image_activated));
 
 
     m_darkroom = darkroom::DarkroomModule::Ptr(
@@ -87,9 +217,10 @@ void ModuleShell::on_selected(int id)
 void ModuleShell::on_image_activated(int id)
 {
     DBG_OUT("on image activated %d", id);
-    Gtk::TreeIter iter = m_model->get_iter_from_id(id);
+    Glib::RefPtr<ImageListStore> store = m_selection_controller->get_list_store();
+    Gtk::TreeIter iter = store->get_iter_from_id(id);
     if(iter) {
-        eng::LibFile::Ptr libfile = (*iter)[m_model->columns().m_libfile];
+        eng::LibFile::Ptr libfile = (*iter)[store->columns().m_libfile];
         m_darkroom->set_image(libfile);
         m_shell.activate_page(1);
     }

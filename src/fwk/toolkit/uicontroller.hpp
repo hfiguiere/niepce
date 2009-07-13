@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/toolkit/dockable.hpp
+ * niepce - fwk/toolkit/uicontroller.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,39 +18,50 @@
  */
 
 
-#ifndef __FRAMEWORK_DOCKABLE_H__
-#define __FRAMEWORK_DOCKABLE_H__
+#ifndef __FRAMEWORK_UICONTROLLER_H__
+#define __FRAMEWORK_UICONTROLLER_H__
 
-#include "fwk/toolkit/uicontroller.hpp"
-#include "fwk/toolkit/widgets/dock-item.hpp"
+
+#include <gtkmm/uimanager.h>
+
+#include "fwk/toolkit/controller.hpp"
+
+namespace Gtk {
+	class Widget;
+}
 
 namespace fwk {
 
-
-/** A dockable item controller
- */
-class Dockable
-    : public UiController,
-      protected DockItem
+class UiController
+  : public Controller
 {
 public:
-    Dockable(fwk::Dock & dock, const Glib::ustring& name, 
-             const Glib::ustring& long_name, 
-             const Glib::ustring& icon_name, DockItem::State state);
+    typedef std::tr1::shared_ptr<UiController> Ptr;
 
+    UiController();
+    virtual ~UiController();
+  
+    /** return the widget controlled (construct it if needed) */
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager) = 0;
+		Gtk::Widget * widget() const;
+
+protected:
+		Gtk::Widget*                 m_widget;
+    Glib::RefPtr<Gtk::UIManager> m_uimanager;
+    Gtk::UIManager::ui_merge_id  m_ui_merge_id;
 };
 
-
 }
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:80
+  fill-column:99
   End:
 */
 
-#endif
 
+#endif

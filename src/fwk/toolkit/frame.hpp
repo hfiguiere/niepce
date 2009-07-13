@@ -28,7 +28,7 @@
 #include <gtkmm/toggleaction.h>
 #include <gtkmm/builder.h>
 
-#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/uicontroller.hpp"
 
 namespace Gtk {
 	class Dialog;
@@ -37,7 +37,7 @@ namespace Gtk {
 namespace fwk {
 
 class Frame 
-		: public Controller
+		: public UiController
 {
 public:
 		typedef std::tr1::shared_ptr<Frame> Ptr;

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <gtkmm/treestore.h>
 
 #include "engine/db/libfolder.hpp"
-#include "fwk/toolkit/controller.hpp"
+#include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notification.hpp"
 
 namespace Gtk {
@@ -41,7 +41,7 @@ namespace Gtk {
 namespace ui {
 
 	class WorkspaceController
-		: public fwk::Controller
+		: public fwk::UiController
 	{
 	public:
 		typedef std::tr1::shared_ptr<WorkspaceController> Ptr;

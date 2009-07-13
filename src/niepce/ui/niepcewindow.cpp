@@ -71,6 +71,7 @@ NiepceWindow::~NiepceWindow()
 Gtk::Widget * 
 NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+    DBG_ASSERT(manager, "manager is NULL");
     if(m_widget) {
         return m_widget;
     }
@@ -78,10 +79,7 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 
     m_widget = &win;
 
-    m_selection_controller = SelectionController::Ptr(new SelectionController);
-    add(m_selection_controller);
-
-    init_actions();
+    init_actions(manager);
     init_ui(manager);
 
     m_notifcenter.reset(new niepce::NotificationCenter());
@@ -94,27 +92,29 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
         sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));
 
 
-    m_notifcenter->signal_lib_notification
-        .connect(sigc::mem_fun(
-                     *get_pointer(m_selection_controller->list_store()),
-                     &ImageListStore::on_lib_notification));
-    m_notifcenter->signal_thumbnail_notification
-        .connect(sigc::mem_fun(
-                     *get_pointer(m_selection_controller->list_store()), 
-                     &ImageListStore::on_tnail_notification));
 
     // main view
     m_moduleshell = ModuleShell::Ptr(
         new ModuleShell(sigc::mem_fun(
-                            *this, &NiepceWindow::getLibraryClient),
-                        m_refActionGroup,
-                        m_selection_controller->list_store()));
+                            *this, &NiepceWindow::getLibraryClient)));
+    m_moduleshell->buildWidget(manager);
+
+    add(m_moduleshell);
+
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(
                      *m_moduleshell->get_gridview(),
                      &GridViewModule::on_lib_notification));
+    m_notifcenter->signal_lib_notification
+        .connect(sigc::mem_fun(
+                     *get_pointer(m_moduleshell->get_list_store()),
+                     &ImageListStore::on_lib_notification));
+    m_notifcenter->signal_thumbnail_notification
+        .connect(sigc::mem_fun(
+                     *get_pointer(m_moduleshell->get_list_store()), 
+                     &ImageListStore::on_tnail_notification));
 
-    add(m_moduleshell);
+
     // workspace treeview
     m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
 
@@ -137,7 +137,8 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
     m_vbox.pack_start(m_hbox);
 
 
-    m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_selection_controller->list_store()));
+    SelectionController::Ptr selection_controller = m_moduleshell->get_selection_controller();
+    m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_moduleshell->get_list_store()));
     add(m_filmstrip);
 
     m_vbox.pack_start(*(m_filmstrip->buildWidget(manager)), Gtk::PACK_SHRINK);
@@ -146,15 +147,7 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
     m_statusBar.push(Glib::ustring(_("Ready")));
 
-    m_selection_controller->add_selectable(m_filmstrip.get());
-    m_selection_controller->add_selectable(m_moduleshell->get_gridview().get());
-    m_selection_controller->signal_selected
-        .connect(sigc::mem_fun(*m_moduleshell,
-                               &ModuleShell::on_selected));
-
-    m_selection_controller->signal_activated
-        .connect(sigc::mem_fun(*m_moduleshell,
-                               &ModuleShell::on_image_activated));
+    selection_controller->add_selectable(m_filmstrip.get());
 
     win.set_size_request(600, 400);
     win.show_all_children();
@@ -179,7 +172,7 @@ void NiepceWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
         "      <menuitem action='Close'/>"
         "      <menuitem action='Quit'/>"
         "    </menu>"
-        "    <menu name='edit-menu' action='MenuEdit'>"
+        "    <menu action='MenuEdit'>"
         "      <menuitem action='Undo'/>"
         "      <menuitem action='Redo'/>"
         "      <separator/>"
@@ -191,32 +184,10 @@ void NiepceWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
         "      <menuitem action='Preferences'/>"
         "    </menu>"
         "    <menu action='MenuImage'>"
-        "      <menuitem action='PrevImage'/>"
-        "      <menuitem action='NextImage'/>"
-        "      <separator/>"
-        "      <menuitem action='RotateLeft'/>"
-        "      <menuitem action='RotateRight'/>"			
-        "      <separator/>"
-        "      <menu action='SetRating'>"
-        "        <menuitem action='SetRating0'/>"
-        "        <menuitem action='SetRating1'/>"
-        "        <menuitem action='SetRating2'/>"
-        "        <menuitem action='SetRating3'/>"
-        "        <menuitem action='SetRating4'/>"
-        "        <menuitem action='SetRating5'/>"
-        "      </menu>"
-        "      <menu action='SetLabel'>"
-        "        <menuitem action='SetLabel6'/>"
-        "        <menuitem action='SetLabel7'/>"
-        "        <menuitem action='SetLabel8'/>"
-        "        <menuitem action='SetLabel9'/>"
-        "        <separator/>"
-        "        <menuitem action='EditLabels'/>"
-        "      </menu>"
-        "      <separator/>"
-        "      <menuitem action='DeleteImage'/>"
         "    </menu>"
         "    <menu action='MenuTools'>"
+        "      <menuitem action='EditLabels'/>"
+        "      <separator/>"        
         "      <menuitem action='ToggleToolsVisible'/>"
         "      <separator/>"        
         "    </menu>"
@@ -230,12 +201,12 @@ void NiepceWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
         "    <toolitem action='Quit'/>"
         "  </toolbar>"
         "</ui>";
-    manager->add_ui_from_string(ui_info);
+    m_ui_merge_id = manager->add_ui_from_string(ui_info);
 } 
 
 
 
-void NiepceWindow::init_actions()
+void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
     Glib::RefPtr<Gtk::Action> an_action;
 
@@ -276,84 +247,12 @@ void NiepceWindow::init_actions()
                           sigc::mem_fun(*this,
                                         &NiepceWindow::on_preferences));
 
-    m_refActionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
-    m_refActionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
-                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)),
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::select_previous));
-    m_refActionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
-                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)),
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::select_next));
-    
-    an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
-    m_refActionGroup->add(an_action, sigc::bind(
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::rotate), -90));
-    an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
-    m_refActionGroup->add(an_action, sigc::bind(
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::rotate), 90));
-    
-    m_refActionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
-    m_refActionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
-                          Gtk::AccelKey("6"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
-                                            &SelectionController::set_label),
-                              1));
-    m_refActionGroup->add(Gtk::Action::create("SetLabel7", _("Label _7")),
-                          Gtk::AccelKey("7"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
-                                            &SelectionController::set_label),
-                              2));
-    m_refActionGroup->add(Gtk::Action::create("SetLabel8", _("Label _8")),
-                          Gtk::AccelKey("8"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
-                                            &SelectionController::set_label),
-                              3));
-    m_refActionGroup->add(Gtk::Action::create("SetLabel9", _("Label _9")),
-                          Gtk::AccelKey("9"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
-                                            &SelectionController::set_label),
-                              4));
-    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("_Edit Labels...")),
-                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
-    
-    m_refActionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
-    m_refActionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
-                          Gtk::AccelKey("0"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              0));
-    m_refActionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
-                          Gtk::AccelKey("1"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              1));
-    m_refActionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
-                          Gtk::AccelKey("2"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              2));
-    m_refActionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
-                          Gtk::AccelKey("3"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              3));
-    m_refActionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
-                          Gtk::AccelKey("4"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              4));
-    m_refActionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
-                          Gtk::AccelKey("5"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              5));
-    m_refActionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
+
 
     m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
+    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("_Edit Labels...")),
+                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
     m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
                                                     _("_Hide tools"));
     m_refActionGroup->add(m_hide_tools_action,
@@ -365,10 +264,9 @@ void NiepceWindow::init_actions()
                           sigc::mem_fun(*Application::app(),
                                         &Application::about));
 
-    Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
+    manager->insert_action_group(m_refActionGroup);		
 		
-    gtkWindow().add_accel_group(Application::app()
-                                ->uiManager()->get_accel_group());
+    gtkWindow().add_accel_group(manager->get_accel_group());
 }
 
 

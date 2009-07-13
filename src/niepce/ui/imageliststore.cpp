@@ -133,7 +133,9 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
 
 libraryclient::LibraryClient::Ptr ImageListStore::getLibraryClient()
 {
-    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_controller.lock())->getLibraryClient();
+    ModuleShell::Ptr shell = std::tr1::dynamic_pointer_cast<ModuleShell>(m_controller.lock());
+    DBG_ASSERT(shell, "parent not a ModuleShell");
+    return	shell->getLibraryClient();
 }
 
 }

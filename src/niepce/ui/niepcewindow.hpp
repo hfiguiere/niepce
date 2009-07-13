@@ -75,7 +75,7 @@ private:
     void on_lib_notification(const eng::LibNotification & n);
 
     void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
-    void init_actions();
+    void init_actions(const Glib::RefPtr<Gtk::UIManager> & manager);
 
     void open_library(const std::string & libMoniker);
     eng::Label::List &   get_labels()
@@ -88,7 +88,6 @@ private:
     ModuleShell::Ptr               m_moduleshell; // the main views stacked.
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
-    ui::SelectionController::Ptr   m_selection_controller;
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
     libraryclient::LibraryClient::Ptr m_libClient;

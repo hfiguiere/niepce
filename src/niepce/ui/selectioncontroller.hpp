@@ -66,7 +66,7 @@ public:
 	void selected(IImageSelectable *);
 
 
-	const Glib::RefPtr<ImageListStore> & list_store() const
+	const Glib::RefPtr<ImageListStore> & get_list_store() const
 		{ return m_imageliststore; }
 
 	// the signal to call when selection is changed.
@@ -88,8 +88,6 @@ public:
     void set_label(int label);
 protected:
 	virtual void _added();
-	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
-		{ return NULL; }
 private:
     int get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
