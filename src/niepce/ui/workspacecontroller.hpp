@@ -82,8 +82,7 @@ namespace ui {
 		void on_count_notification(int);
 		void on_libtree_selection();
 
-	protected:
-		virtual Gtk::Widget * buildWidget();
+		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 
 	private:
 		libraryclient::LibraryClient::Ptr getLibraryClient();

@@ -42,7 +42,7 @@ public:
 		typedef std::tr1::shared_ptr<MetaDataPaneController> Ptr;
 		MetaDataPaneController(fwk::Dock &);
     ~MetaDataPaneController();
-		virtual Gtk::Widget * buildWidget();
+		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 		void display(int file_id, const fwk::XmpMeta * meta);
     int displayed_file() const 
         { return m_fileid; }

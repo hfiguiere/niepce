@@ -40,7 +40,7 @@ public:
   CwWindow();
 
 protected:
-  virtual Gtk::Widget * buildWidget();
+  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 
 private:
   class CameraTreeRecord
@@ -61,7 +61,7 @@ private:
     Gtk::TreeModelColumn<bool>               m_persistent;
   };
 
-  void init_ui();
+  void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
   void init_actions();
   void on_action_import();
   void on_preferences();

@@ -60,7 +60,7 @@ public:
   virtual void dispatch_action(const std::string & action_name);
 
 protected:
-	virtual Gtk::Widget * buildWidget();
+	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 
 private:
     // darkroom split view

@@ -40,14 +40,19 @@ CwWindow::CwWindow()
 }
 
 
-Gtk::Widget * CwWindow::buildWidget()
+Gtk::Widget * CwWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+  if(m_widget) {
+    return m_widget;
+  }
+
   Gtk::Window & win(gtkWindow());
+  m_widget = &win;
 
   Application::Ptr pApp = Application::app();
 
   init_actions();
-  init_ui();
+  init_ui(manager);
 
   win.add(m_vbox);
 
@@ -73,7 +78,7 @@ Gtk::Widget * CwWindow::buildWidget()
 
   win.set_size_request(600, 400);
   win.show_all_children();
-  return &win;
+  return m_widget;
 }
 
 
@@ -133,9 +138,8 @@ void CwWindow::init_actions()
 }
 
 
-void CwWindow::init_ui()
+void CwWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
-  fwk::Application::Ptr pApp = fwk::Application::app();
   Glib::ustring ui_info =
     "<ui>"
     "  <menubar name='MenuBar'>"
@@ -172,7 +176,7 @@ void CwWindow::init_ui()
     "    <toolitem action='Quit'/>"
     "  </toolbar>"
     "</ui>";
-  pApp->uiManager()->add_ui_from_string(ui_info);
+  manager->add_ui_from_string(ui_info);
 } 
 
 

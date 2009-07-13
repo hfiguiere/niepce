@@ -50,7 +50,7 @@ Application::~Application()
 }
 
 /** no widget for applications */
-Gtk::Widget * Application::buildWidget()
+Gtk::Widget * Application::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 {
     return NULL;
 }
@@ -161,7 +161,7 @@ void Application::about()
 void Application::add(const Controller::Ptr & sub)
 {
     Controller::add(sub);
-    sub->buildWidget();
+    sub->buildWidget(uiManager());
 }
 
 void Application::on_about()

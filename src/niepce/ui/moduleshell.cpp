@@ -38,8 +38,13 @@ namespace ui {
 
 
 
-Gtk::Widget * ModuleShell::buildWidget()
+Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+    if(m_widget) {
+        return m_widget;
+    }
+    m_widget = &m_shell;
+    m_ui_manager = manager;
     add_library_module(m_gridview, _("Library"));
 
 
@@ -49,15 +54,18 @@ Gtk::Widget * ModuleShell::buildWidget()
 
     // TODO PrintModuleController
     // add_library_module(, _("Print"));
-    return &m_shell;
+    return m_widget;
 }
 
 
 void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
                                                    const std::string & label)
 {
-    add(module);
-    m_shell.append_page(*module->widget(), label);
+    Gtk::Widget * w = module->buildWidget(m_ui_manager);
+    if(w) {
+        add(module);
+        m_shell.append_page(*w, label);
+    }
 }
 
 void ModuleShell::on_ready()

@@ -52,6 +52,10 @@ int Dialog::run_modal(const Frame::Ptr & parent)
 		return result;
 }
 
+Gtk::Widget *Dialog::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+{
+    return &gtkWindow();
+}
 
 }
 

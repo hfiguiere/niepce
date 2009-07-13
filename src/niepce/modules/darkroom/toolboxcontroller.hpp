@@ -35,7 +35,7 @@ class ToolboxController
 public:
     typedef std::tr1::shared_ptr<ToolboxController> Ptr;
     ToolboxController(fwk::Dock &);
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 };
 
 }

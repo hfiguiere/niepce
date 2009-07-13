@@ -39,13 +39,9 @@ Controller::~Controller()
 //    DBG_OUT("destroy Controllers");
 }
 
-Gtk::Widget * Controller::widget()
+Gtk::Widget * Controller::widget() const
 {
     DBG_ASSERT(!m_parent.expired(), "must be attached");
-    if(m_widget == NULL) 
-    {
-        m_widget = buildWidget();
-    }
     return m_widget;
 }
 

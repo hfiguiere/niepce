@@ -26,7 +26,8 @@
 #include <list>
 #include <tr1/memory>
 
-#include "sigc++/trackable.h"
+#include <gtkmm/uimanager.h>
+#include <sigc++/trackable.h>
 
 #include "fwk/utils/databinder.hpp"
 
@@ -36,13 +37,13 @@ namespace Gtk {
 
 namespace fwk {
 
-	/** Generic controller class
-	 */
-	class Controller
-      : public std::tr1::enable_shared_from_this<Controller>
-      , public sigc::trackable
-	{
-	public:
+/** Generic controller class
+ */
+class Controller
+    : public std::tr1::enable_shared_from_this<Controller>
+    , public sigc::trackable
+{
+public:
 		typedef std::tr1::shared_ptr<Controller> Ptr;
 		typedef std::tr1::weak_ptr<Controller> WeakPtr;
 
@@ -53,7 +54,7 @@ namespace fwk {
 		void add(const Ptr & sub);
 		/** clear the parent. Usually called by the parent when unparenting */
 		void clearParent()
-			{ m_parent.reset(); }
+        { m_parent.reset(); }
 		void remove(const Ptr & sub);
 		
 		virtual bool canTerminate();
@@ -61,14 +62,14 @@ namespace fwk {
 		virtual void terminate();
 
 		/** return the widget controlled (construct it if needed) */
-		virtual Gtk::Widget * buildWidget() = 0;
-		Gtk::Widget * widget();
+		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager) = 0;
+		Gtk::Widget * widget() const;
 
 		/** called when everything is ready 
 		 * subclasses should reimplement if needed
 		 */
 		virtual void on_ready();
-	protected:
+protected:
 		/** called when the controller has been added to a parent. */
 		virtual void _added();
 
@@ -79,7 +80,7 @@ namespace fwk {
 		std::list<Ptr> m_subs; /**< sub controllers */
 
 		DataBinderPool m_databinders;
-	};
+};
 
 }
 

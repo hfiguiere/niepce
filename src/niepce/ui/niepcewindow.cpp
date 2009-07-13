@@ -69,17 +69,20 @@ NiepceWindow::~NiepceWindow()
 }
 
 Gtk::Widget * 
-NiepceWindow::buildWidget()
+NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+    if(m_widget) {
+        return m_widget;
+    }
     Gtk::Window & win(gtkWindow());
 
-    Application::Ptr pApp = Application::app();
+    m_widget = &win;
 
     m_selection_controller = SelectionController::Ptr(new SelectionController);
     add(m_selection_controller);
 
     init_actions();
-    init_ui();
+    init_ui(manager);
 
     m_notifcenter.reset(new niepce::NotificationCenter());
 
@@ -121,15 +124,15 @@ NiepceWindow::buildWidget()
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
-    m_hbox.pack1(*(m_workspacectrl->widget()), Gtk::EXPAND);
-    m_hbox.pack2(*(m_moduleshell->widget()), Gtk::EXPAND);
+    m_hbox.pack1(*(m_workspacectrl->buildWidget(manager)), Gtk::EXPAND);
+    m_hbox.pack2(*(m_moduleshell->buildWidget(manager)), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
 
     win.add(m_vbox);
 
-    Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
+    Gtk::Widget* pMenuBar = manager->get_widget("/MenuBar");
     m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
     m_vbox.pack_start(m_hbox);
 
@@ -137,7 +140,7 @@ NiepceWindow::buildWidget()
     m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_selection_controller->list_store()));
     add(m_filmstrip);
 
-    m_vbox.pack_start(*(m_filmstrip->widget()), Gtk::PACK_SHRINK);
+    m_vbox.pack_start(*(m_filmstrip->buildWidget(manager)), Gtk::PACK_SHRINK);
 
     // status bar
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
@@ -160,9 +163,8 @@ NiepceWindow::buildWidget()
 }
 
 
-void NiepceWindow::init_ui()
+void NiepceWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
-    Application::Ptr pApp = Application::app();
     Glib::ustring ui_info =
         "<ui>"
         "  <menubar name='MenuBar'>"
@@ -177,7 +179,7 @@ void NiepceWindow::init_ui()
         "      <menuitem action='Close'/>"
         "      <menuitem action='Quit'/>"
         "    </menu>"
-        "    <menu action='MenuEdit'>"
+        "    <menu name='edit-menu' action='MenuEdit'>"
         "      <menuitem action='Undo'/>"
         "      <menuitem action='Redo'/>"
         "      <separator/>"
@@ -228,7 +230,7 @@ void NiepceWindow::init_ui()
         "    <toolitem action='Quit'/>"
         "  </toolbar>"
         "</ui>";
-    pApp->uiManager()->add_ui_from_string(ui_info);
+    manager->add_ui_from_string(ui_info);
 } 
 
 

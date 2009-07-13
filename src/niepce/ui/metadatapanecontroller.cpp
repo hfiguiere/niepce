@@ -95,8 +95,11 @@ namespace ui {
     {
     }
 	
-	Gtk::Widget * MetaDataPaneController::buildWidget()
+	Gtk::Widget * MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 	{
+    if(m_widget) {
+      return m_widget;
+    }
 		m_widget = &DockItem::getWidget();
 
 		const MetaDataSectionFormat * formats = get_format();

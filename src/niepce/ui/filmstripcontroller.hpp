@@ -49,9 +49,8 @@ public:
 
 //	void on_tnail_notification(const framework::Notification::Ptr &);
 //	void on_lib_notification(const framework::Notification::Ptr &);
-	
-protected:
-	virtual Gtk::Widget * buildWidget();
+	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+
 private:
 	Gtk::IconView * m_thumbview;
 	Glib::RefPtr<ImageListStore> m_store;

@@ -36,8 +36,11 @@ FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & st
 {
 }
 
-Gtk::Widget * FilmStripController::buildWidget()
+Gtk::Widget * FilmStripController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 {
+    if(m_widget) {
+        return m_widget;
+    }
     DBG_ASSERT(m_store, "m_store NULL");
 	m_thumbview = Glib::wrap(GTK_ICON_VIEW(eog_thumb_view_new(m_store)));
 	GtkWidget *thn = eog_thumb_nav_new(GTK_WIDGET(m_thumbview->gobj()), 

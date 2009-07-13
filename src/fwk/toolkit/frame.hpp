@@ -92,7 +92,6 @@ private:
     /** frame have the widget set at construction time
      * from a ui file or directly.
      */
-    virtual Gtk::Widget *buildWidget();
 		void connectSignals();
 		void frameRectFromConfig();
 		void frameRectToConfig();

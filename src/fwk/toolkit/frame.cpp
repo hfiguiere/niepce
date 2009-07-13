@@ -204,10 +204,6 @@ void Frame::frameRectToConfig()
 		}
 }
 
-Gtk::Widget *Frame::buildWidget()
-{
-    return m_window;
-}
 /*
   Local Variables:
   mode:c++

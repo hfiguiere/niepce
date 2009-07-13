@@ -88,7 +88,7 @@ public:
     void set_label(int label);
 protected:
 	virtual void _added();
-	virtual Gtk::Widget * buildWidget()
+	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 		{ return NULL; }
 private:
     int get_selection();

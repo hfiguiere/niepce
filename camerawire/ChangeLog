@@ -1,3 +1,8 @@
+2009-07-13  Hubert Figuiere  <hub@figuiere.net>
+
+	* API change in fwk::Controller to pass a Gtk::UIManager
+	to buildWidget()
+
 2009-05-22  Hubert Figuiere  <hub@figuiere.net>
 
 	* src/cwwindow.{hpp,cpp}:

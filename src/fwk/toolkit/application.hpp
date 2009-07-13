@@ -63,7 +63,7 @@ public:
             return m_refUIManager; 
         }
 
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
     virtual void quit();
     void about();
     virtual void add(const Controller::Ptr & sub);

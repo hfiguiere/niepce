@@ -63,7 +63,7 @@ public:
   virtual void select_image(int id);
 
 protected:
-  virtual Gtk::Widget * buildWidget();
+  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 
 
 private:

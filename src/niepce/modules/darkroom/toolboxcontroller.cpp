@@ -38,8 +38,11 @@ ToolboxController::ToolboxController(fwk::Dock &dock)
 
 }
 
-Gtk::Widget * ToolboxController::buildWidget()
+Gtk::Widget * ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 {
+    if(m_widget) {
+        return m_widget;
+    }
     DrItemWidget *item = NULL;
     fwk::EditableHScale *s = NULL;
     Gtk::VBox *toolbox = DockItem::get_vbox();

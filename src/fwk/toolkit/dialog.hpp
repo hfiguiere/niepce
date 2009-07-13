@@ -57,6 +57,8 @@ public:
     int run_modal();
     int run_modal(const Frame::Ptr & parent);
 protected:
+    virtual Gtk::Widget *buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+
     bool m_is_setup;
 };
 

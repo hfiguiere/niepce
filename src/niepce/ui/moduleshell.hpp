@@ -64,8 +64,8 @@ public:
 		void on_selected(int id);
 		void on_image_activated(int id);
 
+		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 protected:
-		virtual Gtk::Widget * buildWidget();
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & label);
 		virtual void on_ready();
@@ -76,6 +76,7 @@ private:
 
 		// managed widgets...
 		ModuleShellWidget             m_shell;
+    Glib::RefPtr<Gtk::UIManager>  m_ui_manager;
 
     GridViewModule::Ptr           m_gridview;
     darkroom::DarkroomModule::Ptr m_darkroom;

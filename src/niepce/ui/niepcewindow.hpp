@@ -58,7 +58,7 @@ public:
         { return m_libClient; }
 
 protected:
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 private:
     void on_action_file_import();
 
@@ -74,7 +74,7 @@ private:
     void create_initial_labels();
     void on_lib_notification(const eng::LibNotification & n);
 
-    void init_ui();
+    void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
     void init_actions();
 
     void open_library(const std::string & libMoniker);

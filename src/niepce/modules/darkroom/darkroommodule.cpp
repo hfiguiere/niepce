@@ -44,9 +44,13 @@ void DarkroomModule::dispatch_action(const std::string & /*action_name*/)
 }
 
 
-Gtk::Widget * DarkroomModule::buildWidget()
+Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+    if(m_widget) {
+        return m_widget;
+    }
     ncr::init();
+    m_widget = &m_dr_splitview;
     m_imagecanvas = Gtk::manage(new ImageCanvas());
 // TODO set a proper canvas size
 //    m_canvas_scroll.add(*m_imagecanvas);
@@ -87,9 +91,8 @@ Gtk::Widget * DarkroomModule::buildWidget()
 
     m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController(*m_dock));
     add(m_toolbox_ctrl);
-    (void)m_toolbox_ctrl->buildWidget();
+    (void)m_toolbox_ctrl->buildWidget(manager);
 
-    m_widget = &m_dr_splitview;
     return m_widget;
 }
 

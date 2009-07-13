@@ -181,8 +181,12 @@ namespace ui {
 	}
 
 
-	Gtk::Widget * WorkspaceController::buildWidget()
+	Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
 	{
+    if(m_widget) {
+      return m_widget;
+    }
+    m_widget = &m_vbox;
 		m_treestore = Gtk::TreeStore::create(m_librarycolumns);
 		m_librarytree.set_model(m_treestore);
 
@@ -218,7 +222,7 @@ namespace ui {
 			sigc::mem_fun(this, 
 						  &WorkspaceController::on_libtree_selection));
 
-		return &m_vbox;
+		return m_widget;
 	}
 	
 	void WorkspaceController::on_ready()

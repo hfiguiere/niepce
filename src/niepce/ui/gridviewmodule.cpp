@@ -74,8 +74,12 @@ void GridViewModule::display_none()
 }
 
 
-Gtk::Widget * GridViewModule::buildWidget()
+Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
+  if(m_widget) {
+    return m_widget;
+  }
+  m_widget = &m_lib_splitview;
   m_librarylistview.set_model(m_model);
   m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
   m_librarylistview.property_row_spacing() = 0;
@@ -103,13 +107,13 @@ Gtk::Widget * GridViewModule::buildWidget()
   m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController(*m_dock));
   add(m_metapanecontroller);
   m_lib_splitview.pack2(m_dock->getWidget());
-  (void)m_metapanecontroller->buildWidget();
+  (void)m_metapanecontroller->buildWidget(manager);
 
   m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                              m_lib_splitview.property_position(),
                              fwk::Application::app()->config(),
                              "meta_pane_splitter"));
-  return &m_lib_splitview;
+  return m_widget;
 }
 
 
