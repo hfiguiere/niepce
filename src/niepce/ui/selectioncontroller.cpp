@@ -91,7 +91,9 @@ void SelectionController::selected(IImageSelectable * selectable)
 
 libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
 {
-    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+    ModuleShell::Ptr shell = std::tr1::dynamic_pointer_cast<ModuleShell>(m_parent.lock());
+    DBG_ASSERT(shell, "parent not a ModuleShell");
+    return	shell->getLibraryClient();
 }
 
 inline int SelectionController::get_selection()
