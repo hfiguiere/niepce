@@ -1,18 +1,19 @@
 src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/application.cpp
+src/fwk/toolkit/frame.cpp
 src/niepce/ui/dialogs/editlabels.cpp
 src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
 src/niepce/ui/dialogs/importdialog.ui
 src/niepce/ui/dialogs/preferences.ui
 src/niepce/ui/dialogs/preferencesdialog.cpp
-src/niepce/ui/librarymainviewcontroller.cpp
+src/niepce/ui/moduleshell.cpp
 src/niepce/ui/metadatapanecontroller.cpp
 src/niepce/ui/niepceapplication.cpp
 src/niepce/ui/niepcewindow.cpp
 src/niepce/ui/selectioncontroller.cpp
 src/niepce/ui/workspacecontroller.cpp
-src/niepce/ui/thumb-view/eog-thumb-view.cpp
+src/niepce/ui/thumbstripview.cpp
 src/niepce/stock.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
 src/ext/libgdl/gdl-dock-bar.c
@@ -26,3 +27,4 @@ src/ext/libgdl/gdl-dock-placeholder.c
 src/ext/libgdl/gdl-dock-tablabel.c
 src/ext/libgdl/gdl-dock.c
 src/ext/libgdl/gdl-switcher.c
+camerawire/src/cwwindow.cpp
