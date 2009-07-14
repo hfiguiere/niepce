@@ -1,5 +1,7 @@
 2009-07-13  Hubert Figuiere  <hub@figuiere.net>
 
+	* Fix a crash when switching to the Darkroom without any image.
+
 	* Add UiController. Properly merge and unmerge UI and split
 	actions from NiepceWindow to the ModuleShell.
 

@@ -86,8 +86,14 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
 
 bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
 {
-    Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
+    // no image, just pass.
+    if(!m_image) {
+        DBG_OUT("no image");
+        return false;
+    }
 
+
+    Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
     context->rectangle(ev->area.x, ev->area.y, ev->area.width, ev->area.height);
     context->clip();
 
@@ -107,6 +113,10 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
         // query the image.
         Cairo::RefPtr<Cairo::Surface> img_s 
             = m_image->cairo_surface_for_display();
+        if(!img_s) {
+            DBG_OUT("no image loaded");
+            return false;
+        }
 
         int canvas_h, canvas_w;
         canvas_h = get_height();

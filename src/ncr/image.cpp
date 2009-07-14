@@ -215,6 +215,10 @@ void Image::reload(const std::string & p, bool is_raw,
 void Image::set_output_scale(double scale)
 {
     DBG_OUT("scale %f", scale);
+    if(!priv->m_scale) {
+        DBG_OUT("nothing loaded");
+        return;
+    }
     priv->m_scale->set("x", scale);
     priv->m_scale->set("y", scale);    
 
@@ -225,6 +229,10 @@ void Image::set_output_scale(double scale)
 
 void Image::set_tilt(double angle)
 {
+    if(!priv->m_rotate_n) {
+        DBG_OUT("nothing loaded");
+        return;
+    }
     priv->m_tilt = angle;
     priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
 
@@ -267,6 +275,10 @@ void Image::rotate_by(int degree)
 
 Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
 {
+    if(!priv->m_output) {
+        DBG_OUT("nothing loaded");
+        return Cairo::RefPtr<Cairo::Surface>();
+    }
     priv->m_output->process();
     Gegl::Rectangle roi = priv->m_output->get_bounding_box();
     int w, h;
