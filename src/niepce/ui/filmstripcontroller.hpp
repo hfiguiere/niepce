@@ -1,7 +1,7 @@
 /*
- * niepce - ui/filmstripcontroller.h
+ * niepce - niepce/ui/filmstripcontroller.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,6 @@ public:
 	virtual int get_selected();
 	virtual void select_image(int id);
 
-//	void on_tnail_notification(const framework::Notification::Ptr &);
-//	void on_lib_notification(const framework::Notification::Ptr &);
 	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 
 private:

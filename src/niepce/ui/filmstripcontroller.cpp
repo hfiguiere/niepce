@@ -1,7 +1,7 @@
 /*
- * niepce - ui/filmstripcontroller.cpp
+ * niepce - niepce/ui/filmstripcontroller.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2009 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include "fwk/base/debug.hpp"
 
 #include "eog-thumb-nav.hpp"
-#include "eog-thumb-view.hpp"
+#include "thumbstripview.hpp"
 #include "filmstripcontroller.hpp"
 
 namespace ui {
@@ -42,93 +42,47 @@ Gtk::Widget * FilmStripController::buildWidget(const Glib::RefPtr<Gtk::UIManager
         return m_widget;
     }
     DBG_ASSERT(m_store, "m_store NULL");
-	m_thumbview = Glib::wrap(GTK_ICON_VIEW(eog_thumb_view_new(m_store)));
-	GtkWidget *thn = eog_thumb_nav_new(GTK_WIDGET(m_thumbview->gobj()), 
-									   EOG_THUMB_NAV_MODE_ONE_ROW, true);
-	gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(m_thumbview->gobj()),
-									 GTK_SELECTION_SINGLE);
-	m_widget = Glib::wrap(thn);
-	return m_widget;
+    m_thumbview = manage(new ThumbStripView(m_store));
+    GtkWidget *thn = eog_thumb_nav_new(m_thumbview, 
+                                       EOG_THUMB_NAV_MODE_ONE_ROW, true);
+    m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);
+    m_widget = Glib::wrap(thn);
+    m_widget->set_size_request(-1, 145);
+    return m_widget;
 }
 
 Gtk::IconView * FilmStripController::image_list() 
 { 
-	return m_thumbview; 
+    return m_thumbview;
 }
 
 int FilmStripController::get_selected()
 {
-	int id = 0;
-	Gtk::IconView::ArrayHandle_TreePaths paths = m_thumbview->get_selected_items();
-	if(!paths.empty()) {
-		Gtk::TreePath path(*(paths.begin()));
-		DBG_OUT("found path %s", path.to_string().c_str());
-		Gtk::TreeRow row = *(m_store->get_iter(path));
-		if(row) {
-			DBG_OUT("found row");
+    int id = 0;
+    DBG_OUT("get selected in filmstrip");
+    Gtk::IconView::ArrayHandle_TreePaths paths = m_thumbview->get_selected_items();
+    if(!paths.empty()) {
+        Gtk::TreePath path(*(paths.begin()));
+        DBG_OUT("found path %s", path.to_string().c_str());
+        Gtk::TreeRow row = *(m_store->get_iter(path));
+        if(row) {
+            DBG_OUT("found row");
             eng::LibFile::Ptr libfile = row[m_store->columns().m_libfile];
             if(libfile) {
                 id = libfile->id();
             }
-		}
-	}
-	return id;
+        }
+    }
+    return id;
 }
 
 void FilmStripController::select_image(int id)
 {
-	DBG_OUT("filmstrip select %d", id);
+    DBG_OUT("filmstrip select %d", id);
     Gtk::TreePath path = m_store->get_path_from_id(id);
     m_thumbview->select_path(path);
 }
 
-
-#if 0
-void FilmStripController::on_lib_notification(const framework::Notification::Ptr &n)
-{
-	DBG_ASSERT(n->type() == niepce::NOTIFICATION_LIB, "wrong notification type");
-	if(n->type() == niepce::NOTIFICATION_LIB) {
-		eng::LibNotification ln = boost::any_cast<eng::LibNotification>(n->data());
-		switch(ln.type) {
-		case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-		case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
-		{
-			eng::LibFile::ListPtr l 
-				= boost::any_cast<eng::LibFile::ListPtr>(ln.param);
-			DBG_OUT("received folder content file # %d", l->size());
-			
-			Glib::RefPtr<EogListStore> store(new EogListStore( *l ));
-			eog_thumb_view_set_model((EogThumbView*)(m_thumbview->gobj()), 
-									 store);
-			break;
-		}
-		default:
-			break;
-		}
-	}
-}
-
-
-void FilmStripController::on_tnail_notification(const framework::Notification::Ptr &n)
-{
-	DBG_ASSERT(n->type() == niepce::NOTIFICATION_THUMBNAIL, "wrong notification type");
-	if(n->type() == niepce::NOTIFICATION_THUMBNAIL)	{
-		Glib::RefPtr<EogListStore> store 
-			= eog_thumb_view_get_model((EogThumbView*)(m_thumbview->gobj()));
-		library::ThumbnailNotification tn 
-			= boost::any_cast<library::ThumbnailNotification>(n->data());
-		Gtk::TreeRow row;
-		bool found = store->find_by_id(tn.id, row);
-		if(found) {
-			// FIXME parametrize
-			row[store->m_columns.m_thumbnail] = framework::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
-		}
-		else {
-			DBG_OUT("row %d not found", tn.id);
-		}
-	}
-}
-#endif
 
 }
 

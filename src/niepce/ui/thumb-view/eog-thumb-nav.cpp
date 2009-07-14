@@ -1,8 +1,9 @@
 /* Eye Of Gnome - Thumbnail Navigator
  *
  * Copyright (C) 2006 The Free Software Foundation
+ * Copyright (C) 2009 Hubert Figuiere
  *
- * Author: Lucas Rocha <lucasr@gnome.org>
+ * Original author: Lucas Rocha <lucasr@gnome.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +24,15 @@
 #include "config.h"
 #endif
 
-#include "eog-thumb-nav.hpp"
-#include "eog-thumb-view.hpp"
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <string.h>
+
+#include "eog-thumb-nav.hpp"
+#include "thumbstripview.hpp"
 
 #define EOG_THUMB_NAV_GET_PRIVATE(object) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((object), EOG_TYPE_THUMB_NAV, EogThumbNavPrivate))
@@ -57,7 +59,7 @@ struct _EogThumbNavPrivate {
 	GtkWidget        *button_right;
 	GtkWidget        *sw;
 	GtkWidget        *scale;
-	GtkWidget        *thumbview;
+  ui::ThumbStripView   *thumbview;
 };
 
 static void
@@ -194,7 +196,7 @@ eog_thumb_nav_get_property (GObject    *object,
 		break;
 
 	case PROP_THUMB_VIEW:
-		g_value_set_object (value, nav->priv->thumbview);
+		g_value_set_pointer (value, nav->priv->thumbview);
 		break;
 
 	case PROP_MODE:
@@ -220,8 +222,7 @@ eog_thumb_nav_set_property (GObject      *object,
 		break;
 
 	case PROP_THUMB_VIEW:
-		nav->priv->thumbview = 
-			GTK_WIDGET (g_value_get_object (value));
+		nav->priv->thumbview = (ui::ThumbStripView *)(g_value_get_pointer (value));
 		break;
 
 	case PROP_MODE:
@@ -245,7 +246,8 @@ eog_thumb_nav_constructor (GType type,
 	priv = EOG_THUMB_NAV (object)->priv;
 
 	if (priv->thumbview != NULL) {
-		gtk_container_add (GTK_CONTAINER (priv->sw), priv->thumbview);
+		gtk_container_add (GTK_CONTAINER (priv->sw), 
+                       (GtkWidget*)priv->thumbview->gobj());
 		gtk_widget_show_all (priv->sw);
 	}
 
@@ -271,10 +273,9 @@ eog_thumb_nav_class_init (EogThumbNavClass *klass)
 
 	g_object_class_install_property (g_object_class,
 	                                 PROP_THUMB_VIEW,
-	                                 g_param_spec_object ("thumbview",
+	                                 g_param_spec_pointer ("thumbview",
 	                                                       "Thumbnail View",
 	                                                       "The internal thumbnail viewer widget",
-	                                                       EOG_TYPE_THUMB_VIEW,
 	                                                       (GParamFlags)(G_PARAM_CONSTRUCT_ONLY |
 								G_PARAM_READABLE | 
 								G_PARAM_WRITABLE)));
@@ -364,7 +365,7 @@ eog_thumb_nav_init (EogThumbNav *nav)
 }
 
 GtkWidget *
-eog_thumb_nav_new (GtkWidget       *thumbview, 
+eog_thumb_nav_new (Gtk::Widget       *thumbview, 
 		   EogThumbNavMode  mode, 
 		   gboolean         show_buttons)
 {
@@ -430,12 +431,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 	switch (mode)
 	{
 	case EOG_THUMB_NAV_MODE_ONE_ROW:
-		gtk_icon_view_set_columns (GTK_ICON_VIEW (priv->thumbview), 
-					   G_MAXINT);
+		priv->thumbview->set_columns (G_MAXINT);
 
-		gtk_widget_set_size_request (priv->thumbview, -1, 108);
-		eog_thumb_view_set_item_height (EOG_THUMB_VIEW (priv->thumbview), 
-						100);
+		priv->thumbview->set_size_request (-1, -1);
+		priv->thumbview->set_item_height (100);
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_ALWAYS,
@@ -446,11 +445,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_ONE_COLUMN:
-		gtk_icon_view_set_columns (GTK_ICON_VIEW (priv->thumbview), 1);
+		priv->thumbview->set_columns (1);
 
-		gtk_widget_set_size_request (priv->thumbview, 113, -1);
-		eog_thumb_view_set_item_height (EOG_THUMB_VIEW (priv->thumbview), 
-						-1);
+		priv->thumbview->set_size_request (-1, -1);
+		priv->thumbview->set_item_height (-1);
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,
@@ -462,11 +460,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_ROWS:
-		gtk_icon_view_set_columns (GTK_ICON_VIEW (priv->thumbview), -1);
+		priv->thumbview->set_columns (-1);
 
-		gtk_widget_set_size_request (priv->thumbview, -1, 220);
-		eog_thumb_view_set_item_height (EOG_THUMB_VIEW (priv->thumbview), 
-						-1);
+		priv->thumbview->set_size_request (-1, -1);
+		priv->thumbview->set_item_height (-1);
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,
@@ -478,11 +475,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_COLUMNS:
-		gtk_icon_view_set_columns (GTK_ICON_VIEW (priv->thumbview), -1);
+		priv->thumbview->set_columns (-1);
 
-		gtk_widget_set_size_request (priv->thumbview, 230, -1);
-		eog_thumb_view_set_item_height (EOG_THUMB_VIEW (priv->thumbview), 
-						-1);
+		priv->thumbview->set_size_request (-1, -1);
+		priv->thumbview->set_item_height (-1);
 
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->sw),
 						GTK_POLICY_NEVER,

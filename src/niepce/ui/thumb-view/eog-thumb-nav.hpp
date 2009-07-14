@@ -22,7 +22,7 @@
 #ifndef __EOG_THUMB_NAV_H__
 #define __EOG_THUMB_NAV_H__
 
-#include "eog-thumb-view.hpp"
+#include "thumbstripview.hpp"
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -60,7 +60,7 @@ struct _EogThumbNavClass {
 
 GType	         eog_thumb_nav_get_type          (void) G_GNUC_CONST;
 
-GtkWidget       *eog_thumb_nav_new               (GtkWidget         *thumbview,
+GtkWidget       *eog_thumb_nav_new               (Gtk::Widget         *thumbview,
 						  EogThumbNavMode    mode, 
 	             			          gboolean           show_buttons);
 

@@ -43,6 +43,6 @@ libniepceui_a_SOURCES = \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.hpp \
-	thumb-view/eog-thumb-view.cpp thumb-view/eog-thumb-view.hpp \
+	thumbstripview.cpp thumbstripview.hpp \
 	$(PUBLICHEADERS) \
 	$(NULL)
