@@ -135,8 +135,8 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
 
     Glib::ustring ui_info =
         "<ui>"
-        "  <menubar>"
-        "    <placeholder action='MenuImage'>"
+        "  <menubar name='MenuBar'>"
+        "    <menu action='MenuImage'>"
         "      <menuitem action='PrevImage'/>"
         "      <menuitem action='NextImage'/>"
         "      <separator/>"
@@ -160,11 +160,11 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
         "      </menu>"
         "      <separator/>"
         "      <menuitem action='DeleteImage'/>"
-        "    </placeholder>"
+        "    </menu>"
         "  </menubar>"
         "</ui>";
     m_ui_merge_id = manager->add_ui_from_string(ui_info);
-
+    DBG_ASSERT(m_ui_merge_id, "merge failed");
 
     m_gridview = GridViewModule::Ptr(
         new GridViewModule(m_getclient, 
