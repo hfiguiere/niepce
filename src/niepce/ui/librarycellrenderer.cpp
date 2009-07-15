@@ -132,8 +132,11 @@ void drawRating(const Cairo::RefPtr<Cairo::Context> & cr,
                 const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
                 const GdkRectangle & r)
 {
-    if(rating == -1 || !star || !unstar) {
+    if(!star || !unstar) {
         return;
+    }
+    if(rating == -1) {
+        rating = 0;
     }
     int w = star->get_width();
     int h = star->get_height();
