@@ -24,6 +24,7 @@
 #include <string>
 
 #include <glibmm/i18n.h>
+#include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/scrolledwindow.h>
 
@@ -31,6 +32,7 @@
 #include "fwk/utils/boost.hpp"
 #include "engine/db/libfile.hpp"
 #include "thumbstripview.hpp"
+#include "librarycellrenderer.hpp"
 
 struct EogThumbView;
 
@@ -51,6 +53,26 @@ static GtkTargetEntry target_table[] = {
 };
 #endif
 
+class ThumbStripCell
+    : public LibraryCellRenderer
+{
+public:
+    ThumbStripCell();
+};
+
+
+ThumbStripCell::ThumbStripCell()
+    : Glib::ObjectBase(typeid(ThumbStripCell))
+{
+    set_pad(0);
+    set_size(100);
+    set_drawborder(false);
+    set_drawemblem(false);
+    set_drawrating(false);
+}
+
+
+
 ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
     : m_start_thumb(0)
     , m_end_thumb(0)
@@ -58,7 +80,7 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
 {
     IconView::set_model(store);
 
-    m_renderer = new Gtk::CellRendererPixbuf();
+    m_renderer = new ThumbStripCell();
 
     GtkCellLayout *cl = GTK_CELL_LAYOUT(gobj());
     DBG_ASSERT(cl, "No cell layout");
@@ -72,11 +94,14 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
     gtk_cell_layout_set_attributes (cl, GTK_CELL_RENDERER(m_renderer->gobj()),
                                     "pixbuf",
                                     ui::ImageListStore::Columns::STRIP_THUMB_INDEX,
+                                    "libfile",
+                                    ui::ImageListStore::Columns::FILE_INDEX,
                                     NULL);
     set_selection_mode(Gtk::SELECTION_MULTIPLE);
     set_column_spacing(THUMB_STRIP_VIEW_SPACING);
 
     set_row_spacing (THUMB_STRIP_VIEW_SPACING);
+    set_margin (0);
 
     signal_parent_changed().connect(
         sigc::mem_fun(*this, &ThumbStripView::on_parent_set));

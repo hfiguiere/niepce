@@ -29,12 +29,14 @@
 
 namespace ui {
 
-#define PAD 16
-
 LibraryCellRenderer::LibraryCellRenderer()
 	: Glib::ObjectBase(typeid(LibraryCellRenderer)),
 	  Gtk::CellRendererPixbuf(),
-      m_size(160),
+    m_size(160),
+    m_pad(16),
+    m_drawborder(true),
+    m_drawemblem(true),
+    m_drawrating(true),
 	  m_libfileproperty(*this, "libfile")
 {
 	try {
@@ -71,15 +73,14 @@ LibraryCellRenderer::LibraryCellRenderer()
         
 }
 
-namespace {
 
-void drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
-                   Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-                   const GdkRectangle & r)
+void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
+                                         Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
+                                         const GdkRectangle & r)
 {
     double x, y;
-    x = r.x + PAD;
-    y = r.y + PAD;
+    x = r.x + pad();
+    y = r.y + pad();
     int w = pixbuf->get_width();
     int h = pixbuf->get_height();
     int min = std::min(w,h);
@@ -105,6 +106,8 @@ void drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr,
     Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
     cr->paint();
 }
+
+namespace {
 
 void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
                       const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
@@ -167,7 +170,7 @@ LibraryCellRenderer::get_size_vfunc (Gtk::Widget& /*widget*/,
 		// TODO this should just be a property
 		//
 		Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-		int maxdim = m_size + PAD * 2;
+		int maxdim = m_size + pad() * 2;
 		
 		if(width) 
 			*width = maxdim;
@@ -207,13 +210,21 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
 	cr->rectangle(r.x, r.y, r.width, r.height);
 	cr->fill();
 
-	color = widget.get_style()->get_dark(Gtk::STATE_SELECTED);
-	Gdk::Cairo::set_source_color(cr, color);
-	cr->set_line_width(1.0);
-	cr->rectangle(r.x, r.y, r.width, r.height);
-	cr->stroke();
-        
+  if(m_drawborder) {
+      color = widget.get_style()->get_dark(Gtk::STATE_SELECTED);
+      Gdk::Cairo::set_source_color(cr, color);
+      cr->set_line_width(1.0);
+      cr->rectangle(r.x, r.y, r.width, r.height);
+      cr->stroke();
+  }
 
+	Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
+	_drawThumbnail(cr, pixbuf, r);
+  if(m_drawrating) {
+      drawRating(cr, file->rating(), m_star, m_unstar, r);
+  }
+
+  if(m_drawemblem) {
     Cairo::RefPtr<Cairo::ImageSurface> emblem;
     
 //    DBG_OUT("the filetype: %i", file->fileType());
@@ -236,10 +247,8 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
         break;
     }
 
-	Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-	drawThumbnail(cr, pixbuf, r);
-	drawRating(cr, file->rating(), m_star, m_unstar, r);
-	drawFormatEmblem(cr, emblem, r);
+    drawFormatEmblem(cr, emblem, r);
+  }
 }
 
 

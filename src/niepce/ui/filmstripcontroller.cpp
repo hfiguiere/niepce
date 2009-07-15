@@ -47,7 +47,7 @@ Gtk::Widget * FilmStripController::buildWidget(const Glib::RefPtr<Gtk::UIManager
                                        EOG_THUMB_NAV_MODE_ONE_ROW, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);
     m_widget = Glib::wrap(thn);
-    m_widget->set_size_request(-1, 145);
+    m_widget->set_size_request(-1, 134);
     return m_widget;
 }
 

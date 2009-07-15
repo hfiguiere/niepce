@@ -85,6 +85,7 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
   m_librarylistview.property_row_spacing() = 0;
   m_librarylistview.property_column_spacing() = 0;
   m_librarylistview.property_spacing() = 0;
+  m_librarylistview.property_margin() = 0;
 
   // the main cell
   LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
@@ -158,3 +159,12 @@ void GridViewModule::select_image(int id)
 
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
