@@ -41,14 +41,14 @@ namespace ui {
 class IImageSelectable 
 {
 public:
-	virtual ~IImageSelectable() {}
-	virtual Gtk::IconView * image_list() = 0;
+    virtual ~IImageSelectable() {}
+    virtual Gtk::IconView * image_list() = 0;
     /** Return the id of the selection. <= 0 is none. */
-	virtual int get_selected() = 0;
+    virtual int get_selected() = 0;
     /** select the image a specific id 
      *  might emit the signals.
      */
-	virtual void select_image(int id) = 0;
+    virtual void select_image(int id) = 0;
 };
 
 

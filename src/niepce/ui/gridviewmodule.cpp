@@ -154,7 +154,12 @@ void GridViewModule::select_image(int id)
 {
     DBG_OUT("library select %d", id);
     Gtk::TreePath path = m_model->get_path_from_id(id);
-    m_librarylistview.select_path(path);
+    if(path) {
+      m_librarylistview.select_path(path);
+    }
+    else {
+      m_librarylistview.unselect_all();
+    }
 }
 
 

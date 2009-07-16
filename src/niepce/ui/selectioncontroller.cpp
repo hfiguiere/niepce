@@ -20,6 +20,7 @@
 #include <boost/bind.hpp>
 
 #include <gtkmm/iconview.h>
+#include <gtkmm/treeiter.h>
 #include <glibmm/i18n.h>
 
 #include "fwk/base/autoflag.hpp"
@@ -60,13 +61,19 @@ void SelectionController::add_selectable(IImageSelectable * selectable)
 }
 
 
-void SelectionController::activated(const Gtk::TreeModel::Path & /*path*/,
-									IImageSelectable * selectable)
+void SelectionController::activated(const Gtk::TreeModel::Path & path,
+                                    IImageSelectable * /*selectable*/)
 {
     fwk::AutoFlag f(m_in_handler);
-    int selection = selectable->get_selected();
-    DBG_OUT("item activated %d", selection);
-    signal_activated(selection);
+    Gtk::TreeIter iter = m_imageliststore->get_iter(path);
+    if(iter) {
+        eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+        if(file) {
+            int selection = file->id();
+            DBG_OUT("item activated %d", selection);
+            signal_activated(selection);
+        }
+    }
 }
 
 void SelectionController::selected(IImageSelectable * selectable)

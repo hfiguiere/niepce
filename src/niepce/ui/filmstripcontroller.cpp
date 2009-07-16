@@ -80,7 +80,12 @@ void FilmStripController::select_image(int id)
 {
     DBG_OUT("filmstrip select %d", id);
     Gtk::TreePath path = m_store->get_path_from_id(id);
-    m_thumbview->select_path(path);
+    if(path) {
+        m_thumbview->select_path(path);
+    }
+    else {
+        m_thumbview->unselect_all();
+    }
 }
 
 
