@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Niepce Digital 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-21 00:03+0400\n"
-"PO-Revision-Date: 2009-04-21 00:05+0300\n"
+"POT-Creation-Date: 2009-07-20 14:38+0400\n"
+"PO-Revision-Date: 2009-07-20 14:39+0400\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: GNOME Russian <gnome-cyr@lists.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -11,19 +11,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/fwk/toolkit/application.cpp:44
+#: ../src/fwk/toolkit/application.cpp:45
 msgid "System"
 msgstr "Системная"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:55
+#: ../src/fwk/toolkit/frame.cpp:124
+msgid "Undo "
+msgstr "Отменить"
+
+#: ../src/fwk/toolkit/frame.cpp:133
+msgid "Redo "
+msgstr "Вернуть"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
 msgstr "Редактирование меток"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:112
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
-msgstr ""
+msgstr "Изменить метки"
 
 #: ../src/niepce/ui/dialogs/importdialog.cpp:58
 #: ../src/niepce/ui/dialogs/importdialog.cpp:84
@@ -34,15 +43,67 @@ msgstr "Импортировать"
 msgid "Import picture folder"
 msgstr "Импорт каталога со снимками"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
 msgid "Preferences"
 msgstr "Параметры"
 
-#: ../src/niepce/ui/librarymainviewcontroller.cpp:110
+#: ../src/niepce/ui/moduleshell.cpp:58
+msgid "_Image"
+msgstr "_Снимок"
+
+#: ../src/niepce/ui/moduleshell.cpp:78
+msgid "Set _Label"
+msgstr "По_метить"
+
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Label _6"
+msgstr "Метка _6"
+
+#: ../src/niepce/ui/moduleshell.cpp:84
+msgid "Label _7"
+msgstr "Метка _7"
+
+#: ../src/niepce/ui/moduleshell.cpp:89
+msgid "Label _8"
+msgstr "Метка _8"
+
+#: ../src/niepce/ui/moduleshell.cpp:94
+msgid "Label _9"
+msgstr "Метка _9"
+
+#: ../src/niepce/ui/moduleshell.cpp:100
+msgid "Set _Rating"
+msgstr "Дать _оценку"
+
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "_No Rating"
+msgstr "_Без оценки"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "_1 Star"
+msgstr "_1 звезда"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "_2 Stars"
+msgstr "_2 звезды"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "_3 Stars"
+msgstr "_3 звезды"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "_4 Stars"
+msgstr "_4 звезды"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "_5 Stars"
+msgstr "_5 звезд"
+
+#: ../src/niepce/ui/moduleshell.cpp:172
 msgid "Library"
 msgstr "Библиотека"
 
-#: ../src/niepce/ui/librarymainviewcontroller.cpp:116
+#: ../src/niepce/ui/moduleshell.cpp:183
 msgid "Darkroom"
 msgstr "Проявочная"
 
@@ -145,173 +206,102 @@ msgstr ""
 "\n"
 "Параметры сборки: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:140
+#: ../src/niepce/ui/niepcewindow.cpp:148
 msgid "Ready"
 msgstr "Готово"
 
-#: ../src/niepce/ui/niepcewindow.cpp:240
+#: ../src/niepce/ui/niepcewindow.cpp:214
 msgid "_Library"
 msgstr "_Библиотека"
 
-#: ../src/niepce/ui/niepcewindow.cpp:246
+#: ../src/niepce/ui/niepcewindow.cpp:220
 msgid "New _Folder..."
 msgstr "Создать _папку..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:247
+#: ../src/niepce/ui/niepcewindow.cpp:221
 msgid "New _Project..."
 msgstr "Создать про_ект..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:249
+#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:92
 msgid "_Import..."
 msgstr "_Импортировать..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:259
+#: ../src/niepce/ui/niepcewindow.cpp:233 ../camerawire/src/cwwindow.cpp:102
 msgid "_Edit"
 msgstr "_Правка"
 
-#: ../src/niepce/ui/niepcewindow.cpp:286
-msgid "_Image"
-msgstr "_Снимок"
-
-#: ../src/niepce/ui/niepcewindow.cpp:306
-msgid "Set _Label"
-msgstr "По_метить"
-
-#: ../src/niepce/ui/niepcewindow.cpp:307
-msgid "Label _6"
-msgstr "Метка _6"
-
-#: ../src/niepce/ui/niepcewindow.cpp:312
-msgid "Label _7"
-msgstr "Метка _7"
-
-#: ../src/niepce/ui/niepcewindow.cpp:317
-msgid "Label _8"
-msgstr "Метка _8"
-
-#: ../src/niepce/ui/niepcewindow.cpp:322
-msgid "Label _9"
-msgstr "Метка _9"
-
-#: ../src/niepce/ui/niepcewindow.cpp:327
-msgid "_Edit Labels..."
-msgstr "_Изменить метки..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:330
-msgid "Set _Rating"
-msgstr "Дать _оценку"
-
-#: ../src/niepce/ui/niepcewindow.cpp:331
-msgid "_No Rating"
-msgstr "_Без оценки"
-
-#: ../src/niepce/ui/niepcewindow.cpp:335
-msgid "_1 Star"
-msgstr "_1 звезда"
-
-#: ../src/niepce/ui/niepcewindow.cpp:339
-msgid "_2 Stars"
-msgstr "_2 звезды"
-
-#: ../src/niepce/ui/niepcewindow.cpp:343
-msgid "_3 Stars"
-msgstr "_3 звезды"
-
-#: ../src/niepce/ui/niepcewindow.cpp:347
-msgid "_4 Stars"
-msgstr "_4 звезды"
-
-#: ../src/niepce/ui/niepcewindow.cpp:351
-msgid "_5 Stars"
-msgstr "_5 звезд"
-
-#: ../src/niepce/ui/niepcewindow.cpp:358
+#: ../src/niepce/ui/niepcewindow.cpp:252 ../camerawire/src/cwwindow.cpp:118
 msgid "_Tools"
 msgstr "С_ервис"
 
-#: ../src/niepce/ui/niepcewindow.cpp:360
+#: ../src/niepce/ui/niepcewindow.cpp:253
+msgid "_Edit Labels..."
+msgstr "_Изменить метки..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:256 ../camerawire/src/cwwindow.cpp:124
 msgid "_Hide tools"
 msgstr "_Скрыть инструменты"
 
-#: ../src/niepce/ui/niepcewindow.cpp:364
+#: ../src/niepce/ui/niepcewindow.cpp:260 ../camerawire/src/cwwindow.cpp:128
 msgid "_Help"
 msgstr "Спр_авка"
 
-#: ../src/niepce/ui/niepcewindow.cpp:381
-msgid "Undo "
-msgstr "Отменить"
-
-#: ../src/niepce/ui/niepcewindow.cpp:390
-msgid "Redo "
-msgstr "Вернуть"
-
-#: ../src/niepce/ui/niepcewindow.cpp:452
+#: ../src/niepce/ui/niepcewindow.cpp:331
 msgid "Create library"
 msgstr "Создать библиотеку"
 
-#: ../src/niepce/ui/niepcewindow.cpp:456
+#: ../src/niepce/ui/niepcewindow.cpp:335
 msgid "Create"
 msgstr "Создать"
 
-#: ../src/niepce/ui/niepcewindow.cpp:498
+#: ../src/niepce/ui/niepcewindow.cpp:377
 msgid "Label 1"
 msgstr "Метка 1"
 
-#: ../src/niepce/ui/niepcewindow.cpp:499
+#: ../src/niepce/ui/niepcewindow.cpp:378
 msgid "Label 2"
 msgstr "Метка 2"
 
-#: ../src/niepce/ui/niepcewindow.cpp:500
+#: ../src/niepce/ui/niepcewindow.cpp:379
 msgid "Label 3"
 msgstr "Метка 3"
 
-#: ../src/niepce/ui/niepcewindow.cpp:501
+#: ../src/niepce/ui/niepcewindow.cpp:380
 msgid "Label 4"
 msgstr "Метка 4"
 
-#: ../src/niepce/ui/niepcewindow.cpp:502
+#: ../src/niepce/ui/niepcewindow.cpp:381
 msgid "Label 5"
 msgstr "Метка 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:582
+#: ../src/niepce/ui/niepcewindow.cpp:456
 msgid "Niepce Digital - "
 msgstr "Niepce Digital — "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:183
+#: ../src/niepce/ui/selectioncontroller.cpp:194
 msgid "Set Label"
 msgstr "Установить метку"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:204
+#: ../src/niepce/ui/selectioncontroller.cpp:215
 msgid "Set Rating"
 msgstr "Оценить"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:197
+#: ../src/niepce/ui/workspacecontroller.cpp:195
 msgid "Pictures"
 msgstr "Снимки"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:201
+#: ../src/niepce/ui/workspacecontroller.cpp:199
 msgid "Projects"
 msgstr "Проекты"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:205
+#: ../src/niepce/ui/workspacecontroller.cpp:203
 msgid "Keywords"
 msgstr "Ключевые слова"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:218
+#: ../src/niepce/ui/workspacecontroller.cpp:216
 msgid "_Workspace"
 msgstr "_Рабочий стол"
-
-#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:425
-msgid "pixel"
-msgid_plural "pixels"
-msgstr[0] "пиксел"
-msgstr[1] "пиксела"
-msgstr[2] "пикселов"
-
-#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:436
-msgid "Taken on"
-msgstr "Снято"
 
 #: ../src/niepce/stock.cpp:46
 msgid "Rotate L_eft"
@@ -325,56 +315,56 @@ msgstr "Повернуть в_право"
 msgid "Develop"
 msgstr "Проявка"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:48
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
 msgid "Crop"
 msgstr "Кадрирование"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
 msgid "Tilt"
 msgstr "Выравнивание"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:53
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
 msgid "White balance"
 msgstr "Баланс белого"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
 msgid "Color temperature"
 msgstr "Температура цвета"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:58
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
 msgid "Tone and colour"
 msgstr "Тон и цвет"
 
 #. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
 msgid "Exposure"
 msgstr "Экспозиция"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:64
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
 msgid "Recovery"
 msgstr "Восстановление"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:66
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
 msgid "Fill Light"
 msgstr "Заполняющий свет"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:68
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
 msgid "Blacks"
 msgstr "Темные тона"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:70
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
 msgid "Brightness"
 msgstr "Яркость"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:72
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
 msgid "Contrast"
 msgstr "Контраст"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:74
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
 msgid "Saturation"
 msgstr "Насыщенность"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
 msgid "Vibrance"
 msgstr "Живость"
 
@@ -394,28 +384,28 @@ msgstr "Стиль прикрепляющейся панели"
 msgid "Dockbar style to show items on it"
 msgstr ""
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
 msgid "Iconify"
 msgstr "Свернуть"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
 msgid "Iconify this dock"
 msgstr "Свернуть эту панель"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:397
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
 msgid "Close"
 msgstr "Закрыть эту панель"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:397
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
 msgid "Close this dock"
 msgstr "Закрыть эту панель"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:706
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:704
 #: ../src/ext/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
 msgstr ""
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:707
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:705
 msgid "Dockitem which 'owns' this grip"
 msgstr ""
 
@@ -440,7 +430,9 @@ msgid "Item behavior"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:312
-msgid "General behavior for the dock item (i.e. whether it can float, if it's locked, etc.)"
+msgid ""
+"General behavior for the dock item (i.e. whether it can float, if it's "
+"locked, etc.)"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:320
@@ -449,7 +441,8 @@ msgid "Locked"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:321
-msgid "If set, the dock item cannot be dragged around and it doesn't show a grip"
+msgid ""
+"If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:329
@@ -470,12 +463,16 @@ msgstr "Предпочитаемая высота прикрепляющейся
 
 #: ../src/ext/libgdl/gdl-dock-item.c:616
 #, c-format
-msgid "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or some other compound dock object."
+msgid ""
+"You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
+"some other compound dock object."
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:623
 #, c-format
-msgid "Attempting to add a widget with type %s to a %s, but it can only contain one widget at a time; it already contains a widget of type %s"
+msgid ""
+"Attempting to add a widget with type %s to a %s, but it can only contain one "
+"widget at a time; it already contains a widget of type %s"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-item.c:1345
@@ -504,8 +501,7 @@ msgstr "Запереть"
 msgid "Attempt to bind an unbound item %p"
 msgstr ""
 
-#: ../src/ext/libgdl/gdl-dock-master.c:144
-#: ../src/ext/libgdl/gdl-dock.c:183
+#: ../src/ext/libgdl/gdl-dock-master.c:144 ../src/ext/libgdl/gdl-dock.c:183
 msgid "Default title"
 msgstr ""
 
@@ -514,16 +510,18 @@ msgid "Default title for newly created floating docks"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-master.c:152
-msgid "If is set to 1, all the dock items bound to the master are locked; if it's 0, all are unlocked; -1 indicates inconsistency among the items"
+msgid ""
+"If is set to 1, all the dock items bound to the master are locked; if it's "
+"0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-master.c:160
-#: ../src/ext/libgdl/gdl-switcher.c:706
+#: ../src/ext/libgdl/gdl-switcher.c:702
 msgid "Switcher Style"
 msgstr "Стиль переключателя"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:161
-#: ../src/ext/libgdl/gdl-switcher.c:707
+#: ../src/ext/libgdl/gdl-switcher.c:703
 msgid "Switcher buttons style"
 msgstr "Стиль кнопок переключателя"
 
@@ -532,17 +530,23 @@ msgid "Expand direction"
 msgstr "Направление расширения"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:169
-msgid "Allow the master's dock items to expand their container dock objects in the given direction"
+msgid ""
+"Allow the master's dock items to expand their container dock objects in the "
+"given direction"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-master.c:794
 #, c-format
-msgid "master %p: unable to add object %p[%s] to the hash.  There already is an item with that name (%p)."
+msgid ""
+"master %p: unable to add object %p[%s] to the hash.  There already is an "
+"item with that name (%p)."
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-master.c:967
 #, c-format
-msgid "The new dock controller %p is automatic.  Only manual dock objects should be named controller."
+msgid ""
+"The new dock controller %p is automatic.  Only manual dock objects should be "
+"named controller."
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-notebook.c:134
@@ -595,12 +599,16 @@ msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-object.c:436
 #, c-format
-msgid "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which hasn't implemented this method"
+msgid ""
+"Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
+"hasn't implemented this method"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-object.c:565
 #, c-format
-msgid "Dock operation requested in a non-bound object %p. The application might crash"
+msgid ""
+"Dock operation requested in a non-bound object %p. The application might "
+"crash"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-object.c:572
@@ -610,14 +618,15 @@ msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-object.c:614
 #, c-format
-msgid "Attempt to bind to %p an already bound dock object %p (current master: %p)"
+msgid ""
+"Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
 
-#: ../src/ext/libgdl/gdl-dock-paned.c:132
+#: ../src/ext/libgdl/gdl-dock-paned.c:131
 msgid "Position"
 msgstr "Позиция"
 
-#: ../src/ext/libgdl/gdl-dock-paned.c:133
+#: ../src/ext/libgdl/gdl-dock-paned.c:132
 msgid "Position of the divider in pixels"
 msgstr ""
 
@@ -626,12 +635,14 @@ msgid "Sticky"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:144
-msgid "Whether the placeholder will stick to its host or move up the hierarchy when the host is redocked"
+msgid ""
+"Whether the placeholder will stick to its host or move up the hierarchy when "
+"the host is redocked"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:151
 msgid "Host"
-msgstr ""
+msgstr "Узел"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
@@ -642,7 +653,9 @@ msgid "Next placement"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:160
-msgid "The position an item will be docked to our host if a request is made to dock to us"
+msgid ""
+"The position an item will be docked to our host if a request is made to dock "
+"to us"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:169
@@ -673,7 +686,7 @@ msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:191
 msgid "X-Coordinate"
-msgstr ""
+msgstr "Координата по X"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:192
 msgid "X coordinate for dock when floating"
@@ -681,7 +694,7 @@ msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:198
 msgid "Y-Coordinate"
-msgstr ""
+msgstr "Координата по Y"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:199
 msgid "Y coordinate for dock when floating"
@@ -698,7 +711,9 @@ msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:643
 #, c-format
-msgid "Something weird happened while getting the child placement for %p from parent %p"
+msgid ""
+"Something weird happened while getting the child placement for %p from "
+"parent %p"
 msgstr ""
 
 #: ../src/ext/libgdl/gdl-dock-tablabel.c:129
@@ -744,48 +759,77 @@ msgstr ""
 #: ../src/ext/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Док №%d"
+
+#: ../camerawire/src/cwwindow.cpp:67
+msgid "Camera"
+msgstr "Камера"
+
+#: ../camerawire/src/cwwindow.cpp:91
+msgid "_File"
+msgstr "_Файл"
+
+#~ msgid "pixel"
+#~ msgid_plural "pixels"
+#~ msgstr[0] "пиксел"
+#~ msgstr[1] "пиксела"
+#~ msgstr[2] "пикселов"
+
+#~ msgid "Taken on"
+#~ msgstr "Снято"
 
 #~ msgid "Dark"
 #~ msgstr "Темная"
+
 #~ msgid "..."
 #~ msgstr "..."
+
 #~ msgid "<b>Date:</b>"
 #~ msgstr "<b>Дата:</b>"
+
 #~ msgid ""
 #~ "Date is local\n"
 #~ "Date is UTC"
 #~ msgstr ""
 #~ "Местная дата\n"
 #~ "Дата по UTC"
+
 #~ msgid "Import Raw_Studio"
 #~ msgstr "Импортировать метаданные Raw_studio"
+
 #~ msgid "Import _UFRaw"
 #~ msgstr "Импортировать метаданные _UFRaw"
+
 #~ msgid "You can still change this after importing the pictures."
 #~ msgstr "Вы сможете изменить это после импорта снимков"
+
 #~ msgid "_Directory:"
 #~ msgstr "_Папка:"
-#~ msgid "_Folders"
-#~ msgstr "_Папки"
+
 #~ msgid "_Import"
 #~ msgstr "_Импортировать"
+
 #~ msgid "_Options"
 #~ msgstr "П_араметры"
+
 #~ msgid "gtk-cancel"
 #~ msgstr "gtk-cancel"
+
 #~ msgid ""
 #~ "System\n"
 #~ "Dark"
 #~ msgstr ""
 #~ "Системная\n"
 #~ "Темная"
+
 #~ msgid "_General"
 #~ msgstr "О_бщие"
+
 #~ msgid "_Reopen Library"
 #~ msgstr "_Повторно открыть библиотеку"
+
 #~ msgid "_Theme:\t"
 #~ msgstr "_Тема:\t"
+
 #~ msgid "_User Interface"
 #~ msgstr "_Интерфейс"
-
