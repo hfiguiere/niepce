@@ -1,0 +1,807 @@
+# Czech translation for niepce.
+# Copyright (C) 2009 niepce's COPYRIGHT HOLDER
+# This file is distributed under the same license as the niepce package.
+#
+# Marek Černocký <marek@manet.cz>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: niepce master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-17 08:23+0000\n"
+"PO-Revision-Date: 2010-02-21 14:34+0100\n"
+"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../src/fwk/toolkit/application.cpp:45
+msgid "System"
+msgstr "Systémový"
+
+#: ../src/fwk/toolkit/frame.cpp:124
+msgid "Undo "
+msgstr "Zpět "
+
+#: ../src/fwk/toolkit/frame.cpp:133
+msgid "Redo "
+msgstr "Znovu "
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
+msgid "Edit Labels"
+msgstr "Úprava popisků"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
+msgid "Change Labels"
+msgstr "Změna popisků"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:58
+#: ../src/niepce/ui/dialogs/importdialog.cpp:84
+msgid "Import"
+msgstr "Import"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:80
+msgid "Import picture folder"
+msgstr "Import složky s obrázky"
+
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: ../src/niepce/ui/moduleshell.cpp:58
+msgid "_Image"
+msgstr "_Obrázek"
+
+#: ../src/niepce/ui/moduleshell.cpp:78
+msgid "Set _Label"
+msgstr "Nastavit _popisek"
+
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Label _6"
+msgstr "Popisek 6"
+
+#: ../src/niepce/ui/moduleshell.cpp:84
+msgid "Label _7"
+msgstr "Popisek 7"
+
+#: ../src/niepce/ui/moduleshell.cpp:89
+msgid "Label _8"
+msgstr "Popisek 8"
+
+#: ../src/niepce/ui/moduleshell.cpp:94
+msgid "Label _9"
+msgstr "Popisek 9"
+
+#: ../src/niepce/ui/moduleshell.cpp:100
+msgid "Set _Rating"
+msgstr "Nastavit _hodnocení"
+
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "_No Rating"
+msgstr "_Bez hodnocení"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "_1 Star"
+msgstr "_1 hvězdička"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "_2 Stars"
+msgstr "_2 hvězdičky"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "_3 Stars"
+msgstr "_3 hvězdičky"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "_4 Stars"
+msgstr "_4 hvězdičky"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "_5 Stars"
+msgstr "_5 hvězdiček"
+
+#: ../src/niepce/ui/moduleshell.cpp:172
+msgid "Library"
+msgstr "Sbírka"
+
+#: ../src/niepce/ui/moduleshell.cpp:183
+msgid "Darkroom"
+msgstr "Temná komora"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:43
+msgid "Make:"
+msgstr "Výrobce:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+msgid "Model:"
+msgstr "Model:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+msgid "Lens:"
+msgstr "Čočky:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+msgid "Exposure Program:"
+msgstr "Expoziční režim:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+msgid "Speed:"
+msgstr "Závěrka:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+msgid "Aperture:"
+msgstr "Clona:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "ISO:"
+msgstr "ISO:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:53
+msgid "Exposure Bias:"
+msgstr "Korekce expozice:"
+
+#. this one is fishy as it hardcode the prefix.
+#: ../src/niepce/ui/metadatapanecontroller.cpp:55
+msgid "Flash:"
+msgstr "Blesk:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:56
+msgid "Flash compensation:"
+msgstr "Kompenzace blesku:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+msgid "Focal length:"
+msgstr "Ohnisková vzdálenost:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+msgid "White balance:"
+msgstr "Vyvážení bílé:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+msgid "Date:"
+msgstr "Datum:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:63
+msgid "Rating:"
+msgstr "Hodnocení:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:64
+msgid "Label:"
+msgstr "Popis:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
+msgid "Keywords:"
+msgstr "Klíčová slova:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+msgid "Camera Information"
+msgstr "Informace o fotoaparátu"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "Shooting Information"
+msgstr "Informace o pořízení"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+msgid "IPTC"
+msgstr "Informace IPTC"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:78
+msgid "Rights"
+msgstr "Práva"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:88
+msgid "Image Properties"
+msgstr "Vlastnosti obrázku"
+
+#: ../src/niepce/ui/niepceapplication.cpp:40
+msgid "Niepce Dark"
+msgstr "Tmavý Niepce"
+
+#: ../src/niepce/ui/niepceapplication.cpp:64
+msgid ""
+"A digital photo application.\n"
+"\n"
+"Build options: "
+msgstr ""
+"Aplikace pro digitální fotografii.\n"
+"\n"
+"Volby sestavení: "
+
+#: ../src/niepce/ui/niepcewindow.cpp:148
+msgid "Ready"
+msgstr "Připraven"
+
+#: ../src/niepce/ui/niepcewindow.cpp:214
+msgid "_Library"
+msgstr "_Sbírka"
+
+#: ../src/niepce/ui/niepcewindow.cpp:220
+msgid "New _Folder..."
+msgstr "Nová _složka…"
+
+#: ../src/niepce/ui/niepcewindow.cpp:221
+msgid "New _Project..."
+msgstr "Nový _projekt…"
+
+#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:92
+msgid "_Import..."
+msgstr "_Import…"
+
+#: ../src/niepce/ui/niepcewindow.cpp:233 ../camerawire/src/cwwindow.cpp:102
+msgid "_Edit"
+msgstr "_Upravit"
+
+#: ../src/niepce/ui/niepcewindow.cpp:252 ../camerawire/src/cwwindow.cpp:118
+msgid "_Tools"
+msgstr "Nás_troje"
+
+#: ../src/niepce/ui/niepcewindow.cpp:253
+msgid "_Edit Labels..."
+msgstr "_Upravit popisky…"
+
+#: ../src/niepce/ui/niepcewindow.cpp:256 ../camerawire/src/cwwindow.cpp:124
+msgid "_Hide tools"
+msgstr "Skrý_t nástroje"
+
+#: ../src/niepce/ui/niepcewindow.cpp:260 ../camerawire/src/cwwindow.cpp:128
+msgid "_Help"
+msgstr "_Nápověda"
+
+#: ../src/niepce/ui/niepcewindow.cpp:331
+msgid "Create library"
+msgstr "Založení sbírky"
+
+#: ../src/niepce/ui/niepcewindow.cpp:335
+msgid "Create"
+msgstr "Vytvořit"
+
+#: ../src/niepce/ui/niepcewindow.cpp:377
+msgid "Label 1"
+msgstr "Popisek 1"
+
+#: ../src/niepce/ui/niepcewindow.cpp:378
+msgid "Label 2"
+msgstr "Popisek 2"
+
+#: ../src/niepce/ui/niepcewindow.cpp:379
+msgid "Label 3"
+msgstr "Popisek 3"
+
+#: ../src/niepce/ui/niepcewindow.cpp:380
+msgid "Label 4"
+msgstr "Popisek 4"
+
+#: ../src/niepce/ui/niepcewindow.cpp:381
+msgid "Label 5"
+msgstr "Popisek 5"
+
+#: ../src/niepce/ui/niepcewindow.cpp:456
+msgid "Niepce Digital - "
+msgstr "Niepce Digital - "
+
+#: ../src/niepce/ui/selectioncontroller.cpp:194
+msgid "Set Label"
+msgstr "Natavit popisek"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:215
+msgid "Set Rating"
+msgstr "Natavit hodnocení"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:195
+msgid "Pictures"
+msgstr "Obrázky"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:199
+msgid "Projects"
+msgstr "Projekty"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:203
+msgid "Keywords"
+msgstr "Klíčová slova"
+
+#. TODO make it a mnemonic
+#: ../src/niepce/ui/workspacecontroller.cpp:216
+msgid "_Workspace"
+msgstr "_Pracovní plocha"
+
+#: ../src/niepce/stock.cpp:46
+msgid "Rotate L_eft"
+msgstr "Otočit v_levo"
+
+#: ../src/niepce/stock.cpp:49
+msgid "Rotate R_ight"
+msgstr "Otočit vp_ravo"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:35
+msgid "Develop"
+msgstr "Vyvolat"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
+msgid "Crop"
+msgstr "Oříznout"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
+msgid "Tilt"
+msgstr "Náklon"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+msgid "White balance"
+msgstr "Vyvážení bílé"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
+msgid "Color temperature"
+msgstr "Teplota barev"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
+msgid "Tone and colour"
+msgstr "Odstín a barva"
+
+#. s->signal_value_changed().connect();
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
+msgid "Exposure"
+msgstr "Expozice"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
+msgid "Recovery"
+msgstr "Obnovení"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
+msgid "Fill Light"
+msgstr "Jas tmavých tónů"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
+msgid "Blacks"
+msgstr "Tmavost tmavých tónů"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
+msgid "Brightness"
+msgstr "Jas"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
+msgid "Saturation"
+msgstr "Sytost"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
+msgid "Vibrance"
+msgstr "Sytost bledých tónů"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:108
+msgid "Master"
+msgstr "Nadřízený dok"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:109
+msgid "GdlDockMaster object which the dockbar widget is attached to"
+msgstr "Objekt GdlDockMaster, ke kterému je widget dokového panelu připojen"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:116
+msgid "Dockbar style"
+msgstr "Styl dokového panelu"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:117
+msgid "Dockbar style to show items on it"
+msgstr "Styl dokového panelu pro zobrazování jeho položek"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
+msgid "Iconify"
+msgstr "Do ikony"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
+msgid "Iconify this dock"
+msgstr "Skrýt dok do ikony"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+msgid "Close"
+msgstr "Zavřít"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+msgid "Close this dock"
+msgstr "Zavřít tento dok"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:704
+#: ../src/ext/libgdl/gdl-dock-tablabel.c:128
+msgid "Controlling dock item"
+msgstr "Řízení dokových položek"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:705
+msgid "Dockitem which 'owns' this grip"
+msgstr "Doková položka, která „vlastní“ tento úchop"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:287
+msgid "Orientation"
+msgstr "Orientace"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:288
+msgid "Orientation of the docking item"
+msgstr "Orientace dokovatelné položky"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:303
+msgid "Resizable"
+msgstr "Měnitelná velikost"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:304
+msgid "If set, the dock item can be resized when docked in a panel"
+msgstr ""
+"Pokud je nastaveno, může doková položka při ukotvení v panelu změnit velikost"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:311
+msgid "Item behavior"
+msgstr "Chování položky"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:312
+msgid ""
+"General behavior for the dock item (i.e. whether it can float, if it's "
+"locked, etc.)"
+msgstr ""
+"Obecné chování pro dokovou položku (např. zda může být plovoucí, zda je "
+"uzamknutá atd.)"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:320
+#: ../src/ext/libgdl/gdl-dock-master.c:151
+msgid "Locked"
+msgstr "Uzamčeno"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:321
+msgid ""
+"If set, the dock item cannot be dragged around and it doesn't show a grip"
+msgstr ""
+"Pokud je nastaveno, nelze dokovou položku přetahovat a nezobrazuje úchop"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:329
+msgid "Preferred width"
+msgstr "Upřednostňovaná šířka"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:330
+msgid "Preferred width for the dock item"
+msgstr "Upřednostňovaná šířka pro dokovou položku"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:336
+msgid "Preferred height"
+msgstr "Upřednostňovaná výška"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:337
+msgid "Preferred height for the dock item"
+msgstr "Upřednostňovaná výška pro dokovou položku"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:616
+#, c-format
+msgid ""
+"You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
+"some other compound dock object."
+msgstr ""
+"Nemůžete přidat dokový objekt (%p typu %s) dovnitř %s. Použijte GdlDock nebo "
+"nějaký jiný složený dokový objekt."
+
+#: ../src/ext/libgdl/gdl-dock-item.c:623
+#, c-format
+msgid ""
+"Attempting to add a widget with type %s to a %s, but it can only contain one "
+"widget at a time; it already contains a widget of type %s"
+msgstr ""
+"Pokus o přidání widgetu s typem %s do %s, ale ten může obsahovat naráz jen "
+"jeden widget a již obsahuje widget typu %s"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:1345
+#: ../src/ext/libgdl/gdl-dock-item.c:1390
+#, c-format
+msgid "Unsupported docking strategy %s in dock object of type %s"
+msgstr "Nepodporovaná strategie dokování %s v dokovém objektu typu %s"
+
+#. UnLock menuitem
+#: ../src/ext/libgdl/gdl-dock-item.c:1479
+msgid "UnLock"
+msgstr "Odemknout"
+
+#. Hide menuitem.
+#: ../src/ext/libgdl/gdl-dock-item.c:1486
+msgid "Hide"
+msgstr "Skrýt"
+
+#. Lock menuitem
+#: ../src/ext/libgdl/gdl-dock-item.c:1491
+msgid "Lock"
+msgstr "Zamknout"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:1717
+#, c-format
+msgid "Attempt to bind an unbound item %p"
+msgstr "Zkusit navázat nenavázanou položku %p"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:144 ../src/ext/libgdl/gdl-dock.c:183
+msgid "Default title"
+msgstr "Výchozí název"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:145
+msgid "Default title for newly created floating docks"
+msgstr "Výchozí název pro nově vytvořený plovoucí doky"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:152
+msgid ""
+"If is set to 1, all the dock items bound to the master are locked; if it's "
+"0, all are unlocked; -1 indicates inconsistency among the items"
+msgstr ""
+"Pokud je nastaveno na 1, jsou všechny vazby dokových položek na nadřízený "
+"dok uzamčené; pokud je nastavené na 0, jsou odemčené; -1 signalizuje "
+"nekonzistenci v položkách"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:160
+#: ../src/ext/libgdl/gdl-switcher.c:702
+msgid "Switcher Style"
+msgstr "Styl přepínače"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:161
+#: ../src/ext/libgdl/gdl-switcher.c:703
+msgid "Switcher buttons style"
+msgstr "Styl přepínacího tlačítka"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:168
+msgid "Expand direction"
+msgstr "Směr rozšíření"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:169
+msgid ""
+"Allow the master's dock items to expand their container dock objects in the "
+"given direction"
+msgstr ""
+"Dovoluje dokovým položkám, patřícím do nadřízeného doku, rozšířit svůj "
+"kontejner dokového objektu v daném směru"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:794
+#, c-format
+msgid ""
+"master %p: unable to add object %p[%s] to the hash.  There already is an "
+"item with that name (%p)."
+msgstr ""
+"nadřízený dok %p: nelze přidat objekt %p[%s] do heše. Již se tam nachází "
+"jiná položka s takovýmto názvem (%p)."
+
+#: ../src/ext/libgdl/gdl-dock-master.c:967
+#, c-format
+msgid ""
+"The new dock controller %p is automatic.  Only manual dock objects should be "
+"named controller."
+msgstr ""
+"Nový řadič doku %p je automatický. Pouze ruční dokové objekty by měly být "
+"pojmenovanými řadiči."
+
+#: ../src/ext/libgdl/gdl-dock-notebook.c:134
+msgid "Page"
+msgstr "Stránka"
+
+#: ../src/ext/libgdl/gdl-dock-notebook.c:135
+msgid "The index of the current page"
+msgstr "Index aktuální stránky"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:120
+msgid "Name"
+msgstr "Název"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:121
+msgid "Unique name for identifying the dock object"
+msgstr "Jedinečný název pro identifikaci objektu doku"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:128
+msgid "Long name"
+msgstr "Dlouhý název"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:129
+msgid "Human readable name for the dock object"
+msgstr "Pro lidi čitelný název pro objekt doku"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:135
+msgid "Stock Icon"
+msgstr "Skladová ikona"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:136
+msgid "Stock icon for the dock object"
+msgstr "Ikona ze skladu pro objekt doku"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:142
+msgid "Pixbuf Icon"
+msgstr "Obrázková ikona"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:143
+msgid "Pixbuf icon for the dock object"
+msgstr "Ikona z obrázku pro objekt doku"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:148
+msgid "Dock master"
+msgstr "Nadřízený dok"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:149
+msgid "Dock master this dock object is bound to"
+msgstr "Nadřízený dok, na který je tento dokový objekt navázaný"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:436
+#, c-format
+msgid ""
+"Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
+"hasn't implemented this method"
+msgstr ""
+"Volání gdl_dock_object_dock v dokovém objektu %p (typ objektu je %s), který "
+"nemá tuto metodu implementovanou"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:565
+#, c-format
+msgid ""
+"Dock operation requested in a non-bound object %p. The application might "
+"crash"
+msgstr ""
+"Požadována operace dokování v nenavázaném objektu %p. Aplikace se může "
+"zhroutit"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:572
+#, c-format
+msgid "Cannot dock %p to %p because they belong to different masters"
+msgstr "Nelze dokovat %p do %p, protože náleží do jiného nadřízeného doku"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:614
+#, c-format
+msgid ""
+"Attempt to bind to %p an already bound dock object %p (current master: %p)"
+msgstr ""
+"Pokus o navázání do %p, který má již navázán dokový objekt %p (současný "
+"nadřízený dok: %p)"
+
+#: ../src/ext/libgdl/gdl-dock-paned.c:131
+msgid "Position"
+msgstr "Umístění"
+
+#: ../src/ext/libgdl/gdl-dock-paned.c:132
+msgid "Position of the divider in pixels"
+msgstr "Poloha oddělovače v pixelech"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:143
+msgid "Sticky"
+msgstr "Přichytávací"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:144
+msgid ""
+"Whether the placeholder will stick to its host or move up the hierarchy when "
+"the host is redocked"
+msgstr ""
+"Zda se má rezervované místo přichytávat do jeho hostitele a nebo přesunout "
+"hierarchii, když je hostitel znovu umístěn do doku"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:151
+msgid "Host"
+msgstr "Hostitel"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:152
+msgid "The dock object this placeholder is attached to"
+msgstr "Dokový objekt, do kterého je toto rezervované místo připojené"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:159
+msgid "Next placement"
+msgstr "Následující rezervované místo"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:160
+msgid ""
+"The position an item will be docked to our host if a request is made to dock "
+"to us"
+msgstr ""
+"Poloha položky dokované do našeho hostitele, když vznikne požadavek na "
+"umístění do našeho doku"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:169
+#: ../src/ext/libgdl/gdl-dock.c:190
+msgid "Width"
+msgstr "Šířka"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:170
+msgid "Width for the widget when it's attached to the placeholder"
+msgstr "Šířka widgetu, když je připojený na rezervovaném místě"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:177
+#: ../src/ext/libgdl/gdl-dock.c:198
+msgid "Height"
+msgstr "Výška"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:178
+msgid "Height for the widget when it's attached to the placeholder"
+msgstr "Výška widgetu, když je připojený na rezervovaném místě"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:184
+msgid "Floating Toplevel"
+msgstr "Plovoucí nejvyšší úroveň"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:185
+msgid "Whether the placeholder is standing in for a floating toplevel dock"
+msgstr "Zda rezervované místo může držet plovoucí dok nejvyšší úrovně"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:191
+msgid "X-Coordinate"
+msgstr "Souřadnice X"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:192
+msgid "X coordinate for dock when floating"
+msgstr "Souřadnice X pro dok, když je plovoucí"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:198
+msgid "Y-Coordinate"
+msgstr "Souřadnice Y"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:199
+msgid "Y coordinate for dock when floating"
+msgstr "Souřadnice Y pro dok, když je plovoucí"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:494
+msgid "Attempt to dock a dock object to an unbound placeholder"
+msgstr ""
+"Pokus o umístění do dokového objektu, který nemá navázané rezervované místo"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:618
+#, c-format
+msgid "Got a detach signal from an object (%p) who is not our host %p"
+msgstr ""
+"Obdržen signál pro odpojení z objektu (%p), který není naším hostitelem %p"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:643
+#, c-format
+msgid ""
+"Something weird happened while getting the child placement for %p from "
+"parent %p"
+msgstr ""
+"Něco nepatřičného se přihodilo během získávání umístění potomka pro %p od "
+"rodiče %p"
+
+#: ../src/ext/libgdl/gdl-dock-tablabel.c:129
+msgid "Dockitem which 'owns' this tablabel"
+msgstr "Doková položka, která „vlastní“ tuto jmenovku karty"
+
+#: ../src/ext/libgdl/gdl-dock.c:175
+msgid "Floating"
+msgstr "Plovoucí"
+
+#: ../src/ext/libgdl/gdl-dock.c:176
+msgid "Whether the dock is floating in its own window"
+msgstr "Zda je dok plovoucí ve svém vlastním okně"
+
+#: ../src/ext/libgdl/gdl-dock.c:184
+msgid "Default title for the newly created floating docks"
+msgstr "Výchozí název pro nově vytvořené plovoucí doky"
+
+#: ../src/ext/libgdl/gdl-dock.c:191
+msgid "Width for the dock when it's of floating type"
+msgstr "Šířka pro dok, když je plovoucího typu"
+
+#: ../src/ext/libgdl/gdl-dock.c:199
+msgid "Height for the dock when it's of floating type"
+msgstr "Výška pro dok, když je plovoucího typu"
+
+#: ../src/ext/libgdl/gdl-dock.c:206
+msgid "Float X"
+msgstr "Plovoucí pozice X"
+
+#: ../src/ext/libgdl/gdl-dock.c:207
+msgid "X coordinate for a floating dock"
+msgstr "Souřadnice X pro plovoucí dok"
+
+#: ../src/ext/libgdl/gdl-dock.c:214
+msgid "Float Y"
+msgstr "Plovoucí pozice Y"
+
+#: ../src/ext/libgdl/gdl-dock.c:215
+msgid "Y coordinate for a floating dock"
+msgstr "Souřadnice Y pro plovoucí dok"
+
+#: ../src/ext/libgdl/gdl-dock.c:499
+#, c-format
+msgid "Dock #%d"
+msgstr "Dok číslo %d"
+
+#: ../camerawire/src/cwwindow.cpp:67
+msgid "Camera"
+msgstr "Fotoaparát"
+
+#: ../camerawire/src/cwwindow.cpp:91
+msgid "_File"
+msgstr "_Soubor"
+
