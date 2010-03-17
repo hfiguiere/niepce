@@ -2,60 +2,114 @@
 # Copyright (C) 2009 THE es'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the es package.
 # Roby Sottini <rsottini@yahoo.com>, 2009.
-#
-#
+# Jorge González <jorgegonz@svn.gnome.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-20 17:58+0000\n"
-"PO-Revision-Date: 2009-04-25 19:50+0200\n"
-"Last-Translator: Roby Sottini <rsottini@yahoo.com>\n"
+"POT-Creation-Date: 2009-07-17 03:56+0000\n"
+"PO-Revision-Date: 2010-03-17 07:45+0100\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/fwk/toolkit/application.cpp:44
+#: ../src/fwk/toolkit/application.cpp:45
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:55
-#| msgid "Edit Labels..."
+#: ../src/fwk/toolkit/frame.cpp:124
+msgid "Undo "
+msgstr "Deshacer"
+
+#: ../src/fwk/toolkit/frame.cpp:133
+msgid "Redo "
+msgstr "Rehacer"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
 msgstr "Editar etiquetas"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:112
-#| msgid "Set Label"
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
 msgstr "Cambiar etiquetas"
 
 #: ../src/niepce/ui/dialogs/importdialog.cpp:58
 #: ../src/niepce/ui/dialogs/importdialog.cpp:84
-#| msgid "_Import..."
 msgid "Import"
 msgstr "Importar"
 
 #: ../src/niepce/ui/dialogs/importdialog.cpp:80
-#| msgid "Import picture folderImport"
 msgid "Import picture folder"
 msgstr "Importar carpeta de imágenes"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencias"
 
-#: ../src/niepce/ui/librarymainviewcontroller.cpp:110
+#: ../src/niepce/ui/moduleshell.cpp:58
+msgid "_Image"
+msgstr "_Imagen"
+
+#: ../src/niepce/ui/moduleshell.cpp:78
+msgid "Set _Label"
+msgstr "Establecer _etiqueta"
+
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Label _6"
+msgstr "Etiqueta _6"
+
+#: ../src/niepce/ui/moduleshell.cpp:84
+msgid "Label _7"
+msgstr "Etiqueta _7"
+
+#: ../src/niepce/ui/moduleshell.cpp:89
+msgid "Label _8"
+msgstr "Etiqueta _8"
+
+#: ../src/niepce/ui/moduleshell.cpp:94
+msgid "Label _9"
+msgstr "Etiqueta _9"
+
+#: ../src/niepce/ui/moduleshell.cpp:100
+msgid "Set _Rating"
+msgstr "Establecer p_untuación"
+
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "_No Rating"
+msgstr "_Sin puntuación"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "_1 Star"
+msgstr "_1 estrella"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "_2 Stars"
+msgstr "_2 estrellas"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "_3 Stars"
+msgstr "_3 estrellas"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "_4 Stars"
+msgstr "_4 estrellas"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "_5 Stars"
+msgstr "_5 estrellas"
+
+#: ../src/niepce/ui/moduleshell.cpp:172
 msgid "Library"
-msgstr ""
+msgstr "Biblioteca"
 
-#: ../src/niepce/ui/librarymainviewcontroller.cpp:116
+#: ../src/niepce/ui/moduleshell.cpp:183
 msgid "Darkroom"
-msgstr ""
+msgstr "Cuarto oscuro"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:43
-#| msgid "Date:"
 msgid "Make:"
 msgstr ""
 
@@ -68,13 +122,12 @@ msgid "Lens:"
 msgstr "Lente:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:49
-#| msgid "Exposure Program:Speed:"
 msgid "Exposure Program:"
 msgstr "Velocidad de exposición:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Speed:"
-msgstr ""
+msgstr "Velocidad:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Aperture:"
@@ -86,7 +139,7 @@ msgstr "ISO:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "Exposure Bias:"
-msgstr ""
+msgstr "Bias de exposición:"
 
 #. this one is fishy as it hardcode the prefix.
 #: ../src/niepce/ui/metadatapanecontroller.cpp:55
@@ -94,13 +147,12 @@ msgid "Flash:"
 msgstr "Flash:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:56
-#| msgid "Flash compensation:Focal length:"
 msgid "Flash compensation:"
 msgstr "Compensación del flash:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Focal length:"
-msgstr ""
+msgstr "Longitud focal:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "White balance:"
@@ -124,15 +176,15 @@ msgstr "Palabras clave:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:69
 msgid "Camera Information"
-msgstr ""
+msgstr "Información de la cámara"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:72
 msgid "Shooting Information"
-msgstr ""
+msgstr "Información de disparado"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:75
 msgid "IPTC"
-msgstr ""
+msgstr "IPTC"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:78
 msgid "Rights"
@@ -147,11 +199,6 @@ msgid "Niepce Dark"
 msgstr ""
 
 #: ../src/niepce/ui/niepceapplication.cpp:64
-#| msgid ""
-#| "A digital photo application.\n"
-#| "\n"
-#| "Build options: \n"
-#| "Construir opciones: Ready"
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -161,247 +208,165 @@ msgstr ""
 "\n"
 "Opciones de construcción: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:140
-#| msgid "Redo "
+#: ../src/niepce/ui/niepcewindow.cpp:148
 msgid "Ready"
 msgstr "Preparado"
 
-#: ../src/niepce/ui/niepcewindow.cpp:240
+#: ../src/niepce/ui/niepcewindow.cpp:214
 msgid "_Library"
-msgstr ""
+msgstr "_Biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:246
+#: ../src/niepce/ui/niepcewindow.cpp:220
 msgid "New _Folder..."
 msgstr "_Carpeta nueva…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:247
+#: ../src/niepce/ui/niepcewindow.cpp:221
 msgid "New _Project..."
 msgstr "_Proyecto nuevo…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:249
+#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:92
 msgid "_Import..."
 msgstr "_Importar…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:259
+#: ../src/niepce/ui/niepcewindow.cpp:233 ../camerawire/src/cwwindow.cpp:102
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/niepce/ui/niepcewindow.cpp:286
-msgid "_Image"
-msgstr "_Imagen"
+#: ../src/niepce/ui/niepcewindow.cpp:252 ../camerawire/src/cwwindow.cpp:118
+msgid "_Tools"
+msgstr "_Herramientas"
 
-#: ../src/niepce/ui/niepcewindow.cpp:306
-msgid "Set _Label"
-msgstr ""
-
-#: ../src/niepce/ui/niepcewindow.cpp:307
-msgid "Label _6"
-msgstr "Etiqueta _6"
-
-#: ../src/niepce/ui/niepcewindow.cpp:312
-msgid "Label _7"
-msgstr "Etiqueta _7"
-
-#: ../src/niepce/ui/niepcewindow.cpp:317
-msgid "Label _8"
-msgstr "Etiqueta _8"
-
-#: ../src/niepce/ui/niepcewindow.cpp:322
-msgid "Label _9"
-msgstr "Etiqueta _9"
-
-#: ../src/niepce/ui/niepcewindow.cpp:327
-#| msgid "Edit Labels..."
+#: ../src/niepce/ui/niepcewindow.cpp:253
 msgid "_Edit Labels..."
 msgstr "_Editar etiquetas…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:330
-msgid "Set _Rating"
-msgstr ""
+#: ../src/niepce/ui/niepcewindow.cpp:256 ../camerawire/src/cwwindow.cpp:124
+msgid "_Hide tools"
+msgstr "_Ocultar herramientas"
+
+#: ../src/niepce/ui/niepcewindow.cpp:260 ../camerawire/src/cwwindow.cpp:128
+msgid "_Help"
+msgstr "Ay_uda"
 
 #: ../src/niepce/ui/niepcewindow.cpp:331
-msgid "_No Rating"
-msgstr ""
-
-#: ../src/niepce/ui/niepcewindow.cpp:335
-msgid "_1 Star"
-msgstr "_1 estrella"
-
-#: ../src/niepce/ui/niepcewindow.cpp:339
-msgid "_2 Stars"
-msgstr "_2 estrellas"
-
-#: ../src/niepce/ui/niepcewindow.cpp:343
-msgid "_3 Stars"
-msgstr "_3 estrellas"
-
-#: ../src/niepce/ui/niepcewindow.cpp:347
-msgid "_4 Stars"
-msgstr "_4 estrellas"
-
-#: ../src/niepce/ui/niepcewindow.cpp:351
-msgid "_5 Stars"
-msgstr "_5 estrellas"
-
-#: ../src/niepce/ui/niepcewindow.cpp:358
-msgid "_Tools"
-msgstr ""
-
-#: ../src/niepce/ui/niepcewindow.cpp:360
-msgid "_Hide tools"
-msgstr ""
-
-#: ../src/niepce/ui/niepcewindow.cpp:364
-msgid "_Help"
-msgstr ""
-
-#: ../src/niepce/ui/niepcewindow.cpp:381
-msgid "Undo "
-msgstr "Deshacer"
-
-#: ../src/niepce/ui/niepcewindow.cpp:390
-msgid "Redo "
-msgstr "Rehacer"
-
-#: ../src/niepce/ui/niepcewindow.cpp:452
-#| msgid "Create libraryCreate"
 msgid "Create library"
 msgstr "Crear biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:456
+#: ../src/niepce/ui/niepcewindow.cpp:335
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
-#: ../src/niepce/ui/niepcewindow.cpp:498
-#| msgid "Label _6"
+#: ../src/niepce/ui/niepcewindow.cpp:377
 msgid "Label 1"
 msgstr "Etiqueta 1"
 
-#: ../src/niepce/ui/niepcewindow.cpp:499
-#| msgid "Label _6"
+#: ../src/niepce/ui/niepcewindow.cpp:378
 msgid "Label 2"
 msgstr "Etiqueta 2"
 
-#: ../src/niepce/ui/niepcewindow.cpp:500
-#| msgid "Label _6"
+#: ../src/niepce/ui/niepcewindow.cpp:379
 msgid "Label 3"
 msgstr "Etiqueta 3"
 
-#: ../src/niepce/ui/niepcewindow.cpp:501
-#| msgid "Label _6"
+#: ../src/niepce/ui/niepcewindow.cpp:380
 msgid "Label 4"
 msgstr "Etiqueta 4"
 
-#: ../src/niepce/ui/niepcewindow.cpp:502
-#| msgid "Label _6"
+#: ../src/niepce/ui/niepcewindow.cpp:381
 msgid "Label 5"
 msgstr "Etiqueta 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:582
+#: ../src/niepce/ui/niepcewindow.cpp:456
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:183
+#: ../src/niepce/ui/selectioncontroller.cpp:194
 msgid "Set Label"
 msgstr "Establecer etiqueta"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:204
+#: ../src/niepce/ui/selectioncontroller.cpp:215
 msgid "Set Rating"
 msgstr "Establecer puntuación"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:197
-#| msgid "PicturesProjects"
+#: ../src/niepce/ui/workspacecontroller.cpp:195
 msgid "Pictures"
 msgstr "Imágenes"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:201
-#| msgid "PicturesProjects"
+#: ../src/niepce/ui/workspacecontroller.cpp:199
 msgid "Projects"
 msgstr "Proyectos"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:205
+#: ../src/niepce/ui/workspacecontroller.cpp:203
 msgid "Keywords"
 msgstr "Palabras clave"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:218
+#: ../src/niepce/ui/workspacecontroller.cpp:216
 msgid "_Workspace"
 msgstr "_Área de trabajo "
 
-#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:425
-msgid "pixel"
-msgid_plural "pixels"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/niepce/ui/thumb-view/eog-thumb-view.cpp:436
-msgid "Taken on"
-msgstr ""
-
 #: ../src/niepce/stock.cpp:46
 msgid "Rotate L_eft"
-msgstr ""
+msgstr "Rotar a la _izquierda"
 
 #: ../src/niepce/stock.cpp:49
 msgid "Rotate R_ight"
-msgstr ""
+msgstr "Rotar a la _derecha"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:35
 msgid "Develop"
 msgstr "Desarrollo"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:48
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
 msgid "Crop"
 msgstr "Recortar"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
 msgid "Tilt"
 msgstr ""
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:53
-#| msgid "White balance:"
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
 msgid "White balance"
 msgstr "Balance de blancos"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
 msgid "Color temperature"
 msgstr "Temperatura del color"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:58
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
 msgid "Tone and colour"
 msgstr "Tono y color"
 
 #. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
 msgid "Exposure"
-msgstr ""
+msgstr "Exposición"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:64
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
 msgid "Recovery"
-msgstr ""
+msgstr "Recuperación"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:66
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
 msgid "Fill Light"
 msgstr ""
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:68
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
 msgid "Blacks"
 msgstr "Negros"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:70
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
 msgid "Brightness"
 msgstr "Brillo"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:72
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
 msgid "Contrast"
 msgstr "Contraste"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:74
-#| msgid "Set Rating"
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
 msgid "Saturation"
 msgstr "Saturación"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
 msgid "Vibrance"
 msgstr ""
 
@@ -412,75 +377,83 @@ msgstr "Maestro"
 #: ../src/ext/libgdl/gdl-dock-bar.c:109
 msgid "GdlDockMaster object which the dockbar widget is attached to"
 msgstr ""
+"Objeto GdlDockMaster al cual el widget de la barra de empotrado se encuentra "
+"adjunto"
 
 #: ../src/ext/libgdl/gdl-dock-bar.c:116
 msgid "Dockbar style"
-msgstr ""
+msgstr "Estilo de la barra de empotrado"
 
 #: ../src/ext/libgdl/gdl-dock-bar.c:117
 msgid "Dockbar style to show items on it"
-msgstr ""
+msgstr "Estilo de la barra de empotrado para mostrar elementos en ella"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
 msgid "Iconify"
 msgstr "Iconizar"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
 msgid "Iconify this dock"
-msgstr ""
+msgstr "Iconizar este empotrable"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:397
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:397
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
 msgid "Close this dock"
-msgstr ""
+msgstr "Cerrar este empotrable"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:706
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:704
 #: ../src/ext/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
-msgstr ""
+msgstr "Elemento empotrable de control"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:707
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:705
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Elemento empotrable que «posee» este tirador"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:287
 msgid "Orientation"
-msgstr ""
+msgstr "Orientación"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:288
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "Orientación del elemento que se empotra"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Redimensionable"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:304
 msgid "If set, the dock item can be resized when docked in a panel"
 msgstr ""
+"Si esta activado, el elemento empotrable se puede redimensionar cuando está "
+"empotrado en un panel"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:311
 msgid "Item behavior"
-msgstr ""
+msgstr "Comportamiento del elemento"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:312
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Comportamiento general del elemento empotrable (p.e. si éste puede ser "
+"flotante, bloqueado, etc.)"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:320
 #: ../src/ext/libgdl/gdl-dock-master.c:151
 msgid "Locked"
-msgstr ""
+msgstr "Bloqueado"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:321
 msgid ""
 "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
+"Si esta activado el elemento empotrable no puede ser arrastrado fuera y no "
+"muestra un tirador"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
@@ -488,7 +461,7 @@ msgstr "Anchura preferida"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:330
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "Anchura preferida para el elemento empotrado"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:336
 msgid "Preferred height"
@@ -496,7 +469,7 @@ msgstr "Altura preferida"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:337
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "Altura preferida para el elemento empotrado"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -504,6 +477,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"No se puede añadir un objeto empotrado (%p del tipo %s) dentro de %s. "
+"Utilice GdlDock o algún otro objeto combinado empotrado fijo."
 
 #: ../src/ext/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -511,17 +486,21 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"Se intentó añadir un widget con tipo %s a un %s, pero éste sólo puede "
+"contener un widget a la vez, ya contiene un widget de tipo %s"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:1345
 #: ../src/ext/libgdl/gdl-dock-item.c:1390
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
 msgstr ""
+"Estrategia de empotramiento no soportada %s en el objeto empotrable del tipo "
+"%s"
 
 #. UnLock menuitem
 #: ../src/ext/libgdl/gdl-dock-item.c:1479
 msgid "UnLock"
-msgstr ""
+msgstr "Desbloquear"
 
 #. Hide menuitem.
 #: ../src/ext/libgdl/gdl-dock-item.c:1486
@@ -531,46 +510,51 @@ msgstr "Ocultar"
 #. Lock menuitem
 #: ../src/ext/libgdl/gdl-dock-item.c:1491
 msgid "Lock"
-msgstr ""
+msgstr "Bloquear"
 
 #: ../src/ext/libgdl/gdl-dock-item.c:1717
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Se intentó vincular un elemento no vinculable %p"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:144 ../src/ext/libgdl/gdl-dock.c:183
 msgid "Default title"
-msgstr ""
+msgstr "Título predeterminado"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:145
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Título predeterminado para los empotrables flotantes recién creados"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:152
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Si esta definido como 1, todos los límites de los objetos vinculados al "
+"principalson bloqueados; si es 0 todos son desbloqueados, -1 indica una "
+"inconsistencia entre los elementos."
 
 #: ../src/ext/libgdl/gdl-dock-master.c:160
-#: ../src/ext/libgdl/gdl-switcher.c:706
+#: ../src/ext/libgdl/gdl-switcher.c:702
 msgid "Switcher Style"
 msgstr "Estilo del selector"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:161
-#: ../src/ext/libgdl/gdl-switcher.c:707
+#: ../src/ext/libgdl/gdl-switcher.c:703
 msgid "Switcher buttons style"
 msgstr "Estilo de los botones del selector"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:168
 msgid "Expand direction"
-msgstr ""
+msgstr "Dirección de expansión"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:169
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
+"Permitir a los elementos maestros empotrables que expandan sus objetos "
+"empotrables del contenedor en la dirección proporcionada"
 
 #: ../src/ext/libgdl/gdl-dock-master.c:794
 #, c-format
@@ -578,6 +562,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"el principal %p no puede añadir el objeto %p[%s] al hash.  Ya existe un ítem "
+"con dicho nombre (%p)."
 
 #: ../src/ext/libgdl/gdl-dock-master.c:967
 #, c-format
@@ -585,14 +571,14 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"El nuevo controlador de empotrables %p es automático.  Sólo los objetos "
+"empotrados manuales deberían ser llamados controlador."
 
 #: ../src/ext/libgdl/gdl-dock-notebook.c:134
-#| msgid "_Image"
 msgid "Page"
 msgstr "Página"
 
 #: ../src/ext/libgdl/gdl-dock-notebook.c:135
-#| msgid "PageThe index of the current pageName"
 msgid "The index of the current page"
 msgstr "El índice de la página actual"
 
@@ -602,7 +588,7 @@ msgstr "Nombre"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:121
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Nombre único para identificar al objeto empotrable"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:128
 msgid "Long name"
@@ -610,15 +596,15 @@ msgstr "Nombre largo"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:129
 msgid "Human readable name for the dock object"
-msgstr ""
+msgstr "Nombre legible por el humano para el objeto empotrable"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:135
 msgid "Stock Icon"
-msgstr ""
+msgstr "Icono de fábrica"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:136
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Icono de fábrica para el objeto empotrable"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
@@ -626,15 +612,15 @@ msgstr "Icono Pixbuf"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:143
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Icono de fábrica para el objeto empotrable"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:148
 msgid "Dock master"
-msgstr ""
+msgstr "Empotrable principal"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:149
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "El empotrable principal al que este objeto empotrable está vinculado"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:436
 #, c-format
@@ -642,6 +628,8 @@ msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
 msgstr ""
+"Llamada a gdl_dock_object_dock en el objeto empotrable %p (el objeto es del "
+"tipo %s), el cual no tiene implementado este método"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:565
 #, c-format
@@ -649,36 +637,42 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Se solicitó una operación de empotrado en un objeto no vinculable %p. La "
+"aplicación podría fallar"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:572
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
 msgstr ""
+"No se puede empotrar %p en %p porque pertenecen a diferentes principales"
 
 #: ../src/ext/libgdl/gdl-dock-object.c:614
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Se intentó vincular con %p un objeto %p que ya está vinculado y empotrado "
+"(principalactual: %p)"
+
+#: ../src/ext/libgdl/gdl-dock-paned.c:131
+msgid "Position"
+msgstr "Posición"
 
 #: ../src/ext/libgdl/gdl-dock-paned.c:132
-msgid "Position"
-msgstr ""
-
-#: ../src/ext/libgdl/gdl-dock-paned.c:133
-#| msgid "PositionPosition of the divider in pixelsSticky"
 msgid "Position of the divider in pixels"
 msgstr "Posición del divisor en píxeles"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:143
 msgid "Sticky"
-msgstr ""
+msgstr "Persistente"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:144
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
 msgstr ""
+"Define si el contenedor se pegará a su anfitrión o subirá por la jerarquía "
+"cuando el anfitrión sea re-empotrado"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:151
 msgid "Host"
@@ -686,17 +680,19 @@ msgstr "Anfitrión"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "El objeto empotrable al que este contenedor se encuentra adjunto"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:159
 msgid "Next placement"
-msgstr ""
+msgstr "Siguiente ubicación"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:160
 msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
 msgstr ""
+"La posición en la cual un elemento será empotrado a nuestro anfitrión si se "
+"hace una petición para empotrar"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:169
 #: ../src/ext/libgdl/gdl-dock.c:190
@@ -705,7 +701,7 @@ msgstr "Anchura"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Anchura para el widget cuando está adjuntado al lugar reservado"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:177
 #: ../src/ext/libgdl/gdl-dock.c:198
@@ -714,16 +710,17 @@ msgstr "Altura"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:178
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Altura para el widget cuando está adjuntado al lugar reservado"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:184
-#| msgid "Floating"
 msgid "Floating Toplevel"
 msgstr "Nivel superior flotante"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:185
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
 msgstr ""
+"Indica si el lugar reservado está esperando para un empotrable flotante de "
+"nivel superior"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:191
 msgid "X-Coordinate"
@@ -731,7 +728,7 @@ msgstr "Coordenada X"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:192
 msgid "X coordinate for dock when floating"
-msgstr ""
+msgstr "Coordenada X para el empotrable flotante"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:198
 msgid "Y-Coordinate"
@@ -739,7 +736,7 @@ msgstr "Coordenada Y"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:199
 msgid "Y coordinate for dock when floating"
-msgstr ""
+msgstr "Coordenada Y para el empotrable flotante"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:494
 msgid "Attempt to dock a dock object to an unbound placeholder"
@@ -749,6 +746,7 @@ msgstr "Intenta empotrar un objeto empotrable a un contenedor suelto"
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
 msgstr ""
+"Se obtuvo una señal suelta desde un objeto (%p) que no es nuestro host %p"
 
 #: ../src/ext/libgdl/gdl-dock-placeholder.c:643
 #, c-format
@@ -756,10 +754,12 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"Algo extraño ha sucedido mientras se obtenía la colocación del hijo para %p "
+"del padre %p"
 
 #: ../src/ext/libgdl/gdl-dock-tablabel.c:129
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Elemento fijo que «posee» esta etiqueta de solapa"
 
 #: ../src/ext/libgdl/gdl-dock.c:175
 msgid "Floating"
@@ -767,19 +767,20 @@ msgstr "Flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Define si el empotrable es flotante en su propia ventana"
 
 #: ../src/ext/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
 msgstr ""
+"Título predeterminado para los nuevos empotrables creados recientemente"
 
 #: ../src/ext/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Anchura para el empotrable cuando es del tipo flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Altura del empotrable cuando es del tipo flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:206
 msgid "Float X"
@@ -787,7 +788,7 @@ msgstr "X flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:207
 msgid "X coordinate for a floating dock"
-msgstr ""
+msgstr "Coordenada X para un empotrable flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:214
 msgid "Float Y"
@@ -795,12 +796,21 @@ msgstr "Y flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:215
 msgid "Y coordinate for a floating dock"
-msgstr ""
+msgstr "Coordenada Y para un empotrable flotante"
 
 #: ../src/ext/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Empotrable #%d"
+
+#: ../camerawire/src/cwwindow.cpp:67
+#| msgid "Name"
+msgid "Camera"
+msgstr "Cámara"
+
+#: ../camerawire/src/cwwindow.cpp:91
+msgid "_File"
+msgstr "_Archivo"
 
 #~ msgid "LibraryDarkroomMake:"
 #~ msgstr "Hacer:"
