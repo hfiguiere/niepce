@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 03:56+0000\n"
-"PO-Revision-Date: 2010-03-17 07:45+0100\n"
+"POT-Creation-Date: 2010-03-17 06:45+0000\n"
+"PO-Revision-Date: 2010-03-17 08:03+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Cuarto oscuro"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:43
 msgid "Make:"
-msgstr ""
+msgstr "Marca:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Model:"
@@ -139,7 +139,7 @@ msgstr "ISO:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "Exposure Bias:"
-msgstr "Bias de exposición:"
+msgstr "Compensación de la exposición:"
 
 #. this one is fishy as it hardcode the prefix.
 #: ../src/niepce/ui/metadatapanecontroller.cpp:55
@@ -196,7 +196,7 @@ msgstr "Propiedades de la imagen"
 
 #: ../src/niepce/ui/niepceapplication.cpp:40
 msgid "Niepce Dark"
-msgstr ""
+msgstr "Niepce oscuro"
 
 #: ../src/niepce/ui/niepceapplication.cpp:64
 msgid ""
@@ -323,7 +323,7 @@ msgstr "Recortar"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
 msgid "Tilt"
-msgstr ""
+msgstr "Inclinación"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
 msgid "White balance"
@@ -348,7 +348,7 @@ msgstr "Recuperación"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
 msgid "Fill Light"
-msgstr ""
+msgstr "Luz de ambientación"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
 msgid "Blacks"
@@ -368,7 +368,7 @@ msgstr "Saturación"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
 msgid "Vibrance"
-msgstr ""
+msgstr "Dinamismo"
 
 #: ../src/ext/libgdl/gdl-dock-bar.c:108
 msgid "Master"
@@ -804,7 +804,6 @@ msgid "Dock #%d"
 msgstr "Empotrable #%d"
 
 #: ../camerawire/src/cwwindow.cpp:67
-#| msgid "Name"
 msgid "Camera"
 msgstr "Cámara"
 
