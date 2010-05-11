@@ -1,0 +1,780 @@
+# Chinese (China) translation for niepce.
+# Copyright (C) 2010 niepce's COPYRIGHT HOLDER
+# This file is distributed under the same license as the niepce package.
+# Wang Jian <lark@linux.net.cn>, 2003
+# Deng Xiyue <manphiz@gmail.com>, 2008
+# 微尘  <squeeze@189.cn>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: niepce master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-11 10:50+0800\n"
+"PO-Revision-Date: 2010-05-10 20:02+0800\n"
+"Last-Translator: 微尘 <squeeze@189.cn>\n"
+"Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/fwk/toolkit/application.cpp:45
+msgid "System"
+msgstr "系统"
+
+#: ../src/fwk/toolkit/frame.cpp:124
+msgid "Undo "
+msgstr "撤销"
+
+#: ../src/fwk/toolkit/frame.cpp:133
+msgid "Redo "
+msgstr "重做"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
+msgid "Edit Labels"
+msgstr "编辑标签"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
+msgid "Change Labels"
+msgstr "更改标签"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:58
+#: ../src/niepce/ui/dialogs/importdialog.cpp:84
+msgid "Import"
+msgstr "导入"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:80
+msgid "Import picture folder"
+msgstr "导入图片文件夹"
+
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../src/niepce/ui/moduleshell.cpp:58
+msgid "_Image"
+msgstr "图像(_I)"
+
+#: ../src/niepce/ui/moduleshell.cpp:78
+msgid "Set _Label"
+msgstr "设置标签(_L)"
+
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Label _6"
+msgstr "标签 6(_6)"
+
+#: ../src/niepce/ui/moduleshell.cpp:84
+msgid "Label _7"
+msgstr "标签 7(_7)"
+
+#: ../src/niepce/ui/moduleshell.cpp:89
+msgid "Label _8"
+msgstr "标签 8(_8)"
+
+#: ../src/niepce/ui/moduleshell.cpp:94
+msgid "Label _9"
+msgstr "标签 9(_9)"
+
+#: ../src/niepce/ui/moduleshell.cpp:100
+msgid "Set _Rating"
+msgstr "设置评分(_R)"
+
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "_No Rating"
+msgstr "没有评分(_N)"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "_1 Star"
+msgstr "1星级(_1)"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "_2 Stars"
+msgstr "2星级(_2)"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "_3 Stars"
+msgstr "3星级(_3)"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "_4 Stars"
+msgstr "4星级(_4)"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "_5 Stars"
+msgstr "5星级(_5)"
+
+#: ../src/niepce/ui/moduleshell.cpp:172
+msgid "Library"
+msgstr "库"
+
+#: ../src/niepce/ui/moduleshell.cpp:183
+msgid "Darkroom"
+msgstr "暗室"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:43
+msgid "Make:"
+msgstr "制作:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+msgid "Model:"
+msgstr "型号:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+msgid "Lens:"
+msgstr "镜头:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+msgid "Exposure Program:"
+msgstr "曝光程序:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+msgid "Speed:"
+msgstr "速率:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+msgid "Aperture:"
+msgstr "光圈"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "ISO:"
+msgstr "ISO:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:53
+msgid "Exposure Bias:"
+msgstr "曝光补偿:"
+
+#. this one is fishy as it hardcode the prefix.
+#: ../src/niepce/ui/metadatapanecontroller.cpp:55
+msgid "Flash:"
+msgstr "闪光:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:56
+msgid "Flash compensation:"
+msgstr "闪光补偿:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+msgid "Focal length:"
+msgstr "焦距:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+msgid "White balance:"
+msgstr "白平衡:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+msgid "Date:"
+msgstr "日期:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:63
+msgid "Rating:"
+msgstr "评分:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:64
+msgid "Label:"
+msgstr "标签:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
+msgid "Keywords:"
+msgstr "关键词:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+msgid "Camera Information"
+msgstr "相机信息"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "Shooting Information"
+msgstr "拍摄信息"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+msgid "IPTC"
+msgstr "IPTC"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:78
+msgid "Rights"
+msgstr "权限"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:88
+msgid "Image Properties"
+msgstr "图像属性"
+
+#: ../src/niepce/ui/niepceapplication.cpp:40
+msgid "Niepce Dark"
+msgstr "Niepce Dark"
+
+#: ../src/niepce/ui/niepceapplication.cpp:64
+msgid ""
+"A digital photo application.\n"
+"\n"
+"Build options: "
+msgstr ""
+"数码相片应用程式。\n"
+"\n"
+"编译程式选项:"
+
+#: ../src/niepce/ui/niepcewindow.cpp:148
+msgid "Ready"
+msgstr "就绪"
+
+#: ../src/niepce/ui/niepcewindow.cpp:214
+msgid "_Library"
+msgstr "库(_L)"
+
+#: ../src/niepce/ui/niepcewindow.cpp:220
+msgid "New _Folder..."
+msgstr "新建文件夹(_F)..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:221
+msgid "New _Project..."
+msgstr "新建项目(_P)..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:92
+msgid "_Import..."
+msgstr "导入(_I)..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:233 ../camerawire/src/cwwindow.cpp:102
+msgid "_Edit"
+msgstr "编辑(_E)"
+
+#: ../src/niepce/ui/niepcewindow.cpp:252 ../camerawire/src/cwwindow.cpp:118
+msgid "_Tools"
+msgstr "工具(_T)"
+
+#: ../src/niepce/ui/niepcewindow.cpp:253
+msgid "_Edit Labels..."
+msgstr "编辑标签(_E)..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:256 ../camerawire/src/cwwindow.cpp:124
+msgid "_Hide tools"
+msgstr "隐藏工具栏(_H)"
+
+#: ../src/niepce/ui/niepcewindow.cpp:260 ../camerawire/src/cwwindow.cpp:128
+msgid "_Help"
+msgstr "帮助(_H)"
+
+#: ../src/niepce/ui/niepcewindow.cpp:331
+msgid "Create library"
+msgstr "创建库"
+
+#: ../src/niepce/ui/niepcewindow.cpp:335
+msgid "Create"
+msgstr "创建"
+
+#: ../src/niepce/ui/niepcewindow.cpp:377
+msgid "Label 1"
+msgstr "标签 1"
+
+#: ../src/niepce/ui/niepcewindow.cpp:378
+msgid "Label 2"
+msgstr "标签 2"
+
+#: ../src/niepce/ui/niepcewindow.cpp:379
+msgid "Label 3"
+msgstr "标签 3"
+
+#: ../src/niepce/ui/niepcewindow.cpp:380
+msgid "Label 4"
+msgstr "标签 4"
+
+#: ../src/niepce/ui/niepcewindow.cpp:381
+msgid "Label 5"
+msgstr "标签 5"
+
+#: ../src/niepce/ui/niepcewindow.cpp:456
+msgid "Niepce Digital - "
+msgstr "Niepce Digital -"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:194
+msgid "Set Label"
+msgstr "设置标签"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:215
+msgid "Set Rating"
+msgstr "设置评分"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:195
+msgid "Pictures"
+msgstr "图片"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:199
+msgid "Projects"
+msgstr "项目"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:203
+msgid "Keywords"
+msgstr "关键词"
+
+#. TODO make it a mnemonic
+#: ../src/niepce/ui/workspacecontroller.cpp:216
+msgid "_Workspace"
+msgstr "工作区(_W)"
+
+#: ../src/niepce/stock.cpp:46
+msgid "Rotate L_eft"
+msgstr "向左旋转(_E)"
+
+#: ../src/niepce/stock.cpp:49
+msgid "Rotate R_ight"
+msgstr "向右旋转(_I)"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:35
+msgid "Develop"
+msgstr "显影"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
+msgid "Crop"
+msgstr "裁剪"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
+msgid "Tilt"
+msgstr "倾斜"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+msgid "White balance"
+msgstr "白平衡 "
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
+msgid "Color temperature"
+msgstr "色温"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
+msgid "Tone and colour"
+msgstr "色调和色彩"
+
+#. s->signal_value_changed().connect();
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
+msgid "Exposure"
+msgstr "曝光"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
+msgid "Recovery"
+msgstr "恢复"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
+msgid "Fill Light"
+msgstr "补光"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
+msgid "Blacks"
+msgstr "黑色"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
+msgid "Brightness"
+msgstr "亮度"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
+msgid "Contrast"
+msgstr "对比度"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
+msgid "Saturation"
+msgstr "饱和度"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
+msgid "Vibrance"
+msgstr "自然饱和度"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:108
+msgid "Master"
+msgstr "主对象"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:109
+msgid "GdlDockMaster object which the dockbar widget is attached to"
+msgstr "浮动条控件附着的 GdlDocMaster 对象"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:116
+msgid "Dockbar style"
+msgstr "浮动条风格"
+
+#: ../src/ext/libgdl/gdl-dock-bar.c:117
+msgid "Dockbar style to show items on it"
+msgstr "用于显示项目的浮动条风格"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
+msgid "Iconify"
+msgstr "图标化"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
+msgid "Iconify this dock"
+msgstr "图标化此浮动对象"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+msgid "Close"
+msgstr "关闭"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
+msgid "Close this dock"
+msgstr "关闭此浮动对象"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:704
+#: ../src/ext/libgdl/gdl-dock-tablabel.c:128
+msgid "Controlling dock item"
+msgstr "控制浮动项"
+
+#: ../src/ext/libgdl/gdl-dock-item-grip.c:705
+msgid "Dockitem which 'owns' this grip"
+msgstr "拥有控制柄的浮动项"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:287
+msgid "Orientation"
+msgstr "方向"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:288
+msgid "Orientation of the docking item"
+msgstr "浮动项的方向"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:303
+msgid "Resizable"
+msgstr "可改变大小"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:304
+msgid "If set, the dock item can be resized when docked in a panel"
+msgstr "如果设定，浮动项在嵌入至面板时也可改变大小。"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:311
+msgid "Item behavior"
+msgstr "项目行为"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:312
+msgid ""
+"General behavior for the dock item (i.e. whether it can float, if it's "
+"locked, etc.)"
+msgstr "浮动项的一般行为(如锁定后是否可浮动，等。)"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:320
+#: ../src/ext/libgdl/gdl-dock-master.c:151
+msgid "Locked"
+msgstr "锁定"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:321
+msgid ""
+"If set, the dock item cannot be dragged around and it doesn't show a grip"
+msgstr "如果设定，浮动项不能被拖动且不显示控制柄"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:329
+msgid "Preferred width"
+msgstr "首选宽度"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:330
+msgid "Preferred width for the dock item"
+msgstr "浮动项的首选宽度"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:336
+msgid "Preferred height"
+msgstr "首选高度"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:337
+msgid "Preferred height for the dock item"
+msgstr "浮动项的首选高度"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:616
+#, c-format
+msgid ""
+"You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
+"some other compound dock object."
+msgstr ""
+"您不能将浮动对象 (%p，类型 %s) 添加到 %s 中。请使用 GdlDock 或者其他符合浮动"
+"对象。"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:623
+#, c-format
+msgid ""
+"Attempting to add a widget with type %s to a %s, but it can only contain one "
+"widget at a time; it already contains a widget of type %s"
+msgstr ""
+"尝试添加类型为 %s 的控件到 %s，但它一次只能包含一个控件；它已经包含了类型为 %"
+"s 的控件"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:1345
+#: ../src/ext/libgdl/gdl-dock-item.c:1390
+#, c-format
+msgid "Unsupported docking strategy %s in dock object of type %s"
+msgstr "不支持将浮动策略 %s 用于类型为 %s 的浮动对象"
+
+#. UnLock menuitem
+#: ../src/ext/libgdl/gdl-dock-item.c:1479
+msgid "UnLock"
+msgstr "解锁"
+
+#. Hide menuitem.
+#: ../src/ext/libgdl/gdl-dock-item.c:1486
+msgid "Hide"
+msgstr "隐藏"
+
+#. Lock menuitem
+#: ../src/ext/libgdl/gdl-dock-item.c:1491
+msgid "Lock"
+msgstr "锁定"
+
+#: ../src/ext/libgdl/gdl-dock-item.c:1717
+#, c-format
+msgid "Attempt to bind an unbound item %p"
+msgstr "尝试绑定自由项 %p"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:144 ../src/ext/libgdl/gdl-dock.c:183
+msgid "Default title"
+msgstr "默认标题"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:145
+msgid "Default title for newly created floating docks"
+msgstr "新创建的浮动对象的默认标题"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:152
+msgid ""
+"If is set to 1, all the dock items bound to the master are locked; if it's "
+"0, all are unlocked; -1 indicates inconsistency among the items"
+msgstr ""
+"如果设置为1，所有绑定到主对象的浮动项将被锁定；如果为0，所有的将被解锁；-1表"
+"示项目不统一"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:160
+#: ../src/ext/libgdl/gdl-switcher.c:702
+msgid "Switcher Style"
+msgstr "切换器风格"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:161
+#: ../src/ext/libgdl/gdl-switcher.c:703
+msgid "Switcher buttons style"
+msgstr "切换器按钮风格"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:168
+msgid "Expand direction"
+msgstr "弹出方向"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:169
+msgid ""
+"Allow the master's dock items to expand their container dock objects in the "
+"given direction"
+msgstr "允许主浮动项目向指定的方向弹出"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:794
+#, c-format
+msgid ""
+"master %p: unable to add object %p[%s] to the hash.  There already is an "
+"item with that name (%p)."
+msgstr ""
+"主对象 %p：无法添加对象 %p[%s] 到 hash 表格。已经有一个项目用了这个名字(%p)。"
+
+#: ../src/ext/libgdl/gdl-dock-master.c:967
+#, c-format
+msgid ""
+"The new dock controller %p is automatic.  Only manual dock objects should be "
+"named controller."
+msgstr "新浮动控制器 %p 是自动的。只有手动浮动对象才能指定控制器。"
+
+#: ../src/ext/libgdl/gdl-dock-notebook.c:134
+msgid "Page"
+msgstr "页面"
+
+#: ../src/ext/libgdl/gdl-dock-notebook.c:135
+msgid "The index of the current page"
+msgstr "当前页面的索引"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:120
+msgid "Name"
+msgstr "名称"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:121
+msgid "Unique name for identifying the dock object"
+msgstr "用来识别浮动对象的唯一名称"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:128
+msgid "Long name"
+msgstr "长名字"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:129
+msgid "Human readable name for the dock object"
+msgstr "浮动对象的人类可读名称。"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:135
+msgid "Stock Icon"
+msgstr "嵌入图标"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:136
+msgid "Stock icon for the dock object"
+msgstr "浮动对象的嵌入图标"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:142
+msgid "Pixbuf Icon"
+msgstr "Pixbuf 图标"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:143
+msgid "Pixbuf icon for the dock object"
+msgstr "浮动对象的 Pixbuf 图标"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:148
+msgid "Dock master"
+msgstr "浮动主对象"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:149
+msgid "Dock master this dock object is bound to"
+msgstr "绑定此浮动对象的浮动主对象"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:436
+#, c-format
+msgid ""
+"Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
+"hasn't implemented this method"
+msgstr "浮动对象 %p(对象类型为%s)调用了 gdl_doc_object_dock，但此方法尚未实现"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:565
+#, c-format
+msgid ""
+"Dock operation requested in a non-bound object %p. The application might "
+"crash"
+msgstr "非绑定对象 %p 请求了浮动操作。应用程序可能会崩溃"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:572
+#, c-format
+msgid "Cannot dock %p to %p because they belong to different masters"
+msgstr "无法将 %p 嵌入到 %p 因为它们属于不同的主对象"
+
+#: ../src/ext/libgdl/gdl-dock-object.c:614
+#, c-format
+msgid ""
+"Attempt to bind to %p an already bound dock object %p (current master: %p)"
+msgstr "尝试在 %p 绑定一个已经被绑定的浮动对象 %p (当前主对象：%p)"
+
+#: ../src/ext/libgdl/gdl-dock-paned.c:131
+msgid "Position"
+msgstr "位置"
+
+#: ../src/ext/libgdl/gdl-dock-paned.c:132
+msgid "Position of the divider in pixels"
+msgstr "分离器的位置，以像素计算"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:143
+msgid "Sticky"
+msgstr "粘滞"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:144
+msgid ""
+"Whether the placeholder will stick to its host or move up the hierarchy when "
+"the host is redocked"
+msgstr "当宿主重新嵌入时，占位器是粘滞于其宿主还是延层次关系上移"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:151
+msgid "Host"
+msgstr "主机"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:152
+msgid "The dock object this placeholder is attached to"
+msgstr "浮动对象所附属的占位器"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:159
+msgid "Next placement"
+msgstr "下一个位置"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:160
+msgid ""
+"The position an item will be docked to our host if a request is made to dock "
+"to us"
+msgstr "当请求嵌入我们时，项目将被嵌入我们宿主的位置"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:169
+#: ../src/ext/libgdl/gdl-dock.c:190
+msgid "Width"
+msgstr "宽度"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:170
+msgid "Width for the widget when it's attached to the placeholder"
+msgstr "当附着在占位器时控件的宽度"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:177
+#: ../src/ext/libgdl/gdl-dock.c:198
+msgid "Height"
+msgstr "高度"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:178
+msgid "Height for the widget when it's attached to the placeholder"
+msgstr "当附着在占位器时控件的高度"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:184
+msgid "Floating Toplevel"
+msgstr "浮动的顶层"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:185
+msgid "Whether the placeholder is standing in for a floating toplevel dock"
+msgstr "占位器是否用于浮动的顶层窗体"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:191
+msgid "X-Coordinate"
+msgstr "横坐标"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:192
+msgid "X coordinate for dock when floating"
+msgstr "浮动时的横坐标"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:198
+msgid "Y-Coordinate"
+msgstr "纵坐标"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:199
+msgid "Y coordinate for dock when floating"
+msgstr "浮动时的纵坐标"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:494
+msgid "Attempt to dock a dock object to an unbound placeholder"
+msgstr "尝试向未绑定的占位器嵌入浮动对象"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:618
+#, c-format
+msgid "Got a detach signal from an object (%p) who is not our host %p"
+msgstr "收到来自一个对象(%p)的分离信号，但它并不在我们的宿主 %p"
+
+#: ../src/ext/libgdl/gdl-dock-placeholder.c:643
+#, c-format
+msgid ""
+"Something weird happened while getting the child placement for %p from "
+"parent %p"
+msgstr "当为 %p 从父位置 %p 取得子位置时发生了一些奇怪的事"
+
+#: ../src/ext/libgdl/gdl-dock-tablabel.c:129
+msgid "Dockitem which 'owns' this tablabel"
+msgstr "拥有标签的浮动项"
+
+#: ../src/ext/libgdl/gdl-dock.c:175
+msgid "Floating"
+msgstr "浮动"
+
+#: ../src/ext/libgdl/gdl-dock.c:176
+msgid "Whether the dock is floating in its own window"
+msgstr "浮动对象是否在自己的窗体内浮动"
+
+#: ../src/ext/libgdl/gdl-dock.c:184
+msgid "Default title for the newly created floating docks"
+msgstr "新创建的浮动对象的默认标题"
+
+#: ../src/ext/libgdl/gdl-dock.c:191
+msgid "Width for the dock when it's of floating type"
+msgstr "浮动状态时的宽"
+
+#: ../src/ext/libgdl/gdl-dock.c:199
+msgid "Height for the dock when it's of floating type"
+msgstr "浮动状态时的高"
+
+#: ../src/ext/libgdl/gdl-dock.c:206
+msgid "Float X"
+msgstr "浮动横坐标"
+
+#: ../src/ext/libgdl/gdl-dock.c:207
+msgid "X coordinate for a floating dock"
+msgstr "浮动时的横坐标"
+
+#: ../src/ext/libgdl/gdl-dock.c:214
+msgid "Float Y"
+msgstr "浮动纵坐标"
+
+#: ../src/ext/libgdl/gdl-dock.c:215
+msgid "Y coordinate for a floating dock"
+msgstr "浮动时的纵坐标"
+
+#: ../src/ext/libgdl/gdl-dock.c:499
+#, c-format
+msgid "Dock #%d"
+msgstr "浮动对象 #%d"
+
+#: ../camerawire/src/cwwindow.cpp:67
+msgid "Camera"
+msgstr "相机"
+
+#: ../camerawire/src/cwwindow.cpp:91
+msgid "_File"
+msgstr "文件(_F)"
