@@ -2,10 +2,10 @@ src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/application.cpp
 src/fwk/toolkit/frame.cpp
 src/niepce/ui/dialogs/editlabels.cpp
-src/niepce/ui/dialogs/editlabels.ui
+[type: gettext/glade]src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
-src/niepce/ui/dialogs/importdialog.ui
-src/niepce/ui/dialogs/preferences.ui
+[type: gettext/glade]src/niepce/ui/dialogs/importdialog.ui
+[type: gettext/glade]src/niepce/ui/dialogs/preferences.ui
 src/niepce/ui/dialogs/preferencesdialog.cpp
 src/niepce/ui/moduleshell.cpp
 src/niepce/ui/metadatapanecontroller.cpp
