@@ -67,10 +67,6 @@ msgstr "Popisek 8"
 msgid "Label _9"
 msgstr "Popisek 9"
 
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:7
-msgid "gtk-close"
-msgstr ""
-
 #: ../src/niepce/ui/dialogs/importdialog.cpp:58
 #: ../src/niepce/ui/dialogs/importdialog.cpp:84
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:3
@@ -128,10 +124,6 @@ msgstr "_Importovat"
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:10
 msgid "_Options"
 msgstr "V_olby"
-
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
-msgid "gtk-cancel"
-msgstr ""
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:1
 msgid "_General"
