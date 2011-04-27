@@ -4,13 +4,13 @@
 # Wang Jian <lark@linux.net.cn>, 2003
 # Deng Xiyue <manphiz@gmail.com>, 2008
 # 微尘  <squeeze@189.cn>, 2010.
-#
+# 玉堂白鹤 <squeeze@189.cn> 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-11 10:50+0800\n"
-"PO-Revision-Date: 2010-05-10 20:02+0800\n"
+"POT-Creation-Date: 2011-03-29 09:02+0000\n"
+"PO-Revision-Date: 2011-04-02 18:37+0800\n"
 "Last-Translator: 微尘 <squeeze@189.cn>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -37,14 +37,104 @@ msgstr "编辑标签"
 msgid "Change Labels"
 msgstr "更改标签"
 
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:1
+msgid "<b>Labels</b>"
+msgstr "<b>标签</b>"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:2
+msgid "Label _10"
+msgstr "标签 10(10)"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:3
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Label _6"
+msgstr "标签 6(_6)"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:4
+#: ../src/niepce/ui/moduleshell.cpp:84
+msgid "Label _7"
+msgstr "标签 7(_7)"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:5
+#: ../src/niepce/ui/moduleshell.cpp:89
+msgid "Label _8"
+msgstr "标签 8(_8)"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:6
+#: ../src/niepce/ui/moduleshell.cpp:94
+msgid "Label _9"
+msgstr "标签 9(_9)"
+
 #: ../src/niepce/ui/dialogs/importdialog.cpp:58
 #: ../src/niepce/ui/dialogs/importdialog.cpp:84
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
 msgid "Import"
 msgstr "导入"
 
 #: ../src/niepce/ui/dialogs/importdialog.cpp:80
 msgid "Import picture folder"
 msgstr "导入图片文件夹"
+
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. indent-tabs-mode:nil
+#. fill-column:99
+#. End:
+#.
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
+msgid "..."
+msgstr "..."
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+msgid "<b>Date:</b>"
+msgstr "<b>日期:</b>"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+msgid "Import Raw_Studio"
+msgstr "导入 RawStudio(_S)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+msgid "Import _UFRaw"
+msgstr "导入 UFRaw(_U)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+msgid "You can still change this after importing the pictures."
+msgstr "该图片导入后你依旧可以更改。"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+msgid "_Directory:"
+msgstr "目录(_D)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
+msgid "_Folders"
+msgstr "文件夹(_F)..."
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
+msgid "_Import"
+msgstr "导入(_I)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
+msgid "_Options"
+msgstr "选项(_O)"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:1
+msgid "_General"
+msgstr "常规(_G)"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:2
+msgid "_Reopen Library"
+msgstr "重新打开库(_R)"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
+msgid "_Theme:\t"
+msgstr "主题(_T):\t"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:4
+msgid "_User Interface"
+msgstr "用户界面(_U)"
 
 #: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
 msgid "Preferences"
@@ -57,22 +147,6 @@ msgstr "图像(_I)"
 #: ../src/niepce/ui/moduleshell.cpp:78
 msgid "Set _Label"
 msgstr "设置标签(_L)"
-
-#: ../src/niepce/ui/moduleshell.cpp:79
-msgid "Label _6"
-msgstr "标签 6(_6)"
-
-#: ../src/niepce/ui/moduleshell.cpp:84
-msgid "Label _7"
-msgstr "标签 7(_7)"
-
-#: ../src/niepce/ui/moduleshell.cpp:89
-msgid "Label _8"
-msgstr "标签 8(_8)"
-
-#: ../src/niepce/ui/moduleshell.cpp:94
-msgid "Label _9"
-msgstr "标签 9(_9)"
 
 #: ../src/niepce/ui/moduleshell.cpp:100
 msgid "Set _Rating"
@@ -778,3 +852,9 @@ msgstr "相机"
 #: ../camerawire/src/cwwindow.cpp:91
 msgid "_File"
 msgstr "文件(_F)"
+
+#~ msgid "gtk-close"
+#~ msgstr "gtk-close"
+
+#~ msgid "gtk-cancel"
+#~ msgstr "gtk-close"
