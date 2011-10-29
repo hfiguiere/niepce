@@ -376,11 +376,12 @@ void NiepceWindow::on_preferences()
 
 void NiepceWindow::create_initial_labels()
 {
-    m_libClient->createLabel(_("Label 1"), "255 0 0");
-    m_libClient->createLabel(_("Label 2"), "0 255 0");
-    m_libClient->createLabel(_("Label 3"), "0 0 255");
-    m_libClient->createLabel(_("Label 4"), "100 100 100");
-    m_libClient->createLabel(_("Label 5"), "");
+    // TODO make this parametric from resources
+    m_libClient->createLabel(_("Label 1"), fwk::RgbColor(55769, 9509, 4369).to_string()); /* 217, 37, 17 */
+    m_libClient->createLabel(_("Label 2"), fwk::RgbColor(24929, 55769, 4369).to_string()); /* 97, 217, 17 */
+    m_libClient->createLabel(_("Label 3"), fwk::RgbColor(4369, 50629, 55769).to_string()); /* 17, 197, 217 */
+    m_libClient->createLabel(_("Label 4"), fwk::RgbColor(35209, 4369, 55769).to_string()); /* 137, 17, 217 */
+    m_libClient->createLabel(_("Label 5"), fwk::RgbColor(55769, 35209, 4369).to_string()); /* 217, 137, 17 */
 }
 
 
