@@ -34,6 +34,8 @@
 
 namespace fwk {
 
+class ModuleManager;
+
 class Application 
     : public Controller
 {
@@ -75,6 +77,13 @@ public:
     UndoHistory & undo_history()
         { return m_undo; }
     UndoTransaction * begin_undo(const std::string & label);
+
+    // Module management
+    /** @return the module manager 
+     *  It is guaranted to be safe to call from the constructor
+     */
+    ModuleManager * module_manager() const
+        { return m_module_manager; }
 protected:
     Application(const char *);
     static Application::Ptr m_application; 
@@ -86,6 +95,7 @@ private:
     Glib::RefPtr<Gtk::UIManager> m_refUIManager;
     UndoHistory                  m_undo;
     std::vector<ThemeDesc>       m_themes;
+    ModuleManager               *m_module_manager;
 };
 
 }

@@ -107,7 +107,7 @@ namespace fwk {
 							const char* func,	va_list marker)
 	{
 		char buf[128];
-		snprintf(buf, 128, "(%d) ", (int)pthread_self());
+		snprintf(buf, 128, "(%ld) ", (long)pthread_self());
 		fwrite(buf, 1, strlen(buf), stderr);
 		fwrite(prefix, 1, strlen(prefix), stderr);
 

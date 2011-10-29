@@ -157,6 +157,7 @@ src/niepce/ui/dialogs/Makefile
 src/niepce/ui/thumb-view/Makefile
 src/niepce/modules/Makefile
 src/niepce/modules/darkroom/Makefile
+src/niepce/modules/interfaces/Makefile
 src/niepce/Makefile
 src/fwk/Makefile
 src/fwk/utils/Makefile

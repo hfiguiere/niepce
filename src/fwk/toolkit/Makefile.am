@@ -1,6 +1,7 @@
 
 
 
+
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \
@@ -25,6 +26,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	configdatabinder.hpp configdatabinder.cpp \
 	gdkutils.hpp gdkutils.cpp \
 	gtkutils.hpp gtkutils.cpp \
+	widgets/addinstreemodel.hpp widgets/addinstreemodel.cpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.hpp widgets/editablehscale.cpp \
 	widgets/dock-item.cpp widgets/dock-item.hpp \

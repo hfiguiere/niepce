@@ -29,6 +29,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/boost.hpp"
+#include "fwk/utils/modulemanager.hpp"
 #include "application.hpp"
 #include "uicontroller.hpp"
 #include "frame.hpp"
@@ -39,8 +40,9 @@ namespace fwk {
 Application::Ptr Application::m_application;
 
 Application::Application(const char * name)
-    : m_config(Glib::ustring("/apps/") + name),
-      m_refUIManager(Gtk::UIManager::create())
+    : m_config(Glib::ustring("/apps/") + name)
+    , m_refUIManager(Gtk::UIManager::create())
+    , m_module_manager(new ModuleManager())
 {
     register_theme(_("System"), "");
 }
@@ -48,6 +50,7 @@ Application::Application(const char * name)
 
 Application::~Application()
 {
+    delete m_module_manager;
 }
 
 

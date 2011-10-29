@@ -8,7 +8,7 @@ TESTS = testfiles testxmp \
 	testpathutils \
 	teststringutils test_db test_db2 test_db3 test_db4 testufrawmeta
 
-EXTRA_DIST = test.xmp test2.ufraw
+EXTRA_DIST = test.xmp test2.ufraw MODULES_HOWTO
 
 check_PROGRAMS = testfiles testxmp \
 	testpathutils \
@@ -85,5 +85,9 @@ libniepceutils_a_SOURCES = \
 	db/insertstatement.cpp db/insertstatement.hpp \
 	db/sqlstatement.cpp db/sqlstatement.hpp \
 	db/sqlite/sqlitecnxdrv.cpp db/sqlite/sqlitecnxdrv.hpp \
-	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.hpp
+	db/sqlite/sqlitecnxmgrdrv.cpp db/sqlite/sqlitecnxmgrdrv.hpp \
+	dynamicmodule.hpp dynamicmodule.cpp \
+	modulefactory.hpp \
+	modulemanager.hpp modulemanager.cpp \
+	$(NULL)
 

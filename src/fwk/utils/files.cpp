@@ -34,14 +34,20 @@ namespace fwk {
 	}
 
 
+  bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file, const std::string & ext)
+  {
+    std::string file_ext = fwk::path_extension(file->get_name());
+    boost::to_lower(file_ext);
+    if(file_ext == ext) {
+      return false;
+    }
+    return true;
+  }
+
 	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
 	{
-		std::string ext = fwk::path_extension(file->get_name());
-		boost::to_lower(ext);
-		if(ext == ".xmp") {
-			return false;
-		}
-		return true;
+	  static const std::string ext(".xmp");
+	  return filter_ext(file, ext);
 	}
 
 

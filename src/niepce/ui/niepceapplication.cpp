@@ -22,6 +22,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/aboutdialog.h>
 
+#include "fwk/utils/modulemanager.hpp"
 #include "niepce/stock.hpp"
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
@@ -35,10 +36,15 @@ NiepceApplication::NiepceApplication()
     : Application(PACKAGE)
 {
     niepce::Stock::registerStockItems();
-    const char * themedir = DATADIR"/niepce/themes/";
+    const char * themedir = DATADIR"/"PACKAGE"/themes/";
 
     register_theme(_("Niepce Dark"),
                    std::string(themedir) + "niepce-dark.gtkrc");
+
+    fwk::ModuleManager * modmgr = module_manager();
+    DBG_ASSERT(modmgr != NULL, "module manager is NULL.");
+    // path for modules is $PREFIX/share/niepce/modules/$VERSION
+    modmgr->add_path(DATADIR"/"PACKAGE"/modules/"VERSION);
 }
 
 Application::Ptr NiepceApplication::create()
@@ -61,8 +67,9 @@ void NiepceApplication::on_about()
 //    dlg.set_name("Niepce");
     dlg.set_program_name("Niepce Digital");
     dlg.set_version(VERSION);
-    dlg.set_comments(Glib::ustring(_("A digital photo application.\n\nBuild options: " 
-                                     NIEPCE_BUILD_CONFIG)));
+    dlg.set_comments(Glib::ustring(_("A digital photo application.\n\n"
+                                     "Build options: ")) + 
+                     NIEPCE_BUILD_CONFIG);
     dlg.run();
 }
 

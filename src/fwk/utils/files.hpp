@@ -34,6 +34,8 @@
 namespace fwk {
 
 	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
+  bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,
+		  const std::string & ext);
 	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
 
 	class FileList 
