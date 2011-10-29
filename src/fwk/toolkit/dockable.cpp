@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/dockable.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,24 @@
 
 namespace fwk {
 
-Dockable::Dockable(Dock & dock, const Glib::ustring& name, 
-             const Glib::ustring& long_name, 
-             const Glib::ustring& icon_name, DockItem::State state)
-    : DockItem(dock, name, long_name, icon_name, state)
+Dockable::Dockable(const Glib::ustring& name, 
+                   const Glib::ustring& long_name, 
+                   const Glib::ustring& icon_name)
+    : m_name(name)
+    , m_long_name(long_name)
+    , m_icon_name(icon_name)
 {
 }
 
+Gtk::VBox * 
+Dockable::build_vbox()
+{
+    m_vbox = Gtk::manage(new Gtk::VBox());
+    // do the label, the name, etc.
+
+    // TODO
+    return m_vbox;
+}
 
 }
 /*

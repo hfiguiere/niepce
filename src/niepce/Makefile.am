@@ -24,7 +24,6 @@ niepce_LDADD = \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/libfwk.a \
 	$(top_builddir)/src/ncr/libncr.a \
-	$(top_builddir)/src/ext/libgdl/libgdl.a \
 	$(top_builddir)/src/ext/libview/libview.a \
 	@LIBGLIBMM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ \

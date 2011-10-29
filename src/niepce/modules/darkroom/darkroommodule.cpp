@@ -81,17 +81,17 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
     m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
     m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
-    m_dock = new fwk::Dock();
-    m_dr_splitview.pack2(m_dock->getWidget(), Gtk::SHRINK);
+    m_dock = Gtk::manage(new fwk::Dock());
+    m_dr_splitview.pack2(*m_dock, Gtk::SHRINK);
 
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                                  m_dr_splitview.property_position(),
                                  fwk::Application::app()->config(),
                                  "dr_toolbox_pane_splitter"));
 
-    m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController(*m_dock));
+    m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController);
     add(m_toolbox_ctrl);
-    (void)m_toolbox_ctrl->buildWidget(manager);
+    m_dock->pack_start(*m_toolbox_ctrl->buildWidget(manager));
 
     return m_widget;
 }

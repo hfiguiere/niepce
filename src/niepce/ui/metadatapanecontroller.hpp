@@ -36,21 +36,21 @@ class Dock;
 namespace ui {
 	
 class MetaDataPaneController
-		: public fwk::Dockable
+    : public fwk::Dockable
 {
 public:
-		typedef std::tr1::shared_ptr<MetaDataPaneController> Ptr;
-		MetaDataPaneController(fwk::Dock &);
+    typedef std::tr1::shared_ptr<MetaDataPaneController> Ptr;
+    MetaDataPaneController();
     ~MetaDataPaneController();
-		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
-		void display(int file_id, const fwk::XmpMeta * meta);
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    void display(int file_id, const fwk::XmpMeta * meta);
     int displayed_file() const 
         { return m_fileid; }
 private:
-		std::vector<fwk::MetaDataWidget *> m_widgets;
-
-		static const xmp::MetaDataSectionFormat * get_format();
-
+    std::vector<fwk::MetaDataWidget *> m_widgets;
+    
+    static const xmp::MetaDataSectionFormat * get_format();
+    
     int m_fileid;
 };
 

@@ -25,28 +25,30 @@
 #include <gtkmm/stock.h>
 
 #include "toolboxcontroller.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/widgets/editablehscale.hpp"
-#include "fwk/toolkit/widgets/dock-item.hpp"
 #include "dritemwidget.hpp"
 
 namespace darkroom {
 
-ToolboxController::ToolboxController(fwk::Dock &dock)
-    : Dockable(dock,"tools", _("Develop"), Gtk::Stock::APPLY.id, 
-               DockItem::DOCKED_STATE)
+ToolboxController::ToolboxController()
+    : Dockable("tools", _("Develop"), Gtk::Stock::APPLY.id)
 {
 
 }
 
-Gtk::Widget * ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+Gtk::Widget * 
+ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
 {
     if(m_widget) {
         return m_widget;
     }
     DrItemWidget *item = NULL;
     fwk::EditableHScale *s = NULL;
-    Gtk::VBox *toolbox = DockItem::get_vbox();
-    m_widget = &DockItem::getWidget();
+
+    Gtk::VBox *toolbox = Dockable::build_vbox();
+    m_widget = toolbox;
+    DBG_ASSERT(toolbox, "vbox not found.");
 
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);

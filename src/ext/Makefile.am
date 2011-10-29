@@ -1,5 +1,5 @@
 
 EXTRA_DIST = README
 
-SUBDIRS = libgdl libview
+SUBDIRS = libview
 # DIST_SUBDIRS = 

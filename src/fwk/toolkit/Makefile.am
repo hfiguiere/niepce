@@ -29,7 +29,6 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	widgets/addinstreemodel.hpp widgets/addinstreemodel.cpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.hpp widgets/editablehscale.cpp \
-	widgets/dock-item.cpp widgets/dock-item.hpp \
 	widgets/dock.cpp widgets/dock.hpp \
 	dockable.hpp dockable.cpp \
 	metadatawidget.hpp metadatawidget.cpp \

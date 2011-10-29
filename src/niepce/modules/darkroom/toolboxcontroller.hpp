@@ -23,10 +23,6 @@
 
 #include "fwk/toolkit/dockable.hpp"
 
-namespace fwk {
-class Dock;
-}
-
 namespace darkroom {
 
 class ToolboxController
@@ -34,7 +30,7 @@ class ToolboxController
 {
 public:
     typedef std::tr1::shared_ptr<ToolboxController> Ptr;
-    ToolboxController(fwk::Dock &);
+    ToolboxController();
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 };
 

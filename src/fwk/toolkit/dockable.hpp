@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/dockable.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008, 2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,10 @@
 #ifndef __FRAMEWORK_DOCKABLE_H__
 #define __FRAMEWORK_DOCKABLE_H__
 
+#include <glibmm/ustring.h>
+#include <gtkmm/box.h>
 #include "fwk/toolkit/uicontroller.hpp"
-#include "fwk/toolkit/widgets/dock-item.hpp"
+#include "fwk/toolkit/widgets/dock.hpp"
 
 namespace fwk {
 
@@ -30,14 +32,25 @@ namespace fwk {
 /** A dockable item controller
  */
 class Dockable
-    : public UiController,
-      protected DockItem
+    : public UiController
 {
 public:
-    Dockable(fwk::Dock & dock, const Glib::ustring& name, 
+    Dockable(const Glib::ustring& name, 
              const Glib::ustring& long_name, 
-             const Glib::ustring& icon_name, DockItem::State state);
+             const Glib::ustring& icon_name);
 
+    /** return the vbox controlled (construct it if needed) */
+    Gtk::VBox * build_vbox();
+
+    const Glib::ustring & get_name() const
+        {
+            return m_name;
+        }
+private:
+    Gtk::VBox * m_vbox;
+    Glib::ustring m_name;
+    Glib::ustring m_long_name;
+    Glib::ustring m_icon_name;
 };
 
 

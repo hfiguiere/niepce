@@ -105,10 +105,10 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   m_lib_splitview.pack1(m_scrollview);
   m_dock = new fwk::Dock();
-  m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController(*m_dock));
+  m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController);
   add(m_metapanecontroller);
-  m_lib_splitview.pack2(m_dock->getWidget());
-  (void)m_metapanecontroller->buildWidget(manager);
+  m_lib_splitview.pack2(*m_dock);
+  m_dock->pack_start(*m_metapanecontroller->buildWidget(manager));
 
   m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                              m_lib_splitview.property_position(),
