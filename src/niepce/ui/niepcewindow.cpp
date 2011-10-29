@@ -354,7 +354,9 @@ void NiepceWindow::on_open_library()
     else {
         DBG_OUT("last library is %s", libMoniker.c_str());
     }
-    open_library(libMoniker);
+    if(!libMoniker.empty()) {
+        open_library(libMoniker);
+    }
 }
 
 

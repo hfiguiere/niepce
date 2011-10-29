@@ -227,8 +227,12 @@ namespace ui {
 	
 	void WorkspaceController::on_ready()
 	{
-		getLibraryClient()->getAllFolders();
-		getLibraryClient()->getAllKeywords();
+	    libraryclient::LibraryClient::Ptr libraryClient = getLibraryClient();
+	    if(libraryClient)
+	    {
+		libraryClient->getAllFolders();
+		libraryClient->getAllKeywords();
+	    }
 	}
 
 }
