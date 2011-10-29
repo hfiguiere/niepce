@@ -37,8 +37,16 @@ public:
     typedef std::list<Ptr> List;
     typedef std::tr1::shared_ptr<List> ListPtr;
 
-    /** add a file to a bundle. Will determine what type it is. */
-    void add(const std::string & path);
+    FileBundle()
+        : m_type(LibFile::FILE_TYPE_UNKNOWN)
+        { }
+    LibFile::FileType type() const
+        { return m_type; }
+
+    /** add a file to a bundle. Will determine what type it is. 
+     * @return false if it does not know about the file
+     */
+    bool add(const std::string & path);
     const std::string & main_file() const
         { return m_main; }
     const std::string & jpeg() const
@@ -48,6 +56,7 @@ public:
     
     static ListPtr filter_bundles(const fwk::FileList::Ptr & files);
 private:
+    LibFile::FileType m_type;
     std::string m_main;
     std::string m_xmp_sidecar;
     std::string m_jpeg;

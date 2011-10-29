@@ -91,7 +91,7 @@ void LibFile::setMetaData(int meta, int32_t v)
  * Converts a mimetype, which is expensive to calculate, into a FileType.
  * @param mime The mimetype we want to know as a filetype
  * @return the filetype
- * @todo: add the Video, JPEG+RAW file types.
+ * @todo: add the JPEG+RAW file types.
  */
 LibFile::FileType LibFile::mimetype_to_filetype(fwk::MimeType mime)
 {
@@ -102,6 +102,10 @@ LibFile::FileType LibFile::mimetype_to_filetype(fwk::MimeType mime)
     else if(mime.isImage())
     {
         return FILE_TYPE_IMAGE;
+    }
+    else if(mime.isMovie())
+    {
+        return FILE_TYPE_VIDEO;
     }
     else
     {

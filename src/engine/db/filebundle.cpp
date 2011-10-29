@@ -26,34 +26,48 @@
 
 namespace eng {
 
-void 
+bool 
 FileBundle::add(const std::string & path)
 {
     // TODO make it more reliable with more tests.
-    fwk::MimeType type(path);
-    
-    if(type.isImage()) {
-        if(type.isDigicamRaw()) {
+    fwk::MimeType mime_type(path);
+    bool added = true;
+
+    if(mime_type.isImage()) {
+        if(mime_type.isDigicamRaw()) {
             if(!m_main.empty() && m_jpeg.empty()) {
                 m_jpeg = m_main;
+                m_type = LibFile::FILE_TYPE_RAW_JPEG;
+            }
+            else {
+                m_type = LibFile::FILE_TYPE_RAW;
             }
             m_main = path;
         }
         else {
             if(!m_main.empty()) {
                 m_jpeg = path;
+                m_type = LibFile::FILE_TYPE_RAW_JPEG;
             }
             else {
                 m_main = path;
+                m_type = LibFile::FILE_TYPE_IMAGE;
             }
         }
     }
-    else if(type.isXmp()) {
+    else if(mime_type.isXmp()) {
         m_xmp_sidecar = path;
     }
-    else {
-        DBG_OUT("Unkown file %s\n", path.c_str());
+    else if(mime_type.isMovie()) {
+        m_main = path;
+        m_type = LibFile::FILE_TYPE_VIDEO;
     }
+    else {
+        DBG_OUT("Unkown file %s of type %s\n", path.c_str(), 
+                mime_type.string().c_str());
+        added = false;
+    }
+    return added;
 }
 
 
@@ -72,11 +86,16 @@ FileBundle::filter_bundles(const fwk::FileList::Ptr & files)
         std::string basename = fwk::path_stem(*iter);
 
         if(basename != current_base) {
-            current_base = basename;
-            current_bundle = FileBundle::Ptr(new FileBundle());
-            bundles->push_back(current_bundle);
+            FileBundle::Ptr new_bundle(new FileBundle());
+            if(new_bundle->add(*iter)) {
+                bundles->push_back(new_bundle);
+                current_bundle = new_bundle;
+                current_base = basename;
+            }
         }
-        current_bundle->add(*iter);
+        else {
+            current_bundle->add(*iter);
+        }
     }
 
     return bundles;

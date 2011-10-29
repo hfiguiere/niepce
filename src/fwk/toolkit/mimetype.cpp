@@ -62,13 +62,17 @@ bool MimeType::isDigicamRaw() const
 
 bool MimeType::isImage() const
 {
-		return Gio::content_type_is_a(m_type, "image/*");
+    return Gio::content_type_is_a(m_type, "image/*");
 }
-	
+
+bool MimeType::isMovie() const
+{
+    return Gio::content_type_is_a(m_type, "video/*");
+}	
 
 bool MimeType::isUnknown() const
 {
-		return Gio::content_type_is_unknown(m_type);
+    return Gio::content_type_is_unknown(m_type);
 }
 
 

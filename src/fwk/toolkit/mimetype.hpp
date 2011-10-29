@@ -28,26 +28,36 @@
 
 namespace fwk {
 
-	class MimeType
-	{
-	public:
-		MimeType(const std::string & filename);
+class MimeType
+{
+public:
+    MimeType(const std::string & filename);
     MimeType(const Glib::RefPtr<Gio::File> & file);
-
-		bool isDigicamRaw() const;
-		bool isImage() const;
-		bool isUnknown() const;
-		bool isXmp() const;
-
-		const std::string & string() const
-			{ return m_type; }
-	private:
+    
+    bool isDigicamRaw() const;
+    bool isImage() const;
+    bool isMovie() const;
+    bool isUnknown() const;
+    bool isXmp() const;
+    
+    const std::string & string() const
+        { return m_type; }
+private:
     Glib::RefPtr<Gio::FileInfo> m_fileinfo;
     std::string m_name;
-		std::string m_type;
-	};
+    std::string m_type;
+};
 
 }
 
-
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
