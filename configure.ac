@@ -3,6 +3,8 @@ AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR(README)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_MAINTAINER_MODE
+m4_ifndef([AM_SILENT_RULES], [m4_define([AM_SILENT_RULES],[])])
+AM_SILENT_RULES([yes])
 AC_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR(m4)
 
@@ -133,14 +135,10 @@ AC_SUBST(NIEPCE_LOCALEDIR)
 
 AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
 
-SHAVE_INIT
-
 AC_CONFIG_SUBDIRS(camerawire)
 
 AC_CONFIG_FILES([
 Makefile
-shave
-shave-libtool
 art/Makefile
 doc/Doxyfile
 doc/Makefile

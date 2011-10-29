@@ -19,8 +19,6 @@ ltmain.sh
 stamp-*
 autom4te.cache
 intltool-*.in
-shave
-shave-libtool
 *.o
 *.lo
 *.la
@@ -51,6 +49,8 @@ src/engine/db/test_library
 src/engine/db/test_filebundle
 src/engine/library/test_opqueue
 src/niepce/niepce
+camerawire/src/camerawire
+camerawire/po/POTFILES
 doc/Doxyfile
 doc/doxygen/html
 po/*.gmo
