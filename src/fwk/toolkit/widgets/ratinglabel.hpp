@@ -47,7 +47,8 @@ public:
 			  const Cairo::RefPtr<Cairo::ImageSurface> & star,
 			  const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
 			  double x, double y);
-  static int rating_value_from_hit_x(const Cairo::RefPtr<Cairo::ImageSurface> & star, double x);
+  static void get_geometry(double & w, double & h);
+  static int rating_value_from_hit_x(double x);
 
   // signal emitted when the rating is changed in the UI
   sigc::signal<void, int> signal_changed;

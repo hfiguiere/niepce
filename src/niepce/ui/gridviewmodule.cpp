@@ -27,15 +27,16 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
 #include "gridviewmodule.hpp"
+#include "moduleshell.hpp"
 #include "librarycellrenderer.hpp"
 
 
 namespace ui {
 
 
-GridViewModule::GridViewModule(const sigc::slot<libraryclient::LibraryClient::Ptr> & getclient,
+GridViewModule::GridViewModule(ModuleShell* shell,
                                const Glib::RefPtr<ImageListStore> & store)
-  : m_getclient(getclient)
+  : m_shell(shell)
   , m_model(store)
 {
 }
@@ -58,7 +59,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
         if(m[0] == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
-          m_getclient()->requestMetadata(m[0]);
+          m_shell->getLibraryClient()->requestMetadata(m[0]);
         }
         break;
     }
@@ -89,6 +90,7 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
   // the main cell
   LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
+  libcell->signal_rating_changed.connect(sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
 
   GtkCellLayout *cl = GTK_CELL_LAYOUT(m_librarylistview.gobj());
   DBG_ASSERT(cl, "No cell layout");
@@ -162,6 +164,10 @@ void GridViewModule::select_image(int id)
     }
 }
 
+void GridViewModule::on_rating_changed(int id, int rating)
+{
+    m_shell->get_selection_controller()->set_rating(rating);
+}
 
 }
 /*

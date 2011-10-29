@@ -78,10 +78,17 @@ void RatingLabel::draw_rating(const Cairo::RefPtr<Cairo::Context> & cr,
     }
 }
 
-int RatingLabel::rating_value_from_hit_x(const Cairo::RefPtr<Cairo::ImageSurface> & star, double x)
+
+void RatingLabel::get_geometry(double & w, double & h)
 {
-    int width = star->get_width();
-    return (x / width) + 1;
+  w = get_star()->get_width() * 5;
+  h = get_star()->get_height();
+}
+
+int RatingLabel::rating_value_from_hit_x(double x)
+{
+  int width = get_star()->get_width();
+  return (x / width) + 1;
 }
 
 RatingLabel::RatingLabel(int rating)
@@ -128,7 +135,7 @@ void RatingLabel::on_realize()
 bool RatingLabel::on_button_press_event (GdkEventButton* e)
 {
   if(e->button == 1) {
-    int new_rating =  rating_value_from_hit_x(get_star(), e->x);
+    int new_rating =  rating_value_from_hit_x(e->x);
     DBG_OUT("new rating = %d", new_rating);
 
     if(new_rating != m_rating) {

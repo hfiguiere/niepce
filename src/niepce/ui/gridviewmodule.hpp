@@ -39,6 +39,7 @@ class Dock;
 
 namespace ui {
 
+class ModuleShell;
 
 class GridViewModule
     : public ILibraryModule
@@ -47,7 +48,7 @@ class GridViewModule
 public:
   typedef std::tr1::shared_ptr<GridViewModule> Ptr;
 
-  GridViewModule(const sigc::slot<libraryclient::LibraryClient::Ptr> & getclient,
+  GridViewModule(ModuleShell *shell,
                  const Glib::RefPtr<ImageListStore> & store);
 
 
@@ -67,7 +68,9 @@ protected:
 
 
 private:
-  sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
+  void on_rating_changed(int id, int rating);
+
+  ModuleShell                 *m_shell;
   Glib::RefPtr<ImageListStore> m_model;
 
   // library split view

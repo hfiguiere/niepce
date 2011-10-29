@@ -168,7 +168,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     DBG_ASSERT(m_ui_merge_id, "merge failed");
 
     m_gridview = GridViewModule::Ptr(
-        new GridViewModule(m_getclient, 
+        new GridViewModule(this,
                            m_selection_controller->get_list_store()));
     add_library_module(m_gridview, _("Library"));
 

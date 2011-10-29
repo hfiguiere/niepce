@@ -33,57 +33,62 @@ class LibraryCellRenderer
 	: public Gtk::CellRendererPixbuf
 {
 public:
-	LibraryCellRenderer();
+    LibraryCellRenderer();
+    
+    virtual void get_size_vfunc(Gtk::Widget& widget, 
+                                const Gdk::Rectangle* cell_area, 
+                                int* x_offset, int* y_offset, 
+                                int* width, int* height) const;
+    virtual void render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
+                               Gtk::Widget& widget, 
+                               const Gdk::Rectangle& background_area, 
+                               const Gdk::Rectangle& cell_area, 
+                               const Gdk::Rectangle& expose_area, 
+                               Gtk::CellRendererState flags);
+    virtual bool activate_vfunc(GdkEvent *event,
+                                Gtk::Widget & widget,
+                                const Glib::ustring &	path,
+                                const Gdk::Rectangle&	background_area,
+                                const Gdk::Rectangle&	cell_area,
+                                Gtk::CellRendererState	flags);
+    void set_size(int _size)
+        { m_size = _size; }
+    int size() const
+        { return m_size; }
+    
+    void set_pad(int _pad)
+        { m_pad = _pad; }
+    int pad() const 
+        { return m_pad; }
+    void set_drawborder(bool val)
+        { m_drawborder = val; }
+    void set_drawemblem(bool val)
+        { m_drawemblem = val; }
+    void set_drawrating(bool val)
+        { m_drawrating = val; }
 
-	virtual void 	get_size_vfunc (Gtk::Widget& widget, 
-									const Gdk::Rectangle* cell_area, 
-									int* x_offset, int* y_offset, 
-									int* width, int* height) const;
-	virtual void 	render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window, 
-								  Gtk::Widget& widget, 
-								  const Gdk::Rectangle& background_area, 
-								  const Gdk::Rectangle& cell_area, 
-								  const Gdk::Rectangle& expose_area, 
-								  Gtk::CellRendererState flags);
-
-  void set_size(int _size)
-    { m_size = _size; }
-  int size() const
-    { return m_size; }
-
-  void set_pad(int _pad)
-    { m_pad = _pad; }
-  int pad() const 
-    { return m_pad; }
-  void set_drawborder(bool val)
-    { m_drawborder = val; }
-  void set_drawemblem(bool val)
-    { m_drawemblem = val; }
-  void set_drawrating(bool val)
-    { m_drawrating = val; }
-
-	Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> 	property_libfile() const;
-	Glib::PropertyProxy<eng::LibFile::Ptr> 	property_libfile();
-
+    Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> property_libfile() const;
+    Glib::PropertyProxy<eng::LibFile::Ptr>          property_libfile();
+    sigc::signal<void, int, int> signal_rating_changed;
 protected:
-  /* drawing implementations */
-  void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
-                      Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-                      const GdkRectangle & r);
+    /* drawing implementations */
+    void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
+                        Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
+                        const GdkRectangle & r);
 
 private:
-  int                                 m_size;
-  int                                 m_pad;
-  bool                                m_drawborder;
-  bool                                m_drawemblem;
-  bool                                m_drawrating;
-	Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
-
-	Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
-	Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;
-	Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
-	Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
-	Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
+    int                                 m_size;
+    int                                 m_pad;
+    bool                                m_drawborder;
+    bool                                m_drawemblem;
+    bool                                m_drawrating;
+    Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
+    
+    Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
+    Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;
+    Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
+    Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
+    Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
 };
 
 

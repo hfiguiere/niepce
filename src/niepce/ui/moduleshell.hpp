@@ -38,13 +38,13 @@ namespace Gtk {
 namespace ui {
 
 class ModuleShell
-		: public fwk::UiController
+    : public fwk::UiController
 {
 public:
-		typedef std::tr1::shared_ptr<ModuleShell> Ptr;
-		typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
-
-		ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client)
+    typedef std::tr1::shared_ptr<ModuleShell> Ptr;
+    typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
+    
+    ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client)
         : m_getclient(get_client)
         , m_actionGroup(Gtk::ActionGroup::create("ModuleShell"))
         {
@@ -68,23 +68,23 @@ public:
             return m_getclient();
         }
 
-		/** called when somehing is selected by the shared selection */
-		void on_selected(int id);
-		void on_image_activated(int id);
-
-		virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+    /** called when somehing is selected by the shared selection */
+    void on_selected(int id);
+    void on_image_activated(int id);
+    
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & label);
-		virtual void on_ready();
+    virtual void on_ready();
 private:
-		sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
-		Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
-
-		// managed widgets...
-		ModuleShellWidget             m_shell;
+    sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
+    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    
+    // managed widgets...
+    ModuleShellWidget             m_shell;
     Glib::RefPtr<Gtk::UIManager>  m_ui_manager;
-
+    
     ui::SelectionController::Ptr  m_selection_controller;
     GridViewModule::Ptr           m_gridview;
     darkroom::DarkroomModule::Ptr m_darkroom;
