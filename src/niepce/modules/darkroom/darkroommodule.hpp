@@ -48,10 +48,10 @@ public:
 	typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
 
 	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
-                   const sigc::slot<libraryclient::LibraryClient::Ptr> & getclient)
+                   const libraryclient::LibraryClient::Ptr & libclient)
         : m_actionGroup(action_group),
           m_image(new ncr::Image),
-          m_getClient(getclient)
+          m_libClient(libclient)
 		{
 		}
 
@@ -71,7 +71,7 @@ private:
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
-    sigc::slot<libraryclient::LibraryClient::Ptr> m_getClient;
+    libraryclient::LibraryClient::Ptr m_libClient;
     fwk::Dock                   *m_dock;
 };
 

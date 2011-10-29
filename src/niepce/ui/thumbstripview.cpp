@@ -64,12 +64,14 @@ public:
 
 ThumbStripCell::ThumbStripCell()
     : Glib::ObjectBase(typeid(ThumbStripCell))
+    , LibraryCellRenderer(NULL)
 {
     set_pad(0);
     set_size(100);
     set_drawborder(false);
     set_drawemblem(false);
     set_drawrating(false);
+    set_drawlabel(false);
 }
 
 

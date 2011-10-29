@@ -33,6 +33,7 @@
 #include "fwk/toolkit/gdkutils.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "libraryclient/libraryclient.hpp"
+#include "libraryclient/uidataprovider.hpp"
 #include "editlabels.hpp"
 
 
@@ -40,9 +41,9 @@ using libraryclient::LibraryClient;
 
 namespace ui {
 
-EditLabels::EditLabels(const eng::Label::List & labels, const LibraryClient::Ptr & libclient)
+EditLabels::EditLabels(const LibraryClient::Ptr & libclient)
     : fwk::Dialog(GLADEDIR"editlabels.ui", "editLabels")
-    , m_labels(labels)
+    , m_labels(libclient->getDataProvider()->getLabels())
     , m_lib_client(libclient)
 {
     std::fill(m_status.begin(), m_status.end(), false);

@@ -44,8 +44,8 @@ public:
     typedef std::tr1::shared_ptr<ModuleShell> Ptr;
     typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
     
-    ModuleShell(const sigc::slot<libraryclient::LibraryClient::Ptr> get_client)
-        : m_getclient(get_client)
+    ModuleShell(const libraryclient::LibraryClient::Ptr & libclient)
+        : m_libraryclient(libclient)
         , m_actionGroup(Gtk::ActionGroup::create("ModuleShell"))
         {
         }
@@ -65,7 +65,7 @@ public:
         }
     libraryclient::LibraryClient::Ptr getLibraryClient() const
         {
-            return m_getclient();
+            return m_libraryclient;
         }
 
     /** called when somehing is selected by the shared selection */
@@ -78,7 +78,7 @@ protected:
                                     const std::string & label);
     virtual void on_ready();
 private:
-    sigc::slot<libraryclient::LibraryClient::Ptr> m_getclient;
+    libraryclient::LibraryClient::Ptr m_libraryclient;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     
     // managed widgets...

@@ -22,6 +22,7 @@
 
 #include "libraryclient.hpp"
 #include "clientimpl.hpp"
+#include "uidataprovider.hpp"
 
 using eng::tid_t;
 
@@ -32,14 +33,16 @@ const char * s_thumbcacheDirname = "thumbcache";
 
 LibraryClient::LibraryClient(const fwk::Moniker & moniker, 
                              const fwk::NotificationCenter::Ptr & nc)
-    : m_pImpl(ClientImpl::makeClientImpl(moniker, nc)),
-      m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
+    : m_pImpl(ClientImpl::makeClientImpl(moniker, nc))
+    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
+    , m_uidataprovider(new UIDataProvider())
 {
 }
 
 LibraryClient::~LibraryClient()
 {
     delete m_pImpl;
+    delete m_uidataprovider;
 }
 
 tid_t LibraryClient::newTid()

@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/toolkit/uicontroller.hpp
+ * niepce - libraryclient/uidataprovider.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2011 Hub Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,51 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __LIBRARYCLIENT_UIDATAPROVIDER_HPP__
+#define __LIBRARYCLIENT_UIDATAPROVIDER_HPP__
 
-#ifndef __FRAMEWORK_UICONTROLLER_H__
-#define __FRAMEWORK_UICONTROLLER_H__
+#include <stdint.h>
 
-
-#include <gtkmm/uimanager.h>
-
-#include "fwk/toolkit/controller.hpp"
-
-namespace Gtk {
-	class Widget;
-}
+#include "engine/db/label.hpp"
 
 namespace fwk {
+class RgbColor;
+}
 
-class UiController
-  : public Controller
+namespace libraryclient {
+
+class UIDataProvider
 {
 public:
-    typedef std::tr1::shared_ptr<UiController> Ptr;
+    // label management
 
-    UiController();
-    virtual ~UiController();
-  
-    /** return the widget controlled (construct it if needed) */
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager) = 0;
-    Gtk::Widget * widget() const;
-
-protected:
-    Gtk::Widget*                 m_widget;
-    Glib::RefPtr<Gtk::UIManager> m_uimanager;
-    Gtk::UIManager::ui_merge_id  m_ui_merge_id;
+    void updateLabel(const eng::Label::Ptr &);
+    void addLabels(const eng::Label::ListPtr & l);
+    void deleteLabel(int id);
+    const fwk::RgbColor * colorForLabel(int id) const;
+    const eng::Label::List & getLabels() const
+        { return m_labels; }
+private:
+    eng::Label::List m_labels;
 };
 
 }
 
+#endif
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */
 
-
-#endif

@@ -40,6 +40,7 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "engine/db/library.hpp"
+#include "libraryclient/uidataprovider.hpp"
 
 #include "thumbstripview.hpp"
 #include "niepcewindow.hpp"
@@ -68,36 +69,19 @@ NiepceWindow::~NiepceWindow()
     pApp->uiManager()->remove_action_group(m_refActionGroup);
 }
 
-Gtk::Widget * 
-NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+void 
+NiepceWindow::_createModuleShell()
 {
-    DBG_ASSERT(manager, "manager is NULL");
-    if(m_widget) {
-        return m_widget;
-    }
-    Gtk::Window & win(gtkWindow());
+    DBG_ASSERT(m_uimanager, "UI manager NULL");
+    DBG_ASSERT(m_libClient, "libclient not initialized");
+    DBG_ASSERT(m_widget, "widget not built");
 
-    m_widget = &win;
-
-    init_actions(manager);
-    init_ui(manager);
-
-    m_notifcenter.reset(new niepce::NotificationCenter());
-
-    Glib::ustring name("camera");
-    set_icon_from_theme(name);		
-
-
-    m_notifcenter->signal_lib_notification.connect(
-        sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));
-
-
+    DBG_OUT("creating module shell");
 
     // main view
     m_moduleshell = ModuleShell::Ptr(
-        new ModuleShell(sigc::mem_fun(
-                            *this, &NiepceWindow::getLibraryClient)));
-    m_moduleshell->buildWidget(manager);
+        new ModuleShell(getLibraryClient()));
+    m_moduleshell->buildWidget(m_uimanager);
 
     add(m_moduleshell);
 
@@ -124,15 +108,15 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
-    m_hbox.pack1(*(m_workspacectrl->buildWidget(manager)), Gtk::EXPAND);
-    m_hbox.pack2(*(m_moduleshell->buildWidget(manager)), Gtk::EXPAND);
+    m_hbox.pack1(*(m_workspacectrl->buildWidget(m_uimanager)), Gtk::EXPAND);
+    m_hbox.pack2(*(m_moduleshell->buildWidget(m_uimanager)), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
 
-    win.add(m_vbox);
+    static_cast<Gtk::Window*>(m_widget)->add(m_vbox);
 
-    Gtk::Widget* pMenuBar = manager->get_widget("/MenuBar");
+    Gtk::Widget* pMenuBar = m_uimanager->get_widget("/MenuBar");
     m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
     m_vbox.pack_start(m_hbox);
 
@@ -141,13 +125,43 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
     m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_moduleshell->get_list_store()));
     add(m_filmstrip);
 
-    m_vbox.pack_start(*(m_filmstrip->buildWidget(manager)), Gtk::PACK_SHRINK);
+    m_vbox.pack_start(*(m_filmstrip->buildWidget(m_uimanager)), Gtk::PACK_SHRINK);
 
     // status bar
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
     m_statusBar.push(Glib::ustring(_("Ready")));
 
     selection_controller->add_selectable(m_filmstrip.get());
+
+    m_vbox.show_all_children();
+    m_vbox.show();
+}
+
+
+Gtk::Widget * 
+NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+{
+    DBG_ASSERT(manager, "manager is NULL");
+
+    if(m_widget) {
+        return m_widget;
+    }
+    m_uimanager = manager;
+    Gtk::Window & win(gtkWindow());
+
+    m_widget = &win;
+
+    init_actions(manager);
+    init_ui(manager);
+
+    m_notifcenter.reset(new niepce::NotificationCenter());
+
+    Glib::ustring name("camera");
+    set_icon_from_theme(name);		
+
+
+    m_notifcenter->signal_lib_notification.connect(
+        sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));
 
     win.set_size_request(600, 400);
     win.show_all_children();
@@ -395,41 +409,20 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
     {
         eng::Label::ListPtr l 
             = boost::any_cast<eng::Label::ListPtr>(ln.param);
-        for(eng::Label::List::const_iterator iter = l->begin();
-            iter != l->end(); ++iter) {
-                
-            m_labels.push_back(*iter);
-        }
+        m_libClient->getDataProvider()->addLabels(l);
         break;
     }
     case eng::Library::NOTIFY_LABEL_CHANGED:
     {
         const eng::Label::Ptr & l 
             = boost::any_cast<const eng::Label::Ptr &>(ln.param);
-        // TODO: will work as long as we have 5 labels or something.
-        for(eng::Label::List::iterator iter = m_labels.begin();
-            iter != m_labels.end(); ++iter) {
-
-            if((*iter)->id() == l->id()) {
-                (*iter)->set_label(l->label());
-                (*iter)->set_color(l->color());
-            }
-        }
+        m_libClient->getDataProvider()->updateLabel(l);
         break;
     }
     case eng::Library::NOTIFY_LABEL_DELETED:
     {
         int id = boost::any_cast<int>(ln.param);
-        // TODO: will work as long as we have 5 labels or something.
-        for(eng::Label::List::iterator iter = m_labels.begin();
-            iter != m_labels.end(); ++iter) {
-
-            if((*iter)->id() == id) {
-                DBG_OUT("remove label %d", id);
-                iter = m_labels.erase(iter);
-                break;
-            }
-        }
+        m_libClient->getDataProvider()->deleteLabel(id);
         break;
     }
     default:
@@ -444,13 +437,16 @@ void NiepceWindow::open_library(const std::string & libMoniker)
                                                        m_notifcenter));
     set_title(libMoniker);
     m_libClient->getAllLabels();
+    if(!m_moduleshell) {
+        _createModuleShell();
+    }
 }
 
 void NiepceWindow::on_action_edit_labels()
 {
     DBG_OUT("edit labels");
     // get the labels.
-    EditLabels::Ptr dlg(new EditLabels(get_labels(), getLibraryClient()));
+    EditLabels::Ptr dlg(new EditLabels(getLibraryClient()));
     dlg->run_modal(shared_frame_ptr());
 }
 

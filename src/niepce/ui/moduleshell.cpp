@@ -180,7 +180,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
 
 
     m_darkroom = darkroom::DarkroomModule::Ptr(
-        new darkroom::DarkroomModule(m_actionGroup, m_getclient));
+        new darkroom::DarkroomModule(m_actionGroup, m_libraryclient));
     add_library_module(m_darkroom, _("Darkroom"));
 
     // TODO PrintModuleController
@@ -208,7 +208,7 @@ void ModuleShell::on_selected(int id)
 {
     DBG_OUT("selected callback %d", id);
     if(id > 0) {
-        m_getclient()->requestMetadata(id);
+        m_libraryclient->requestMetadata(id);
     }		
     else  {
         m_gridview->display_none();

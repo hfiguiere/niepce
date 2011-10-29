@@ -18,8 +18,13 @@
  */
 
 
+#include <stdint.h>
+
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
+#include "fwk/toolkit/gdkutils.hpp"
+#include "engine/db/label.hpp"
+#include "libraryclient/uidataprovider.hpp"
 #include "librarycellrenderer.hpp"
 
 #include <gdkmm/general.h>
@@ -32,7 +37,7 @@
 
 namespace ui {
 
-LibraryCellRenderer::LibraryCellRenderer()
+LibraryCellRenderer::LibraryCellRenderer(libraryclient::UIDataProvider *provider)
     : Glib::ObjectBase(typeid(LibraryCellRenderer)),
       Gtk::CellRendererPixbuf(),
       m_size(160),
@@ -40,6 +45,8 @@ LibraryCellRenderer::LibraryCellRenderer()
       m_drawborder(true),
       m_drawemblem(true),
       m_drawrating(true),
+      m_drawlabel(true),
+      m_uiDataProvider(provider),
       m_libfileproperty(*this, "libfile")
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -98,23 +105,42 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
 
 namespace {
 
-void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
+int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
                       const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
-                      const GdkRectangle & r)
-		
+                      const GdkRectangle & r)		
 {	
+    int left = 0;
     if(emblem) {
         int w, h;
         w = emblem->get_width();
         h = emblem->get_height();
         double x, y;
-        x = r.x + r.width - CELL_PADDING - w;
+        left = CELL_PADDING + w;
+        x = r.x + r.width - left;
         y = r.y + r.height - CELL_PADDING - h;
         cr->set_source(emblem, x, y);
         cr->paint();
     }
+    return left;
 }
 
+void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr, 
+               int right, const fwk::RgbColor * color,
+               const GdkRectangle & r)
+{
+    DBG_ASSERT(color, "color is NULL");
+    const int label_size = 15;
+    double x, y;
+    x = r.x + r.width - CELL_PADDING - right - CELL_PADDING - label_size;
+    y = r.y + r.height - CELL_PADDING - label_size;
+    
+    cr->rectangle(x, y, label_size, label_size);
+    cr->set_source_rgb(1.0, 1.0, 1.0);
+    cr->stroke();
+    cr->rectangle(x, y, label_size, label_size);
+    Gdk::Cairo::set_source_color(cr, fwk::rgbcolor_to_gdkcolor(*color));
+    cr->fill();
+}
 
 }
 
@@ -218,17 +244,27 @@ LibraryCellRenderer::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
             break;
         }
         
-        drawFormatEmblem(cr, emblem, r);
+        int left = drawFormatEmblem(cr, emblem, r);
+        if(m_drawlabel) {
+            DBG_ASSERT(m_uiDataProvider, "no UIDataProvider");
+            uint32_t label_index = file->label();
+            const fwk::RgbColor * label_color = m_uiDataProvider->colorForLabel(label_index);
+            DBG_ASSERT(label_color, "color not found");
+            if(label_color) {
+                drawLabel(cr, left, label_color, r);
+            }
+        }
     }
 }
 
 
-bool LibraryCellRenderer::activate_vfunc(GdkEvent *event,
-                                         Gtk::Widget & widget,
-                                         const Glib::ustring &	path,
-                                         const Gdk::Rectangle&	background_area,
-                                         const Gdk::Rectangle&	cell_area,
-                                         Gtk::CellRendererState	flags)
+bool
+LibraryCellRenderer::activate_vfunc(GdkEvent *event,
+                                    Gtk::Widget & /*widget*/,
+                                    const Glib::ustring & /*path*/,
+                                    const Gdk::Rectangle& /*background_area*/,
+                                    const Gdk::Rectangle& cell_area,
+                                    Gtk::CellRendererState /*flags*/)
 {
     DBG_OUT("activated. Event type of %d", event->type);
     if(event->type == GDK_BUTTON_PRESS) {

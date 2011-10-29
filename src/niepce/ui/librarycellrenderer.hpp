@@ -26,6 +26,11 @@
 #include <cairomm/surface.h>
 
 #include "engine/db/libfile.hpp"
+#include "engine/db/label.hpp"
+
+namespace libraryclient {
+class UIDataProvider;
+}
 
 namespace ui {
 
@@ -33,7 +38,7 @@ class LibraryCellRenderer
 	: public Gtk::CellRendererPixbuf
 {
 public:
-    LibraryCellRenderer();
+    LibraryCellRenderer(libraryclient::UIDataProvider *provider);
     
     virtual void get_size_vfunc(Gtk::Widget& widget, 
                                 const Gdk::Rectangle* cell_area, 
@@ -66,6 +71,8 @@ public:
         { m_drawemblem = val; }
     void set_drawrating(bool val)
         { m_drawrating = val; }
+    void set_drawlabel(bool val)
+        { m_drawlabel = val; }
 
     Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> property_libfile() const;
     Glib::PropertyProxy<eng::LibFile::Ptr>          property_libfile();
@@ -82,6 +89,8 @@ private:
     bool                                m_drawborder;
     bool                                m_drawemblem;
     bool                                m_drawrating;
+    bool                                m_drawlabel;
+    libraryclient::UIDataProvider      *m_uiDataProvider;
     Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
     
     Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;

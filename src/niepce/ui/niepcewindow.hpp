@@ -78,8 +78,8 @@ private:
     void init_actions(const Glib::RefPtr<Gtk::UIManager> & manager);
 
     void open_library(const std::string & libMoniker);
-    eng::Label::List &   get_labels()
-        { return m_labels; }
+
+    void _createModuleShell();
 		
     niepce::NotificationCenter::Ptr m_notifcenter;
 
@@ -91,7 +91,6 @@ private:
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
     libraryclient::LibraryClient::Ptr m_libClient;
-    eng::Label::List               m_labels;
 };
 
 }

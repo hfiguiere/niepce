@@ -38,7 +38,10 @@ GridViewModule::GridViewModule(ModuleShell* shell,
                                const Glib::RefPtr<ImageListStore> & store)
   : m_shell(shell)
   , m_model(store)
+  , m_uidataprovider(NULL)
 {
+    m_uidataprovider = m_shell->getLibraryClient()->getDataProvider();
+    DBG_ASSERT(m_uidataprovider, "provider is NULL");
 }
 
 void 
@@ -89,7 +92,7 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
   m_librarylistview.property_margin() = 0;
 
   // the main cell
-  LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer());
+  LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer(m_uidataprovider));
   libcell->signal_rating_changed.connect(sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
 
   GtkCellLayout *cl = GTK_CELL_LAYOUT(m_librarylistview.gobj());
@@ -164,7 +167,7 @@ void GridViewModule::select_image(int id)
     }
 }
 
-void GridViewModule::on_rating_changed(int id, int rating)
+void GridViewModule::on_rating_changed(int /*id*/, int rating)
 {
     m_shell->get_selection_controller()->set_rating(rating);
 }

@@ -37,6 +37,10 @@ namespace fwk {
 class Dock;
 }
 
+namespace libraryclient {
+class UIDataProvider;
+}
+
 namespace ui {
 
 class ModuleShell;
@@ -72,6 +76,7 @@ private:
 
   ModuleShell                 *m_shell;
   Glib::RefPtr<ImageListStore> m_model;
+  libraryclient::UIDataProvider *m_uidataprovider;
 
   // library split view
   Gtk::IconView                m_librarylistview;

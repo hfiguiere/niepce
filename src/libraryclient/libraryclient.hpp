@@ -34,7 +34,9 @@ namespace fwk {
 
 namespace libraryclient {
 
-	class ClientImpl;
+  class UIDataProvider;
+
+  class ClientImpl;
 
 	class LibraryClient
 		: public eng::Storage
@@ -85,14 +87,16 @@ namespace libraryclient {
 
 		/* sync call */
 		virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords);
-
+	  UIDataProvider *getDataProvider() const
+	  { return m_uidataprovider; }
 	private:
-		ClientImpl* m_pImpl;
-
-		eng::ThumbnailCache                    m_thumbnailCache;
-
-		LibraryClient(const LibraryClient &);
-		LibraryClient & operator=(const LibraryClient &);
+	  ClientImpl* m_pImpl;
+	  
+	  eng::ThumbnailCache                    m_thumbnailCache;
+	  UIDataProvider *m_uidataprovider;
+	  
+	  LibraryClient(const LibraryClient &);
+	  LibraryClient & operator=(const LibraryClient &);
 	};
 
 }

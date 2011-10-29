@@ -23,4 +23,6 @@ test_worker_LDADD = $(TEST_LIBS)
 
 liblibraryclient_a_SOURCES = libraryclient.hpp  libraryclient.cpp \
 	clientimpl.hpp clientimpl.cpp \
-	locallibraryserver.hpp locallibraryserver.cpp
+	locallibraryserver.hpp locallibraryserver.cpp \
+	uidataprovider.hpp uidataprovider.cpp \
+	$(NULL)

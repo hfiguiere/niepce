@@ -39,14 +39,14 @@ class EditLabels
 {
 public:
     typedef std::tr1::shared_ptr<EditLabels> Ptr;
-    EditLabels(const eng::Label::List &, const libraryclient::LibraryClient::Ptr &);
+    EditLabels(const libraryclient::LibraryClient::Ptr &);
 
     virtual void setup_widget();
 private:
     void label_name_changed(size_t idx);
     void label_color_changed(size_t idx);
     void update_labels(int /*response*/);
-    eng::Label::List                  m_labels;
+    const eng::Label::List            & m_labels;
     std::tr1::array<Gtk::ColorButton*, 5> m_colors;
     std::tr1::array<Gtk::Entry*, 5>   m_entries;
     std::tr1::array<bool, 5>          m_status;
