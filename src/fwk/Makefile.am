@@ -1,7 +1,9 @@
 SUBDIRS = utils toolkit
 
 
-INCLUDES = -I$(top_srcdir)/src
+INCLUDES = -I$(top_srcdir)/src \
+	@BOOST_CPPFLAGS@ \
+	$(NULL)
 
 noinst_LIBRARIES = libfwk.a
 
