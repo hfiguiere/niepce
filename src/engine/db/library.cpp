@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2009,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
+
+#include <glibmm/i18n.h>
 
 #include "fwk/base/color.hpp"
 #include "niepce/notifications.hpp"
@@ -125,7 +127,14 @@ bool Library::_initDb()
                             " path TEXT)");
     SQLStatement folderTable("CREATE TABLE folders (id INTEGER PRIMARY KEY,"
                              " path TEXT, name TEXT, vault_id INTEGER, "
+                             " locked INTEGER, virtual INTEGER,"
                              " parent_id INTEGER)");
+
+    SQLStatement initialFolders(
+        boost::format("insert into folders (name, locked, virtual, parent_id) "
+                      " values ('%1%', 1, %2%, 0)") 
+        % _("Trash") 
+        % int(LibFolder::VIRTUAL_TRASH));
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " main_file INTEGER, name TEXT, parent_id INTEGER,"
                            " orientation INTEGER, file_type INTEGER, "
@@ -164,6 +173,7 @@ bool Library::_initDb()
     m_dbdrv->execute_statement(adminVersion);
     m_dbdrv->execute_statement(vaultTable);
     m_dbdrv->execute_statement(folderTable);
+    m_dbdrv->execute_statement(initialFolders);
     m_dbdrv->execute_statement(fileTable);
     m_dbdrv->execute_statement(fsFileTable);
     m_dbdrv->execute_statement(keywordTable);
@@ -395,18 +405,14 @@ bool Library::addJpegFileToBundle(int file_id, int fsfile_id)
 LibFolder::Ptr Library::getFolder(const std::string & folder)
 {
     LibFolder::Ptr f;
-    SQLStatement sql(boost::format("SELECT id,name "
-                                   "FROM folders WHERE path='%1%'") 
-                     % folder);
+    SQLStatement sql(boost::format("SELECT %1% "
+                                   "FROM folders WHERE path='%2%'") 
+                     % LibFolder::read_db_columns() % folder);
 		
     try {
         if(m_dbdrv->execute_statement(sql)) {
             if(m_dbdrv->read_next_row()) {
-                int32_t id;
-                std::string name;
-                m_dbdrv->get_column_content(0, id);
-                m_dbdrv->get_column_content(1, name);
-                f = LibFolder::Ptr(new LibFolder(id, name));
+                f = LibFolder::read_from(m_dbdrv);
             }
         }
     }
@@ -443,15 +449,13 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
 
 void Library::getAllFolders(const LibFolder::ListPtr & l)
 {
-    SQLStatement sql("SELECT id,name FROM folders");
+    SQLStatement sql(boost::format("SELECT %1% FROM folders")
+                     % LibFolder::read_db_columns());
     try {
         if(m_dbdrv->execute_statement(sql)) {
             while(m_dbdrv->read_next_row()) {
-                int32_t id;
-                std::string name;
-                m_dbdrv->get_column_content(0, id);
-                m_dbdrv->get_column_content(1, name);
-                l->push_back(LibFolder::Ptr(new LibFolder(id, name)));
+                LibFolder::Ptr f = LibFolder::read_from(m_dbdrv);
+                l->push_back(f);
             }
         }
     }

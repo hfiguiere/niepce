@@ -39,7 +39,7 @@
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.
-#define DB_SCHEMA_VERSION 3
+#define DB_SCHEMA_VERSION 4
 
 namespace fwk {
 class RgbColor;

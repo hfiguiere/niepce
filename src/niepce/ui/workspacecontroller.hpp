@@ -108,6 +108,7 @@ namespace ui {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,
 			ICON_ROLL,
+			ICON_TRASH,
 			ICON_KEYWORD,
 			_ICON_SIZE
 		};

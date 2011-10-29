@@ -43,6 +43,9 @@ folders         id             Unique ID in the database
 		path           The absolute path of the folder
 		name 	       The display name
 		vault_id       The vault ID (unused) 0 = no vault (= vaults.id)
+		locked         Can't be deleted if non 0. For special folders.
+		virtual        Type of virtual item. 0 = regular. 
+                               See libfolder.hpp
 		parent_id      The ID of the parent (= folders.id). 0 = top level
 
 Keywords are defined in on table, and linked to files in the other

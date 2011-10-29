@@ -28,7 +28,7 @@ noinst_LIBRARIES = libniepcedb.a
 
 libniepcedb_a_SOURCES = library.hpp library.cpp \
 	libfile.hpp libfile.cpp \
-	libfolder.hpp \
+	libfolder.hpp libfolder.cpp \
 	label.hpp \
 	libmetadata.hpp libmetadata.cpp \
 	keyword.hpp keyword.cpp \

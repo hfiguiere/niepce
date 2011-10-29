@@ -50,6 +50,9 @@ namespace ui {
 			m_icons[ICON_ROLL] = icon_theme->load_icon(
 				Glib::ustring("emblem-photos"), 16,
 				Gtk::ICON_LOOKUP_USE_BUILTIN);
+			m_icons[ICON_TRASH] = icon_theme->load_icon(
+				Glib::ustring("user-trash"), 16,
+				Gtk::ICON_LOOKUP_USE_BUILTIN);
 			// FIXME use an icon that make more sense.
 			m_icons[ICON_KEYWORD] = icon_theme->load_icon(
 				Glib::ustring("application-certificate"), 16, 
@@ -154,11 +157,16 @@ namespace ui {
 
 	void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
 	{
-		Gtk::TreeModel::iterator iter(add_item(m_treestore, m_folderNode->children(), 
-											   m_icons[ICON_ROLL], 
-											   f->name(), f->id(), FOLDER_ITEM));
-		getLibraryClient()->countFolder(f->id());
-		m_folderidmap[f->id()] = iter;
+	  int icon_idx = ICON_ROLL;
+	  if(f->virtual_type() == eng::LibFolder::VIRTUAL_TRASH) {
+	    icon_idx = ICON_TRASH;
+	  }
+	  Gtk::TreeModel::iterator iter(add_item(m_treestore, 
+						 m_folderNode->children(), 
+						 m_icons[icon_idx], 
+						 f->name(), f->id(), FOLDER_ITEM));
+	  getLibraryClient()->countFolder(f->id());
+	  m_folderidmap[f->id()] = iter;
 	}
 
 	Gtk::TreeModel::iterator

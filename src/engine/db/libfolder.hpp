@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfolder.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007, 2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,27 +26,63 @@
 #include <list>
 #include <tr1/memory>
 
+#include "fwk/utils/db/iconnectiondriver.hpp"
+
 namespace eng {
 
-	class LibFolder
-	{
-	public:
-		typedef std::tr1::shared_ptr< LibFolder > Ptr;
-		typedef std::list< Ptr > List;
-		typedef std::tr1::shared_ptr< List > ListPtr;
+class LibFolder
+{
+public:
+    typedef std::tr1::shared_ptr< LibFolder > Ptr;
+    typedef std::list< Ptr > List;
+    typedef std::tr1::shared_ptr< List > ListPtr;
+    typedef enum {
+        VIRTUAL_NONE = 0,
+        VIRTUAL_TRASH = 1,
 
-		LibFolder(int _id, std::string _name)
-			: m_id(_id), m_name(_name)
-			{
-			}
-		int id() const
-			{ return m_id; }
-		const std::string & name() const
-			{ return m_name; }
-	private:
-		int         m_id;
-		std::string m_name;
-	};
+        _VIRTUAL_LAST
+    } VirtualType;
+
+    LibFolder(int _id, std::string _name)
+        : m_id(_id), m_name(_name)
+        , m_locked(false)
+        , m_virtual(VIRTUAL_NONE)
+        {
+        }
+    int id() const
+        { return m_id; }
+    const std::string & name() const
+        { return m_name; }
+
+    bool is_locked() const
+        { return m_locked; }
+    void set_is_locked(bool _locked)
+        { m_locked = _locked; }
+    VirtualType virtual_type() const
+        { return m_virtual; }
+    void set_virtual_type(VirtualType _virtual)
+        { m_virtual = _virtual; }
+
+    /** database persistance */
+    static const char * read_db_columns();
+    static Ptr read_from(const db::IConnectionDriver::Ptr & db);
+private:
+    int         m_id;
+    std::string m_name;
+    bool m_locked;
+    VirtualType m_virtual;
+};
+
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 
 #endif
