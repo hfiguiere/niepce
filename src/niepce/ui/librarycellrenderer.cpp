@@ -74,20 +74,13 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
                                          Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
                                          const GdkRectangle & r)
 {
-    double x, y;
-    x = r.x + pad();
-    y = r.y + pad();
     int w = pixbuf->get_width();
     int h = pixbuf->get_height();
-    int min = std::min(w,h);
-    int max = std::max(w,h);
-    int offset = (max - min) / 2;
-    if(w > h) {
-        y += offset;
-    }
-    else {
-        x += offset;
-    }
+    int offset_x = (m_size - w) / 2;
+    int offset_y = (m_size - h) / 2;
+    double x, y;
+    x = r.x + pad() + offset_x;
+    y = r.y + pad() + offset_y;
 	
 // draw the shadow...
 //		cr->set_source_rgb(0.0, 0.0, 0.0);
