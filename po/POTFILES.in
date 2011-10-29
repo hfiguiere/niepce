@@ -1,6 +1,8 @@
 src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/application.cpp
 src/fwk/toolkit/frame.cpp
+src/fwk/toolkit/widgets/addinstreemodel.cpp
+src/engine/db/library.cpp
 src/niepce/ui/dialogs/editlabels.cpp
 [type: gettext/glade]src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
@@ -16,15 +18,4 @@ src/niepce/ui/workspacecontroller.cpp
 src/niepce/ui/thumbstripview.cpp
 src/niepce/stock.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
-src/ext/libgdl/gdl-dock-bar.c
-src/ext/libgdl/gdl-dock-item-grip.c
-src/ext/libgdl/gdl-dock-item.c
-src/ext/libgdl/gdl-dock-master.c
-src/ext/libgdl/gdl-dock-notebook.c
-src/ext/libgdl/gdl-dock-object.c
-src/ext/libgdl/gdl-dock-paned.c
-src/ext/libgdl/gdl-dock-placeholder.c
-src/ext/libgdl/gdl-dock-tablabel.c
-src/ext/libgdl/gdl-dock.c
-src/ext/libgdl/gdl-switcher.c
 camerawire/src/cwwindow.cpp
