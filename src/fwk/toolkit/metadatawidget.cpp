@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "fwk/base/fractions.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
+#include "fwk/toolkit/widgets/ratinglabel.hpp"
 
 #include "metadatawidget.hpp"
 
@@ -56,6 +57,12 @@ void clear_widget(std::pair<const std::string, Gtk::Widget *> & p)
     Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
     if(l) {
         l->set_text("");
+        return;
+    }
+    fwk::RatingLabel * rl = dynamic_cast<fwk::RatingLabel*>(p.second);
+    if(rl) {
+        rl->set_rating(0);
+        return;
     }
 }
 }
@@ -116,7 +123,7 @@ void MetaDataWidget::add_data(const std::string & id,
                               const char * value,
                               xmp::MetaDataType type)
 {
-    Gtk::Label *w = NULL;
+    Gtk::Widget *w = NULL;
     int n_row;
     std::map<std::string, Gtk::Widget *>::iterator iter 
         = m_data_map.end();
@@ -134,8 +141,13 @@ void MetaDataWidget::add_data(const std::string & id,
         labelw->set_alignment(0, 0.5);
         labelw->set_use_markup(true);
 
-        w = Gtk::manage(new Gtk::Label());
-        w->set_alignment(0, 0.5);
+        if(type == xmp::META_DT_STAR_RATING) {
+            w = Gtk::manage(new fwk::RatingLabel());
+        }
+        else {
+            w = Gtk::manage(new Gtk::Label());
+            static_cast<Gtk::Label*>(w)->set_alignment(0, 0.5);
+        }
 
         m_table.resize(n_row + 1, 2);
         m_table.attach(*labelw, 0, 1, n_row, n_row+1, 
@@ -150,13 +162,29 @@ void MetaDataWidget::add_data(const std::string & id,
     switch(type) {
     case xmp::META_DT_FRAC:
     {
-        double decimal = fwk::fraction_to_decimal(value);
-        std::string frac = boost::lexical_cast<std::string>(decimal);
-        w->set_text(frac);
+        try {
+            double decimal = fwk::fraction_to_decimal(value);
+            std::string frac = boost::lexical_cast<std::string>(decimal);
+            static_cast<Gtk::Label*>(w)->set_text(frac);
+        }
+        catch(...) {
+            DBG_OUT("conversion of '%s' to frac failed", value);
+        }
+        break;
+    }
+    case xmp::META_DT_STAR_RATING:
+    {
+        try {
+            int rating = boost::lexical_cast<int>(value);
+            static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
+        }
+        catch(...) {
+            DBG_OUT("conversion of '%s' to int failed", value);
+        }
         break;
     }
     default:
-        w->set_text(value);
+        static_cast<Gtk::Label*>(w)->set_text(value);
         break;
     }
     m_table.show_all();

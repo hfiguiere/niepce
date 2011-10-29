@@ -3,6 +3,7 @@
 
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
+	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \
 	@GCONF_CFLAGS@  @EXEMPI_CFLAGS@ \
@@ -27,6 +28,9 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	gdkutils.hpp gdkutils.cpp \
 	gtkutils.hpp gtkutils.cpp \
 	widgets/addinstreemodel.hpp widgets/addinstreemodel.cpp \
+	widgets/ratingaction.hpp widgets/ratingaction.cpp \
+	widgets/ratinglabel.hpp widgets/ratinglabel.cpp \
+	widgets/ratingmenuitem.hpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.hpp widgets/editablehscale.cpp \
 	widgets/dock.cpp widgets/dock.hpp \

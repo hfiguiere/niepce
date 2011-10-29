@@ -31,6 +31,7 @@
 #include "engine/db/library.hpp"
 #include "engine/db/libfile.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/widgets/ratingaction.hpp"
 #include "moduleshell.hpp"
 #include "niepcewindow.hpp"
 #include "metadatapanecontroller.hpp"
@@ -98,36 +99,36 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
                               4));
     
     m_actionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
-    m_actionGroup->add(Gtk::Action::create("SetRating0", _("_No Rating")),
+    m_actionGroup->add(fwk::RatingAction::create("SetRating0", 0),
                           Gtk::AccelKey("0"), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               0));
-    m_actionGroup->add(Gtk::Action::create("SetRating1", _("_1 Star")),
+    m_actionGroup->add(fwk::RatingAction::create("SetRating1", 1),
                           Gtk::AccelKey("1"), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               1));
-    m_actionGroup->add(Gtk::Action::create("SetRating2", _("_2 Stars")),
+    m_actionGroup->add(fwk::RatingAction::create("SetRating2", 2),
                           Gtk::AccelKey("2"), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               2));
-    m_actionGroup->add(Gtk::Action::create("SetRating3", _("_3 Stars")),
+    m_actionGroup->add(fwk::RatingAction::create("SetRating3", 3),
                           Gtk::AccelKey("3"), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               3));
-    m_actionGroup->add(Gtk::Action::create("SetRating4", _("_4 Stars")),
+    m_actionGroup->add(fwk::RatingAction::create("SetRating4", 4),
                           Gtk::AccelKey("4"), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               4));
-    m_actionGroup->add(Gtk::Action::create("SetRating5", _("_5 Stars")),
-                          Gtk::AccelKey("5"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_rating),
-                              5));
+    m_actionGroup->add(fwk::RatingAction::create("SetRating5", 5),
+                       Gtk::AccelKey("5"), sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::set_rating),
+                           5));
     m_actionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
     manager->insert_action_group(m_actionGroup);

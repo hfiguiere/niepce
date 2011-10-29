@@ -19,6 +19,7 @@
 
 
 #include "fwk/base/debug.hpp"
+#include "fwk/toolkit/widgets/ratinglabel.hpp"
 #include "librarycellrenderer.hpp"
 
 #include <gdkmm/general.h>
@@ -56,10 +57,6 @@ LibraryCellRenderer::LibraryCellRenderer()
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-unknown-fmt.png"));
         
-        m_star = Cairo::ImageSurface::create_from_png(
-            std::string(DATADIR"/niepce/pixmaps/niepce-set-star.png"));
-        m_unstar = Cairo::ImageSurface::create_from_png(
-            std::string(DATADIR"/niepce/pixmaps/niepce-unset-star.png"));
 	}
 	catch(const std::exception & e)
 	{
@@ -126,34 +123,6 @@ void drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr,
     }
 }
 
-void drawRating(const Cairo::RefPtr<Cairo::Context> & cr, 
-                int32_t rating,
-                const Cairo::RefPtr<Cairo::ImageSurface> & star,
-                const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
-                const GdkRectangle & r)
-{
-    if(!star || !unstar) {
-        return;
-    }
-    if(rating == -1) {
-        rating = 0;
-    }
-    int w = star->get_width();
-    int h = star->get_height();
-    double x, y;
-    x = r.x + 4;
-    y = r.y + r.height - 4 - h;
-    for(int32_t i = 1; i <= 5; i++) {
-        if(i <= rating) {
-            cr->set_source(star, x, y);
-        }
-        else {
-            cr->set_source(unstar, x, y);
-        }
-        cr->paint();
-        x += w;
-    }
-}
 
 }
 
@@ -221,10 +190,15 @@ LibraryCellRenderer::render_vfunc (const Glib::RefPtr<Gdk::Drawable>& window,
       cr->stroke();
   }
 
-	Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-	_drawThumbnail(cr, pixbuf, r);
+  Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
+  _drawThumbnail(cr, pixbuf, r);
   if(m_drawrating) {
-      drawRating(cr, file->rating(), m_star, m_unstar, r);
+      double x, y;
+      x = r.x + 4;
+      y = r.y + r.height - 4;
+      fwk::RatingLabel::draw_rating(cr, file->rating(), 
+                                    fwk::RatingLabel::get_star(), 
+                                    fwk::RatingLabel::get_unstar(), x, y);
   }
 
   if(m_drawemblem) {

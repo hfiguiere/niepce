@@ -84,9 +84,6 @@ private:
 	Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
 	Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
 	Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
-
-	Cairo::RefPtr<Cairo::ImageSurface>  m_star;
-	Cairo::RefPtr<Cairo::ImageSurface>  m_unstar;
 };
 
 
