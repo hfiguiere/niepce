@@ -55,8 +55,6 @@ public:
 protected:
   virtual void  on_realize();
   virtual bool 	on_button_press_event (GdkEventButton* event);
-  virtual bool 	on_button_release_event (GdkEventButton* event);
-  virtual bool 	on_motion_notify_event (GdkEventMotion* event);
 
   virtual void 	on_size_request (Gtk::Requisition* requisition);
   virtual bool  on_expose_event (GdkEventExpose *event);

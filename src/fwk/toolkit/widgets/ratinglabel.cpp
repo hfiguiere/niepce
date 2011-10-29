@@ -18,6 +18,8 @@
  */
 
 
+#include <cmath>
+
 #include "fwk/base/debug.hpp"
 #include "ratinglabel.hpp"
 
@@ -87,8 +89,8 @@ void RatingLabel::get_geometry(double & w, double & h)
 
 int RatingLabel::rating_value_from_hit_x(double x)
 {
-  int width = get_star()->get_width();
-  return (x / width) + 1;
+  double width = get_star()->get_width();
+  return round(x / width);
 }
 
 RatingLabel::RatingLabel(int rating)
@@ -147,19 +149,6 @@ bool RatingLabel::on_button_press_event (GdkEventButton* e)
 }
 
 
-bool RatingLabel::on_button_release_event (GdkEventButton* e)
-{
-  return true;
-}
-
-
-bool RatingLabel::on_motion_notify_event (GdkEventMotion* e)
-{
-  return true;
-}
-
-
-
 void RatingLabel::on_size_request(Gtk::Requisition* requisition)
 {
   *requisition = Gtk::Requisition();
@@ -169,7 +158,7 @@ void RatingLabel::on_size_request(Gtk::Requisition* requisition)
   //  DBG_OUT("size request is %d %d", requisition->width, requisition->height);
 }
 
-bool RatingLabel::on_expose_event(GdkEventExpose *evt)
+bool RatingLabel::on_expose_event(GdkEventExpose * /*evt*/)
 {
   if (is_drawable()) {
     const Gtk::Allocation& allocation = get_allocation();
