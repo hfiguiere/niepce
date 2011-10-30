@@ -18,17 +18,21 @@
  */
 
 
+#include <boost/bind.hpp>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/iconview.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/builder.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "importdialog.hpp"
@@ -40,11 +44,11 @@ namespace ui {
 
 ImportDialog::ImportDialog()
     : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog"),
-    m_date_tz_combo(NULL),
+      m_date_tz_combo(NULL),
 	  m_ufraw_import_check(NULL),
 	  m_rawstudio_import_check(NULL),
 	  m_directory_name(NULL),
-    m_folderList(NULL)
+      m_imagesList(NULL)
 {
 }
 
@@ -67,8 +71,10 @@ void ImportDialog::setup_widget()
     _builder->get_widget("ufraw_import_check", m_ufraw_import_check);
     _builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
     _builder->get_widget("directory_name", m_directory_name);
-    _builder->get_widget("folderList", m_folderList);
-    m_folderListModel = m_folderListModelRecord.inject(*m_folderList);
+    _builder->get_widget("imagesList", m_imagesList);
+    _builder->get_widget("destinationFolder", m_destinationFolder);
+    m_imagesListModel = m_imagesListModelRecord.inject(*m_imagesList);
+    m_imagesList->set_model(m_imagesListModel);
     m_is_setup = true;
 }
 
@@ -82,7 +88,7 @@ void ImportDialog::do_select_directories()
 	
     dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
-    dialog.set_select_multiple(true);
+    dialog.set_select_multiple(false);
     std::string last_import_location;
     last_import_location = cfg.getValue("last_import_location", "");
     if(!last_import_location.empty()) {
@@ -93,23 +99,28 @@ void ImportDialog::do_select_directories()
     switch(result)
     {
     case Gtk::RESPONSE_OK:
-        set_to_import(dialog.get_filenames());
-//        m_directory_name->set_label(m_to_import);
+        set_to_import(dialog.get_filename());
         break;
     default:
         break;
     }
 }
 
-void ImportDialog::set_to_import(const Glib::SListHandle<Glib::ustring> & l)
+void ImportDialog::set_to_import(const Glib::ustring & f)
 {
-    m_list_to_import = l;
-    m_folderListModel->clear();
-    for(std::list<std::string>::const_iterator i = m_list_to_import.begin();
-        i != m_list_to_import.end(); ++i) {
+    m_folder_path_to_import = f;
+    m_destinationFolder->set_text(fwk::path_basename(f));
+    m_directory_name->set_text(f);
+//
+    m_imagesListModel->clear();
+    fwk::FileList::Ptr list_to_import 
+        = fwk::FileList::getFilesFromDirectory(f, 
+                                               boost::bind(&fwk::filter_xmp_out, _1));
+    for(std::list<std::string>::const_iterator i = list_to_import->begin();
+        i != list_to_import->end(); ++i) {
         DBG_OUT("selected %s", i->c_str());
-        Gtk::TreeIter iter = m_folderListModel->append();
-        iter->set_value(m_folderListModelRecord.m_col1, *i);
+        Gtk::TreeIter iter = m_imagesListModel->append();
+        iter->set_value(m_imagesListModelRecord.m_col1, *i);
     }
 }
 
@@ -121,6 +132,7 @@ void ImportDialog::set_to_import(const Glib::SListHandle<Glib::ustring> & l)
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
+  tab-width:4
   fill-column:99
   End:
 */

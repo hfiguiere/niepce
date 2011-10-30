@@ -21,14 +21,15 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Import</property>
     <property name="window_position">center-on-parent</property>
-    <property name="default_width">300</property>
-    <property name="default_height">300</property>
+    <property name="default_width">600</property>
+    <property name="default_height">600</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <placeholder/>
@@ -36,6 +37,7 @@
         <child>
           <object class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">8</property>
             <child>
               <object class="GtkHBox" id="hbox1">
@@ -86,9 +88,9 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Folders</property>
+                <property name="label" translatable="yes">_Images to import</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">folderList</property>
+                <property name="mnemonic_widget">imagesList</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -103,15 +105,49 @@
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTreeView" id="folderList">
+                  <object class="GtkTreeView" id="imagesList">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox2">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Destination _Folder</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="destinationFolder">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x2022;</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -122,6 +158,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="ufraw_import_check">
                         <property name="label" translatable="yes">Import _UFRaw</property>
@@ -162,6 +199,7 @@
                           <object class="GtkVBox" id="vbox1">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">4</property>
                             <child>
                               <object class="GtkComboBox" id="date_tz_combo">
@@ -219,12 +257,12 @@
                 </child>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="expand">False</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="pack_type">end</property>
             <property name="position">2</property>
           </packing>

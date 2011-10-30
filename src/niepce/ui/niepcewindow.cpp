@@ -295,14 +295,12 @@ void NiepceWindow::on_action_file_import()
     case 0:
     {
         // import
-        const std::list<std::string> & to_import(import_dialog->to_import());
+        Glib::ustring to_import = import_dialog->path_to_import();
         if(!to_import.empty()) {
-            cfg.setValue("last_import_location", to_import.front());
+            cfg.setValue("last_import_location", import_dialog->path_to_import());
 			
             //DBG_OUT("%s", to_import.c_str());
-            std::for_each(to_import.begin(), to_import.end(),
-                          boost::bind(&LibraryClient::importFromDirectory,
-                                      m_libClient, _1, false));
+            m_libClient->importFromDirectory(to_import, false);
         }
         break;
     }

@@ -30,6 +30,7 @@
 
 #include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/dialog.hpp"
+#include "imageliststore.hpp"
 
 namespace Gtk {
 	class Dialog;
@@ -50,23 +51,28 @@ public:
 
  	virtual void setup_widget();
 
-	const std::list<std::string> & to_import() const
-		{ return m_list_to_import; }
-	void set_to_import(const Glib::SListHandle<Glib::ustring> & l);
+//	const std::list<std::string> & to_import() const
+//		{ return m_list_to_import; }
+    const Glib::ustring & path_to_import() const
+        { return m_folder_path_to_import; }
+	void set_to_import(const Glib::ustring & f);
 
 private:
 	class ImportParam;
 
 	void do_select_directories();
 	
-	std::list<std::string> m_list_to_import;
+  Glib::ustring m_folder_path_to_import;
+//	std::list<std::string> m_list_to_import;
+
 	Gtk::ComboBox *m_date_tz_combo;
 	Gtk::CheckButton *m_ufraw_import_check;
 	Gtk::CheckButton *m_rawstudio_import_check;
 	Gtk::Label *m_directory_name;
-	Gtk::TreeView *m_folderList;
-	fwk::TextModelRecord m_folderListModelRecord;
-	Glib::RefPtr<Gtk::ListStore> m_folderListModel;
+    Gtk::Entry *m_destinationFolder;
+	Gtk::TreeView *m_imagesList;
+    fwk::TextModelRecord m_imagesListModelRecord;
+    Glib::RefPtr<Gtk::ListStore> m_imagesListModel;
 };
 
 }
@@ -77,6 +83,7 @@ private:
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
+  tab-width:4
   fill-column:80
   End:
 */
