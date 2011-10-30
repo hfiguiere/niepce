@@ -33,6 +33,7 @@ int test_main( int, char *[] )             // note the name!
   BOOST_CHECK(fwk::path_stem("/foo/bar/baz.txt") == "/foo/bar/baz");
   
   BOOST_CHECK(fwk::path_extension("/foo/bar/baz.txt") == ".txt");
+  BOOST_CHECK(fwk::path_extension("img_2114.xmp") == ".xmp");
 
   BOOST_CHECK(fwk::path_replace_extension("/foo/bar/baz.txt", ".xmp") == "/foo/bar/baz.xmp");
 

@@ -45,7 +45,7 @@ std::string::size_type _path_extension_pos(const std::string &path)
     }
     std::string::size_type slash_idx = path.find_last_of("/");
     // if the '.' is not part of the last component
-    if(idx < slash_idx) {
+    if((slash_idx != std::string::npos) && (idx < slash_idx)) {
         return std::string::npos;
     }
 
