@@ -18,13 +18,14 @@
  */
 
 #include <cairomm/context.h>
-#include <gdkmm/general.h>
 
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
 
 #include "imagecanvas.hpp"
+
+#include <gdkmm/general.h>
 
 namespace darkroom {
 

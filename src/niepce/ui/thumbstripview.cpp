@@ -24,7 +24,6 @@
 #include <string>
 
 #include <glibmm/i18n.h>
-#include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/scrolledwindow.h>
 
@@ -33,6 +32,8 @@
 #include "engine/db/libfile.hpp"
 #include "thumbstripview.hpp"
 #include "librarycellrenderer.hpp"
+
+#include <gdkmm/general.h>
 
 struct EogThumbView;
 

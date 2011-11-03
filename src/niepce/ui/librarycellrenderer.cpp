@@ -18,10 +18,10 @@
  */
 
 
-#include <gdkmm/general.h>
-
 #include "fwk/base/debug.hpp"
 #include "librarycellrenderer.hpp"
+
+#include <gdkmm/general.h>
 
 #ifndef DATADIR
 #error DATADIR is not defined
