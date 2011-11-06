@@ -74,6 +74,9 @@ public:
     void setLabel(int32_t v);
     int32_t label() const
         { return m_label; }
+    void setFlag(int32_t v);
+    int32_t flag() const
+        { return m_flag; }
 
     /** Setter for the filetype.
      * @param v the FILETYPE of the file
@@ -85,11 +88,6 @@ public:
     
     /** set an arbitrary meta data value */
     void setMetaData(int meta, int32_t v); 
-
-    /** retrieve the keywords id list 
-     * @return the list
-     */
-    const Keyword::IdList & keywords() const;
 		
     /** return an URI of the real path
      * because the Gtk stuff want that.
@@ -112,9 +110,8 @@ private:
     int32_t     m_orientation;  /**< Exif orientatoin */
     int32_t     m_rating;       /**< rating */
     int32_t     m_label;        /**< Label ID */
+    int32_t     m_flag;         /**< Flag */
     FileType    m_file_type;    /**< File type */
-    mutable bool m_hasKeywordList;
-    mutable Keyword::IdList m_keywordList;
 };
 
 }

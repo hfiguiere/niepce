@@ -129,6 +129,24 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
                            sigc::mem_fun(*m_selection_controller,
                                          &SelectionController::set_rating),
                            5));
+
+    m_actionGroup->add(Gtk::Action::create("SetFlag", _("Set _Flag")));
+    m_actionGroup->add(Gtk::Action::create("SetFlagReject", _("Flag as _Rejected")),
+                          Gtk::AccelKey("x"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_flag),
+                              -1));
+    m_actionGroup->add(Gtk::Action::create("SetFlagNone", _("_Unflagged")),
+                          Gtk::AccelKey("u"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_flag),
+                              0));
+    m_actionGroup->add(Gtk::Action::create("SetFlagPick", _("Flag as _Pick")),
+                          Gtk::AccelKey("p"), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
+                                            &SelectionController::set_flag),
+                              1));
+
     m_actionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
     manager->insert_action_group(m_actionGroup);
@@ -158,6 +176,11 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
         "        <menuitem action='SetLabel8'/>"
         "        <menuitem action='SetLabel9'/>"
         "        <separator/>"
+        "      </menu>"
+        "      <menu action='SetFlag'>"
+        "        <menuitem action='SetFlagReject'/>"
+        "        <menuitem action='SetFlagNone'/>"
+        "        <menuitem action='SetFlagPick'/>"
         "      </menu>"
         "      <separator/>"
         "      <menuitem action='DeleteImage'/>"

@@ -126,8 +126,10 @@ bool Library::_initDb()
     SQLStatement vaultTable("CREATE TABLE vaults (id INTEGER PRIMARY KEY,"
                             " path TEXT)");
     SQLStatement folderTable("CREATE TABLE folders (id INTEGER PRIMARY KEY,"
-                             " path TEXT, name TEXT, vault_id INTEGER, "
-                             " locked INTEGER, virtual INTEGER,"
+                             " path TEXT, name TEXT, "
+                             " vault_id INTEGER DEFAULT 0, "
+                             " locked INTEGER DEFAULT 0, "
+                             " virtual INTEGER DEFAULT 0,"
                              " parent_id INTEGER)");
 
     SQLStatement initialFolders(
@@ -138,14 +140,15 @@ bool Library::_initDb()
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " main_file INTEGER, name TEXT, parent_id INTEGER,"
                            " orientation INTEGER, file_type INTEGER, "
-                           " file_date INTEGER, rating INTEGER, label INTEGER,"
+                           " file_date INTEGER, rating INTEGER DEFAULT 0, "
+                           " label INTEGER, flag INTEGER DEFAULT 0, "
                            " import_date INTEGER, mod_date INTEGER, "
                            " xmp TEXT, xmp_date INTEGER, xmp_file INTEGER,"
                            " jpeg_file INTEGER)");
     SQLStatement fsFileTable("CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,"
                              " path TEXT)");
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
-                              " keyword TEXT, parent_id INTEGER)");
+                              " keyword TEXT, parent_id INTEGER DEFAULT 0)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
                                  " keyword_id INTEGER)");
     SQLStatement labelTable("CREATE TABLE labels (id INTEGER PRIMARY KEY,"
@@ -472,7 +475,7 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
     int32_t fsfid;
     std::string pathname;
     std::string name;
-    DBG_ASSERT(dbdrv->get_number_of_columns() == 9, "wrong number of columns");
+    DBG_ASSERT(dbdrv->get_number_of_columns() == 10, "wrong number of columns");
     dbdrv->get_column_content(0, id);
     dbdrv->get_column_content(1, fid);
     dbdrv->get_column_content(2, pathname);
@@ -488,6 +491,8 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
     f->setRating(val);
     dbdrv->get_column_content(6, val);
     f->setLabel(val);
+    dbdrv->get_column_content(9, val);
+    f->setFlag(val);
 
     /* Casting needed. Remember that a simple enum like this is just a couple
      * of #define for integers.
@@ -502,7 +507,7 @@ void Library::getFolderContent(int folder_id, const LibFile::ListPtr & fl)
     SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
                                    "name,"
                                    "orientation,rating,label,file_type,"
-                                   "fsfiles.id"
+                                   "fsfiles.id,flag"
                                    " FROM files,fsfiles "
                                    " WHERE parent_id='%1%' "
                                    " AND files.main_file=fsfiles.id")
@@ -619,7 +624,7 @@ void Library::getKeywordContent(int keyword_id, const LibFile::ListPtr & fl)
 {
     SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
                                    "name,orientation,rating,label,file_type,"
-                                   " fsfiles.id "
+                                   " fsfiles.id,flag"
                                    " FROM files,fsfiles "
                                    " WHERE files.id IN "
                                    " (SELECT file_id FROM keywording "
@@ -721,7 +726,8 @@ bool Library::setMetaData(int file_id, int meta,
     switch(meta) {
     case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
     case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
-    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
+    case MAKE_METADATA_IDX(eng::META_NS_TIFF,    eng::META_TIFF_ORIENTATION):
+    case MAKE_METADATA_IDX(eng::META_NS_NIEPCE,  eng::META_NIEPCE_FLAG):
         if(value.type() == typeid(int32_t)) {
             // internal.
             int32_t nvalue = boost::any_cast<int32_t>(value);
@@ -736,6 +742,9 @@ bool Library::setMetaData(int file_id, int meta,
                 break;
             case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
                 col = "label";
+                break;
+            case MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG):
+                col = "flag";
                 break;
             }
             if(col) {

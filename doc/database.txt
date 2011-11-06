@@ -24,6 +24,7 @@ files           id             Unique ID in the database
                                Exif (time_t)
 		rating         The file rating (0-5)
 		label          The label (labels.id)
+		flag           The file flage. (-1 reject, 0 none, +1 flagged)
 		import_date    The date of import in the database (time_t)
 		mod_date       The date modified (time_t)
 		xmp            The XMP blob

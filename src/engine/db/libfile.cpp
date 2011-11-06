@@ -31,6 +31,7 @@ LibFile::LibFile(int _id, int _folderId, int _fsfileid, const std::string & p,
 	  m_name(_name), 
     m_main_file(_fsfileid, p),
 	  m_orientation(0), m_rating(0), m_label(0),
+    m_flag(0),
     m_file_type(FILE_TYPE_UNKNOWN)
 {
     
@@ -38,15 +39,6 @@ LibFile::LibFile(int _id, int _folderId, int _fsfileid, const std::string & p,
 
 LibFile::~LibFile()
 {
-}
-
-
-const Keyword::IdList & LibFile::keywords() const
-{
-    if(!m_hasKeywordList) {
-//			storage()->fetchKeywordsForFile(m_id, m_keywordList);
-    }
-    return m_keywordList;
 }
 
 void LibFile::setOrientation(int32_t v)
@@ -64,6 +56,11 @@ void LibFile::setRating(int32_t v)
 void LibFile::setLabel(int32_t v)
 {
     m_label = v;
+}
+
+void LibFile::setFlag(int32_t v)
+{
+    m_flag = v;
 }
 
 void LibFile::setFileType(FileType v)

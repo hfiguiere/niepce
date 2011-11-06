@@ -222,6 +222,25 @@ void SelectionController::set_rating(int rating)
     }
 }
 
+void SelectionController::set_flag(int flag)
+{
+    DBG_OUT("flag = %d", flag);
+    int selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            DBG_OUT("old flag is %d", file->flag());
+            int old_value = file->flag();
+            _set_metadata(_("Set Flag"), file, 
+                          MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG), 
+                          old_value, flag);
+            // we need to set the rating here so that undo/redo works
+            // consistently.
+            file->setFlag(flag);
+        }
+    }
+}
 
 }
 

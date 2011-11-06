@@ -73,6 +73,8 @@ public:
         { m_drawrating = val; }
     void set_drawlabel(bool val)
         { m_drawlabel = val; }
+    void set_drawflag(bool val)
+        { m_drawlabel = val; }
 
     Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> property_libfile() const;
     Glib::PropertyProxy<eng::LibFile::Ptr>          property_libfile();
@@ -82,7 +84,8 @@ protected:
     void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
                         Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
                         const GdkRectangle & r);
-
+    void _drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
+                   int flag_value, double x, double y);
 private:
     int                                 m_size;
     int                                 m_pad;
@@ -90,6 +93,7 @@ private:
     bool                                m_drawemblem;
     bool                                m_drawrating;
     bool                                m_drawlabel;
+    bool                                m_drawflag;
     libraryclient::UIDataProvider      *m_uiDataProvider;
     Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
     
@@ -98,6 +102,9 @@ private:
     Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
+
+    Cairo::RefPtr<Cairo::ImageSurface>  m_flag_reject;
+    Cairo::RefPtr<Cairo::ImageSurface>  m_flag_pick;
 };
 
 

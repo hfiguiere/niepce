@@ -46,6 +46,7 @@ LibraryCellRenderer::LibraryCellRenderer(libraryclient::UIDataProvider *provider
       m_drawemblem(true),
       m_drawrating(true),
       m_drawlabel(true),
+      m_drawflag(true),
       m_uiDataProvider(provider),
       m_libfileproperty(*this, "libfile")
 {
@@ -66,6 +67,13 @@ LibraryCellRenderer::LibraryCellRenderer(libraryclient::UIDataProvider *provider
         m_unknown_format_emblem 
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-unknown-fmt.png"));
+
+        m_flag_reject
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-flag-reject.png"));
+        m_flag_pick
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-flag-pick.png"));
     }
     catch(const std::exception & e) {
         ERR_OUT("exception while creating emblems: %s", e.what());
@@ -102,6 +110,33 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
     Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
     cr->paint();
 }
+
+
+void LibraryCellRenderer::_drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
+                   int flag_value, double x, double y)
+{
+    if(flag_value == 0) {
+        return;
+    }
+
+    Cairo::RefPtr<Cairo::ImageSurface> pixbuf;
+    if(flag_value == -1) {
+        pixbuf = m_flag_reject;
+    }
+    else if(flag_value == 1) {
+        pixbuf = m_flag_pick;
+    }
+    else {
+        ERR_OUT("wrong flag value %d", flag_value);
+        return ;
+    }
+    int w = pixbuf->get_width();
+
+    cr->set_source(pixbuf, x - w, y);
+    cr->paint();
+}
+
+
 
 namespace {
 
@@ -221,6 +256,12 @@ LibraryCellRenderer::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
         fwk::RatingLabel::draw_rating(cr, file->rating(), 
                                       fwk::RatingLabel::get_star(), 
                                       fwk::RatingLabel::get_unstar(), x, y);
+    }
+    if(m_drawflag) {
+        double x, y;
+        x = r.x + r.width - CELL_PADDING;
+        y = r.y + CELL_PADDING;
+        _drawFlag(cr, file->flag(), x, y);
     }
     
     if(m_drawemblem) {

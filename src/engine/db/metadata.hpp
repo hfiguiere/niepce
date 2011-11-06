@@ -27,13 +27,16 @@ namespace eng {
 enum {
     META_NS_XMPCORE = 0,
     META_NS_TIFF,
-    META_NS_EXIF
+    META_NS_EXIF,
+    META_NS_NIEPCE
 };
 
 /** Metadata for xmpcore. Combine with %META_NS_XMPCORE */
 enum {
     META_XMPCORE_RATING = 0,
-    META_XMPCORE_LABEL
+    META_XMPCORE_LABEL = 1,
+
+    _META_XMPCORE_LAST_
 };
 
 /** Metadata for tiff. Combine with %META_NS_TIFF */
@@ -42,7 +45,7 @@ enum {
 };
 
 enum {
-
+    META_NIEPCE_FLAG = 0
 };
 
 /** make a metadata index with a namespace and a value */

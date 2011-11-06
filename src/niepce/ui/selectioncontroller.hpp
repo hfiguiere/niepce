@@ -86,8 +86,10 @@ public:
     void set_rating(int rating);
     /** set the label of selection to the label with index %label. */
     void set_label(int label);
+    /** set flag */
+    void set_flag(int flag);
 protected:
-	virtual void _added();
+    virtual void _added();
 private:
     int get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
