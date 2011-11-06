@@ -102,7 +102,7 @@ void EditLabels::update_labels(int /*response*/)
         if(m_status[i]) {
             bool has_label = m_labels.size() > i;
 
-            DBG_OUT("updating label %d", i);
+            DBG_OUT("updating label %lu", i);
             std::string new_name = m_entries[i]->get_text();
             // a newname is NOT valid.
             if(new_name.empty()) {

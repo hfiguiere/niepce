@@ -70,7 +70,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     {
         eng::LibFile::ListPtr l 
             = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
-        DBG_OUT("received folder content file # %d", l->size());
+        DBG_OUT("received folder content file # %lu", l->size());
         Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
         clear();
         m_idmap.clear();
