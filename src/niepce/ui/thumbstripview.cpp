@@ -72,6 +72,7 @@ ThumbStripCell::ThumbStripCell()
     set_drawemblem(false);
     set_drawrating(false);
     set_drawlabel(false);
+    set_drawflag(false);
 }
 
 

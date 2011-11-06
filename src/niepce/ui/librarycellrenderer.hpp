@@ -74,7 +74,7 @@ public:
     void set_drawlabel(bool val)
         { m_drawlabel = val; }
     void set_drawflag(bool val)
-        { m_drawlabel = val; }
+        { m_drawflag = val; }
 
     Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> property_libfile() const;
     Glib::PropertyProxy<eng::LibFile::Ptr>          property_libfile();

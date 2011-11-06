@@ -145,6 +145,7 @@ public:
     std::string label() const;
     /** return the rating, -1 is not found (not set) */
     int32_t rating() const;
+    int32_t flag() const;
     time_t  creation_date() const;
     std::string creation_date_str() const;
     const std::vector< std::string > & keywords() const;

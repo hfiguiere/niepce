@@ -30,6 +30,7 @@
 #include <exempi/xmpconsts.h>
 
 #include "fwk/base/debug.hpp"
+#include "niepce/xmp.hpp"
 #include "exempi.hpp"
 #include "pathutils.hpp"
 
@@ -188,6 +189,16 @@ int32_t XmpMeta::rating() const
         ERR_OUT("get \"Rating\" property failed: %d", xmp_get_error());
     }
     return _rating;
+}
+
+int32_t XmpMeta::flag() const
+{
+    int32_t _flag = 0;
+    if(!xmp_get_property_int32(m_xmp, niepce::NIEPCE_XMP_NAMESPACE, "Flag", 
+                               &_flag, NULL)) {
+        ERR_OUT("get \"Flag\" property failed: %d", xmp_get_error());
+    }
+    return _flag;
 }
 
 

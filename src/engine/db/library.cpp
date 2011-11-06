@@ -271,7 +271,7 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
     DBG_ASSERT(!manage, "manage not supported");
     DBG_ASSERT(folder_id != -1, "invalid folder ID");
     try {
-        int32_t rating, label_id, orientation;
+        int32_t rating, label_id, orientation, flag;
         std::string label;  
         fwk::MimeType mime = fwk::MimeType(file);
         eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
@@ -280,6 +280,7 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
         orientation = meta.orientation();
         rating = meta.rating();
         label = meta.label();
+        flag = meta.flag();
         time_t creation_date = meta.creation_date();
         if(creation_date == -1) {
             creation_date = 0;
@@ -292,17 +293,18 @@ int Library::addFile(int folder_id, const std::string & file, bool manage)
         SQLStatement sql(boost::format("INSERT INTO files ("
                                        " main_file, name, parent_id, "
                                        " import_date, mod_date, "
-                                       " orientation, file_date, rating, label, file_type,"
-                                       " xmp) "
+                                       " orientation, file_date, rating, label, "
+                                       " file_type, flag, xmp) "
                                        " VALUES ("
                                        " '%1%', '%2%', '%3%', "
                                        " '%4%', '%4%',"
                                        " '%5%', '%6%', '%7%', '%8%', '%9%',"
+                                       " '%10%',"
                                        " ?1);") 
                          % fs_file_id % fwk::path_basename(file) % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
-                         % label_id % file_type);
+                         % label_id % file_type % flag);
         std::string buf = meta.serialize_inline();
         sql.bind(1, buf);
         if(m_dbdrv->execute_statement(sql)) {
