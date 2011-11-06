@@ -288,11 +288,13 @@ LibraryCellRenderer::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
         int left = drawFormatEmblem(cr, emblem, r);
         if(m_drawlabel) {
             DBG_ASSERT(m_uiDataProvider, "no UIDataProvider");
-            uint32_t label_index = file->label();
-            const fwk::RgbColor * label_color = m_uiDataProvider->colorForLabel(label_index);
-            DBG_ASSERT(label_color, "color not found");
-            if(label_color) {
-                drawLabel(cr, left, label_color, r);
+            uint32_t label_id = file->label();
+            if(label_id != 0) {
+                const fwk::RgbColor * label_color = m_uiDataProvider->colorForLabel(label_id);
+                DBG_ASSERT(label_color, "color not found");
+                if(label_color) {
+                    drawLabel(cr, left, label_color, r);
+                }
             }
         }
     }
