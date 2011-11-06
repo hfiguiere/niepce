@@ -41,7 +41,7 @@ namespace fwk {
 
 #ifdef DEBUG
 #define DBG_ASSERT(cond, reason)	\
-	fwk::dbg_assert(cond, #cond, __FILE__, __LINE__, reason)
+	fwk::dbg_assert(cond, #cond, __FUNCTION__, __FILE__, __LINE__, reason)
 #else
 #define DBG_ASSERT(cond, reason)	\
 	assert(cond)
@@ -60,15 +60,17 @@ namespace fwk {
 	void dbg_print(const char* fmt, const char* func, ...)
     __attribute__ ((format (printf, 1, 3)));
 
-	/** assert 
-	 * @param condvalue the value of the assert, true, assert
-	 * @param cond the text of the condition
-	 * @param filen the file name __FILE__
-	 * @param linen the line number __LINE__
-	 * @param reason the reason of the assert
-	 */
-	void dbg_assert(bool condvalue, const char* cond, const char* filen,
-					int linen, const char* reason);
+/** assert 
+ * @param condvalue the value of the assert, true, assert
+ * @param cond the text of the condition
+ * @param func the function it happens in __FUNCTION__
+ * @param filen the file name __FILE__
+ * @param linen the line number __LINE__
+ * @param reason the reason of the assert
+ */
+void dbg_assert(bool condvalue, const char* cond, const char* func,
+                const char* filen,
+                int linen, const char* reason);
 
 	/** print error message. printf format.
 	 * Call with the ERR_OUT macro.
@@ -80,5 +82,13 @@ namespace fwk {
 
 }
 
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
 #endif

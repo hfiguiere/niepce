@@ -66,13 +66,14 @@ namespace fwk {
 	/** assert 
 	 * 
 	 */
-	void dbg_assert(bool condvalue, const char* cond, const char* filen,
-					int linen, const char* reason)
+	void dbg_assert(bool condvalue, const char* cond, 
+                        const char* func, const char* filen,
+                        int linen, const char* reason)
 	{
-		if(!condvalue) {
-			_print("ASSERT: ", "%s:%d %s", cond, filen, linen, reason);
-
-		}
+            if(!condvalue) {
+                _print("ASSERT: ", "[%s] %s:%d %s", func, cond, filen, linen, reason);
+                
+            }
 	}
 
 
@@ -121,3 +122,12 @@ namespace fwk {
 	}
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
