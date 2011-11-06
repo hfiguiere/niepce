@@ -20,4 +20,16 @@
 
 #include "dock.hpp"
 
+namespace fwk {
+
+
+Dock::Dock()
+{
+  set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+  add(m_vbox);
+}
+
+}
+
+
 

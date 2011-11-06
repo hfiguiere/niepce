@@ -91,7 +91,7 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
     m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController);
     add(m_toolbox_ctrl);
-    m_dock->pack_start(*m_toolbox_ctrl->buildWidget(manager));
+    m_dock->vbox().pack_start(*m_toolbox_ctrl->buildWidget(manager));
 
     return m_widget;
 }

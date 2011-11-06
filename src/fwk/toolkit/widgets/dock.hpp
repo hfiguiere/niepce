@@ -21,16 +21,22 @@
 #define __FWK_TOOLKIT_DOCK_HPP__
 
 #include <gtkmm/box.h>
+#include <gtkmm/scrolledwindow.h>
+
 
 namespace fwk {
 
 
 class Dock
-  : public Gtk::VBox
+  : public Gtk::ScrolledWindow
 {
 public:
-  
+    Dock();
 
+    Gtk::VBox & vbox()
+        { return m_vbox; }
+private:
+    Gtk::VBox m_vbox;
 };
 
 
