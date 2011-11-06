@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/ncr.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2011 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,16 +22,9 @@ extern "C" {
 #include <babl/babl.h>
 }
 
-#include <geglmm/init.h>
-
 #include "ncr.hpp"
 
 namespace ncr {
-
-void init()
-{
-    Gegl::init(0, NULL);
-}
 
 Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata)
 {

@@ -25,7 +25,7 @@
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
-#include "ncr/ncr.hpp"
+#include "ncr/init.hpp"
 #include "darkroommodule.hpp"
 
 namespace darkroom {

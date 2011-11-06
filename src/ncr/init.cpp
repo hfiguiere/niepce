@@ -1,7 +1,7 @@
 /*
- * niepce - ncr/ncr.h
+ * niepce - ncr/init.cpp
  *
- * Copyright (C) 2008,2011 Hubert Figuiere
+ * Copyright (C) 2011 Hub Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,28 +18,15 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "init.hpp"
 
-#ifndef _NIEPCE_NCR_H
-#define _NIEPCE_NCR_H
-
-#include <glibmm/refptr.h>
-#include <geglmm/buffer.h>
-#include <libopenraw/libopenraw.h>
+#include <geglmm/init.h>
 
 namespace ncr {
 
-/** load RAW data into a buffer. */
-Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata); 
-
+void init()
+{
+    Gegl::init(0, NULL);
 }
 
-#endif
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:80
-  End:
-*/
+}

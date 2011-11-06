@@ -12,6 +12,7 @@ noinst_LIBRARIES = libncr.a
 
 libncr_a_SOURCES = ncr.hpp ncr.cpp \
 	image.hpp image.cpp \
+	init.hpp init.cpp \
 	$(NULL)
 
 #libncr_la_SOURCES = ncr.h ncr.cpp
