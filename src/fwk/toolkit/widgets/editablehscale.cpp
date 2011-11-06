@@ -28,10 +28,32 @@
 namespace fwk {
 
 EditableHScale::EditableHScale(double min, double max, double step)
-    : m_adj(0, min, max, step),
+    : m_icon(NULL),
+      m_adj(0, min, max, step),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)
 {
+    _init();
+}
+
+
+EditableHScale::EditableHScale(const std::string & icon_path, 
+                               double min, double max, double step)
+    : m_icon(Gtk::manage(new Gtk::Image(icon_path))),
+      m_adj(0, min, max, step),
+      m_scale(m_adj), m_entry(m_adj),
+      m_dirty(false)
+{
+    _init();
+}
+
+
+
+void EditableHScale::_init()
+{
+    if(m_icon) {
+        pack_start(*m_icon, false, true);
+    }
     m_scale.property_draw_value() = false;
     m_scale.add_events(Gdk::BUTTON_RELEASE_MASK);
     m_scale.signal_button_release_event()

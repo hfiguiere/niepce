@@ -7,4 +7,5 @@ dist_icons_DATA = niepce-jpg-fmt.png niepce-raw-fmt.png niepce-rawjpeg-fmt.png\
 	niepce-set-star.png niepce-unset-star.png\
 	niepce-rotate-left.png niepce-rotate-right.png \
 	niepce-flag-pick.png niepce-flag-reject.png  \
+	niepce-transform-rotate.png \
 	$(NULL)

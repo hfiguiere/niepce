@@ -35,6 +35,8 @@ class EditableHScale
 {
 public:
     EditableHScale(double min, double max, double step);
+    EditableHScale(const std::string & icon_name, 
+                   double min, double max, double step);
 
     Gtk::Adjustment  &       get_adjustment()
         { return m_adj; }
@@ -50,6 +52,9 @@ private:
 
     void on_adj_value_changed();
 
+    void _init();
+
+    Gtk::Image      *m_icon;
     Gtk::Adjustment  m_adj;
     Gtk::HScale      m_scale;
     Gtk::SpinButton  m_entry;
