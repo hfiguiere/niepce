@@ -69,8 +69,8 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
     if(iter) {
         eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
         if(file) {
-            int selection = file->id();
-            DBG_OUT("item activated %d", selection);
+            eng::library_id_t selection = file->id();
+            DBG_OUT("item activated %Ld", selection);
             signal_activated(selection);
         }
     }
@@ -85,7 +85,7 @@ void SelectionController::selected(IImageSelectable * selectable)
 
 	fwk::AutoFlag f(m_in_handler);
 
-	int selection = selectable->get_selected();
+	eng::library_id_t selection = selectable->get_selected();
 	std::vector<IImageSelectable *>::iterator iter;
 	for(iter = m_selectables.begin(); iter != m_selectables.end(); iter++) {
 		if(*iter != selectable) {
@@ -103,7 +103,7 @@ libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
     return	shell->getLibraryClient();
 }
 
-inline int SelectionController::get_selection()
+inline eng::library_id_t SelectionController::get_selection()
 {
     DBG_ASSERT(!m_selectables.empty(), "selectables list can't be empty");
     return m_selectables[0]->get_selected();
@@ -112,7 +112,7 @@ inline int SelectionController::get_selection()
 
 void SelectionController::_selection_move(bool backwards)
 {
-    int selection = get_selection();
+	eng::library_id_t selection = get_selection();
     Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
     if(iter) {
         if(backwards) {
@@ -156,7 +156,7 @@ void SelectionController::select_next()
 void SelectionController::rotate(int angle)
 {
     DBG_OUT("angle = %d", angle);
-    int selection = get_selection();
+	eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
@@ -184,7 +184,7 @@ bool SelectionController::_set_metadata(const std::string & undo_label, const en
 void SelectionController::set_label(int label)
 {
     DBG_OUT("label = %d", label);
-    int selection = get_selection();
+    eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
@@ -205,7 +205,7 @@ void SelectionController::set_label(int label)
 void SelectionController::set_rating(int rating)
 {
     DBG_OUT("rating = %d", rating);
-    int selection = get_selection();
+    eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
@@ -225,7 +225,7 @@ void SelectionController::set_rating(int rating)
 void SelectionController::set_flag(int flag)
 {
     DBG_OUT("flag = %d", flag);
-    int selection = get_selection();
+    eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {

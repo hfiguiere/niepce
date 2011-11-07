@@ -27,6 +27,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
@@ -108,8 +109,8 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::Library::NOTIFY_FOLDER_COUNTED:
     {
-        std::pair<int,int> count(boost::any_cast<std::pair<int,int> >(ln.param));
-        DBG_OUT("count for folder %d is %d", count.first, count.second);
+        std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
+        DBG_OUT("count for folder %Ld is %d", count.first, count.second);
         std::map<int, Gtk::TreeIter>::iterator iter
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {
@@ -178,7 +179,7 @@ WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> &treestore,
                               const Gtk::TreeNodeChildren & childrens,
                               const Glib::RefPtr<Gdk::Pixbuf> & icon,
                               const Glib::ustring & label, 
-                              int id, int type) const
+                              eng::library_id_t id, int type) const
 {
     Gtk::TreeModel::iterator iter;
     Gtk::TreeModel::Row row;
@@ -222,7 +223,7 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
     col->set_expand(true);
     num = m_librarytree.append_column("", m_librarycolumns.m_count);
     col = m_librarytree.get_column(num - 1);
-    col->set_alignment(1.0);
+    col->set_alignment(1.0f);
 
     // TODO make it a mnemonic
     m_label.set_text_with_mnemonic(Glib::ustring(_("_Workspace")));

@@ -27,6 +27,7 @@ test_filebundle_LDADD = $(TEST_LIBS)
 noinst_LIBRARIES = libniepcedb.a
 
 libniepcedb_a_SOURCES = library.hpp library.cpp \
+	librarytypes.hpp \
 	libfile.hpp libfile.cpp \
 	libfolder.hpp libfolder.cpp \
 	label.hpp \

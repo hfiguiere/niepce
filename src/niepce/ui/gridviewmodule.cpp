@@ -59,10 +59,10 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
     case eng::Library::NOTIFY_METADATA_CHANGED:
     {
         DBG_OUT("metadata changed");
-        std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
-        if(m[0] == m_metapanecontroller->displayed_file()) {
+		eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
+        if(m.id == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
-          m_shell->getLibraryClient()->requestMetadata(m[0]);
+          m_shell->getLibraryClient()->requestMetadata(m.id);
         }
         break;
     }
@@ -133,9 +133,9 @@ Gtk::IconView * GridViewModule::image_list()
     return & m_librarylistview; 
 }
 
-int GridViewModule::get_selected()
+eng::library_id_t GridViewModule::get_selected()
 {
-    int id = 0;
+	eng::library_id_t id = 0;
     Glib::RefPtr<Gtk::TreeSelection> selection;
 
     Gtk::IconView::ArrayHandle_TreePaths paths = m_librarylistview.get_selected_items();
@@ -151,13 +151,13 @@ int GridViewModule::get_selected()
             }
         }
     }
-    DBG_OUT("get_selected %d", id);
+    DBG_OUT("get_selected %Ld", id);
     return id;
 }
 
-void GridViewModule::select_image(int id)
+void GridViewModule::select_image(eng::library_id_t id)
 {
-    DBG_OUT("library select %d", id);
+    DBG_OUT("library select %Ld", id);
     Gtk::TreePath path = m_model->get_path_from_id(id);
     if(path) {
       m_librarylistview.select_path(path);

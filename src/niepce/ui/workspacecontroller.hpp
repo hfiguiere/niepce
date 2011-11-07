@@ -103,7 +103,7 @@ namespace ui {
 										  const Gtk::TreeNodeChildren & childrens,
 										  const Glib::RefPtr<Gdk::Pixbuf> & icon,
 										  const Glib::ustring & label, 
-										  int id, int type) const;
+										  eng::library_id_t id, int type) const;
 		enum {
 			ICON_FOLDER = 0,
 			ICON_PROJECT,

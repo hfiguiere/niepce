@@ -28,7 +28,7 @@
 namespace eng {
 
 
-LibMetadata::LibMetadata(int _id)
+LibMetadata::LibMetadata(library_id_t _id)
 	: XmpMeta(),
       m_id(_id)
 {

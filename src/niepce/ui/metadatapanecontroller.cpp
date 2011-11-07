@@ -120,7 +120,7 @@ namespace ui {
   }
   
   
-  void MetaDataPaneController::display(int file_id, const fwk::XmpMeta * meta)
+	void MetaDataPaneController::display(eng::library_id_t file_id, const fwk::XmpMeta * meta)
   {
     m_fileid = file_id;
     DBG_OUT("displaying metadata");

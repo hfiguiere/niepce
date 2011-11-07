@@ -138,7 +138,7 @@ void MetaDataWidget::add_data(const std::string & id,
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
                                              Glib::ustring("<b>") 
                                              + label + "</b>"));
-        labelw->set_alignment(0, 0.5);
+        labelw->set_alignment(0.0f, 0.5f);
         labelw->set_use_markup(true);
 
         if(type == xmp::META_DT_STAR_RATING) {
@@ -146,7 +146,7 @@ void MetaDataWidget::add_data(const std::string & id,
         }
         else {
             w = Gtk::manage(new Gtk::Label());
-            static_cast<Gtk::Label*>(w)->set_alignment(0, 0.5);
+            static_cast<Gtk::Label*>(w)->set_alignment(0.0f, 0.5f);
         }
 
         m_table.resize(n_row + 1, 2);

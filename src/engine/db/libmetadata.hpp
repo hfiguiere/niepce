@@ -26,6 +26,7 @@
 #include <boost/any.hpp>
 
 #include "fwk/utils/exempi.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
 
 namespace eng {
@@ -36,9 +37,9 @@ namespace eng {
 	public:
 		typedef std::tr1::shared_ptr<LibMetadata> Ptr;
 
-		LibMetadata(int _id);
+		LibMetadata(library_id_t _id);
 
-        int id() const
+        library_id_t id() const
             { return m_id; }
         bool setMetaData(int meta, const boost::any & value);
         /** do like the unix "touch". Update the MetadataDate 
@@ -47,7 +48,7 @@ namespace eng {
         bool touch();
     private:
         LibMetadata(const LibMetadata &);
-        int m_id;
+        library_id_t m_id;
 	};
 
 }

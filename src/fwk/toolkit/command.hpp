@@ -28,6 +28,7 @@ namespace fwk {
 class Command
 {
 public:
+	virtual ~Command() {}
     typedef boost::function<void (void)> Function;
     virtual void undo() = 0;
     virtual void redo() = 0;

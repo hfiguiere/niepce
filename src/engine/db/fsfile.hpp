@@ -23,6 +23,7 @@
 #include <string>
 #include <tr1/memory>
 
+#include "engine/db/librarytypes.hpp"
 
 namespace eng {
 
@@ -32,14 +33,14 @@ class FsFile
 public:
     typedef std::tr1::shared_ptr< FsFile > Ptr;
 
-    FsFile(int id, const std::string & path);
+    FsFile(library_id_t id, const std::string & path);
 
-    int id()
+    library_id_t id()
         { return m_id; }
     const std::string & path() const
         { return m_path; }
 private:
-    int m_id;
+    library_id_t m_id;
     std::string m_path; /**< absolute path */
 };
 

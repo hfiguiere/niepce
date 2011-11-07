@@ -25,6 +25,7 @@
 #include <tr1/memory>
 
 #include "fwk/toolkit/mimetype.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "engine/db/keyword.hpp"
 #include "engine/db/storage.hpp"
 #include "engine/db/fsfile.hpp"
@@ -49,14 +50,14 @@ public:
 
     static FileType mimetype_to_filetype(fwk::MimeType mime);
 
-    LibFile(int id, int folderId, int fsfileid, 
+    LibFile(library_id_t id, library_id_t folderId, library_id_t fsfileid, 
             const std::string & p,
             const std::string & name );
     virtual ~LibFile();
 
-    int id() const
+    library_id_t id() const
         { return m_id; }
-    int folderId() const
+    library_id_t folderId() const
         { return m_folderId; }
     const std::string & name() const
         { return m_name; }
@@ -101,8 +102,8 @@ public:
 //		bool isUri(const char * _uri) const
 //			{ return uri() == _uri; }
 private:
-    int         m_id;           /**< file ID */
-    int         m_folderId;     /**< parent folder */
+    library_id_t         m_id;           /**< file ID */
+    library_id_t         m_folderId;     /**< parent folder */
     std::string m_name;         /**< name */
     FsFile      m_main_file;
 //    boost::filesystem::path  m_path;/**< path name relative to the folder */

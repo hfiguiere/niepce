@@ -25,7 +25,7 @@
 #include "uidataprovider.hpp"
 
 using eng::tid_t;
-
+using eng::library_id_t;
 
 namespace libraryclient {
 
@@ -64,28 +64,28 @@ tid_t LibraryClient::getAllFolders()
     return m_pImpl->getAllFolders();
 }
 
-tid_t LibraryClient::queryFolderContent(int id)
+tid_t LibraryClient::queryFolderContent(eng::library_id_t id)
 {
     return m_pImpl->queryFolderContent(id);
 }
 
-tid_t LibraryClient::queryKeywordContent(int id)
+tid_t LibraryClient::queryKeywordContent(eng::library_id_t id)
 {
     return m_pImpl->queryKeywordContent(id);
 }
 
-eng::tid_t LibraryClient::countFolder(int id)
+eng::tid_t LibraryClient::countFolder(library_id_t id)
 {
     return m_pImpl->countFolder(id);
 }
 
-eng::tid_t LibraryClient::requestMetadata(int id)
+eng::tid_t LibraryClient::requestMetadata(eng::library_id_t id)
 {
     return m_pImpl->requestMetadata(id);
 }
 
 /** set the metadata */
-eng::tid_t LibraryClient::setMetadata(int id, int meta, int value)
+eng::tid_t LibraryClient::setMetadata(library_id_t id, int meta, int value)
 {
     return m_pImpl->setMetadata(id, meta, value);
 }
@@ -108,7 +108,7 @@ eng::tid_t LibraryClient::deleteLabel(int id)
 }
 
 
-eng::tid_t LibraryClient::updateLabel(int id, const std::string & new_name,
+eng::tid_t LibraryClient::updateLabel(library_id_t id, const std::string & new_name,
                                           const std::string & new_color)
 {
     return m_pImpl->updateLabel(id, new_name, new_color);

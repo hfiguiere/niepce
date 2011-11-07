@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/keyword.hpp
+ * niepce - db/librarytypes.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __ENG_DB_LIBRARY_TYPES_HPP__
+#define __ENG_DB_LIBRARY_TYPES_HPP__
 
-#ifndef __NIEPCE_DB_KEYWORD_H__
-#define __NIEPCE_DB_KEYWORD_H__
 
-#include <string>
-#include <vector>
-#include <tr1/memory>
-
-#include "engine/db/librarytypes.hpp"
+#include <stdint.h>
 
 namespace eng {
 
-	class Keyword
-	{
-	public:
-		typedef std::tr1::shared_ptr<Keyword> Ptr;
-		typedef std::vector<Ptr> List;
-		typedef std::tr1::shared_ptr<List> ListPtr;
-		typedef std::vector<int> IdList;
-
-		Keyword(library_id_t id, const std::string & keyword);
-		
-		library_id_t id() const
-			{ return m_id; }
-		const std::string & keyword() 
-			{ return m_keyword; }
-	private:
-		library_id_t m_id;
-		std::string m_keyword;
-	};
-
+/** library id in the database */
+typedef int64_t library_id_t;
+	
 }
 
 #endif

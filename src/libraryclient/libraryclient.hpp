@@ -25,6 +25,7 @@
 
 #include "engine/library/clienttypes.hpp"
 #include "engine/library/thumbnailcache.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "engine/db/storage.hpp"
 
 namespace fwk {
@@ -57,20 +58,20 @@ namespace libraryclient {
 		 */
 		eng::tid_t getAllFolders();
 
-		eng::tid_t queryFolderContent(int id);
-		eng::tid_t queryKeywordContent(int id);
-		eng::tid_t countFolder(int id);
-		eng::tid_t requestMetadata(int id);
+		eng::tid_t queryFolderContent(eng::library_id_t id);
+		eng::tid_t queryKeywordContent(eng::library_id_t id);
+		eng::tid_t countFolder(eng::library_id_t id);
+		eng::tid_t requestMetadata(eng::library_id_t id);
 
     /** set the metadata */
-    eng::tid_t setMetadata(int id, int meta, int value);
+    eng::tid_t setMetadata(eng::library_id_t id, int meta, int value);
 
     /** get all the labels */
     eng::tid_t getAllLabels();
     eng::tid_t createLabel(const std::string & s, const std::string & color);
     eng::tid_t deleteLabel(int id);
     /** update a label */
-    eng::tid_t updateLabel(int id, const std::string & new_name, 
+    eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name, 
                                const std::string & new_color);
 
     /** tell to process the Xmp update Queue */

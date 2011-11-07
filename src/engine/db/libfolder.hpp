@@ -26,6 +26,7 @@
 #include <list>
 #include <tr1/memory>
 
+#include "engine/db/librarytypes.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
 
 namespace eng {
@@ -43,13 +44,13 @@ public:
         _VIRTUAL_LAST
     } VirtualType;
 
-    LibFolder(int _id, std::string _name)
+    LibFolder(library_id_t _id, std::string _name)
         : m_id(_id), m_name(_name)
         , m_locked(false)
         , m_virtual(VIRTUAL_NONE)
         {
         }
-    int id() const
+    library_id_t id() const
         { return m_id; }
     const std::string & name() const
         { return m_name; }
@@ -67,7 +68,7 @@ public:
     static const char * read_db_columns();
     static Ptr read_from(const db::IConnectionDriver::Ptr & db);
 private:
-    int         m_id;
+    library_id_t         m_id;
     std::string m_name;
     bool m_locked;
     VirtualType m_virtual;

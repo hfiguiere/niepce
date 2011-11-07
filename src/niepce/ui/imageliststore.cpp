@@ -42,9 +42,9 @@ ImageListStore::ImageListStore(const Columns& _columns)
 }
 
 
-Gtk::TreeIter ImageListStore::get_iter_from_id(int id)
+Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id)
 {
-    std::map<int, Gtk::TreeIter>::iterator iter
+    std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
         = m_idmap.find( id );
     if(iter != m_idmap.end()) {
         return iter->second;
@@ -52,7 +52,7 @@ Gtk::TreeIter ImageListStore::get_iter_from_id(int id)
     return Gtk::TreeIter();
 }
 
-Gtk::TreePath ImageListStore::get_path_from_id(int id)
+Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 {
     Gtk::TreeIter iter = get_iter_from_id(id);
     if(iter) {
@@ -102,15 +102,15 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::Library::NOTIFY_METADATA_CHANGED:
     {
-        std::tr1::array<int, 3> m = boost::any_cast<std::tr1::array<int, 3> >(ln.param);
+		eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
         DBG_OUT("metadata changed");
         Gtk::TreeRow row;
-        std::map<int, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m[0]);
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m.id);
         if(iter != m_idmap.end()) {
             row = *(iter->second);
             //
             eng::LibFile::Ptr file = row[m_columns.m_libfile];
-            file->setMetaData(m[1], m[2]);
+            file->setMetaData(m.meta, m.value);
             row[m_columns.m_libfile] = file;
         }
         break;
@@ -127,7 +127,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 
 void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
 {
-    std::map<int, Gtk::TreeIter>::iterator iter
+    std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
         = m_idmap.find( tn.id );
     if(iter != m_idmap.end()) {
         // found the icon view item
@@ -136,7 +136,7 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
         row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
     }
     else {
-        DBG_OUT("row %d not found", tn.id);
+        DBG_OUT("row %Ld not found", tn.id);
     }
 }
 

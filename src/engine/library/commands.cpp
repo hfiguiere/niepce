@@ -84,7 +84,7 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 
 
 void Commands::cmdQueryFolderContent(const Library::Ptr & lib, 
-                                     int folder_id)
+                                     library_id_t folder_id)
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getFolderContent(folder_id, fl);
@@ -92,14 +92,14 @@ void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
 }
 
 void Commands::cmdCountFolder(const Library::Ptr & lib, 
-                              int folder_id)
+                              eng::library_id_t folder_id)
 {
     int count = lib->countFolder(folder_id);
     lib->notify(Library::NOTIFY_FOLDER_COUNTED, boost::any(std::make_pair(folder_id, count)));
 }
 
 void Commands::cmdQueryKeywordContent(const Library::Ptr & lib, 
-                                      int keyword_id)
+                                      library_id_t keyword_id)
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getKeywordContent(keyword_id, fl);
@@ -107,7 +107,7 @@ void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
 }
 
 void Commands::cmdRequestMetadata(const Library::Ptr & lib,
-                                  int file_id)
+                                  library_id_t file_id)
 {
     LibMetadata::Ptr lm(new LibMetadata(file_id));
     lib->getMetaData(file_id, lm);
@@ -115,12 +115,12 @@ void Commands::cmdRequestMetadata(const Library::Ptr & lib,
 }
 
 void Commands::cmdSetMetadata(const Library::Ptr & lib,
-                              int file_id, int meta, int value)
+                              library_id_t file_id, int meta, int value)
 {
-    std::tr1::array<int, 3> m;
-    m[0] = file_id;
-    m[1] = meta;
-    m[2] = value;
+	metadata_desc_t m;
+	m.id = file_id;
+	m.meta = meta;
+	m.value = value;
     lib->setMetaData(file_id, meta, value);
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
 }
@@ -135,7 +135,7 @@ void Commands::cmdListAllLabels(const Library::Ptr & lib)
 void Commands::cmdCreateLabel(const Library::Ptr & lib,
                               const std::string & s, const std::string & color)
 {
-    int id = lib->addLabel(s, color);
+    int64_t id = lib->addLabel(s, color);
     if(id != -1) {
         eng::Label::ListPtr l(new eng::Label::List);
         l->push_back(eng::Label::Ptr(new eng::Label(id, s, color)));
@@ -153,7 +153,7 @@ void Commands::cmdDeleteLabel(const Library::Ptr & lib,
 
 
 void Commands::cmdUpdateLabel(const Library::Ptr & lib,
-                              int label_id, const std::string & name,
+                              eng::library_id_t label_id, const std::string & name,
                               const std::string & color)
 {
     lib->updateLabel(label_id, name, color);

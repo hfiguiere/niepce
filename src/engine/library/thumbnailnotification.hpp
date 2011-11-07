@@ -23,11 +23,13 @@
 
 #include <gdkmm/pixbuf.h>
 
+#include "engine/db/librarytypes.hpp"
+
 namespace eng {
 
 	struct ThumbnailNotification
 	{
-		int  id;
+		eng::library_id_t  id;
 		int  width;
 		int  height;
 		Glib::RefPtr<Gdk::Pixbuf> pixmap; 

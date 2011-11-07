@@ -44,22 +44,22 @@ public:
                                const fwk::FileList::Ptr & files, 
                                bool manage);
 		static void cmdQueryFolderContent(const Library::Ptr & lib, 
-                                      int folder_id);
+                                      library_id_t folder_id);
 		static void cmdCountFolder(const Library::Ptr & lib, 
-                               int folder_id);
+								   library_id_t folder_id);
 		static void cmdQueryKeywordContent(const Library::Ptr & lib, 
-                                       int keyword_id);
+                                       library_id_t keyword_id);
 		static void cmdRequestMetadata(const Library::Ptr & lib,
-                                   int file_id);
+                                   library_id_t file_id);
     static void cmdSetMetadata(const Library::Ptr & lib,
-                               int file_id, int meta, int value);
+                               library_id_t file_id, int meta, int value);
     static void cmdListAllLabels(const Library::Ptr & lib);
     static void cmdCreateLabel(const Library::Ptr & lib, const std::string & s, 
                                const std::string & color);
     static void cmdDeleteLabel(const Library::Ptr & lib,
                                int label_id);
     static void cmdUpdateLabel(const Library::Ptr & lib,
-                               int label_id, const std::string & name,
+                               eng::library_id_t label_id, const std::string & name,
                                const std::string & color);
 		static void cmdProcessXmpUpdateQueue(const Library::Ptr & lib);
 };

@@ -71,7 +71,7 @@ tid_t ClientImpl::getAllFolders()
     return id;
 }
 
-tid_t ClientImpl::queryFolderContent(int folder_id)
+tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdQueryFolderContent,
@@ -81,7 +81,7 @@ tid_t ClientImpl::queryFolderContent(int folder_id)
 }
 
 
-tid_t ClientImpl::countFolder(int folder_id)
+tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdCountFolder, 
@@ -91,7 +91,7 @@ tid_t ClientImpl::countFolder(int folder_id)
 }
 
 
-tid_t ClientImpl::queryKeywordContent(int keyword_id)
+tid_t ClientImpl::queryKeywordContent(eng::library_id_t keyword_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdQueryKeywordContent,
@@ -101,7 +101,7 @@ tid_t ClientImpl::queryKeywordContent(int keyword_id)
 }
 
 
-tid_t ClientImpl::requestMetadata(int file_id)
+tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdRequestMetadata,
@@ -111,7 +111,7 @@ tid_t ClientImpl::requestMetadata(int file_id)
 }
 
 
-tid_t ClientImpl::setMetadata(int file_id, int meta, int value)
+tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, int value)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdSetMetadata, _1,
@@ -149,7 +149,7 @@ tid_t ClientImpl::deleteLabel(int label_id)
     return id;    
 }
 
-tid_t ClientImpl::updateLabel(int label_id, const std::string & new_name,
+tid_t ClientImpl::updateLabel(eng::library_id_t label_id, const std::string & new_name,
                               const std::string & new_color)
 {
     tid_t id = LibraryClient::newTid();

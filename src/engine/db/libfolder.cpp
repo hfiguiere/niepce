@@ -28,7 +28,7 @@ const char* LibFolder::read_db_columns()
 
 LibFolder::Ptr LibFolder::read_from(const db::IConnectionDriver::Ptr & db)
 {
-  int32_t id;
+  library_id_t id;
   std::string name;
   int32_t virt_type, locked;
   db->get_column_content(0, id);

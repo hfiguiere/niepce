@@ -32,7 +32,7 @@ DrItemWidget::DrItemWidget(const Glib::ustring & title)
 
 void DrItemWidget::add_widget(const Glib::ustring & label, Gtk::Widget & w)
 {
-    Gtk::Label *l = manage(new Gtk::Label(label, 0.0, 0.5));
+    Gtk::Label *l = manage(new Gtk::Label(label, 0.0f, 0.5f));
     m_box.pack_start(*l, Gtk::PACK_SHRINK);
     m_box.pack_start(w, Gtk::PACK_SHRINK);
 }

@@ -25,7 +25,7 @@
 
 namespace eng {
 	
-LibFile::LibFile(int _id, int _folderId, int _fsfileid, const std::string & p,
+LibFile::LibFile(library_id_t _id, library_id_t _folderId, library_id_t _fsfileid, const std::string & p,
                  const std::string & _name )
 	: m_id(_id), m_folderId(_folderId),
 	  m_name(_name), 

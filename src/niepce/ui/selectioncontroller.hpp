@@ -26,6 +26,7 @@
 #include <sigc++/signal.h>
 
 #include "fwk/toolkit/controller.hpp"
+#include "engine/db/librarytypes.hpp";
 #include "ui/imageliststore.hpp"
 
 namespace Gtk {
@@ -44,11 +45,11 @@ public:
     virtual ~IImageSelectable() {}
     virtual Gtk::IconView * image_list() = 0;
     /** Return the id of the selection. <= 0 is none. */
-    virtual int get_selected() = 0;
+    virtual eng::library_id_t get_selected() = 0;
     /** select the image a specific id 
      *  might emit the signals.
      */
-    virtual void select_image(int id) = 0;
+    virtual void select_image(eng::library_id_t id) = 0;
 };
 
 
@@ -70,10 +71,10 @@ public:
 		{ return m_imageliststore; }
 
 	// the signal to call when selection is changed.
-    sigc::signal<void, int> signal_selected;
+    sigc::signal<void, eng::library_id_t> signal_selected;
 
 	// signal for when the item is activated (ie double-click)
-    sigc::signal<void, int> signal_activated;
+    sigc::signal<void, eng::library_id_t> signal_activated;
 
     /////////
     /** select the previous image. Emit the signal */
@@ -91,7 +92,7 @@ public:
 protected:
     virtual void _added();
 private:
-    int get_selection();
+	eng::library_id_t get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label, 

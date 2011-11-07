@@ -24,7 +24,7 @@
 
 namespace eng {
 
-FsFile::FsFile(int _id, const std::string & _path)
+FsFile::FsFile(library_id_t _id, const std::string & _path)
     : m_id(_id), m_path(_path)
 {
 }

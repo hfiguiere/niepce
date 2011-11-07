@@ -30,6 +30,7 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
 #include "fwk/utils/db/iconnectionmanagerdriver.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "engine/db/libfolder.hpp"
 #include "engine/db/libfile.hpp"
 #include "engine/db/libmetadata.hpp"
@@ -92,47 +93,47 @@ public:
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFileAndFolder(const std::string & folder, 
+		library_id_t addFileAndFolder(const std::string & folder, 
                          const std::string & file, bool manage);
 
     /** add a fs file to the library  
      * @param file the file path
      * @return the id of the fs_file, -1 in case of error
      */
-    int addFsFile(const std::string & file);
+    library_id_t addFsFile(const std::string & file);
 
     /** Get a FsFile from an id
      * @param id the id of the FsFile
      * @return the path. Empty if not found.
      */
-    std::string getFsFile(int id);
+    std::string getFsFile(library_id_t id);
 
 		/** add a file to the library
 		 * @param folder_id the id of the containing folder
 		 * @param file the file path
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-		int addFile(int folder_id, const std::string & file, bool manage);
+		library_id_t addFile(library_id_t folder_id, const std::string & file, bool manage);
 
 		/** add a bundle of files to the library
 		 * @param folder_id the id of the containing folder
 		 * @param bundle the bundle
 		 * @param manage pass true it the library *manage* the file. Currently unsupported.
 		 */
-    int addBundle(int folder_id, const eng::FileBundle::Ptr & bundle, 
+    library_id_t addBundle(library_id_t folder_id, const eng::FileBundle::Ptr & bundle, 
                   bool manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle
      * @param fsfile_id the id of the fsfile
      * @return true if success
      */
-    bool addSidecarFileToBundle(int file_id, int fsfile_id);
+    bool addSidecarFileToBundle(library_id_t file_id, library_id_t fsfile_id);
     /** add a jpeg fsfile to a bundle (file)
      * @param file_id the id of the file bundle
      * @param fsfile_id the id of the fsfile
      * @return true if success
      */
-    bool addJpegFileToBundle(int file_id, int fsfile_id);
+    bool addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id);
 		
 		/** Get a specific folder id from the library
 		 * @param folder the folder path to check
@@ -153,21 +154,21 @@ public:
 		 * @param folder_id id of the folder
 		 * @param fl the resulting file list
 		 */
-		void getFolderContent(int folder_id, const LibFile::ListPtr & fl);
-		int countFolder(int folder_id);
+		void getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl);
+		int countFolder(library_id_t folder_id);
 		void getAllKeywords(const Keyword::ListPtr & l);
-		void getKeywordContent(int keyword_id, const LibFile::ListPtr & fl);
+		void getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl);
     /** get the metadata block (XMP) */
-		void getMetaData(int file_id, const LibMetadata::Ptr & );
+		void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     /** set the metadata block (XMP) */
-    bool setMetaData(int file_id, const LibMetadata::Ptr & );
-    bool setMetaData(int file_id, int meta, const boost::any & value);
+    bool setMetaData(library_id_t file_id, const LibMetadata::Ptr & );
+    bool setMetaData(library_id_t file_id, int meta, const boost::any & value);
 
 		void getAllLabels(const eng::Label::ListPtr & l);
-    int addLabel(const std::string & name, const std::string & color);
-    int addLabel(const std::string & name, const fwk::RgbColor & c);
-    bool updateLabel(int label_id, const std::string & name, const std::string & color);
-    bool deleteLabel(int label_id);
+    library_id_t addLabel(const std::string & name, const std::string & color);
+    library_id_t addLabel(const std::string & name, const fwk::RgbColor & c);
+    bool updateLabel(library_id_t label_id, const std::string & name, const std::string & color);
+    bool deleteLabel(library_id_t label_id);
 
     /** Trigger the processing of the XMP update queue */
     bool processXmpUpdateQueue();
@@ -177,13 +178,13 @@ public:
 		 * @return -1 if not found (shouldn't happen) or the id of the
 		 * keyword, either found or just created.
 		 */
-		int makeKeyword(const std::string & keyword);
+		library_id_t makeKeyword(const std::string & keyword);
 		/** Assign a keyword to a file.
 		 * @param kw_id the keyword id
 		 * @param file_id the file id
 		 * @return true if success, false if error
 		 */
-		bool assignKeyword(int kw_id, int file_id);
+		bool assignKeyword(library_id_t kw_id, library_id_t file_id);
 
 		int checkDatabaseVersion();
 		
@@ -195,14 +196,14 @@ private:
 
     /** external sqlite fucntion to trigger the rewrite of the XMP */
     void triggerRewriteXmp(void);
-    bool getXmpIdsInQueue(std::vector<int> & ids);
+    bool getXmpIdsInQueue(std::vector<library_id_t> & ids);
     /** rewrite the XMP sidecar for the file whose id is %id
      * and remove it from the queue.
      */
-    bool rewriteXmpForId(int id);
+    bool rewriteXmpForId(library_id_t id);
 
     /** set an "internal" metadata of type int */
-    bool setInternalMetaDataInt(int file_id, const char* col,
+    bool setInternalMetaDataInt(library_id_t file_id, const char* col,
                                 int32_t value);
 
     std::string                       m_maindir;

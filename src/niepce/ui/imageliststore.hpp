@@ -61,8 +61,8 @@ public:
 
     const Columns & columns() const
         { return m_columns; }
-    Gtk::TreePath get_path_from_id(int id);
-    Gtk::TreeIter get_iter_from_id(int id);
+    Gtk::TreePath get_path_from_id(eng::library_id_t id);
+    Gtk::TreeIter get_iter_from_id(eng::library_id_t id);
 
     static Glib::RefPtr<ImageListStore> create();
 
@@ -77,7 +77,7 @@ private:
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
     const Columns           & m_columns;
-    std::map<int, Gtk::TreeIter> m_idmap;
+    std::map<eng::library_id_t, Gtk::TreeIter> m_idmap;
     fwk::Controller::WeakPtr m_controller;
 };
 
