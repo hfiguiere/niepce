@@ -22,6 +22,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	uicontroller.hpp uicontroller.cpp \
 	notification.hpp \
 	mimetype.hpp mimetype.cpp \
+	movieutils.hpp movieutils.cpp \
 	imageloader.hpp imageloader.cpp \
 	notificationcenter.hpp notificationcenter.cpp \
 	configdatabinder.hpp configdatabinder.cpp \

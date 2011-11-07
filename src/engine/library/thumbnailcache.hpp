@@ -1,7 +1,7 @@
 /*
  * niepce - library/thumbnailcache.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,46 +30,59 @@
 namespace eng {
 
 
-	class ThumbnailTask
-	{
-	public:
-		typedef std::tr1::shared_ptr< ThumbnailTask > Ptr;
+class ThumbnailTask
+{
+public:
+    typedef std::tr1::shared_ptr< ThumbnailTask > Ptr;
 		
-		ThumbnailTask(const LibFile::Ptr & f, int w, int h)
-			: m_file(f), m_width(w), m_height(h)
-			{ }
+    ThumbnailTask(const LibFile::Ptr & f, int w, int h)
+        : m_file(f), m_width(w), m_height(h)
+        { }
 		
-		const LibFile::Ptr & file()
-			{ return m_file; }
-		int width() const
-			{ return m_width; }
-		int height() const
-			{ return m_height; }
-	private:
-		const LibFile::Ptr m_file;
-		int m_width;
-		int m_height;
-	};
+    const LibFile::Ptr & file()
+        { return m_file; }
+    int width() const
+        { return m_width; }
+    int height() const
+        { return m_height; }
+private:
+    const LibFile::Ptr m_file;
+    int m_width;
+    int m_height;
+};
 
 
-	class ThumbnailCache
-		: private fwk::Worker< ThumbnailTask::Ptr >
-	{
-	public:
-		ThumbnailCache(const std::string & dir,
-					   const fwk::NotificationCenter::Ptr & nc);
-		~ThumbnailCache();
+class ThumbnailCache
+    : private fwk::Worker< ThumbnailTask::Ptr >
+{
+public:
+    ThumbnailCache(const std::string & dir,
+                   const fwk::NotificationCenter::Ptr & nc);
+    ~ThumbnailCache();
 
-		void request(const LibFile::ListPtr & fl);
-		void requestForFile(const LibFile::Ptr & f);
+    void request(const LibFile::ListPtr & fl);
+    void requestForFile(const LibFile::Ptr & f);
 
-	protected:
-		virtual void execute(const  ThumbnailTask::Ptr & task);
-	private:
+    static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
+
+protected:
+    virtual void execute(const  ThumbnailTask::Ptr & task);
+private:
     std::string                                 m_cacheDir;
-		std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
-	};
+    std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
+
+    std::string path_for_thumbnail(const std::string & filename, int size) const;
+};
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
