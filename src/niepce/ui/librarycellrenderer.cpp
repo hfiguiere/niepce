@@ -89,6 +89,10 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
                                          Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
                                          const GdkRectangle & r)
 {
+    if(!pixbuf) {
+        ERR_OUT("NULL pixbuf");
+        return;
+    }
     int w = pixbuf->get_width();
     int h = pixbuf->get_height();
     int offset_x = (m_size - w) / 2;

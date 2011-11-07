@@ -37,30 +37,34 @@ using fwk::Application;
 
 namespace ui {
 
+
 WorkspaceController::WorkspaceController()
     : fwk::UiController()
 {
+    static struct _Icons {
+        int icon_id;
+        const char *icon_name;
+    } icons[] = {
+        { ICON_FOLDER, "folder" },
+        { ICON_PROJECT, "applications-accessories" },
+        { ICON_ROLL, "emblem-photos" },
+        { ICON_TRASH, "user-trash" },
+        { ICON_KEYWORD, "application-certificate" },
+        { 0, NULL }
+    };
+    
     Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());
-    try {
-        m_icons[ICON_FOLDER] = icon_theme->load_icon(
-            Glib::ustring("folder"), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
-        m_icons[ICON_PROJECT] = icon_theme->load_icon(
-            Glib::ustring("applications-accessories"), 16, 
-            Gtk::ICON_LOOKUP_USE_BUILTIN);
-        m_icons[ICON_ROLL] = icon_theme->load_icon(
-            Glib::ustring("emblem-photos"), 16,
-            Gtk::ICON_LOOKUP_USE_BUILTIN);
-        m_icons[ICON_TRASH] = icon_theme->load_icon(
-            Glib::ustring("user-trash"), 16,
-            Gtk::ICON_LOOKUP_USE_BUILTIN);
-        // FIXME use an icon that make more sense.
-        m_icons[ICON_KEYWORD] = icon_theme->load_icon(
-            Glib::ustring("application-certificate"), 16, 
-            Gtk::ICON_LOOKUP_USE_BUILTIN);
-    }
-    catch(const Gtk::IconThemeError & e)
-    {
-        ERR_OUT("Exception %s.", e.what().c_str());
+    int i = 0;
+    while(icons[i].icon_name) {
+        try {
+            m_icons[icons[i].icon_id] = icon_theme->load_icon(
+            Glib::ustring(icons[i].icon_name), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
+        }
+        catch(const Gtk::IconThemeError & e)
+        {
+            ERR_OUT("Exception %s.", e.what().c_str());
+        }
+        i++;
     }
 }
 

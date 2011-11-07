@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "fwk/base/debug.hpp"
 #include "gdkutils.hpp"
 
 
@@ -28,6 +29,10 @@ namespace fwk {
 	{
 		int height, width;
 		int orig_h, orig_w;
+		if(!pix) {
+			ERR_OUT("NULL pixbuf");
+			return pix;
+		}
 		orig_h = pix->get_height();
 		orig_w = pix->get_width();
 		int orig_dim = std::max(orig_h, orig_w);

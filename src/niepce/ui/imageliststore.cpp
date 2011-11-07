@@ -80,11 +80,20 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             Gtk::TreeModel::iterator riter = append();
             Gtk::TreeRow row = *riter;
             // locate it in local cache...
-            row[m_columns.m_pix] = icon_theme->load_icon(
-                Glib::ustring("image-loading"), 32,
-                Gtk::ICON_LOOKUP_USE_BUILTIN);
+            // this would avoid exception handling.
+            Glib::RefPtr<Gdk::Pixbuf> icon;
+            try {
+                icon = icon_theme->load_icon(
+                    Glib::ustring("image-loading"), 32,
+                    Gtk::ICON_LOOKUP_USE_BUILTIN);
+            }
+            catch(const Gtk::IconThemeError & e)
+            {
+                ERR_OUT("Exception %s.", e.what().c_str());
+            }
+            row[m_columns.m_pix] = icon;
             row[m_columns.m_libfile] = *iter;
-            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(row[m_columns.m_pix], 100);
+            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(icon, 100);
             m_idmap[(*iter)->id()] = riter;
         }
         // at that point clear the cache because the icon view is populated.
