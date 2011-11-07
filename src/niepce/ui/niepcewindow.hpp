@@ -36,11 +36,7 @@
 #include "ui/workspacecontroller.hpp"
 #include "ui/selectioncontroller.hpp"
 #include "ui/filmstripcontroller.hpp"
-#include "notificationcenter.hpp"
-
-namespace fwk {
-	class NotificatioCenter;
-}
+#include "niepce/notificationcenter.hpp"
 
 namespace ui {
 
