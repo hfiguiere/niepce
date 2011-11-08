@@ -36,6 +36,10 @@ std::string path_basename(const std::string & path);
  */
 std::string path_stem(const std::string & path);
 
+/** return the dirname of a path. Assume the last component is a file.
+    /foo/bar/baz.txt returns /foo/bar/
+ */
+std::string path_dirname(const std::string & path);
 
 /** return the extension of a path
     /foo/bar/baz.txt returns .txt
@@ -47,7 +51,7 @@ std::string path_replace_extension(const std::string & path, const char * ext);
 
 
 bool path_exists(const std::string & path);
-
+bool ensure_path_for_file(const std::string & path);
 void path_remove_recursive(const std::string & path);
 
 }

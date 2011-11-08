@@ -77,7 +77,9 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
     DBG_OUT("creating thumbnail for %s",filename.c_str());
 
     fwk::MimeType mime_type(filename);
-
+    if(!fwk::ensure_path_for_file(cached)) {
+        ERR_OUT("coudln't create directories for %s", cached.c_str());
+    }
 
     DBG_OUT("MIME type %s", mime_type.string().c_str());
 	
@@ -161,16 +163,20 @@ void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
 
 std::string ThumbnailCache::path_for_thumbnail(const std::string & filename, int size) const
 {
-    std::string subdir = size ? boost::lexical_cast<std::string>(size) : "full";
     // todo compute a hash
-    return m_cacheDir + "/" + subdir + "/" + fwk::path_basename(filename) + ".png";
+    return dir_for_thumbnail(size) + fwk::path_basename(filename) + ".png";
+}
+
+std::string ThumbnailCache::dir_for_thumbnail(int size) const
+{
+    std::string subdir = size ? boost::lexical_cast<std::string>(size) : "full";
+    return m_cacheDir + "/" + subdir + "/";
 }
 
 bool ThumbnailCache::is_thumbnail_cached(const std::string & /*file*/, const std::string & thumb)
 {
     return fwk::path_exists(thumb);
 }
-
 
 }
 /*

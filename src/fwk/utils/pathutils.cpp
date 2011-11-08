@@ -20,6 +20,7 @@
 
 #include <giomm/file.h>
 
+#include "fwk/base/debug.hpp"
 #include "pathutils.hpp"
 
 namespace fwk {
@@ -66,6 +67,14 @@ std::string path_stem(const std::string & path)
     return std::string(path.begin(), path.begin() + idx);
 }
 
+std::string path_dirname(const std::string & path)
+{
+    std::string::size_type slash_idx = path.find_last_of("/");
+    if(slash_idx == std::string::npos) {
+        return "";
+    }
+    return std::string(path.begin(), path.begin() + slash_idx + 1);
+}
 
 /** return the extension of a path
     /foo/bar/baz.txt returns .txt
@@ -99,6 +108,19 @@ bool path_exists(const std::string & path)
     return file->query_exists();
 }
 
+bool ensure_path_for_file(const std::string & path)
+{
+    try {
+        Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(path_dirname(path));
+        if(dir->query_exists()) {
+            return true;
+        }
+        return dir->make_directory_with_parents();
+    }
+    catch(...) {
+        return false;
+    }
+}
 
 void _path_remove_recursive(const Glib::RefPtr<Gio::File> & dir)
 {
