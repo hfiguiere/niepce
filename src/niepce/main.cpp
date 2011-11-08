@@ -28,7 +28,6 @@
 
 #include "fwk/utils/init.hpp"
 #include "fwk/utils/exempi.hpp"
-#include "xmp.hpp"
 #include "ui/niepceapplication.hpp"
 
 int main(int argc, char ** argv)
@@ -39,7 +38,7 @@ int main(int argc, char ** argv)
 
   fwk::utils::init();
 
-  fwk::ExempiManager ex_manager(niepce::xmp_namespaces);
+  fwk::ExempiManager ex_manager(NULL);
 
 	return fwk::Application::main(
 		boost::bind(&ui::NiepceApplication::create),

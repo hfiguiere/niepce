@@ -99,6 +99,8 @@ struct MetaDataSectionFormat {
     const MetaDataFormat * formats;
 };
 
+extern const char * NIEPCE_XMP_NAMESPACE;
+extern const char * NIEPCE_XMP_NS_PREFIX;
 extern const char * UFRAW_INTEROP_NAMESPACE;	
 extern const char * UFRAW_INTEROP_NS_PREFIX;	
 

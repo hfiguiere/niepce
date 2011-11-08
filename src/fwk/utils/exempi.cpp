@@ -30,11 +30,13 @@
 #include <exempi/xmpconsts.h>
 
 #include "fwk/base/debug.hpp"
-#include "niepce/xmp.hpp"
 #include "exempi.hpp"
 #include "pathutils.hpp"
 
 namespace xmp {
+
+const char * NIEPCE_XMP_NAMESPACE = "http://xmlns.figuiere.net/ns/niepce/1.0";
+const char * NIEPCE_XMP_NS_PREFIX = "niepce";
 
 const char * UFRAW_INTEROP_NAMESPACE = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
 const char * UFRAW_INTEROP_NS_PREFIX = "ufrint";
@@ -48,6 +50,8 @@ ExempiManager::ExempiManager(const ns_defs_t* namespaces)
     if(xmp_init()) {
         xmp_register_namespace(xmp::UFRAW_INTEROP_NAMESPACE,
                                xmp::UFRAW_INTEROP_NS_PREFIX, NULL);
+        xmp_register_namespace(xmp::NIEPCE_XMP_NAMESPACE,
+                               xmp::NIEPCE_XMP_NS_PREFIX, NULL);
         
         if(namespaces != NULL) {
             const ns_defs_t* iter = namespaces;
@@ -194,7 +198,7 @@ int32_t XmpMeta::rating() const
 int32_t XmpMeta::flag() const
 {
     int32_t _flag = 0;
-    if(!xmp_get_property_int32(m_xmp, niepce::NIEPCE_XMP_NAMESPACE, "Flag", 
+    if(!xmp_get_property_int32(m_xmp, xmp::NIEPCE_XMP_NAMESPACE, "Flag", 
                                &_flag, NULL)) {
         ERR_OUT("get \"Flag\" property failed: %d", xmp_get_error());
     }

@@ -23,7 +23,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "libmetadata.hpp"
-#include "niepce/xmp.hpp"
 
 namespace eng {
 
@@ -53,7 +52,7 @@ bool xmpPropertyNameFromIndex(int meta, std::string & ns, std::string & property
         property = "Orientation";
         break;
     case MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG):
-        ns = niepce::NIEPCE_XMP_NAMESPACE;
+        ns = xmp::NIEPCE_XMP_NAMESPACE;
         property = "Flag";
         break;
     default:

@@ -31,8 +31,8 @@ niepce_LDADD = \
 	@GEGLMM_LIBS@ @OPENRAW_LIBS@ @EXEMPI_LIBS@
 
 
-niepce_SOURCES = xmp.cpp \
+niepce_SOURCES = \
 	stock.hpp stock.cpp \
 	notificationcenter.hpp notificationcenter.cpp \
-        notifications.hpp xmp.hpp \
+        notifications.hpp \
 	main.cpp
