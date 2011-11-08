@@ -71,7 +71,7 @@ private:
     std::string                                 m_cacheDir;
     std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
 
-    std::string path_for_thumbnail(const std::string & filename, int size) const;
+    std::string path_for_thumbnail(const std::string & filename, library_id_t id, int size) const;
     std::string dir_for_thumbnail(int size) const;
 };
 

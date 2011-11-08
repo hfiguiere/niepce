@@ -23,6 +23,7 @@
 #include <boost/bind.hpp>
 #include <boost/any.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
 
 #include <gdkmm/pixbuf.h>
 #include <libopenraw-gnome/gdkpixbuf.h>
@@ -139,7 +140,7 @@ void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
 
     Glib::RefPtr<Gdk::Pixbuf> pix;
 
-    std::string dest = path_for_thumbnail(task->file()->path(), std::max(w,h));
+    std::string dest = path_for_thumbnail(task->file()->path(), task->file()->id(), std::max(w,h));
     DBG_OUT("cached thumbnail %s", dest.c_str());
 
     pix = getThumbnail(task->file(), w, h, dest);
@@ -161,16 +162,17 @@ void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
     }
 }
 
-std::string ThumbnailCache::path_for_thumbnail(const std::string & filename, int size) const
+std::string ThumbnailCache::path_for_thumbnail(const std::string & filename, library_id_t id, int size) const
 {
-    // todo compute a hash
-    return dir_for_thumbnail(size) + fwk::path_basename(filename) + ".png";
+    // todo compute a better hash
+    std::string thumb_name = str(boost::format("%1%-%2%.png") % id % fwk::path_basename(filename));
+    return Glib::build_filename(dir_for_thumbnail(size), thumb_name);
 }
 
 std::string ThumbnailCache::dir_for_thumbnail(int size) const
 {
     std::string subdir = size ? boost::lexical_cast<std::string>(size) : "full";
-    return m_cacheDir + "/" + subdir + "/";
+    return Glib::build_filename(m_cacheDir, subdir);
 }
 
 bool ThumbnailCache::is_thumbnail_cached(const std::string & /*file*/, const std::string & thumb)
