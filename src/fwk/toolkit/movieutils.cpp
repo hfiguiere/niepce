@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include <boost/format.hpp>
-
+#include "movieutils.hpp"
 
 namespace fwk {
 
