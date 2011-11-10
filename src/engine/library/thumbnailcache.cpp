@@ -91,8 +91,13 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
     }
     // TODO: what about videos?
     else if(mime_type.isMovie()) {
-        if(fwk::thumbnail_movie(filename, w, h, cached)) {
-            pix = Gdk::Pixbuf::create_from_file(cached, w, h, true);
+        try {
+            if(fwk::thumbnail_movie(filename, w, h, cached)) {
+                pix = Gdk::Pixbuf::create_from_file(cached, w, h, true);
+            }
+        }
+        catch(const Glib::Error & e) {
+            ERR_OUT("exception %s", e.what().c_str());
         }
     }
     else if(!mime_type.isImage()) {

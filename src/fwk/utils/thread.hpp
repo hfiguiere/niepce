@@ -29,25 +29,36 @@
 
 namespace fwk {
 
-	/** thread */
-	class Thread
-	{
-	public:
-		/** create the worker for the library whose dir is specified */
-		Thread();
-		virtual ~Thread();
-
-		void terminate()
-			{ m_terminated = true; }
-	protected:
-		void start();
-		virtual void main() = 0;
-		volatile bool m_terminated;
-	private:
+/** thread */
+class Thread
+{
+public:
+    /** create the worker for the library whose dir is specified */
+    Thread();
+    virtual ~Thread();
+    
+    void terminate()
+        { m_terminated = true; }
+protected:
+    void start();
+    virtual void main() = 0;
+    volatile bool m_terminated;
+    Glib::Thread * thread() const
+        { return m_thrd; }
+private:
     Glib::Thread *       m_thrd;
-	};
+};
 
 }
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

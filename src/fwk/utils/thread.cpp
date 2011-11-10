@@ -23,37 +23,33 @@
 namespace fwk {
 
 
-	Thread::Thread()
-		: m_terminated(true),
-		  m_thrd(NULL)
-	{
-	}
+Thread::Thread()
+    : m_terminated(true),
+      m_thrd(NULL)
+{
+}
 
 
-	Thread::~Thread()
-	{
-		terminate();
-	}
+Thread::~Thread()
+{
+    terminate();
+}
 
 
-
-#if 0
-	void Thread::schedule(const Op::Ptr & _op)
-	{
-		OpQueue::mutex_t::scoped_lock lock(m_ops.mutex(), true);
-		bool was_empty = m_ops.isEmpty();
-		m_ops.add(_op);
-		if(was_empty) {
-			start();
-		}
-	}
-#endif
-
-	void Thread::start()
-	{
-		m_thrd = Glib::Thread::create(sigc::mem_fun(*this, &Thread::main), true);
+void Thread::start()
+{
+    m_thrd = Glib::Thread::create(sigc::mem_fun(*this, &Thread::main), true);
 // TODO add this thread to a manager for task management.
 //		thrd->join();
-	}
+}
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

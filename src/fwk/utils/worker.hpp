@@ -29,83 +29,103 @@
 
 namespace fwk {
 
-	/** worker thread for the library */
-	template <class T>
-	class Worker
-		: public Thread
-	{
-	public:
-		Worker();
-		virtual ~Worker();
-		typedef MtQueue<T> queue_t;
-
+/** worker thread for the library */
+template <class T>
+class Worker
+    : public Thread
+{
+public:
+    Worker();
+    virtual ~Worker();
+    typedef MtQueue<T> queue_t;
+    
 #ifdef BOOST_AUTO_TEST_MAIN
-		queue_t & _tasks() 
-			{ return m_tasks; }
+    queue_t & _tasks() 
+        { return m_tasks; }
 #endif
-		void schedule(const T & );
-		void clear();
-	protected:
-		virtual void main();
+    void schedule(const T & );
+    void clear();
+protected:
+    virtual void main();
+    
+    queue_t      m_tasks;
+private:
+    virtual void execute(const T & _op) = 0;
+    Glib::Mutex m_q_mutex;
+    Glib::Cond m_wait_cond;
+};
 
-		queue_t      m_tasks;
-	private:
-		virtual void execute(const T & _op) = 0;
-	};
+template <class T>
+Worker<T>::Worker()
+    : Thread()
+{
+    start();
+}
 
-	template <class T>
-	Worker<T>::Worker()
-		: Thread()
-	{
-	}
+template <class T>
+Worker<T>::~Worker()
+{
+    m_tasks.clear();
+    {
+        Glib::Mutex::Lock lock(m_q_mutex);
+        m_terminated = true;
+        m_wait_cond.broadcast();
+    }
+    thread()->join();
+}
 
-	template <class T>
-	Worker<T>::~Worker()
-	{
-		typename queue_t::mutex_t::Lock lock(m_tasks.mutex());
-		m_tasks.clear();
-	}
+/** this is the main loop of the libray worker */
+template <class T>
+void Worker<T>::main()
+{
+    m_terminated = false;
+    
+    do {
+        T op;
+        {
+            // make sure we terminate the thread before we unlock
+            // the task queue.
+            Glib::Mutex::Lock lock(m_q_mutex);
+            if(!m_tasks.empty()) {
+                op = m_tasks.pop();
+            }
+        }
+        // depending on T this might blow
+        if(op) {
+            execute(op);
+        }
 
-	/** this is the main loop of the libray worker */
-	template <class T>
-	void Worker<T>::main()
-	{
-		m_terminated = false;
-		
-		do 
-		{
-			T op;
-			{
-				// make sure we terminate the thread before we unlock
-				// the task queue.
-				typename queue_t::mutex_t::Lock lock(m_tasks.mutex());
-				if(m_tasks.empty()) {
-					m_terminated = true;
-					break;
-				}
-				op = m_tasks.pop();
-			}
-			execute(op);
-		} while(!m_terminated);
-	}
+        Glib::Mutex::Lock lock(m_q_mutex);
+        if(m_tasks.empty()) {
+            m_wait_cond.wait(m_q_mutex);
+        }
+    } while(!m_terminated);
+}
 
-	template <class T>
-	void Worker<T>::schedule(const T & _op)
-	{
-		typename queue_t::mutex_t::Lock lock(m_tasks.mutex());
-		bool was_empty = m_tasks.empty();
-		m_tasks.add(_op);
-		if(was_empty) {
-			start();
-		}
-	}
+template <class T>
+void Worker<T>::schedule(const T & _op)
+{
+    Glib::Mutex::Lock lock(m_q_mutex);
+    m_tasks.add(_op);
+    m_wait_cond.broadcast();
+}
 
-	template <class T>
-	void Worker<T>::clear()
-	{
-		m_tasks.clear();
-	}
+template <class T>
+void Worker<T>::clear()
+{
+    Glib::Mutex::Lock lock(m_q_mutex);
+    m_tasks.clear();
+}
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
