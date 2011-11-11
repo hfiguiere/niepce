@@ -23,7 +23,7 @@ EXTRA_DIST = $(gladefiles)
 
 noinst_LIBRARIES = libniepceui.a
 
-PUBLICHEADERS = ilibrarymodule.hpp
+PUBLICHEADERS = ilibrarymodule.hpp imoduleshell.hpp
 
 libniepceui_a_CPPFLAGS = 
 libniepceui_a_SOURCES = \

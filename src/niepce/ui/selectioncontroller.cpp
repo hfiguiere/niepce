@@ -103,12 +103,20 @@ libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
     return	shell->getLibraryClient();
 }
 
-inline eng::library_id_t SelectionController::get_selection()
+eng::library_id_t SelectionController::get_selection() const
 {
     DBG_ASSERT(!m_selectables.empty(), "selectables list can't be empty");
     return m_selectables[0]->get_selected();
 }
 
+eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
+{
+    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(id);
+    if(iter) {
+        return (*iter)[m_imageliststore->columns().m_libfile];
+    }
+    return eng::LibFile::Ptr();
+}
 
 void SelectionController::_selection_move(bool backwards)
 {

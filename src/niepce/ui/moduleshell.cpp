@@ -191,8 +191,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     DBG_ASSERT(m_ui_merge_id, "merge failed");
 
     m_gridview = GridViewModule::Ptr(
-        new GridViewModule(this,
-                           m_selection_controller->get_list_store()));
+        new GridViewModule(*this, m_selection_controller->get_list_store()));
     add_library_module(m_gridview, _("Library"));
 
     m_selection_controller->add_selectable(m_gridview.get());
@@ -201,10 +200,10 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     m_selection_controller->signal_activated
         .connect(sigc::mem_fun(*this, &ModuleShell::on_image_activated));
 
-
-    m_darkroom = darkroom::DarkroomModule::Ptr(
-        new darkroom::DarkroomModule(m_actionGroup, m_libraryclient));
+    m_darkroom = dr::DarkroomModule::Ptr(new dr::DarkroomModule(*this, m_actionGroup));
     add_library_module(m_darkroom, _("Darkroom"));
+
+    m_shell.signal_activated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_activated));
 
     // TODO PrintModuleController
     // add_library_module(, _("Print"));
@@ -219,6 +218,7 @@ void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
     if(w) {
         add(module);
         m_shell.append_page(*w, label);
+        m_modules.push_back(module);
     }
 }
 
@@ -227,9 +227,9 @@ void ModuleShell::on_ready()
 }
 
 
-void ModuleShell::on_selected(int id)
+void ModuleShell::on_selected(eng::library_id_t id)
 {
-    DBG_OUT("selected callback %d", id);
+    DBG_OUT("selected callback %Ld", id);
     if(id > 0) {
         m_libraryclient->requestMetadata(id);
     }		
@@ -238,9 +238,9 @@ void ModuleShell::on_selected(int id)
     }
 }
 
-void ModuleShell::on_image_activated(int id)
+void ModuleShell::on_image_activated(eng::library_id_t id)
 {
-    DBG_OUT("on image activated %d", id);
+    DBG_OUT("on image activated %Ld", id);
     Glib::RefPtr<ImageListStore> store = m_selection_controller->get_list_store();
     Gtk::TreeIter iter = store->get_iter_from_id(id);
     if(iter) {
@@ -248,6 +248,12 @@ void ModuleShell::on_image_activated(int id)
         m_darkroom->set_image(libfile);
         m_shell.activate_page(1);
     }
+}
+
+void ModuleShell::on_module_activated(int idx)
+{
+    DBG_ASSERT(idx < m_modules.size(), "wrong module index");
+    m_modules[idx]->set_active(true);
 }
 
 

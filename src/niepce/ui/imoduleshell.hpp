@@ -1,7 +1,7 @@
 /*
- * niepce - darkroom/dritem.cpp
+ * niepce - ui/imoduleshell.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gtkmm/label.h>
 
-#include "dritemwidget.hpp"
+#ifndef _UI_IMODULESHELL_HPP__
+#define _UI_IMODULESHELL_HPP__
 
-namespace dr {
+#include "niepce/ui/selectioncontroller.hpp"
 
-DrItemWidget::DrItemWidget(const Glib::ustring & title)
-    : fwk::ToolboxItemWidget(title)
+namespace ui {
+
+class IModuleShell
 {
-    add(m_box);
-    m_box.set_border_width(6);
-}
-
-void DrItemWidget::add_widget(const Glib::ustring & label, Gtk::Widget & w)
-{
-    Gtk::Label *l = manage(new Gtk::Label(label, 0.0f, 0.5f));
-    m_box.pack_start(*l, Gtk::PACK_SHRINK);
-    m_box.pack_start(w, Gtk::PACK_SHRINK);
-}
-
+public:
+    virtual const ui::SelectionController::Ptr & get_selection_controller() const = 0;
+    virtual libraryclient::LibraryClient::Ptr getLibraryClient() const = 0;
+};
 
 }
 
+#endif
 /*
   Local Variables:
   mode:c++
@@ -49,4 +44,3 @@ void DrItemWidget::add_widget(const Glib::ustring & label, Gtk::Widget & w)
   fill-column:80
   End:
 */
-

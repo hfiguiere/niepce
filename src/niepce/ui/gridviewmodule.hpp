@@ -30,6 +30,7 @@
 
 #include "engine/db/library.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
+#include "niepce/ui/imoduleshell.hpp"
 #include "niepce/ui/metadatapanecontroller.hpp"
 #include "niepce/ui/selectioncontroller.hpp"
 
@@ -52,7 +53,7 @@ class GridViewModule
 public:
   typedef std::tr1::shared_ptr<GridViewModule> Ptr;
 
-  GridViewModule(ModuleShell *shell,
+  GridViewModule(const IModuleShell & shell,
                  const Glib::RefPtr<ImageListStore> & store);
 
 
@@ -61,6 +62,7 @@ public:
 
   /* ILibraryModule */
   virtual void dispatch_action(const std::string & action_name);
+  virtual void set_active(bool active);
 
   /* IImageSelectable */
   virtual Gtk::IconView * image_list();
@@ -74,7 +76,7 @@ protected:
 private:
   void on_rating_changed(int id, int rating);
 
-  ModuleShell                 *m_shell;
+  const IModuleShell &               m_shell;
   Glib::RefPtr<ImageListStore> m_model;
   libraryclient::UIDataProvider *m_uidataprovider;
 

@@ -21,7 +21,7 @@
 #ifndef __UI_MODULESHELL_HPP__
 #define __UI_MODULESHELL_HPP__
 
-
+#include <vector>
 
 #include "moduleshellwidget.hpp"
 #include "libraryclient/libraryclient.hpp"
@@ -30,15 +30,17 @@
 #include "niepce/ui/gridviewmodule.hpp"
 #include "modules/darkroom/darkroommodule.hpp"
 #include "imageliststore.hpp"
+#include "imoduleshell.hpp"
 
 namespace Gtk {
-	class Widget;
+class Widget;
 }
 
 namespace ui {
 
 class ModuleShell
     : public fwk::UiController
+    , public IModuleShell
 {
 public:
     typedef std::tr1::shared_ptr<ModuleShell> Ptr;
@@ -59,24 +61,25 @@ public:
         { 
             return m_selection_controller->get_list_store(); 
         }
-    const SelectionController::Ptr & get_selection_controller() const
+    virtual const SelectionController::Ptr & get_selection_controller() const
         {
             return m_selection_controller;
         }
-    libraryclient::LibraryClient::Ptr getLibraryClient() const
+    virtual libraryclient::LibraryClient::Ptr getLibraryClient() const
         {
             return m_libraryclient;
         }
 
-    /** called when somehing is selected by the shared selection */
-    void on_selected(int id);
-    void on_image_activated(int id);
+    /** called when something is selected by the shared selection */
+    void on_selected(eng::library_id_t id);
+    void on_image_activated(eng::library_id_t id);
     
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & label);
     virtual void on_ready();
+    void on_module_activated(int idx);
 private:
     libraryclient::LibraryClient::Ptr m_libraryclient;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
@@ -86,8 +89,10 @@ private:
     Glib::RefPtr<Gtk::UIManager>  m_ui_manager;
     
     ui::SelectionController::Ptr  m_selection_controller;
+    std::vector<ILibraryModule::Ptr> m_modules;
+    // these should be dynamic
     GridViewModule::Ptr           m_gridview;
-    darkroom::DarkroomModule::Ptr m_darkroom;
+    dr::DarkroomModule::Ptr       m_darkroom;
 };
 
 }

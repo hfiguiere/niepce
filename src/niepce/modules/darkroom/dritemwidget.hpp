@@ -26,7 +26,7 @@
 
 #include "fwk/toolkit/widgets/toolboxitemwidget.hpp"
 
-namespace darkroom {
+namespace dr {
 
 /** Generic Darkroom item for the toolbox. */
 class DrItemWidget

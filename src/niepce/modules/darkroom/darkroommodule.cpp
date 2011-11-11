@@ -28,19 +28,46 @@
 #include "ncr/init.hpp"
 #include "darkroommodule.hpp"
 
-namespace darkroom {
+namespace dr {
+
+DarkroomModule::DarkroomModule(const ui::IModuleShell & shell, 
+                               const Glib::RefPtr<Gtk::ActionGroup> & action_group)
+    : m_shell(shell)
+    , m_actionGroup(action_group)
+    , m_image(new ncr::Image)
+{
+    m_shell.get_selection_controller()->signal_selected.connect(
+        sigc::mem_fun(*this, &DarkroomModule::on_selected));
+}
 
 
 void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
 {
-    m_image->reload(file->path(), 
-                    file->fileType() == eng::LibFile::FILE_TYPE_RAW,
-                    file->orientation());
-
+    if(file) {
+        m_image->reload(file->path(), 
+                        file->fileType() == eng::LibFile::FILE_TYPE_RAW,
+                        file->orientation());
+    }
+    else {
+        // clear out
+    }
 }
 
 void DarkroomModule::dispatch_action(const std::string & /*action_name*/)
 {
+}
+
+
+void DarkroomModule::set_active(bool active)
+{
+    m_active = active;
+    if(active) {
+        // if activated, force the refresh of the image.
+        ui::SelectionController::Ptr sel = m_shell.get_selection_controller();
+        eng::library_id_t id = sel->get_selection();
+        eng::LibFile::Ptr file = sel->get_file(id);
+        set_image(file);
+    }
 }
 
 
@@ -96,6 +123,11 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     return m_widget;
 }
 
+void DarkroomModule::on_selected(eng::library_id_t id)
+{
+    eng::LibFile::Ptr file = m_shell.get_selection_controller()->get_file(id);
+    set_image(file);
+}
 
 }
 

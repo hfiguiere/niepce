@@ -23,7 +23,7 @@
 
 #include "fwk/toolkit/dockable.hpp"
 
-namespace darkroom {
+namespace dr {
 
 class ToolboxController
     : public fwk::Dockable

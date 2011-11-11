@@ -34,25 +34,36 @@ namespace Gtk {
 namespace ui {
 
 
-	class ModuleShellWidget
-		: public Gtk::VBox
-	{
-	public:
-		ModuleShellWidget();
+class ModuleShellWidget
+    : public Gtk::VBox
+{
+public:
+    ModuleShellWidget();
+    
+    int append_page(Gtk::Widget & w, const Glib::ustring & label);
+    void activate_page(int);
 
-		int append_page(Gtk::Widget & w, const Glib::ustring & label);
-		void activate_page(int);
-	protected:
-		
-		void set_current_page(int, Gtk::ToggleButton *);
-	private:
-		Gtk::HButtonBox         m_mainbar;
-		Gtk::Notebook           m_notebook;
-		int                     m_currentpage;
-		std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;
-	};
+    sigc::signal<void, int> signal_activated;
+protected:
+    
+    void set_current_page(int, Gtk::ToggleButton *);
+private:
+    Gtk::HButtonBox         m_mainbar;
+    Gtk::Notebook           m_notebook;
+    int                     m_currentpage;
+    std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;
+};
 
 }
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

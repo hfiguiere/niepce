@@ -32,6 +32,7 @@
 #include "libraryclient/libraryclient.hpp"
 #include "ncr/image.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
+#include "niepce/ui/imoduleshell.hpp"
 #include "modules/darkroom/imagecanvas.hpp"
 #include "modules/darkroom/toolboxcontroller.hpp"
 	
@@ -39,30 +40,30 @@ namespace fwk {
 class Dock;
 }
 
-namespace darkroom {
+namespace dr {
 
 class DarkroomModule
     : public ui::ILibraryModule
 {
 public:
-	typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
+    typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
+    
+    DarkroomModule(const ui::IModuleShell & shell, 
+                   const Glib::RefPtr<Gtk::ActionGroup> & action_group);
+    
+    void set_image(const eng::LibFile::Ptr & file);
+    
+    virtual void dispatch_action(const std::string & action_name);
 
-	DarkroomModule(const Glib::RefPtr<Gtk::ActionGroup> & action_group,
-                   const libraryclient::LibraryClient::Ptr & libclient)
-        : m_actionGroup(action_group),
-          m_image(new ncr::Image),
-          m_libClient(libclient)
-		{
-		}
-
-	void set_image(const eng::LibFile::Ptr & file);
-
-  virtual void dispatch_action(const std::string & action_name);
-
+    virtual void set_active(bool active);
+    
 protected:
-	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
-
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    
 private:
+    void on_selected(eng::library_id_t id);
+
+    const ui::IModuleShell &     m_shell;
     // darkroom split view
     Gtk::HPaned                  m_dr_splitview;
     Gtk::VBox                    m_vbox;
@@ -71,8 +72,10 @@ private:
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     ncr::Image::Ptr              m_image;
-    libraryclient::LibraryClient::Ptr m_libClient;
     fwk::Dock                   *m_dock;
+
+    // state
+    bool                         m_active;
 };
 
 

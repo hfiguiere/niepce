@@ -33,7 +33,7 @@
 #error DATADIR is not defined
 #endif
 
-namespace darkroom {
+namespace dr {
 
 ToolboxController::ToolboxController()
     : Dockable("tools", _("Develop"), Gtk::Stock::APPLY.id)

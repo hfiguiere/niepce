@@ -27,9 +27,7 @@
 
 #include <gdkmm/general.h>
 
-namespace darkroom {
-
-
+namespace dr {
 
 #define IMAGE_INSET 6
 #define SHADOW_OFFSET 3

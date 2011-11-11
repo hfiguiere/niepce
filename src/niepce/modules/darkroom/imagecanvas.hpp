@@ -26,7 +26,7 @@
 
 #include "ncr/image.hpp"
 
-namespace darkroom {
+namespace dr {
 
 class ImageCanvas
     : public Gtk::DrawingArea

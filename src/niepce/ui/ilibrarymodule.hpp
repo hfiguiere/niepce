@@ -37,6 +37,11 @@ public:
 
   /** dispatch action by name to the controller */
   virtual void dispatch_action(const std::string & action_name) = 0;
+
+  /** called when the module is set activate or unactive 
+      @param active true if brought to the front, false if defocused.
+   */
+  virtual void set_active(bool active) = 0;
 };
 
 

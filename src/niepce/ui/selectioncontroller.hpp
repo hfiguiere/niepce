@@ -89,10 +89,15 @@ public:
     void set_label(int label);
     /** set flag */
     void set_flag(int flag);
+
+    /** get the current selection 
+     *  todo: change it to support multiple
+     */
+    eng::library_id_t get_selection() const;
+    eng::LibFile::Ptr get_file(eng::library_id_t id) const;
 protected:
     virtual void _added();
 private:
-	eng::library_id_t get_selection();
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label, 

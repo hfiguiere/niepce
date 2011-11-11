@@ -25,44 +25,44 @@
 namespace ui {
 
 ModuleShellWidget::ModuleShellWidget()
-		: Gtk::VBox(),
-		  m_currentpage(-1)
+    : Gtk::VBox(),
+      m_currentpage(-1)
 {
-		set_spacing(4);
-		m_mainbar.set_layout(Gtk::BUTTONBOX_START);
-		m_mainbar.set_spacing(4);
-		m_notebook.set_show_tabs(false);
-		pack_start(m_mainbar, Gtk::PACK_SHRINK);
-		pack_start(m_notebook);
+    set_spacing(4);
+    m_mainbar.set_layout(Gtk::BUTTONBOX_START);
+    m_mainbar.set_spacing(4);
+    m_notebook.set_show_tabs(false);
+    pack_start(m_mainbar, Gtk::PACK_SHRINK);
+    pack_start(m_notebook);
 }
 
 int
 ModuleShellWidget::append_page(Gtk::Widget & w, const Glib::ustring & label)
 {
-		int idx;
-		
-		Gtk::ToggleButton* button = Gtk::manage(new Gtk::ToggleButton(label));
-		m_mainbar.pack_start(*button);
-		idx = m_notebook.append_page(w, label);
-		sigc::connection conn = button->signal_toggled().connect(
+    int idx;
+    
+    Gtk::ToggleButton* button = Gtk::manage(new Gtk::ToggleButton(label));
+    m_mainbar.pack_start(*button);
+    idx = m_notebook.append_page(w, label);
+    sigc::connection conn = button->signal_toggled().connect(
         sigc::bind(sigc::mem_fun(this, &ModuleShellWidget::set_current_page),
                    idx, button));
-		if(m_currentpage == -1) {
+    if(m_currentpage == -1) {
         set_current_page(idx, button);
-		}
-		if((int)m_buttons.size() < idx + 1) {
+    }
+    if((int)m_buttons.size() < idx + 1) {
         m_buttons.resize(idx + 1);
-		}
-		m_buttons[idx] = std::make_pair(button, conn);
-		return idx;
+    }
+    m_buttons[idx] = std::make_pair(button, conn);
+    return idx;
 }
 	
 void ModuleShellWidget::activate_page(int idx)
 {
-		if(m_currentpage != idx) {
+    if(m_currentpage != idx) {
         Gtk::ToggleButton * btn = m_buttons[idx].first;
         set_current_page(idx, btn);
-		}
+    }
 }
 
 
@@ -76,14 +76,15 @@ void ModuleShellWidget::set_current_page(int idx, Gtk::ToggleButton * btn)
         m_buttons[m_currentpage].second.unblock();
         return;
     }
-		m_notebook.set_current_page(idx);
-		if(m_currentpage >= 0) {
+    m_notebook.set_current_page(idx);
+    if(m_currentpage >= 0) {
         m_buttons[m_currentpage].second.block();
         m_buttons[m_currentpage].first->set_active(false);
         m_buttons[m_currentpage].second.unblock();
-		}
-		btn->set_active(true);
-		m_currentpage = idx;
+    }
+    btn->set_active(true);
+    m_currentpage = idx;
+    signal_activated(idx);
 }
 
 }

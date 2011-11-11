@@ -34,13 +34,13 @@
 namespace ui {
 
 
-GridViewModule::GridViewModule(ModuleShell* shell,
+GridViewModule::GridViewModule(const IModuleShell & shell,
                                const Glib::RefPtr<ImageListStore> & store)
   : m_shell(shell)
   , m_model(store)
   , m_uidataprovider(NULL)
 {
-    m_uidataprovider = m_shell->getLibraryClient()->getDataProvider();
+    m_uidataprovider = m_shell.getLibraryClient()->getDataProvider();
     DBG_ASSERT(m_uidataprovider, "provider is NULL");
 }
 
@@ -62,7 +62,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 		eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
         if(m.id == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
-          m_shell->getLibraryClient()->requestMetadata(m.id);
+          m_shell.getLibraryClient()->requestMetadata(m.id);
         }
         break;
     }
@@ -127,6 +127,10 @@ void GridViewModule::dispatch_action(const std::string & /*action_name*/)
 {
 }
 
+void GridViewModule::set_active(bool /*active*/)
+{
+}
+
 
 Gtk::IconView * GridViewModule::image_list()
 { 
@@ -169,7 +173,7 @@ void GridViewModule::select_image(eng::library_id_t id)
 
 void GridViewModule::on_rating_changed(int /*id*/, int rating)
 {
-    m_shell->get_selection_controller()->set_rating(rating);
+    m_shell.get_selection_controller()->set_rating(rating);
 }
 
 }
