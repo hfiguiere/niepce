@@ -243,12 +243,36 @@ void SelectionController::set_flag(int flag)
             _set_metadata(_("Set Flag"), file, 
                           MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG), 
                           old_value, flag);
-            // we need to set the rating here so that undo/redo works
+            // we need to set the flag here so that undo/redo works
             // consistently.
             file->setFlag(flag);
         }
     }
 }
+
+
+void SelectionController::set_properties(const fwk::PropertyBag & /*props*/)
+{
+    eng::library_id_t selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+#if 0
+            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            DBG_OUT("old flag is %d", file->flag());
+            int old_value = file->flag();
+            _set_metadata(_("Set Properties"), file, 
+                          // FIXME
+                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING),
+                          old_value, flag);
+            // we need to set the rating here so that undo/redo works
+            // consistently.
+            file->setFlag(flag);
+#endif
+        }
+    }
+}
+
 
 }
 

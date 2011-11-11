@@ -36,4 +36,7 @@ libniepcedb_a_SOURCES = library.hpp library.cpp \
 	storage.hpp storage.cpp \
 	fsfile.hpp fsfile.cpp \
 	filebundle.hpp filebundle.cpp \
-	metadata.hpp
+	metadata.hpp \
+	properties.hpp properties.cpp \
+	xmpproperties.hpp xmpproperties.cpp \
+	properties-def.hpp

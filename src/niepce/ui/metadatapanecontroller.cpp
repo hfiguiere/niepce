@@ -24,109 +24,149 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/stock.h>
 
-#include <exempi/xmpconsts.h>
-
 #include "fwk/base/debug.hpp"
-#include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
+#include "engine/db/properties.hpp"
+#include "engine/db/xmpproperties.hpp"
 #include "metadatapanecontroller.hpp"
 
-using namespace xmp;
-
 namespace ui {
-
 	
-  const MetaDataSectionFormat *
-  MetaDataPaneController::get_format() 
-  {
-    static const MetaDataFormat s_camerainfo_format[] = {
-      { _("Make:"), NS_TIFF, "Make", META_DT_STRING, true },
-      { _("Model:"), NS_TIFF, "Model", META_DT_STRING, true },
-      { _("Lens:"), NS_EXIF_AUX, "Lens", META_DT_STRING, true },
-      { NULL, NULL, NULL, META_DT_NONE, true }
+const fwk::MetaDataSectionFormat *
+MetaDataPaneController::get_format() 
+{
+    static const fwk::MetaDataFormat s_camerainfo_format[] = {
+        { _("Make:"), eng::NpTiffMakeProp, fwk::META_DT_STRING, true },
+        { _("Model:"), eng::NpTiffModelProp, fwk::META_DT_STRING, true },
+        { _("Lens:"), eng::NpExifAuxLensProp, fwk::META_DT_STRING, true },
+        { NULL, 0, fwk::META_DT_NONE, true }
     };
-    static const MetaDataFormat s_shootinginfo_format[] = {
-      { _("Exposure Program:"), NS_EXIF, "ExposureProgram", META_DT_STRING, true },
-      { _("Speed:"), NS_EXIF, "ExposureTime", META_DT_STRING, true },
-      { _("Aperture:"), NS_EXIF, "FNumber", META_DT_FRAC, true },
-      { _("ISO:"), NS_EXIF, "ISOSpeedRatings", META_DT_STRING_ARRAY, true },
-      { _("Exposure Bias:"), NS_EXIF, "ExposureBiasValue", META_DT_FRAC, true },
-      // this one is fishy as it hardcode the prefix.
-      { _("Flash:"), NS_EXIF, "Flash/exif:Fired", META_DT_STRING, true },
-      { _("Flash compensation:"), NS_EXIF_AUX, "FlashCompensation", META_DT_STRING, true },
-      { _("Focal length:"), NS_EXIF, "FocalLength", META_DT_FRAC, true },
-      { _("White balance:"), NS_EXIF, "WhiteBalance", META_DT_STRING, true },
-      { _("Date:"), NS_EXIF, "DateTimeOriginal", META_DT_DATE, false },
-      { NULL, NULL, NULL, META_DT_NONE, true }
+    static const fwk::MetaDataFormat s_shootinginfo_format[] = {
+        { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::META_DT_STRING, true },
+        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::META_DT_STRING, true },
+        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::META_DT_FRAC, true },
+        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::META_DT_STRING_ARRAY, true },
+        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::META_DT_FRAC, true },
+        { _("Flash:"), eng::NpExifFlashFiredProp, fwk::META_DT_STRING, true },
+        { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::META_DT_STRING, true },
+        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::META_DT_FRAC, true },
+        { _("White balance:"), eng::NpExifWbProp, fwk::META_DT_STRING, true },
+        { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::META_DT_DATE, false },
+        { NULL, 0, fwk::META_DT_NONE, true }
     };
-    static const MetaDataFormat s_iptc_format[] = {
-      { _("Rating:"), NS_XAP, "Rating", META_DT_STAR_RATING, false },
-      { _("Label:"), NS_XAP, "Label", META_DT_STRING, false },            
-      { _("Keywords:"), NS_DC, "subject", META_DT_STRING_ARRAY, false },
-      { NULL, NULL, NULL, META_DT_NONE, true }			
+    static const fwk::MetaDataFormat s_iptc_format[] = {
+        { _("Headline:"), eng::NpIptcHeadlineProp, fwk::META_DT_STRING, false },
+        { _("Caption:"), eng::NpIptcDescriptionProp, fwk::META_DT_TEXT, false },
+        { _("Rating:"), eng::NpXmpRatingProp, fwk::META_DT_STAR_RATING, false },
+        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, false },            
+        { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::META_DT_STRING_ARRAY, false },
+        { NULL, 0, fwk::META_DT_NONE, true }			
     };
-    static const MetaDataSectionFormat s_format[] = {
-      { _("Camera Information"),
-	s_camerainfo_format
-      },
-      { _("Shooting Information"),
-	s_shootinginfo_format
-      },
-      { _("IPTC"),
-	s_iptc_format
-      },
-      { _("Rights"),
-	NULL
-      },
-      { NULL, NULL
-      }
+    static const fwk::MetaDataSectionFormat s_format[] = {
+        { _("Camera Information"),
+          s_camerainfo_format
+        },
+        { _("Shooting Information"),
+          s_shootinginfo_format
+        },
+        { _("IPTC"),
+          s_iptc_format
+        },
+        { _("Rights"),
+          NULL
+        },
+        { NULL, NULL
+        }
     };
     return s_format;
-  }
+}
+
+const fwk::PropertySet & MetaDataPaneController::get_property_set()
+{
+    static fwk::PropertySet propset;
+    if(propset.empty()) {
+        const fwk::MetaDataSectionFormat * formats = get_format();
+        
+        const fwk::MetaDataSectionFormat * current = formats;
+        while(current->section) {
+            const fwk::MetaDataFormat * format = current->formats;
+            while(format && format->label) {
+                propset.insert(format->id);
+                format++;
+            }
+            current++;
+        }
+    }
+    return propset;
+}
+
   
-  MetaDataPaneController::MetaDataPaneController()
+MetaDataPaneController::MetaDataPaneController()
     : Dockable("Metadata", _("Image Properties"), 
 	       Gtk::Stock::PROPERTIES.id /*, DockItem::DOCKED_STATE*/),
       m_fileid(0)
-  {
-  }
-  
-  MetaDataPaneController::~MetaDataPaneController()
-  {
-  }
-  
-  Gtk::Widget * 
-  MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
-  {
+{
+}
+
+MetaDataPaneController::~MetaDataPaneController()
+{
+}
+
+Gtk::Widget * 
+MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
+{
     if(m_widget) {
-      return m_widget;
+        return m_widget;
     }
     Gtk::VBox *vbox = build_vbox();
     m_widget = vbox;
     DBG_ASSERT(vbox, "dockable vbox not found");
-
-    const MetaDataSectionFormat * formats = get_format();
     
-    const MetaDataSectionFormat * current = formats;
+    const fwk::MetaDataSectionFormat * formats = get_format();
+    
+    const fwk::MetaDataSectionFormat * current = formats;
     while(current->section) {
-      fwk::MetaDataWidget *w = Gtk::manage(new fwk::MetaDataWidget(current->section));
-      vbox->pack_start(*w, Gtk::PACK_SHRINK, 0);
-      w->set_data_format(current);
-      m_widgets.push_back(w);
-      current++;
+        fwk::MetaDataWidget *w = Gtk::manage(new fwk::MetaDataWidget(current->section));
+        vbox->pack_start(*w, Gtk::PACK_SHRINK, 0);
+        w->set_data_format(current);
+        m_widgets.push_back(w);
+        w->signal_metadata_changed.connect(
+            sigc::mem_fun(*this, 
+                          &MetaDataPaneController::on_metadata_changed));
+        current++;
     }
     
     return m_widget;
-  }
+}
   
-  
-	void MetaDataPaneController::display(eng::library_id_t file_id, const fwk::XmpMeta * meta)
-  {
+void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props)
+{
+    signal_metadata_changed.emit(props);
+}
+
+
+void MetaDataPaneController::display(eng::library_id_t file_id, const fwk::XmpMeta * meta)
+{
     m_fileid = file_id;
     DBG_OUT("displaying metadata");
+    fwk::PropertyBag properties;
+    if(meta) {
+        const fwk::PropertySet & propset = get_property_set();
+        eng::convert_xmp_to_properties(meta, propset, properties);
+    }
     std::for_each(m_widgets.begin(), m_widgets.end(),
 		  boost::bind(&fwk::MetaDataWidget::set_data_source,
-			      _1, meta));
-  }
+			      _1, properties));
+}
   
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/

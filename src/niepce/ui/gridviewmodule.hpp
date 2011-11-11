@@ -28,6 +28,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treestore.h>
 
+#include "fwk/base/propertybag.hpp"
 #include "engine/db/library.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
 #include "niepce/ui/imoduleshell.hpp"
@@ -74,6 +75,7 @@ protected:
 
 
 private:
+  void on_metadata_changed(const fwk::PropertyBag &);
   void on_rating_changed(int id, int rating);
 
   const IModuleShell &               m_shell;

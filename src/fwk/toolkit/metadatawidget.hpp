@@ -26,32 +26,60 @@
 
 #include <gtkmm/table.h>
 
+#include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/widgets/toolboxitemwidget.hpp"
 
 namespace xmp {
-	struct MetaDataSectionFormat;
+struct MetaDataSectionFormat;
+struct MetaDataFormat;
 }
 
 namespace fwk {
 
-class XmpMeta;
+enum MetaDataType {
+    META_DT_NONE = 0,
+    META_DT_STRING,
+    META_DT_STRING_ARRAY,
+    META_DT_TEXT,
+    META_DT_DATE,
+    META_DT_FRAC, 
+    META_DT_STAR_RATING
+};
 
+struct MetaDataFormat {
+    const char * label;
+    uint32_t     id;
+    MetaDataType type;
+    bool         readonly;
+};
+	
+struct MetaDataSectionFormat {
+    const char * section;
+    const MetaDataFormat * formats;
+};
+
+
+class XmpMeta;
 
 class MetaDataWidget 
 	: public fwk::ToolboxItemWidget
 {
 public:
-	MetaDataWidget(const Glib::ustring & title);
-	
-	void add_data(const std::string & id, const std::string & label,
-				  const char * value, xmp::MetaDataType type);
-	void set_data_format(const xmp::MetaDataSectionFormat * fmt);
-	void set_data_source(const fwk::XmpMeta * xmp);
+    MetaDataWidget(const Glib::ustring & title);
+    
+    void add_data(const MetaDataFormat * current,
+                  const PropertyValue & value);
+    void set_data_format(const MetaDataSectionFormat * fmt);
+    void set_data_source(const fwk::PropertyBag & properties);
+    
+    sigc::signal<void, const fwk::PropertyBag &> signal_metadata_changed;
 protected:
+    void on_str_changed(Gtk::Entry *, fwk::PropertyIndex prop);
+    void on_int_changed(int, fwk::PropertyIndex prop);
 private:
-	Gtk::Table    m_table;
-	std::map<std::string, Gtk::Widget *> m_data_map;
-	const xmp::MetaDataSectionFormat * m_fmt;
+    Gtk::Table    m_table;
+    std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
+    const MetaDataSectionFormat * m_fmt;
 };
 
 }

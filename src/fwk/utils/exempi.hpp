@@ -75,30 +75,6 @@ private:
     T _p;
 };
 
-
-enum MetaDataType {
-    META_DT_NONE = 0,
-    META_DT_STRING,
-    META_DT_STRING_ARRAY,
-    META_DT_DATE,
-    META_DT_FRAC, 
-    META_DT_STAR_RATING
-};
-	
-	
-struct MetaDataFormat {
-    const char * label;
-    const char * ns;
-    const char * property;
-    MetaDataType     type;
-    bool         readonly;
-};
-	
-struct MetaDataSectionFormat {
-    const char * section;
-    const MetaDataFormat * formats;
-};
-
 extern const char * NIEPCE_XMP_NAMESPACE;
 extern const char * NIEPCE_XMP_NS_PREFIX;
 extern const char * UFRAW_INTEROP_NAMESPACE;	

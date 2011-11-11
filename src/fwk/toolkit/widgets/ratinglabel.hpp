@@ -29,7 +29,7 @@ class RatingLabel
   : public Gtk::DrawingArea
 {
 public:
-  RatingLabel(int rating = 0);
+  RatingLabel(int rating = 0, bool editable = true);
   virtual ~RatingLabel();
 
   bool is_editable() const

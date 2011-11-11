@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/metadata.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,22 +28,53 @@ enum {
     META_NS_XMPCORE = 0,
     META_NS_TIFF,
     META_NS_EXIF,
+    META_NS_IPTC,
     META_NS_NIEPCE
 };
 
 /** Metadata for xmpcore. Combine with %META_NS_XMPCORE */
 enum {
-    META_XMPCORE_RATING = 0,
-    META_XMPCORE_LABEL = 1,
+    _META_XMPCORE_NONE_ = 0,
+    META_XMPCORE_RATING = 1,  // NS_XAP, "Rating"
+    META_XMPCORE_LABEL,       // NS_XAP, "Label"
 
     _META_XMPCORE_LAST_
 };
 
 /** Metadata for tiff. Combine with %META_NS_TIFF */
 enum {
-    META_TIFF_ORIENTATION = 0
+    META_TIFF_ORIENTATION = 0,
+    META_TIFF_MAKE,                // NS_TIFF, "Make"
+    META_TIFF_MODEL,               // NS_TIFF, "Model"
+
+    _META_TIFF_LAST_
 };
 
+enum {
+    META_EXIF_AUX_LENS = 0,            // NS_EXIF_AUX, "Lens"
+    META_EXIF_EXPOSUREPROGRAM,         // NS_EXIF, "ExposureProgram"
+    META_EXIF_EXPOSURETIME,            // NS_EXIF, "ExposureTime"
+    META_EXIF_FNUMBER,                 // NS_EXIF, "FNumber"
+    META_EXIF_ISOSPEEDRATINGS,         // NS_EXIF, "ISOSpeedRatings"
+    META_EXIF_EXPOSUREBIAS,            // NS_EXIF, "ExposureBiasValue"
+    META_EXIF_FLASHFIRED,              // NS_EXIF, "Flash/exif:Fired"
+    META_EXIF_AUX_FLASHCOMPENSATION,   // NS_EXIF_AUX, "FlashCompensation"
+    META_EXIF_WB,                      // NS_EXIF, "WhiteBalance"
+    META_EXIF_DATETIMEORIGINAL,        // NS_EXIF, "DateTimeOriginal"
+    META_EXIF_FOCALLENGTH,             // NS_EXIF, "FocalLength"
+    
+    _META_EXIF_LAST_
+};
+
+enum {
+    META_IPTC_HEADLINE = 0,    // NS_PHOTOSHOP, "Headline"
+    META_IPTC_DESCRIPTION = 1, // NS_DC, "description"
+    META_IPTC_KEYWORDS = 2,    // NS_DC, "subject"
+    
+    _META_IPTC_LAST_
+};
+
+/** Metadata for Niepce. Combine with %META_NS_NIEPCE */
 enum {
     META_NIEPCE_FLAG = 0
 };

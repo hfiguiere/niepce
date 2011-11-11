@@ -25,6 +25,7 @@
 
 #include <sigc++/signal.h>
 
+#include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/librarytypes.hpp";
 #include "ui/imageliststore.hpp"
@@ -89,6 +90,8 @@ public:
     void set_label(int label);
     /** set flag */
     void set_flag(int flag);
+
+    void set_properties(const fwk::PropertyBag & props);
 
     /** get the current selection 
      *  todo: change it to support multiple

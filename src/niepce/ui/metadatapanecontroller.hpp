@@ -26,12 +26,11 @@
 #include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/dockable.hpp"
 
-namespace xmp {
-struct MetaDataSectionFormat;
-}
 namespace fwk {
+struct MetaDataSectionFormat;
 class MetaDataWidget;
 class Dock;
+class PropertyBag;
 }
 
 namespace ui {
@@ -47,12 +46,17 @@ public:
     void display(eng::library_id_t file_id, const fwk::XmpMeta * meta);
     eng::library_id_t displayed_file() const 
         { return m_fileid; }
+
+    sigc::signal<void, const fwk::PropertyBag &> signal_metadata_changed;
 private:
+    void on_metadata_changed(const fwk::PropertyBag &);
+
     std::vector<fwk::MetaDataWidget *> m_widgets;
     
-    static const xmp::MetaDataSectionFormat * get_format();
+    static const fwk::MetaDataSectionFormat * get_format();
+    static const fwk::PropertySet & get_property_set();
     
-	eng::library_id_t m_fileid;
+    eng::library_id_t m_fileid;
 };
 
 }

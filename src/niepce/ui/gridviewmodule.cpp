@@ -22,6 +22,8 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeselection.h>
 
+#include <exempi/xmpconsts.h>
+
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
@@ -111,6 +113,8 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
   m_lib_splitview.pack1(m_scrollview);
   m_dock = new fwk::Dock();
   m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController);
+  m_metapanecontroller->signal_metadata_changed.connect(
+      sigc::mem_fun(*this, &GridViewModule::on_metadata_changed));
   add(m_metapanecontroller);
   m_lib_splitview.pack2(*m_dock);
   m_dock->vbox().pack_start(*m_metapanecontroller->buildWidget(manager));
@@ -169,6 +173,14 @@ void GridViewModule::select_image(eng::library_id_t id)
     else {
       m_librarylistview.unselect_all();
     }
+}
+
+
+void GridViewModule::on_metadata_changed(const fwk::PropertyBag & props)
+{
+    // TODO this MUST be more generic
+    DBG_OUT("on_metadata_changed()");
+    m_shell.get_selection_controller()->set_properties(props);
 }
 
 void GridViewModule::on_rating_changed(int /*id*/, int rating)

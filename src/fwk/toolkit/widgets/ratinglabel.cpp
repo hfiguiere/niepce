@@ -93,10 +93,10 @@ int RatingLabel::rating_value_from_hit_x(double x)
   return round(x / width);
 }
 
-RatingLabel::RatingLabel(int rating)
+  RatingLabel::RatingLabel(int rating, bool editable)
   : Gtk::DrawingArea()
   , m_rating(rating)
-  , m_is_editable(false)
+  , m_is_editable(editable)
 {
   DBG_OUT("ctor");
 }

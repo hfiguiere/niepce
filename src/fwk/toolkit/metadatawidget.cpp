@@ -24,12 +24,16 @@
 #include <boost/bind.hpp>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
+#include <gtkmm/entry.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/fractions.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
+
+// remove
+#include "engine/db/properties.hpp"
 
 #include "metadatawidget.hpp"
 
@@ -45,18 +49,23 @@ MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     add(m_table);
 }
 
-void MetaDataWidget::set_data_format(const xmp::MetaDataSectionFormat * fmt)
+void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
 {
     m_fmt = fmt;
 }
 
 namespace {
 static 
-void clear_widget(std::pair<const std::string, Gtk::Widget *> & p)
+void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
 {
     Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
     if(l) {
         l->set_text("");
+        return;
+    }
+    Gtk::Entry * e = dynamic_cast<Gtk::Entry*>(p.second);
+    if(e) {
+        e->set_text("");
         return;
     }
     fwk::RatingLabel * rl = dynamic_cast<fwk::RatingLabel*>(p.second);
@@ -67,14 +76,14 @@ void clear_widget(std::pair<const std::string, Gtk::Widget *> & p)
 }
 }
 
-void MetaDataWidget::set_data_source(const fwk::XmpMeta * xmp)
+void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
 {
     DBG_OUT("set data source");
     if(!m_data_map.empty()) {
         std::for_each(m_data_map.begin(), m_data_map.end(),
                       boost::bind(&clear_widget, _1));
     }
-    if(!xmp) {
+    if(properties.empty()) {
         return;
     }
     if(!m_fmt) {
@@ -82,71 +91,71 @@ void MetaDataWidget::set_data_source(const fwk::XmpMeta * xmp)
         return;
     }
 
-    const xmp::MetaDataFormat * current = m_fmt->formats;
+    const MetaDataFormat * current = m_fmt->formats;
     xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
     while(current && current->label) {
-        std::string id(current->property);
-        id += "-";
-        id += current->ns;
-        if(current->type == xmp::META_DT_STRING_ARRAY) {
-            xmp::ScopedPtr<XmpIteratorPtr> 
-                iter(xmp_iterator_new(xmp->xmp(), current->ns,
-                                      current->property, XMP_ITER_JUSTLEAFNODES));
-            std::vector<std::string> vec;
-            while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
-                vec.push_back(xmp_string_cstr(value));
-            }
-            std::string v = fwk::join(vec, ", ");
-            add_data(id, current->label, v.c_str(), current->type);
+        PropertyValue v;
+        if(properties.get_value_for_property(current->id, v)) {
+            add_data(current, v);
         }
         else {
-            const char * v = "";
-            if(xmp_get_property(xmp->xmp(), current->ns,
-                                current->property, value, NULL)) {
-                v = xmp_string_cstr(value);
-            }
-            else {
-                DBG_OUT("get_property failed id = %s, ns = %s, prop = %s,"
-                        "label = %s",
-                        id.c_str(), current->ns, current->property,
-                        current->label);
-            }
-            add_data(id, current->label, v, current->type);
+            DBG_OUT("get_property failed id = %d, label = %s",
+                    current->id, current->label);
         }
         current++;
     }
 }
 
 
-void MetaDataWidget::add_data(const std::string & id, 
-                              const std::string & label,
-                              const char * value,
-                              xmp::MetaDataType type)
+void MetaDataWidget::add_data(const MetaDataFormat * current,
+                              const PropertyValue & value)
 {
     Gtk::Widget *w = NULL;
     int n_row;
-    std::map<std::string, Gtk::Widget *>::iterator iter 
+    std::map<PropertyIndex, Gtk::Widget *>::iterator iter 
         = m_data_map.end();
     if(m_data_map.empty()) {
         n_row = 0;
     }
     else {
-        iter = m_data_map.find(id);
+        iter = m_data_map.find(current->id);
         n_row = m_table.property_n_rows();
     }
     if(iter == m_data_map.end()) {
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
                                              Glib::ustring("<b>") 
-                                             + label + "</b>"));
+                                             + current->label + "</b>"));
         labelw->set_alignment(0.0f, 0.5f);
         labelw->set_use_markup(true);
 
-        if(type == xmp::META_DT_STAR_RATING) {
-            w = Gtk::manage(new fwk::RatingLabel());
+        if(current->type == META_DT_STAR_RATING) {
+            fwk::RatingLabel * r = Gtk::manage(new fwk::RatingLabel(0, !current->readonly));
+            if(!current->readonly) {
+                r->signal_changed.connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_int_changed), 
+                        current->id));
+            }
+            w = r;
         }
         else {
-            w = Gtk::manage(new Gtk::Label());
-            static_cast<Gtk::Label*>(w)->set_alignment(0.0f, 0.5f);
+            // TODO make it editable
+
+            if(current->readonly) {
+                Gtk::Label * l = Gtk::manage(new Gtk::Label());
+                l->set_alignment(0.0f, 0.5f);
+                w = l;
+            }
+            else {
+                Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
+                e->signal_changed().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_str_changed),
+                        e, current->id));
+                w = e;
+            }
         }
 
         m_table.resize(n_row + 1, 2);
@@ -154,40 +163,59 @@ void MetaDataWidget::add_data(const std::string & id,
                        Gtk::FILL, Gtk::SHRINK, 4, 0);
         m_table.attach(*w, 1, 2, n_row, n_row+1, 
                        Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK, 4, 0);
-        m_data_map.insert(std::make_pair(id, w));
+        m_data_map.insert(std::make_pair(current->id, w));
     }
     else {
         w = static_cast<Gtk::Label*>(iter->second);
     }
-    switch(type) {
-    case xmp::META_DT_FRAC:
+    switch(current->type) {
+    case META_DT_FRAC:
     {
         try {
-            double decimal = fwk::fraction_to_decimal(value);
+            double decimal = fwk::fraction_to_decimal(boost::get<std::string>(value));
             std::string frac = boost::lexical_cast<std::string>(decimal);
             static_cast<Gtk::Label*>(w)->set_text(frac);
         }
         catch(...) {
-            DBG_OUT("conversion of '%s' to frac failed", value);
+            DBG_OUT("conversion of '%u' to frac failed", current->id);
         }
         break;
     }
-    case xmp::META_DT_STAR_RATING:
+    case META_DT_STAR_RATING:
     {
         try {
-            int rating = boost::lexical_cast<int>(value);
+            int rating = boost::get<int>(value);
             static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
         }
         catch(...) {
-            DBG_OUT("conversion of '%s' to int failed", value);
+            DBG_OUT("conversion of '%u' to int failed", current->id);
         }
         break;
     }
-    default:
-        static_cast<Gtk::Label*>(w)->set_text(value);
+    default:        
+        if(current->readonly) {
+            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+        }
+        else {
+            static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
+        }
         break;
     }
     m_table.show_all();
+}
+
+void MetaDataWidget::on_str_changed(Gtk::Entry *e, fwk::PropertyIndex prop)
+{
+    fwk::PropertyBag props;
+    props.set_value_for_property(prop, fwk::PropertyValue(e->get_text()));
+    signal_metadata_changed.emit(props);
+}
+
+void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
+{
+    fwk::PropertyBag props;
+    props.set_value_for_property(prop, fwk::PropertyValue(value));
+    signal_metadata_changed.emit(props);
 }
 
 }
