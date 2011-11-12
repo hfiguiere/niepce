@@ -27,7 +27,7 @@
 
 #include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/controller.hpp"
-#include "engine/db/librarytypes.hpp";
+#include "engine/db/librarytypes.hpp"
 #include "ui/imageliststore.hpp"
 
 namespace Gtk {
