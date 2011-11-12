@@ -74,7 +74,7 @@ public:
     
     sigc::signal<void, const fwk::PropertyBag &> signal_metadata_changed;
 protected:
-    void on_str_changed(Gtk::Entry *, fwk::PropertyIndex prop);
+    bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);

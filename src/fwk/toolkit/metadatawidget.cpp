@@ -92,10 +92,9 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
     }
 
     const MetaDataFormat * current = m_fmt->formats;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
     while(current && current->label) {
         PropertyValue v;
-        if(properties.get_value_for_property(current->id, v)) {
+        if(properties.get_value_for_property(current->id, v) || !current->readonly) {
             add_data(current, v);
         }
         else {
@@ -147,7 +146,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             }
             else {
                 Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
-                e->signal_changed().connect(
+                e->signal_focus_out_event().connect(
                     sigc::bind(
                         sigc::mem_fun(*this, 
                                       &MetaDataWidget::on_str_changed),
@@ -210,14 +209,15 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     m_table.show_all();
 }
 
-void MetaDataWidget::on_str_changed(Gtk::Entry *e, fwk::PropertyIndex prop)
+bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e, fwk::PropertyIndex prop)
 {
     if(m_update) {
-        return;
+        return true;
     }
     fwk::PropertyBag props;
     props.set_value_for_property(prop, fwk::PropertyValue(e->get_text()));
     signal_metadata_changed.emit(props);
+    return true;
 }
 
 void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)

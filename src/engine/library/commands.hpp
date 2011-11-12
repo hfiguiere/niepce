@@ -52,7 +52,8 @@ public:
 		static void cmdRequestMetadata(const Library::Ptr & lib,
                                    library_id_t file_id);
     static void cmdSetMetadata(const Library::Ptr & lib,
-                               library_id_t file_id, int meta, int value);
+                               library_id_t file_id, fwk::PropertyIndex meta, 
+                               const fwk::PropertyValue & value);
     static void cmdListAllLabels(const Library::Ptr & lib);
     static void cmdCreateLabel(const Library::Ptr & lib, const std::string & s, 
                                const std::string & color);

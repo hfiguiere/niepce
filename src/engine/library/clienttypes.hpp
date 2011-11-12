@@ -20,17 +20,18 @@
 #ifndef _LIBRARY_CLIENTTYPES_H_
 #define _LIBRARY_CLIENTTYPES_H_
 
+#include "fwk/base/propertybag.hpp"
 #include "engine/db/librarytypes.hpp"
 
 namespace eng {
 
-	typedef int tid_t; /**< transaction ID */
+  typedef int tid_t; /**< transaction ID */
 
-	struct metadata_desc_t {
-		library_id_t id;
-		int          meta;
-		int          value;
-	};
+  struct metadata_desc_t {
+    library_id_t id;
+    fwk::PropertyIndex          meta;
+    fwk::PropertyValue          value;
+  };
 }
 
 

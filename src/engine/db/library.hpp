@@ -162,7 +162,7 @@ public:
 		void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     /** set the metadata block (XMP) */
     bool setMetaData(library_id_t file_id, const LibMetadata::Ptr & );
-    bool setMetaData(library_id_t file_id, int meta, const boost::any & value);
+    bool setMetaData(library_id_t file_id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
 
 		void getAllLabels(const eng::Label::ListPtr & l);
     library_id_t addLabel(const std::string & name, const std::string & color);

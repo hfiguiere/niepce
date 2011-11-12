@@ -35,7 +35,7 @@ const PropsToXmpMap & props_to_xmp_map()
     static PropsToXmpMap s_props_map;
     if(s_props_map.empty()) {
 
-#define DEFINE_PROPERTY(a,b,c,d) \
+#define DEFINE_PROPERTY(a,b,c,d,e)                                       \
         s_props_map.insert(std::make_pair(b, std::make_pair(c,d)));
 #include "engine/db/properties-def.hpp"
 #undef DEFINE_PROPERTY
@@ -69,6 +69,23 @@ bool get_prop_from_xmp(const fwk::XmpMeta * meta, fwk::PropertyIndex p,
     }
     // not found in XMP
     return false;
+}
+
+bool property_index_to_xmp(fwk::PropertyIndex index, const char * & ns, const char * & property)
+{
+    const PropsToXmpMap & propmap = props_to_xmp_map();
+     PropsToXmpMap::const_iterator iter = propmap.find(index);
+    if(iter == propmap.end()) {
+        // not found
+        return false;
+    }
+    if(iter->second.first == NULL || iter->second.second == NULL) {
+        // no XMP equivalent
+        return false;
+    }
+    ns = iter->second.first;
+    property = iter->second.second;
+    return true;
 }
 
 void convert_xmp_to_properties(const fwk::XmpMeta * meta, const fwk::PropertySet & propset,
@@ -120,22 +137,6 @@ void convert_xmp_to_properties(const fwk::XmpMeta * meta, const fwk::PropertySet
         }
     }
 }
-
-#if 0
-
-if(current->type == META_DT_STRING_ARRAY) {
-    xmp::ScopedPtr<XmpIteratorPtr> 
-        iter(xmp_iterator_new(xmp->xmp(), current->ns,
-                              current->property, XMP_ITER_JUSTLEAFNODES));
-    std::vector<std::string> vec;
-    while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
-        vec.push_back(xmp_string_cstr(value));
-    }
-    std::string v = fwk::join(vec, ", ");
-    add_data(current, v.c_str());
-}
-
-#endif
 
 }
 

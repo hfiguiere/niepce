@@ -23,6 +23,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "libmetadata.hpp"
+#include "xmpproperties.hpp"
 
 namespace eng {
 
@@ -33,53 +34,23 @@ LibMetadata::LibMetadata(library_id_t _id)
 {
 }
 
-namespace {
 
-bool xmpPropertyNameFromIndex(int meta, std::string & ns, std::string & property)
+bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value)
 {
-    bool found = true;
-    switch(meta) {
-    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
-        ns = NS_XAP;
-        property = "Rating";
-        break;
-    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
-        ns = NS_XAP;
-        property = "Label";
-        break;
-    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
-        ns = NS_TIFF;
-        property = "Orientation";
-        break;
-    case MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG):
-        ns = xmp::NIEPCE_XMP_NAMESPACE;
-        property = "Flag";
-        break;
-    default:
-        found = false;
-        break;
-    }
-   
-    return found;
-}
-
-}
-
-bool LibMetadata::setMetaData(int meta, const boost::any & value)
-{
-    std::string ns;
-    std::string property;
+    const char * ns = NULL;
+    const char * property = NULL;
     bool result = false;
 
-    result = xmpPropertyNameFromIndex(meta, ns, property);
+    result = property_index_to_xmp(meta, ns, property);
     if(result) {
-        if(value.type() == typeid(int32_t)) {
-            result = xmp_set_property_int32(xmp(), ns.c_str(), property.c_str(), 
-                                            boost::any_cast<int32_t>(value), 0);
+        
+        if(value.type() == typeid(int)) {
+            result = xmp_set_property_int32(xmp(), ns, property, 
+                                            boost::get<int>(value), 0);
         }
         else if(value.type() == typeid(std::string)) {
-            result = xmp_set_property(xmp(), ns.c_str(), property.c_str(), 
-                                      boost::any_cast<std::string>(value).c_str(), 0);
+            result = xmp_set_property(xmp(), ns, property, 
+                                      boost::get<std::string>(value).c_str(), 0);
         }
     }
     else {

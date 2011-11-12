@@ -21,6 +21,8 @@
 #ifndef __ENG_PROPERTIES_HPP__
 #define __ENG_PROPERTIES_HPP__
 
+#include <typeinfo>
+
 #include "fwk/base/propertybag.hpp"
 #include "engine/db/metadata.hpp"
 
@@ -28,7 +30,7 @@ namespace eng {
 
   // prefix Np is for Niepce Property
 
-#define DEFINE_PROPERTY(a,b,c,d)                 \
+#define DEFINE_PROPERTY(a,b,c,d,e)               \
     a = b,
 
 enum {
@@ -43,9 +45,19 @@ enum {
 struct property_desc_t {
     fwk::PropertyIndex prop;
     const char * name;
+    const std::type_info & type;
 };
 
-extern const property_desc_t properties_names[];
+typedef std::map<fwk::PropertyIndex, const property_desc_t*> PropDescMap;
+
+/** get the properties description */
+const PropDescMap & property_desc_map();
+/** return true of the property is of the type ti */
+bool check_property_type(fwk::PropertyIndex idx, const std::type_info & ti);
+
+
+/** internal property name */
+const char * _propertyName(fwk::PropertyIndex idx);
 
 }
 

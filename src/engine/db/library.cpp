@@ -31,6 +31,7 @@
 #include "niepce/notifications.hpp"
 #include "library.hpp"
 #include "metadata.hpp"
+#include "properties.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/exception.hpp"
 #include "fwk/utils/exempi.hpp"
@@ -721,32 +722,34 @@ bool Library::setMetaData(library_id_t file_id, const LibMetadata::Ptr & meta)
  * @param value the value to set
  * @return false on error
  */
-bool Library::setMetaData(library_id_t file_id, int meta, 
-                          const boost::any & value)
+bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta, 
+                          const fwk::PropertyValue & value)
 {
     bool retval = false;
-    DBG_OUT("setting metadata in column %x", meta);
+    DBG_OUT("setting metadata %x", meta);
+    DBG_ASSERT(check_property_type(meta, value.type()), 
+               "wrong property value type");
     switch(meta) {
-    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
-    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
-    case MAKE_METADATA_IDX(eng::META_NS_TIFF,    eng::META_TIFF_ORIENTATION):
-    case MAKE_METADATA_IDX(eng::META_NS_NIEPCE,  eng::META_NIEPCE_FLAG):
+    case eng::NpXmpRatingProp:
+    case eng::NpXmpLabelProp:
+    case eng::NpTiffOrientationProp:
+    case eng::NpNiepceFlagProp:
         if(value.type() == typeid(int32_t)) {
             // internal.
-            int32_t nvalue = boost::any_cast<int32_t>(value);
+            int nvalue = boost::get<int>(value);
             // make the column mapping more generic.
             const char * col = NULL;
             switch(meta) {
-            case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
+            case eng::NpXmpRatingProp:
                 col = "rating";
                 break;
-            case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
+            case eng::NpTiffOrientationProp:
                 col = "orientation";
                 break;
-            case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL):
+            case eng::NpXmpLabelProp:
                 col = "label";
                 break;
-            case MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG):
+            case eng::NpNiepceFlagProp:
                 col = "flag";
                 break;
             }
@@ -756,9 +759,10 @@ bool Library::setMetaData(library_id_t file_id, int meta,
         }
         break;
     default:
-        // external.
-        ERR_OUT("unknown metadata to set");
-        return false;
+        // external
+        // TODO add the external metadata
+        // 
+        break;
     }
     LibMetadata::Ptr metablock(new LibMetadata(file_id));
     getMetaData(file_id, metablock);

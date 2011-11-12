@@ -20,6 +20,7 @@
 #include <gtkmm/icontheme.h>
 
 #include "imageliststore.hpp"
+#include "engine/db/properties.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
@@ -102,16 +103,19 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::Library::NOTIFY_METADATA_CHANGED:
     {
-		eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
-        DBG_OUT("metadata changed");
-        Gtk::TreeRow row;
-        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m.id);
-        if(iter != m_idmap.end()) {
-            row = *(iter->second);
-            //
-            eng::LibFile::Ptr file = row[m_columns.m_libfile];
-            file->setProperty(m.meta, m.value);
-            row[m_columns.m_libfile] = file;
+        eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
+        fwk::PropertyIndex prop = m.meta;
+        DBG_OUT("metadata changed %s", eng::_propertyName(prop));
+        // only interested in a few props
+        if(is_property_interesting(prop)) {
+            std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m.id);
+            if(iter != m_idmap.end()) {
+                Gtk::TreeRow row = *(iter->second);
+                //
+                eng::LibFile::Ptr file = row[m_columns.m_libfile];
+                file->setProperty(prop, boost::get<int>(m.value));
+                row[m_columns.m_libfile] = file;
+            }
         }
         break;
     }
@@ -145,6 +149,13 @@ libraryclient::LibraryClient::Ptr ImageListStore::getLibraryClient()
     ModuleShell::Ptr shell = std::tr1::dynamic_pointer_cast<ModuleShell>(m_controller.lock());
     DBG_ASSERT(shell, "parent not a ModuleShell");
     return	shell->getLibraryClient();
+}
+
+
+bool ImageListStore::is_property_interesting(fwk::PropertyIndex idx)
+{
+    return (idx == eng::NpXmpRatingProp) || (idx == eng::NpXmpLabelProp)
+        || (idx == eng::NpTiffOrientationProp) || (idx == eng::NpNiepceFlagProp);
 }
 
 }

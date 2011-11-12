@@ -111,7 +111,7 @@ tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 }
 
 
-tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, int value)
+tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, const fwk::PropertyValue & value)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdSetMetadata, _1,

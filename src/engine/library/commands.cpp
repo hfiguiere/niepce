@@ -115,7 +115,8 @@ void Commands::cmdRequestMetadata(const Library::Ptr & lib,
 }
 
 void Commands::cmdSetMetadata(const Library::Ptr & lib,
-                              library_id_t file_id, int meta, int value)
+                              library_id_t file_id, fwk::PropertyIndex meta, 
+                              const fwk::PropertyValue & value)
 {
 	metadata_desc_t m;
 	m.id = file_id;

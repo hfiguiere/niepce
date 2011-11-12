@@ -46,7 +46,7 @@ public:
 		eng::tid_t queryFolderContent(eng::library_id_t id);
 	eng::tid_t countFolder(eng::library_id_t id);
 	eng::tid_t requestMetadata(eng::library_id_t id);
-    eng::tid_t setMetadata(eng::library_id_t id, int meta, int value);
+    eng::tid_t setMetadata(eng::library_id_t id, int meta, const fwk::PropertyValue & value);
 
     eng::tid_t getAllLabels();
     eng::tid_t createLabel(const std::string & s, const std::string & color);

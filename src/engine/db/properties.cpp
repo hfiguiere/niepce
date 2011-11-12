@@ -22,19 +22,58 @@
 
 namespace eng {
 
-#define DEFINE_PROPERTY(a,b,c,d)			\
-    { a, #a },
+#define DEFINE_PROPERTY(a,b,c,d,e)               \
+    { a, #a, typeid(e) },
 
-const property_desc_t properties_names[] = {
+static const property_desc_t properties_names[] = {
 
     #include "engine/db/properties-def.hpp"
 
-    { 0, NULL }
+    { 0, NULL, typeid(NULL) }
 };
 
 #undef DEFINE_PROPERTY
 
+const char * _propertyName(fwk::PropertyIndex idx)
+{
+    const PropDescMap & propmap = property_desc_map();
+    PropDescMap::const_iterator iter = propmap.find(idx);
+    if(iter != propmap.end()) {
+        if(iter->second->name) {
+            return iter->second->name;
+        }
+    }
+    return "UNKNOWN";
 }
+
+const PropDescMap & property_desc_map()
+{
+    static PropDescMap s_map;
+    if(s_map.empty()) {
+        const eng::property_desc_t * current = eng::properties_names;
+        while(current->prop != 0) {
+            if(current->name) {
+                s_map.insert(std::make_pair(current->prop, current));
+            }
+            ++current;
+        }
+    }
+    return s_map;
+}
+
+bool check_property_type(fwk::PropertyIndex idx, const std::type_info & ti)
+{
+    const PropDescMap & propmap = property_desc_map();
+    PropDescMap::const_iterator iter = propmap.find(idx);
+    if(iter != propmap.end()) {
+        return iter->second->type == ti;
+    }
+    return false;
+}
+
+
+}
+
 
 /*
   Local Variables:

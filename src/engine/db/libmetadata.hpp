@@ -25,31 +25,32 @@
 #include <tr1/memory>
 #include <boost/any.hpp>
 
+#include "fwk/base/propertybag.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
 
 namespace eng {
 
-	class LibMetadata
-		: public fwk::XmpMeta
-	{
-	public:
-		typedef std::tr1::shared_ptr<LibMetadata> Ptr;
-
-		LibMetadata(library_id_t _id);
-
-        library_id_t id() const
-            { return m_id; }
-        bool setMetaData(int meta, const boost::any & value);
-        /** do like the unix "touch". Update the MetadataDate 
-         * to the current time, in UTC.
-         */
-        bool touch();
-    private:
-        LibMetadata(const LibMetadata &);
-        library_id_t m_id;
-	};
+class LibMetadata
+    : public fwk::XmpMeta
+{
+public:
+    typedef std::tr1::shared_ptr<LibMetadata> Ptr;
+    
+    LibMetadata(library_id_t _id);
+    
+    library_id_t id() const
+        { return m_id; }
+    bool setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+    /** do like the unix "touch". Update the MetadataDate 
+     * to the current time, in UTC.
+     */
+    bool touch();
+private:
+    LibMetadata(const LibMetadata &);
+    library_id_t m_id;
+};
 
 }
 

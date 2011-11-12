@@ -75,6 +75,7 @@ protected:
     ImageListStore(const Columns& columns);
 private:
     libraryclient::LibraryClient::Ptr getLibraryClient();
+    static bool is_property_interesting(fwk::PropertyIndex idx);
 
     const Columns           & m_columns;
     std::map<eng::library_id_t, Gtk::TreeIter> m_idmap;

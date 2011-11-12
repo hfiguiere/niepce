@@ -37,6 +37,8 @@ typedef std::map<fwk::PropertyIndex, std::pair<const char*, const char *> > Prop
 /** get the mapping of properties to XMP */
 const PropsToXmpMap & props_to_xmp_map();
 
+bool property_index_to_xmp(fwk::PropertyIndex index, const char * & ns, const char * & property);
+
 /** convert XMP to a set of properties 
  * @param meta the XmpMeta source
  * @param propset the property set requested
