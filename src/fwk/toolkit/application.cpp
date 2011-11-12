@@ -1,3 +1,4 @@
+
 /*
  * niepce - framework/application.cpp
  *
@@ -24,8 +25,6 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
-#include <gtkmm/rc.h>
-#include <gconf/gconf.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/boost.hpp"
@@ -40,7 +39,7 @@ namespace fwk {
 Application::Ptr Application::m_application;
 
 Application::Application(const char * name)
-    : m_config(Glib::ustring("/apps/") + name)
+    : m_config(name)
     , m_refUIManager(Gtk::UIManager::create())
     , m_module_manager(new ModuleManager())
 {
@@ -108,12 +107,10 @@ void Application::register_theme(const Glib::ustring & label,
 int Application::main(boost::function<Application::Ptr (void)> constructor, 
                       int argc, char **argv)
 {
-    // TODO fix error check
-    gconf_init(argc, argv, NULL);
-
     Gtk::Main kit(argc, argv);
     Application::Ptr app = constructor();
 
+#if GTKMM2
     DBG_OUT("use_custon_theme %d", app->get_use_custom_theme());
     if(app->get_use_custom_theme() != -1) {
         std::string rcpath = app->get_rc_path();
@@ -121,12 +118,12 @@ int Application::main(boost::function<Application::Ptr (void)> constructor,
             Gtk::RC rc(rcpath);
         }
     }
+#endif
 
-    kit.signal_run().connect(sigc::mem_fun(*app,
-                                           &Application::_ready));
     Frame::Ptr window(app->makeMainFrame());
     app->add(window);
-		
+    // signal_run() is gone in Gtkmm3. Call directly. Should work.
+    app->_ready();
     Gtk::Main::run(window->gtkWindow());
 	
     return 0;

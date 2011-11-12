@@ -77,6 +77,7 @@ protected:
 private:
   void on_metadata_changed(const fwk::PropertyBag &, const fwk::PropertyBag & old);
   void on_rating_changed(int id, int rating);
+  bool on_librarylistview_click(GdkEventButton *e);
 
   const IModuleShell &               m_shell;
   Glib::RefPtr<ImageListStore> m_model;

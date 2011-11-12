@@ -24,6 +24,7 @@
 #include <string>
 
 #include <glibmm/i18n.h>
+#include <gdkmm.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/scrolledwindow.h>
 
@@ -86,21 +87,16 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
 
     m_renderer = new ThumbStripCell();
 
-    GtkCellLayout *cl = GTK_CELL_LAYOUT(gobj());
-    DBG_ASSERT(cl, "No cell layout");
-    gtk_cell_layout_pack_start(cl, GTK_CELL_RENDERER(m_renderer->gobj()), 
-                               FALSE);
+    pack_start(*m_renderer, FALSE);
     m_renderer->property_follow_state() = true;
     m_renderer->property_height() = 100;
     m_renderer->property_yalign() = 0.5;
     m_renderer->property_xalign() = 0.5;
 	
-    gtk_cell_layout_set_attributes (cl, GTK_CELL_RENDERER(m_renderer->gobj()),
-                                    "pixbuf",
-                                    ui::ImageListStore::Columns::STRIP_THUMB_INDEX,
-                                    "libfile",
-                                    ui::ImageListStore::Columns::FILE_INDEX,
-                                    NULL);
+    add_attribute(*m_renderer, "pixbuf",
+                  ui::ImageListStore::Columns::STRIP_THUMB_INDEX);
+    add_attribute(*m_renderer, "libfile",
+                  ui::ImageListStore::Columns::FILE_INDEX);
     set_selection_mode(Gtk::SELECTION_MULTIPLE);
     set_column_spacing(THUMB_STRIP_VIEW_SPACING);
 
@@ -220,8 +216,8 @@ void
 ThumbStripView::on_parent_set (Gtk::Widget */*old_parent*/)
 {
     Gtk::ScrolledWindow *sw;
-    Gtk::Adjustment *hadjustment;
-    Gtk::Adjustment *vadjustment;
+    Glib::RefPtr<Gtk::Adjustment> hadjustment;
+    Glib::RefPtr<Gtk::Adjustment> vadjustment;
 
     Gtk::Widget *parent = get_parent ();
     sw = dynamic_cast<Gtk::ScrolledWindow*>(parent);

@@ -55,10 +55,11 @@ public:
 protected:
   virtual void  on_realize();
   virtual bool 	on_button_press_event (GdkEventButton* event);
-
-  virtual void 	on_size_request (Gtk::Requisition* requisition);
-  virtual bool  on_expose_event (GdkEventExpose *event);
+  virtual bool  on_draw(const Cairo::RefPtr< Cairo::Context > &cr);
   virtual void 	on_state_changed (Gtk::StateType previous_state);
+
+  virtual void 	get_preferred_width_vfunc (int& minimum_width, int& natural_width) const;
+  virtual void 	get_preferred_height_vfunc (int& minimum_height, int& natural_height) const;
 private:
   int m_rating;
   bool m_is_editable;

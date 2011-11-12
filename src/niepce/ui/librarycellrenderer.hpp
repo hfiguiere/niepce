@@ -40,22 +40,17 @@ class LibraryCellRenderer
 public:
     LibraryCellRenderer(libraryclient::UIDataProvider *provider);
     
-    virtual void get_size_vfunc(Gtk::Widget& widget, 
-                                const Gdk::Rectangle* cell_area, 
-                                int* x_offset, int* y_offset, 
-                                int* width, int* height) const;
-    virtual void render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
+    virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const;
+    virtual void get_preferred_height_vfunc(Gtk::Widget& widget, int& minimum_height, int& natural_height) const;
+
+    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget, 
                                const Gdk::Rectangle& background_area, 
                                const Gdk::Rectangle& cell_area, 
-                               const Gdk::Rectangle& expose_area, 
                                Gtk::CellRendererState flags);
-    virtual bool activate_vfunc(GdkEvent *event,
-                                Gtk::Widget & widget,
-                                const Glib::ustring &	path,
-                                const Gdk::Rectangle&	background_area,
-                                const Gdk::Rectangle&	cell_area,
-                                Gtk::CellRendererState	flags);
+    /** call when the cell is clicked */
+    bool on_click(GdkEventButton *event, const GdkRectangle & cell_area);
+
     void set_size(int _size)
         { m_size = _size; }
     int size() const

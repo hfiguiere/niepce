@@ -7,7 +7,7 @@ INCLUDES = -DDATADIR=\"$(datadir)\" \
 
 bin_PROGRAMS = niepce
 
-niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@ @GCONF_CFLAGS@ \
+niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@ \
 	-DNIEPCE_LOCALEDIR=\"@NIEPCE_LOCALEDIR@\"
 
 niepce_LDFLAGS =
@@ -27,7 +27,7 @@ niepce_LDADD = \
 	$(top_builddir)/src/ext/libview/libview.a \
 	@LIBGLIBMM_LIBS@ \
 	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ \
-	@GCONF_LIBS@ @BABL_LIBS@ \
+	@BABL_LIBS@ \
 	@GEGLMM_LIBS@ @OPENRAW_LIBS@ @EXEMPI_LIBS@
 
 

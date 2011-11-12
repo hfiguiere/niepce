@@ -149,25 +149,25 @@ bool RatingLabel::on_button_press_event (GdkEventButton* e)
 }
 
 
-void RatingLabel::on_size_request(Gtk::Requisition* requisition)
+void RatingLabel::get_preferred_width_vfunc (int& minimum_width, int& natural_width) const
 {
-  *requisition = Gtk::Requisition();
   const Cairo::RefPtr<Cairo::ImageSurface> & star = get_star();
-  requisition->width = star->get_width() * 5;
-  requisition->height = star->get_height();
-  //  DBG_OUT("size request is %d %d", requisition->width, requisition->height);
+  minimum_width = natural_width = star->get_width() * 5;
 }
 
-bool RatingLabel::on_expose_event(GdkEventExpose * /*evt*/)
+void RatingLabel::get_preferred_height_vfunc (int& minimum_height, int& natural_height) const
 {
-  if (is_drawable()) {
-    const Gtk::Allocation& allocation = get_allocation();
-    double x, y;
-    x = 0;
-    y = allocation.get_height();
-    Cairo::RefPtr< Cairo::Context >  cr = get_window()->create_cairo_context();
-    draw_rating(cr , m_rating, get_star(), get_unstar(), x, y);
-  }
+  const Cairo::RefPtr<Cairo::ImageSurface> & star = get_star();
+  minimum_height = natural_height = star->get_height();
+}
+
+bool RatingLabel::on_draw(const Cairo::RefPtr< Cairo::Context > &cr)
+{
+  const Cairo::RefPtr<Cairo::ImageSurface> & star = get_star();
+  double x, y;
+  x = 0;
+  y = star->get_height();
+  draw_rating(cr , m_rating, star, get_unstar(), x, y);
   return true;
 }
 

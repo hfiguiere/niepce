@@ -50,7 +50,7 @@ public:
    void SetAlignment(Alignment align);
 
 protected:
-   void on_style_changed(const Glib::RefPtr<Gtk::Style> &oldStyle);
+  void on_style_updated();
 
 private:
    Gtk::Label mLabel;

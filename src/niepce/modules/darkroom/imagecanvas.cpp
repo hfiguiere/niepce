@@ -18,6 +18,7 @@
  */
 
 #include <cairomm/context.h>
+#include <gdkmm.h>
 
 
 #include "fwk/base/debug.hpp"
@@ -133,8 +134,8 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
 
         // paint the background
         sc->rectangle(0, 0, canvas_w, canvas_h);
-        Gdk::Cairo::set_source_color(sc, 
-                                     get_style()->get_bg(Gtk::STATE_NORMAL));
+        Gdk::RGBA color = get_style_context()->get_background_color(Gtk::STATE_FLAG_NORMAL);
+        Gdk::Cairo::set_source_rgba(sc, color);
         sc->fill();
 
 

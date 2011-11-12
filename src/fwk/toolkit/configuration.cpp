@@ -20,18 +20,35 @@
 
 #include <memory>
 
-#include <gconf/gconf-client.h>
+#include <glibmm/miscutils.h>
+#include <glibmm/fileutils.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "configuration.hpp"
 
+//
+// NOTE: this does not use GSettings because GSettings is broken by design.
+//       like abort() on many simple things that it does not like
+//       missing keys, missing schema.
+//       This is non negotiable
+//
 
 namespace fwk {
 
-Configuration::Configuration(const Glib::ustring & root)
-		: m_gconf(gconf_client_get_default()),
-		  m_root(root)
+Configuration::Configuration(const Glib::ustring & file)
+    : m_root("main")
 {
+    m_filename = Glib::build_filename(Glib::get_user_config_dir(),
+                                      file);
+    m_filename = Glib::build_filename(m_filename, "config");
+    fwk::ensure_path_for_file(m_filename);
+    try {
+        m_keyfile.load_from_file(m_filename);
+    }
+    catch(...) {
+        DBG_OUT("conf file %s not found - will be created", m_filename.c_str());
+    }
 }
 
 
@@ -39,63 +56,34 @@ Configuration::~Configuration()
 {
 }
 
+void Configuration::save()
+{
+    Glib::file_set_contents(m_filename, m_keyfile.to_data());
+}
 
 bool Configuration::hasKey(const Glib::ustring & key) const
 {
-		//
-		bool found = true;
-
-    GConfValue * v = gconf_client_get(m_gconf,
-                                      Glib::ustring(m_root + "/" + key).c_str(),
-                                      NULL);
-    found = (v != NULL);
-    if(v) {
-        gconf_value_free(v);
-    }
-    else {
-        DBG_OUT("key %s not found", key.c_str());
-    }
-
-		return found;
+    //
+    return m_keyfile.has_group(m_root) && m_keyfile.has_key(m_root, key);
 }
 
 
 const Glib::ustring Configuration::getValue(const Glib::ustring & key,
                                             const Glib::ustring & def) const
 {
-		Glib::ustring value;
-    GError *err = NULL;
-    gchar* v = gconf_client_get_string(m_gconf,
-                                       Glib::ustring(m_root + "/" + key).c_str(),
-                                       &err);
-
-    if(!v) {
-        value = def;
-        if(err) {
-            DBG_OUT("Exception raised: %s", err->message);
-            g_error_free(err);
-        }
-		}
-    else {
-        value = v;
-        g_free(v);
+    bool has_key = hasKey(key);
+    if(!has_key) {
+        return def;
     }
 
-		return value;
+    return m_keyfile.get_string(m_root, key);
 }
 
 void Configuration::setValue(const Glib::ustring & key, 
                              const Glib::ustring & value)
 {
-    GError *err = NULL;
-    gboolean ret = gconf_client_set_string(m_gconf, 
-                                           Glib::ustring(m_root + "/" + key).c_str(), 
-                                           value.c_str(), &err);
-        
-    if(ret && err) {
-        DBG_OUT("Exception raised: %s", err->message);
-        g_error_free(err);
-		}
+    m_keyfile.set_string(m_root, key, value);
+    save();
 }
 
 }

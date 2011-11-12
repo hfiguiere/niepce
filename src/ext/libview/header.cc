@@ -155,11 +155,13 @@ Header::SetAlignment(Alignment align) // IN: The new alignment
  */
 
 void
-Header::on_style_changed(const Glib::RefPtr<Gtk::Style> &oldStyle) // IN
+Header::on_style_updated() // IN
 {
-   Gtk::MenuItem::on_style_changed(oldStyle);
+   Gtk::MenuItem::on_style_updated();
 
+#if GTKMM2
    mLabel.set_style(get_style());
+#endif
 }
 
 

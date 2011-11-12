@@ -20,6 +20,9 @@
 
 #include <stdint.h>
 
+#include <gdkmm.h>
+#include <gtkmm.h>
+
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
@@ -183,69 +186,54 @@ void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr,
 
 }
 
-
 void 
-LibraryCellRenderer::get_size_vfunc(Gtk::Widget& /*widget*/, 
-                                    const Gdk::Rectangle* /*cell_area*/, 
-                                    int* x_offset, int* y_offset, 
-                                    int* width, int* height) const
+LibraryCellRenderer::get_preferred_width_vfunc(Gtk::Widget& /*widget*/, int& minimum_width, int& natural_width) const
 {
-    if(x_offset) {
-        *x_offset = 0;
-    }
-    if(y_offset) {
-        *y_offset = 0;
-    }
-    
-    if(width || height) {
-        // TODO this should just be a property
-        //
-        Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-        int maxdim = m_size + pad() * 2;
-	
-        if(width) {
-            *width = maxdim;
-        }
-        if(height) {
-            *height = maxdim;
-        }
-    }
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
+    int maxdim = m_size + pad() * 2;
+    minimum_width = natural_width = maxdim;
 }
 
+void 
+LibraryCellRenderer::get_preferred_height_vfunc(Gtk::Widget& /*widget*/, int& minimum_height, int& natural_height) const
+{
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
+    int maxdim = m_size + pad() * 2;
+    minimum_height = natural_height = maxdim;
+}
 
 void 
-LibraryCellRenderer::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window, 
+LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr, 
                                   Gtk::Widget& widget, 
                                   const Gdk::Rectangle& /*background_area*/, 
                                   const Gdk::Rectangle& cell_area, 
-                                  const Gdk::Rectangle& /*expose_area*/, 
                                   Gtk::CellRendererState flags)
 {
     unsigned int xpad = Gtk::CellRenderer::property_xpad();
     unsigned int ypad = Gtk::CellRenderer::property_ypad();
     
-    Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
     GdkRectangle r = *(cell_area.gobj());
     r.x += xpad;
     r.y += ypad;
     
     eng::LibFile::Ptr file = m_libfileproperty.get_value();
     
-    Gdk::Color color;
+    Glib::RefPtr<Gtk::StyleContext> style_context = widget.get_style_context();
+    Gdk::RGBA color;
     if(flags & Gtk::CELL_RENDERER_SELECTED) {
-        color = widget.get_style()->get_bg(Gtk::STATE_SELECTED);
+        color = style_context->get_background_color(Gtk::STATE_FLAG_SELECTED);
     }
     else {
-        color = widget.get_style()->get_bg(Gtk::STATE_NORMAL);
+        color = style_context->get_background_color(Gtk::STATE_FLAG_NORMAL);
     }
     
-    Gdk::Cairo::set_source_color(cr, color);
+    Gdk::Cairo::set_source_rgba(cr, color);
     cr->rectangle(r.x, r.y, r.width, r.height);
     cr->fill();
     
     if(m_drawborder) {
-        color = widget.get_style()->get_dark(Gtk::STATE_SELECTED);
-        Gdk::Cairo::set_source_color(cr, color);
+        color = style_context->get_border_color(Gtk::STATE_FLAG_SELECTED);
+        Gdk::Cairo::set_source_rgba(cr, color);
         cr->set_line_width(1.0);
         cr->rectangle(r.x, r.y, r.width, r.height);
         cr->stroke();
@@ -306,21 +294,16 @@ LibraryCellRenderer::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
 
 
 bool
-LibraryCellRenderer::activate_vfunc(GdkEvent *event,
-                                    Gtk::Widget & /*widget*/,
-                                    const Glib::ustring & /*path*/,
-                                    const Gdk::Rectangle& /*background_area*/,
-                                    const Gdk::Rectangle& cell_area,
-                                    Gtk::CellRendererState /*flags*/)
+LibraryCellRenderer::on_click(GdkEventButton *event, const GdkRectangle & cell_area)
 {
-    DBG_OUT("activated. Event type of %d", event->type);
+    DBG_OUT("On click. Event type of %d", event->type);
     if(event->type == GDK_BUTTON_PRESS) {
         GdkEventButton *bevt = (GdkEventButton*)event;
 
         // hit test with the rating region
         unsigned int xpad = Gtk::CellRenderer::property_xpad();
         unsigned int ypad = Gtk::CellRenderer::property_ypad();
-        GdkRectangle r = *(cell_area.gobj());
+        GdkRectangle r = cell_area;
         r.x += xpad;
         r.y += ypad;
 
@@ -354,7 +337,6 @@ LibraryCellRenderer::activate_vfunc(GdkEvent *event,
     }
     return false;
 }
-
 
 Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> 	
 LibraryCellRenderer::property_libfile() const

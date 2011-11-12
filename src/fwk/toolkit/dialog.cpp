@@ -30,7 +30,7 @@ namespace fwk {
 
 void Dialog::add_header(const std::string & label)
 {
-    Gtk::VBox * vbox;
+    Gtk::Box * vbox;
 
     builder()->get_widget("dialog-vbox1", vbox);
     std::string markup = str(boost::format("<span size=\"x-large\">%1%</span>") % label);
