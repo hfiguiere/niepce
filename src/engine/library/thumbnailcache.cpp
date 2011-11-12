@@ -120,9 +120,9 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
                                                                    std::min(w, h));
         if(pixbuf) {
             pix = Glib::wrap(pixbuf, true); // take ownership
-        }
-        if((w < pix->get_width()) || (h < pix->get_height())) {
-            pix = fwk::gdkpixbuf_scale_to_fit(pix, std::min(w,h));
+            if((w < pix->get_width()) || (h < pix->get_height())) {
+                pix = fwk::gdkpixbuf_scale_to_fit(pix, std::min(w,h));
+            }
         }
     }
     if(pix)
