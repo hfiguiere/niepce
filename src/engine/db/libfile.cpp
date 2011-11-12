@@ -20,7 +20,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "libfile.hpp"
-#include "metadata.hpp"
+#include "properties.hpp"
 
 
 namespace eng {
@@ -68,20 +68,43 @@ void LibFile::setFileType(FileType v)
     m_file_type = v;
 }
 
-void LibFile::setMetaData(int meta, int32_t v)
+void LibFile::setProperty(fwk::PropertyIndex idx, int32_t v)
 {
-    switch(meta) {
-    case MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING):
-        setRating(v);
-        break;
-    case MAKE_METADATA_IDX(eng::META_NS_TIFF, eng::META_TIFF_ORIENTATION):
+    switch(idx) {
+    case NpTiffOrientationProp:
         setOrientation(v);
         break;
+    case NpXmpRatingProp:
+        setRating(v);
+        break;
+    case NpXmpLabelProp:
+        setLabel(v);
+        break;
+    case NpNiepceFlagProp:
+        setFlag(v);
+        break;
     default:
-        // TODO deal with label as well
-        ERR_OUT("unknown meta %d", meta);
+        ERR_OUT("set property %u not handled", idx);
         break;
     }
+}
+
+int32_t LibFile::property(fwk::PropertyIndex idx) const
+{
+    switch(idx) {
+    case NpTiffOrientationProp:
+        return orientation();
+    case NpXmpRatingProp:
+        return rating();
+    case NpXmpLabelProp:
+        return label();
+    case NpNiepceFlagProp:
+        return flag();
+    default:
+        ERR_OUT("get property %u not handled", idx);
+        break;
+    }
+    return -1;
 }
 
 /**

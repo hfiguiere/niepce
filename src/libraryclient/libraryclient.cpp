@@ -85,9 +85,10 @@ eng::tid_t LibraryClient::requestMetadata(eng::library_id_t id)
 }
 
 /** set the metadata */
-eng::tid_t LibraryClient::setMetadata(library_id_t id, int meta, int value)
+eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value)
 {
-    return m_pImpl->setMetadata(id, meta, value);
+    // FIXME we should pass the value directly
+    return m_pImpl->setMetadata(id, meta, boost::get<int>(value));
 }
 
 eng::tid_t LibraryClient::getAllLabels()

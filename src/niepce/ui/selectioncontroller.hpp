@@ -91,6 +91,8 @@ public:
     /** set flag */
     void set_flag(int flag);
 
+    void set_property(fwk::PropertyIndex idx, int value);
+
     void set_properties(const fwk::PropertyBag & props);
 
     /** get the current selection 
@@ -105,7 +107,11 @@ private:
 
     bool _set_metadata(const std::string & undo_label, 
                        const eng::LibFile::Ptr & file,
-                       int meta, int old_value, int new_value);
+                       fwk::PropertyIndex meta, 
+                       int old_value, int new_value);
+    bool _set_metadata(const std::string & undo_label, 
+                       const eng::LibFile::Ptr & file,
+                       const fwk::PropertyBag & props);
     /** move the selection and emit the signal 
      * @param backwards true if the move is backwards.
      */

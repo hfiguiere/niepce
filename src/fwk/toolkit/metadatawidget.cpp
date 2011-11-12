@@ -27,6 +27,7 @@
 #include <gtkmm/entry.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/base/autoflag.hpp"
 #include "fwk/base/fractions.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
@@ -44,7 +45,8 @@ namespace fwk {
 MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     : ToolboxItemWidget(title),
       m_table(1, 2, false),
-      m_fmt(NULL)
+      m_fmt(NULL),
+      m_update(false)
 {
     add(m_table);
 }
@@ -54,10 +56,9 @@ void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
     m_fmt = fmt;
 }
 
-namespace {
-static 
-void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
+void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
 {
+    AutoFlag flag(m_update);
     Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
     if(l) {
         l->set_text("");
@@ -74,14 +75,13 @@ void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
         return;
     }
 }
-}
 
 void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
 {
     DBG_OUT("set data source");
     if(!m_data_map.empty()) {
         std::for_each(m_data_map.begin(), m_data_map.end(),
-                      boost::bind(&clear_widget, _1));
+                      boost::bind(&MetaDataWidget::clear_widget, this, _1));
     }
     if(properties.empty()) {
         return;
@@ -140,8 +140,6 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             w = r;
         }
         else {
-            // TODO make it editable
-
             if(current->readonly) {
                 Gtk::Label * l = Gtk::manage(new Gtk::Label());
                 l->set_alignment(0.0f, 0.5f);
@@ -174,6 +172,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         try {
             double decimal = fwk::fraction_to_decimal(boost::get<std::string>(value));
             std::string frac = boost::lexical_cast<std::string>(decimal);
+            AutoFlag flag(m_update);
             static_cast<Gtk::Label*>(w)->set_text(frac);
         }
         catch(...) {
@@ -185,6 +184,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     {
         try {
             int rating = boost::get<int>(value);
+            AutoFlag flag(m_update);
             static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
         }
         catch(...) {
@@ -192,12 +192,18 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         }
         break;
     }
-    default:        
-        if(current->readonly) {
-            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+    default:
+        try {
+            AutoFlag flag(m_update);
+            if(current->readonly) {
+                static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+            }
+            else {
+                static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
+            }
         }
-        else {
-            static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
+        catch(...) {
+            DBG_OUT("conversion of '%u' to string failed", current->id);
         }
         break;
     }
@@ -206,6 +212,9 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
 
 void MetaDataWidget::on_str_changed(Gtk::Entry *e, fwk::PropertyIndex prop)
 {
+    if(m_update) {
+        return;
+    }
     fwk::PropertyBag props;
     props.set_value_for_property(prop, fwk::PropertyValue(e->get_text()));
     signal_metadata_changed.emit(props);
@@ -213,6 +222,9 @@ void MetaDataWidget::on_str_changed(Gtk::Entry *e, fwk::PropertyIndex prop)
 
 void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
 {
+    if(m_update) {
+        return;
+    }
     fwk::PropertyBag props;
     props.set_value_for_property(prop, fwk::PropertyValue(value));
     signal_metadata_changed.emit(props);

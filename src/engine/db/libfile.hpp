@@ -25,6 +25,7 @@
 #include <tr1/memory>
 
 #include "fwk/toolkit/mimetype.hpp"
+#include "fwk/base/propertybag.hpp"
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/keyword.hpp"
 #include "engine/db/storage.hpp"
@@ -78,6 +79,8 @@ public:
     void setFlag(int32_t v);
     int32_t flag() const
         { return m_flag; }
+    void setProperty(fwk::PropertyIndex idx, int32_t v);
+    int32_t property(fwk::PropertyIndex idx) const;
 
     /** Setter for the filetype.
      * @param v the FILETYPE of the file
@@ -87,9 +90,6 @@ public:
     FileType fileType() const
         { return m_file_type; }
     
-    /** set an arbitrary meta data value */
-    void setMetaData(int meta, int32_t v); 
-		
     /** return an URI of the real path
      * because the Gtk stuff want that.
      */

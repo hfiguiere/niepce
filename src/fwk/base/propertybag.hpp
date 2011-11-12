@@ -42,10 +42,21 @@ class PropertyBag
 {
 public:
     typedef std::tr1::shared_ptr<PropertyBag> Ptr;
+    typedef std::map<PropertyIndex, PropertyValue> _Map;
+    typedef _Map::const_iterator const_iterator;
 
     bool empty() const
         {
             return m_bag.empty();
+        }
+    
+    const_iterator begin() const
+        {
+            return m_bag.begin();
+        }
+    const_iterator end() const
+        {
+            return m_bag.end();
         }
 
     /** return true if a property was removed prior to insertion */
@@ -57,7 +68,6 @@ public:
     /** return true if the property was removed */
     bool remove_value_for_property(PropertyIndex idx);
 private:
-    typedef std::map<PropertyIndex, PropertyValue> _Map;
     _Map    m_bag;
 };
 

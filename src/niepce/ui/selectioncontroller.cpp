@@ -30,6 +30,7 @@
 #include "fwk/toolkit/command.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "engine/db/metadata.hpp"
+#include "engine/db/properties.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "niepcewindow.hpp"
 #include "selectioncontroller.hpp"
@@ -174,101 +175,99 @@ void SelectionController::rotate(int angle)
 }
 
 
-bool SelectionController::_set_metadata(const std::string & undo_label, const eng::LibFile::Ptr & file,
-                                        int meta, int old_value, int new_value)
+bool SelectionController::_set_metadata(const std::string & undo_label, 
+                                        const eng::LibFile::Ptr & file,
+                                        fwk::PropertyIndex meta, 
+                                        int old_value, int new_value)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
     undo->new_command<void>(
         boost::bind(&libraryclient::LibraryClient::setMetadata,
-                    getLibraryClient(), file->id(), meta, new_value),
+                    getLibraryClient(), file->id(), meta, fwk::PropertyValue(new_value)),
         boost::bind(&libraryclient::LibraryClient::setMetadata,
-                    getLibraryClient(), file->id(), meta, old_value)
+                    getLibraryClient(), file->id(), meta, fwk::PropertyValue(old_value))
         );
     undo->execute();
     return true;
 }
 
+bool SelectionController::_set_metadata(const std::string & undo_label, 
+                                        const eng::LibFile::Ptr & file,
+                                        const fwk::PropertyBag & props)
+{
+    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
+    for(fwk::PropertyBag::const_iterator iter = props.begin(); 
+        iter != props.end(); ++iter) {
+
+        undo->new_command<void>(
+            boost::bind(&libraryclient::LibraryClient::setMetadata,
+                        getLibraryClient(), file->id(), iter->first, iter->second),
+            // FIXME. This make undo now work
+            boost::bind(&libraryclient::LibraryClient::setMetadata,
+                        getLibraryClient(), file->id(), iter->first, iter->second)
+            );
+    }
+    undo->execute();
+    return true;    
+}
 
 void SelectionController::set_label(int label)
 {
-    DBG_OUT("label = %d", label);
-    eng::library_id_t selection = get_selection();
-    if(selection >= 0) {
-        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
-        if(iter) {
-            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            DBG_OUT("old label is %d", file->label());
-            int old_value = file->label();
-            _set_metadata(_("Set Label"), file, 
-                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_LABEL), 
-                          old_value, label);
-            // we need to set the label here so that undo/redo works
-            // consistently.
-            file->setLabel(label);
-        }
-    }
+    set_property(eng::NpXmpLabelProp, label);
 }
 
 
 void SelectionController::set_rating(int rating)
 {
-    DBG_OUT("rating = %d", rating);
-    eng::library_id_t selection = get_selection();
-    if(selection >= 0) {
-        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
-        if(iter) {
-            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            DBG_OUT("old rating is %d", file->rating());
-            int old_value = file->rating();
-            _set_metadata(_("Set Rating"), file, 
-                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING), 
-                          old_value, rating);
-            // we need to set the rating here so that undo/redo works
-            // consistently.
-            file->setRating(rating);
-        }
-    }
+    set_property(eng::NpXmpRatingProp, rating);
 }
 
 void SelectionController::set_flag(int flag)
 {
-    DBG_OUT("flag = %d", flag);
+    set_property(eng::NpNiepceFlagProp, flag);
+}
+
+void SelectionController::set_property(fwk::PropertyIndex idx, int value)
+{
+    DBG_OUT("property %u = %d", idx, value);
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
             eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            DBG_OUT("old flag is %d", file->flag());
-            int old_value = file->flag();
-            _set_metadata(_("Set Flag"), file, 
-                          MAKE_METADATA_IDX(eng::META_NS_NIEPCE, eng::META_NIEPCE_FLAG), 
-                          old_value, flag);
-            // we need to set the flag here so that undo/redo works
+            DBG_OUT("old property is %d", file->property(idx));
+            int old_value = file->property(idx);
+            const char *action = NULL;
+            switch(idx) {
+            case eng::NpNiepceFlagProp:
+                action = _("Set Flag");
+                break;
+            case eng::NpXmpRatingProp:
+                action = _("Set Rating");
+                break;
+            case eng::NpXmpLabelProp:
+                action = _("Set Label");
+                break;
+            default:
+                action = _("Set Property");
+                break;
+            }
+            _set_metadata(action, file, idx, old_value, value);
+            // we need to set the property here so that undo/redo works
             // consistently.
-            file->setFlag(flag);
+            file->setProperty(idx, value);
         }
-    }
+    }    
 }
 
-
-void SelectionController::set_properties(const fwk::PropertyBag & /*props*/)
+void SelectionController::set_properties(const fwk::PropertyBag & props)
 {
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-#if 0
             eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            DBG_OUT("old flag is %d", file->flag());
-            int old_value = file->flag();
-            _set_metadata(_("Set Properties"), file, 
-                          // FIXME
-                          MAKE_METADATA_IDX(eng::META_NS_XMPCORE, eng::META_XMPCORE_RATING),
-                          old_value, flag);
-            // we need to set the rating here so that undo/redo works
-            // consistently.
-            file->setFlag(flag);
-#endif
+            _set_metadata(_("Set Properties"), file, props);
         }
     }
 }

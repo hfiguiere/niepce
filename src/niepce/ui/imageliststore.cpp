@@ -110,7 +110,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             row = *(iter->second);
             //
             eng::LibFile::Ptr file = row[m_columns.m_libfile];
-            file->setMetaData(m.meta, m.value);
+            file->setProperty(m.meta, m.value);
             row[m_columns.m_libfile] = file;
         }
         break;

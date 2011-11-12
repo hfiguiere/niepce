@@ -77,9 +77,12 @@ protected:
     void on_str_changed(Gtk::Entry *, fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
+    void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);
+
     Gtk::Table    m_table;
     std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
     const MetaDataSectionFormat * m_fmt;
+    bool m_update;
 };
 
 }

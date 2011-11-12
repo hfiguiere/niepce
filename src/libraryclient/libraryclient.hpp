@@ -23,6 +23,7 @@
 #include <string>
 #include <tr1/memory>
 
+#include "fwk/base/propertybag.hpp"
 #include "engine/library/clienttypes.hpp"
 #include "engine/library/thumbnailcache.hpp"
 #include "engine/db/librarytypes.hpp"
@@ -64,7 +65,7 @@ namespace libraryclient {
 		eng::tid_t requestMetadata(eng::library_id_t id);
 
     /** set the metadata */
-    eng::tid_t setMetadata(eng::library_id_t id, int meta, int value);
+	  eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
 
     /** get all the labels */
     eng::tid_t getAllLabels();
