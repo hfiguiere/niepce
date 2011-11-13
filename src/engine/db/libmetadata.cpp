@@ -20,6 +20,7 @@
 #include <string.h>
 #include <time.h>
 #include <exempi/xmpconsts.h>
+#include <exempi/xmperrors.h>
 
 #include "fwk/base/debug.hpp"
 #include "libmetadata.hpp"
@@ -49,8 +50,15 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue 
                                             boost::get<int>(value), 0);
         }
         else if(value.type() == typeid(std::string)) {
-            result = xmp_set_property(xmp(), ns, property, 
-                                      boost::get<std::string>(value).c_str(), 0);
+            std::string val = boost::get<std::string>(value);
+            result = xmp_set_property(xmp(), ns, property, val.c_str(), 0);
+            // FIXME we should know in advance it is localized.
+            if(!result && (xmp_get_error() == XMPErr_BadXPath)) {
+                result = xmp_set_localized_text(xmp(), ns, property, "", "x-default", val.c_str(), 0);
+            }
+        }
+        if(!result) {
+            ERR_OUT("error setting property %s:%s %d", ns, property, xmp_get_error());
         }
     }
     else {

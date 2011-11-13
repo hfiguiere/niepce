@@ -58,8 +58,15 @@ bool get_prop_from_xmp(const fwk::XmpMeta * meta, fwk::PropertyIndex p,
         return false;
     }
     xmp::ScopedPtr<XmpStringPtr> xmp_value(xmp_string_new());
-    if(xmp_get_property(meta->xmp(), iter->second.first,
-                        iter->second.second, xmp_value, NULL)) {
+    uint32_t prop_bits = 0;
+    const char * ns = iter->second.first;
+    const char * xmp_prop = iter->second.second;
+    bool found = xmp_get_property(meta->xmp(), ns, xmp_prop, xmp_value, &prop_bits);
+    if(found && XMP_IS_ARRAY_ALTTEXT(prop_bits)) {
+        found = xmp_get_localized_text(meta->xmp(), ns, xmp_prop, "", "x-default", 
+                                       NULL, xmp_value, NULL);
+    }
+    if(found) {
         const char * v = NULL;
         v = xmp_string_cstr(xmp_value);
         if(v) {
