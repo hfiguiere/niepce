@@ -25,6 +25,7 @@
 #include <string>
 
 #include <gtkmm/table.h>
+#include <gtkmm/textview.h>
 
 #include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/widgets/toolboxitemwidget.hpp"
@@ -75,6 +76,7 @@ public:
     sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
 protected:
     bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
+    bool on_text_changed(GdkEventFocus*, Glib::RefPtr<Gtk::TextBuffer> b, fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);

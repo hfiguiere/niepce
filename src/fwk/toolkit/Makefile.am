@@ -35,6 +35,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.hpp widgets/editablehscale.cpp \
 	widgets/dock.cpp widgets/dock.hpp \
+	widgets/notabtextview.hpp widgets/notabtextview.cpp \
 	dockable.hpp dockable.cpp \
 	metadatawidget.hpp metadatawidget.cpp \
 	undo.hpp undo.cpp \

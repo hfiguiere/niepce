@@ -25,6 +25,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/textview.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/autoflag.hpp"
@@ -32,6 +33,7 @@
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
+#include "fwk/toolkit/widgets/notabtextview.hpp"
 
 // remove
 #include "engine/db/properties.hpp"
@@ -68,6 +70,10 @@ void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> 
     if(e) {
         e->set_text("");
         return;
+    }
+    Gtk::TextView * tv = dynamic_cast<Gtk::TextView*>(p.second);
+    if(tv) {
+        tv->get_buffer()->set_text("");
     }
     fwk::RatingLabel * rl = dynamic_cast<fwk::RatingLabel*>(p.second);
     if(rl) {
@@ -128,7 +134,10 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         labelw->set_alignment(0.0f, 0.5f);
         labelw->set_use_markup(true);
 
-        if(current->type == META_DT_STAR_RATING) {
+        switch(current->type)
+        {
+        case META_DT_STAR_RATING:
+        {
             fwk::RatingLabel * r = Gtk::manage(new fwk::RatingLabel(0, !current->readonly));
             if(!current->readonly) {
                 r->signal_changed.connect(
@@ -138,8 +147,29 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
                         current->id));
             }
             w = r;
+            break;
         }
-        else {
+        case META_DT_TEXT:
+        {
+            if(current->readonly) {
+                Gtk::Label * l = Gtk::manage(new Gtk::Label());
+                l->set_alignment(0.0f, 0.5f);
+                w = l;
+            }
+            else {
+                Gtk::TextView * e = Gtk::manage(new NoTabTextView());
+                e->set_editable(true);
+                e->set_wrap_mode(Gtk::WRAP_WORD);
+                e->signal_focus_out_event().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_text_changed),
+                        e->get_buffer(), current->id));
+                w = e;
+            }
+            break;
+        }
+        default:
             if(current->readonly) {
                 Gtk::Label * l = Gtk::manage(new Gtk::Label());
                 l->set_alignment(0.0f, 0.5f);
@@ -154,6 +184,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
                         e, current->id));
                 w = e;
             }
+            break;
         }
 
         m_table.resize(n_row + 1, 2);
@@ -192,6 +223,22 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         }
         break;
     }
+    case META_DT_TEXT:
+    {
+        try {
+            AutoFlag flag(m_update);
+            if(current->readonly) {
+                static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+            }
+            else {
+                static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(boost::get<std::string>(value));
+            }
+        }
+        catch(...) {
+            DBG_OUT("conversion of '%u' to int failed", current->id);
+        }
+        break;
+    }
     default:
         try {
             AutoFlag flag(m_update);
@@ -217,6 +264,18 @@ bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e,
         return true;
     }
     emit_metadata_changed(prop, fwk::PropertyValue(e->get_text()));
+    return true;
+}
+
+bool MetaDataWidget::on_text_changed(GdkEventFocus*, 
+                                     Glib::RefPtr<Gtk::TextBuffer> b, 
+                                     fwk::PropertyIndex prop)
+{
+    if(m_update) {
+        return true;
+    }
+    emit_metadata_changed(prop, 
+                          fwk::PropertyValue(b->get_text()));
     return true;
 }
 
