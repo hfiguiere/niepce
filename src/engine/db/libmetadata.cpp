@@ -23,10 +23,49 @@
 #include <exempi/xmperrors.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/stringutils.hpp"
 #include "libmetadata.hpp"
-#include "xmpproperties.hpp"
+#include "properties.hpp"
 
 namespace eng {
+
+typedef std::map<fwk::PropertyIndex, std::pair<const char*, const char *> > PropsToXmpMap;
+
+/** get the mapping of properties to XMP */
+const PropsToXmpMap & props_to_xmp_map();
+
+
+const PropsToXmpMap & props_to_xmp_map()
+{
+    static PropsToXmpMap s_props_map;
+    if(s_props_map.empty()) {
+
+#define DEFINE_PROPERTY(a,b,c,d,e)                                       \
+        s_props_map.insert(std::make_pair(b, std::make_pair(c,d)));
+#include "engine/db/properties-def.hpp"
+#undef DEFINE_PROPERTY
+
+    }
+    return s_props_map;
+}
+
+bool LibMetadata::property_index_to_xmp(fwk::PropertyIndex index, const char * & ns, const char * & property)
+{
+    const PropsToXmpMap & propmap = props_to_xmp_map();
+     PropsToXmpMap::const_iterator iter = propmap.find(index);
+    if(iter == propmap.end()) {
+        // not found
+        return false;
+    }
+    if(iter->second.first == NULL || iter->second.second == NULL) {
+        // no XMP equivalent
+        return false;
+    }
+    ns = iter->second.first;
+    property = iter->second.second;
+    return true;
+}
+
 
 
 LibMetadata::LibMetadata(library_id_t _id)
@@ -66,6 +105,87 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue 
     }
     return result;
 }
+
+
+bool LibMetadata::getMetaData(fwk::PropertyIndex p, fwk::PropertyValue & value) const
+{
+    const PropsToXmpMap & propmap = props_to_xmp_map();
+    PropsToXmpMap::const_iterator iter = propmap.find(p);
+    if(iter == propmap.end()) {
+        // not found
+        return false;
+    }
+    if(iter->second.first == NULL || iter->second.second == NULL) {
+        // no XMP equivalent
+        return false;
+    }
+    xmp::ScopedPtr<XmpStringPtr> xmp_value(xmp_string_new());
+    uint32_t prop_bits = 0;
+    const char * ns = iter->second.first;
+    const char * xmp_prop = iter->second.second;
+    bool found = xmp_get_property(xmp(), ns, xmp_prop, xmp_value, &prop_bits);
+    if(found && XMP_IS_ARRAY_ALTTEXT(prop_bits)) {
+        found = xmp_get_localized_text(xmp(), ns, xmp_prop, "", "x-default", 
+                                       NULL, xmp_value, NULL);
+    }
+    if(found) {
+        const char * v = NULL;
+        v = xmp_string_cstr(xmp_value);
+        if(v) {
+            value = fwk::PropertyValue(v);
+            return true;
+        }
+    }
+    // not found in XMP
+    return false;
+}
+
+void LibMetadata::to_properties(const fwk::PropertySet & propset,
+                                fwk::PropertyBag & properties)
+{
+    fwk::PropertySet::const_iterator iter;
+    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
+    fwk::PropertyValue propval;
+    for(iter = propset.begin(); iter != propset.end(); ++iter) {
+        switch(*iter) {
+        case NpXmpRatingProp:
+            properties.set_value_for_property(NpXmpRatingProp,
+                                              fwk::PropertyValue(rating()));
+            break;
+        case NpXmpLabelProp:
+            properties.set_value_for_property(NpXmpLabelProp,
+                                              fwk::PropertyValue(label()));
+            break;
+        case NpTiffOrientationProp:
+            properties.set_value_for_property(NpTiffOrientationProp, 
+                                              fwk::PropertyValue(orientation()));
+            break;
+        case NpIptcKeywordsProp:
+        {
+            xmp::ScopedPtr<XmpIteratorPtr> 
+                iter(xmp_iterator_new(xmp(), NS_DC,
+                                      "subject", XMP_ITER_JUSTLEAFNODES));
+            std::vector<std::string> vec;
+            while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+                vec.push_back(xmp_string_cstr(value));
+            }
+            std::string v = fwk::join(vec, ", ");
+            properties.set_value_for_property(NpIptcKeywordsProp, 
+                                              fwk::PropertyValue(v));
+            break;
+        }
+        default:
+            if(getMetaData(*iter, propval)) {
+                properties.set_value_for_property(*iter, propval);                
+            }
+            else {
+                DBG_OUT("unknown prop %u", *iter);
+            }
+            break;
+        }
+    }
+}
+
 
 bool LibMetadata::touch()
 {

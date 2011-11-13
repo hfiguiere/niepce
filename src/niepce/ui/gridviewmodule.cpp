@@ -55,7 +55,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         eng::LibMetadata::Ptr lm
             = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
         DBG_OUT("received metadata");
-        m_metapanecontroller->display(lm->id(), lm.get());
+        m_metapanecontroller->display(lm->id(), lm);
         break;
     }
     case eng::Library::NOTIFY_METADATA_CHANGED:
@@ -76,7 +76,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 
 void GridViewModule::display_none()
 {
-  m_metapanecontroller->display(0, NULL);
+    m_metapanecontroller->display(0, eng::LibMetadata::Ptr());
 }
 
 

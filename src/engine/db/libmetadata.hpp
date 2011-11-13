@@ -43,12 +43,24 @@ public:
     library_id_t id() const
         { return m_id; }
     bool setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+    bool getMetaData(fwk::PropertyIndex meta, fwk::PropertyValue & value) const;
+
+    /** convert XMP to a set of properties 
+     * @param propset the property set requested
+     * @param props the output properties
+     */
+    void to_properties(const fwk::PropertySet & propset,
+                       fwk::PropertyBag & properties);
     /** do like the unix "touch". Update the MetadataDate 
      * to the current time, in UTC.
      */
     bool touch();
 private:
     LibMetadata(const LibMetadata &);
+
+    static bool property_index_to_xmp(fwk::PropertyIndex index, 
+                                      const char * & ns, const char * & property);
+
     library_id_t m_id;
 };
 

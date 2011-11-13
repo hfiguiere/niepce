@@ -27,7 +27,6 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
 #include "engine/db/properties.hpp"
-#include "engine/db/xmpproperties.hpp"
 #include "metadatapanecontroller.hpp"
 
 namespace ui {
@@ -147,14 +146,14 @@ void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props,
 }
 
 
-void MetaDataPaneController::display(eng::library_id_t file_id, const fwk::XmpMeta * meta)
+void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMetadata::Ptr & meta)
 {
     m_fileid = file_id;
     DBG_OUT("displaying metadata");
     fwk::PropertyBag properties;
     if(meta) {
         const fwk::PropertySet & propset = get_property_set();
-        eng::convert_xmp_to_properties(meta, propset, properties);
+        meta->to_properties(propset, properties);
     }
     std::for_each(m_widgets.begin(), m_widgets.end(),
 		  boost::bind(&fwk::MetaDataWidget::set_data_source,

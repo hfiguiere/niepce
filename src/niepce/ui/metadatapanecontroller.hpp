@@ -23,6 +23,7 @@
 #include <gtkmm/box.h>
 
 #include "engine/db/librarytypes.hpp"
+#include "engine/db/libmetadata.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/dockable.hpp"
 
@@ -43,7 +44,7 @@ public:
     MetaDataPaneController();
     ~MetaDataPaneController();
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
-    void display(eng::library_id_t file_id, const fwk::XmpMeta * meta);
+    void display(eng::library_id_t file_id, const eng::LibMetadata::Ptr & meta);
     eng::library_id_t displayed_file() const 
         { return m_fileid; }
 
