@@ -58,7 +58,8 @@ MetaDataPaneController::get_format()
         { _("Headline:"), eng::NpIptcHeadlineProp, fwk::META_DT_STRING, false },
         { _("Caption:"), eng::NpIptcDescriptionProp, fwk::META_DT_TEXT, false },
         { _("Rating:"), eng::NpXmpRatingProp, fwk::META_DT_STAR_RATING, false },
-        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, false },            
+        // FIXME change this type to the right one when there is a widget
+        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, true },            
         { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::META_DT_STRING_ARRAY, false },
         { NULL, 0, fwk::META_DT_NONE, true }			
     };
