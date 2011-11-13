@@ -72,15 +72,17 @@ public:
     void set_data_format(const MetaDataSectionFormat * fmt);
     void set_data_source(const fwk::PropertyBag & properties);
     
-    sigc::signal<void, const fwk::PropertyBag &> signal_metadata_changed;
+    sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
 protected:
     bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);
+    void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValue & value);
 
     Gtk::Table    m_table;
     std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
+    fwk::PropertyBag m_current_data;
     const MetaDataSectionFormat * m_fmt;
     bool m_update;
 };

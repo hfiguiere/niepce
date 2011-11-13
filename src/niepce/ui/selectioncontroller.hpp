@@ -93,7 +93,8 @@ public:
 
     void set_property(fwk::PropertyIndex idx, int value);
 
-    void set_properties(const fwk::PropertyBag & props);
+    void set_properties(const fwk::PropertyBag & props, 
+                        const fwk::PropertyBag & old);
 
     /** get the current selection 
      *  todo: change it to support multiple
@@ -111,7 +112,8 @@ private:
                        int old_value, int new_value);
     bool _set_metadata(const std::string & undo_label, 
                        const eng::LibFile::Ptr & file,
-                       const fwk::PropertyBag & props);
+                       const fwk::PropertyBag & props,
+                       const fwk::PropertyBag & old);
     /** move the selection and emit the signal 
      * @param backwards true if the move is backwards.
      */

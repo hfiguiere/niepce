@@ -47,9 +47,10 @@ public:
     eng::library_id_t displayed_file() const 
         { return m_fileid; }
 
-    sigc::signal<void, const fwk::PropertyBag &> signal_metadata_changed;
+    sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
 private:
-    void on_metadata_changed(const fwk::PropertyBag &);
+    void on_metadata_changed(const fwk::PropertyBag &, 
+                             const fwk::PropertyBag & old);
 
     std::vector<fwk::MetaDataWidget *> m_widgets;
     

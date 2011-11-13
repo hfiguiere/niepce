@@ -139,9 +139,10 @@ MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
     return m_widget;
 }
   
-void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props)
+void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props,
+                                                 const fwk::PropertyBag & old)
 {
-    signal_metadata_changed.emit(props);
+    signal_metadata_changed.emit(props, old);
 }
 
 

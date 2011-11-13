@@ -193,18 +193,23 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 
 bool SelectionController::_set_metadata(const std::string & undo_label, 
                                         const eng::LibFile::Ptr & file,
-                                        const fwk::PropertyBag & props)
+                                        const fwk::PropertyBag & props,
+                                        const fwk::PropertyBag & old)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
     for(fwk::PropertyBag::const_iterator iter = props.begin(); 
         iter != props.end(); ++iter) {
 
+        fwk::PropertyValue value;
+        old.get_value_for_property(iter->first, value);
+
+        DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
+
         undo->new_command<void>(
             boost::bind(&libraryclient::LibraryClient::setMetadata,
                         getLibraryClient(), file->id(), iter->first, iter->second),
-            // FIXME. This make undo now work
             boost::bind(&libraryclient::LibraryClient::setMetadata,
-                        getLibraryClient(), file->id(), iter->first, iter->second)
+                        getLibraryClient(), file->id(), iter->first, value)
             );
     }
     undo->execute();
@@ -260,14 +265,15 @@ void SelectionController::set_property(fwk::PropertyIndex idx, int value)
     }    
 }
 
-void SelectionController::set_properties(const fwk::PropertyBag & props)
+void SelectionController::set_properties(const fwk::PropertyBag & props,
+                                         const fwk::PropertyBag & old)
 {
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
             eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            _set_metadata(_("Set Properties"), file, props);
+            _set_metadata(_("Set Properties"), file, props, old);
         }
     }
 }

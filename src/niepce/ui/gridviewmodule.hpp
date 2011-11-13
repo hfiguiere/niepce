@@ -75,7 +75,7 @@ protected:
 
 
 private:
-  void on_metadata_changed(const fwk::PropertyBag &);
+  void on_metadata_changed(const fwk::PropertyBag &, const fwk::PropertyBag & old);
   void on_rating_changed(int id, int rating);
 
   const IModuleShell &               m_shell;

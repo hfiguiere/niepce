@@ -79,6 +79,7 @@ void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> 
 void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
 {
     DBG_OUT("set data source");
+    m_current_data = properties;
     if(!m_data_map.empty()) {
         std::for_each(m_data_map.begin(), m_data_map.end(),
                       boost::bind(&MetaDataWidget::clear_widget, this, _1));
@@ -209,14 +210,13 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     m_table.show_all();
 }
 
-bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e, fwk::PropertyIndex prop)
+bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e, 
+                                    fwk::PropertyIndex prop)
 {
     if(m_update) {
         return true;
     }
-    fwk::PropertyBag props;
-    props.set_value_for_property(prop, fwk::PropertyValue(e->get_text()));
-    signal_metadata_changed.emit(props);
+    emit_metadata_changed(prop, fwk::PropertyValue(e->get_text()));
     return true;
 }
 
@@ -225,9 +225,19 @@ void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
     if(m_update) {
         return;
     }
-    fwk::PropertyBag props;
+    emit_metadata_changed(prop, fwk::PropertyValue(value));
+}
+
+void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop, 
+                                           const fwk::PropertyValue & value)
+{
+    fwk::PropertyBag props, old_props;
     props.set_value_for_property(prop, fwk::PropertyValue(value));
-    signal_metadata_changed.emit(props);
+    fwk::PropertyValue old_value;
+    if(m_current_data.get_value_for_property(prop, old_value)) {
+        old_props.set_value_for_property(prop, old_value);
+    }
+    signal_metadata_changed.emit(props, old_props);
 }
 
 }
