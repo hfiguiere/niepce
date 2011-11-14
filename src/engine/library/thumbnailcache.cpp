@@ -89,7 +89,6 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
     if(mime_type.isUnknown()) {
         DBG_OUT("unknown file type %s", filename.c_str());
     }
-    // TODO: what about videos?
     else if(mime_type.isMovie()) {
         try {
             if(fwk::thumbnail_movie(filename, w, h, cached)) {
@@ -97,7 +96,7 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
             }
         }
         catch(const Glib::Error & e) {
-            ERR_OUT("exception %s", e.what().c_str());
+            ERR_OUT("exception thumbnailing video %s", e.what().c_str());
         }
     }
     else if(!mime_type.isImage()) {
@@ -112,7 +111,7 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
             }
         }
         catch(const Glib::Error & e) {
-            ERR_OUT("exception %s", e.what().c_str());
+            ERR_OUT("exception thumbnailing image %s", e.what().c_str());
         }
     }	
     else {	
