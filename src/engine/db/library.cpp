@@ -131,6 +131,7 @@ bool Library::_initDb()
                              " vault_id INTEGER DEFAULT 0, "
                              " locked INTEGER DEFAULT 0, "
                              " virtual INTEGER DEFAULT 0,"
+                             " expanded INTEGER DEFAULT 0,"
                              " parent_id INTEGER)");
 
     SQLStatement initialFolders(

@@ -59,6 +59,10 @@ public:
         { return m_locked; }
     void set_is_locked(bool _locked)
         { m_locked = _locked; }
+    bool is_expanded() const
+        { return m_expanded; }
+    void set_expanded(bool _exp)
+        { m_expanded = _exp; }
     VirtualType virtual_type() const
         { return m_virtual; }
     void set_virtual_type(VirtualType _virtual)
@@ -71,6 +75,7 @@ private:
     library_id_t         m_id;
     std::string m_name;
     bool m_locked;
+    bool m_expanded;
     VirtualType m_virtual;
 };
 
