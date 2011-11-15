@@ -68,7 +68,8 @@ public:
         NOTIFY_LABEL_CHANGED,
         NOTIFY_LABEL_DELETED,
         NOTIFY_XMP_NEEDS_UPDATE,
-        NOTIFY_FOLDER_COUNTED
+        NOTIFY_FOLDER_COUNTED,
+        NOTIFY_FILE_MOVED
 		} NotifyType;
 
 		Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
@@ -163,6 +164,8 @@ public:
     /** set the metadata block (XMP) */
     bool setMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     bool setMetaData(library_id_t file_id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+
+    bool moveFileToFolder(library_id_t file_id, library_id_t folder_id);
 
 		void getAllLabels(const eng::Label::ListPtr & l);
     library_id_t addLabel(const std::string & name, const std::string & color);

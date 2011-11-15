@@ -54,6 +54,8 @@ public:
     static void cmdSetMetadata(const Library::Ptr & lib,
                                library_id_t file_id, fwk::PropertyIndex meta, 
                                const fwk::PropertyValue & value);
+    static void cmdMoveFileToFolder(const Library::Ptr & lib, 
+                                    library_id_t file_id, library_id_t folder_id);
     static void cmdListAllLabels(const Library::Ptr & lib);
     static void cmdCreateLabel(const Library::Ptr & lib, const std::string & s, 
                                const std::string & color);

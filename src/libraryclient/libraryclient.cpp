@@ -90,6 +90,11 @@ eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta, 
     return m_pImpl->setMetadata(id, meta, value);
 }
 
+eng::tid_t LibraryClient::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t folder_id)
+{
+    return m_pImpl->moveFileToFolder(file_id, folder_id);
+}
+
 eng::tid_t LibraryClient::getAllLabels()
 {
     return m_pImpl->getAllLabels();

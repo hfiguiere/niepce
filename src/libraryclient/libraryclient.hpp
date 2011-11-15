@@ -66,6 +66,7 @@ namespace libraryclient {
 
     /** set the metadata */
 	  eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+	  eng::tid_t moveFileToFolder(eng::library_id_t file_id, eng::library_id_t folder_id);
 
     /** get all the labels */
     eng::tid_t getAllLabels();

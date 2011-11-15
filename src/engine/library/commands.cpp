@@ -118,12 +118,23 @@ void Commands::cmdSetMetadata(const Library::Ptr & lib,
                               library_id_t file_id, fwk::PropertyIndex meta, 
                               const fwk::PropertyValue & value)
 {
-	metadata_desc_t m;
-	m.id = file_id;
-	m.meta = meta;
-	m.value = value;
+    metadata_desc_t m;
+    m.id = file_id;
+    m.meta = meta;
+    m.value = value;
     lib->setMetaData(file_id, meta, value);
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
+}
+
+void Commands::cmdMoveFileToFolder(const Library::Ptr & lib, 
+                                   library_id_t file_id, library_id_t folder_id)
+{
+    if(lib->moveFileToFolder(file_id, folder_id)) {
+        std::pair<library_id_t, library_id_t> move;
+        move.first = file_id;
+        move.second = folder_id;
+        lib->notify(Library::NOTIFY_FILE_MOVED, boost::any(move));
+    }
 }
 
 void Commands::cmdListAllLabels(const Library::Ptr & lib)

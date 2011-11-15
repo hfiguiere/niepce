@@ -56,7 +56,18 @@ int test_main(int, char *[])
     
     int file_id = lib.addFile(folder_added->id(), "foo/myfile", false);
     BOOST_CHECK(file_id > 0);
-    
+
+    BOOST_CHECK(lib.moveFileToFolder(file_id, 100) == false);
+    BOOST_CHECK(lib.moveFileToFolder(file_id, folder_added->id()));
+
+    int count = lib.countFolder(folder_added->id());
+    BOOST_CHECK(count == 1);
+
+    const eng::LibFile::ListPtr fl(new eng::LibFile::List);
+    lib.getFolderContent(folder_added->id(), fl);
+    BOOST_CHECK(fl->size() == (size_t)count);
+    BOOST_CHECK(fl->front()->id() == file_id);
+
     BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
     return 0;
 }

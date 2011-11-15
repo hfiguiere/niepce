@@ -773,6 +773,29 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
     return retval;
 }
 
+
+bool Library::moveFileToFolder(library_id_t file_id, library_id_t folder_id)
+{
+    SQLStatement sql(boost::format("SELECT id FROM folders WHERE id = %1%;") % folder_id);
+    try {
+        if(m_dbdrv->execute_statement(sql)) {
+            if(m_dbdrv->read_next_row()) {
+                // we have the destination folder
+                SQLStatement sql2(boost::format("UPDATE files SET parent_id = %1% "
+                                     " WHERE id = %2%;") % folder_id % file_id);
+                if(m_dbdrv->execute_statement(sql2)) {
+                    return true;
+                }
+            }
+        }
+    }
+    catch(fwk::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return false;
+}
+
 void Library::getAllLabels(const Label::ListPtr & l)
 {
     SQLStatement sql("SELECT id,name,color FROM labels ORDER BY id");
