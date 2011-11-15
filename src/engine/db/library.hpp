@@ -69,6 +69,7 @@ public:
         NOTIFY_LABEL_DELETED,
         NOTIFY_XMP_NEEDS_UPDATE,
         NOTIFY_FOLDER_COUNTED,
+        NOTIFY_FOLDER_COUNT_CHANGE,
         NOTIFY_FILE_MOVED
 		} NotifyType;
 

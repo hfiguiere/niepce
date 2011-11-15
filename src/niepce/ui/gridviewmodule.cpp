@@ -52,6 +52,8 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
     switch(ln.type) {
     case eng::Library::NOTIFY_METADATA_QUERIED:
     {
+        DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
+                   "incorrect data type for the notification");
         eng::LibMetadata::Ptr lm
             = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
         DBG_OUT("received metadata");
@@ -61,11 +63,23 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
     case eng::Library::NOTIFY_METADATA_CHANGED:
     {
         DBG_OUT("metadata changed");
-		eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
+        DBG_ASSERT(ln.param.type() == typeid(eng::metadata_desc_t),
+                   "incorrect data type for the notification");
+        eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
         if(m.id == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
           m_shell.getLibraryClient()->requestMetadata(m.id);
         }
+        break;
+    }
+    case eng::Library::NOTIFY_FILE_MOVED:
+    {
+        DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
+                   "incorrect data type for the notification");
+        std::pair<eng::library_id_t,eng::library_id_t> moved(boost::any_cast<std::pair<eng::library_id_t,eng::library_id_t> >(ln.param));
+        
+// check that the file that was moved still match the content
+
         break;
     }
     default:

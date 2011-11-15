@@ -253,7 +253,8 @@ void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
     m_refActionGroup->add(Gtk::Action::create("Cut", Gtk::Stock::CUT));
     m_refActionGroup->add(Gtk::Action::create("Copy", Gtk::Stock::COPY));
     m_refActionGroup->add(Gtk::Action::create("Paste", Gtk::Stock::PASTE));
-    m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE));
+    m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE),
+                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete));
 
     m_refActionGroup->add(Gtk::Action::create("Preferences", 
                                               Gtk::Stock::PREFERENCES),
@@ -446,6 +447,12 @@ void NiepceWindow::on_action_edit_labels()
     // get the labels.
     EditLabels::Ptr dlg(new EditLabels(getLibraryClient()));
     dlg->run_modal(shared_frame_ptr());
+}
+
+void NiepceWindow::on_action_edit_delete()
+{
+    // find the responder. And pass it.
+    m_moduleshell->action_edit_delete();
 }
 
 void NiepceWindow::set_title(const std::string & title)

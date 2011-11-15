@@ -85,14 +85,16 @@ eng::tid_t LibraryClient::requestMetadata(eng::library_id_t id)
 }
 
 /** set the metadata */
-eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value)
+eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta, 
+                                      const fwk::PropertyValue & value)
 {
     return m_pImpl->setMetadata(id, meta, value);
 }
 
-eng::tid_t LibraryClient::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t folder_id)
+eng::tid_t LibraryClient::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
+                                           eng::library_id_t to_folder)
 {
-    return m_pImpl->moveFileToFolder(file_id, folder_id);
+    return m_pImpl->moveFileToFolder(file_id, from_folder, to_folder);
 }
 
 eng::tid_t LibraryClient::getAllLabels()

@@ -210,6 +210,11 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     return m_widget;
 }
 
+void ModuleShell::action_edit_delete()
+{
+    DBG_OUT("shell - delete");
+    m_selection_controller->move_to_trash();
+}
 
 void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
                                                    const std::string & label)

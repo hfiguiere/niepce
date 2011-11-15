@@ -68,12 +68,14 @@ namespace ui {
 					add(m_label);  
 					add(m_type);
 					add(m_count);
+					add(m_count_n);
 				}
 			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
 			Gtk::TreeModelColumn<int> m_id;
 			Gtk::TreeModelColumn<Glib::ustring> m_label;
 			Gtk::TreeModelColumn<int> m_type;
 			Gtk::TreeModelColumn<Glib::ustring> m_count;
+			Gtk::TreeModelColumn<int> m_count_n;
 		};
 
 		virtual void on_ready();

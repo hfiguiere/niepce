@@ -120,11 +120,12 @@ tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, const fwk::Pr
     return id;
 }
 
-tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t folder_id)
+tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder_id,
+                                   eng::library_id_t to_folder_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdMoveFileToFolder, _1,
-                                      file_id, folder_id)));
+                                      file_id, from_folder_id, to_folder_id)));
     m_localLibrary->schedule(op);
     return id;    
 }

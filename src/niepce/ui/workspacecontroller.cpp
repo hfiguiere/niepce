@@ -115,8 +115,34 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {
             Gtk::TreeRow row = *(iter->second);
+            row[m_librarycolumns.m_count_n] = count.second;
             row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(count.second);
         }
+
+        break;
+    }
+    case eng::Library::NOTIFY_FOLDER_COUNT_CHANGE:
+    {
+        std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
+        DBG_OUT("count change for folder %Ld is %d", count.first, count.second);
+        std::map<int, Gtk::TreeIter>::iterator iter
+            = m_folderidmap.find( count.first );
+        if(iter != m_folderidmap.end()) {
+            Gtk::TreeRow row = *(iter->second);
+            int new_count = row[m_librarycolumns.m_count_n] + count.second;
+            row[m_librarycolumns.m_count_n] = new_count;
+            row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(new_count);
+        }
+
+        break;
+    }
+    case eng::Library::NOTIFY_FILE_MOVED:
+    {
+        DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
+                   "incorrect data type for the notification");
+
+        std::pair<eng::library_id_t,eng::library_id_t> moved(boost::any_cast<std::pair<eng::library_id_t,eng::library_id_t> >(ln.param));
+        
 
         break;
     }

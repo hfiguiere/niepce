@@ -127,13 +127,16 @@ void Commands::cmdSetMetadata(const Library::Ptr & lib,
 }
 
 void Commands::cmdMoveFileToFolder(const Library::Ptr & lib, 
-                                   library_id_t file_id, library_id_t folder_id)
+                                   library_id_t file_id, library_id_t from_folder_id,
+                                   library_id_t to_folder_id)
 {
-    if(lib->moveFileToFolder(file_id, folder_id)) {
+    if(lib->moveFileToFolder(file_id, to_folder_id)) {
         std::pair<library_id_t, library_id_t> move;
         move.first = file_id;
-        move.second = folder_id;
+        move.second = to_folder_id;
         lib->notify(Library::NOTIFY_FILE_MOVED, boost::any(move));
+        lib->notify(Library::NOTIFY_FOLDER_COUNT_CHANGE, boost::any(std::make_pair(from_folder_id, -1)));
+        lib->notify(Library::NOTIFY_FOLDER_COUNT_CHANGE, boost::any(std::make_pair(to_folder_id, 1)));
     }
 }
 

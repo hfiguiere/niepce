@@ -278,6 +278,27 @@ void SelectionController::set_properties(const fwk::PropertyBag & props,
     }
 }
 
+void SelectionController::move_to_trash()
+{
+    eng::library_id_t trash_folder = 1; // FIXME get the actual ID.
+    eng::library_id_t selection = get_selection();
+    if(selection >= 0) {
+        Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+        if(iter) {
+            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            eng::library_id_t from_folder = file->folderId();
+            fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(_("Move to Trash"));
+            undo->new_command<void>(
+                boost::bind(&libraryclient::LibraryClient::moveFileToFolder,
+                            getLibraryClient(), selection, from_folder, trash_folder),
+                boost::bind(&libraryclient::LibraryClient::moveFileToFolder,
+                            getLibraryClient(), selection, trash_folder, from_folder )
+                );
+            undo->execute();
+        }        
+    }
+}
+
 
 }
 

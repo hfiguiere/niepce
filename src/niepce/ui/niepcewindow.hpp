@@ -62,6 +62,7 @@ private:
     void on_action_file_open();
     void on_open_library();
     void on_action_edit_labels();
+    void on_action_edit_delete();
 
     void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
                                  Gtk::Dialog *);

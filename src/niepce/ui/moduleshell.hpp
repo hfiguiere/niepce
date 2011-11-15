@@ -75,6 +75,8 @@ public:
     void on_image_activated(eng::library_id_t id);
     
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+
+    void action_edit_delete();
 protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & label);

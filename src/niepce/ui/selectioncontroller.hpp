@@ -96,6 +96,8 @@ public:
     void set_properties(const fwk::PropertyBag & props, 
                         const fwk::PropertyBag & old);
 
+    void move_to_trash();
+
     /** get the current selection 
      *  todo: change it to support multiple
      */
