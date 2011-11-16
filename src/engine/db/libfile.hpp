@@ -38,6 +38,7 @@ class LibFile
 {
 public:
     typedef std::tr1::shared_ptr< LibFile > Ptr;
+    typedef std::tr1::weak_ptr< LibFile> WeakPtr;
     typedef std::list< Ptr > List;
     typedef std::tr1::shared_ptr< List > ListPtr;
 

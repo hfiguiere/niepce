@@ -28,6 +28,7 @@ namespace ui {
 class IModuleShell
 {
 public:
+    virtual ~IModuleShell() {}
     virtual const ui::SelectionController::Ptr & get_selection_controller() const = 0;
     virtual libraryclient::LibraryClient::Ptr getLibraryClient() const = 0;
 };

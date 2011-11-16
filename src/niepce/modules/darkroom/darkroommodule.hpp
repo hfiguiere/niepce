@@ -58,6 +58,8 @@ public:
     virtual void set_active(bool active);
     
 protected:
+	void reload_image();
+
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
     
 private:
@@ -71,11 +73,13 @@ private:
     Gtk::ScrolledWindow          m_canvas_scroll;
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    eng::LibFile::WeakPtr        m_imagefile;
     ncr::Image::Ptr              m_image;
     fwk::Dock                   *m_dock;
 
     // state
     bool                         m_active;
+    bool                         m_need_reload;
 };
 
 
