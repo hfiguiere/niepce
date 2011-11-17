@@ -111,7 +111,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
         DBG_OUT("count for folder %Ld is %d", count.first, count.second);
-        std::map<int, Gtk::TreeIter>::iterator iter
+        std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {
             Gtk::TreeRow row = *(iter->second);
@@ -125,7 +125,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
         DBG_OUT("count change for folder %Ld is %d", count.first, count.second);
-        std::map<int, Gtk::TreeIter>::iterator iter
+        std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {
             Gtk::TreeRow row = *(iter->second);
@@ -163,12 +163,12 @@ void WorkspaceController::on_libtree_selection()
     Gtk::TreeModel::iterator selected = selection->get_selected();
     if((*selected)[m_librarycolumns.m_type] == FOLDER_ITEM)
     {
-        int id = (*selected)[m_librarycolumns.m_id];
+        eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
         getLibraryClient()->queryFolderContent(id);
     }
     else if((*selected)[m_librarycolumns.m_type] == KEYWORD_ITEM)
     {
-        int id = (*selected)[m_librarycolumns.m_id];
+        eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
         getLibraryClient()->queryKeywordContent(id);			
     }
     else 
@@ -191,6 +191,7 @@ void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
     int icon_idx = ICON_ROLL;
     if(f->virtual_type() == eng::LibFolder::VIRTUAL_TRASH) {
         icon_idx = ICON_TRASH;
+        getLibraryClient()->set_trash_id(f->id());
     }
     Gtk::TreeModel::iterator iter(add_item(m_treestore, 
                                            m_folderNode->children(), 

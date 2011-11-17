@@ -36,6 +36,7 @@ LibraryClient::LibraryClient(const fwk::Moniker & moniker,
     : m_pImpl(ClientImpl::makeClientImpl(moniker, nc))
     , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
     , m_uidataprovider(new UIDataProvider())
+    , m_trash_id(0)
 {
 }
 

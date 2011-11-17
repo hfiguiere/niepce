@@ -280,7 +280,7 @@ void SelectionController::set_properties(const fwk::PropertyBag & props,
 
 void SelectionController::move_to_trash()
 {
-    eng::library_id_t trash_folder = 1; // FIXME get the actual ID.
+    eng::library_id_t trash_folder = getLibraryClient()->trash_id();
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
