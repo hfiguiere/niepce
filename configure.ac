@@ -157,6 +157,7 @@ src/niepce/modules/darkroom/Makefile
 src/niepce/modules/interfaces/Makefile
 src/niepce/Makefile
 src/fwk/Makefile
+src/fwk/base/Makefile
 src/fwk/utils/Makefile
 src/fwk/utils/db/Makefile
 src/fwk/utils/db/sqlite/Makefile

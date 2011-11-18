@@ -22,7 +22,7 @@ niepce_LDADD = \
 	$(top_builddir)/src/niepce/modules/interfaces/libinterfaces.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
-	$(top_builddir)/src/fwk/libfwk.a \
+	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libview/libview.a \
 	@LIBGLIBMM_LIBS@ \

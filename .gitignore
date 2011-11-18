@@ -33,8 +33,8 @@ m4/ltsugar.m4
 m4/ltversion.m4
 m4/lt~obsolete.m4
 po/Makefile.in.in
-src/fwk/testmoniker
-src/fwk/testgeometry
+src/fwk/base/testmoniker
+src/fwk/base/testgeometry
 src/fwk/utils/test_db
 src/fwk/utils/test_db2
 src/fwk/utils/test_db3
@@ -54,4 +54,5 @@ camerawire/po/POTFILES
 doc/Doxyfile
 doc/doxygen/html
 po/*.gmo
+po/niepce.pot
 po/POTFILES

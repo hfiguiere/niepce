@@ -20,5 +20,5 @@ camerawire_LDADD = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ \
 	@GCONF_LIBS@ @GPHOTO_LIBS@ \
 	$(top_builddir)/../src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/../src/fwk/utils/libniepceutils.a \
-	$(top_builddir)/../src/fwk/libfwk.a \
+	$(top_builddir)/../src/fwk/base/libfwkbase.a \
 	$(NULL)

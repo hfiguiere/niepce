@@ -17,19 +17,19 @@ check_PROGRAMS = testfiles testxmp \
 
 testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@LIBGLIBMM_LIBS@
 
 
 testxmp_SOURCES = testxmp.cpp
 testxmp_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@EXEMPI_LIBS@ @LIBGLIBMM_LIBS@
 
 testufrawmeta_SOURCES = testufrawmeta.cpp
 testufrawmeta_CXXFLAGS =  -g -O0
 testufrawmeta_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@EXEMPI_LIBS@ @LIBXML2_LIBS@ \
 	@LIBGLIBMM_LIBS@
 
@@ -43,25 +43,25 @@ testpathutils_LDADD = libniepceutils.a \
 
 test_db_SOURCES = db/test_db.cpp
 test_db_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@LIBGLIBMM_LIBS@\
 	@SQLITE3_LIBS@
 
 test_db2_SOURCES = db/test_db2.cpp
 test_db2_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@LIBGLIBMM_LIBS@\
 	@SQLITE3_LIBS@
 
 test_db3_SOURCES = db/test_db3.cpp
 test_db3_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@LIBGLIBMM_LIBS@\
 	@SQLITE3_LIBS@
 
 test_db4_SOURCES = db/test_db4.cpp
 test_db4_LDADD = libniepceutils.a \
-	../libfwk.a \
+	../base/libfwkbase.a \
 	@LIBGLIBMM_LIBS@\
 	@SQLITE3_LIBS@
 

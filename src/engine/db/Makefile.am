@@ -10,7 +10,7 @@ TEST_LIBS =  \
 	libniepcedb.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
-	$(top_builddir)/src/fwk/libfwk.a \
+	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	@LIBGTKMM_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@LIBGLIBMM_LIBS@ \
