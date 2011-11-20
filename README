@@ -8,9 +8,6 @@ Some files maybe under GPL version 2 or later.
 (c) 2006-2009 Hubert Figuière
 Some portions are written by other people.
 
-libgdl has been copied from Inkscape. Still wondering why
-Gtk+ does not provide this functionality by default.
-
 What is this?
 -------------
 
@@ -22,11 +19,10 @@ To build is you need the following:
 -----------------------------------
 
 A C++ compiler
-gtk+ 2.8
+gtk+ 2.12
 cairo 1.1
 gtkmm 2.12
 giomm
-gconf 2.x
 cairomm
 sqlite3
 libxml2 > 2.5.0
@@ -39,14 +35,14 @@ gegl >= 0.1.0
 babl
 libgphoto2
 
-Niepce is being developed on Linux. It should build and work on other
+Niepce is being developped on Linux. It should build and work on other
 UNIX systems.
 
 
 Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
-aptitude install gconf2-dev \
+aptitude install \
 > libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev 
 
 Debian (nor Ubuntu) do not still pack geglmm. In order to get it visit 
@@ -55,15 +51,8 @@ http://ftp.gnome.org/pub/gnome/sources/geglmm/
 
 Working on SUSE
 ~~~~~~~~~~~~~~~
-To install the up to date dependencies, add the following repostitory to
-zypper using "zypper ar"
 
-For openSUSE 11.0
-http://download.opensuse.org/repositories/home:/hfiguiere/openSUSE_11.0/
-For openSUSE 11.1
-http://download.opensuse.org/repositories/home:/hfiguiere/openSUSE_11.1/
-
-You'll find an up to date set of dependencies to build Niepce Digital.
+[ there used to be stuff in the openSUSE build service ]
 
 Getting the code
 ----------------
