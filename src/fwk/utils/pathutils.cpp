@@ -25,6 +25,8 @@
 
 namespace fwk {
 
+void _path_remove_recursive(const Glib::RefPtr<Gio::File> & dir);
+
 /** return the basename of a path. Example:
     /foo/bar/baz.txt returns baz.txt
  */
