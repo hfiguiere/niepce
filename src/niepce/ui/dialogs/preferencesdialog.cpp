@@ -42,40 +42,28 @@ void PreferencesDialog::setup_widget()
 
     add_header(_("Preferences"));
 
-    Gtk::ComboBox * theme_combo = NULL;
+    Gtk::CheckButton * theme_checkbutton = NULL;
     Gtk::CheckButton * reopen_checkbutton = NULL;
     fwk::DataBinderPool * binder_pool = new fwk::DataBinderPool();
 
     gtkDialog().signal_hide().connect(boost::bind(&fwk::DataBinderPool::destroy, 
                                               binder_pool));
 		
-    builder()->get_widget("theme_combo", theme_combo);
- 
-		Glib::RefPtr<Gtk::ListStore> model = m_theme_combo_model.inject(*theme_combo);
-		
-		const std::vector<fwk::Application::ThemeDesc> & themes 
-			= fwk::Application::app()->get_available_themes();
-    std::vector<fwk::Application::ThemeDesc>::const_iterator i;
-    for(i = themes.begin(); i != themes.end(); ++i) {
-        DBG_OUT("adding %s", i->first.c_str());
-        Gtk::TreeIter iter = model->append();
-        iter->set_value(m_theme_combo_model.m_col1, i->first); 
-        iter->set_value(m_theme_combo_model.m_col2, i->second); 
-    }
-
-    theme_combo->set_active(fwk::Application::app()
-                            ->get_use_custom_theme());
-    theme_combo->signal_changed().connect(
-			boost::bind(&fwk::Application::set_use_custom_theme,
+    builder()->get_widget("dark_theme_checkbox", theme_checkbutton);
+    
+    theme_checkbutton->set_active(fwk::Application::app()
+                            ->get_use_dark_theme());
+    theme_checkbutton->signal_toggled().connect(
+			boost::bind(&fwk::Application::set_use_dark_theme,
 									fwk::Application::app(),
-									theme_combo->property_active()));
+									theme_checkbutton->property_active()));
 
     builder()->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
-															reopen_checkbutton->property_active(),
-															fwk::Application::app()->config(),
-															"reopen_last_library"));
-		m_is_setup = true;
+							    reopen_checkbutton->property_active(),
+							    fwk::Application::app()->config(),
+							    "reopen_last_library"));
+    m_is_setup = true;
 }
 
 

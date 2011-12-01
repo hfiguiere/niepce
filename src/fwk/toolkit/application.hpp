@@ -45,13 +45,8 @@ public:
 
     virtual ~Application();
 
-    virtual Glib::ustring get_rc_path();
-    virtual int get_use_custom_theme() const;
-    virtual void set_use_custom_theme(int theme_idx);
-    const std::vector<ThemeDesc> & get_available_themes() const
-        {
-            return m_themes;
-        }
+    virtual bool get_use_dark_theme() const;
+    virtual void set_use_dark_theme(bool value);
 
     virtual Frame::Ptr makeMainFrame() = 0;
 
@@ -88,13 +83,10 @@ protected:
     Application(const char *);
     static Application::Ptr m_application; 
     virtual void on_about();
-    void register_theme(const Glib::ustring & label,
-                        const std::string &path);
 private:
     Configuration                m_config;
     Glib::RefPtr<Gtk::UIManager> m_refUIManager;
     UndoHistory                  m_undo;
-    std::vector<ThemeDesc>       m_themes;
     ModuleManager               *m_module_manager;
 };
 
