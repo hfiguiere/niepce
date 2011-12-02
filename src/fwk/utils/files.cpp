@@ -20,6 +20,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <giomm/file.h>
+#include <glibmm/miscutils.h>
 
 #include "fwk/base/debug.hpp"
 #include "files.hpp"
