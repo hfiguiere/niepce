@@ -22,6 +22,7 @@
 #ifndef __UI_LIBRARY_CELL_RENDERER_H__
 #define __UI_LIBRARY_CELL_RENDERER_H__
 
+#include <glibmm/property.h>
 #include <gtkmm/cellrendererpixbuf.h>
 #include <cairomm/surface.h>
 
