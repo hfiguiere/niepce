@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include <glibmm/thread.h>
+#include <glibmm/threads.h>
 
 
 namespace fwk {
@@ -43,10 +43,10 @@ protected:
     void start();
     virtual void main() = 0;
     volatile bool m_terminated;
-    Glib::Thread * thread() const
+    Glib::Threads::Thread * thread() const
         { return m_thrd; }
 private:
-    Glib::Thread *       m_thrd;
+    Glib::Threads::Thread *       m_thrd;
 };
 
 }

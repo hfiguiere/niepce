@@ -27,7 +27,7 @@
 #include <tr1/memory>
 #include <boost/any.hpp>
 
-#include <glibmm/thread.h>
+#include <glibmm/threads.h>
 
 namespace fwk {
 
@@ -36,7 +36,7 @@ namespace fwk {
 	{
 	public:
 		typedef std::tr1::shared_ptr<Notification> Ptr;
-		typedef Glib::RecMutex mutex_t;
+	  typedef Glib::Threads::RecMutex mutex_t;
 
 		Notification(int _type)
 			: m_type(_type)
