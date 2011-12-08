@@ -51,8 +51,8 @@ protected:
     queue_t      m_tasks;
 private:
     virtual void execute(const T & _op) = 0;
-    Glib::Threads::Mutex m_q_mutex;
-    Glib::Threads::Cond m_wait_cond;
+    Glib::Mutex m_q_mutex;
+    Glib::Cond m_wait_cond;
 };
 
 template <class T>
@@ -67,7 +67,7 @@ Worker<T>::~Worker()
 {
     m_tasks.clear();
     {
-        Glib::Threads::Mutex::Lock lock(m_q_mutex);
+        Glib::Mutex::Lock lock(m_q_mutex);
         m_terminated = true;
         m_wait_cond.broadcast();
     }
@@ -85,7 +85,7 @@ void Worker<T>::main()
         {
             // make sure we terminate the thread before we unlock
             // the task queue.
-            Glib::Threads::Mutex::Lock lock(m_q_mutex);
+            Glib::Mutex::Lock lock(m_q_mutex);
             if(!m_tasks.empty()) {
                 op = m_tasks.pop();
             }
@@ -95,7 +95,7 @@ void Worker<T>::main()
             execute(op);
         }
 
-        Glib::Threads::Mutex::Lock lock(m_q_mutex);
+        Glib::Mutex::Lock lock(m_q_mutex);
         if(m_tasks.empty()) {
             m_wait_cond.wait(m_q_mutex);
         }
@@ -105,7 +105,7 @@ void Worker<T>::main()
 template <class T>
 void Worker<T>::schedule(const T & _op)
 {
-    Glib::Threads::Mutex::Lock lock(m_q_mutex);
+    Glib::Mutex::Lock lock(m_q_mutex);
     m_tasks.add(_op);
     m_wait_cond.broadcast();
 }
@@ -113,7 +113,7 @@ void Worker<T>::schedule(const T & _op)
 template <class T>
 void Worker<T>::clear()
 {
-    Glib::Threads::Mutex::Lock lock(m_q_mutex);
+    Glib::Mutex::Lock lock(m_q_mutex);
     m_tasks.clear();
 }
 

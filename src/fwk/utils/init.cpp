@@ -18,7 +18,7 @@
  */
 
 
-#include <glibmm/threads.h>
+#include <glibmm/thread.h>
 #include <giomm/init.h>
 
 
@@ -31,6 +31,9 @@ namespace utils {
 void init()
 {
   Gio::init();
+  if(!Glib::thread_supported()) {
+    Glib::thread_init();
+  }
 }
 
 

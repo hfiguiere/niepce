@@ -23,7 +23,7 @@
 #define __FWK_UTILS_MTQUEUE_H__
 
 #include <deque>
-#include <glibmm/threads.h>
+#include <glibmm/thread.h>
 
 namespace fwk {
 
@@ -36,7 +36,7 @@ namespace fwk {
 	class MtQueue
 	{
 	public:
-	  typedef Glib::Threads::RecMutex mutex_t;
+		typedef Glib::RecMutex mutex_t;
 		typedef T              value_type;
 
 		MtQueue();
