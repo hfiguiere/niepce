@@ -30,6 +30,7 @@
 
 #include "fwk/base/propertybag.hpp"
 #include "engine/db/library.hpp"
+#include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
 #include "niepce/ui/imoduleshell.hpp"
 #include "niepce/ui/metadatapanecontroller.hpp"
@@ -84,7 +85,7 @@ private:
   libraryclient::UIDataProvider *m_uidataprovider;
 
   // library split view
-  Gtk::IconView                m_librarylistview;
+  fwk::ImageGridView*          m_librarylistview;
   Gtk::ScrolledWindow          m_scrollview;
   MetaDataPaneController::Ptr  m_metapanecontroller;
   Gtk::HPaned                  m_lib_splitview;

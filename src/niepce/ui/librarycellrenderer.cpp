@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,6 @@
 
 
 #include <stdint.h>
-
-#include <gdkmm.h>
-#include <gtkmm.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
@@ -294,16 +291,19 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 
 
 bool
-LibraryCellRenderer::on_click(GdkEventButton *event, const GdkRectangle & cell_area)
+LibraryCellRenderer::activate_vfunc(GdkEvent *event, Gtk::Widget & ,
+                                    const Glib::ustring &, const Gdk::Rectangle& /*bg*/,
+                                    const Gdk::Rectangle & cell_area, Gtk::CellRendererState)
 {
-    DBG_OUT("On click. Event type of %d", event->type);
-    if(event->type == GDK_BUTTON_PRESS) {
-        GdkEventButton *bevt = (GdkEventButton*)event;
+    DBG_OUT("On click. Event %p", event);
+    if(this->ClickableCellRenderer::is_hit()) {
+
+        this->ClickableCellRenderer::reset_hit();
 
         // hit test with the rating region
         unsigned int xpad = Gtk::CellRenderer::property_xpad();
         unsigned int ypad = Gtk::CellRenderer::property_ypad();
-        GdkRectangle r = cell_area;
+        GdkRectangle r = *cell_area.gobj();
         r.x += xpad;
         r.y += ypad;
 
@@ -315,8 +315,8 @@ LibraryCellRenderer::on_click(GdkEventButton *event, const GdkRectangle & cell_a
         rect.y = r.y + r.height - rh - CELL_PADDING;
         rect.width = rw;
         rect.height = rh;
-        x = bevt->x;
-        y = bevt->y;
+        x = this->ClickableCellRenderer::x();
+        y = this->ClickableCellRenderer::y();
         DBG_OUT("r(%d, %d, %d, %d) p(%f, %f)", rect.x, rect.y,
                 rect.width, rect.height, x, y);
         bool hit = (rect.x <= x) && (rect.x + rect.width >= x) 

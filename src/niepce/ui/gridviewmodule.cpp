@@ -41,6 +41,8 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
   : m_shell(shell)
   , m_model(store)
   , m_uidataprovider(NULL)
+  , m_librarylistview(NULL)
+  , m_dock(NULL)
 {
     m_uidataprovider = m_shell.getLibraryClient()->getDataProvider();
     DBG_ASSERT(m_uidataprovider, "provider is NULL");
@@ -100,27 +102,29 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     return m_widget;
   }
   m_widget = &m_lib_splitview;
-  m_librarylistview.set_model(m_model);
-  m_librarylistview.set_selection_mode(Gtk::SELECTION_SINGLE);
-  m_librarylistview.property_row_spacing() = 0;
-  m_librarylistview.property_column_spacing() = 0;
-  m_librarylistview.property_spacing() = 0;
-  m_librarylistview.property_margin() = 0;
+  m_librarylistview = Gtk::manage(new fwk::ImageGridView());
+  m_librarylistview->set_model(m_model);
+  m_librarylistview->set_selection_mode(Gtk::SELECTION_SINGLE);
+  m_librarylistview->property_row_spacing() = 0;
+  m_librarylistview->property_column_spacing() = 0;
+  m_librarylistview->property_spacing() = 0;
+  m_librarylistview->property_margin() = 0;
 
-  m_librarylistview.signal_button_press_event()
+  m_librarylistview->signal_button_press_event()
       .connect(sigc::mem_fun(*this,  &GridViewModule::on_librarylistview_click));
 
   // the main cell
   LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer(m_uidataprovider));
   libcell->signal_rating_changed.connect(sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
 
-  m_librarylistview.pack_start(*libcell, FALSE);
-  m_librarylistview.add_attribute(*libcell, "pixbuf", 
+  Glib::RefPtr<Gtk::CellArea> cell_area = m_librarylistview->property_cell_area();
+  cell_area->pack_start(*libcell, FALSE);
+  cell_area->add_attribute(*libcell, "pixbuf", 
                                   m_model->columns().m_pix.index());
-  m_librarylistview.add_attribute(*libcell, "libfile", 
+  cell_area->add_attribute(*libcell, "libfile", 
                                   m_model->columns().m_libfile.index());
 
-  m_scrollview.add(m_librarylistview);
+  m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   m_lib_splitview.pack1(m_scrollview);
   m_dock = new fwk::Dock();
@@ -150,7 +154,7 @@ void GridViewModule::set_active(bool /*active*/)
 
 Gtk::IconView * GridViewModule::image_list()
 { 
-    return & m_librarylistview; 
+    return m_librarylistview; 
 }
 
 eng::library_id_t GridViewModule::get_selected()
@@ -158,7 +162,7 @@ eng::library_id_t GridViewModule::get_selected()
 	eng::library_id_t id = 0;
     Glib::RefPtr<Gtk::TreeSelection> selection;
 
-    std::vector<Gtk::TreePath> paths = m_librarylistview.get_selected_items();
+    std::vector<Gtk::TreePath> paths = m_librarylistview->get_selected_items();
     if(!paths.empty()) {
         Gtk::TreePath path(*(paths.begin()));
         DBG_OUT("found path %s", path.to_string().c_str());
@@ -180,10 +184,10 @@ void GridViewModule::select_image(eng::library_id_t id)
     DBG_OUT("library select %Ld", id);
     Gtk::TreePath path = m_model->get_path_from_id(id);
     if(path) {
-      m_librarylistview.select_path(path);
+      m_librarylistview->select_path(path);
     }
     else {
-      m_librarylistview.unselect_all();
+      m_librarylistview->unselect_all();
     }
 }
 
@@ -210,8 +214,8 @@ bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
     Gtk::TreeModel::Path path;
     Gtk::CellRenderer * renderer = NULL;
     DBG_OUT("click (%f, %f)", x, y);
-    m_librarylistview.convert_widget_to_bin_window_coords(x, y, bx, by);
-    if(m_librarylistview.get_item_at_pos(bx, by, path, renderer)){
+    m_librarylistview->convert_widget_to_bin_window_coords(x, y, bx, by);
+    if(m_librarylistview->get_item_at_pos(bx, by, path, renderer)){
         DBG_OUT("found an item");
 
         return true;

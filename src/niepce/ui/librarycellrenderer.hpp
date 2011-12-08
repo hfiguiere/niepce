@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 #include "engine/db/libfile.hpp"
 #include "engine/db/label.hpp"
+#include "fwk/toolkit/widgets/imagegridview.hpp"
 
 namespace libraryclient {
 class UIDataProvider;
@@ -37,6 +38,7 @@ namespace ui {
 
 class LibraryCellRenderer
 	: public Gtk::CellRendererPixbuf
+        , public fwk::ClickableCellRenderer
 {
 public:
     LibraryCellRenderer(libraryclient::UIDataProvider *provider);
@@ -50,8 +52,9 @@ public:
                                const Gdk::Rectangle& cell_area, 
                                Gtk::CellRendererState flags);
     /** call when the cell is clicked */
-    bool on_click(GdkEventButton *event, const GdkRectangle & cell_area);
-
+    virtual bool activate_vfunc(GdkEvent* event, Gtk::Widget& widget,const Glib::ustring & path,
+                                const Gdk::Rectangle& background_area, 
+                                const Gdk::Rectangle& cell_area, Gtk::CellRendererState flags);
     void set_size(int _size)
         { m_size = _size; }
     int size() const
