@@ -17,24 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #include "fwk/base/debug.hpp"
 
 #include "notabtextview.hpp"
 
-
 namespace fwk {
 
-bool NoTabTextView::on_key_press_event(GdkEventKey *event)
+NoTabTextView::NoTabTextView()
 {
-    if(event->keyval == GDK_KEY_Tab) {
-        get_parent()->child_focus(Gtk::DIR_TAB_FORWARD);
-        return true;
-    }
-    return Gtk::TextView::on_key_press_event(event);
+    set_accepts_tab(false);
 }
-
 
 }
 /*

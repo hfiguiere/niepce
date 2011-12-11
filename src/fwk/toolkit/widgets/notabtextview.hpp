@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef __FWK_WIDGET_NOTABTEXTVIEW_H__
 #define __FWK_WIDGET_NOTABTEXTVIEW_H__
 
@@ -29,7 +28,8 @@ namespace fwk {
 class NoTabTextView
     : public Gtk::TextView
 {
-    virtual bool on_key_press_event(GdkEventKey *event);
+public:
+    NoTabTextView();
 };
 
 }

@@ -177,6 +177,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             }
             else {
                 Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
+                e->set_has_frame(false); // TODO make that a custom widget
                 e->signal_focus_out_event().connect(
                     sigc::bind(
                         sigc::mem_fun(*this, 
