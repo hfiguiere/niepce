@@ -157,7 +157,7 @@ Gtk::IconView * GridViewModule::image_list()
 
 eng::library_id_t GridViewModule::get_selected()
 {
-	eng::library_id_t id = 0;
+    eng::library_id_t id = 0;
     Glib::RefPtr<Gtk::TreeSelection> selection;
 
     Gtk::IconView::ArrayHandle_TreePaths paths = m_librarylistview.get_selected_items();
@@ -182,10 +182,11 @@ void GridViewModule::select_image(eng::library_id_t id)
     DBG_OUT("library select %Ld", id);
     Gtk::TreePath path = m_model->get_path_from_id(id);
     if(path) {
-      m_librarylistview.select_path(path);
+        m_librarylistview.scroll_to_path(path, false, 0, 0);
+        m_librarylistview.select_path(path);
     }
     else {
-      m_librarylistview.unselect_all();
+        m_librarylistview.unselect_all();
     }
 }
 

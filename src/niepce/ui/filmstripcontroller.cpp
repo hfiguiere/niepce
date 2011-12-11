@@ -58,7 +58,7 @@ Gtk::IconView * FilmStripController::image_list()
 
 eng::library_id_t FilmStripController::get_selected()
 {
-	eng::library_id_t id = 0;
+    eng::library_id_t id = 0;
     DBG_OUT("get selected in filmstrip");
     Gtk::IconView::ArrayHandle_TreePaths paths = m_thumbview->get_selected_items();
     if(!paths.empty()) {
@@ -81,6 +81,7 @@ void FilmStripController::select_image(eng::library_id_t id)
     DBG_OUT("filmstrip select %Ld", id);
     Gtk::TreePath path = m_store->get_path_from_id(id);
     if(path) {
+        m_thumbview->scroll_to_path(path, false, 0, 0);
         m_thumbview->select_path(path);
     }
     else {
