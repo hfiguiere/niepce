@@ -83,6 +83,7 @@ void ModuleShellWidget::set_current_page(int idx, Gtk::ToggleButton * btn)
         m_buttons[m_currentpage].second.unblock();
     }
     btn->set_active(true);
+    signal_deactivated(m_currentpage);
     m_currentpage = idx;
     signal_activated(idx);
 }

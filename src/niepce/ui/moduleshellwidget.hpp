@@ -44,6 +44,7 @@ public:
     void activate_page(int);
 
     sigc::signal<void, int> signal_activated;
+    sigc::signal<void, int> signal_deactivated;
 protected:
     
     void set_current_page(int, Gtk::ToggleButton *);

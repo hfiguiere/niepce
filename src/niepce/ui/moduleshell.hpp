@@ -81,6 +81,7 @@ protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & label);
     virtual void on_ready();
+    void on_module_deactivated(int idx);
     void on_module_activated(int idx);
 private:
     libraryclient::LibraryClient::Ptr m_libraryclient;

@@ -204,6 +204,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     add_library_module(m_darkroom, _("Darkroom"));
 
     m_shell.signal_activated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_activated));
+    m_shell.signal_deactivated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_deactivated));
 
     // TODO PrintModuleController
     // add_library_module(, _("Print"));
@@ -253,6 +254,12 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
         m_darkroom->set_image(libfile);
         m_shell.activate_page(1);
     }
+}
+
+void ModuleShell::on_module_deactivated(int idx)
+{
+    DBG_ASSERT(idx < m_modules.size(), "wrong module index");
+    m_modules[idx]->set_active(false);
 }
 
 void ModuleShell::on_module_activated(int idx)
