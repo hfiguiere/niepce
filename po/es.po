@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-17 02:23+0000\n"
-"PO-Revision-Date: 2011-12-05 18:02+0100\n"
+"POT-Creation-Date: 2011-12-05 17:15+0000\n"
+"PO-Revision-Date: 2011-12-23 17:24+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "_Sin marcar"
 
 #: ../src/niepce/ui/moduleshell.cpp:144
 msgid "Flag as _Pick"
-msgstr ""
+msgstr "Marcar como _aceptada"
 
 #: ../src/niepce/ui/moduleshell.cpp:195
 msgid "Library"
@@ -248,13 +248,12 @@ msgstr "Fecha:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Headline:"
-msgstr ""
+msgstr "Encabezado:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:58
-#, fuzzy
 #| msgid "Rating:"
 msgid "Caption:"
-msgstr "Puntuación:"
+msgstr "Descripción:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Rating:"
@@ -404,20 +403,20 @@ msgstr "Establecer propiedades"
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:234
+#: ../src/niepce/ui/workspacecontroller.cpp:235
 msgid "Pictures"
 msgstr "Imágenes"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:238
+#: ../src/niepce/ui/workspacecontroller.cpp:239
 msgid "Projects"
 msgstr "Proyectos"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:242
+#: ../src/niepce/ui/workspacecontroller.cpp:243
 msgid "Keywords"
 msgstr "Palabras clave"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:255
+#: ../src/niepce/ui/workspacecontroller.cpp:256
 msgid "_Workspace"
 msgstr "_Área de trabajo "
 
