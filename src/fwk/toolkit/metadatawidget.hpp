@@ -61,6 +61,7 @@ struct MetaDataSectionFormat {
 
 
 class XmpMeta;
+class TokenTextView;
 
 class MetaDataWidget 
 	: public fwk::ToolboxItemWidget
@@ -77,6 +78,8 @@ public:
 protected:
     bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
     bool on_text_changed(GdkEventFocus*, Glib::RefPtr<Gtk::TextBuffer> b, fwk::PropertyIndex prop);
+    bool on_string_array_changed(GdkEventFocus*, fwk::TokenTextView * ttv,
+                                 fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);

@@ -34,6 +34,7 @@
 #include "fwk/utils/stringutils.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
 #include "fwk/toolkit/widgets/notabtextview.hpp"
+#include "fwk/toolkit/widgets/tokentextview.hpp"
 
 // remove
 #include "engine/db/properties.hpp"
@@ -87,8 +88,20 @@ void MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt
             w = r;
             break;
         }
-        case META_DT_TEXT:
+        case META_DT_STRING_ARRAY:
         {
+            fwk::TokenTextView * ttv = Gtk::manage(new fwk::TokenTextView());
+            if(!current->readonly) {
+                ttv->signal_focus_out_event().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_string_array_changed),
+                        ttv, current->id));
+            }
+            w = ttv;
+            break;
+        }
+        case META_DT_TEXT:
             if(current->readonly) {
                 Gtk::Label * l = Gtk::manage(new Gtk::Label());
                 l->set_alignment(0.0f, 0.5f);
@@ -106,7 +119,6 @@ void MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt
                 w = e;
             }
             break;
-        }
         default:
             if(current->readonly) {
                 Gtk::Label * l = Gtk::manage(new Gtk::Label());
@@ -152,9 +164,15 @@ void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> 
         e->set_text("");
         return;
     }
+    fwk::TokenTextView *ttv = dynamic_cast<fwk::TokenTextView*>(p.second);
+    if(ttv) {
+        ttv->set_tokens(fwk::TokenTextView::Tokens());
+        return;
+    }
     Gtk::TextView * tv = dynamic_cast<Gtk::TextView*>(p.second);
     if(tv) {
         tv->get_buffer()->set_text("");
+        return;
     }
     fwk::RatingLabel * rl = dynamic_cast<fwk::RatingLabel*>(p.second);
     if(rl) {
@@ -229,6 +247,18 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             DBG_OUT("conversion of '%u' to int failed", current->id);
         }
         break;
+    case META_DT_STRING_ARRAY:
+        try {
+            AutoFlag flag(m_update);
+            fwk::StringArray tokens = boost::get<fwk::StringArray>(value);
+            
+            static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
+        }
+        catch(...) {
+            DBG_OUT("conversion of '%u' from %s to StringArray failed", current->id,
+                    value.type().name());
+        }
+        break;
     case META_DT_TEXT:
         try {
             AutoFlag flag(m_update);
@@ -279,6 +309,20 @@ bool MetaDataWidget::on_text_changed(GdkEventFocus*,
     }
     emit_metadata_changed(prop, 
                           fwk::PropertyValue(b->get_text()));
+    return true;
+}
+
+bool MetaDataWidget::on_string_array_changed(GdkEventFocus*, 
+                                             fwk::TokenTextView * ttv,
+                                             fwk::PropertyIndex prop)
+{
+    if(m_update) {
+        return true;
+    }
+    fwk::TokenTextView::Tokens tok;
+    ttv->get_tokens(tok);
+    emit_metadata_changed(prop, 
+                          fwk::PropertyValue(tok));
     return true;
 }
 

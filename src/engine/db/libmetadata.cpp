@@ -1,7 +1,7 @@
 /*
  * niepce - db/libmetadata.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ const PropsToXmpMap & props_to_xmp_map()
     return s_props_map;
 }
 
-bool LibMetadata::property_index_to_xmp(fwk::PropertyIndex index, const char * & ns, const char * & property)
+bool
+LibMetadata::property_index_to_xmp(fwk::PropertyIndex index, 
+                                   const char * & ns, const char * & property)
 {
     const PropsToXmpMap & propmap = props_to_xmp_map();
      PropsToXmpMap::const_iterator iter = propmap.find(index);
@@ -75,7 +77,8 @@ LibMetadata::LibMetadata(library_id_t _id)
 }
 
 
-bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value)
+bool LibMetadata::setMetaData(fwk::PropertyIndex meta, 
+                              const fwk::PropertyValue & value)
 {
     const char * ns = NULL;
     const char * property = NULL;
@@ -93,11 +96,25 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue 
             result = xmp_set_property(xmp(), ns, property, val.c_str(), 0);
             // FIXME we should know in advance it is localized.
             if(!result && (xmp_get_error() == XMPErr_BadXPath)) {
-                result = xmp_set_localized_text(xmp(), ns, property, "", "x-default", val.c_str(), 0);
+                result = xmp_set_localized_text(xmp(), ns, property, 
+                                                "", "x-default", 
+                                                val.c_str(), 0);
+            }
+        }
+        else if(value.type() == typeid(fwk::StringArray)) {
+            fwk::StringArray v = boost::get<fwk::StringArray>(value);
+            // TODO see if we can get that without deleting the whole property
+            /*result = */xmp_delete_property(xmp(), ns, property);
+            for(fwk::StringArray::const_iterator iter = v.begin(); 
+                iter != v.end(); ++iter) {
+                /*result = */xmp_append_array_item(xmp(), ns, property, 
+                                                   XMP_PROP_VALUE_IS_ARRAY,
+                                                   iter->c_str(), 0);
             }
         }
         if(!result) {
-            ERR_OUT("error setting property %s:%s %d", ns, property, xmp_get_error());
+            ERR_OUT("error setting property %s:%s %d", ns, property, 
+                    xmp_get_error());
         }
     }
     else {
@@ -107,7 +124,8 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue 
 }
 
 
-bool LibMetadata::getMetaData(fwk::PropertyIndex p, fwk::PropertyValue & value) const
+bool LibMetadata::getMetaData(fwk::PropertyIndex p, 
+                              fwk::PropertyValue & value) const
 {
     const PropsToXmpMap & propmap = props_to_xmp_map();
     PropsToXmpMap::const_iterator iter = propmap.find(p);
@@ -165,18 +183,17 @@ void LibMetadata::to_properties(const fwk::PropertySet & propset,
             xmp::ScopedPtr<XmpIteratorPtr> 
                 iter(xmp_iterator_new(xmp(), NS_DC,
                                       "subject", XMP_ITER_JUSTLEAFNODES));
-            std::vector<std::string> vec;
+            fwk::StringArray vec;
             while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                 vec.push_back(xmp_string_cstr(value));
             }
-            std::string v = fwk::join(vec, ", ");
             properties.set_value_for_property(NpIptcKeywordsProp, 
-                                              fwk::PropertyValue(v));
+                                              fwk::PropertyValue(vec));
             break;
         }
         default:
             if(getMetaData(*iter, propval)) {
-                properties.set_value_for_property(*iter, propval);                
+                properties.set_value_for_property(*iter, propval);
             }
             else {
                 DBG_OUT("unknown prop %u", *iter);

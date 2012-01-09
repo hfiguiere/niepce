@@ -22,6 +22,9 @@
 #ifndef __FWK_PROPERTYBAG_HPP_
 #define __FWK_PROPERTYBAG_HPP_
 
+#include <stdint.h>
+#include <string>
+#include <vector>
 #include <map>
 #include <set>
 #include <tr1/memory>
@@ -30,7 +33,8 @@
 namespace fwk {
 
 typedef uint32_t PropertyIndex;
-typedef boost::variant<int, std::string> PropertyValue;
+typedef std::vector<std::string> StringArray;
+typedef boost::variant<int, std::string, StringArray> PropertyValue;
 
 typedef std::set<PropertyIndex> PropertySet;
 
