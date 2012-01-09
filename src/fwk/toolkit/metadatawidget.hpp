@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ protected:
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);
+    void create_widgets_for_format(const MetaDataSectionFormat * fmt);
     void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValue & value);
 
     Gtk::Table    m_table;

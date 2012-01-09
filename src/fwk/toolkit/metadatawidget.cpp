@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2011 Hubert Figuiere
+ * Copyright (C) 2008-2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,87 @@ MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
 void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
 {
     m_fmt = fmt;
+    create_widgets_for_format(fmt);
+}
+
+void MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
+{
+    Gtk::Widget *w = NULL;
+    const MetaDataFormat * current = m_fmt->formats;
+    int n_row = 0;
+
+    while(current && current->label) {
+        Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
+                                             Glib::ustring("<b>") 
+                                             + current->label + "</b>"));
+        labelw->set_alignment(0.0f, 0.5f);
+        labelw->set_use_markup(true);
+    
+        switch(current->type)
+        {
+        case META_DT_STAR_RATING:
+        {
+            fwk::RatingLabel * r = Gtk::manage(new fwk::RatingLabel(0, !current->readonly));
+            if(!current->readonly) {
+                r->signal_changed.connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_int_changed), 
+                        current->id));
+            }
+            w = r;
+            break;
+        }
+        case META_DT_TEXT:
+        {
+            if(current->readonly) {
+                Gtk::Label * l = Gtk::manage(new Gtk::Label());
+                l->set_alignment(0.0f, 0.5f);
+                w = l;
+            }
+            else {
+                Gtk::TextView * e = Gtk::manage(new NoTabTextView());
+                e->set_editable(true);
+                e->set_wrap_mode(Gtk::WRAP_WORD);
+                e->signal_focus_out_event().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_text_changed),
+                        e->get_buffer(), current->id));
+                w = e;
+            }
+            break;
+        }
+        default:
+            if(current->readonly) {
+                Gtk::Label * l = Gtk::manage(new Gtk::Label());
+                l->set_alignment(0.0f, 0.5f);
+                w = l;
+            }
+            else {
+                Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
+                e->set_has_frame(false); // TODO make that a custom widget
+                e->signal_focus_out_event().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, 
+                                      &MetaDataWidget::on_str_changed),
+                        e, current->id));
+                w = e;
+            }
+            break;
+        }
+    
+        m_table.resize(n_row + 1, 2);
+        m_table.attach(*labelw, 0, 1, n_row, n_row+1, 
+                       Gtk::FILL, Gtk::SHRINK, 4, 0);
+        m_table.attach(*w, 1, 2, n_row, n_row+1, 
+                       Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK, 4, 0);
+        m_data_map.insert(std::make_pair(current->id, w));
+
+        current++;
+        n_row++;
+    }
+    m_table.show_all();
 }
 
 void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
@@ -117,90 +198,17 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
                               const PropertyValue & value)
 {
     Gtk::Widget *w = NULL;
-    int n_row;
     std::map<PropertyIndex, Gtk::Widget *>::iterator iter 
-        = m_data_map.end();
-    if(m_data_map.empty()) {
-        n_row = 0;
-    }
-    else {
-        iter = m_data_map.find(current->id);
-        n_row = m_table.property_n_rows();
-    }
+        = m_data_map.find(current->id);
     if(iter == m_data_map.end()) {
-        Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
-                                             Glib::ustring("<b>") 
-                                             + current->label + "</b>"));
-        labelw->set_alignment(0.0f, 0.5f);
-        labelw->set_use_markup(true);
-
-        switch(current->type)
-        {
-        case META_DT_STAR_RATING:
-        {
-            fwk::RatingLabel * r = Gtk::manage(new fwk::RatingLabel(0, !current->readonly));
-            if(!current->readonly) {
-                r->signal_changed.connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_int_changed), 
-                        current->id));
-            }
-            w = r;
-            break;
-        }
-        case META_DT_TEXT:
-        {
-            if(current->readonly) {
-                Gtk::Label * l = Gtk::manage(new Gtk::Label());
-                l->set_alignment(0.0f, 0.5f);
-                w = l;
-            }
-            else {
-                Gtk::TextView * e = Gtk::manage(new NoTabTextView());
-                e->set_editable(true);
-                e->set_wrap_mode(Gtk::WRAP_WORD);
-                e->signal_focus_out_event().connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_text_changed),
-                        e->get_buffer(), current->id));
-                w = e;
-            }
-            break;
-        }
-        default:
-            if(current->readonly) {
-                Gtk::Label * l = Gtk::manage(new Gtk::Label());
-                l->set_alignment(0.0f, 0.5f);
-                w = l;
-            }
-            else {
-                Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
-                e->set_has_frame(false); // TODO make that a custom widget
-                e->signal_focus_out_event().connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_str_changed),
-                        e, current->id));
-                w = e;
-            }
-            break;
-        }
-
-        m_table.resize(n_row + 1, 2);
-        m_table.attach(*labelw, 0, 1, n_row, n_row+1, 
-                       Gtk::FILL, Gtk::SHRINK, 4, 0);
-        m_table.attach(*w, 1, 2, n_row, n_row+1, 
-                       Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK, 4, 0);
-        m_data_map.insert(std::make_pair(current->id, w));
+        ERR_OUT("no widget for property");
+        return;
     }
-    else {
-        w = static_cast<Gtk::Label*>(iter->second);
-    }
+
+    w = static_cast<Gtk::Label*>(iter->second);
+
     switch(current->type) {
     case META_DT_FRAC:
-    {
         try {
             double decimal = fwk::fraction_to_decimal(boost::get<std::string>(value));
             std::string frac = boost::lexical_cast<std::string>(decimal);
@@ -211,9 +219,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             DBG_OUT("conversion of '%u' to frac failed", current->id);
         }
         break;
-    }
     case META_DT_STAR_RATING:
-    {
         try {
             int rating = boost::get<int>(value);
             AutoFlag flag(m_update);
@@ -223,9 +229,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             DBG_OUT("conversion of '%u' to int failed", current->id);
         }
         break;
-    }
     case META_DT_TEXT:
-    {
         try {
             AutoFlag flag(m_update);
             if(current->readonly) {
@@ -239,7 +243,6 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
             DBG_OUT("conversion of '%u' to int failed", current->id);
         }
         break;
-    }
     default:
         try {
             AutoFlag flag(m_update);
@@ -255,7 +258,6 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         }
         break;
     }
-    m_table.show_all();
 }
 
 bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e, 
