@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/debug.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,12 @@
 #define NDEBUG _SAVENDEBUG
 #endif
 
-
 #include "debug.hpp"
 
-
+extern "C" void dbg_assert_raised()
+{
+    // set a breakpoint here.
+}
 
 namespace fwk {
 
@@ -72,7 +74,7 @@ namespace fwk {
 	{
             if(!condvalue) {
                 _print("ASSERT: ", "[%s] %s:%d %s", func, cond, filen, linen, reason);
-                
+                dbg_assert_raised();
             }
 	}
 
