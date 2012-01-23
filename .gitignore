@@ -35,6 +35,7 @@ m4/lt~obsolete.m4
 po/Makefile.in.in
 src/fwk/base/testmoniker
 src/fwk/base/testgeometry
+src/fwk/base/testfractions
 src/fwk/utils/test_db
 src/fwk/utils/test_db2
 src/fwk/utils/test_db3
