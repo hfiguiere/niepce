@@ -54,7 +54,7 @@ LibMetadata::property_index_to_xmp(fwk::PropertyIndex index,
                                    const char * & ns, const char * & property)
 {
     const PropsToXmpMap & propmap = props_to_xmp_map();
-     PropsToXmpMap::const_iterator iter = propmap.find(index);
+    PropsToXmpMap::const_iterator iter = propmap.find(index);
     if(iter == propmap.end()) {
         // not found
         return false;
@@ -104,13 +104,20 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta,
         else if(value.type() == typeid(fwk::StringArray)) {
             fwk::StringArray v = boost::get<fwk::StringArray>(value);
             // TODO see if we can get that without deleting the whole property
-            /*result = */xmp_delete_property(xmp(), ns, property);
+            result = xmp_delete_property(xmp(), ns, property);
             for(fwk::StringArray::const_iterator iter = v.begin(); 
                 iter != v.end(); ++iter) {
-                /*result = */xmp_append_array_item(xmp(), ns, property, 
-                                                   XMP_PROP_VALUE_IS_ARRAY,
-                                                   iter->c_str(), 0);
+                result = xmp_append_array_item(xmp(), ns, property, 
+                                               XMP_PROP_VALUE_IS_ARRAY,
+                                               iter->c_str(), 0);
             }
+        }
+        else if(value.type() == typeid(fwk::Date)) {
+            fwk::Date d = boost::get<fwk::Date>(value);
+
+            result = xmp_set_property_date(xmp(), ns, property,
+                                           &d.xmp_date(), 0);
+
         }
         if(!result) {
             ERR_OUT("error setting property %s:%s %d", ns, property, 
@@ -165,18 +172,23 @@ void LibMetadata::to_properties(const fwk::PropertySet & propset,
     xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
     fwk::PropertyValue propval;
     for(iter = propset.begin(); iter != propset.end(); ++iter) {
-        switch(*iter) {
+        fwk::PropertySet::key_type prop_id = *iter;
+        switch(prop_id) {
         case NpXmpRatingProp:
-            properties.set_value_for_property(NpXmpRatingProp,
+            properties.set_value_for_property(prop_id,
                                               fwk::PropertyValue(rating()));
             break;
         case NpXmpLabelProp:
-            properties.set_value_for_property(NpXmpLabelProp,
+            properties.set_value_for_property(prop_id,
                                               fwk::PropertyValue(label()));
             break;
         case NpTiffOrientationProp:
-            properties.set_value_for_property(NpTiffOrientationProp, 
+            properties.set_value_for_property(prop_id, 
                                               fwk::PropertyValue(orientation()));
+            break;
+        case NpExifDateTimeOriginalProp:
+            properties.set_value_for_property(prop_id,
+                                              fwk::PropertyValue(creation_date()));
             break;
         case NpIptcKeywordsProp:
         {
@@ -187,16 +199,16 @@ void LibMetadata::to_properties(const fwk::PropertySet & propset,
             while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                 vec.push_back(xmp_string_cstr(value));
             }
-            properties.set_value_for_property(NpIptcKeywordsProp, 
+            properties.set_value_for_property(prop_id,
                                               fwk::PropertyValue(vec));
             break;
         }
         default:
-            if(getMetaData(*iter, propval)) {
-                properties.set_value_for_property(*iter, propval);
+            if(getMetaData(prop_id, propval)) {
+                properties.set_value_for_property(prop_id, propval);
             }
             else {
-                DBG_OUT("unknown prop %u", *iter);
+                DBG_OUT("unknown prop %u", prop_id);
             }
             break;
         }

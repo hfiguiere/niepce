@@ -4,7 +4,7 @@
 /*
  * niepce - utils/exempi.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2008,2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,8 @@ extern const char * UFRAW_INTEROP_NS_PREFIX;
 
 namespace fwk {
 
+class Date;
+
 class ExempiManager
     : public boost::noncopyable
 {
@@ -124,7 +126,7 @@ public:
     /** return the rating, -1 is not found (not set) */
     int32_t rating() const;
     int32_t flag() const;
-    time_t  creation_date() const;
+    fwk::Date  creation_date() const;
     std::string creation_date_str() const;
     const std::vector< std::string > & keywords() const;
 private:

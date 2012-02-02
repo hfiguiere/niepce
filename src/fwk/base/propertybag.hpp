@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef __FWK_PROPERTYBAG_HPP_
 #define __FWK_PROPERTYBAG_HPP_
 
@@ -30,11 +28,13 @@
 #include <tr1/memory>
 #include <boost/variant.hpp>
 
+#include "fwk/base/date.hpp"
+
 namespace fwk {
 
 typedef uint32_t PropertyIndex;
 typedef std::vector<std::string> StringArray;
-typedef boost::variant<int, std::string, StringArray> PropertyValue;
+typedef boost::variant<int, std::string, StringArray, Date> PropertyValue;
 
 typedef std::set<PropertyIndex> PropertySet;
 

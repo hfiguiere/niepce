@@ -20,7 +20,6 @@
 #ifndef __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
 #define __NIEPCE_FRAMEWORK_META_DATA_WIDGET_H__
 
-
 #include <map>
 #include <string>
 
@@ -59,7 +58,6 @@ struct MetaDataSectionFormat {
     const MetaDataFormat * formats;
 };
 
-
 class XmpMeta;
 class TokenTextView;
 
@@ -84,6 +82,24 @@ protected:
 private:
     void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);
     void create_widgets_for_format(const MetaDataSectionFormat * fmt);
+
+    // the widget factory
+    Gtk::Widget* create_star_rating_widget(bool readonly, uint32_t id);
+    Gtk::Widget* create_string_array_widget(bool readonly, uint32_t id);
+    Gtk::Widget* create_text_widget(bool readonly, uint32_t id);
+    Gtk::Widget* create_string_widget(bool readonly, uint32_t id);
+    Gtk::Widget* create_date_widget(bool readonly, uint32_t id);
+
+    // set data
+    bool set_fraction_data(Gtk::Widget* w, const PropertyValue & value);
+    bool set_star_rating_data(Gtk::Widget* w, const PropertyValue & value);
+    bool set_string_array_data(Gtk::Widget* w, const PropertyValue & value);
+    bool set_text_data(Gtk::Widget* w, bool readonly, 
+                       const PropertyValue & value);
+    bool set_string_data(Gtk::Widget* w, bool readonly,
+                         const PropertyValue & value);
+    bool set_date_data(Gtk::Widget* w, const PropertyValue & value);
+
     void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValue & value);
 
     Gtk::Table    m_table;

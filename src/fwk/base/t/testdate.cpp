@@ -1,5 +1,5 @@
 /*
- * niepce - base/t/testfractions.cpp
+ * niepce - base/t/testdate.cpp
  *
  * Copyright (C) 2012 Hubert Figuiere
  *
@@ -16,20 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/** @brief unit test for fractions */
+/** @brief unit test for date */
 
 #include <boost/test/minimal.hpp>
 
 #include <stdlib.h>
 #include <vector>
 #include <boost/rational.hpp>
-#include "fwk/base/fractions.hpp"
+
+#include "fwk/base/date.hpp"
 
 int test_main( int, char *[] )             // note the name!
 {
-	double f = fwk::fraction_to_decimal("1/4");
-	boost::rational<int> r(1,4);
-	BOOST_CHECK(f == boost::rational_cast<double>(r));
-	return 0;
+    fwk::Date d(0);
+    
+    XmpDateTime xmp_dt = d.xmp_date();
+    BOOST_CHECK(xmp_dt.year == 1970);
+    BOOST_CHECK(xmp_dt.month == 1);
+    BOOST_CHECK(xmp_dt.day == 1);
+    
+    printf("%s\n", d.to_string().c_str());
+    
+    return 0;
 }
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/

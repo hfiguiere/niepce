@@ -284,7 +284,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
         rating = meta.rating();
         label = meta.label();
         flag = meta.flag();
-        time_t creation_date = meta.creation_date();
+        time_t creation_date = fwk::make_time_value(meta.creation_date());
         if(creation_date == -1) {
             creation_date = 0;
         }
@@ -896,6 +896,9 @@ bool Library::getXmpIdsInQueue(std::vector<library_id_t> & ids)
 
 bool Library::rewriteXmpForId(library_id_t id)
 {
+    /// DISABLED
+#if 0
+
     SQLStatement del(boost::format("DELETE FROM xmp_update_queue "
                                    " WHERE id='%1%';") % id);
     SQLStatement getxmp(boost::format("SELECT xmp, main_file, xmp_file FROM files "
@@ -952,7 +955,8 @@ bool Library::rewriteXmpForId(library_id_t id)
     {
         DBG_OUT("db exception %s", e.what());
         return false;
-    }    
+    }
+#endif
     return true;
 }
 

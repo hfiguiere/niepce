@@ -1,14 +1,19 @@
 
 INCLUDES = -I$(top_srcdir)/src \
 	@BOOST_CPPFLAGS@ \
+	@EXEMPI_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libfwkbase.a
 
 
-TESTS = testmoniker testgeometry
+TESTS = testmoniker testgeometry testfractions testdate
 
-check_PROGRAMS = testmoniker testgeometry
+check_PROGRAMS = testmoniker testgeometry testfractions testdate
+
+testdate_SOURCES = t/testdate.cpp
+testdate_LDADD = libfwkbase.a \
+	@LIBGLIBMM_LIBS@
 
 testmoniker_SOURCES = t/testmoniker.cpp
 testmoniker_LDADD = libfwkbase.a \
@@ -18,10 +23,14 @@ testgeometry_SOURCES = t/testgeometry.cpp
 testgeometry_LDADD = libfwkbase.a \
 	@LIBGLIBMM_LIBS@
 
+testfractions_SOURCES = t/testfractions.cpp
+testfractions_LDADD = libfwkbase.a \
+	@LIBGLIBMM_LIBS@
 
 
 libfwkbase_a_SOURCES = color.hpp color.cpp \
 	autoflag.hpp \
+	date.hpp date.cpp \
 	debug.hpp debug.cpp \
 	fractions.hpp fractions.cpp \
 	moniker.hpp moniker.cpp \

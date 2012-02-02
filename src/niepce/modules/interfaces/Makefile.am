@@ -1,6 +1,7 @@
 
 
 INCLUDES = -I$(top_srcdir)/src/ \
+	@EXEMPI_CFLAGS@ \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@
 

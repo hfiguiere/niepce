@@ -37,7 +37,7 @@
 #include "fwk/toolkit/widgets/tokentextview.hpp"
 
 // remove
-#include "engine/db/properties.hpp"
+//#include "engine/db/properties.hpp"
 
 #include "metadatawidget.hpp"
 
@@ -60,10 +60,85 @@ void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
     create_widgets_for_format(fmt);
 }
 
-void MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
+Gtk::Widget* 
+MetaDataWidget::create_star_rating_widget(bool readonly, uint32_t id)
+{
+    fwk::RatingLabel* r = Gtk::manage(new fwk::RatingLabel(0, !readonly));
+    if(!readonly) {
+        r->signal_changed.connect(
+            sigc::bind(
+                sigc::mem_fun(*this, 
+                              &MetaDataWidget::on_int_changed), 
+                id));
+    }
+    return r;
+}
+
+Gtk::Widget*
+MetaDataWidget::create_string_array_widget(bool readonly, uint32_t id)
+{
+    fwk::TokenTextView * ttv = Gtk::manage(new fwk::TokenTextView());
+    if(!readonly) {
+        ttv->signal_focus_out_event().connect(
+            sigc::bind(
+                sigc::mem_fun(*this, 
+                              &MetaDataWidget::on_string_array_changed),
+                ttv, id));
+    }
+    return ttv;
+}
+
+Gtk::Widget*
+MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
+{
+    if(readonly) {
+        Gtk::Label * l = Gtk::manage(new Gtk::Label());
+        l->set_alignment(0.0f, 0.5f);
+        return l;
+    }
+
+    Gtk::TextView * e = Gtk::manage(new NoTabTextView());
+    e->set_editable(true);
+    e->set_wrap_mode(Gtk::WRAP_WORD);
+    e->signal_focus_out_event().connect(
+        sigc::bind(
+            sigc::mem_fun(*this, 
+                          &MetaDataWidget::on_text_changed),
+            e->get_buffer(), id));
+    return e;
+}
+
+Gtk::Widget*
+MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
+{
+    if(readonly) {
+        Gtk::Label * l = Gtk::manage(new Gtk::Label());
+        l->set_alignment(0.0f, 0.5f);
+        return l;
+    }
+
+    Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
+    e->set_has_frame(false); // TODO make that a custom widget
+    e->signal_focus_out_event().connect(
+        sigc::bind(
+            sigc::mem_fun(*this, 
+                          &MetaDataWidget::on_str_changed),
+            e, id));
+    return e;
+}
+
+Gtk::Widget*
+MetaDataWidget::create_date_widget(bool /*readonly*/, uint32_t id)
+{
+    // for now a date widget is just like a string. Read only
+    return create_string_widget(true, id);
+}
+
+void 
+MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
 {
     Gtk::Widget *w = NULL;
-    const MetaDataFormat * current = m_fmt->formats;
+    const MetaDataFormat * current = fmt->formats;
     int n_row = 0;
 
     while(current && current->label) {
@@ -73,68 +148,21 @@ void MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt
         labelw->set_alignment(0.0f, 0.5f);
         labelw->set_use_markup(true);
     
-        switch(current->type)
-        {
+        switch(current->type) {
         case META_DT_STAR_RATING:
-        {
-            fwk::RatingLabel * r = Gtk::manage(new fwk::RatingLabel(0, !current->readonly));
-            if(!current->readonly) {
-                r->signal_changed.connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_int_changed), 
-                        current->id));
-            }
-            w = r;
+            w = create_star_rating_widget(current->readonly, current->id);
             break;
-        }
         case META_DT_STRING_ARRAY:
-        {
-            fwk::TokenTextView * ttv = Gtk::manage(new fwk::TokenTextView());
-            if(!current->readonly) {
-                ttv->signal_focus_out_event().connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_string_array_changed),
-                        ttv, current->id));
-            }
-            w = ttv;
+            w = create_string_array_widget(current->readonly, current->id);
             break;
-        }
         case META_DT_TEXT:
-            if(current->readonly) {
-                Gtk::Label * l = Gtk::manage(new Gtk::Label());
-                l->set_alignment(0.0f, 0.5f);
-                w = l;
-            }
-            else {
-                Gtk::TextView * e = Gtk::manage(new NoTabTextView());
-                e->set_editable(true);
-                e->set_wrap_mode(Gtk::WRAP_WORD);
-                e->signal_focus_out_event().connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_text_changed),
-                        e->get_buffer(), current->id));
-                w = e;
-            }
+            w = create_text_widget(current->readonly, current->id);
+            break;
+        case META_DT_DATE:
+            w = create_date_widget(current->readonly, current->id);
             break;
         default:
-            if(current->readonly) {
-                Gtk::Label * l = Gtk::manage(new Gtk::Label());
-                l->set_alignment(0.0f, 0.5f);
-                w = l;
-            }
-            else {
-                Gtk::Entry * e = Gtk::manage(new Gtk::Entry());
-                e->set_has_frame(false); // TODO make that a custom widget
-                e->signal_focus_out_event().connect(
-                    sigc::bind(
-                        sigc::mem_fun(*this, 
-                                      &MetaDataWidget::on_str_changed),
-                        e, current->id));
-                w = e;
-            }
+            w = create_string_widget(current->readonly, current->id);
             break;
         }
     
@@ -211,6 +239,99 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
     }
 }
 
+bool MetaDataWidget::set_fraction_data(Gtk::Widget* w, const PropertyValue & value)
+{
+    try {
+        const std::string& str_value = boost::get<std::string>(value);
+        DBG_OUT("set fraction %s", str_value.c_str());
+        double decimal = fwk::fraction_to_decimal(str_value);
+        std::string frac = boost::lexical_cast<std::string>(decimal);
+        AutoFlag flag(m_update);
+        static_cast<Gtk::Label*>(w)->set_text(frac);
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
+
+bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w, const PropertyValue & value)
+{
+    try {
+        int rating = boost::get<int>(value);
+        AutoFlag flag(m_update);
+        static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
+
+bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue & value)
+{
+    try {
+        AutoFlag flag(m_update);
+        fwk::StringArray tokens = boost::get<fwk::StringArray>(value);
+        
+        static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
+
+bool MetaDataWidget::set_text_data(Gtk::Widget* w, bool readonly,
+                                   const PropertyValue & value)
+{
+    try {
+        AutoFlag flag(m_update);
+        if(readonly) {
+            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+        }
+        else {
+            static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(boost::get<std::string>(value));
+        }
+    }
+    catch(...) {
+        return false;
+    }
+    return true;    
+}
+
+bool MetaDataWidget::set_string_data(Gtk::Widget* w, bool readonly,
+                                     const PropertyValue & value)
+{
+    try {
+        AutoFlag flag(m_update);
+        if(readonly) {
+            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+        }
+        else {
+            static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
+        }
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
+
+bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
+{
+    try {
+        AutoFlag flag(m_update);
+        fwk::Date date = boost::get<fwk::Date>(value);
+        static_cast<Gtk::Label*>(w)->set_text(date.to_string());
+
+        DBG_OUT("setting date data %s\n", date.to_string().c_str());
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
 
 void MetaDataWidget::add_data(const MetaDataFormat * current,
                               const PropertyValue & value)
@@ -227,65 +348,22 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
 
     switch(current->type) {
     case META_DT_FRAC:
-        try {
-            double decimal = fwk::fraction_to_decimal(boost::get<std::string>(value));
-            std::string frac = boost::lexical_cast<std::string>(decimal);
-            AutoFlag flag(m_update);
-            static_cast<Gtk::Label*>(w)->set_text(frac);
-        }
-        catch(...) {
-            DBG_OUT("conversion of '%u' to frac failed", current->id);
-        }
+        set_fraction_data(w, value);
         break;
     case META_DT_STAR_RATING:
-        try {
-            int rating = boost::get<int>(value);
-            AutoFlag flag(m_update);
-            static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
-        }
-        catch(...) {
-            DBG_OUT("conversion of '%u' to int failed", current->id);
-        }
+        set_star_rating_data(w, value);
         break;
     case META_DT_STRING_ARRAY:
-        try {
-            AutoFlag flag(m_update);
-            fwk::StringArray tokens = boost::get<fwk::StringArray>(value);
-            
-            static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
-        }
-        catch(...) {
-            DBG_OUT("conversion of '%u' from %s to StringArray failed", current->id,
-                    value.type().name());
-        }
+        set_string_array_data(w, value);
         break;
     case META_DT_TEXT:
-        try {
-            AutoFlag flag(m_update);
-            if(current->readonly) {
-                static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
-            }
-            else {
-                static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(boost::get<std::string>(value));
-            }
-        }
-        catch(...) {
-            DBG_OUT("conversion of '%u' to int failed", current->id);
-        }
+        set_text_data(w, current->readonly, value);
+        break;
+    case META_DT_DATE:
+        set_date_data(w, value);
         break;
     default:
-        try {
-            AutoFlag flag(m_update);
-            if(current->readonly) {
-                static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
-            }
-            else {
-                static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
-            }
-        }
-        catch(...) {
-            DBG_OUT("conversion of '%u' to string failed", current->id);
-        }
+        set_string_data(w, current->readonly, value);
         break;
     }
 }
