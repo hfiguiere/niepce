@@ -2,14 +2,14 @@
 # Copyright (C) 2009 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
 #
-# Marek Černocký <marek@manet.cz>, 2010, 2011.
+# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-17 02:23+0000\n"
-"PO-Revision-Date: 2011-11-21 22:10+0100\n"
+"POT-Creation-Date: 2012-02-02 04:15+0000\n"
+"PO-Revision-Date: 2012-02-02 09:55+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-
-#: ../src/fwk/toolkit/application.cpp:47
-msgid "System"
-msgstr "Systémový"
 
 #: ../src/fwk/toolkit/frame.cpp:124
 msgid "Undo "
@@ -139,16 +135,17 @@ msgid "_Options"
 msgstr "V_olby"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:1
+#| msgid "_User Interface"
+msgid "Use dark interface"
+msgstr "Používat tmavé rozhraní"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:2
 msgid "_General"
 msgstr "O_becné"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:2
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
 msgid "_Reopen Library"
 msgstr "Znovu otevřít sbí_rku"
-
-#: ../src/niepce/ui/dialogs/preferences.ui.h:3
-msgid "_Theme:\t"
-msgstr "Mo_tiv:\t"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:4
 msgid "_User Interface"
@@ -287,11 +284,7 @@ msgstr "Práva"
 msgid "Image Properties"
 msgstr "Vlastnosti obrázku"
 
-#: ../src/niepce/ui/niepceapplication.cpp:41
-msgid "Niepce Dark"
-msgstr "Tmavý Niepce"
-
-#: ../src/niepce/ui/niepceapplication.cpp:70
+#: ../src/niepce/ui/niepceapplication.cpp:66
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -402,20 +395,20 @@ msgstr "Nastavit vlastnosti"
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:234
+#: ../src/niepce/ui/workspacecontroller.cpp:235
 msgid "Pictures"
 msgstr "Obrázky"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:238
+#: ../src/niepce/ui/workspacecontroller.cpp:239
 msgid "Projects"
 msgstr "Projekty"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:242
+#: ../src/niepce/ui/workspacecontroller.cpp:243
 msgid "Keywords"
 msgstr "Klíčová slova"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:255
+#: ../src/niepce/ui/workspacecontroller.cpp:256
 msgid "_Workspace"
 msgstr "_Pracovní plocha"
 
