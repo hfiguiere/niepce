@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008,2011 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,13 @@
 #ifndef __UI_LIBRARY_CELL_RENDERER_H__
 #define __UI_LIBRARY_CELL_RENDERER_H__
 
+#include <glibmm/property.h>
 #include <gtkmm/cellrendererpixbuf.h>
 #include <cairomm/surface.h>
 
 #include "engine/db/libfile.hpp"
 #include "engine/db/label.hpp"
+#include "fwk/toolkit/widgets/imagegridview.hpp"
 
 namespace libraryclient {
 class UIDataProvider;
@@ -36,26 +38,23 @@ namespace ui {
 
 class LibraryCellRenderer
 	: public Gtk::CellRendererPixbuf
+        , public fwk::ClickableCellRenderer
 {
 public:
     LibraryCellRenderer(libraryclient::UIDataProvider *provider);
     
-    virtual void get_size_vfunc(Gtk::Widget& widget, 
-                                const Gdk::Rectangle* cell_area, 
-                                int* x_offset, int* y_offset, 
-                                int* width, int* height) const;
-    virtual void render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
+    virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const;
+    virtual void get_preferred_height_vfunc(Gtk::Widget& widget, int& minimum_height, int& natural_height) const;
+
+    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget, 
                                const Gdk::Rectangle& background_area, 
                                const Gdk::Rectangle& cell_area, 
-                               const Gdk::Rectangle& expose_area, 
                                Gtk::CellRendererState flags);
-    virtual bool activate_vfunc(GdkEvent *event,
-                                Gtk::Widget & widget,
-                                const Glib::ustring &	path,
-                                const Gdk::Rectangle&	background_area,
-                                const Gdk::Rectangle&	cell_area,
-                                Gtk::CellRendererState	flags);
+    /** call when the cell is clicked */
+    virtual bool activate_vfunc(GdkEvent* event, Gtk::Widget& widget,const Glib::ustring & path,
+                                const Gdk::Rectangle& background_area, 
+                                const Gdk::Rectangle& cell_area, Gtk::CellRendererState flags);
     void set_size(int _size)
         { m_size = _size; }
     int size() const

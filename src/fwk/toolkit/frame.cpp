@@ -86,11 +86,11 @@ void Frame::set_icon_from_theme(const Glib::ustring & name)
 		RefPtr< IconTheme > icon_theme(Application::app()->getIconTheme());
 		vector<int> icon_sizes(icon_theme->get_icon_sizes(name));
 		
-		list< RefPtr <Gdk::Pixbuf> > icons;
+		vector< RefPtr <Gdk::Pixbuf> > icons;
 
 		for_each(icon_sizes.begin(), icon_sizes.end(),
              // store the icon
-             bind(&std::list< RefPtr<Gdk::Pixbuf> >::push_back, 
+             bind(&std::vector< RefPtr<Gdk::Pixbuf> >::push_back, 
                   boost::ref(icons), 
                   // load the icon
                   bind( &IconTheme::load_icon, 

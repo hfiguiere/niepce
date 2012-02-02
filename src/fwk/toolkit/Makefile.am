@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \
-	@GCONF_CFLAGS@  @EXEMPI_CFLAGS@ \
+	@EXEMPI_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a
@@ -37,6 +37,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	widgets/dock.cpp widgets/dock.hpp \
 	widgets/notabtextview.hpp widgets/notabtextview.cpp \
 	widgets/tokentextview.hpp widgets/tokentextview.cpp \
+	widgets/imagegridview.hpp widgets/imagegridview.cpp \
 	dockable.hpp dockable.cpp \
 	metadatawidget.hpp metadatawidget.cpp \
 	undo.hpp undo.cpp \

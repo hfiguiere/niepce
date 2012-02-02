@@ -36,10 +36,6 @@ NiepceApplication::NiepceApplication()
     : Application(PACKAGE)
 {
     niepce::Stock::registerStockItems();
-    const char * themedir = DATADIR"/"PACKAGE"/themes/";
-
-    register_theme(_("Niepce Dark"),
-                   std::string(themedir) + "niepce-dark.gtkrc");
 
     fwk::ModuleManager * modmgr = module_manager();
     DBG_ASSERT(modmgr != NULL, "module manager is NULL.");

@@ -44,10 +44,10 @@ void registerStockItems()
 
     try {
         Gtk::Stock::add(Gtk::StockItem(ROTATE_LEFT, _("Rotate L_eft"), Gdk::ModifierType(0), '['));
-        icon_factory->add(ROTATE_LEFT, Gtk::IconSet(
+        icon_factory->add(ROTATE_LEFT, Gtk::IconSet::create(
                               Gdk::Pixbuf::create_from_file(DATADIR"/niepce/pixmaps/niepce-rotate-left.png")));
         Gtk::Stock::add(Gtk::StockItem(ROTATE_RIGHT, _("Rotate R_ight"), Gdk::ModifierType(0), ']'));
-        icon_factory->add(ROTATE_RIGHT, Gtk::IconSet(
+        icon_factory->add(ROTATE_RIGHT, Gtk::IconSet::create(
                               Gdk::Pixbuf::create_from_file(DATADIR"/niepce/pixmaps/niepce-rotate-right.png")));
     }
     catch(const Glib::Exception &e)

@@ -26,6 +26,7 @@
 #include <boost/format.hpp>
 
 #include <gdkmm/pixbuf.h>
+#include <glibmm/miscutils.h>
 #include <libopenraw-gnome/gdkpixbuf.h>
 
 #include "niepce/notifications.hpp"

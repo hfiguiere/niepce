@@ -21,8 +21,7 @@ dnl all the library version.
 dnl if one is harcoded elsewhere, it is a bug
 LIBGIOMM_VERSION=2.16
 LIBGLIBMM_VERSION=2.4
-LIBGTKMM_VERSION=2.12.0
-LIBGCONF_VERSION=2.0.0
+LIBGTKMM_VERSION=3.0
 LIBGNOMEUI_VERSION=2.0.0
 EXEMPI_VERSION=2.0.0
 SQLITE_VERSION=3.0
@@ -66,9 +65,7 @@ AC_LANG_CPLUSPLUS
 AC_LANG_COMPILER_REQUIRE
 
 PKG_CHECK_MODULES(LIBGLIBMM, [glibmm-2.4 >= $LIBGLIBMM_VERSION giomm-2.4 >= $LIBGIOMM_VERSION gthread-2.0])
-PKG_CHECK_MODULES(LIBGTKMM, [gtkmm-2.4 >= $LIBGTKMM_VERSION])
-dnl PKG_CHECK_MODULES(LIBGCONFMM, [gconfmm-2.6 >= $LIBGCONFMM_VERSION])
-PKG_CHECK_MODULES(GCONF, [gconf-2.0 >= $LIBGCONF_VERSION])
+PKG_CHECK_MODULES(LIBGTKMM, [gtkmm-3.0 >= $LIBGTKMM_VERSION])
 PKG_CHECK_MODULES(SQLITE3, [sqlite3 >= $SQLITE_VERSION])
 PKG_CHECK_MODULES(EXEMPI, [exempi-2.0 >= $EXEMPI_VERSION])
 PKG_CHECK_MODULES(LIBXML2, [libxml-2.0 >= $LIBXML2_VERSION])
@@ -97,11 +94,12 @@ BOOST_SMART_PTR
 BOOST_TEST([s])
 
 AC_LANG_PUSH(C++)
+dnl -Wmissing-noreturn -Wshadow
 if test "$GCC" = "yes"; then
         NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
-                      -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
-                      -Wunused -Wpointer-arith -Wshadow -fshow-column ; do
+                      -Wchar-subscripts -Wwrite-strings \
+                      -Wunused -Wpointer-arith -fshow-column ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
 		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "

@@ -29,7 +29,7 @@ namespace fwk {
 
 EditableHScale::EditableHScale(double min, double max, double step)
     : m_icon(NULL),
-      m_adj(0, min, max, step),
+      m_adj(Gtk::Adjustment::create(0, min, max, step)),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)
 {
@@ -40,7 +40,7 @@ EditableHScale::EditableHScale(double min, double max, double step)
 EditableHScale::EditableHScale(const std::string & icon_path, 
                                double min, double max, double step)
     : m_icon(Gtk::manage(new Gtk::Image(icon_path))),
-      m_adj(0, min, max, step),
+      m_adj(Gtk::Adjustment::create(0, min, max, step)),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)
 {
@@ -67,7 +67,7 @@ void EditableHScale::_init()
         .connect(sigc::mem_fun(*this, &EditableHScale::on_button_press_event));
     pack_start(m_entry, Gtk::PACK_SHRINK);
 
-    m_adj.signal_value_changed()
+    m_adj->signal_value_changed()
         .connect(sigc::mem_fun(*this, &EditableHScale::on_adj_value_changed));
     add_events(Gdk::BUTTON_RELEASE_MASK);
 }
@@ -83,8 +83,8 @@ bool EditableHScale::on_button_press_event(GdkEventButton *_event)
         Gtk::Widget::on_button_release_event(_event);
         if(m_dirty) {
             m_dirty = false;
-            DBG_OUT("value_change.emit(%f)", m_adj.get_value());
-            m_sig_value_changed.emit(m_adj.get_value());
+            DBG_OUT("value_change.emit(%f)", m_adj->get_value());
+            m_sig_value_changed.emit(m_adj->get_value());
         }
         return false;
     }
@@ -94,7 +94,7 @@ bool EditableHScale::on_button_press_event(GdkEventButton *_event)
 void EditableHScale::on_adj_value_changed()
 {
     m_dirty = true;
-    m_sig_value_changing.emit(m_adj.get_value());
+    m_sig_value_changing.emit(m_adj->get_value());
 }
 
 

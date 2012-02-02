@@ -21,28 +21,29 @@
 #ifndef _FRAMEWORK_CONFIGURATION_H_
 #define _FRAMEWORK_CONFIGURATION_H_
 
-#include <gconf/gconf-client.h>
-
 #include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-
+#include <glibmm/keyfile.h>
 
 namespace fwk {
 
 class Configuration
 {
 public:
-		Configuration(const Glib::ustring & root);
-		~Configuration();
-
-		bool hasKey(const Glib::ustring & key) const;
-		const Glib::ustring getValue(const Glib::ustring & key,
+    Configuration(const Glib::ustring & file);
+    ~Configuration();
+    
+    bool hasKey(const Glib::ustring & key) const;
+    const Glib::ustring getValue(const Glib::ustring & key,
                                  const Glib::ustring & def) const;
-
-		void setValue(const Glib::ustring & key, const Glib::ustring & value);
+    
+    void setValue(const Glib::ustring & key, const Glib::ustring & value);
 private:
-    GConfClient *                       m_gconf;
-		Glib::ustring                       m_root;
+    
+    void save();
+
+    Glib::ustring          m_filename;
+    Glib::KeyFile          m_keyfile;
+    Glib::ustring          m_root;
 };
 
 }

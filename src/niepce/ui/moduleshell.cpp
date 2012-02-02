@@ -59,11 +59,11 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     m_actionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
     m_actionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
-                          Gtk::AccelKey(GDK_Left, Gdk::ModifierType(0)),
+                          Gtk::AccelKey(GDK_KEY_Left, Gdk::ModifierType(0)),
                           sigc::mem_fun(*m_selection_controller,
                                         &SelectionController::select_previous));
     m_actionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
-                          Gtk::AccelKey(GDK_Right, Gdk::ModifierType(0)),
+                          Gtk::AccelKey(GDK_KEY_Right, Gdk::ModifierType(0)),
                           sigc::mem_fun(*m_selection_controller,
                                         &SelectionController::select_next));
     

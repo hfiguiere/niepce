@@ -60,7 +60,7 @@ eng::library_id_t FilmStripController::get_selected()
 {
     eng::library_id_t id = 0;
     DBG_OUT("get selected in filmstrip");
-    Gtk::IconView::ArrayHandle_TreePaths paths = m_thumbview->get_selected_items();
+    std::vector<Gtk::TreePath> paths = m_thumbview->get_selected_items();
     if(!paths.empty()) {
         Gtk::TreePath path(*(paths.begin()));
         DBG_OUT("found path %s", path.to_string().c_str());
