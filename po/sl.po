@@ -8,22 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 04:34+0000\n"
-"PO-Revision-Date: 2011-11-25 09:25+0100\n"
+"POT-Creation-Date: 2012-02-02 18:18+0000\n"
+"PO-Revision-Date: 2012-02-02 20:22+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-Language: Slovenian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: ../src/fwk/toolkit/application.cpp:47
-msgid "System"
-msgstr "Sistem"
 
 #: ../src/fwk/toolkit/frame.cpp:124
 msgid "Undo "
@@ -142,16 +138,16 @@ msgid "_Options"
 msgstr "_Možnosti"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:1
+msgid "Use dark interface"
+msgstr "Uporabi temno različico vmesnika"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:2
 msgid "_General"
 msgstr "_Splošno"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:2
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
 msgid "_Reopen Library"
 msgstr "_Ponovno odpiranje knjižnice"
-
-#: ../src/niepce/ui/dialogs/preferences.ui.h:3
-msgid "_Theme:\t"
-msgstr "_Tema:\t"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:4
 msgid "_User Interface"
@@ -290,11 +286,7 @@ msgstr "Pravice"
 msgid "Image Properties"
 msgstr "Lastnosti slike"
 
-#: ../src/niepce/ui/niepceapplication.cpp:41
-msgid "Niepce Dark"
-msgstr "Niepce temno"
-
-#: ../src/niepce/ui/niepceapplication.cpp:70
+#: ../src/niepce/ui/niepceapplication.cpp:66
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -384,7 +376,7 @@ msgstr "Oznaka 5"
 
 #: ../src/niepce/ui/niepcewindow.cpp:460
 msgid "Niepce Digital - "
-msgstr "Niepce program -"
+msgstr "Program Niepce -"
 
 #: ../src/niepce/ui/selectioncontroller.cpp:248
 msgid "Set Flag"
@@ -499,6 +491,15 @@ msgstr "Fotoaparat"
 #: ../camerawire/src/cwwindow.cpp:91
 msgid "_File"
 msgstr "_Datoteka"
+
+#~ msgid "System"
+#~ msgstr "Sistem"
+
+#~ msgid "_Theme:\t"
+#~ msgstr "_Tema:\t"
+
+#~ msgid "Niepce Dark"
+#~ msgstr "Niepce temno"
 
 #~ msgid "gtk-close"
 #~ msgstr "gtk-close"
