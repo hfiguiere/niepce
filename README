@@ -5,7 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files maybe under GPL version 2 or later.
 
-(c) 2006-2009 Hubert Figuière
+(c) 2006-2012 Hubert Figuière
 Some portions are written by other people.
 
 What is this?
@@ -19,9 +19,9 @@ To build is you need the following:
 -----------------------------------
 
 A C++ compiler
-gtk+ 2.12
+gtk+ 3.2
 cairo 1.1
-gtkmm 2.12
+gtkmm 3.2
 giomm
 cairomm
 sqlite3
@@ -43,7 +43,7 @@ Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
 aptitude install \
-> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-2.4-dev 
+> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-3-dev 
 
 Debian (nor Ubuntu) do not still pack geglmm. In order to get it visit 
 to get the latest version:
