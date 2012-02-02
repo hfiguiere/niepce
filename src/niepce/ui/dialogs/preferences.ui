@@ -61,8 +61,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="n_rows">1</property>
-                <property name="n_columns">2</property>
                 <child>
                   <object class="GtkCheckButton" id="reopen_checkbutton">
                     <property name="label" translatable="yes">_Reopen Library</property>
@@ -98,8 +96,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="n_rows">1</property>
-                <property name="n_columns">2</property>
                 <child>
                   <object class="GtkCheckButton" id="dark_theme_checkbox">
                     <property name="label" translatable="yes">Use dark interface</property>
