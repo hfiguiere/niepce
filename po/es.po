@@ -3,24 +3,20 @@
 # This file is distributed under the same license as the es package.
 # Roby Sottini <rsottini@yahoo.com>, 2009.
 # Jorge González <jorgegonz@svn.gnome.org>, 2010.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-05 17:15+0000\n"
-"PO-Revision-Date: 2011-12-23 17:24+0100\n"
+"POT-Creation-Date: 2012-02-02 04:15+0000\n"
+"PO-Revision-Date: 2012-02-02 12:09+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ../src/fwk/toolkit/application.cpp:47
-msgid "System"
-msgstr "Sistema"
 
 #: ../src/fwk/toolkit/frame.cpp:124
 msgid "Undo "
@@ -139,16 +135,17 @@ msgid "_Options"
 msgstr "_Opciones"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:1
+#| msgid "_User Interface"
+msgid "Use dark interface"
+msgstr "Usar interfaz oscura"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:2
 msgid "_General"
 msgstr "_General"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:2
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
 msgid "_Reopen Library"
 msgstr "_Reabrir biblioteca"
-
-#: ../src/niepce/ui/dialogs/preferences.ui.h:3
-msgid "_Theme:\t"
-msgstr "_Tema:\t"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:4
 msgid "_User Interface"
@@ -251,7 +248,6 @@ msgid "Headline:"
 msgstr "Encabezado:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:58
-#| msgid "Rating:"
 msgid "Caption:"
 msgstr "Descripción:"
 
@@ -288,11 +284,7 @@ msgstr "Derechos"
 msgid "Image Properties"
 msgstr "Propiedades de la imagen"
 
-#: ../src/niepce/ui/niepceapplication.cpp:41
-msgid "Niepce Dark"
-msgstr "Niepce oscuro"
-
-#: ../src/niepce/ui/niepceapplication.cpp:70
+#: ../src/niepce/ui/niepceapplication.cpp:66
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -492,6 +484,15 @@ msgstr "Cámara"
 #: ../camerawire/src/cwwindow.cpp:91
 msgid "_File"
 msgstr "_Archivo"
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "_Theme:\t"
+#~ msgstr "_Tema:\t"
+
+#~ msgid "Niepce Dark"
+#~ msgstr "Niepce oscuro"
 
 #~ msgid "gtk-close"
 #~ msgstr "gtk-close"
