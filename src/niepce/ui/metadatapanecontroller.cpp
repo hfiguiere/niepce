@@ -44,7 +44,7 @@ MetaDataPaneController::get_format()
         { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::META_DT_STRING, true },
         { _("Speed:"), eng::NpExifExposureTimeProp, fwk::META_DT_STRING, true },
         { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::META_DT_FRAC, true },
-        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::META_DT_STRING_ARRAY, true },
+        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::META_DT_STRING, true },
         { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::META_DT_FRAC, true },
         { _("Flash:"), eng::NpExifFlashFiredProp, fwk::META_DT_STRING, true },
         { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::META_DT_STRING, true },
