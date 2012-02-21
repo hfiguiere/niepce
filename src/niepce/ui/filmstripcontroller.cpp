@@ -78,7 +78,7 @@ eng::library_id_t FilmStripController::get_selected()
 
 void FilmStripController::select_image(eng::library_id_t id)
 {
-    DBG_OUT("filmstrip select %Ld", id);
+    DBG_OUT("filmstrip select %Ld", (long long)id);
     Gtk::TreePath path = m_store->get_path_from_id(id);
     if(path) {
         m_thumbview->scroll_to_path(path, false, 0, 0);

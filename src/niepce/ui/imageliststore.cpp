@@ -140,7 +140,7 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
         row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
     }
     else {
-        DBG_OUT("row %Ld not found", tn.id);
+        DBG_OUT("row %Ld not found", (long long)tn.id);
     }
 }
 

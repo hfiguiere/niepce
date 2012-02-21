@@ -442,7 +442,7 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
     try {
         if(m_dbdrv->execute_statement(sql)) {
             library_id_t id = m_dbdrv->last_row_id();
-            DBG_OUT("last row inserted %Ld", id);
+            DBG_OUT("last row inserted %Ld", (long long)id);
             f = LibFolder::Ptr(new LibFolder(id, 
                                              fwk::path_basename(folder)));
         }

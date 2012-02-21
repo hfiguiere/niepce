@@ -235,7 +235,7 @@ void ModuleShell::on_ready()
 
 void ModuleShell::on_selected(eng::library_id_t id)
 {
-    DBG_OUT("selected callback %Ld", id);
+    DBG_OUT("selected callback %Ld", (long long)id);
     if(id > 0) {
         m_libraryclient->requestMetadata(id);
     }		
@@ -246,7 +246,7 @@ void ModuleShell::on_selected(eng::library_id_t id)
 
 void ModuleShell::on_image_activated(eng::library_id_t id)
 {
-    DBG_OUT("on image activated %Ld", id);
+    DBG_OUT("on image activated %Ld", (long long)id);
     Glib::RefPtr<ImageListStore> store = m_selection_controller->get_list_store();
     Gtk::TreeIter iter = store->get_iter_from_id(id);
     if(iter) {
@@ -258,13 +258,13 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
 
 void ModuleShell::on_module_deactivated(int idx)
 {
-    DBG_ASSERT(idx < m_modules.size(), "wrong module index");
+    DBG_ASSERT((idx > 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
     m_modules[idx]->set_active(false);
 }
 
 void ModuleShell::on_module_activated(int idx)
 {
-    DBG_ASSERT(idx < m_modules.size(), "wrong module index");
+    DBG_ASSERT((idx > 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
     m_modules[idx]->set_active(true);
 }
 

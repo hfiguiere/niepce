@@ -161,7 +161,7 @@ void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
             tn.height = pix->get_height();
             tn.pixmap = pix;
             n->setData(boost::any(tn));
-            DBG_OUT("notify thumbnail for id=%Ld", tn.id);
+            DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
             nc->post(n);
         }
     }

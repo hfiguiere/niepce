@@ -71,7 +71,7 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
         eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
         if(file) {
             eng::library_id_t selection = file->id();
-            DBG_OUT("item activated %Ld", selection);
+            DBG_OUT("item activated %Ld", (long long)selection);
             signal_activated(selection);
         }
     }

@@ -110,7 +110,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     case eng::Library::NOTIFY_FOLDER_COUNTED:
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
-        DBG_OUT("count for folder %Ld is %d", count.first, count.second);
+        DBG_OUT("count for folder %Ld is %d", (long long)count.first, count.second);
         std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {
@@ -124,7 +124,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     case eng::Library::NOTIFY_FOLDER_COUNT_CHANGE:
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
-        DBG_OUT("count change for folder %Ld is %d", count.first, count.second);
+        DBG_OUT("count change for folder %Ld is %d", (long long)count.first, count.second);
         std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
             = m_folderidmap.find( count.first );
         if(iter != m_folderidmap.end()) {

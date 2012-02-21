@@ -175,13 +175,13 @@ eng::library_id_t GridViewModule::get_selected()
             }
         }
     }
-    DBG_OUT("get_selected %Ld", id);
+    DBG_OUT("get_selected %Ld", (long long)id);
     return id;
 }
 
 void GridViewModule::select_image(eng::library_id_t id)
 {
-    DBG_OUT("library select %Ld", id);
+    DBG_OUT("library select %Ld", (long long)id);
     Gtk::TreePath path = m_model->get_path_from_id(id);
     if(path) {
         m_librarylistview->scroll_to_path(path, false, 0, 0);
