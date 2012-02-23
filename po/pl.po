@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-02 19:17+0100\n"
-"PO-Revision-Date: 2012-02-02 19:16+0100\n"
+"POT-Creation-Date: 2012-02-23 22:05+0100\n"
+"PO-Revision-Date: 2012-02-23 22:06+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -142,14 +142,18 @@ msgid "Use dark interface"
 msgstr "Użycie ciemnego interfejsu"
 
 #: ../src/niepce/ui/dialogs/preferences.ui.h:2
+msgid "Write XMP automatically (not recommended)"
+msgstr "Automatyczne zapisywanie XMP (niezalecane)"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
 msgid "_General"
 msgstr "Ogól_ne"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:3
+#: ../src/niepce/ui/dialogs/preferences.ui.h:4
 msgid "_Reopen Library"
 msgstr "Ot_wórz ponownie kolekcję"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:4
+#: ../src/niepce/ui/dialogs/preferences.ui.h:5
 msgid "_User Interface"
 msgstr "Interfejs _użytkownika"
 
