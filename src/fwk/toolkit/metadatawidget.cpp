@@ -52,6 +52,7 @@ MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
       m_update(false)
 {
     add(m_table);
+    set_sensitive(false);
 }
 
 void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
@@ -217,6 +218,7 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
         std::for_each(m_data_map.begin(), m_data_map.end(),
                       boost::bind(&MetaDataWidget::clear_widget, this, _1));
     }
+    set_sensitive(!properties.empty());
     if(properties.empty()) {
         return;
     }
