@@ -177,9 +177,9 @@ void Commands::cmdUpdateLabel(const Library::Ptr & lib,
 }
 
 
-void Commands::cmdProcessXmpUpdateQueue(const Library::Ptr & lib)
+void Commands::cmdProcessXmpUpdateQueue(const Library::Ptr & lib, bool write_xmp)
 {
-    lib->processXmpUpdateQueue();
+    lib->processXmpUpdateQueue(write_xmp);
 }
 
 }

@@ -170,11 +170,11 @@ tid_t ClientImpl::updateLabel(eng::library_id_t label_id, const std::string & ne
 }
 
 
-tid_t ClientImpl::processXmpUpdateQueue()
+tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, boost::bind(&Commands::cmdProcessXmpUpdateQueue,
-                                      _1)));
+                                      _1, write_xmp)));
     m_localLibrary->schedule(op);
     return id;
 }

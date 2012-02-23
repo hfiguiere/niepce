@@ -121,7 +121,9 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
     {
-        getLibraryClient()->processXmpUpdateQueue();
+        fwk::Configuration & cfg = fwk::Application::app()->config();
+        int write_xmp = boost::lexical_cast<int>(cfg.getValue("write_xmp_automatically", "0"));
+        getLibraryClient()->processXmpUpdateQueue(write_xmp);
         break;
     }
     default:

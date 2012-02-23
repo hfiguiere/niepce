@@ -175,7 +175,7 @@ public:
     bool deleteLabel(library_id_t label_id);
 
     /** Trigger the processing of the XMP update queue */
-    bool processXmpUpdateQueue();
+    bool processXmpUpdateQueue(bool rewrite_xmp);
 
 		/** Locate the keyword, creating it if needed
 		 * @param keyword the keyword to locate
@@ -204,7 +204,7 @@ private:
     /** rewrite the XMP sidecar for the file whose id is %id
      * and remove it from the queue.
      */
-    bool rewriteXmpForId(library_id_t id);
+    bool rewriteXmpForId(library_id_t id, bool rewrite_xmp);
 
     /** set an "internal" metadata of type int */
     bool setInternalMetaDataInt(library_id_t file_id, const char* col,

@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2009,2012 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public:
                            const std::string & new_color);
     
     /** tell to process the Xmp update Queue */
-    eng::tid_t processXmpUpdateQueue();
+    eng::tid_t processXmpUpdateQueue(bool write_xmp);
     
     /** Import files from a directory
      * @param dir the directory

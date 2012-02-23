@@ -122,9 +122,9 @@ eng::tid_t LibraryClient::updateLabel(library_id_t id, const std::string & new_n
     return m_pImpl->updateLabel(id, new_name, new_color);
 }
 
-eng::tid_t LibraryClient::processXmpUpdateQueue()
+eng::tid_t LibraryClient::processXmpUpdateQueue(bool write_xmp)
 {
-    return m_pImpl->processXmpUpdateQueue();
+    return m_pImpl->processXmpUpdateQueue(write_xmp);
 }
 
 void LibraryClient::importFromDirectory(const std::string & dir, bool manage)

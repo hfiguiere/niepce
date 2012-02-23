@@ -56,7 +56,7 @@ public:
     eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name,
                                const std::string & new_color);
 
-    eng::tid_t processXmpUpdateQueue();
+    eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
 		eng::tid_t importFromDirectory(const std::string & dir, bool manage);
 

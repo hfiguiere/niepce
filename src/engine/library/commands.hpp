@@ -65,7 +65,7 @@ public:
     static void cmdUpdateLabel(const Library::Ptr & lib,
                                eng::library_id_t label_id, const std::string & name,
                                const std::string & color);
-		static void cmdProcessXmpUpdateQueue(const Library::Ptr & lib);
+    static void cmdProcessXmpUpdateQueue(const Library::Ptr & lib, bool write_xmp);
 };
 
 }

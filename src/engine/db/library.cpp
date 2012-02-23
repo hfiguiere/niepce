@@ -894,11 +894,8 @@ bool Library::getXmpIdsInQueue(std::vector<library_id_t> & ids)
 }
 
 
-bool Library::rewriteXmpForId(library_id_t id)
+bool Library::rewriteXmpForId(library_id_t id, bool write_xmp)
 {
-    /// DISABLED
-#if 0
-
     SQLStatement del(boost::format("DELETE FROM xmp_update_queue "
                                    " WHERE id='%1%';") % id);
     SQLStatement getxmp(boost::format("SELECT xmp, main_file, xmp_file FROM files "
@@ -907,7 +904,7 @@ bool Library::rewriteXmpForId(library_id_t id)
         
         if(m_dbdrv->execute_statement(del) 
            && m_dbdrv->execute_statement(getxmp)) {
-            while(m_dbdrv->read_next_row()) {
+            while(write_xmp && m_dbdrv->read_next_row()) {
                 std::string xmp_buffer;
                 library_id_t main_file_id;
                 library_id_t xmp_file_id;
@@ -956,12 +953,12 @@ bool Library::rewriteXmpForId(library_id_t id)
         DBG_OUT("db exception %s", e.what());
         return false;
     }
-#endif
+
     return true;
 }
 
 
-bool Library::processXmpUpdateQueue()
+bool Library::processXmpUpdateQueue(bool write_xmp)
 {
     bool retval = false;
     std::vector<library_id_t> ids;
@@ -969,7 +966,7 @@ bool Library::processXmpUpdateQueue()
     if(retval) {
         std::for_each(ids.begin(), ids.end(),
                      boost::bind(&Library::rewriteXmpForId,
-                                 this, _1));
+                                 this, _1, write_xmp));
     }
     return retval;
 }

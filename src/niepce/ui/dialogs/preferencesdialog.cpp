@@ -42,9 +42,10 @@ void PreferencesDialog::setup_widget()
 
     add_header(_("Preferences"));
 
-    Gtk::CheckButton * theme_checkbutton = NULL;
-    Gtk::CheckButton * reopen_checkbutton = NULL;
-    fwk::DataBinderPool * binder_pool = new fwk::DataBinderPool();
+    Gtk::CheckButton* theme_checkbutton = NULL;
+    Gtk::CheckButton* reopen_checkbutton = NULL;
+    Gtk::CheckButton* write_xmp_checkbutton = NULL;
+    fwk::DataBinderPool* binder_pool = new fwk::DataBinderPool();
 
     gtkDialog().signal_hide().connect(boost::bind(&fwk::DataBinderPool::destroy, 
                                               binder_pool));
@@ -54,15 +55,20 @@ void PreferencesDialog::setup_widget()
     theme_checkbutton->set_active(fwk::Application::app()
                             ->get_use_dark_theme());
     theme_checkbutton->signal_toggled().connect(
-			boost::bind(&fwk::Application::set_use_dark_theme,
-									fwk::Application::app(),
-									theme_checkbutton->property_active()));
+	    boost::bind(&fwk::Application::set_use_dark_theme,
+			fwk::Application::app(),
+			theme_checkbutton->property_active()));
 
     builder()->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
-							    reopen_checkbutton->property_active(),
-							    fwk::Application::app()->config(),
-							    "reopen_last_library"));
+				    reopen_checkbutton->property_active(),
+				    fwk::Application::app()->config(),
+				    "reopen_last_library"));
+    builder()->get_widget("write_xmp_checkbutton", write_xmp_checkbutton);
+    binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
+				  write_xmp_checkbutton->property_active(),
+				  fwk::Application::app()->config(),
+				  "write_xmp_automatically"));
     m_is_setup = true;
 }
 
