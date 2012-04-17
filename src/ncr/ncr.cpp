@@ -41,7 +41,7 @@ Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata)
             = Gegl::Buffer::create(Gegl::Rectangle(rect), babl_format ("Y u16"));
         
         data = or_rawdata_data(rawdata);
-        buffer->set(Gegl::Rectangle(rect), babl_format ("Y u16"),
+        buffer->set(Gegl::Rectangle(rect), 1, babl_format ("Y u16"),
                     data, GEGL_AUTO_ROWSTRIDE);
         
         return buffer;

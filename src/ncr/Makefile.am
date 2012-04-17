@@ -3,7 +3,7 @@
 
 INCLUDES = -I$(top_srcdir)/src  \
 	@LIBGTKMM_CFLAGS@ \
-	@GEGLMM_CFLAGS@ @OPENRAW_CFLAGS@
+	@BABL_CFLAGS@ @GEGLMM_CFLAGS@ @OPENRAW_CFLAGS@
 
 niepcelibdir = @libdir@/niepce/
 #niepcelib_LTLIBRARIES = libncr.la
