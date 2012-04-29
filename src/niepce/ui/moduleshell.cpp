@@ -258,13 +258,13 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
 
 void ModuleShell::on_module_deactivated(int idx)
 {
-    DBG_ASSERT((idx > 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
+    DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
     m_modules[idx]->set_active(false);
 }
 
 void ModuleShell::on_module_activated(int idx)
 {
-    DBG_ASSERT((idx > 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
+    DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
     m_modules[idx]->set_active(true);
 }
 

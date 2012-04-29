@@ -327,7 +327,7 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
         fwk::Date date = boost::get<fwk::Date>(value);
         static_cast<Gtk::Label*>(w)->set_text(date.to_string());
 
-        DBG_OUT("setting date data %s\n", date.to_string().c_str());
+        DBG_OUT("setting date data %s", date.to_string().c_str());
     }
     catch(...) {
         return false;
