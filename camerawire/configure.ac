@@ -95,7 +95,7 @@ if test "$GCC" = "yes"; then
         CW_BUILD_CONFIG="$CW_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
                       -Wchar-subscripts -Wwrite-strings -Wmissing-noreturn \
-                      -Wunused -Wpointer-arith -Wshadow -fshow-column ; do
+                      -Wunused -Wpointer-arith -Wshadow ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
 		CW_BUILD_CONFIG="$CW_BUILD_CONFIG$option "

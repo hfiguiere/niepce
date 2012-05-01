@@ -97,7 +97,7 @@ if test "$GCC" = "yes"; then
         NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
         for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
                       -Wchar-subscripts -Wwrite-strings \
-                      -Wunused -Wpointer-arith -fshow-column ; do
+                      -Wunused -Wpointer-arith ; do
                 SAVE_CXXFLAGS="$CXXFLAGS"
                 CXXFLAGS="$CXXFLAGS $option"
 		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "
