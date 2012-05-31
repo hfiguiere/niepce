@@ -38,7 +38,7 @@ Thread::~Thread()
 
 void Thread::start()
 {
-    m_thrd = Glib::Thread::create(sigc::mem_fun(*this, &Thread::main), true);
+    m_thrd = Glib::Threads::Thread::create(sigc::mem_fun(*this, &Thread::main));
 // TODO add this thread to a manager for task management.
 //		thrd->join();
 }

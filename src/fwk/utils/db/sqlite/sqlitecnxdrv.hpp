@@ -29,7 +29,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <glibmm/thread.h>
+#include <glibmm/threads.h>
 
 #include "fwk/utils/db/iconnectiondriver.hpp"
 
@@ -44,7 +44,7 @@ class SqliteCnxDrv: public db::IConnectionDriver {
     struct Priv ;
     friend class SqliteCnxMgrDrv ;
     boost::scoped_ptr<Priv> m_priv ;
-    mutable Glib::RecMutex m_mutex;
+    mutable Glib::Threads::RecMutex m_mutex;
 
     //forbid copy
     SqliteCnxDrv (const SqliteCnxDrv &) ;

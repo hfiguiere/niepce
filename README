@@ -21,6 +21,7 @@ To build is you need the following:
 A C++ compiler
 gtk+ 3.2
 cairo 1.1
+glibmm 2.32
 gtkmm 3.2
 giomm
 cairomm
