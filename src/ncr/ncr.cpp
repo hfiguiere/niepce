@@ -30,23 +30,23 @@ Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata)
 {
     uint32_t x, y;
     void *data;
-    if(or_rawdata_format(rawdata) == OR_DATA_TYPE_CFA) {
-        /* TODO take the dest_x and dest_y into account */
-        GeglRectangle rect = {0, 0, 0, 0};
-        or_rawdata_dimensions(rawdata, &x, &y);
-        rect.width = x;
-        rect.height = y;
-        
-        Glib::RefPtr<Gegl::Buffer> buffer 
-            = Gegl::Buffer::create(Gegl::Rectangle(rect), babl_format ("Y u16"));
-        
-        data = or_rawdata_data(rawdata);
-        buffer->set(Gegl::Rectangle(rect), 1, babl_format ("Y u16"),
-                    data, GEGL_AUTO_ROWSTRIDE);
-        
-        return buffer;
+    if(or_rawdata_format(rawdata) != OR_DATA_TYPE_RAW) {
+        return Glib::RefPtr<Gegl::Buffer>();
     }
-    return Glib::RefPtr<Gegl::Buffer>();
+    /* TODO take the dest_x and dest_y into account */
+    GeglRectangle rect = {0, 0, 0, 0};
+    or_rawdata_dimensions(rawdata, &x, &y);
+    rect.width = x;
+    rect.height = y;
+
+    Glib::RefPtr<Gegl::Buffer> buffer
+        = Gegl::Buffer::create(Gegl::Rectangle(rect), babl_format ("Y u16"));
+
+    data = or_rawdata_data(rawdata);
+    buffer->set(Gegl::Rectangle(rect), 1, babl_format ("Y u16"),
+                data, GEGL_AUTO_ROWSTRIDE);
+
+    return buffer;
 }
 
 }
