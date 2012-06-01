@@ -84,18 +84,13 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
 //    DBG_OUT("image frame %f %f %f %f", x, y, width, height);  
 }
 
-bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
+bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 {
     // no image, just pass.
     if(!m_image) {
         DBG_OUT("no image");
         return false;
     }
-
-
-    Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
-    context->rectangle(ev->area.x, ev->area.y, ev->area.width, ev->area.height);
-    context->clip();
 
     if(m_need_redisplay) {
         _redisplay();
@@ -111,7 +106,7 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
 
 
         // query the image.
-        Cairo::RefPtr<Cairo::Surface> img_s 
+        Cairo::RefPtr<Cairo::Surface> img_s
             = m_image->cairo_surface_for_display();
         if(!img_s) {
             DBG_OUT("no image loaded");
@@ -123,10 +118,10 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
         canvas_w = get_width();
         DBG_OUT("canvas w = %d ; h = %d", canvas_w, canvas_h);
 
-        m_backingstore 
-            = Cairo::Surface::create(img_s, Cairo::CONTENT_COLOR, 
+        m_backingstore
+            = Cairo::Surface::create(img_s, Cairo::CONTENT_COLOR,
                                      canvas_w, canvas_h);
-        Cairo::RefPtr<Cairo::Context> sc 
+        Cairo::RefPtr<Cairo::Context> sc
             = Cairo::Context::create(m_backingstore);
 
 
@@ -156,7 +151,6 @@ bool ImageCanvas::on_expose_event(GdkEventExpose *ev)
 //        sc->set_line_width(1.0);
 //        sc->rectangle(x, y, out_w, out_h);
 //        sc->stroke();
-		
 
         m_need_redisplay = false;
     }

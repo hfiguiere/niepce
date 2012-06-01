@@ -54,7 +54,7 @@ public:
             return m_zoom_mode;
         }
 protected:
-    virtual bool on_expose_event(GdkEventExpose *);
+    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 private:
     void on_image_reloaded();
 
