@@ -26,12 +26,12 @@ extern "C" {
 
 namespace ncr {
 
-Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata)
+GeglBuffer* load_rawdata(ORRawDataRef rawdata)
 {
     uint32_t x, y;
     void *data;
     if(or_rawdata_format(rawdata) != OR_DATA_TYPE_RAW) {
-        return Glib::RefPtr<Gegl::Buffer>();
+        return NULL;
     }
     /* TODO take the dest_x and dest_y into account */
     GeglRectangle rect = {0, 0, 0, 0};
@@ -39,11 +39,11 @@ Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata)
     rect.width = x;
     rect.height = y;
 
-    Glib::RefPtr<Gegl::Buffer> buffer
-        = Gegl::Buffer::create(Gegl::Rectangle(rect), babl_format ("Y u16"));
+    GeglBuffer* buffer
+        = gegl_buffer_new(&rect, babl_format ("Y u16"));
 
     data = or_rawdata_data(rawdata);
-    buffer->set(Gegl::Rectangle(rect), 1, babl_format ("Y u16"),
+    gegl_buffer_set(buffer, &rect, 1, babl_format ("Y u16"),
                 data, GEGL_AUTO_ROWSTRIDE);
 
     return buffer;

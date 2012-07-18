@@ -21,12 +21,10 @@
 
 extern "C" {
 #include <babl/babl.h>
+#include <gegl.h>
 }
 
 #include <libopenraw/libopenraw.h>
-
-#include <geglmm/node.h>
-#include <geglmm/operation.h>
 
 #include "fwk/base/debug.hpp"
 #include "ncr.hpp"
@@ -34,51 +32,44 @@ extern "C" {
 
 namespace ncr {
 
-namespace {
-
-const Babl * format_for_cairo_argb32()
-{
-    // TODO not endian neutral
-    return babl_format_new(babl_model("R'G'B'A"),
-                           babl_type ("u8"),
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-                           babl_component ("B'"),
-                           babl_component ("G'"),
-                           babl_component ("R'"),
-                           babl_component ("A"),
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-                           babl_component ("A"),
-                           babl_component ("R'"),
-                           babl_component ("G'"),
-                           babl_component ("B'"),
-#else
-#error unknown endian
-#endif
-                           NULL);
-}
-
-
-}
-
 struct Image::Private {
     Private()
         : m_width(0)
         , m_height(0)
-        , m_orientation(0)
+        , m_orientation(0), m_vertical(false)
         , m_flip(false)
         , m_tilt(0.0)
+        , m_graph(NULL), m_rgb(NULL), m_rotate_n(NULL)
+        , m_scale(NULL)
+        , m_sink_buffer(NULL)
         {
+        }
+    ~Private()
+        {
+            if(m_graph) {
+                g_object_unref(m_graph);
+            }
+            if(m_sink_buffer) {
+                g_object_unref(m_sink_buffer);
+            }
         }
 
     int m_width, m_height; /**< the native dimension, with orientation */
     int m_orientation;     /**< EXIF orientation in degrees */
+    bool m_vertical;
     bool m_flip;           /**< EXIF flip */
     double m_tilt;         /**< User rotation */
-    Glib::RefPtr<Gegl::Node> m_node;
-    Glib::RefPtr<Gegl::Node> m_rgb;    /**< RGB pixmap */
-    Glib::RefPtr<Gegl::Node> m_rotate_n;
-    Glib::RefPtr<Gegl::Node> m_scale;
-    Glib::RefPtr<Gegl::Node> m_output;
+    GeglNode* m_graph;
+    GeglNode* m_rgb;    /**< RGB pixmap */
+    GeglNode* m_rotate_n;
+    GeglNode* m_scale;
+    // sink
+    GeglNode*   m_sink;
+    GeglBuffer* m_sink_buffer;
+
+    GeglNode* _rotate_node(int orientation);
+    GeglNode* _scale_node();
+    GeglNode* _load_raw(const std::string &path);
 };
 
 Image::Image()
@@ -91,116 +82,165 @@ Image::~Image()
     delete priv;
 }
 
-void Image::reload(const std::string & p, bool is_raw,
-    int orientation)
+GeglNode* Image::Private::_rotate_node(int orientation)
 {
-    Glib::RefPtr<Gegl::Node> load_file;
-
-    priv->m_node = Gegl::Node::create();
-    priv->m_node->set("format", babl_format("RGB u16"));
-
-    if(!is_raw) {
-        load_file = priv->m_node->new_child("operation", "gegl:load");
-        load_file->set("path", p);
-        priv->m_rgb = load_file;
-    }
-    else {
-        ORRawDataRef rawdata;
-        or_get_extract_rawdata(p.c_str(), 0, &rawdata);
-        Glib::RefPtr<Gegl::Buffer> buffer = ncr::load_rawdata(rawdata);
-        // @todo can return a NULL buffer if load failed. Deal with that.
-        load_file = priv->m_node->new_child("operation", "gegl:load-buffer");
-        load_file->set("buffer", buffer);
-        or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);
-        or_rawdata_release(rawdata);
-
-        Glib::RefPtr<Gegl::Node> stretch = priv->m_node->new_child(
-            "operation", "gegl:stretch-contrast");
-        
-        Glib::RefPtr<Gegl::Node> demosaic = priv->m_node->new_child(
-            "operation", "gegl:demosaic-bimedian");
-        // @todo refactor somewhere.
-        int npattern = 0;
-        switch(pattern) {
-        case OR_CFA_PATTERN_GRBG:
-            npattern = 0;
-            break;
-        case OR_CFA_PATTERN_BGGR:
-            npattern = 1;
-            break;
-        case OR_CFA_PATTERN_GBRG:
-            npattern = 2;
-            break;
-        case OR_CFA_PATTERN_RGGB:
-            npattern = 3;
-            break;
-        default:
-            break;
-        }
-
-        demosaic->set("pattern", npattern);
-
-        priv->m_rgb = load_file->link(stretch)->link(demosaic);
-    }
-    
-    Glib::RefPtr<Gegl::Node> current;
+//    GeglNode* rotateNode = gegl_node_new_child(m_graph, NULL, NULL);
 
     DBG_OUT("rotation is %d", orientation);
-    bool vertical = false;
     switch(orientation) {
     case 0:
     case 1:
         break;
     case 2:
-        priv->m_flip = true;
+        m_flip = true;
         break;
     case 4:
-        priv->m_flip = true;
+        m_flip = true;
         // fall through
     case 3:
-        priv->m_orientation = 180;
+        m_orientation = 180;
         break;
     case 5:
-        priv->m_flip = true;
+        m_flip = true;
         // fall through
     case 6:
-        priv->m_orientation = 270;
-        vertical = true;
+        m_orientation = 270;
+        m_vertical = true;
         break;
     case 7:
-        priv->m_flip = true;
+        m_flip = true;
         // fall through
     case 8:
-        priv->m_orientation = 90;
-        vertical = true;
+        m_orientation = 90;
+        m_vertical = true;
         break;
     }
+
     // @todo ideally we would have a plain GEGL op for that.
-    if(priv->m_flip) {
-        // @todo find a test case.
-        priv->m_rotate_n =  priv->m_node->new_child("operation", 
-                                                    "gegl:reflect");
-        priv->m_rotate_n->set("x", -1.0);
-        current = priv->m_rgb->link(priv->m_rotate_n);
+    // @todo find a test case.
+//    GeglNode* flipNode = gegl_node_new_child(rotateNode,
+//                                             "operation", "gegl:reflect",
+//                                             "x", (m_flip ? -1.0 : 1.0), NULL);
+
+    GeglNode* rotationNode = NULL;
+    double rotate = m_orientation + m_tilt;
+    rotationNode = gegl_node_new_child(m_graph,
+                                       "operation", "gegl:rotate",
+                                       "degrees", rotate, NULL);
+//    gegl_node_link(flipNode, rotationNode);
+
+    return rotationNode;
+}
+
+/** create the RAW pipeline */
+GeglNode* Image::Private::_load_raw(const std::string &p)
+{
+    GeglNode* rgb = NULL;
+
+    ORRawDataRef rawdata;
+    or_get_extract_rawdata(p.c_str(), 0, &rawdata);
+    GeglBuffer* buffer = ncr::load_rawdata(rawdata);
+    // @todo can return a NULL buffer if load failed. Deal with that.
+    GeglNode* load_file = gegl_node_new_child(m_graph,
+                                              "operation", "gegl:buffer-source",
+                                              "buffer", buffer, NULL);
+    or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);
+    or_rawdata_release(rawdata);
+
+    GeglNode* stretch =
+        gegl_node_new_child(m_graph,
+                            "operation", "gegl:stretch-contrast",
+                            NULL);
+    GeglNode* demosaic =
+        gegl_node_new_child(m_graph,
+                            "operation", "gegl:demosaic-bimedian",
+                            NULL);
+    // @todo refactor somewhere.
+    int npattern = 0;
+    switch(pattern) {
+    case OR_CFA_PATTERN_GRBG:
+        npattern = 0;
+        break;
+    case OR_CFA_PATTERN_BGGR:
+        npattern = 1;
+        break;
+    case OR_CFA_PATTERN_GBRG:
+        npattern = 2;
+        break;
+    case OR_CFA_PATTERN_RGGB:
+        npattern = 3;
+        break;
+    default:
+        break;
+    }
+    gegl_node_set(demosaic, "pattern", npattern, NULL);
+
+    gegl_node_link_many(load_file, stretch, demosaic, NULL);
+
+    rgb = demosaic;
+    return rgb;
+}
+
+GeglNode* Image::Private::_scale_node()
+{
+    return gegl_node_new_child(m_graph, "operation", "gegl:scale", NULL);
+}
+
+void Image::reload(const std::string & p, bool is_raw,
+    int orientation)
+{
+    GeglNode* load_file;
+
+    priv->m_graph = gegl_node_new();
+//    priv->m_graph->set("format", babl_format("RGB u16"));
+
+    DBG_OUT("loading file %s", p.c_str());
+
+    if(!is_raw) {
+        load_file = gegl_node_new_child(priv->m_graph,
+                                        "operation", "gegl:load",
+                                        "path", p.c_str(), NULL);
     }
     else {
-        current = priv->m_rgb;
+        load_file = priv->_load_raw(p);
     }
-    priv->m_rotate_n = priv->m_node->new_child("operation", "gegl:rotate");
-    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
-    current = current->link(priv->m_rotate_n);
 
-    priv->m_scale = priv->m_node->new_child("operation", "gegl:scale");
-    current->link(priv->m_scale);
-    priv->m_output = priv->m_scale;
-    
+    priv->m_rotate_n = priv->_rotate_node(orientation);
+    priv->m_scale = priv->_scale_node();
+    priv->m_sink = gegl_node_create_child (priv->m_graph, "gegl:display");
+
+//        gegl_node_new_child(priv->m_graph,
+//                            "operation", "gegl:buffer-sink",
+//                            "format", babl_format("RGB u8"),
+//                            "buffer", &(priv->m_sink_buffer), NULL);
+
+    gegl_node_link_many(load_file, priv->m_rotate_n,
+                        priv->m_scale, priv->m_sink, NULL);
+
+//    gegl_node_process(priv->m_sink);
+    // DEBUG
+#if 0
+    GeglNode* debugsink;
+    GeglNode* graph =
+        gegl_graph (debugsink=gegl_node ("gegl:save",
+                                         "path", "/tmp/gegl.png", NULL,
+                                         gegl_node ("gegl:buffer-source",
+                                                    "buffer",
+                                                    priv->m_sink_buffer,
+                                                    NULL)
+                        )
+            );
+    gegl_node_process (debugsink);
+    g_object_unref (graph);
+#endif
+    // END DEBUG
+
     int width, height;
-    Gegl::Rectangle rect;
-    rect = load_file->get_bounding_box();
-    width = rect.gobj()->width;
-    height = rect.gobj()->height;
+    GeglRectangle rect = gegl_node_get_bounding_box(load_file);
+    width = rect.width;
+    height = rect.height;
     DBG_OUT("width %d height %d", width, height);
-    if(vertical) {
+    if(priv->m_vertical) {
         priv->m_width = height;
         priv->m_height = width;
     }
@@ -219,8 +259,7 @@ void Image::set_output_scale(double scale)
         DBG_OUT("nothing loaded");
         return;
     }
-    priv->m_scale->set("x", scale);
-    priv->m_scale->set("y", scale);    
+    gegl_node_set(priv->m_scale, "x", scale, "y", scale, NULL);
 
     signal_update();
 }
@@ -234,9 +273,10 @@ void Image::set_tilt(double angle)
         return;
     }
     priv->m_tilt = angle;
-    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
+    gegl_node_set(priv->m_rotate_n, "degrees",
+                  priv->m_orientation + priv->m_tilt, NULL);
 
-    signal_update();    
+    signal_update();
 }
 
 
@@ -267,7 +307,7 @@ void Image::rotate_by(int degree)
         // within 0..359 degrees anyway
         priv->m_orientation %= 360;
     }
-    priv->m_rotate_n->set("degrees", priv->m_orientation + priv->m_tilt);
+    gegl_node_set(priv->m_rotate_n, "degrees", priv->m_orientation + priv->m_tilt, NULL);
     signal_update();
 }
 
@@ -275,23 +315,27 @@ void Image::rotate_by(int degree)
 
 Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
 {
-    if(!priv->m_output) {
+    if(!priv->m_sink) {
         DBG_OUT("nothing loaded");
         return Cairo::RefPtr<Cairo::Surface>();
     }
-    priv->m_output->process();
-    Gegl::Rectangle roi = priv->m_output->get_bounding_box();
+    DBG_OUT("processing");
+    gegl_node_process(priv->m_scale);
+    GeglRectangle roi = gegl_node_get_bounding_box(priv->m_scale);
     int w, h;
-    w = roi.gobj()->width;
-    h = roi.gobj()->height;
+    w = roi.width;
+    h = roi.height;
 
-    const Babl * format = format_for_cairo_argb32();
+    DBG_OUT("surface w=%d, h=%d", w, h);
 
-    Cairo::RefPtr<Cairo::ImageSurface> surface 
+    const Babl* format = babl_format("B'aG'aR'aA u8");
+
+    Cairo::RefPtr<Cairo::ImageSurface> surface
         = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, w, h);
-    priv->m_output->blit(1.0, roi, format,
-                         (void*)surface->get_data(), surface->get_stride(),
-                         (Gegl::BLIT_CACHE | Gegl::BLIT_DIRTY));
+    gegl_node_blit(priv->m_scale, 1.0, &roi, format,
+                   (void*)surface->get_data(), surface->get_stride(),
+                   (GeglBlitFlags)(GEGL_BLIT_CACHE | GEGL_BLIT_DIRTY));
+
     return surface;
 }
 
@@ -309,15 +353,15 @@ int Image::get_original_height() const
 
 int Image::get_output_width() const
 {
-    Gegl::Rectangle roi = priv->m_output->get_bounding_box();
-    return roi.gobj()->width;
+    GeglRectangle roi = gegl_node_get_bounding_box(priv->m_sink);
+    return roi.width;
 }
 
 
 int Image::get_output_height() const
 {
-    Gegl::Rectangle roi = priv->m_output->get_bounding_box();
-    return roi.gobj()->height;
+    GeglRectangle roi = gegl_node_get_bounding_box(priv->m_sink);
+    return roi.height;
 }
 
 

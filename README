@@ -1,7 +1,7 @@
 Niepce Digital
 ==============
 
-This software is licensed under GPL version 3. See file 
+This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files maybe under GPL version 2 or later.
 
@@ -31,8 +31,7 @@ boost 1.34
  -boost test (for the unit test)
 exempi >= 2.2.0
 libopenraw >= 0.1.0
-geglmm >= 0.1.0
-gegl >= 0.1.0
+gegl >= 0.2.0
 babl
 libgphoto2
 
@@ -44,11 +43,7 @@ Working on Debian
 ~~~~~~~~~~~~~~~~~
 In order to get Niepce working on Debian you should have to install:
 aptitude install \
-> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-3-dev 
-
-Debian (nor Ubuntu) do not still pack geglmm. In order to get it visit 
-to get the latest version:
-http://ftp.gnome.org/pub/gnome/sources/geglmm/
+> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-3-dev
 
 Working on SUSE
 ~~~~~~~~~~~~~~~

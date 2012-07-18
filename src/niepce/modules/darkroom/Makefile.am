@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce -I$(top_srcdir)/src/ex
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \
-	@GEGLMM_CFLAGS@ @EXEMPI_CFLAGS@ @OPENRAW_CFLAGS@
+	@GEGL_CFLAGS@ @EXEMPI_CFLAGS@ @OPENRAW_CFLAGS@
 
 
 noinst_LIBRARIES=libmoduledarkroom.a

@@ -23,13 +23,13 @@
 #define _NIEPCE_NCR_H
 
 #include <glibmm/refptr.h>
-#include <geglmm/buffer.h>
+#include <gegl.h>
 #include <libopenraw/libopenraw.h>
 
 namespace ncr {
 
 /** load RAW data into a buffer. */
-Glib::RefPtr<Gegl::Buffer> load_rawdata(ORRawDataRef rawdata); 
+GeglBuffer* load_rawdata(ORRawDataRef rawdata);
 
 }
 

@@ -76,7 +76,7 @@ public:
     sigc::signal<void> signal_update;
 private:
 
-    /** rotate by x degrees (orientation) 
+    /** rotate by x degrees (orientation)
      *  ensure the end results is within 0..359.
      */
     void rotate_by(int degree);

@@ -20,13 +20,13 @@
 
 #include "init.hpp"
 
-#include <geglmm/init.h>
+#include <gegl.h>
 
 namespace ncr {
 
 void init()
 {
-    Gegl::init(0, NULL);
+    gegl_init(0, NULL);
 }
 
 }
