@@ -336,6 +336,9 @@ Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
                    (void*)surface->get_data(), surface->get_stride(),
                    (GeglBlitFlags)(GEGL_BLIT_CACHE | GEGL_BLIT_DIRTY));
 
+    // If you don't do that, it will never paint().
+    // Thanks to mitch for the tip in #gegl
+    surface->mark_dirty();
     return surface;
 }
 
