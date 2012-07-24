@@ -34,7 +34,8 @@ namespace ncr {
 
 struct Image::Private {
     Private()
-        : m_width(0)
+        : m_status(Image::STATUS_UNSET)
+        , m_width(0)
         , m_height(0)
         , m_orientation(0), m_vertical(false)
         , m_flip(false)
@@ -54,6 +55,7 @@ struct Image::Private {
             }
         }
 
+    Image::status_t m_status;
     int m_width, m_height; /**< the native dimension, with orientation */
     int m_orientation;     /**< EXIF orientation in degrees */
     bool m_vertical;
@@ -191,6 +193,8 @@ void Image::reload(const std::string & p, bool is_raw,
 {
     GeglNode* load_file;
 
+    priv->m_status = STATUS_LOADING;
+
     priv->m_graph = gegl_node_new();
 //    priv->m_graph->set("format", babl_format("RGB u16"));
 
@@ -240,6 +244,9 @@ void Image::reload(const std::string & p, bool is_raw,
     width = rect.width;
     height = rect.height;
     DBG_OUT("width %d height %d", width, height);
+    if(!width || !height) {
+        priv->m_status = STATUS_ERROR;
+    }
     if(priv->m_vertical) {
         priv->m_width = height;
         priv->m_height = width;
@@ -313,12 +320,18 @@ void Image::rotate_by(int degree)
 
 
 
-Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
+Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
 {
+    if(priv->m_status == STATUS_ERROR) {
+        // return the error
+        DBG_OUT("error");
+        return Cairo::RefPtr<Cairo::ImageSurface>();
+    }
     if(!priv->m_sink) {
         DBG_OUT("nothing loaded");
-        return Cairo::RefPtr<Cairo::Surface>();
+        return Cairo::RefPtr<Cairo::ImageSurface>();
     }
+    DBG_ASSERT(priv->m_status == STATUS_LOADING, "wrong status for image");
     DBG_OUT("processing");
     gegl_node_process(priv->m_scale);
     GeglRectangle roi = gegl_node_get_bounding_box(priv->m_scale);
@@ -339,7 +352,13 @@ Cairo::RefPtr<Cairo::Surface> Image::cairo_surface_for_display()
     // If you don't do that, it will never paint().
     // Thanks to mitch for the tip in #gegl
     surface->mark_dirty();
+    priv->m_status = STATUS_LOADED;
     return surface;
+}
+
+Image::status_t Image::get_status() const
+{
+    return priv->m_status;
 }
 
 int Image::get_original_width() const

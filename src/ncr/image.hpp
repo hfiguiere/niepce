@@ -29,17 +29,27 @@
 
 namespace ncr {
 
-class Image 
+class Image
 //    : public std::tr1::enable_shared_from_this<Image>
 {
 public:
     typedef std::tr1::shared_ptr<Image> Ptr;
+    typedef enum {
+        STATUS_UNSET,
+        STATUS_LOADING,
+        STATUS_LOADED,
+        STATUS_ERROR,
+        _STATUS_LAST
+    } status_t;
 
     Image();
     virtual ~Image();
 
     /* get a cairo surface to display the resulting image */
-    Cairo::RefPtr<Cairo::Surface> cairo_surface_for_display();
+    Cairo::RefPtr<Cairo::ImageSurface> cairo_surface_for_display();
+
+    /** The status of the image. */
+    status_t get_status() const;
 
     /* the dimensions of the original image */
     int get_original_width() const;

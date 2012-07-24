@@ -64,6 +64,7 @@ private:
     double _calc_image_scale(int img_w, int img_h);
     /** cause to "recalulate" the content. */
     void _redisplay();
+    Cairo::RefPtr<Cairo::ImageSurface> _get_error_placeholder();
 
     bool                           m_need_redisplay;
     ZoomMode                       m_zoom_mode;

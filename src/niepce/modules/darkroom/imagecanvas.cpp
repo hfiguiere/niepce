@@ -28,6 +28,10 @@
 
 #include <gdkmm/general.h>
 
+#ifndef DATADIR
+#error DATADIR is not defined
+#endif
+
 namespace dr {
 
 #define IMAGE_INSET 6
@@ -84,6 +88,14 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
 //    DBG_OUT("image frame %f %f %f %f", x, y, width, height);  
 }
 
+Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_error_placeholder()
+{
+    Cairo::RefPtr<Cairo::ImageSurface> s;
+    s = Cairo::ImageSurface::create_from_png(
+        std::string(DATADIR"/niepce/pixmaps/niepce-image-generic.png"));
+    return s;
+}
+
 bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 {
     // no image, just pass.
@@ -95,22 +107,30 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
     if(m_need_redisplay) {
         _redisplay();
 
-        // calculate the image scale
+        Cairo::RefPtr<Cairo::ImageSurface> img_s;
+
         int img_w, img_h;
-        img_w = m_image->get_original_width();
-        img_h = m_image->get_original_height();
-        DBG_OUT("image w = %d ; h = %d", img_w, img_h);
-        double scale = _calc_image_scale(img_w, img_h);
-        DBG_OUT("scale = %f", scale);
-        m_image->set_output_scale(scale);
+        double scale = 1.0;
+
+        if(m_image->get_status() != ncr::Image::STATUS_ERROR) {
+
+            // calculate the image scale
+            img_w = m_image->get_original_width();
+            img_h = m_image->get_original_height();
+            DBG_OUT("image w = %d ; h = %d", img_w, img_h);
+            scale = _calc_image_scale(img_w, img_h);
+            DBG_OUT("scale = %f", scale);
+            m_image->set_output_scale(scale);
 
 
-        // query the image.
-        Cairo::RefPtr<Cairo::Surface> img_s
-            = m_image->cairo_surface_for_display();
+            // query the image.
+            img_s = m_image->cairo_surface_for_display();
+        }
         if(!img_s) {
             DBG_OUT("no image loaded");
-            return false;
+            img_s = _get_error_placeholder();
+            img_w = img_s->get_width();
+            img_h = img_s->get_height();
         }
 
         int canvas_h, canvas_w;
@@ -164,11 +184,15 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 
 void ImageCanvas::_redisplay()
 {
-    int img_w, img_h; 
+    if (m_image->get_status() == ncr::Image::STATUS_ERROR) {
+        ERR_OUT("Image is in error");
+        return;
+    }
+    int img_w, img_h;
     img_w = m_image->get_original_width();
     img_h = m_image->get_original_height();
     DBG_OUT("set image w %d h %d", img_w, img_h);
-        
+
     fwk::Rect dest(0,0, get_width() - 8, get_height() - 8);
     fwk::Rect source(0,0, img_w, img_h);
     fwk::Rect frame;
