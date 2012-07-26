@@ -91,8 +91,13 @@ void ImageCanvas::_calc_image_frame(int img_w, int img_h,
 Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_error_placeholder()
 {
     Cairo::RefPtr<Cairo::ImageSurface> s;
-    s = Cairo::ImageSurface::create_from_png(
-        std::string(DATADIR"/niepce/pixmaps/niepce-image-generic.png"));
+    try {
+        s = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-image-generic.png"));
+    }
+    catch(...) {
+    }
+
     return s;
 }
 
