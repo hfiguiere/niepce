@@ -71,6 +71,7 @@ struct Image::Private {
 
     GeglNode* _rotate_node(int orientation);
     GeglNode* _scale_node();
+    GeglNode* _load_dcraw(const std::string &path);
     GeglNode* _load_raw(const std::string &path);
 };
 
@@ -132,6 +133,14 @@ GeglNode* Image::Private::_rotate_node(int orientation)
 //    gegl_node_link(flipNode, rotationNode);
 
     return rotationNode;
+}
+
+/** Use dcraw as a loader. Temporary fix */
+GeglNode* Image::Private::_load_dcraw(const std::string &p)
+{
+    return gegl_node_new_child(m_graph,
+                               "operation", "gegl:raw-load",
+                               "path", p.c_str(), NULL);
 }
 
 /** create the RAW pipeline */
@@ -206,7 +215,7 @@ void Image::reload(const std::string & p, bool is_raw,
                                         "path", p.c_str(), NULL);
     }
     else {
-        load_file = priv->_load_raw(p);
+        load_file = priv->_load_dcraw(p);
     }
 
     priv->m_rotate_n = priv->_rotate_node(orientation);
