@@ -1,0 +1,488 @@
+# Serbian translation for niepce.
+# Copyright (C) 2012 niepce's COPYRIGHT HOLDER
+# This file is distributed under the same license as the niepce package.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: niepce master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-26 04:24+0000\n"
+"PO-Revision-Date: 2012-11-27 09:14+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"Language-Team: Serbian <gnom@prevod.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: ../src/fwk/toolkit/frame.cpp:124
+msgid "Undo "
+msgstr "Опозови "
+
+#: ../src/fwk/toolkit/frame.cpp:133
+msgid "Redo "
+msgstr "Поврати "
+
+#: ../src/fwk/toolkit/widgets/addinstreemodel.cpp:64
+msgid "Name"
+msgstr "Назив"
+
+#: ../src/fwk/toolkit/widgets/addinstreemodel.cpp:65
+msgid "Description"
+msgstr "Опис"
+
+#: ../src/engine/db/library.cpp:140
+msgid "Trash"
+msgstr "Смеће"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:57
+msgid "Edit Labels"
+msgstr "Уредите натписе"
+
+#: ../src/niepce/ui/dialogs/editlabels.cpp:114
+msgid "Change Labels"
+msgstr "Измените натписе"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:1
+#: ../src/niepce/ui/moduleshell.cpp:80
+msgid "Label _6"
+msgstr "Натпис _6"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:2
+#: ../src/niepce/ui/moduleshell.cpp:85
+msgid "Label _7"
+msgstr "Натпис _7"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:3
+#: ../src/niepce/ui/moduleshell.cpp:90
+msgid "Label _8"
+msgstr "Натпис _8"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:4
+#: ../src/niepce/ui/moduleshell.cpp:95
+msgid "Label _9"
+msgstr "Натпис _9"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:5
+msgid "Label _10"
+msgstr "Натпис _10"
+
+#: ../src/niepce/ui/dialogs/editlabels.ui.h:6
+msgid "<b>Labels</b>"
+msgstr "<b>Натписи</b>"
+
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. indent-tabs-mode:nil
+#. tab-width:4
+#. fill-column:99
+#. End:
+#.
+#: ../src/niepce/ui/dialogs/importdialog.cpp:62
+#: ../src/niepce/ui/dialogs/importdialog.cpp:90
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
+msgid "Import"
+msgstr "Увези"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:86
+msgid "Import picture folder"
+msgstr "Увезите фасциклу са сликама"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+msgid "_Import"
+msgstr "_Увези"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+msgid "_Directory:"
+msgstr "_Директоријум:"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+msgid "..."
+msgstr "..."
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+msgid "_Images to import"
+msgstr "_Слике за увоз"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+msgid "Destination _Folder"
+msgstr "Одредишна _фасцикла"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+msgid "Import _UFRaw"
+msgstr "Увези сирово _УФ"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
+msgid "Import Raw_Studio"
+msgstr "Увези сирови _студио"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
+msgid "You can still change this after importing the pictures."
+msgstr "Ово можете још увек да измените након увоза слика."
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
+msgid "<b>Date:</b>"
+msgstr "<b>Датум:</b>"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
+msgid "_Options"
+msgstr "_Опције"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:1
+msgid "_Reopen Library"
+msgstr "_Поново отвори библиотеку"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:2
+msgid "Write XMP automatically (not recommended)"
+msgstr "Самостално запиши ИксМП (није препоручљиво)"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:3
+msgid "_General"
+msgstr "_Опште"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:4
+msgid "Use dark interface"
+msgstr "Користи тамно сучеље"
+
+#: ../src/niepce/ui/dialogs/preferences.ui.h:5
+msgid "_User Interface"
+msgstr "_Корисничко сучеље"
+
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+msgid "Preferences"
+msgstr "Поставке"
+
+#: ../src/niepce/ui/moduleshell.cpp:59
+msgid "_Image"
+msgstr "_Слика"
+
+#: ../src/niepce/ui/moduleshell.cpp:79
+msgid "Set _Label"
+msgstr "Подеси _натпис"
+
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "Set _Rating"
+msgstr "Подеси _оцену"
+
+#: ../src/niepce/ui/moduleshell.cpp:133
+msgid "Set _Flag"
+msgstr "Подеси _опцију"
+
+#: ../src/niepce/ui/moduleshell.cpp:134
+msgid "Flag as _Rejected"
+msgstr "Означи _одбаченом"
+
+#: ../src/niepce/ui/moduleshell.cpp:139
+msgid "_Unflagged"
+msgstr "_Без опције"
+
+#: ../src/niepce/ui/moduleshell.cpp:144
+msgid "Flag as _Pick"
+msgstr "Означи _изабраном"
+
+#: ../src/niepce/ui/moduleshell.cpp:195
+msgid "Library"
+msgstr "Библиотека"
+
+#: ../src/niepce/ui/moduleshell.cpp:204
+msgid "Darkroom"
+msgstr "Мрачна соба"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "Make:"
+msgstr "Произвођач:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "Model:"
+msgstr "Модел:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:40
+msgid "Lens:"
+msgstr "Сочиво:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+msgid "Exposure Program:"
+msgstr "Програм експозиције:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+msgid "Speed:"
+msgstr "Брзина:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:46
+msgid "Aperture:"
+msgstr "Бленда:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:47
+msgid "ISO:"
+msgstr "ИСО:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:48
+msgid "Exposure Bias:"
+msgstr "Нагиб експозиције:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+msgid "Flash:"
+msgstr "Блиц:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+msgid "Flash compensation:"
+msgstr "Надокнада блица:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+msgid "Focal length:"
+msgstr "Жижна даљина:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "White balance:"
+msgstr "Баланс белог:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:53
+msgid "Date:"
+msgstr "Датум:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+msgid "Headline:"
+msgstr "Заглавље:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+msgid "Caption:"
+msgstr "Наслов:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+msgid "Rating:"
+msgstr "Оцена:"
+
+#. FIXME change this type to the right one when there is a widget
+#: ../src/niepce/ui/metadatapanecontroller.cpp:61
+msgid "Label:"
+msgstr "Натпис:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:62
+msgid "Keywords:"
+msgstr "Кључне речи:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:66
+msgid "Camera Information"
+msgstr "Подаци о фото-апарату"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+msgid "Shooting Information"
+msgstr "Подаци о снимању"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "IPTC"
+msgstr "ИПТЦ"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+msgid "Rights"
+msgstr "Права"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:105
+msgid "Image Properties"
+msgstr "Особине слике"
+
+#: ../src/niepce/ui/niepceapplication.cpp:66
+msgid ""
+"A digital photo application.\n"
+"\n"
+"Build options: "
+msgstr ""
+"Програм за дигиталне фотографије.\n"
+"\n"
+"Опције изградње: "
+
+#: ../src/niepce/ui/niepcewindow.cpp:132
+msgid "Ready"
+msgstr "Спреман"
+
+#: ../src/niepce/ui/niepcewindow.cpp:228
+msgid "_Library"
+msgstr "_Библиотека"
+
+#: ../src/niepce/ui/niepcewindow.cpp:234
+msgid "New _Folder..."
+msgstr "Нова _фасцикла..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:235
+msgid "New _Project..."
+msgstr "Нови _пројекат..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:237 ../camerawire/src/cwwindow.cpp:92
+msgid "_Import..."
+msgstr "_Увези..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:247 ../camerawire/src/cwwindow.cpp:102
+msgid "_Edit"
+msgstr "_Уреди"
+
+#: ../src/niepce/ui/niepcewindow.cpp:267 ../camerawire/src/cwwindow.cpp:118
+msgid "_Tools"
+msgstr "_Алати"
+
+#: ../src/niepce/ui/niepcewindow.cpp:268
+msgid "_Edit Labels..."
+msgstr "_Уреди натписе..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:271 ../camerawire/src/cwwindow.cpp:124
+msgid "_Hide tools"
+msgstr "_Сакриј алате"
+
+#: ../src/niepce/ui/niepcewindow.cpp:275 ../camerawire/src/cwwindow.cpp:128
+msgid "_Help"
+msgstr "По_моћ"
+
+#: ../src/niepce/ui/niepcewindow.cpp:344
+msgid "Create library"
+msgstr "Направи библиотеку"
+
+#: ../src/niepce/ui/niepcewindow.cpp:348
+msgid "Create"
+msgstr "Направи"
+
+#. TODO make this parametric from resources
+#: ../src/niepce/ui/niepcewindow.cpp:393
+msgid "Label 1"
+msgstr "Натпис 1"
+
+#. 217, 37, 17
+#: ../src/niepce/ui/niepcewindow.cpp:394
+msgid "Label 2"
+msgstr "Натпис 2"
+
+#. 97, 217, 17
+#: ../src/niepce/ui/niepcewindow.cpp:395
+msgid "Label 3"
+msgstr "Натпис 3"
+
+#. 17, 197, 217
+#: ../src/niepce/ui/niepcewindow.cpp:396
+msgid "Label 4"
+msgstr "Натпис 4"
+
+#. 137, 17, 217
+#: ../src/niepce/ui/niepcewindow.cpp:397
+msgid "Label 5"
+msgstr "Натпис 5"
+
+#: ../src/niepce/ui/niepcewindow.cpp:460
+msgid "Niepce Digital - "
+msgstr "Њепце дигитал — "
+
+#: ../src/niepce/ui/selectioncontroller.cpp:248
+msgid "Set Flag"
+msgstr "Подеси опцију"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:251
+msgid "Set Rating"
+msgstr "Подеси оцену"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:254
+msgid "Set Label"
+msgstr "Подеси натпис"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:257
+msgid "Set Property"
+msgstr "Подеси својство"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:276
+msgid "Set Properties"
+msgstr "Подеси својства"
+
+#: ../src/niepce/ui/selectioncontroller.cpp:290
+msgid "Move to Trash"
+msgstr "Премести у смеће"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:235
+msgid "Pictures"
+msgstr "Слике"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:239
+msgid "Projects"
+msgstr "Пројекти"
+
+#: ../src/niepce/ui/workspacecontroller.cpp:243
+msgid "Keywords"
+msgstr "Кључне речи"
+
+#. TODO make it a mnemonic
+#: ../src/niepce/ui/workspacecontroller.cpp:256
+msgid "_Workspace"
+msgstr "_Радни простор"
+
+#: ../src/niepce/stock.cpp:46
+msgid "Rotate L_eft"
+msgstr "Заокрени на _лево"
+
+#: ../src/niepce/stock.cpp:49
+msgid "Rotate R_ight"
+msgstr "Заокрени на _десно"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:39
+msgid "Develop"
+msgstr "Развиј"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:57
+msgid "Crop"
+msgstr "Одрежи"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
+msgid "Tilt"
+msgstr "Нагиб"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:63
+msgid "White balance"
+msgstr "Баланс белог"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:66
+msgid "Color temperature"
+msgstr "Температура боје"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:68
+msgid "Tone and colour"
+msgstr "Тон и боја"
+
+#. s->signal_value_changed().connect();
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:72
+msgid "Exposure"
+msgstr "Изложеност"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:74
+msgid "Recovery"
+msgstr "Опоравак"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
+msgid "Fill Light"
+msgstr "Испуни светлост"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:78
+msgid "Blacks"
+msgstr "Црнило"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:80
+msgid "Brightness"
+msgstr "Осветљеност"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:82
+msgid "Contrast"
+msgstr "Контраст"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:84
+msgid "Saturation"
+msgstr "Засићеност"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:86
+msgid "Vibrance"
+msgstr "Вибрација"
+
+#: ../camerawire/src/cwwindow.cpp:67
+msgid "Camera"
+msgstr "Фото-апарат"
+
+#: ../camerawire/src/cwwindow.cpp:91
+msgid "_File"
+msgstr "_Датотека"
