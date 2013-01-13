@@ -53,6 +53,10 @@ src/engine/library/test_opqueue
 src/niepce/niepce
 camerawire/src/camerawire
 camerawire/po/POTFILES
+camerawire/po/Makefile.in
+magellan/src/magellan
+magellan/po/POTFILES
+magellan/po/Makefile.in
 doc/Doxyfile
 doc/doxygen/html
 po/*.gmo

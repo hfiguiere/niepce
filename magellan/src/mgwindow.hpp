@@ -42,34 +42,17 @@ protected:
   virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 
 private:
-  class CameraTreeRecord
-    : public Gtk::TreeModelColumnRecord
-  {
-  public:
-    CameraTreeRecord()
-      {
-        add(m_icon);
-        add(m_label);
-        add(m_persistent);
-      }
-
-    Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
-    Gtk::TreeModelColumn<std::string>        m_label;
-    Gtk::TreeModelColumn<bool>               m_persistent;
-  };
 
   void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
   void init_actions();
   void on_action_import();
   void on_preferences();
 
-  void reload_camera_list();
+  void detect_devices();
 
-  CameraTreeRecord               m_camera_tree_record;
-  Glib::RefPtr<Gtk::ListStore>   m_camera_tree_model;
   Gtk::VBox                      m_vbox;
-  Gtk::HBox                      m_hbox;
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+	Glib::RefPtr<Gtk::Action>      m_importAction;
 };
 
 }

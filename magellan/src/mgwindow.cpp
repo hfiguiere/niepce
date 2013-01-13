@@ -23,6 +23,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/window.h>
 
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "mgwindow.hpp"
@@ -58,23 +59,17 @@ Gtk::Widget * MgWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager
 
   Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
   m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
-  m_vbox.pack_start(m_hbox, true, true, 4);
 
-  m_camera_tree_model = Gtk::ListStore::create(m_camera_tree_record);
-  Gtk::TreeView *treeview = manage(new Gtk::TreeView(m_camera_tree_model));
-  Gtk::TreeViewColumn *column;
+  Glib::RefPtr<Gtk::Builder> bldr
+	  = Gtk::Builder::create_from_file(GLADEDIR"mgwindow.ui",
+					   "content_box");
+  Gtk::Box* content;
+  bldr->get_widget("content_box", content);
+  m_vbox.pack_start(*content, true, true, 8);
 
-  column = manage(new Gtk::TreeViewColumn(_("Camera")));
-  Gtk::CellRendererToggle *cell = manage(new Gtk::CellRendererToggle);
-  column->pack_start(*cell, false);
-  column->add_attribute(cell->property_active(), 
-                        m_camera_tree_record.m_persistent);
-  column->pack_start(m_camera_tree_record.m_icon, false);
-  column->pack_start(m_camera_tree_record.m_label);
-  treeview->append_column(*column);
-  m_hbox.pack_start(*treeview, false, true, 4);
-
-  reload_camera_list();
+  Gtk::Button* dload_btn;
+  bldr->get_widget("download_btn", dload_btn);
+  dload_btn->set_related_action(m_importAction);
 
   win.set_size_request(600, 400);
   win.show_all_children();
@@ -87,17 +82,18 @@ void MgWindow::init_actions()
     Glib::RefPtr<Gtk::Action> an_action;
 
     m_refActionGroup = Gtk::ActionGroup::create();
-		
+
     m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
-    m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-                          sigc::mem_fun(*this, 
-                                        &MgWindow::on_action_import));
+    m_importAction = Gtk::Action::create("Import", _("_Import"));
+    m_refActionGroup->add(m_importAction,
+			  sigc::mem_fun(*this,
+					&MgWindow::on_action_import));
     m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
-                          sigc::mem_fun(gtkWindow(), 
-                                        &Gtk::Window::hide));			
+                          sigc::mem_fun(gtkWindow(),
+                                        &Gtk::Window::hide));
     m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-                          sigc::mem_fun(*Application::app(), 
-                                        &Application::quit));	
+                          sigc::mem_fun(*Application::app(),
+                                        &Application::quit));
 
     m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
 
@@ -110,16 +106,16 @@ void MgWindow::init_actions()
     m_refActionGroup->add(Gtk::Action::create("Paste", Gtk::Stock::PASTE));
     m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE));
 
-    m_refActionGroup->add(Gtk::Action::create("Preferences", 
+    m_refActionGroup->add(Gtk::Action::create("Preferences",
                                               Gtk::Stock::PREFERENCES),
                           sigc::mem_fun(*this,
                                         &MgWindow::on_preferences));
 
     m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
-    m_refActionGroup->add(Gtk::Action::create("ReloadCameras",
+    m_refActionGroup->add(Gtk::Action::create("RedetectDevices",
                                               Gtk::Stock::REFRESH),
                           Gtk::AccelKey("F5"),
-                          sigc::mem_fun(*this, &MgWindow::reload_camera_list));
+                          sigc::mem_fun(*this, &MgWindow::detect_devices));
     m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
                                                     _("_Hide tools"));
     m_refActionGroup->add(m_hide_tools_action,
@@ -131,8 +127,8 @@ void MgWindow::init_actions()
                           sigc::mem_fun(*Application::app(),
                                         &Application::about));
 
-    Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
-		
+    Application::app()->uiManager()->insert_action_group(m_refActionGroup);
+
     gtkWindow().add_accel_group(Application::app()
                                 ->uiManager()->get_accel_group());
 }
@@ -161,10 +157,10 @@ void MgWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
     "      <menuitem action='Preferences'/>"
     "    </menu>"
     "    <menu action='MenuTools'>"
-    "      <menuitem action='ReloadCameras' />"
-    "      <separator/>"        
+    "      <menuitem action='RedetectDevices' />"
+    "      <separator/>"
     "      <menuitem action='ToggleToolsVisible'/>"
-    "      <separator/>"        
+    "      <separator/>"
     "    </menu>"
     "    <menu action='MenuHelp'>"
     "      <menuitem action='Help'/>"
@@ -177,21 +173,24 @@ void MgWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
     "  </toolbar>"
     "</ui>";
   manager->add_ui_from_string(ui_info);
-} 
+}
 
 
 void MgWindow::on_action_import()
 {
+  DBG_OUT("import");
 }
 
 
 void MgWindow::on_preferences()
 {
+  DBG_OUT("prefs");
 }
 
 
-void MgWindow::reload_camera_list()
+void MgWindow::detect_devices()
 {
+  DBG_OUT("detect");
 }
 
 
