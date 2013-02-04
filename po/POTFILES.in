@@ -19,3 +19,5 @@ src/niepce/ui/thumbstripview.cpp
 src/niepce/stock.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
 camerawire/src/cwwindow.cpp
+magellan/src/mgwindow.cpp
+[type: gettext/glade]magellan/src/mgwindow.ui
