@@ -26,7 +26,7 @@
 
 #include <tr1/memory>
 
-#include "fwk/base/color.hpp"
+#include "fwk/base/colour.hpp"
 #include "engine/db/librarytypes.hpp"
 
 namespace eng {
@@ -41,27 +41,27 @@ public:
     typedef std::vector<Ptr> List;
     typedef std::tr1::shared_ptr<List> ListPtr;
 
-    Label(library_id_t _id, const std::string & _label, const std::string & _colorstring)
+    Label(library_id_t _id, const std::string & _label, const std::string & _colourstring)
         : m_id(_id), m_label(_label)
-        , m_color(_colorstring)
+        , m_colour(_colourstring)
         {
         }
-		
+
     library_id_t id() const
         { return m_id; }
-    const std::string & label() 
+    const std::string & label()
         { return m_label; }
     void set_label(const std::string & l)
         { m_label = l; }
-    const fwk::RgbColor & color() const
-        { return m_color; }
-    void set_color(const fwk::RgbColor & c)
-        { m_color = c; }
+    const fwk::RgbColour & colour() const
+        { return m_colour; }
+    void set_colour(const fwk::RgbColour & c)
+        { m_colour = c; }
 
 private:
     library_id_t          m_id;
     std::string      m_label;
-    fwk::RgbColor    m_color;
+    fwk::RgbColour    m_colour;
 };
 
 }

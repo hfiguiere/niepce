@@ -164,20 +164,20 @@ int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr,
 }
 
 void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr, 
-               int right, const fwk::RgbColor * color,
+               int right, const fwk::RgbColour * colour,
                const GdkRectangle & r)
 {
-    DBG_ASSERT(color, "color is NULL");
+    DBG_ASSERT(colour, "colour is NULL");
     const int label_size = 15;
     double x, y;
     x = r.x + r.width - CELL_PADDING - right - CELL_PADDING - label_size;
     y = r.y + r.height - CELL_PADDING - label_size;
-    
+
     cr->rectangle(x, y, label_size, label_size);
     cr->set_source_rgb(1.0, 1.0, 1.0);
     cr->stroke();
     cr->rectangle(x, y, label_size, label_size);
-    Gdk::Cairo::set_source_rgba(cr, fwk::rgbcolor_to_gdkcolor(*color));
+    Gdk::Cairo::set_source_rgba(cr, fwk::rgbcolour_to_gdkcolor(*colour));
     cr->fill();
 }
 
@@ -208,29 +208,29 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 {
     unsigned int xpad = Gtk::CellRenderer::property_xpad();
     unsigned int ypad = Gtk::CellRenderer::property_ypad();
-    
+
     GdkRectangle r = *(cell_area.gobj());
     r.x += xpad;
     r.y += ypad;
-    
+
     eng::LibFile::Ptr file = m_libfileproperty.get_value();
-    
+
     Glib::RefPtr<Gtk::StyleContext> style_context = widget.get_style_context();
-    Gdk::RGBA color;
+    Gdk::RGBA colour;
     if(flags & Gtk::CELL_RENDERER_SELECTED) {
-        color = style_context->get_background_color(Gtk::STATE_FLAG_SELECTED);
+        colour = style_context->get_background_color(Gtk::STATE_FLAG_SELECTED);
     }
     else {
-        color = style_context->get_background_color(Gtk::STATE_FLAG_NORMAL);
+        colour = style_context->get_background_color(Gtk::STATE_FLAG_NORMAL);
     }
-    
-    Gdk::Cairo::set_source_rgba(cr, color);
+
+    Gdk::Cairo::set_source_rgba(cr, colour);
     cr->rectangle(r.x, r.y, r.width, r.height);
     cr->fill();
-    
+
     if(m_drawborder) {
-        color = style_context->get_border_color(Gtk::STATE_FLAG_SELECTED);
-        Gdk::Cairo::set_source_rgba(cr, color);
+        colour = style_context->get_border_color(Gtk::STATE_FLAG_SELECTED);
+        Gdk::Cairo::set_source_rgba(cr, colour);
         cr->set_line_width(1.0);
         cr->rectangle(r.x, r.y, r.width, r.height);
         cr->stroke();
@@ -273,16 +273,16 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
             emblem = m_unknown_format_emblem;
             break;
         }
-        
+
         int left = drawFormatEmblem(cr, emblem, r);
         if(m_drawlabel) {
             DBG_ASSERT(m_uiDataProvider, "no UIDataProvider");
             uint32_t label_id = file->label();
             if(label_id != 0) {
-                const fwk::RgbColor * label_color = m_uiDataProvider->colorForLabel(label_id);
-                DBG_ASSERT(label_color, "color not found");
-                if(label_color) {
-                    drawLabel(cr, left, label_color, r);
+                const fwk::RgbColour * label_colour = m_uiDataProvider->colourForLabel(label_id);
+                DBG_ASSERT(label_colour, "colour not found");
+                if(label_colour) {
+                    drawLabel(cr, left, label_colour, r);
                 }
             }
         }

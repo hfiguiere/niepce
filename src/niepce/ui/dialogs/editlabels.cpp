@@ -56,27 +56,27 @@ void EditLabels::setup_widget()
 
     add_header(_("Edit Labels"));
 
-    const char * color_fmt = "colorbutton%1%";
+    const char * colour_fmt = "colorbutton%1%";
     const char * value_fmt = "value%1%";
     for(size_t i = 0; i < 5; i++) {
         bool has_label = m_labels.size() > i;
 
-        Gtk::ColorButton *colorbutton;
+        Gtk::ColorButton *colourbutton;
         Gtk::Entry *labelentry;
 
-        _builder->get_widget(str(boost::format(color_fmt) % (i+1)), colorbutton);
-        m_colors[i] = colorbutton;
+        _builder->get_widget(str(boost::format(colour_fmt) % (i+1)), colourbutton);
+        m_colours[i] = colourbutton;
         _builder->get_widget(str(boost::format(value_fmt) % (i+1)), labelentry);
         DBG_ASSERT(labelentry, "couldn't find label");
         m_entries[i] = labelentry;
 
         if(has_label) {
-            Gdk::RGBA color = fwk::rgbcolor_to_gdkcolor(m_labels[i]->color());
-            colorbutton->set_rgba(color);
+            Gdk::RGBA colour = fwk::rgbcolour_to_gdkcolor(m_labels[i]->colour());
+            colourbutton->set_rgba(colour);
             labelentry->set_text(m_labels[i]->label());
         }
-        colorbutton->signal_color_set().connect(
-            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_color_changed), i));
+        colourbutton->signal_color_set().connect(
+            sigc::bind(sigc::mem_fun(*this, &EditLabels::label_colour_changed), i));
         labelentry->signal_changed().connect(
             sigc::bind(sigc::mem_fun(*this, &EditLabels::label_name_changed), i));
     }
@@ -90,7 +90,7 @@ void EditLabels::label_name_changed(size_t idx)
 }
 
 
-void EditLabels::label_color_changed(size_t idx)
+void EditLabels::label_colour_changed(size_t idx)
 {
     m_status[idx] = true;
 }
@@ -108,29 +108,29 @@ void EditLabels::update_labels(int /*response*/)
             if(new_name.empty()) {
                 continue;
             }
-            std::string new_color
-                = fwk::gdkcolor_to_rgbcolor(m_colors[i]->get_rgba()).to_string();
+            std::string new_colour
+                = fwk::gdkcolor_to_rgbcolour(m_colours[i]->get_rgba()).to_string();
             if(!undo) {
                 undo = fwk::Application::app()->begin_undo(_("Change Labels"));
             }
 
             if(has_label) {
                 std::string current_name = m_labels[i]->label();
-                std::string current_color = m_labels[i]->color().to_string();
+                std::string current_colour = m_labels[i]->colour().to_string();
 
                 undo->new_command<void>(
-                    boost::bind(&libraryclient::LibraryClient::updateLabel, 
-                                m_lib_client, m_labels[i]->id(), new_name, 
-                                new_color),
-                    boost::bind(&libraryclient::LibraryClient::updateLabel, 
-                                m_lib_client, m_labels[i]->id(), current_name, 
-                                current_color));
+                    boost::bind(&libraryclient::LibraryClient::updateLabel,
+                                m_lib_client, m_labels[i]->id(), new_name,
+                                new_colour),
+                    boost::bind(&libraryclient::LibraryClient::updateLabel,
+                                m_lib_client, m_labels[i]->id(), current_name,
+                                current_colour));
             }
             else {
                 undo->new_command<int>(
-                    boost::bind(&libraryclient::LibraryClient::createLabel, 
-                                m_lib_client, new_name, new_color),
-                    boost::bind(&libraryclient::LibraryClient::deleteLabel, 
+                    boost::bind(&libraryclient::LibraryClient::createLabel,
+                                m_lib_client, new_name, new_colour),
+                    boost::bind(&libraryclient::LibraryClient::deleteLabel,
                                 m_lib_client, _1));
             }
         }

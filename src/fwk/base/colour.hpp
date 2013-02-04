@@ -1,5 +1,5 @@
 /*
- * niepce - fwk/base/color.hpp
+ * niepce - fwk/base/colour.hpp
  *
  * Copyright (C) 2009 Hubert Figuiere
  *
@@ -19,8 +19,8 @@
 
 
 
-#ifndef __FWK_BASE_COLOR_HPP_
-#define __FWK_BASE_COLOR_HPP_
+#ifndef __FWK_BASE_COLOUR_HPP_
+#define __FWK_BASE_COLOUR_HPP_
 
 #include <stdint.h>
 
@@ -29,16 +29,16 @@
 
 namespace fwk {
 
-  /** A RgbColor tuple (3 components, 16bpp)
+  /** A RgbColour tuple (3 components, 16bpp)
    *  To be used only for UI.
    */
-  class RgbColor
+  class RgbColour
     : public std::tr1::array<uint16_t, 3>
   {
   public:
-    RgbColor(value_type r = 0, value_type g = 0, value_type b = 0);
-    explicit RgbColor(const std::string & );
-    
+    RgbColour(value_type r = 0, value_type g = 0, value_type b = 0);
+    explicit RgbColour(const std::string & );
+
     std::string to_string() const;
   };
 

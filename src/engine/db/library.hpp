@@ -43,7 +43,7 @@
 #define DB_SCHEMA_VERSION 5
 
 namespace fwk {
-class RgbColor;
+class RgbColour;
 }
 
 namespace eng {
@@ -169,9 +169,9 @@ public:
     bool moveFileToFolder(library_id_t file_id, library_id_t folder_id);
 
 		void getAllLabels(const eng::Label::ListPtr & l);
-    library_id_t addLabel(const std::string & name, const std::string & color);
-    library_id_t addLabel(const std::string & name, const fwk::RgbColor & c);
-    bool updateLabel(library_id_t label_id, const std::string & name, const std::string & color);
+    library_id_t addLabel(const std::string & name, const std::string & colour);
+    library_id_t addLabel(const std::string & name, const fwk::RgbColour & c);
+    bool updateLabel(library_id_t label_id, const std::string & name, const std::string & colour);
     bool deleteLabel(library_id_t label_id);
 
     /** Trigger the processing of the XMP update queue */

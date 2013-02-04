@@ -69,10 +69,10 @@ namespace fwk {
 			break;
 		case 7:
 			pixbuf =  tmp->rotate_simple(Gdk::PIXBUF_ROTATE_COUNTERCLOCKWISE)->flip(FALSE);
-			break;		
+			break;
 		case 8:
 			pixbuf =  tmp->rotate_simple(Gdk::PIXBUF_ROTATE_COUNTERCLOCKWISE);
-			break;		
+			break;
 		default:
 			break;
 		}
@@ -80,18 +80,18 @@ namespace fwk {
 	}
 
 
-  Gdk::RGBA rgbcolor_to_gdkcolor(const fwk::RgbColor & color)
+  Gdk::RGBA rgbcolour_to_gdkcolor(const fwk::RgbColour & colour)
   {
-    Gdk::RGBA gdkcolor;
-    gdkcolor.set_rgba_u(color[0], color[1], color[2]);
-    return gdkcolor;
+    Gdk::RGBA gdkcolour;
+    gdkcolour.set_rgba_u(colour[0], colour[1], colour[2]);
+    return gdkcolour;
   }
 
 
-  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::RGBA & color)
+  fwk::RgbColour gdkcolor_to_rgbcolour(const Gdk::RGBA & colour)
   {
-    fwk::RgbColor rgbcolor(color.get_red_u(), color.get_green_u(), color.get_blue_u());
-    return rgbcolor;
+    fwk::RgbColour rgbcolour(colour.get_red_u(), colour.get_green_u(), colour.get_blue_u());
+    return rgbcolour;
   }
 
 

@@ -25,7 +25,7 @@
 #include "engine/db/label.hpp"
 
 namespace fwk {
-class RgbColor;
+class RgbColour;
 }
 
 namespace libraryclient {
@@ -38,7 +38,7 @@ public:
     void updateLabel(const eng::Label::Ptr &);
     void addLabels(const eng::Label::ListPtr & l);
     void deleteLabel(int id);
-    const fwk::RgbColor * colorForLabel(int id) const;
+    const fwk::RgbColour * colourForLabel(int id) const;
     const eng::Label::List & getLabels() const
         { return m_labels; }
 private:

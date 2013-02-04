@@ -27,7 +27,7 @@
 
 #include <glibmm/i18n.h>
 
-#include "fwk/base/color.hpp"
+#include "fwk/base/colour.hpp"
 #include "niepce/notifications.hpp"
 #include "library.hpp"
 #include "metadata.hpp"
@@ -804,11 +804,11 @@ void Library::getAllLabels(const Label::ListPtr & l)
             while(m_dbdrv->read_next_row()) {
                 int32_t id;
                 std::string name;
-                std::string color;
+                std::string colour;
                 m_dbdrv->get_column_content(0, id);
                 m_dbdrv->get_column_content(1, name);
-                m_dbdrv->get_column_content(2, color);
-                l->push_back(Label::Ptr(new Label(id, name, color)));
+                m_dbdrv->get_column_content(2, colour);
+                l->push_back(Label::Ptr(new Label(id, name, colour)));
             }
         }
     }
@@ -819,13 +819,13 @@ void Library::getAllLabels(const Label::ListPtr & l)
 }
 
 
-library_id_t Library::addLabel(const std::string & name, const std::string & color)
+library_id_t Library::addLabel(const std::string & name, const std::string & colour)
 {
     library_id_t ret = -1;
 
     SQLStatement sql(boost::format("INSERT INTO labels (name,color)"
                                    " VALUES ('%1%', '%2%')") 
-                     % name % color);
+                     % name % colour);
     if(m_dbdrv->execute_statement(sql)) {
         library_id_t id = m_dbdrv->last_row_id();
         DBG_OUT("last row inserted %d", (int)id);
@@ -835,17 +835,17 @@ library_id_t Library::addLabel(const std::string & name, const std::string & col
 }
 
 
-library_id_t Library::addLabel(const std::string & name, const fwk::RgbColor & c)
+library_id_t Library::addLabel(const std::string & name, const fwk::RgbColour & c)
 {
     return addLabel(name, c.to_string());
 }
 
 
-bool Library::updateLabel(library_id_t label_id, const std::string & name, const std::string & color)
+bool Library::updateLabel(library_id_t label_id, const std::string & name, const std::string & colour)
 {
     SQLStatement sql(boost::format("UPDATE labels SET name='%2%', color='%3%'"
                                    " WHERE id='%1%';") 
-                     % label_id % name % color);
+                     % label_id % name % colour);
     try {
         return m_dbdrv->execute_statement(sql);
     }

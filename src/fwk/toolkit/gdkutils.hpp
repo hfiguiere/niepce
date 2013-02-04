@@ -24,11 +24,11 @@
 #include <gdkmm/pixbuf.h>
 #include <gdkmm/rgba.h>
 
-#include "fwk/base/color.hpp"
+#include "fwk/base/colour.hpp"
 
 namespace fwk {
-	
-	/** scale the pixbuf to fit in the square 
+
+	/** scale the pixbuf to fit in the square
 	 * @param dim the dimension of the square
 	 */
 	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_scale_to_fit(const Glib::RefPtr<Gdk::Pixbuf> & pix,
@@ -37,9 +37,8 @@ namespace fwk {
 	Glib::RefPtr<Gdk::Pixbuf> gdkpixbuf_exif_rotate(const Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
 													int exif_orientation);
 
-  Gdk::RGBA rgbcolor_to_gdkcolor(const fwk::RgbColor & color);
-  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::RGBA & color);
-
+  Gdk::RGBA rgbcolour_to_gdkcolor(const fwk::RgbColour & colour);
+  fwk::RgbColour gdkcolor_to_rgbcolour(const Gdk::RGBA & colour);
 }
 
 #endif

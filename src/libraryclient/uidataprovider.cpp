@@ -21,7 +21,7 @@
 #include <boost/bind.hpp>
 
 #include "fwk/base/debug.hpp"
-#include "fwk/base/color.hpp"
+#include "fwk/base/colour.hpp"
 #include "engine/db/label.hpp"
 #include "uidataprovider.hpp"
 
@@ -33,10 +33,10 @@ void UIDataProvider::updateLabel(const eng::Label::Ptr & l)
     // TODO: will work as long as we have 5 labels or something.
     for(eng::Label::List::iterator iter = m_labels.begin();
         iter != m_labels.end(); ++iter) {
-        
+
         if((*iter)->id() == l->id()) {
             (*iter)->set_label(l->label());
-            (*iter)->set_color(l->color());
+            (*iter)->set_colour(l->colour());
         }
     }
 }
@@ -56,7 +56,7 @@ void UIDataProvider::deleteLabel(int id)
     // TODO: will work as long as we have 5 labels or something.
     for(eng::Label::List::iterator iter = m_labels.begin();
         iter != m_labels.end(); ++iter) {
-        
+
         if((*iter)->id() == id) {
             DBG_OUT("remove label %d", id);
             iter = m_labels.erase(iter);
@@ -65,12 +65,12 @@ void UIDataProvider::deleteLabel(int id)
     }
 }
 
-const fwk::RgbColor * UIDataProvider::colorForLabel(int id) const
+const fwk::RgbColour * UIDataProvider::colourForLabel(int id) const
 {
     for(eng::Label::List::const_iterator iter = m_labels.begin();
         iter != m_labels.end(); ++iter) {
         if((*iter)->id() == id) {
-            return &((*iter)->color());
+            return &((*iter)->colour());
         }
     }
     return NULL;

@@ -28,7 +28,7 @@ testfractions_LDADD = libfwkbase.a \
 	@LIBGLIBMM_LIBS@
 
 
-libfwkbase_a_SOURCES = color.hpp color.cpp \
+libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	autoflag.hpp \
 	date.hpp date.cpp \
 	debug.hpp debug.cpp \
