@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.cpp
  *
- * Copyright (C) 2008,2011 Hubert Figuiere
+ * Copyright (C) 2008, 2011, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,7 +177,7 @@ void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr,
     cr->set_source_rgb(1.0, 1.0, 1.0);
     cr->stroke();
     cr->rectangle(x, y, label_size, label_size);
-    Gdk::Cairo::set_source_color(cr, fwk::rgbcolor_to_gdkcolor(*color));
+    Gdk::Cairo::set_source_rgba(cr, fwk::rgbcolor_to_gdkcolor(*color));
     cr->fill();
 }
 

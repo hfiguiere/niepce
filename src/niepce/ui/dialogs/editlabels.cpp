@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/editlabels.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,8 +71,8 @@ void EditLabels::setup_widget()
         m_entries[i] = labelentry;
 
         if(has_label) {
-            Gdk::Color color = fwk::rgbcolor_to_gdkcolor(m_labels[i]->color());
-            colorbutton->set_color(color);
+            Gdk::RGBA color = fwk::rgbcolor_to_gdkcolor(m_labels[i]->color());
+            colorbutton->set_rgba(color);
             labelentry->set_text(m_labels[i]->label());
         }
         colorbutton->signal_color_set().connect(
@@ -108,8 +108,8 @@ void EditLabels::update_labels(int /*response*/)
             if(new_name.empty()) {
                 continue;
             }
-            std::string new_color 
-                = fwk::gdkcolor_to_rgbcolor(m_colors[i]->get_color()).to_string();
+            std::string new_color
+                = fwk::gdkcolor_to_rgbcolor(m_colors[i]->get_rgba()).to_string();
             if(!undo) {
                 undo = fwk::Application::app()->begin_undo(_("Change Labels"));
             }

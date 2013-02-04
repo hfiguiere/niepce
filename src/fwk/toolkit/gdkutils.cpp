@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gdkmm/color.h>
-
 #include "fwk/base/debug.hpp"
 #include "gdkutils.hpp"
 
@@ -82,17 +80,17 @@ namespace fwk {
 	}
 
 
-  Gdk::Color rgbcolor_to_gdkcolor(const fwk::RgbColor & color)
+  Gdk::RGBA rgbcolor_to_gdkcolor(const fwk::RgbColor & color)
   {
-    Gdk::Color gdkcolor;
-    gdkcolor.set_rgb(color[0], color[1], color[2]);
+    Gdk::RGBA gdkcolor;
+    gdkcolor.set_rgba_u(color[0], color[1], color[2]);
     return gdkcolor;
   }
 
 
-  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::Color & color)
+  fwk::RgbColor gdkcolor_to_rgbcolor(const Gdk::RGBA & color)
   {
-    fwk::RgbColor rgbcolor(color.get_red(), color.get_green(), color.get_blue());
+    fwk::RgbColor rgbcolor(color.get_red_u(), color.get_green_u(), color.get_blue_u());
     return rgbcolor;
   }
 
