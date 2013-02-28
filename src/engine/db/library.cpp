@@ -62,7 +62,7 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
     m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
     m_inited = init();
 
-    m_dbdrv->create_function0("rewrite_xmp", 
+    m_dbdrv->create_function0("rewrite_xmp",
                               boost::bind(&Library::triggerRewriteXmp,
                                           this));
 }
@@ -136,8 +136,8 @@ bool Library::_initDb()
 
     SQLStatement initialFolders(
         boost::format("insert into folders (name, locked, virtual, parent_id) "
-                      " values ('%1%', 1, %2%, 0)") 
-        % _("Trash") 
+                      " values ('%1%', 1, %2%, 0)")
+        % _("Trash")
         % int(LibFolder::VIRTUAL_TRASH));
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " main_file INTEGER, name TEXT, parent_id INTEGER,"
@@ -203,9 +203,9 @@ int Library::checkDatabaseVersion()
     std::string version;
     try {
         SQLStatement sql("SELECT value FROM admin WHERE key='version'");
-			
+
         if(m_dbdrv->execute_statement(sql)) {
-            if(m_dbdrv->read_next_row() 
+            if(m_dbdrv->read_next_row()
                && m_dbdrv->get_column_content(0, version)) {
                 v = boost::lexical_cast<int>(version);
             }
@@ -234,7 +234,7 @@ int64_t Library::addFsFile(const std::string & file)
     int64_t ret = -1;
 
     SQLStatement sql(boost::format("INSERT INTO fsfiles (path)"
-                                   " VALUES ('%1%')") 
+                                   " VALUES ('%1%')")
                      % file);
     if(m_dbdrv->execute_statement(sql)) {
         int64_t id = m_dbdrv->last_row_id();
@@ -248,7 +248,7 @@ std::string Library::getFsFile(library_id_t id)
 {
     std::string p;
     SQLStatement sql(boost::format("SELECT path FROM fsfiles"
-                                   " WHERE id='%1%'") 
+                                   " WHERE id='%1%'")
                      % id);
     try {
         if(m_dbdrv->execute_statement(sql) &&
@@ -275,7 +275,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
     try {
         int32_t rating, orientation, flag;
 		library_id_t label_id;
-        std::string label;  
+        std::string label;
         fwk::MimeType mime = fwk::MimeType(file);
         eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
         fwk::XmpMeta meta(file, file_type == eng::LibFile::FILE_TYPE_RAW);
@@ -303,7 +303,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
                                        " '%4%', '%4%',"
                                        " '%5%', '%6%', '%7%', '%8%', '%9%',"
                                        " '%10%',"
-                                       " ?1);") 
+                                       " ?1);")
                          % fs_file_id % fwk::path_basename(file) % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
@@ -317,7 +317,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
             const std::vector< std::string > &keywords(meta.keywords());
             std::vector< std::string >::const_iterator iter;
             for(iter = keywords.begin();
-                iter != keywords.end(); iter++) 
+                iter != keywords.end(); iter++)
             {
                 library_id_t kwid = makeKeyword(*iter);
                 if(kwid != -1) {
@@ -340,8 +340,9 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
 }
 
 
-library_id_t Library::addFileAndFolder(const std::string & folder, const std::string & file, 
-                              bool manage)
+library_id_t Library::addFileAndFolder(const std::string & folder,
+                                       const std::string & file,
+                                       bool manage)
 {
     LibFolder::Ptr f;
     f = getFolder(folder);
@@ -351,8 +352,9 @@ library_id_t Library::addFileAndFolder(const std::string & folder, const std::st
     return addFile(f ? f->id() : -1, file, manage);
 }
 
-library_id_t Library::addBundle(library_id_t folder_id, const eng::FileBundle::Ptr & bundle, 
-                       bool manage)
+library_id_t Library::addBundle(library_id_t folder_id,
+                                const eng::FileBundle::Ptr & bundle,
+                                bool manage)
 {
     library_id_t file_id = 0;
     file_id = addFile(folder_id, bundle->main_file(), manage);
@@ -371,16 +373,17 @@ library_id_t Library::addBundle(library_id_t folder_id, const eng::FileBundle::P
             fsfile_id = addFsFile(bundle->jpeg());
             if(fsfile_id > 0) {
                 success = addJpegFileToBundle(file_id, fsfile_id);
-            }         
+            }
         }
     }
     return file_id;
 }
 
-bool Library::addSidecarFileToBundle(library_id_t file_id, library_id_t fsfile_id)
+bool Library::addSidecarFileToBundle(library_id_t file_id,
+                                     library_id_t fsfile_id)
 {
     SQLStatement sql(boost::format("UPDATE files SET xmp_file='%2%'"
-                                   " WHERE id='%1%';") 
+                                   " WHERE id='%1%';")
                      % file_id % fsfile_id);
     try {
         return m_dbdrv->execute_statement(sql);
@@ -397,7 +400,7 @@ bool Library::addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id)
 {
     SQLStatement sql(boost::format("UPDATE files SET jpeg_file='%2%',"
                                    " file_type='%3%' "
-                                   " WHERE id='%1%';") 
+                                   " WHERE id='%1%';")
                      % file_id % fsfile_id % LibFile::FILE_TYPE_RAW_JPEG);
     try {
         return m_dbdrv->execute_statement(sql);
@@ -414,9 +417,9 @@ LibFolder::Ptr Library::getFolder(const std::string & folder)
 {
     LibFolder::Ptr f;
     SQLStatement sql(boost::format("SELECT %1% "
-                                   "FROM folders WHERE path='%2%'") 
+                                   "FROM folders WHERE path='%2%'")
                      % LibFolder::read_db_columns() % folder);
-		
+
     try {
         if(m_dbdrv->execute_statement(sql)) {
             if(m_dbdrv->read_next_row()) {
@@ -437,13 +440,13 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
     LibFolder::Ptr f;
     SQLStatement sql(boost::format("INSERT INTO folders "
                                    "(path,name,vault_id,parent_id) "
-                                   "VALUES('%1%', '%2%', '0', '0')") 
+                                   "VALUES('%1%', '%2%', '0', '0')")
                      % folder % fwk::path_basename(folder));
     try {
         if(m_dbdrv->execute_statement(sql)) {
             library_id_t id = m_dbdrv->last_row_id();
             DBG_OUT("last row inserted %Ld", (long long)id);
-            f = LibFolder::Ptr(new LibFolder(id, 
+            f = LibFolder::Ptr(new LibFolder(id,
                                              fwk::path_basename(folder)));
         }
     }
@@ -541,7 +544,7 @@ int Library::countFolder(library_id_t folder_id)
             if(m_dbdrv->read_next_row()) {
                 m_dbdrv->get_column_content(0, count);
             }
-        }			
+        }
     }
     catch(fwk::Exception & e)
     {
@@ -569,7 +572,7 @@ void Library::getAllKeywords(const Keyword::ListPtr & l)
         DBG_OUT("db exception %s", e.what());
     }
 }
-	
+
 library_id_t Library::makeKeyword(const std::string & keyword)
 {
     library_id_t keyword_id = -1;
@@ -612,7 +615,7 @@ bool Library::assignKeyword(library_id_t kw_id, library_id_t file_id)
 {
     bool ret = false;
     SQLStatement sql(boost::format("INSERT INTO keywording (file_id, keyword_id) "
-                                   " VALUES('%1%', '%2%');") 
+                                   " VALUES('%1%', '%2%');")
                      % file_id % kw_id );
     try {
         ret = m_dbdrv->execute_statement(sql);
@@ -713,22 +716,22 @@ bool Library::setMetaData(library_id_t file_id, const LibMetadata::Ptr & meta)
         DBG_OUT("db exception %s", e.what());
         ret = false;
     }
-    return ret;    
+    return ret;
 }
 
 
-/** set metadata 
+/** set metadata
  * @param file_id the file ID to set the metadata block
  * @param meta the metadata index
  * @param value the value to set
  * @return false on error
  */
-bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta, 
+bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
                           const fwk::PropertyValue & value)
 {
     bool retval = false;
     DBG_OUT("setting metadata %x", meta);
-    DBG_ASSERT(check_property_type(meta, value.type()), 
+    DBG_ASSERT(check_property_type(meta, value.type()),
                "wrong property value type");
     switch(meta) {
     case eng::NpXmpRatingProp:
@@ -762,7 +765,7 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
     default:
         // external
         // TODO add the external metadata
-        // 
+        //
         break;
     }
     LibMetadata::Ptr metablock(new LibMetadata(file_id));
@@ -835,16 +838,18 @@ library_id_t Library::addLabel(const std::string & name, const std::string & col
 }
 
 
-library_id_t Library::addLabel(const std::string & name, const fwk::RgbColour & c)
+library_id_t Library::addLabel(const std::string & name,
+                               const fwk::RgbColour & c)
 {
     return addLabel(name, c.to_string());
 }
 
 
-bool Library::updateLabel(library_id_t label_id, const std::string & name, const std::string & colour)
+bool Library::updateLabel(library_id_t label_id, const std::string & name,
+                          const std::string & colour)
 {
     SQLStatement sql(boost::format("UPDATE labels SET name='%2%', color='%3%'"
-                                   " WHERE id='%1%';") 
+                                   " WHERE id='%1%';")
                      % label_id % name % colour);
     try {
         return m_dbdrv->execute_statement(sql);
@@ -859,7 +864,6 @@ bool Library::updateLabel(library_id_t label_id, const std::string & name, const
 
 bool Library::deleteLabel(library_id_t label_id)
 {
-    
     SQLStatement sql(boost::format("DELETE FROM labels "
                                    " WHERE id='%1%';") % label_id);
     try {
@@ -901,8 +905,8 @@ bool Library::rewriteXmpForId(library_id_t id, bool write_xmp)
     SQLStatement getxmp(boost::format("SELECT xmp, main_file, xmp_file FROM files "
                                    " WHERE id='%1%';") % id);
     try {
-        
-        if(m_dbdrv->execute_statement(del) 
+
+        if(m_dbdrv->execute_statement(del)
            && m_dbdrv->execute_statement(getxmp)) {
             while(write_xmp && m_dbdrv->read_next_row()) {
                 std::string xmp_buffer;

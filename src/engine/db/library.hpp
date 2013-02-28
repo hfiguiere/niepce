@@ -51,9 +51,9 @@ namespace eng {
 class Library
 {
 public:
-		typedef std::tr1::shared_ptr<Library> Ptr;
+    typedef std::tr1::shared_ptr<Library> Ptr;
 
-		typedef enum {
+    typedef enum {
         NOTIFY_NONE = 0,
         NOTIFY_NEW_LIBRARY_CREATED,
         NOTIFY_ADDED_FOLDERS,
@@ -71,34 +71,34 @@ public:
         NOTIFY_FOLDER_COUNTED,
         NOTIFY_FOLDER_COUNT_CHANGE,
         NOTIFY_FILE_MOVED
-		} NotifyType;
+    } NotifyType;
 
-		Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
-		virtual ~Library();
+    Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
+    virtual ~Library();
 
-		bool ok()
+    bool ok()
         { return m_inited; }
-		/** set the main library directory */
+    /** set the main library directory */
 //		void setMainDir(const std::string & dir)
 //			{ m_maindir = dir; }
-		/** return the main directory */
-		const std::string & mainDir() const
+    /** return the main directory */
+    const std::string & mainDir() const
         { return m_maindir; }
-		/** get the path to the DB file */
-		const std::string & dbName() const
+    /** get the path to the DB file */
+    const std::string & dbName() const
         { return m_dbname; }
 
-		void notify(NotifyType t, const boost::any & param);
+    void notify(NotifyType t, const boost::any & param);
 
-		/** add a file to the library
-		 * @param folder the path of the containing folder
-		 * @param file the file path
-		 * @param manage pass true it the library *manage* the file. Currently unsupported.
-		 */
-		library_id_t addFileAndFolder(const std::string & folder, 
-                         const std::string & file, bool manage);
+    /** add a file to the library
+     * @param folder the path of the containing folder
+     * @param file the file path
+     * @param manage pass true it the library *manage* the file. Currently unsupported.
+     */
+    library_id_t addFileAndFolder(const std::string & folder,
+                                  const std::string & file, bool manage);
 
-    /** add a fs file to the library  
+    /** add a fs file to the library
      * @param file the file path
      * @return the id of the fs_file, -1 in case of error
      */
@@ -110,20 +110,21 @@ public:
      */
     std::string getFsFile(library_id_t id);
 
-		/** add a file to the library
-		 * @param folder_id the id of the containing folder
-		 * @param file the file path
-		 * @param manage pass true it the library *manage* the file. Currently unsupported.
-		 */
-		library_id_t addFile(library_id_t folder_id, const std::string & file, bool manage);
+    /** add a file to the library
+     * @param folder_id the id of the containing folder
+     * @param file the file path
+     * @param manage pass true it the library *manage* the file. Currently unsupported.
+     */
+    library_id_t addFile(library_id_t folder_id, const std::string & file, bool manage);
 
-		/** add a bundle of files to the library
-		 * @param folder_id the id of the containing folder
-		 * @param bundle the bundle
-		 * @param manage pass true it the library *manage* the file. Currently unsupported.
-		 */
-    library_id_t addBundle(library_id_t folder_id, const eng::FileBundle::Ptr & bundle, 
-                  bool manage);
+    /** add a bundle of files to the library
+     * @param folder_id the id of the containing folder
+     * @param bundle the bundle
+     * @param manage pass true it the library *manage* the file. Currently unsupported.
+     */
+    library_id_t addBundle(library_id_t folder_id,
+                           const eng::FileBundle::Ptr & bundle,
+                           bool manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle
      * @param fsfile_id the id of the fsfile
@@ -136,39 +137,40 @@ public:
      * @return true if success
      */
     bool addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id);
-		
-		/** Get a specific folder id from the library
-		 * @param folder the folder path to check
-		 * @return the folder, NULL if not found
-		 */
-		LibFolder::Ptr getFolder(const std::string & folder);
 
-		/** Add a folder
-		 * @param folder the folder path
-		 */
-		LibFolder::Ptr addFolder(const std::string & folder);
-		/** List all the folders.
-		 * @param l the list of LibFolder
-		 */
-		void getAllFolders(const LibFolder::ListPtr & l);
+    /** Get a specific folder id from the library
+     * @param folder the folder path to check
+     * @return the folder, NULL if not found
+     */
+    LibFolder::Ptr getFolder(const std::string & folder);
 
-		/** List the folder content
-		 * @param folder_id id of the folder
-		 * @param fl the resulting file list
-		 */
-		void getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl);
-		int countFolder(library_id_t folder_id);
-		void getAllKeywords(const Keyword::ListPtr & l);
-		void getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl);
+    /** Add a folder
+     * @param folder the folder path
+     */
+    LibFolder::Ptr addFolder(const std::string & folder);
+    /** List all the folders.
+     * @param l the list of LibFolder
+     */
+    void getAllFolders(const LibFolder::ListPtr & l);
+
+    /** List the folder content
+     * @param folder_id id of the folder
+     * @param fl the resulting file list
+     */
+    void getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl);
+    int countFolder(library_id_t folder_id);
+    void getAllKeywords(const Keyword::ListPtr & l);
+    void getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl);
     /** get the metadata block (XMP) */
-		void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );
+    void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     /** set the metadata block (XMP) */
     bool setMetaData(library_id_t file_id, const LibMetadata::Ptr & );
-    bool setMetaData(library_id_t file_id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+    bool setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
+                     const fwk::PropertyValue & value);
 
     bool moveFileToFolder(library_id_t file_id, library_id_t folder_id);
 
-		void getAllLabels(const eng::Label::ListPtr & l);
+    void getAllLabels(const eng::Label::ListPtr & l);
     library_id_t addLabel(const std::string & name, const std::string & colour);
     library_id_t addLabel(const std::string & name, const fwk::RgbColour & c);
     bool updateLabel(library_id_t label_id, const std::string & name, const std::string & colour);
@@ -177,26 +179,26 @@ public:
     /** Trigger the processing of the XMP update queue */
     bool processXmpUpdateQueue(bool rewrite_xmp);
 
-		/** Locate the keyword, creating it if needed
-		 * @param keyword the keyword to locate
-		 * @return -1 if not found (shouldn't happen) or the id of the
-		 * keyword, either found or just created.
-		 */
-		library_id_t makeKeyword(const std::string & keyword);
-		/** Assign a keyword to a file.
-		 * @param kw_id the keyword id
-		 * @param file_id the file id
-		 * @return true if success, false if error
-		 */
-		bool assignKeyword(library_id_t kw_id, library_id_t file_id);
+    /** Locate the keyword, creating it if needed
+     * @param keyword the keyword to locate
+     * @return -1 if not found (shouldn't happen) or the id of the
+     * keyword, either found or just created.
+     */
+    library_id_t makeKeyword(const std::string & keyword);
+    /** Assign a keyword to a file.
+     * @param kw_id the keyword id
+     * @param file_id the file id
+     * @return true if success, false if error
+     */
+    bool assignKeyword(library_id_t kw_id, library_id_t file_id);
 
-		int checkDatabaseVersion();
-		
-		db::IConnectionDriver::Ptr dbDriver()
+    int checkDatabaseVersion();
+
+    db::IConnectionDriver::Ptr dbDriver()
         { return m_dbdrv; }
 private:
-		bool init();
-		bool _initDb();
+    bool init();
+    bool _initDb();
 
     /** external sqlite fucntion to trigger the rewrite of the XMP */
     void triggerRewriteXmp(void);
@@ -212,17 +214,17 @@ private:
 
     std::string                       m_maindir;
     std::string                       m_dbname;
-		db::IConnectionManagerDriver::Ptr m_dbmgr;
-		db::IConnectionDriver::Ptr        m_dbdrv;
-		std::tr1::weak_ptr<fwk::NotificationCenter>  m_notif_center;
-		bool                              m_inited;
+    db::IConnectionManagerDriver::Ptr m_dbmgr;
+    db::IConnectionDriver::Ptr        m_dbdrv;
+    std::tr1::weak_ptr<fwk::NotificationCenter>  m_notif_center;
+    bool                              m_inited;
 };
 
-	
+
 struct LibNotification
 {
-		Library::NotifyType type;
-		boost::any          param;
+    Library::NotifyType type;
+    boost::any          param;
 };
 
 }
