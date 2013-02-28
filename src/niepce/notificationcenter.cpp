@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/notificationcenter.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,36 +25,44 @@
 
 namespace niepce {
 
-
 NotificationCenter::NotificationCenter()
 {
-  subscribe(NOTIFICATION_LIB, 
+  subscribe(NOTIFICATION_LIB,
             sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
-  subscribe(NOTIFICATION_THUMBNAIL, 
+  subscribe(NOTIFICATION_THUMBNAIL,
             sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
 }
 
 
 void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
 {
-    switch(n->type()) {
-
-    case NOTIFICATION_LIB:
-    {
-        eng::LibNotification ln 
-          = boost::any_cast<eng::LibNotification>(n->data());
-        signal_lib_notification (ln);
-        break;
+    try {
+        switch(n->type()) {
+        case NOTIFICATION_LIB:
+        {
+            eng::LibNotification ln
+                = boost::any_cast<eng::LibNotification>(n->data());
+            signal_lib_notification (ln);
+            break;
+        }
+        case NOTIFICATION_THUMBNAIL:
+        {
+            eng::ThumbnailNotification tn
+                = boost::any_cast<eng::ThumbnailNotification>(n->data());
+            signal_thumbnail_notification (tn);
+            break;
+        }
+        default:
+            break;
+        }
     }
-    case NOTIFICATION_THUMBNAIL:
+    catch(const boost::bad_any_cast & e)
     {
-        eng::ThumbnailNotification tn
-          = boost::any_cast<eng::ThumbnailNotification>(n->data());
-        signal_thumbnail_notification (tn);
-        break;
+        ERR_OUT("improper notification data: %s", e.what());
     }
-    default:
-      break;
+    catch(...)
+    {
+        ERR_OUT("unknown exception");
     }
 }
 
