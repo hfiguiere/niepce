@@ -18,8 +18,6 @@
  */
 
 
-
-
 #ifndef __FWK_NOTIFICATIONCENTER_H__
 #define __FWK_NOTIFICATIONCENTER_H__
 
@@ -29,33 +27,40 @@
 
 namespace fwk {
 
-	class NotificationCenter
+class NotificationCenter
     : public sigc::trackable
-	{
-	public:
-		typedef std::tr1::shared_ptr< NotificationCenter > Ptr;
+{
+public:
+    typedef std::tr1::shared_ptr< NotificationCenter > Ptr;
     typedef sigc::slot<void, Notification::Ptr> subscriber_t;
 
-		NotificationCenter();
-		~NotificationCenter();
+    NotificationCenter();
+    ~NotificationCenter();
 
-		
-		// called from out of thread
-		void post(const Notification::Ptr & n);
+    // called from out of thread
+    void post(const Notification::Ptr & n);
 
-		void subscribe(int type, const subscriber_t & );
-		void unsubscribe(int type, const subscriber_t & );
-		
-	private:
-		typedef sigc::signal<void, Notification::Ptr> subscription_t;
+    void subscribe(int type, const subscriber_t & );
+    void unsubscribe(int type, const subscriber_t & );
 
-		void _dispatch(void);
+private:
+    typedef sigc::signal<void, Notification::Ptr> subscription_t;
 
-		class Priv;
-		Priv *p;
-	};
+    void _dispatch(void);
 
+    class Priv;
+    Priv *p;
+};
 
 }
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
