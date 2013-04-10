@@ -1,7 +1,7 @@
 /*
  * niepce - cwapplication.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,16 +26,16 @@
 
 namespace cw {
 
-  CwApplication::CwApplication()
-    : Application(PACKAGE)
+  CwApplication::CwApplication(int & argc, char** & argv)
+	  : Application(argc, argv, "net.figuiere.camerawire", PACKAGE)
   {
   }
 
 
-  fwk::Application::Ptr CwApplication::create()
+  fwk::Application::Ptr CwApplication::create(int & argc, char** & argv)
   {
     if (!m_application) {
-      m_application = fwk::Application::Ptr(new CwApplication());
+      m_application = fwk::Application::Ptr(new CwApplication(argc, argv));
     }
     return m_application;
   }

@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2008, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <boost/function.hpp>
 
 #include <glibmm/refptr.h>
+#include <gtkmm/application.h>
 #include <gtkmm/uimanager.h>
 #include <gtkmm/icontheme.h>
 
@@ -66,7 +67,7 @@ public:
     Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
 
     static Application::Ptr app();
-    static int main(boost::function<Application::Ptr (void)> constructor, 
+    static int main(const Application::Ptr & app,
                     int argc, char **argv);
 
     UndoHistory & undo_history()
@@ -80,14 +81,16 @@ public:
     ModuleManager * module_manager() const
         { return m_module_manager; }
 protected:
-    Application(const char *);
-    static Application::Ptr m_application; 
+    Application(int & argc, char** &argv, const char* app_id, const char *name);
+    static Application::Ptr m_application;
+    void _add(const Controller::Ptr & sub, bool attach = true);
     virtual void on_about();
 private:
     Configuration                m_config;
     Glib::RefPtr<Gtk::UIManager> m_refUIManager;
     UndoHistory                  m_undo;
     ModuleManager               *m_module_manager;
+    Glib::RefPtr<Gtk::Application> m_gtkapp;
 };
 
 }

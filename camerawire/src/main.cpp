@@ -1,7 +1,7 @@
 /*
  * niepce - camerawire/main.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2009, 2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,8 @@ int main(int argc, char ** argv)
 
   fwk::utils::init();
 
-	return fwk::Application::main(
-		boost::bind(&cw::CwApplication::create),
-		argc, argv);
+  fwk::Application::Ptr app = cw::CwApplication::create(argc, argv);
+  return fwk::Application::main(app, argc, argv);
 }
 
 

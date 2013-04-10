@@ -2,7 +2,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2009, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,12 @@ namespace fwk {
 
 Application::Ptr Application::m_application;
 
-Application::Application(const char * name)
+Application::Application(int & argc, char** &argv, const char* app_id,
+                         const char * name)
     : m_config(name)
     , m_refUIManager(Gtk::UIManager::create())
     , m_module_manager(new ModuleManager())
+    , m_gtkapp(Gtk::Application::create(argc, argv, app_id))
 {
 }
 
@@ -69,7 +71,7 @@ bool Application::get_use_dark_theme() const
     bool v;
     try {
         v = boost::lexical_cast<bool>(m_config.getValue("ui_dark_theme", "0"));
-    } 
+    }
     catch(...) {
         v = false;
     }
@@ -82,29 +84,25 @@ void Application::set_use_dark_theme(bool value)
                       boost::lexical_cast<Glib::ustring>(value));
 }
 
-
-/** Main loop. 
+/** Main loop.
  * @param constructor the Application object constructor
  * @param argc
  * @param argv
  * @return main return code
  */
-int Application::main(boost::function<Application::Ptr (void)> constructor, 
-                      int argc, char **argv)
+int Application::main(const Application::Ptr & app,
+                      int /*argc*/, char ** /*argv*/)
 {
-    Gtk::Main kit(argc, argv);
-    Application::Ptr app = constructor();
-
     bool use_dark = app->get_use_dark_theme();
     Glib::RefPtr<Gtk::Settings> settings = Gtk::Settings::get_default();
     settings->set_property("gtk-application-prefer-dark-theme", use_dark);
 
     Frame::Ptr window(app->makeMainFrame());
-    app->add(window);
+    app->_add(window, false);
     // signal_run() is gone in Gtkmm3. Call directly. Should work.
     app->_ready();
-    Gtk::Main::run(window->gtkWindow());
-	
+    app->m_gtkapp->run(window->gtkWindow());
+
     return 0;
 }
 
@@ -122,7 +120,7 @@ void Application::terminate()
 void Application::quit()
 {
     terminate();
-    Gtk::Main::quit();
+    m_gtkapp->quit();
 }
 
 void Application::about()
@@ -131,14 +129,23 @@ void Application::about()
 }
 
 /** adding a controller to an application build said controller
- * widget 
+ * widget
  */
 void Application::add(const Controller::Ptr & sub)
+{
+    _add(sub, true);
+}
+
+void Application::_add(const Controller::Ptr & sub, bool attach)
 {
     Controller::add(sub);
     UiController::Ptr uictrl = std::tr1::dynamic_pointer_cast<UiController>(sub);
     if(uictrl) {
-        uictrl->buildWidget(uiManager());
+        Gtk::Widget *w = uictrl->buildWidget(uiManager());
+        Gtk::Window *win = NULL;
+        if(attach && m_gtkapp && (win = dynamic_cast<Gtk::Window*>(w))) {
+            m_gtkapp->add_window(*win);
+        }
     }
 }
 

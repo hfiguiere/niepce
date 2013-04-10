@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepceapplication.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2008, 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ using fwk::Application;
 
 namespace ui {
 
-NiepceApplication::NiepceApplication()
-    : Application(PACKAGE)
+NiepceApplication::NiepceApplication(int & argc, char** & argv)
+    : Application(argc, argv, "net.figuiere.Niepce", PACKAGE)
 {
     niepce::Stock::registerStockItems();
 
@@ -43,10 +43,10 @@ NiepceApplication::NiepceApplication()
     modmgr->add_path(DATADIR"/"PACKAGE"/modules/"VERSION);
 }
 
-Application::Ptr NiepceApplication::create()
+Application::Ptr NiepceApplication::create(int & argc, char** & argv)
 {
     if (!m_application) {
-        m_application = Application::Ptr(new NiepceApplication());
+        m_application = Application::Ptr(new NiepceApplication(argc, argv));
     }
     return m_application;
 }

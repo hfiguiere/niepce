@@ -1,7 +1,7 @@
 /*
  * niepce - main/main.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007, 2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,9 +40,9 @@ int main(int argc, char ** argv)
 
   fwk::ExempiManager ex_manager(NULL);
 
-	return fwk::Application::main(
-		boost::bind(&ui::NiepceApplication::create),
-		argc, argv);
+  fwk::Application::Ptr app = ui::NiepceApplication::create(argc, argv);
+  return fwk::Application::main(app,
+				argc, argv);
 }
 
 
