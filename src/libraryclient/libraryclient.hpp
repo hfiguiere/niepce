@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2009,2012 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #define _LIBRARYCLIENT_H_
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/base/propertybag.hpp"
 #include "engine/library/clienttypes.hpp"
@@ -44,7 +44,7 @@ class LibraryClient
     : public eng::Storage
 {
 public:
-    typedef std::tr1::shared_ptr< LibraryClient > Ptr;
+    typedef std::shared_ptr< LibraryClient > Ptr;
     
     LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
     virtual ~LibraryClient();

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/dialog.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class Dialog
 	: public fwk::Frame
 {
 public:
-    typedef std::tr1::shared_ptr<Dialog> Ptr;
+    typedef std::shared_ptr<Dialog> Ptr;
 
 		Dialog(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "")

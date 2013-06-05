@@ -1,7 +1,7 @@
 /*
  * niepce - ui/dialogs/preferencesdialog.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/checkbutton.h>
 
-#include "fwk/utils/boost.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
@@ -47,7 +46,7 @@ void PreferencesDialog::setup_widget()
     Gtk::CheckButton* write_xmp_checkbutton = NULL;
     fwk::DataBinderPool* binder_pool = new fwk::DataBinderPool();
 
-    gtkDialog().signal_hide().connect(boost::bind(&fwk::DataBinderPool::destroy, 
+    gtkDialog().signal_hide().connect(std::bind(&fwk::DataBinderPool::destroy,
                                               binder_pool));
 		
     builder()->get_widget("dark_theme_checkbox", theme_checkbutton);
@@ -55,7 +54,7 @@ void PreferencesDialog::setup_widget()
     theme_checkbutton->set_active(fwk::Application::app()
                             ->get_use_dark_theme());
     theme_checkbutton->signal_toggled().connect(
-	    boost::bind(&fwk::Application::set_use_dark_theme,
+	    std::bind(&fwk::Application::set_use_dark_theme,
 			fwk::Application::app(),
 			theme_checkbutton->property_active()));
 

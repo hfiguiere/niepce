@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/notificationcenter.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __NIEPCE_NOTIFICATIONCENTER_HPP_
 #define __NIEPCE_NOTIFICATIONCENTER_HPP_
 
-#include <tr1/memory>
+#include <memory>
 #include <sigc++/signal.h>
 
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -36,7 +36,7 @@ class NotificationCenter
   : public fwk::NotificationCenter
 {
 public:
-  typedef std::tr1::shared_ptr<NotificationCenter> Ptr;
+  typedef std::shared_ptr<NotificationCenter> Ptr;
   NotificationCenter();
 
   sigc::signal<void, const eng::LibNotification &> signal_lib_notification;

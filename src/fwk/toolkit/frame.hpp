@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/frame.hpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,9 @@
 #ifndef _FRAMEWORK_FRAME_H_
 #define _FRAMEWORK_FRAME_H_
 
+#include <memory>
 #include <string>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <sigc++/signal.h>
 #include <gtkmm/toggleaction.h>
@@ -40,7 +41,7 @@ class Frame
 		: public UiController
 {
 public:
-		typedef std::tr1::shared_ptr<Frame> Ptr;
+		typedef std::shared_ptr<Frame> Ptr;
 
 		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "");
@@ -50,7 +51,7 @@ public:
     /** convenience to return the Frame::Ptr from this */
     Ptr shared_frame_ptr()
         {
-            return std::tr1::static_pointer_cast<Frame>(shared_from_this());
+            return std::static_pointer_cast<Frame>(shared_from_this());
         }
 
 		Gtk::Window & gtkWindow()

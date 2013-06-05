@@ -1,7 +1,7 @@
 /*
  * niepce - framework/undo.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,8 @@
  */
 
 
-#include <boost/bind.hpp>
+#include <algorithm>
+#include <functional>
 #include <boost/checked_delete.hpp>
 
 #include "fwk/base/debug.hpp"
@@ -34,8 +35,9 @@ UndoTransaction::UndoTransaction(const std::string & n)
 
 UndoTransaction::~UndoTransaction()
 {
+    using std::placeholders::_1;
     std::for_each(m_operations.begin(), m_operations.end(),
-                  boost::bind(&boost::checked_delete<Command>, _1));
+                  std::bind(&boost::checked_delete<Command>, _1));
 }
 
 
@@ -47,27 +49,17 @@ void UndoTransaction::add(Command * cmd)
 void UndoTransaction::undo()
 {
     DBG_OUT("undo transaction %lu cmd", (unsigned long)m_operations.size());
-// I have no idea why this do not work
-//    std::for_each(m_operations.rbegin(), m_operations.rend(),
-//                  boost::bind(&Command::undo, _1));
-    for(std::list<Command *>::reverse_iterator iter = m_operations.rbegin();
-        iter != m_operations.rend(); iter++)
-    {
-        (*iter)->undo();
-    }
+    using std::placeholders::_1;
+    std::for_each(m_operations.rbegin(), m_operations.rend(),
+                  std::bind(&Command::undo, _1));
 }
 
 void UndoTransaction::redo()
 {
     DBG_OUT("redo transaction %lu cmd", (unsigned long)m_operations.size());
-// I have no idea why this do not work
-//    std::for_each(m_operations.begin(), m_operations.end(),
-//                  boost::bind(&Command::redo, _1));
-    for(std::list<Command *>::iterator iter = m_operations.begin();
-        iter != m_operations.end(); iter++)
-    {
-        (*iter)->redo();
-    }
+    using std::placeholders::_1;
+    std::for_each(m_operations.begin(), m_operations.end(),
+                  std::bind(&Command::redo, _1));
 }
 
 UndoHistory::~UndoHistory()
@@ -145,8 +137,9 @@ std::string UndoHistory::next_redo() const
 	
 void UndoHistory::clear(std::list<UndoTransaction*> & l)
 {
+    using std::placeholders::_1;
     std::for_each(l.begin(), l.end(), 
-                  boost::bind(&boost::checked_delete<UndoTransaction>, _1));
+                  std::bind(&boost::checked_delete<UndoTransaction>, _1));
     l.clear();
 }
 

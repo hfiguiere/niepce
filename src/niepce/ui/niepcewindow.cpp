@@ -73,7 +73,7 @@ void
 NiepceWindow::_createModuleShell()
 {
     DBG_ASSERT(m_uimanager, "UI manager NULL");
-    DBG_ASSERT(m_libClient, "libclient not initialized");
+    DBG_ASSERT(static_cast<bool>(m_libClient), "libclient not initialized");
     DBG_ASSERT(m_widget, "widget not built");
 
     DBG_OUT("creating module shell");

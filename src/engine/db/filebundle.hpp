@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/filebundle.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <list>
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/utils/files.hpp"
 #include "engine/db/libfile.hpp"
@@ -33,9 +33,9 @@ namespace eng {
 class FileBundle
 {
 public:
-    typedef std::tr1::shared_ptr<FileBundle> Ptr;
+    typedef std::shared_ptr<FileBundle> Ptr;
     typedef std::list<Ptr> List;
-    typedef std::tr1::shared_ptr<List> ListPtr;
+    typedef std::shared_ptr<List> ListPtr;
 
     FileBundle()
         : m_type(LibFile::FILE_TYPE_UNKNOWN)

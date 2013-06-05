@@ -27,7 +27,6 @@
 
 #include <boost/utility.hpp>
 
-
 namespace fwk {
 
 /** @brief the base class for all the data binders */

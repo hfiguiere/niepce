@@ -5,7 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files maybe under GPL version 2 or later.
 
-(c) 2006-2012 Hubert Figuière
+(c) 2006-2013 Hubert Figuière
 Some portions are written by other people.
 
 What is this?
@@ -18,7 +18,7 @@ It is currently work in progress.
 To build is you need the following:
 -----------------------------------
 
-A C++ compiler
+A C++11 compiler
 gtk+ 3.2
 cairo 1.1
 glibmm 2.32

@@ -19,15 +19,14 @@
 
 
 #include <algorithm>
+#include <functional>
 
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
-#include "fwk/utils/boost.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
@@ -119,18 +118,19 @@ void EditLabels::update_labels(int /*response*/)
                 std::string current_colour = m_labels[i]->colour().to_string();
 
                 undo->new_command<void>(
-                    boost::bind(&libraryclient::LibraryClient::updateLabel,
+                    std::bind(&libraryclient::LibraryClient::updateLabel,
                                 m_lib_client, m_labels[i]->id(), new_name,
                                 new_colour),
-                    boost::bind(&libraryclient::LibraryClient::updateLabel,
+                    std::bind(&libraryclient::LibraryClient::updateLabel,
                                 m_lib_client, m_labels[i]->id(), current_name,
                                 current_colour));
             }
             else {
+                using std::placeholders::_1;
                 undo->new_command<int>(
-                    boost::bind(&libraryclient::LibraryClient::createLabel,
+                    std::bind(&libraryclient::LibraryClient::createLabel,
                                 m_lib_client, new_name, new_colour),
-                    boost::bind(&libraryclient::LibraryClient::deleteLabel,
+                    std::bind(&libraryclient::LibraryClient::deleteLabel,
                                 m_lib_client, _1));
             }
         }

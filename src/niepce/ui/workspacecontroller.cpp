@@ -71,7 +71,7 @@ WorkspaceController::WorkspaceController()
 
 libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
 {
-    return	std::tr1::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+    return	std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
 
 

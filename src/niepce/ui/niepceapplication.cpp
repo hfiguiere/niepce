@@ -40,7 +40,7 @@ NiepceApplication::NiepceApplication(int & argc, char** & argv)
     fwk::ModuleManager * modmgr = module_manager();
     DBG_ASSERT(modmgr != NULL, "module manager is NULL.");
     // path for modules is $PREFIX/share/niepce/modules/$VERSION
-    modmgr->add_path(DATADIR"/"PACKAGE"/modules/"VERSION);
+    modmgr->add_path(DATADIR "/" PACKAGE "/modules/" VERSION);
 }
 
 Application::Ptr NiepceApplication::create(int & argc, char** & argv)

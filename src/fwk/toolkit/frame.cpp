@@ -19,7 +19,7 @@
 
 #include <list>
 #include <vector>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
@@ -78,26 +78,24 @@ Frame::~Frame()
 
 void Frame::set_icon_from_theme(const Glib::ustring & name)
 {
-		using Glib::RefPtr;
-		using Gtk::IconTheme;
-		using std::vector;
-		using std::list;
-		
-		RefPtr< IconTheme > icon_theme(Application::app()->getIconTheme());
-		vector<int> icon_sizes(icon_theme->get_icon_sizes(name));
-		
-		vector< RefPtr <Gdk::Pixbuf> > icons;
+    using Glib::RefPtr;
+    using Gtk::IconTheme;
+    using std::vector;
+    using std::list;
 
-		for_each(icon_sizes.begin(), icon_sizes.end(),
-             // store the icon
-             bind(&std::vector< RefPtr<Gdk::Pixbuf> >::push_back, 
-                  boost::ref(icons), 
-                  // load the icon
-                  bind( &IconTheme::load_icon, 
-                        boost::ref(icon_theme), 
-                        boost::ref(name), _1, 
-                        Gtk::ICON_LOOKUP_USE_BUILTIN)));
-		gtkWindow().set_icon_list(icons);
+    RefPtr< IconTheme > icon_theme(Application::app()->getIconTheme());
+    vector<int> icon_sizes(icon_theme->get_icon_sizes(name));
+
+    vector< RefPtr <Gdk::Pixbuf> > icons;
+
+    for_each(icon_sizes.begin(), icon_sizes.end(),
+             [&icons, icon_theme, name](int s) {
+                 icons.push_back(
+                     icon_theme->load_icon(name, s,
+                                           Gtk::ICON_LOOKUP_USE_BUILTIN));
+             }
+        );
+    gtkWindow().set_icon_list(icons);
 }
 
 void Frame::set_title(const std::string & title)

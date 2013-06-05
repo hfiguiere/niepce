@@ -21,8 +21,8 @@
 #ifndef __NIEPCE_LIBRARY_OP_H__
 #define __NIEPCE_LIBRARY_OP_H__
 
-#include <tr1/memory>
-#include <boost/function.hpp>
+#include <memory>
+#include <functional>
 
 #include "engine/library/clienttypes.hpp"
 #include "engine/db/library.hpp"
@@ -33,8 +33,8 @@ namespace eng {
 	class Op
 	{
 	public:
-		typedef std::tr1::shared_ptr< Op > Ptr;
-		typedef boost::function<void (const Library::Ptr &)> function_t;
+		typedef std::shared_ptr< Op > Ptr;
+		typedef std::function<void (const Library::Ptr &)> function_t;
 
 		Op(tid_t id, const function_t & func);
 

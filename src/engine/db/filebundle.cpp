@@ -80,7 +80,7 @@ FileBundle::filter_bundles(const fwk::FileList::Ptr & files)
 
     files->sort();
 
-    for(fwk::FileList::const_iterator iter = files->begin();
+    for(auto iter = files->begin();
         iter != files->end(); ++iter)
     {
         std::string basename = fwk::path_stem(*iter);

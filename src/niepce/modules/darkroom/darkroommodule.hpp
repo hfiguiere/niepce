@@ -1,7 +1,7 @@
 /*
  * niepce - modules/darkroom/darkroommodule.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ class DarkroomModule
     : public ui::ILibraryModule
 {
 public:
-    typedef std::tr1::shared_ptr<DarkroomModule> Ptr;
+    typedef std::shared_ptr<DarkroomModule> Ptr;
     
     DarkroomModule(const ui::IModuleShell & shell, 
                    const Glib::RefPtr<Gtk::ActionGroup> & action_group);

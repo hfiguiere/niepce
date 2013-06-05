@@ -21,7 +21,7 @@
 #ifndef _FRAMEWORK_APPLICATION_H_
 #define _FRAMEWORK_APPLICATION_H_
 
-#include <boost/function.hpp>
+#include <functional>
 
 #include <glibmm/refptr.h>
 #include <gtkmm/application.h>
@@ -41,7 +41,7 @@ class Application
     : public Controller
 {
 public:
-    typedef std::tr1::shared_ptr<Application> Ptr;
+    typedef std::shared_ptr<Application> Ptr;
     typedef std::pair<std::string, std::string> ThemeDesc;
 
     virtual ~Application();

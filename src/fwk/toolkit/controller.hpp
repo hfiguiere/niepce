@@ -1,7 +1,7 @@
 /*
  * niepce - framework/controller.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 
 #include <list>
-#include <tr1/memory>
+#include <memory>
 
 #include <sigc++/trackable.h>
 
@@ -36,12 +36,12 @@ namespace fwk {
 /** Generic controller class
  */
 class Controller
-    : public std::tr1::enable_shared_from_this<Controller>
+    : public std::enable_shared_from_this<Controller>
     , public sigc::trackable
 {
 public:
-		typedef std::tr1::shared_ptr<Controller> Ptr;
-		typedef std::tr1::weak_ptr<Controller> WeakPtr;
+		typedef std::shared_ptr<Controller> Ptr;
+		typedef std::weak_ptr<Controller> WeakPtr;
 
 		Controller();
 		virtual ~Controller();
