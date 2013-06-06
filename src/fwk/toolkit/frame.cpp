@@ -27,7 +27,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
-#include "fwk/utils/boost.hpp"
 #include "frame.hpp"
 #include "application.hpp"
 

@@ -89,7 +89,7 @@ public:
 
 class  IConnectionManagerDriver {
 public:
-    typedef std::tr1::shared_ptr<IConnectionManagerDriver> Ptr;
+    typedef std::shared_ptr<IConnectionManagerDriver> Ptr;
     IConnectionManagerDriver()
     {
     }

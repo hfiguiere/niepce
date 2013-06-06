@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.hpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,8 @@
 
 #include <vector>
 #include <string>
-#include <tr1/memory>
+#include <memory>
+
 #include <boost/any.hpp>
 
 #include "fwk/base/propertybag.hpp"
@@ -36,16 +37,16 @@ class LibMetadata
     : public fwk::XmpMeta
 {
 public:
-    typedef std::tr1::shared_ptr<LibMetadata> Ptr;
-    
+    typedef std::shared_ptr<LibMetadata> Ptr;
+
     LibMetadata(library_id_t _id);
-    
+
     library_id_t id() const
         { return m_id; }
     bool setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value);
     bool getMetaData(fwk::PropertyIndex meta, fwk::PropertyValue & value) const;
 
-    /** convert XMP to a set of properties 
+    /** convert XMP to a set of properties
      * @param propset the property set requested
      * @param props the output properties
      */

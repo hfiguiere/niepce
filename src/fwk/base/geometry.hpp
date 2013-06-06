@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/geometry.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define __FWK_BASE_GEOMETRY_H__
 
 #include <exception>
-#include <tr1/array>
+#include <array>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -34,14 +34,14 @@ class Rect
 public:
     Rect();
     Rect(int x, int y, int w, int h);
-    /** build a Rect from a string 
+    /** build a Rect from a string
      * @param s string whose format is "x y w h" as decimal ints.
      * @throw a std::bad_cast exception if there is not 4 element
      * or if one of them is not an int.
      */
-    Rect(const std::string & s) 
+    Rect(const std::string & s)
         throw(std::bad_cast);
-    
+
     int x() const
         { return _r[X]; }
     int y() const
@@ -70,9 +70,9 @@ private:
         X = 0,
         Y,
         W,
-        H			
+        H
     };
-    std::tr1::array<int, 4> _r;
+    std::array<int, 4> _r;
 };
 
 }

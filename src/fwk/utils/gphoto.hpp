@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/gphoto.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 #include <list>
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include <boost/noncopyable.hpp>
 
@@ -40,7 +40,7 @@ class GpDevice
   : public boost::noncopyable
 {
 public:
-  typedef std::tr1::shared_ptr<GpDevice> Ptr;
+  typedef std::shared_ptr<GpDevice> Ptr;
 
   GpDevice(const std::string & model, const std::string & path);
 

@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/fsfile.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #define __NIEPCE_DB_FSFILE_H__
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include "engine/db/librarytypes.hpp"
 
@@ -31,7 +31,7 @@ namespace eng {
 class FsFile
 {
 public:
-    typedef std::tr1::shared_ptr< FsFile > Ptr;
+    typedef std::shared_ptr< FsFile > Ptr;
 
     FsFile(library_id_t id, const std::string & path);
 

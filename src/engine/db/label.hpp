@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/label.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@
 
 #include <string>
 #include <vector>
-
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/base/colour.hpp"
 #include "engine/db/librarytypes.hpp"
@@ -37,9 +36,9 @@ namespace eng {
 class Label
 {
 public:
-    typedef std::tr1::shared_ptr<Label> Ptr;
+    typedef std::shared_ptr<Label> Ptr;
     typedef std::vector<Ptr> List;
-    typedef std::tr1::shared_ptr<List> ListPtr;
+    typedef std::shared_ptr<List> ListPtr;
 
     Label(library_id_t _id, const std::string & _label, const std::string & _colourstring)
         : m_id(_id), m_label(_label)

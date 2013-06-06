@@ -93,7 +93,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     {
         eng::Keyword::Ptr k
             = boost::any_cast<eng::Keyword::Ptr>(ln.param);
-        DBG_ASSERT(k, "keyword must not be NULL");
+        DBG_ASSERT(static_cast<bool>(k), "keyword must not be NULL");
         add_keyword_item(k);
         break;
     }
@@ -101,7 +101,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     {
         eng::Keyword::ListPtr l
             = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
-        DBG_ASSERT(l, "keyword list must not be NULL");
+        DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
         for_each(l->begin(), l->end(), 
                  boost::bind(&WorkspaceController::add_keyword_item, 
                              this, _1));

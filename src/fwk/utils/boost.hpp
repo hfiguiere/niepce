@@ -1,7 +1,7 @@
 /*
- * niepce - utils/boost.h
+ * niepce - utils/boost.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +22,11 @@
 #ifndef _UTILS_BOOST_H_
 #define _UTILS_BOOST_H_
 
-#include <tr1/memory>
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
 #include <glibmm/refptr.h>
 
 namespace Glib {
 
-	/** Dereference Glib::RefPtr<> for use in boost::bind */
+	/** Dereference Glib::RefPtr<> for use in std::bind */
 	template< class T_CppObject > inline
 	T_CppObject *get_pointer(const Glib::RefPtr< T_CppObject >& p)
 	{
@@ -38,40 +34,6 @@ namespace Glib {
 	}
 
 }
-
-
-namespace std {
-namespace tr1 {
-
-template< class T_CppObject > inline
-T_CppObject *get_pointer(const shared_ptr< T_CppObject > &p)
-{
-    return p.get();
-}
-
-
-}
-}
-
-namespace fwk {
-
-/** function to make a shared_ptr<> form a weak_ptr<> 
- * idea from http://lists.boost.org/boost-users/2007/01/24384.php
- */
-template<class T> 
-std::tr1::shared_ptr<T> shared_ptr_from( std::tr1::weak_ptr<T> const & wpt )
-{
-    return std::tr1::shared_ptr<T>( wpt ); // throws on wpt.expired()
-} 
-
-}
-
-/** need to convert a weak_ptr<> to a shared_ptr<> in the bind() 
- * this allow breaking some circular references.
- */
-#define BIND_SHARED_PTR(_type, _spt) \
-    boost::bind(&fwk::shared_ptr_from<_type>, std::tr1::weak_ptr<_type>(_spt))
-
 
 #endif
 /*

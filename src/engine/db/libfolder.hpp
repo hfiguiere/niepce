@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfolder.hpp
  *
- * Copyright (C) 2007, 2011 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 #include <string>
 #include <list>
-#include <tr1/memory>
+#include <memory>
 
 #include "engine/db/librarytypes.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
@@ -34,9 +34,9 @@ namespace eng {
 class LibFolder
 {
 public:
-    typedef std::tr1::shared_ptr< LibFolder > Ptr;
+    typedef std::shared_ptr< LibFolder > Ptr;
     typedef std::list< Ptr > List;
-    typedef std::tr1::shared_ptr< List > ListPtr;
+    typedef std::shared_ptr< List > ListPtr;
     typedef enum {
         VIRTUAL_NONE = 0,
         VIRTUAL_TRASH = 1,

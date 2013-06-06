@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/files.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@
 
 #include <list>
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
-#include <boost/function.hpp>
+#include <functional>
 
 #include <giomm/fileinfo.h>
 
@@ -42,7 +42,7 @@ namespace fwk {
 		: private std::list< std::string >
 	{
 	public:
-		typedef std::tr1::shared_ptr< FileList > Ptr;
+		typedef std::shared_ptr< FileList > Ptr;
 
 		typedef std::list< std::string >    _impltype_t;
 		typedef _impltype_t::value_type       value_type;
@@ -55,7 +55,7 @@ namespace fwk {
 		FileList( const _impltype_t & );
 
 		static Ptr getFilesFromDirectory(const value_type & dir,
-										 boost::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter);
+						 std::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter);
 
 		const_iterator begin() const
 			{ return _impltype_t::begin(); }

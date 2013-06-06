@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/colour.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 #include <string>
-#include <tr1/array>
+#include <array>
 
 namespace fwk {
 
@@ -33,7 +33,7 @@ namespace fwk {
    *  To be used only for UI.
    */
   class RgbColour
-    : public std::tr1::array<uint16_t, 3>
+    : public std::array<uint16_t, 3>
   {
   public:
     RgbColour(value_type r = 0, value_type g = 0, value_type b = 0);

@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfile.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <string>
 #include <list>
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/toolkit/mimetype.hpp"
 #include "fwk/base/propertybag.hpp"
@@ -37,10 +37,10 @@ namespace eng {
 class LibFile
 {
 public:
-    typedef std::tr1::shared_ptr< LibFile > Ptr;
-    typedef std::tr1::weak_ptr< LibFile> WeakPtr;
+    typedef std::shared_ptr< LibFile > Ptr;
+    typedef std::weak_ptr< LibFile> WeakPtr;
     typedef std::list< Ptr > List;
-    typedef std::tr1::shared_ptr< List > ListPtr;
+    typedef std::shared_ptr< List > ListPtr;
 
     enum FileType {
         FILE_TYPE_UNKNOWN = 0,
@@ -52,7 +52,7 @@ public:
 
     static FileType mimetype_to_filetype(fwk::MimeType mime);
 
-    LibFile(library_id_t id, library_id_t folderId, library_id_t fsfileid, 
+    LibFile(library_id_t id, library_id_t folderId, library_id_t fsfileid,
             const std::string & p,
             const std::string & name );
     virtual ~LibFile();

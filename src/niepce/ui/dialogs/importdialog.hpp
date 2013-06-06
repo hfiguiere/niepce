@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/importdialog.h
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #define __UI_IMPORTDIALOG_H__
 
 #include <list>
+#include <memory>
 #include <string>
 
 #include <glibmm/refptr.h>
@@ -45,7 +46,7 @@ class ImportDialog
 	: public fwk::Dialog
 {
 public:
-  typedef std::tr1::shared_ptr<ImportDialog> Ptr;
+    typedef std::shared_ptr<ImportDialog> Ptr;
 
 	ImportDialog();
 
