@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/notification.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ void NotificationCenter::subscribe(int type, const subscriber_t & s)
 
 void NotificationCenter::unsubscribe(int /*type*/, const subscriber_t & /*s*/)
 {
-//		m_subscribers.remove_if(boost::bind(&boost::function_equal, _1, s));
+//		m_subscribers.remove_if(std::bind(&boost::function_equal, _1, s));
 }
 
 void NotificationCenter::post(const Notification::Ptr & n)

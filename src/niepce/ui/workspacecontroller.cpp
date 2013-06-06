@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <functional>
+
 #include <boost/any.hpp>
-#include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
 
@@ -77,15 +78,17 @@ libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
 
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
+    using std::placeholders::_1;
+
     DBG_OUT("notification for workspace");
     switch(ln.type) {
     case eng::Library::NOTIFY_ADDED_FOLDERS:
     {
-        eng::LibFolder::ListPtr l 
+        eng::LibFolder::ListPtr l
             = boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
         DBG_OUT("received added folders # %lu", l->size());
-        for_each(l->begin(), l->end(), 
-                 boost::bind(&WorkspaceController::add_folder_item, 
+        for_each(l->begin(), l->end(),
+                 std::bind(&WorkspaceController::add_folder_item,
                              this, _1));
         break;
     }
@@ -102,8 +105,8 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         eng::Keyword::ListPtr l
             = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
         DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
-        for_each(l->begin(), l->end(), 
-                 boost::bind(&WorkspaceController::add_keyword_item, 
+        for_each(l->begin(), l->end(),
+                 std::bind(&WorkspaceController::add_keyword_item,
                              this, _1));
         break;
     }

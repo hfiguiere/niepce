@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2012 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 
 
 #include <utility>
+#include <functional>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/bind.hpp>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
@@ -215,8 +215,9 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
     DBG_OUT("set data source");
     m_current_data = properties;
     if(!m_data_map.empty()) {
+        using std::placeholders::_1;
         std::for_each(m_data_map.begin(), m_data_map.end(),
-                      boost::bind(&MetaDataWidget::clear_widget, this, _1));
+                      std::bind(&MetaDataWidget::clear_widget, this, _1));
     }
     set_sensitive(!properties.empty());
     if(properties.empty()) {

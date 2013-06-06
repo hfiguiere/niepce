@@ -1,5 +1,5 @@
 /*
- * (c) 2007-2008 Hubert Figuiere
+ * (c) 2007-2013 Hubert Figuiere
  *
  ***********************************************************
  *This file was part of the Nemiver Project.
@@ -31,8 +31,7 @@
 #include <string.h>
 #include <string>
 #include <list>
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <sqlite3.h>
 #include "fwk/utils/exception.hpp"
@@ -126,7 +125,7 @@ namespace db { namespace sqlite {
 			//the result of the last sqlite3_step() function, or -333
 			int last_execution_result ;
             
-            std::list<boost::function<void (void)> > userfunctions;
+            std::list<std::function<void (void)> > userfunctions;
 
 			Priv():
 				sqlite(NULL),
@@ -346,8 +345,8 @@ namespace db { namespace sqlite {
             
         void wrapper(sqlite3_context* ctx, int, sqlite3_value**)
         {
-            boost::function<void (void)> *f;
-            f = (boost::function<void (void)>*)sqlite3_user_data(ctx);
+            std::function<void (void)> *f;
+            f = (std::function<void (void)>*)sqlite3_user_data(ctx);
             (*f)();
         }
 
