@@ -37,6 +37,7 @@ src/fwk/base/testmoniker
 src/fwk/base/testgeometry
 src/fwk/base/testfractions
 src/fwk/base/testdate
+src/fwk/base/testmap
 src/fwk/utils/test_db
 src/fwk/utils/test_db2
 src/fwk/utils/test_db3

@@ -1,7 +1,7 @@
 /*
  * gnote
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,7 +27,7 @@
 #ifndef __FWK_MAP_HPP_
 #define __FWK_MAP_HPP_
 
-#include <list>
+#include <algorithm>
 #include <vector>
 #include <map>
 
@@ -35,25 +35,27 @@ namespace fwk {
 
   /** get all the keys from the map. */
   template <typename _Map>
-  void map_get_keys(const _Map & m, std::vector<typename _Map::mapped_type> & l) 
+  void map_get_keys(const _Map & m, std::vector<typename _Map::key_type> & l)
   {
     l.clear();
-    for(typename _Map::const_iterator iter = m.begin();
-        iter != m.end(); ++iter) {
-      l.push_back(iter->first);
-    }
+    std::for_each(m.begin(), m.end(),
+                  [&l] (const typename _Map::value_type & p) {
+                      l.push_back(p.first);
+                  }
+        );
   }
 
 
   /** get all the mapped elements from the map. */
   template <typename _Map>
-  void map_get_values(const _Map & m, std::list<typename _Map::mapped_type> & l) 
+  void map_get_values(const _Map & m, std::vector<typename _Map::mapped_type> & l)
   {
     l.clear();
-    for(typename _Map::const_iterator iter = m.begin();
-        iter != m.end(); ++iter) {
-      l.push_back(iter->second);
-    }
+    std::for_each(m.begin(), m.end(),
+                  [&l] (const typename _Map::value_type & p) {
+                      l.push_back(p.second);
+                  }
+        );
   }
 
 
@@ -61,13 +63,23 @@ namespace fwk {
   template <typename _Map>
   void map_delete_all_second(const _Map & m)
   {
-    for(typename _Map::const_iterator iter = m.begin();
-        iter != m.end(); ++iter) {
-      delete iter->second;
-    }    
+    std::for_each(m.begin(), m.end(),
+                  [] (const typename _Map::value_type & p) {
+                      delete p.second;
+                  }
+        );
   }
 
 }
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
