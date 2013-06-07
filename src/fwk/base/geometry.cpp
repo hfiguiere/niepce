@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/geometry.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,11 +55,12 @@ Rect::Rect(const std::string & s)
         throw(std::bad_cast());
     }
     int i = 0;
-    std::vector< std::string >::iterator iter;
-    for(iter = v.begin(); iter != v.end(); ++iter) {
-        _r[i] = boost::lexical_cast<int>(*iter);
-        i++;
-    }
+    for_each(v.begin(), v.end(),
+             [&i, this] (const std::string &s) {
+                 _r[i] = boost::lexical_cast<int>(s);
+                 i++;
+             }
+        );
 }
 
 Rect & Rect::scale(double _s)
