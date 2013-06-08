@@ -62,6 +62,13 @@ AC_ARG_ENABLE(camerawire,[  --enable-camerawire   Enable building Camerawire],[
 ],[
     NP_APP_CAMERAWIRE=no
 ])
+AC_ARG_ENABLE(allapps, [  --enable-allapps   Enable all apps],[
+    NP_APP_NIEPCE=yes
+    NP_APP_CAMERAWIRE=yes
+    NP_APPS="niepce,camerawire"
+],[
+
+])
 
 if test -z "$NP_APPS" ; then
     NP_APPS="niepce"
@@ -158,7 +165,9 @@ po/Makefile.in
 po/Makefile
 ])
 
+dnl =============
 dnl niepce
+dnl =============
 AM_CONDITIONAL(NIEPCE_BUILD, test "$NP_APP_NIEPCE" = "yes")
 if test "$NP_APP_NIEPCE" = "yes" ; then
 
@@ -192,7 +201,10 @@ src/niepce/Makefile
 
 fi
 
+dnl ================
 dnl camerawire
+dnl ================
+
 AM_CONDITIONAL(CW_BUILD, test "$NP_APP_CAMERAWIRE" = "yes")
 if test "$NP_APP_CAMERAWIRE" = "yes" ; then
 
