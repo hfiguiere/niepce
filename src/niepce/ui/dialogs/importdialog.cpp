@@ -108,22 +108,21 @@ void ImportDialog::do_select_directories()
 
 void ImportDialog::set_to_import(const Glib::ustring & f)
 {
-    using std::placeholders::_1;
-
     m_folder_path_to_import = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
-//
+
     m_imagesListModel->clear();
     fwk::FileList::Ptr list_to_import
-        = fwk::FileList::getFilesFromDirectory(f,
-                                               std::bind(&fwk::filter_xmp_out, _1));
-    for(auto i = list_to_import->begin();
-        i != list_to_import->end(); ++i) {
-        DBG_OUT("selected %s", i->c_str());
-        Gtk::TreeIter iter = m_imagesListModel->append();
-        iter->set_value(m_imagesListModelRecord.m_col1, *i);
-    }
+        = fwk::FileList::getFilesFromDirectory(f, &fwk::filter_xmp_out);
+
+    std::for_each(list_to_import->begin(), list_to_import->end(),
+                  [this] (const std::string & s) {
+                      DBG_OUT("selected %s", s.c_str());
+                      Gtk::TreeIter iter = m_imagesListModel->append();
+                      iter->set_value(m_imagesListModelRecord.m_col1, s);
+                  }
+        );
 }
 
 }
