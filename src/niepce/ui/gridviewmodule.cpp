@@ -1,7 +1,7 @@
 /*
- * niepce - ui/gridviewmodule.hpp
+ * niepce - ui/gridviewmodule.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
     DBG_ASSERT(m_uidataprovider, "provider is NULL");
 }
 
-void 
+void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {
     switch(ln.type) {
@@ -79,7 +79,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
                    "incorrect data type for the notification");
         std::pair<eng::library_id_t,eng::library_id_t> moved(boost::any_cast<std::pair<eng::library_id_t,eng::library_id_t> >(ln.param));
-        
+
 // check that the file that was moved still match the content
 
         break;
@@ -102,8 +102,7 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     return m_widget;
   }
   m_widget = &m_lib_splitview;
-  m_librarylistview = Gtk::manage(new fwk::ImageGridView());
-  m_librarylistview->set_model(m_model);
+  m_librarylistview = Gtk::manage(new fwk::ImageGridView(m_model));
   m_librarylistview->set_selection_mode(Gtk::SELECTION_SINGLE);
   m_librarylistview->property_row_spacing() = 0;
   m_librarylistview->property_column_spacing() = 0;
@@ -119,9 +118,9 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
   Glib::RefPtr<Gtk::CellArea> cell_area = m_librarylistview->property_cell_area();
   cell_area->pack_start(*libcell, FALSE);
-  cell_area->add_attribute(*libcell, "pixbuf", 
+  cell_area->add_attribute(*libcell, "pixbuf",
                                   m_model->columns().m_pix.index());
-  cell_area->add_attribute(*libcell, "libfile", 
+  cell_area->add_attribute(*libcell, "libfile",
                                   m_model->columns().m_libfile.index());
 
   m_scrollview.add(*m_librarylistview);
@@ -153,8 +152,8 @@ void GridViewModule::set_active(bool /*active*/)
 
 
 Gtk::IconView * GridViewModule::image_list()
-{ 
-    return m_librarylistview; 
+{
+    return m_librarylistview;
 }
 
 eng::library_id_t GridViewModule::get_selected()

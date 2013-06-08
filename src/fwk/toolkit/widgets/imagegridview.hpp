@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/imagegridview.hpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ class ImageGridView
 {
 public:
   ImageGridView();
+  ImageGridView(const Glib::RefPtr<Gtk::TreeModel> & model);
 
   /**
    * Used to work around the activate that don't pass an event.

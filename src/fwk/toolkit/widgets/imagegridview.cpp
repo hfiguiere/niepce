@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/imagegridview.cpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,11 @@ void ClickableCellRenderer::hit(int x, int y)
   m_x = x;
   m_y = y;
   m_hit = true;
+}
+
+ImageGridView::ImageGridView(const Glib::RefPtr<Gtk::TreeModel> & model)
+  : Gtk::IconView(model)
+{
 }
 
 ImageGridView::ImageGridView()
