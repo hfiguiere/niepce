@@ -1,4 +1,4 @@
-AC_INIT(niepce, 0.0.1)
+AC_INIT(niepce-suite, 2013.6.1)
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR(README)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz])
@@ -8,14 +8,6 @@ AC_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR(m4)
 
 m4_pattern_allow([^BOOST_])
-
-MAJOR_VERSION=0
-MINOR_VERSION=0
-MICRO_VERSION=1
-
-NIEPCE_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION"
-AC_SUBST(NIEPCE_VERSION)
-
 
 dnl all the library version.
 dnl if one is harcoded elsewhere, it is a bug
@@ -50,6 +42,31 @@ AC_ARG_ENABLE(debug,[  --enable-debug    Turn on debugging],[
 ])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
+NP_APPS=""
+
+AC_ARG_ENABLE(niepce,[  --enable-niepce   Enable building Niepce (default)],[
+    NP_APP_NIEPCE=yes
+    if test ! -z "$NP_APPS" ; then
+        NP_APPS="$NP_APPS,"
+    fi
+    NP_APPS="$NP_APPSniepce"
+],[
+    NP_APP_NIEPCE=no
+])
+AC_ARG_ENABLE(camerawire,[  --enable-camerawire   Enable building Camerawire],[
+    NP_APP_CAMERAWIRE=yes
+    if test ! -z "$NP_APPS" ; then
+        NP_APPS="$NP_APPS,"
+    fi
+    NP_APPS="$NP_APPScamerawire"
+],[
+    NP_APP_CAMERAWIRE=no
+])
+
+if test -z "$NP_APPS" ; then
+    NP_APPS="niepce"
+    NP_APP_NIEPCE=yes
+fi
 
 CPPFLAGS="$CPPFLAGS $DEBUG_CFLAGS -Wall -Wcast-align -Wcast-qual -Wpointer-arith -Wreturn-type"
 CFLAGS="$CFLAGS $DEBUG_CFLAGS $OPTIMIZE_CFLAGS"
@@ -72,6 +89,7 @@ PKG_CHECK_MODULES(LIBXML2, [libxml-2.0 >= $LIBXML2_VERSION])
 PKG_CHECK_MODULES(BABL, babl)
 PKG_CHECK_MODULES(GPHOTO, [libgphoto2 >= $LIBGPHOTO_VERSION libgphoto2_port])
 
+dnl niepce
 PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-1.0 >= $LIBOPENRAW_VERSION)
 AC_SUBST(OPENRAW_CFLAGS)
 AC_SUBST(OPENRAW_LIBS)
@@ -79,7 +97,6 @@ AC_SUBST(OPENRAW_LIBS)
 PKG_CHECK_MODULES(GEGL, gegl-0.2 >= $GEGL_VERSION)
 AC_SUBST(GEGL_CFLAGS)
 AC_SUBST(GEGL_LIBS)
-
 
 BOOST_REQUIRE([$BOOST_VERSION])
 BOOST_CONVERSION
@@ -114,19 +131,6 @@ AC_LANG_POP
 
 IT_PROG_INTLTOOL([0.35.0])
 
-GETTEXT_PACKAGE=niepce
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
-                   [The domain to use with gettext])
-AM_GLIB_GNU_GETTEXT
-
-NIEPCE_LOCALEDIR=[${datadir}/locale]
-AC_SUBST(NIEPCE_LOCALEDIR)
-
-AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
-
-AC_CONFIG_SUBDIRS(camerawire)
-
 AC_CONFIG_FILES([
 Makefile
 art/Makefile
@@ -139,13 +143,6 @@ data/themes/Makefile
 src/Makefile
 src/ext/Makefile
 src/ext/libview/Makefile
-src/niepce/ui/Makefile
-src/niepce/ui/dialogs/Makefile
-src/niepce/ui/thumb-view/Makefile
-src/niepce/modules/Makefile
-src/niepce/modules/darkroom/Makefile
-src/niepce/modules/interfaces/Makefile
-src/niepce/Makefile
 src/fwk/Makefile
 src/fwk/base/Makefile
 src/fwk/utils/Makefile
@@ -161,5 +158,75 @@ po/Makefile.in
 po/Makefile
 ])
 
+dnl niepce
+AM_CONDITIONAL(NIEPCE_BUILD, test "$NP_APP_NIEPCE" = "yes")
+if test "$NP_APP_NIEPCE" = "yes" ; then
+
+MAJOR_VERSION=0
+MINOR_VERSION=0
+MICRO_VERSION=1
+
+NIEPCE_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION"
+AC_SUBST(NIEPCE_VERSION)
+
+GETTEXT_PACKAGE=niepce
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
+                   [The domain to use with gettext])
+AM_GLIB_GNU_GETTEXT
+
+NIEPCE_LOCALEDIR=[${datadir}/locale]
+AC_SUBST(NIEPCE_LOCALEDIR)
+
+AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string used to hardcode the build config.])
+
+AC_CONFIG_FILES([
+src/niepce/ui/Makefile
+src/niepce/ui/dialogs/Makefile
+src/niepce/ui/thumb-view/Makefile
+src/niepce/modules/Makefile
+src/niepce/modules/darkroom/Makefile
+src/niepce/modules/interfaces/Makefile
+src/niepce/Makefile
+])
+
+fi
+
+dnl camerawire
+AM_CONDITIONAL(CW_BUILD, test "$NP_APP_CAMERAWIRE" = "yes")
+if test "$NP_APP_CAMERAWIRE" = "yes" ; then
+
+MAJOR_VERSION=0
+MINOR_VERSION=0
+MICRO_VERSION=1
+
+CAMERAWIRE_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION"
+AC_SUBST(CAMERAWIRE_VERSION)
+
+GETTEXT_PACKAGE=camerawire
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
+                   [The domain to use with gettext])
+AM_GLIB_GNU_GETTEXT
+
+CW_LOCALEDIR=[${datadir}/locale]
+AC_SUBST(CW_LOCALEDIR)
+
+AC_DEFINE_UNQUOTED([CW_BUILD_CONFIG], ["$CW_BUILD_CONFIG"], [The string used to hardcode the build config.])
+
+AC_CONFIG_FILES([
+camerawire/Makefile
+camerawire/src/Makefile
+camerawire/po/Makefile.in
+camerawire/po/Makefile
+])
+
+fi
 
 AC_OUTPUT
+
+echo "
+
+  Build apps: ${NP_APPS}
+
+"

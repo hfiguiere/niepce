@@ -6,7 +6,7 @@ AM_CPPFLAGS = -DCW_LOCALEDIR=\"${CW_LOCALEDIR}\"
 bin_PROGRAMS = camerawire
 
 INCLUDES = -DDATADIR=\"$(datadir)\" \
-	-I$(top_srcdir)/../src/ -I$(top_srcdir)/src  \
+	-I$(top_srcdir)/src  \
 	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@ \
 	@GPHOTO_CFLAGS@
 
@@ -18,7 +18,7 @@ camerawire_SOURCES = \
 
 camerawire_LDADD = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ \
 	@GPHOTO_LIBS@ \
-	$(top_builddir)/../src/fwk/toolkit/libniepceframework.a \
-	$(top_builddir)/../src/fwk/utils/libniepceutils.a \
-	$(top_builddir)/../src/fwk/base/libfwkbase.a \
+	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
+	$(top_builddir)/src/fwk/utils/libniepceutils.a \
+	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(NULL)
