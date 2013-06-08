@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <boost/bind.hpp>
-
 #include <glibmm/i18n.h>
 
 #include "fwk/utils/init.hpp"
@@ -31,9 +29,9 @@
 
 int main(int argc, char ** argv)
 {
-  bindtextdomain(GETTEXT_PACKAGE, CW_LOCALEDIR);
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-  textdomain(GETTEXT_PACKAGE);
+  bindtextdomain(CW_GETTEXT_PACKAGE, CW_LOCALEDIR);
+  bind_textdomain_codeset(CW_GETTEXT_PACKAGE, "UTF-8");
+  textdomain(CW_GETTEXT_PACKAGE);
 
   fwk::utils::init();
 

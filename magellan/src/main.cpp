@@ -31,9 +31,9 @@
 
 int main(int argc, char ** argv)
 {
-  bindtextdomain(GETTEXT_PACKAGE, CW_LOCALEDIR);
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-  textdomain(GETTEXT_PACKAGE);
+  bindtextdomain(MG_GETTEXT_PACKAGE, MG_LOCALEDIR);
+  bind_textdomain_codeset(MG_GETTEXT_PACKAGE, "UTF-8");
+  textdomain(MG_GETTEXT_PACKAGE);
 
   fwk::utils::init();
 
