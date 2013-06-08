@@ -34,36 +34,38 @@ class LocalLibraryServer;
 class ClientImpl
 {
 public:
-    static ClientImpl *makeClientImpl(const fwk::Moniker & moniker, 
+    static ClientImpl *makeClientImpl(const fwk::Moniker & moniker,
                                       const fwk::NotificationCenter::Ptr & nc);
-		
-		ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
-		virtual ~ClientImpl();
+
+    ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+    virtual ~ClientImpl();
     bool ok() const;
 
-		eng::tid_t getAllKeywords();
-		eng::tid_t queryKeywordContent(eng::library_id_t id);
-		eng::tid_t getAllFolders();
-		eng::tid_t queryFolderContent(eng::library_id_t id);
-	eng::tid_t countFolder(eng::library_id_t id);
-	eng::tid_t requestMetadata(eng::library_id_t id);
-    eng::tid_t setMetadata(eng::library_id_t id, int meta, const fwk::PropertyValue & value);
-    eng::tid_t moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder_id,
+    eng::tid_t getAllKeywords();
+    eng::tid_t queryKeywordContent(eng::library_id_t id);
+    eng::tid_t getAllFolders();
+    eng::tid_t queryFolderContent(eng::library_id_t id);
+    eng::tid_t countFolder(eng::library_id_t id);
+    eng::tid_t requestMetadata(eng::library_id_t id);
+    eng::tid_t setMetadata(eng::library_id_t id, int meta,
+                           const fwk::PropertyValue & value);
+    eng::tid_t moveFileToFolder(eng::library_id_t file_id,
+                                eng::library_id_t from_folder_id,
                                 eng::library_id_t to_folder_id);
 
     eng::tid_t getAllLabels();
     eng::tid_t createLabel(const std::string & s, const std::string & color);
     eng::tid_t deleteLabel(int id);
     eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name,
-                               const std::string & new_color);
+                           const std::string & new_color);
 
     eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
-		eng::tid_t importFromDirectory(const std::string & dir, bool manage);
+    eng::tid_t importFromDirectory(const std::string & dir, bool manage);
 
 protected:
-		const fwk::Moniker m_moniker;
-		LocalLibraryServer *m_localLibrary;
+    const fwk::Moniker m_moniker;
+    LocalLibraryServer *m_localLibrary;
 };
 
 }
