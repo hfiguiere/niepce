@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,11 @@ private:
     void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
     void init_actions(const Glib::RefPtr<Gtk::UIManager> & manager);
 
-    void open_library(const std::string & libMoniker);
+    // UI to open library
+    std::string prompt_open_library();
+    // open the library
+    // @return false if error.
+    bool open_library(const std::string & libMoniker);
 
     void _createModuleShell();
 		

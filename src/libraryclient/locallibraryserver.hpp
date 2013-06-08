@@ -27,7 +27,6 @@
 #include "fwk/utils/worker.hpp"
 #include "engine/library/op.hpp"
 #include "engine/db/library.hpp"
-
 namespace libraryclient {
 
 	class LocalLibraryServer
@@ -41,7 +40,10 @@ namespace libraryclient {
 			, m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
 			{
 			}
-
+		bool ok() const
+			{
+				return m_library && m_library->ok();
+			}
 	protected:
 		virtual void execute(const eng::Op::Ptr & _op);
 

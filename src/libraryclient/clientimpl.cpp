@@ -55,6 +55,11 @@ ClientImpl::~ClientImpl()
     delete m_localLibrary;
 }
 
+bool ClientImpl::ok() const
+{
+    return m_localLibrary && m_localLibrary->ok();
+}
+
 tid_t ClientImpl::getAllKeywords()
 {
     tid_t id = LibraryClient::newTid();

@@ -60,12 +60,18 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
 {
     DBG_OUT("dir = %s", dir.c_str());
     db::DBDesc desc("", 0, m_dbname);
-    m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
-    m_inited = init();
+    try {
+        m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
+        m_inited = init();
 
-    m_dbdrv->create_function0("rewrite_xmp",
-                              std::bind(&Library::triggerRewriteXmp,
-                                          this));
+        m_dbdrv->create_function0("rewrite_xmp",
+                                  std::bind(&Library::triggerRewriteXmp,
+                                            this));
+    }
+    catch(const std::exception &e)
+    {
+        ERR_OUT("Exception: %s", e.what());
+    }
 }
 
 Library::~Library()

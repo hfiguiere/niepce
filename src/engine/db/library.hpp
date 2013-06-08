@@ -76,7 +76,7 @@ public:
     Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
     virtual ~Library();
 
-    bool ok()
+    bool ok() const
         { return m_inited; }
     /** set the main library directory */
 //		void setMainDir(const std::string & dir)

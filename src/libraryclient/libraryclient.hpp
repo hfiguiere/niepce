@@ -48,7 +48,9 @@ public:
     
     LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
     virtual ~LibraryClient();
-    
+    // @return false in case of error.
+    bool ok() const;
+
     static eng::tid_t newTid();
     /** get all the keywords 
      * @return transaction ID
