@@ -1,6 +1,6 @@
 
 
-AM_CPPFLAGS = -DCW_LOCALEDIR=\"${CW_LOCALEDIR}\"
+AM_CPPFLAGS = -DMG_LOCALEDIR=\"${MG_LOCALEDIR}\"
 
 gladefiles = mgwindow.ui
 gladedir = @datarootdir@/niepce/glade/
@@ -10,7 +10,7 @@ bin_PROGRAMS = magellan
 
 INCLUDES = -DDATADIR=\"$(datadir)\" \
 	-DGLADEDIR=\"$(gladedir)\" \
-	-I$(top_srcdir)/../src/ -I$(top_srcdir)/src  \
+	-I$(top_srcdir)/src  \
 	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@
 
 magellan_SOURCES = \
@@ -20,7 +20,7 @@ magellan_SOURCES = \
 
 
 magellan_LDADD = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ \
-	$(top_builddir)/../src/fwk/toolkit/libniepceframework.a \
-	$(top_builddir)/../src/fwk/utils/libniepceutils.a \
-	$(top_builddir)/../src/fwk/base/libfwkbase.a \
+	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
+	$(top_builddir)/src/fwk/utils/libniepceutils.a \
+	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(NULL)
