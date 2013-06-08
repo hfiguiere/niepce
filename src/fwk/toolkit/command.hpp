@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/command.h
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __FWK_COMMAND_H_
 #define __FWK_COMMAND_H_
 
-#include <boost/function.hpp>
+#include <functional>
 
 namespace fwk {
 
@@ -29,7 +29,7 @@ class Command
 {
 public:
 	virtual ~Command() {}
-    typedef boost::function<void (void)> Function;
+    typedef std::function<void (void)> Function;
     virtual void undo() = 0;
     virtual void redo() = 0;
 };
@@ -39,8 +39,8 @@ class CommandWithArg
     : public Command
 {
 public:
-    typedef boost::function<void (_ArgType)> UndoFunction;
-    typedef boost::function<_ArgType (void)> RedoFunction;
+    typedef std::function<void (_ArgType)> UndoFunction;
+    typedef std::function<_ArgType (void)> RedoFunction;
     CommandWithArg(const RedoFunction & _redo,
                    const UndoFunction & _undo)
         : m_redo(_redo)
@@ -67,8 +67,8 @@ class CommandWithArg<void>
     : public Command
 {
 public:
-    typedef boost::function<void (void)> UndoFunction;
-    typedef boost::function<void (void)> RedoFunction;
+    typedef std::function<void (void)> UndoFunction;
+    typedef std::function<void (void)> RedoFunction;
     CommandWithArg(const RedoFunction & _redo,
                    const UndoFunction & _undo)
         : m_redo(_redo)

@@ -23,7 +23,7 @@ It is currently work in progress.
 To build is you need the following:
 -----------------------------------
 
-A C++ compiler
+A C++11 compiler
 gtk+ 2.8
 cairo 1.1
 gtkmm 2.12

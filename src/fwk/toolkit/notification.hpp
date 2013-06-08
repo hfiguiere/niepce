@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/notification.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #ifndef __FWK_NOTIFICATION_H__
 #define __FWK_NOTIFICATION_H__
 
-#include <tr1/memory>
+#include <memory>
 #include <boost/any.hpp>
 
 #include <glibmm/threads.h>
@@ -35,7 +35,7 @@ namespace fwk {
 	class Notification
 	{
 	public:
-		typedef std::tr1::shared_ptr<Notification> Ptr;
+		typedef std::shared_ptr<Notification> Ptr;
 	  typedef Glib::Threads::RecMutex mutex_t;
 
 		Notification(int _type)

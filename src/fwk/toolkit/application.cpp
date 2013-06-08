@@ -18,8 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
+#include <functional>
 #include <boost/lexical_cast.hpp>
 
 #include <glibmm/i18n.h>
@@ -28,7 +27,6 @@
 #include <gtkmm/settings.h>
 
 #include "fwk/base/debug.hpp"
-#include "fwk/utils/boost.hpp"
 #include "fwk/utils/modulemanager.hpp"
 #include "application.hpp"
 #include "uicontroller.hpp"
@@ -109,10 +107,11 @@ int Application::main(const Application::Ptr & app,
 
 void Application::terminate()
 {
+    using std::placeholders::_1;
     std::for_each(m_subs.begin(), m_subs.end(),
-                  boost::bind(&Controller::terminate, _1));
+                  std::bind(&Controller::terminate, _1));
     std::for_each(m_subs.begin(), m_subs.end(),
-                  boost::bind(&Controller::clearParent, _1));
+                  std::bind(&Controller::clearParent, _1));
     m_subs.clear();
 }
 
@@ -139,7 +138,7 @@ void Application::add(const Controller::Ptr & sub)
 void Application::_add(const Controller::Ptr & sub, bool attach)
 {
     Controller::add(sub);
-    UiController::Ptr uictrl = std::tr1::dynamic_pointer_cast<UiController>(sub);
+    UiController::Ptr uictrl = std::dynamic_pointer_cast<UiController>(sub);
     if(uictrl) {
         Gtk::Widget *w = uictrl->buildWidget(uiManager());
         Gtk::Window *win = NULL;

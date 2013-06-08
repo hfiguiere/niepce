@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/metadatapanecontroller.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
@@ -155,8 +155,9 @@ void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMe
         const fwk::PropertySet & propset = get_property_set();
         meta->to_properties(propset, properties);
     }
+    using std::placeholders::_1;
     std::for_each(m_widgets.begin(), m_widgets.end(),
-		  boost::bind(&fwk::MetaDataWidget::set_data_source,
+		  std::bind(&fwk::MetaDataWidget::set_data_source,
 			      _1, properties));
 }
   

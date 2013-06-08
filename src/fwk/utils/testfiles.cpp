@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testfiles.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,9 @@
  */
 /** @brief unit test for files */
 
+#include <functional>
+
 #include <boost/test/minimal.hpp>
-#include <boost/bind.hpp>
 
 #include <stdlib.h>
 
@@ -27,6 +28,7 @@
 #include "init.hpp"
 
 using fwk::FileList;
+using std::placeholders::_1;
 
 int test_main( int, char *[] )             // note the name!
 {
@@ -39,10 +41,10 @@ int test_main( int, char *[] )             // note the name!
 
 	FileList::Ptr files;
 	
-	files = FileList::getFilesFromDirectory( "foo", boost::bind(fwk::filter_none, _1) );
+	files = FileList::getFilesFromDirectory( "foo", std::bind(fwk::filter_none, _1) );
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "AAtest", boost::bind(fwk::filter_none, _1));
+	files = FileList::getFilesFromDirectory( "AAtest", std::bind(fwk::filter_none, _1));
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	

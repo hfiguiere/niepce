@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/test_filebundle.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ int test_main(int, char *[])
         eng::FileBundle::filter_bundles(thelist);
 
     BOOST_CHECK(bundles_list->size() == 2);
-    eng::FileBundle::List::const_iterator iter = bundles_list->begin();
-    eng::FileBundle::Ptr b = *iter;
+    auto iter = bundles_list->begin();
+    auto b = *iter;
     BOOST_CHECK(b->main_file() == "/foo/bar/dcs_0001.nef");
     BOOST_CHECK(b->jpeg() == "/foo/bar/dcs_0001.jpg");
     BOOST_CHECK(b->sidecar() == "/foo/bar/dcs_0001.xmp");

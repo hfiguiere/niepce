@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/notification.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __FWK_NOTIFICATIONCENTER_H__
 #define __FWK_NOTIFICATIONCENTER_H__
 
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/toolkit/notification.hpp"
 
@@ -31,7 +31,7 @@ class NotificationCenter
     : public sigc::trackable
 {
 public:
-    typedef std::tr1::shared_ptr< NotificationCenter > Ptr;
+    typedef std::shared_ptr< NotificationCenter > Ptr;
     typedef sigc::slot<void, Notification::Ptr> subscriber_t;
 
     NotificationCenter();

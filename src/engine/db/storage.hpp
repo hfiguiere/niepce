@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/storage.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __NIEPCE_LIBRARY_STORAGE_H__
 #define __NIEPCE_LIBRARY_STORAGE_H__
 
-#include <tr1/memory>
+#include <memory>
 
 #include "engine/db/keyword.hpp"
 
@@ -31,7 +31,7 @@ namespace eng {
 	class Storage
 	{
 	public:
-		typedef std::tr1::shared_ptr<Storage> Ptr;
+		typedef std::shared_ptr<Storage> Ptr;
 
 		virtual ~Storage();
 

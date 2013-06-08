@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/filmstripcontroller.h
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ class FilmStripController
 	  public IImageSelectable
 {
 public:
-	typedef std::tr1::shared_ptr<FilmStripController> Ptr;
-	typedef std::tr1::weak_ptr<FilmStripController> WeakPtr;
+	typedef std::shared_ptr<FilmStripController> Ptr;
+	typedef std::weak_ptr<FilmStripController> WeakPtr;
 
 	FilmStripController(const Glib::RefPtr<ImageListStore> & store);
 

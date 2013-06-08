@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class GridViewModule
     , public IImageSelectable
 {
 public:
-  typedef std::tr1::shared_ptr<GridViewModule> Ptr;
+  typedef std::shared_ptr<GridViewModule> Ptr;
 
   GridViewModule(const IModuleShell & shell,
                  const Glib::RefPtr<ImageListStore> & store);

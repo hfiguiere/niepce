@@ -1,7 +1,7 @@
 /*
  * niepce - library/thumbnailcache.h
  *
- * Copyright (C) 2007,2011 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef _LIBRARY_THUMBNAILCACHE_H__
 #define _LIBRARY_THUMBNAILCACHE_H__
 
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/utils/worker.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -33,7 +33,7 @@ namespace eng {
 class ThumbnailTask
 {
 public:
-    typedef std::tr1::shared_ptr< ThumbnailTask > Ptr;
+    typedef std::shared_ptr< ThumbnailTask > Ptr;
 		
     ThumbnailTask(const LibFile::Ptr & f, int w, int h)
         : m_file(f), m_width(w), m_height(h)
@@ -69,7 +69,7 @@ protected:
     virtual void execute(const  ThumbnailTask::Ptr & task);
 private:
     std::string                                 m_cacheDir;
-    std::tr1::weak_ptr<fwk::NotificationCenter> m_notif_center;
+    std::weak_ptr<fwk::NotificationCenter> m_notif_center;
 
     std::string path_for_thumbnail(const std::string & filename, library_id_t id, int size) const;
     std::string dir_for_thumbnail(int size) const;

@@ -18,7 +18,7 @@
  */
 
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
@@ -111,17 +111,18 @@ void ImportDialog::set_to_import(const Glib::ustring & f)
     m_folder_path_to_import = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
-//
+
     m_imagesListModel->clear();
-    fwk::FileList::Ptr list_to_import 
-        = fwk::FileList::getFilesFromDirectory(f, 
-                                               boost::bind(&fwk::filter_xmp_out, _1));
-    for(std::list<std::string>::const_iterator i = list_to_import->begin();
-        i != list_to_import->end(); ++i) {
-        DBG_OUT("selected %s", i->c_str());
-        Gtk::TreeIter iter = m_imagesListModel->append();
-        iter->set_value(m_imagesListModelRecord.m_col1, *i);
-    }
+    fwk::FileList::Ptr list_to_import
+        = fwk::FileList::getFilesFromDirectory(f, &fwk::filter_xmp_out);
+
+    std::for_each(list_to_import->begin(), list_to_import->end(),
+                  [this] (const std::string & s) {
+                      DBG_OUT("selected %s", s.c_str());
+                      Gtk::TreeIter iter = m_imagesListModel->append();
+                      iter->set_value(m_imagesListModelRecord.m_col1, s);
+                  }
+        );
 }
 
 }

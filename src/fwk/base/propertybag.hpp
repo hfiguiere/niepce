@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011-2012 Hubert Figuiere
+ * Copyright (C) 2011-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <tr1/memory>
+#include <memory>
 #include <boost/variant.hpp>
 
 #include "fwk/base/date.hpp"
@@ -38,14 +38,14 @@ typedef boost::variant<int, std::string, StringArray, Date> PropertyValue;
 
 typedef std::set<PropertyIndex> PropertySet;
 
-/** a property bag 
+/** a property bag
  * It is important that the values for PropertyIndex be properly name spaced
  * by the caller.
  */
 class PropertyBag
 {
 public:
-    typedef std::tr1::shared_ptr<PropertyBag> Ptr;
+    typedef std::shared_ptr<PropertyBag> Ptr;
     typedef std::map<PropertyIndex, PropertyValue> _Map;
     typedef _Map::const_iterator const_iterator;
 
@@ -53,7 +53,7 @@ public:
         {
             return m_bag.empty();
         }
-    
+
     const_iterator begin() const
         {
             return m_bag.begin();

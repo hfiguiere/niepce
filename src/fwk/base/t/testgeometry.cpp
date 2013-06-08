@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testgeometry.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,20 +37,21 @@ int test_main( int, char *[] )             // note the name!
 	BOOST_CHECK(r2.y() == 100);
 	BOOST_CHECK(r2.w() == 250);
 	BOOST_CHECK(r2.h() == 250);
-	bool raised = false;
 	std::vector<std::string> vtest;
 	vtest.push_back("a b c d");
 	vtest.push_back("100 100 150");
-	for(std::vector<std::string>::iterator iter = vtest.begin();
-		iter != vtest.end(); ++iter) {
-		try {
-			Rect r3(*iter);
-		}
-		catch(std::bad_cast) {
-			raised = true;
-		}
-		BOOST_CHECK(raised);
-	}
+	std::for_each(vtest.begin(), vtest.end(),
+		      [] (const std::string & s) {
+			      bool raised = false;
+			      try {
+				      Rect r3(s);
+			      }
+			      catch(std::bad_cast) {
+				      raised = true;
+			      }
+			      BOOST_CHECK(raised);
+		      }
+		);
 
 
     Rect dest1(0, 0, 640, 480);

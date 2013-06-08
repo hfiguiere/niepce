@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <gtkmm/iconview.h>
 #include <gtkmm/treeiter.h>
 #include <glibmm/i18n.h>
 
 #include "fwk/base/autoflag.hpp"
-#include "fwk/utils/boost.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "fwk/toolkit/command.hpp"
@@ -99,8 +98,8 @@ void SelectionController::selected(IImageSelectable * selectable)
 
 libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
 {
-    ModuleShell::Ptr shell = std::tr1::dynamic_pointer_cast<ModuleShell>(m_parent.lock());
-    DBG_ASSERT(shell, "parent not a ModuleShell");
+    ModuleShell::Ptr shell = std::dynamic_pointer_cast<ModuleShell>(m_parent.lock());
+    DBG_ASSERT(static_cast<bool>(shell), "parent not a ModuleShell");
     return	shell->getLibraryClient();
 }
 
@@ -139,9 +138,10 @@ void SelectionController::_selection_move(bool backwards)
             selection = libfile->id();
 
             fwk::AutoFlag f(m_in_handler);
-        
+
+            using std::placeholders::_1;
             std::for_each(m_selectables.begin(), m_selectables.end(),
-                          boost::bind(&IImageSelectable::select_image, _1,  
+                          std::bind(&IImageSelectable::select_image, _1,
                                       selection));
             signal_selected(selection);
         }
@@ -182,9 +182,9 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
     undo->new_command<void>(
-        boost::bind(&libraryclient::LibraryClient::setMetadata,
+        std::bind(&libraryclient::LibraryClient::setMetadata,
                     getLibraryClient(), file->id(), meta, fwk::PropertyValue(new_value)),
-        boost::bind(&libraryclient::LibraryClient::setMetadata,
+        std::bind(&libraryclient::LibraryClient::setMetadata,
                     getLibraryClient(), file->id(), meta, fwk::PropertyValue(old_value))
         );
     undo->execute();
@@ -206,14 +206,14 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
 
         undo->new_command<void>(
-            boost::bind(&libraryclient::LibraryClient::setMetadata,
+            std::bind(&libraryclient::LibraryClient::setMetadata,
                         getLibraryClient(), file->id(), iter->first, iter->second),
-            boost::bind(&libraryclient::LibraryClient::setMetadata,
+            std::bind(&libraryclient::LibraryClient::setMetadata,
                         getLibraryClient(), file->id(), iter->first, value)
             );
     }
     undo->execute();
-    return true;    
+    return true;
 }
 
 void SelectionController::set_label(int label)
@@ -289,13 +289,13 @@ void SelectionController::move_to_trash()
             eng::library_id_t from_folder = file->folderId();
             fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(_("Move to Trash"));
             undo->new_command<void>(
-                boost::bind(&libraryclient::LibraryClient::moveFileToFolder,
+                std::bind(&libraryclient::LibraryClient::moveFileToFolder,
                             getLibraryClient(), selection, from_folder, trash_folder),
-                boost::bind(&libraryclient::LibraryClient::moveFileToFolder,
+                std::bind(&libraryclient::LibraryClient::moveFileToFolder,
                             getLibraryClient(), selection, trash_folder, from_folder )
                 );
             undo->execute();
-        }        
+        }
     }
 }
 

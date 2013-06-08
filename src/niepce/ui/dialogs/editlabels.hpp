@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/editlabels.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __UI_EDITLABELS_HPP__
 #define __UI_EDITLABELS_HPP__
 
-#include <tr1/array>
+#include <array>
 
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/entry.h>
@@ -38,7 +38,7 @@ class EditLabels
     : public fwk::Dialog
 {
 public:
-    typedef std::tr1::shared_ptr<EditLabels> Ptr;
+    typedef std::shared_ptr<EditLabels> Ptr;
     EditLabels(const libraryclient::LibraryClient::Ptr &);
 
     virtual void setup_widget();
@@ -47,9 +47,9 @@ private:
     void label_colour_changed(size_t idx);
     void update_labels(int /*response*/);
     const eng::Label::List            & m_labels;
-    std::tr1::array<Gtk::ColorButton*, 5> m_colours;
-    std::tr1::array<Gtk::Entry*, 5>   m_entries;
-    std::tr1::array<bool, 5>          m_status;
+    std::array<Gtk::ColorButton*, 5> m_colours;
+    std::array<Gtk::Entry*, 5>   m_entries;
+    std::array<bool, 5>          m_status;
     libraryclient::LibraryClient::Ptr m_lib_client;
 };
 

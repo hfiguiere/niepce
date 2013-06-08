@@ -148,8 +148,8 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
 
 libraryclient::LibraryClient::Ptr ImageListStore::getLibraryClient()
 {
-    ModuleShell::Ptr shell = std::tr1::dynamic_pointer_cast<ModuleShell>(m_controller.lock());
-    DBG_ASSERT(shell, "parent not a ModuleShell");
+    ModuleShell::Ptr shell = std::dynamic_pointer_cast<ModuleShell>(m_controller.lock());
+    DBG_ASSERT(static_cast<bool>(shell), "parent not a ModuleShell");
     return	shell->getLibraryClient();
 }
 

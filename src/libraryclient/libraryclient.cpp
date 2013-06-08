@@ -46,6 +46,11 @@ LibraryClient::~LibraryClient()
     delete m_uidataprovider;
 }
 
+bool LibraryClient::ok() const
+{
+    return m_pImpl && m_pImpl->ok();
+}
+
 tid_t LibraryClient::newTid()
 {
     static tid_t id = 0;

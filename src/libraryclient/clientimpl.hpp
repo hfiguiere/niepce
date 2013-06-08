@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.hpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ public:
 		
 		ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
 		virtual ~ClientImpl();
+    bool ok() const;
 
 		eng::tid_t getAllKeywords();
 		eng::tid_t queryKeywordContent(eng::library_id_t id);

@@ -1,7 +1,7 @@
 /*
- * niepce - utils/databinder.h
+ * niepce - base/t/testmap.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,41 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/** @brief unit test for fractions */
 
+#include <boost/test/minimal.hpp>
 
+#include <stdlib.h>
+#include <map>
+#include "fwk/base/map.hpp"
 
-
-#ifndef _UTILS_DATABINDER_H_
-#define _UTILS_DATABINDER_H_
-
-#include <vector>
-
-#include <boost/utility.hpp>
-
-namespace fwk {
-
-/** @brief the base class for all the data binders */
-class DataBinderBase
-	: public boost::noncopyable
+int test_main( int, char *[] )             // note the name!
 {
-public:
-	virtual ~DataBinderBase() 
-		{}
-};
 
-/** @brief a pool of data binders */
-class DataBinderPool
-	: private std::vector< DataBinderBase* >
-{
-public:
-	~DataBinderPool();
-	/** add a data binder to the pool. the pool will own the pointer */
-	void add_binder(DataBinderBase *);
-	static void destroy(DataBinderPool *pool);
-};
+	std::map<std::string, int> n { { "one", 1 }, { "two", 2 } };
 
+	BOOST_CHECK(n.size() == 2);
 
+	std::vector<std::string> keys;
+	fwk::map_get_keys(n, keys);
+	BOOST_CHECK(n.size() == keys.size());
+	BOOST_CHECK(keys[0] == "one");
+
+	std::vector<int> values;
+	fwk::map_get_values(n, values);
+	BOOST_CHECK(n.size() == values.size());
+	BOOST_CHECK(values[0] == 1);
+
+	return 0;
 }
 
-
-#endif

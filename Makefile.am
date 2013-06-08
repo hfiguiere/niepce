@@ -11,5 +11,12 @@ DISTCLEANFILES = intltool-extract \
                  intltool-update \
                  po/.intltool-merge-cache
 
-SUBDIRS = po data src camerawire magellan
-DIST_SUBDIRS = po art data doc src
+if CW_BUILD
+CW_DIR = camerawire
+endif
+if MG_BUILD
+MG_DIR = magellan
+endif
+
+SUBDIRS = po data src $(CW_DIR) $(MG_DIR)
+DIST_SUBDIRS = po art data doc src camerawire magellan

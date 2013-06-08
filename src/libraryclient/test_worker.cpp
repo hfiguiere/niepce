@@ -1,7 +1,7 @@
 /*
  * niepce - library/test_worker.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #define BOOST_AUTO_TEST_MAIN
 #include "locallibraryserver.hpp"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/test/minimal.hpp>
 
 
@@ -38,7 +38,7 @@ void foo(const Library::Ptr &)
 
 //BOOST_AUTO_TEST_CASE(worker_test)
 int test_main(int, char *[])
-{                                               
+{
   fwk::utils::init();
 
 	char templ[] = "/tmp/niepce-tmpXXXXXX";
@@ -47,10 +47,10 @@ int test_main(int, char *[])
 	{
 		fwk::DirectoryDisposer d(ptempl);
 		LocalLibraryServer w(std::string("") + ptempl, fwk::NotificationCenter::Ptr());
-		
+
 		BOOST_CHECK(w._tasks().empty());
-		
-		Op::Ptr p(new Op(0, boost::bind(&foo, eng::Library::Ptr())));
+
+		Op::Ptr p(new Op(0, std::bind(&foo, eng::Library::Ptr())));
 		w.schedule(p);
 	}
     return 0;

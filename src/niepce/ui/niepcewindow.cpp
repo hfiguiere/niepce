@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  */
 
 #include <string>
-#include <boost/bind.hpp>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/window.h>
@@ -73,7 +72,7 @@ void
 NiepceWindow::_createModuleShell()
 {
     DBG_ASSERT(m_uimanager, "UI manager NULL");
-    DBG_ASSERT(m_libClient, "libclient not initialized");
+    DBG_ASSERT(static_cast<bool>(m_libClient), "libclient not initialized");
     DBG_ASSERT(m_widget, "widget not built");
 
     DBG_OUT("creating module shell");
@@ -341,34 +340,18 @@ void NiepceWindow::on_open_library()
         libMoniker = cfg.getValue("lastOpenLibrary", "");
     }
     if(libMoniker.empty()) {
-        Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
-                                      Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
-			
-        dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-        dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
-
-        int result = dialog.run();
-        Glib::ustring libraryToCreate;
-        switch(result)
-        {
-        case Gtk::RESPONSE_OK:
-            libraryToCreate = dialog.get_filename();
-            // pass it to the library
-            libMoniker = "local:";
-            libMoniker += libraryToCreate.c_str();
-            cfg.setValue("lastOpenLibrary", libMoniker);
-            DBG_OUT("created library %s", libMoniker.c_str());
-            break;
-        default:
-            break;
-        }
-			
+        libMoniker = prompt_open_library();
     }
     else {
         DBG_OUT("last library is %s", libMoniker.c_str());
     }
     if(!libMoniker.empty()) {
-        open_library(libMoniker);
+        if(!open_library(libMoniker)) {
+            ERR_OUT("library %s cannot be open. Prompting.",
+                    libMoniker.c_str());
+            libMoniker = prompt_open_library();
+            open_library(libMoniker);
+        }
     }
 }
 
@@ -429,16 +412,48 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
     }
 }
 
+std::string NiepceWindow::prompt_open_library()
+{
+    std::string libMoniker;
+    Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
+                                  Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
 
-void NiepceWindow::open_library(const std::string & libMoniker)
+    int result = dialog.run();
+    Glib::ustring libraryToCreate;
+    switch(result)
+    {
+    case Gtk::RESPONSE_OK: {
+        Configuration & cfg = Application::app()->config();
+        libraryToCreate = dialog.get_filename();
+        // pass it to the library
+        libMoniker = "local:";
+        libMoniker += libraryToCreate.c_str();
+        cfg.setValue("lastOpenLibrary", libMoniker);
+        DBG_OUT("created library %s", libMoniker.c_str());
+        break;
+    }
+    default:
+        break;
+    }
+    return libMoniker;
+}
+
+bool NiepceWindow::open_library(const std::string & libMoniker)
 {
     m_libClient = LibraryClient::Ptr(new LibraryClient(fwk::Moniker(libMoniker),
                                                        m_notifcenter));
+    if(!m_libClient->ok()) {
+        m_libClient = nullptr;
+        return false;
+    }
     set_title(libMoniker);
     m_libClient->getAllLabels();
     if(!m_moduleshell) {
         _createModuleShell();
     }
+    return true;
 }
 
 void NiepceWindow::on_action_edit_labels()

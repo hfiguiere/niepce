@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/niepcelibrarymodule.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define __NIEPCE_UI_ILIBRARYMODULE_HPP_
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include "fwk/toolkit/uicontroller.hpp"
 
@@ -33,7 +33,7 @@ class ILibraryModule
   : public fwk::UiController
 {
 public:
-  typedef std::tr1::shared_ptr<ILibraryModule> Ptr;
+  typedef std::shared_ptr<ILibraryModule> Ptr;
 
   /** dispatch action by name to the controller */
   virtual void dispatch_action(const std::string & action_name) = 0;

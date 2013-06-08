@@ -17,12 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <gtkmm/widget.h>
 
 #include "fwk/base/debug.hpp"
-#include "fwk/utils/boost.hpp"
 #include "controller.hpp"
 
 
@@ -72,8 +71,10 @@ void Controller::_added()
 
 void Controller::_ready()
 {
+    using std::placeholders::_1;
+
     std::for_each(m_subs.begin(), m_subs.end(),
-                  boost::bind(&Controller::_ready, _1));
+                  std::bind(&Controller::_ready, _1));
     on_ready();
 }
 

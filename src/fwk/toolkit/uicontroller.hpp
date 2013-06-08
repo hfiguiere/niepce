@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/uicontroller.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class UiController
   : public Controller
 {
 public:
-    typedef std::tr1::shared_ptr<UiController> Ptr;
+    typedef std::shared_ptr<UiController> Ptr;
 
     UiController();
     virtual ~UiController();

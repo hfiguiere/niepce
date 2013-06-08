@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include <tr1/memory>
+#include <memory>
 #include <boost/any.hpp>
 
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -51,7 +51,7 @@ namespace eng {
 class Library
 {
 public:
-    typedef std::tr1::shared_ptr<Library> Ptr;
+    typedef std::shared_ptr<Library> Ptr;
 
     typedef enum {
         NOTIFY_NONE = 0,
@@ -76,7 +76,7 @@ public:
     Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
     virtual ~Library();
 
-    bool ok()
+    bool ok() const
         { return m_inited; }
     /** set the main library directory */
 //		void setMainDir(const std::string & dir)
@@ -216,7 +216,7 @@ private:
     std::string                       m_dbname;
     db::IConnectionManagerDriver::Ptr m_dbmgr;
     db::IConnectionDriver::Ptr        m_dbdrv;
-    std::tr1::weak_ptr<fwk::NotificationCenter>  m_notif_center;
+    std::weak_ptr<fwk::NotificationCenter>  m_notif_center;
     bool                              m_inited;
 };
 

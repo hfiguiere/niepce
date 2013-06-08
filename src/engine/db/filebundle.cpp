@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/filebundle.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 
 #include "filebundle.hpp"
 #include "fwk/base/debug.hpp"
@@ -80,23 +81,24 @@ FileBundle::filter_bundles(const fwk::FileList::Ptr & files)
 
     files->sort();
 
-    for(fwk::FileList::const_iterator iter = files->begin();
-        iter != files->end(); ++iter)
-    {
-        std::string basename = fwk::path_stem(*iter);
+    std::for_each(files->begin(), files->end(),
+                  [&current_base, &bundles, &current_bundle]
+                  (const std::string & f) {
+                      std::string basename = fwk::path_stem(f);
 
-        if(basename != current_base) {
-            FileBundle::Ptr new_bundle(new FileBundle());
-            if(new_bundle->add(*iter)) {
-                bundles->push_back(new_bundle);
-                current_bundle = new_bundle;
-                current_base = basename;
-            }
-        }
-        else {
-            current_bundle->add(*iter);
-        }
-    }
+                      if(basename != current_base) {
+                          FileBundle::Ptr new_bundle(new FileBundle());
+                          if(new_bundle->add(f)) {
+                              bundles->push_back(new_bundle);
+                              current_bundle = new_bundle;
+                              current_base = basename;
+                          }
+                      }
+                      else {
+                          current_bundle->add(f);
+                      }
+                  }
+        );
 
     return bundles;
 }

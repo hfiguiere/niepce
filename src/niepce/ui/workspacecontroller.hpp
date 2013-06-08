@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef __UI_WORKSPACECONTROLLER_H__
 #define __UI_WORKSPACECONTROLLER_H__
 
-#include <tr1/array>
+#include <array>
 
 #include <glibmm/ustring.h>
 
@@ -44,7 +44,7 @@ class WorkspaceController
     : public fwk::UiController
 {
 public:
-    typedef std::tr1::shared_ptr<WorkspaceController> Ptr;
+    typedef std::shared_ptr<WorkspaceController> Ptr;
     
     enum {
         FOLDERS_ITEM,
@@ -113,7 +113,7 @@ private:
         ICON_KEYWORD,
         _ICON_SIZE
     };
-    std::tr1::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
+    std::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
     WorkspaceTreeColumns           m_librarycolumns;
     Gtk::VBox                      m_vbox;
     Gtk::Label                     m_label;

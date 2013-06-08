@@ -1,7 +1,7 @@
 /*
  * niepce - ui/moduleshell.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,8 +43,8 @@ class ModuleShell
     , public IModuleShell
 {
 public:
-    typedef std::tr1::shared_ptr<ModuleShell> Ptr;
-    typedef std::tr1::weak_ptr<ModuleShell> WeakPtr;
+    typedef std::shared_ptr<ModuleShell> Ptr;
+    typedef std::weak_ptr<ModuleShell> WeakPtr;
     
     ModuleShell(const libraryclient::LibraryClient::Ptr & libclient)
         : m_libraryclient(libclient)

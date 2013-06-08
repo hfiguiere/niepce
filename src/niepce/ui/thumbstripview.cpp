@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail View
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * C++-ization: Hubert Figuiere <hub@figuiere.net>
  * Original Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
@@ -79,12 +79,11 @@ ThumbStripCell::ThumbStripCell()
 
 
 ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
-    : m_start_thumb(0)
+    : IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
+    , m_start_thumb(0)
     , m_end_thumb(0)
     , m_store(store)
 {
-    IconView::set_model(store);
-
     m_renderer = new ThumbStripCell();
 
     pack_start(*m_renderer, FALSE);

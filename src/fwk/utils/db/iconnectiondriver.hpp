@@ -27,9 +27,9 @@
 #define __NEMIVER_I_CONNECTION_DRIVER_H__
 
 #include <stdint.h>
-#include <tr1/memory>
 
-#include <boost/function.hpp>
+#include <memory>
+#include <functional>
 
 namespace fwk {
 class Buffer ;
@@ -54,9 +54,9 @@ class SQLStatement;
 class IConnectionDriver {
 
 public:
-    typedef std::tr1::shared_ptr<IConnectionDriver> Ptr;
+    typedef std::shared_ptr<IConnectionDriver> Ptr;
 
-    typedef boost::function<void (void)> f0_t;
+    typedef std::function<void (void)> f0_t;
 
     virtual ~IConnectionDriver ()
     {}

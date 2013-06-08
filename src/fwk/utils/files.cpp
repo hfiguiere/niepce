@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/files.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ namespace fwk {
 	{
 	}
 
-	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, boost::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter)
+	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, std::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter)
 	{
 //		if(!exists( p ) ) {
 //			DBG_OUT( "directory %s do not exist", p.c_str() );
