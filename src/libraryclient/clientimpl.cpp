@@ -35,7 +35,7 @@ using std::placeholders::_1;
 
 namespace libraryclient {
 
-ClientImpl *ClientImpl::makeClientImpl(const fwk::Moniker & moniker, 
+ClientImpl *ClientImpl::makeClientImpl(const fwk::Moniker & moniker,
                                        const fwk::NotificationCenter::Ptr & nc)
 {
     return new ClientImpl(moniker, nc);
@@ -45,7 +45,7 @@ ClientImpl::ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCent
     : m_moniker(moniker),
       m_localLibrary(NULL)
 {
-    DBG_OUT("creating implementation with moniker %s", 
+    DBG_OUT("creating implementation with moniker %s",
             moniker.c_str());
     m_localLibrary = new LocalLibraryServer(moniker.path(), nc);
 }
@@ -63,7 +63,7 @@ bool ClientImpl::ok() const
 tid_t ClientImpl::getAllKeywords()
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdListAllKeywords, _1)));
+    Op::Ptr op(new Op(id, &Commands::cmdListAllKeywords));
     m_localLibrary->schedule(op);
     return id;
 }
@@ -72,7 +72,7 @@ tid_t ClientImpl::getAllKeywords()
 tid_t ClientImpl::getAllFolders()
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdListAllFolders, _1)));
+    Op::Ptr op(new Op(id, &Commands::cmdListAllFolders));
     m_localLibrary->schedule(op);
     return id;
 }
@@ -90,7 +90,7 @@ tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdCountFolder, 
+    Op::Ptr op(new Op(id, std::bind(&Commands::cmdCountFolder,
                                       _1, folder_id)));
     m_localLibrary->schedule(op);
     return id;
@@ -117,7 +117,8 @@ tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 }
 
 
-tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, const fwk::PropertyValue & value)
+tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
+                              const fwk::PropertyValue & value)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdSetMetadata, _1,
@@ -126,34 +127,34 @@ tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta, const fwk::Pr
     return id;
 }
 
-tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder_id,
+tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
+                                   eng::library_id_t from_folder_id,
                                    eng::library_id_t to_folder_id)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdMoveFileToFolder, _1,
                                       file_id, from_folder_id, to_folder_id)));
     m_localLibrary->schedule(op);
-    return id;    
+    return id;
 }
 
 
 tid_t ClientImpl::getAllLabels()
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdListAllLabels,
-                                      _1)));
+    Op::Ptr op(new Op(id, &Commands::cmdListAllLabels));
     m_localLibrary->schedule(op);
-    return id;    
+    return id;
 }
 
 
-tid_t ClientImpl::createLabel(const std::string & s, const std::string & color)
+tid_t ClientImpl::createLabel(const std::string & s, const std::string & colour)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdCreateLabel,
-                                      _1, s, color)));
+                                      _1, s, colour)));
     m_localLibrary->schedule(op);
-    return id;    
+    return id;
 }
 
 tid_t ClientImpl::deleteLabel(int label_id)
@@ -162,17 +163,18 @@ tid_t ClientImpl::deleteLabel(int label_id)
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdDeleteLabel,
                                       _1, label_id)));
     m_localLibrary->schedule(op);
-    return id;    
+    return id;
 }
 
-tid_t ClientImpl::updateLabel(eng::library_id_t label_id, const std::string & new_name,
-                              const std::string & new_color)
+tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
+                              const std::string & new_name,
+                              const std::string & new_colour)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdUpdateLabel,
-                                      _1, label_id, new_name, new_color)));
+                                      _1, label_id, new_name, new_colour)));
     m_localLibrary->schedule(op);
-    return id;    
+    return id;
 }
 
 
@@ -189,10 +191,9 @@ tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
 tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 {
     FileList::Ptr files;
-	
-    files = FileList::getFilesFromDirectory(dir, 
-                                            std::bind(&fwk::filter_none, _1));
-    
+
+    files = FileList::getFilesFromDirectory(dir, &fwk::filter_none);
+
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, std::bind(&Commands::cmdImportFiles,
                                       _1, dir, files, manage)));

@@ -35,9 +35,8 @@ UndoTransaction::UndoTransaction(const std::string & n)
 
 UndoTransaction::~UndoTransaction()
 {
-    using std::placeholders::_1;
     std::for_each(m_operations.begin(), m_operations.end(),
-                  std::bind(&boost::checked_delete<Command>, _1));
+                  &boost::checked_delete<Command>);
 }
 
 
@@ -137,9 +136,8 @@ std::string UndoHistory::next_redo() const
 	
 void UndoHistory::clear(std::list<UndoTransaction*> & l)
 {
-    using std::placeholders::_1;
-    std::for_each(l.begin(), l.end(), 
-                  std::bind(&boost::checked_delete<UndoTransaction>, _1));
+    std::for_each(l.begin(), l.end(),
+                  &boost::checked_delete<UndoTransaction>);
     l.clear();
 }
 

@@ -41,10 +41,10 @@ int test_main( int, char *[] )             // note the name!
 
 	FileList::Ptr files;
 	
-	files = FileList::getFilesFromDirectory( "foo", std::bind(fwk::filter_none, _1) );
+	files = FileList::getFilesFromDirectory("foo", fwk::filter_none);
 	BOOST_CHECK( !files );
 
-	files = FileList::getFilesFromDirectory( "AAtest", std::bind(fwk::filter_none, _1));
+	files = FileList::getFilesFromDirectory("AAtest", fwk::filter_none);
 	BOOST_CHECK( files );
 	BOOST_CHECK( files->size() == 3 );
 	
