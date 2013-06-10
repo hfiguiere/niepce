@@ -1,28 +1,28 @@
 # Czech translation for niepce.
 # Copyright (C) 2009 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-#
-# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012.
+# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-23 06:39+0000\n"
-"PO-Revision-Date: 2012-03-25 18:56+0200\n"
+"POT-Creation-Date: 2013-06-10 03:06+0000\n"
+"PO-Revision-Date: 2013-06-10 22:11+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
-#: ../src/fwk/toolkit/frame.cpp:124
+#: ../src/fwk/toolkit/frame.cpp:121
 msgid "Undo "
 msgstr "Zpět "
 
-#: ../src/fwk/toolkit/frame.cpp:133
+#: ../src/fwk/toolkit/frame.cpp:130
 msgid "Redo "
 msgstr "Znovu "
 
@@ -34,15 +34,15 @@ msgstr "Název"
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/engine/db/library.cpp:140
+#: ../src/engine/db/library.cpp:147
 msgid "Trash"
 msgstr "Koš"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:57
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
 msgstr "Úprava popisků"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:114
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
 msgstr "Změna popisků"
 
@@ -95,6 +95,7 @@ msgid "Import picture folder"
 msgstr "Import složky s obrázky"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../magellan/src/mgwindow.cpp:87
 msgid "_Import"
 msgstr "_Importovat"
 
@@ -154,7 +155,7 @@ msgstr "Používat tmavé rozhraní"
 msgid "_User Interface"
 msgstr "_Uživatelské rozhraní"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
 msgstr "Předvolby"
 
@@ -297,80 +298,84 @@ msgstr ""
 "\n"
 "Volby sestavení: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:132
+#: ../src/niepce/ui/niepcewindow.cpp:131
 msgid "Ready"
 msgstr "Připraven"
 
-#: ../src/niepce/ui/niepcewindow.cpp:228
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "_Library"
 msgstr "_Sbírka"
 
-#: ../src/niepce/ui/niepcewindow.cpp:234
+#: ../src/niepce/ui/niepcewindow.cpp:233
 msgid "New _Folder..."
 msgstr "Nová _složka…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:235
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "New _Project..."
 msgstr "Nový _projekt…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:237 ../camerawire/src/cwwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:236 ../camerawire/src/cwwindow.cpp:92
 msgid "_Import..."
 msgstr "_Import…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:247 ../camerawire/src/cwwindow.cpp:102
+#: ../src/niepce/ui/niepcewindow.cpp:246 ../camerawire/src/cwwindow.cpp:102
+#: ../magellan/src/mgwindow.cpp:98
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/niepce/ui/niepcewindow.cpp:267 ../camerawire/src/cwwindow.cpp:118
+#: ../src/niepce/ui/niepcewindow.cpp:266 ../camerawire/src/cwwindow.cpp:118
+#: ../magellan/src/mgwindow.cpp:114
 msgid "_Tools"
 msgstr "Nás_troje"
 
-#: ../src/niepce/ui/niepcewindow.cpp:268
+#: ../src/niepce/ui/niepcewindow.cpp:267
 msgid "_Edit Labels..."
 msgstr "_Upravit popisky…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:271 ../camerawire/src/cwwindow.cpp:124
+#: ../src/niepce/ui/niepcewindow.cpp:270 ../camerawire/src/cwwindow.cpp:124
+#: ../magellan/src/mgwindow.cpp:120
 msgid "_Hide tools"
 msgstr "Skrý_t nástroje"
 
-#: ../src/niepce/ui/niepcewindow.cpp:275 ../camerawire/src/cwwindow.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:274 ../camerawire/src/cwwindow.cpp:128
+#: ../magellan/src/mgwindow.cpp:124
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/niepce/ui/niepcewindow.cpp:344
-msgid "Create library"
-msgstr "Založení sbírky"
-
-#: ../src/niepce/ui/niepcewindow.cpp:348
-msgid "Create"
-msgstr "Vytvořit"
-
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:393
+#: ../src/niepce/ui/niepcewindow.cpp:376
 msgid "Label 1"
 msgstr "Popisek 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:394
+#: ../src/niepce/ui/niepcewindow.cpp:377
 msgid "Label 2"
 msgstr "Popisek 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:395
+#: ../src/niepce/ui/niepcewindow.cpp:378
 msgid "Label 3"
 msgstr "Popisek 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:396
+#: ../src/niepce/ui/niepcewindow.cpp:379
 msgid "Label 4"
 msgstr "Popisek 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:397
+#: ../src/niepce/ui/niepcewindow.cpp:380
 msgid "Label 5"
 msgstr "Popisek 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:460
+#: ../src/niepce/ui/niepcewindow.cpp:418
+msgid "Create library"
+msgstr "Založení sbírky"
+
+#: ../src/niepce/ui/niepcewindow.cpp:421
+msgid "Create"
+msgstr "Vytvořit"
+
+#: ../src/niepce/ui/niepcewindow.cpp:475
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -398,20 +403,20 @@ msgstr "Nastavit vlastnosti"
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:235
+#: ../src/niepce/ui/workspacecontroller.cpp:238
 msgid "Pictures"
 msgstr "Obrázky"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:239
+#: ../src/niepce/ui/workspacecontroller.cpp:242
 msgid "Projects"
 msgstr "Projekty"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:243
+#: ../src/niepce/ui/workspacecontroller.cpp:246
 msgid "Keywords"
 msgstr "Klíčová slova"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:256
+#: ../src/niepce/ui/workspacecontroller.cpp:259
 msgid "_Workspace"
 msgstr "_Pracovní plocha"
 
@@ -484,6 +489,34 @@ msgstr "Sytost bledých tónů"
 msgid "Camera"
 msgstr "Fotoaparát"
 
-#: ../camerawire/src/cwwindow.cpp:91
+#: ../camerawire/src/cwwindow.cpp:91 ../magellan/src/mgwindow.cpp:86
 msgid "_File"
 msgstr "_Soubor"
+
+#: ../magellan/src/mgwindow.ui.h:1
+msgid "_Erase after download"
+msgstr "Po staž_ení smazat"
+
+#: ../magellan/src/mgwindow.ui.h:2
+msgid "<b>GPS Device</b>"
+msgstr "<b>Zařízení GPS</b>"
+
+#: ../magellan/src/mgwindow.ui.h:3
+msgid "GPX"
+msgstr "GPX"
+
+#: ../magellan/src/mgwindow.ui.h:4
+msgid "KML"
+msgstr "KML"
+
+#: ../magellan/src/mgwindow.ui.h:5
+msgid "<b>Format</b>"
+msgstr "<b>Formát</b>"
+
+#: ../magellan/src/mgwindow.ui.h:6
+msgid "<b>Output</b>"
+msgstr "<b>Výstup</b>"
+
+#: ../magellan/src/mgwindow.ui.h:7
+msgid "Download"
+msgstr "Stáhnout"
