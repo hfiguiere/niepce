@@ -3,26 +3,27 @@
 # This file is distributed under the same license as the es package.
 # Roby Sottini <rsottini@yahoo.com>, 2009.
 # Jorge González <jorgegonz@svn.gnome.org>, 2010.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-23 06:39+0000\n"
-"PO-Revision-Date: 2012-02-23 13:59+0100\n"
+"POT-Creation-Date: 2013-06-10 03:06+0000\n"
+"PO-Revision-Date: 2013-06-13 12:50+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: ../src/fwk/toolkit/frame.cpp:124
+#: ../src/fwk/toolkit/frame.cpp:121
 msgid "Undo "
 msgstr "Deshacer"
 
-#: ../src/fwk/toolkit/frame.cpp:133
+#: ../src/fwk/toolkit/frame.cpp:130
 msgid "Redo "
 msgstr "Rehacer"
 
@@ -34,15 +35,15 @@ msgstr "Nombre"
 msgid "Description"
 msgstr "Descripción"
 
-#: ../src/engine/db/library.cpp:140
+#: ../src/engine/db/library.cpp:147
 msgid "Trash"
 msgstr "Papelera"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:57
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
 msgstr "Editar etiquetas"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:114
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
 msgstr "Cambiar etiquetas"
 
@@ -95,6 +96,7 @@ msgid "Import picture folder"
 msgstr "Importar carpeta de imágenes"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../magellan/src/mgwindow.cpp:87
 msgid "_Import"
 msgstr "_Importar"
 
@@ -154,7 +156,7 @@ msgstr "Usar interfaz oscura"
 msgid "_User Interface"
 msgstr "Interfaz de _usuario"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -297,80 +299,84 @@ msgstr ""
 "\n"
 "Opciones de construcción: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:132
+#: ../src/niepce/ui/niepcewindow.cpp:131
 msgid "Ready"
 msgstr "Preparado"
 
-#: ../src/niepce/ui/niepcewindow.cpp:228
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "_Library"
 msgstr "_Biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:234
+#: ../src/niepce/ui/niepcewindow.cpp:233
 msgid "New _Folder..."
 msgstr "_Carpeta nueva…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:235
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "New _Project..."
 msgstr "_Proyecto nuevo…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:237 ../camerawire/src/cwwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:236 ../camerawire/src/cwwindow.cpp:92
 msgid "_Import..."
 msgstr "_Importar…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:247 ../camerawire/src/cwwindow.cpp:102
+#: ../src/niepce/ui/niepcewindow.cpp:246 ../camerawire/src/cwwindow.cpp:102
+#: ../magellan/src/mgwindow.cpp:98
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/niepce/ui/niepcewindow.cpp:267 ../camerawire/src/cwwindow.cpp:118
+#: ../src/niepce/ui/niepcewindow.cpp:266 ../camerawire/src/cwwindow.cpp:118
+#: ../magellan/src/mgwindow.cpp:114
 msgid "_Tools"
 msgstr "_Herramientas"
 
-#: ../src/niepce/ui/niepcewindow.cpp:268
+#: ../src/niepce/ui/niepcewindow.cpp:267
 msgid "_Edit Labels..."
 msgstr "_Editar etiquetas…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:271 ../camerawire/src/cwwindow.cpp:124
+#: ../src/niepce/ui/niepcewindow.cpp:270 ../camerawire/src/cwwindow.cpp:124
+#: ../magellan/src/mgwindow.cpp:120
 msgid "_Hide tools"
 msgstr "_Ocultar herramientas"
 
-#: ../src/niepce/ui/niepcewindow.cpp:275 ../camerawire/src/cwwindow.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:274 ../camerawire/src/cwwindow.cpp:128
+#: ../magellan/src/mgwindow.cpp:124
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/niepce/ui/niepcewindow.cpp:344
-msgid "Create library"
-msgstr "Crear biblioteca"
-
-#: ../src/niepce/ui/niepcewindow.cpp:348
-msgid "Create"
-msgstr "Crear"
-
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:393
+#: ../src/niepce/ui/niepcewindow.cpp:376
 msgid "Label 1"
 msgstr "Etiqueta 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:394
+#: ../src/niepce/ui/niepcewindow.cpp:377
 msgid "Label 2"
 msgstr "Etiqueta 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:395
+#: ../src/niepce/ui/niepcewindow.cpp:378
 msgid "Label 3"
 msgstr "Etiqueta 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:396
+#: ../src/niepce/ui/niepcewindow.cpp:379
 msgid "Label 4"
 msgstr "Etiqueta 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:397
+#: ../src/niepce/ui/niepcewindow.cpp:380
 msgid "Label 5"
 msgstr "Etiqueta 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:460
+#: ../src/niepce/ui/niepcewindow.cpp:418
+msgid "Create library"
+msgstr "Crear biblioteca"
+
+#: ../src/niepce/ui/niepcewindow.cpp:421
+msgid "Create"
+msgstr "Crear"
+
+#: ../src/niepce/ui/niepcewindow.cpp:475
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -398,20 +404,20 @@ msgstr "Establecer propiedades"
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:235
+#: ../src/niepce/ui/workspacecontroller.cpp:238
 msgid "Pictures"
 msgstr "Imágenes"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:239
+#: ../src/niepce/ui/workspacecontroller.cpp:242
 msgid "Projects"
 msgstr "Proyectos"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:243
+#: ../src/niepce/ui/workspacecontroller.cpp:246
 msgid "Keywords"
 msgstr "Palabras clave"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:256
+#: ../src/niepce/ui/workspacecontroller.cpp:259
 msgid "_Workspace"
 msgstr "_Área de trabajo "
 
@@ -484,9 +490,40 @@ msgstr "Dinamismo"
 msgid "Camera"
 msgstr "Cámara"
 
-#: ../camerawire/src/cwwindow.cpp:91
+#: ../camerawire/src/cwwindow.cpp:91 ../magellan/src/mgwindow.cpp:86
 msgid "_File"
 msgstr "_Archivo"
+
+#: ../magellan/src/mgwindow.ui.h:1
+msgid "_Erase after download"
+msgstr "_Borrar después de descargar"
+
+#: ../magellan/src/mgwindow.ui.h:2
+#| msgid "<b>Date:</b>"
+msgid "<b>GPS Device</b>"
+msgstr "<b>Dispositivo GPS</b>"
+
+#: ../magellan/src/mgwindow.ui.h:3
+msgid "GPX"
+msgstr "GPX"
+
+#: ../magellan/src/mgwindow.ui.h:4
+msgid "KML"
+msgstr "KML"
+
+#: ../magellan/src/mgwindow.ui.h:5
+#| msgid "<b>Date:</b>"
+msgid "<b>Format</b>"
+msgstr "<b>Formato</b>"
+
+#: ../magellan/src/mgwindow.ui.h:6
+#| msgid "<b>Date:</b>"
+msgid "<b>Output</b>"
+msgstr "<b>Salida</b>"
+
+#: ../magellan/src/mgwindow.ui.h:7
+msgid "Download"
+msgstr "Descargar"
 
 #~ msgid "System"
 #~ msgstr "Sistema"
