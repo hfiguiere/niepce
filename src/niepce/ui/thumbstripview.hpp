@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/thumbstripview.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,31 @@
 #ifndef _THUMB_STRIP_VIEW_HPP_
 #define _THUMB_STRIP_VIEW_HPP_
 
+#include <glibmm/property.h>
+
 #include <gtkmm/iconview.h>
+#include <gtkmm/orientable.h>
 #include <gtkmm/cellrendererpixbuf.h>
 
 #include "niepce/ui/imageliststore.hpp"
 
 namespace ui {
 
+/** This is needed to implement the property
+ * That must be registered before the Interface is registered
+ */
+class ThumbStripViewBase
+    : public Gtk::IconView
+{
+protected:
+    ThumbStripViewBase(const Glib::RefPtr<ui::ImageListStore> & store);
+
+    Glib::Property<Gtk::Orientation> m_orientation_property;
+};
+
 class ThumbStripView
-  : public Gtk::IconView
+  : public ThumbStripViewBase
+  , public Gtk::Orientable
 {
 public:
     ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store);
@@ -47,10 +63,20 @@ private:
     void add_range(int, int);
     void clear_range (int start_thumb, int end_thumb);
 
+    void setup_model(const Glib::RefPtr<ui::ImageListStore> & store);
+    void row_added(const Gtk::TreeModel::Path&,
+                   const Gtk::TreeModel::iterator&);
+    void row_deleted(const Gtk::TreeModel::Path&);
+    void update_item_count();
+
     gint m_start_thumb; /* the first visible thumbnail */
     gint m_end_thumb;   /* the last visible thumbnail  */
     Glib::RefPtr<ui::ImageListStore> m_store;
     Gtk::CellRendererPixbuf  *m_renderer;
+
+    int m_model_item_count;
+    sigc::connection m_model_add;
+    sigc::connection m_model_rm;
 };
 
 

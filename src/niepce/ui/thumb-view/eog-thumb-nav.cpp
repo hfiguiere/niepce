@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail Navigator
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * Original author: Lucas Rocha <lucasr@gnome.org>
  *
@@ -37,7 +37,7 @@
 #define EOG_THUMB_NAV_GET_PRIVATE(object) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((object), EOG_TYPE_THUMB_NAV, EogThumbNavPrivate))
 
-G_DEFINE_TYPE (EogThumbNav, eog_thumb_nav, GTK_TYPE_HBOX)
+G_DEFINE_TYPE (EogThumbNav, eog_thumb_nav, GTK_TYPE_BOX)
 
 #define EOG_THUMB_NAV_SCROLL_INC     1
 #define EOG_THUMB_NAV_SCROLL_MOVE    20
@@ -59,7 +59,7 @@ struct _EogThumbNavPrivate {
 	GtkWidget        *button_right;
 	GtkWidget        *sw;
 	GtkWidget        *scale;
-  ui::ThumbStripView   *thumbview;
+	ui::ThumbStripView   *thumbview;
 };
 
 static void
@@ -247,7 +247,7 @@ eog_thumb_nav_constructor (GType type,
 
 	if (priv->thumbview != NULL) {
 		gtk_container_add (GTK_CONTAINER (priv->sw), 
-                       (GtkWidget*)priv->thumbview->gobj());
+				   (GtkWidget*)priv->thumbview->Gtk::IconView::gobj());
 		gtk_widget_show_all (priv->sw);
 	}
 
@@ -431,7 +431,8 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 	switch (mode)
 	{
 	case EOG_THUMB_NAV_MODE_ONE_ROW:
-		priv->thumbview->set_columns (G_MAXINT);
+//		priv->thumbview->set_columns (-1);
+		priv->thumbview->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
 
 		priv->thumbview->set_size_request (-1, -1);
 		priv->thumbview->set_item_height (100);
@@ -445,6 +446,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_ONE_COLUMN:
+		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -460,6 +462,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_ROWS:
+		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -475,6 +478,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_COLUMNS:
+		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);

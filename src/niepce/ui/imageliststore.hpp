@@ -63,6 +63,8 @@ public:
         { return m_columns; }
     Gtk::TreePath get_path_from_id(eng::library_id_t id);
     Gtk::TreeIter get_iter_from_id(eng::library_id_t id);
+    size_t get_count() const
+        { return children().size(); }
 
     static Glib::RefPtr<ImageListStore> create();
 

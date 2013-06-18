@@ -62,7 +62,6 @@ public:
     ThumbStripCell();
 };
 
-
 ThumbStripCell::ThumbStripCell()
     : Glib::ObjectBase(typeid(ThumbStripCell))
     , LibraryCellRenderer(NULL)
@@ -76,22 +75,30 @@ ThumbStripCell::ThumbStripCell()
     set_drawflag(false);
 }
 
-
+ThumbStripViewBase::ThumbStripViewBase(const Glib::RefPtr<ui::ImageListStore> & store)
+    : Glib::ObjectBase(typeid(ThumbStripViewBase))
+    , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
+    , m_orientation_property(*this, "orientation")
+{
+}
 
 ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
-    : IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
+    : Glib::ObjectBase(typeid(ThumbStripView))
+    , ThumbStripViewBase(store)
+    , Gtk::Orientable()
     , m_start_thumb(0)
     , m_end_thumb(0)
     , m_store(store)
+    , m_model_item_count(0)
 {
-    m_renderer = new ThumbStripCell();
+    m_renderer = manage(new ThumbStripCell());
 
     pack_start(*m_renderer, FALSE);
     m_renderer->property_follow_state() = true;
     m_renderer->property_height() = 100;
     m_renderer->property_yalign() = 0.5;
     m_renderer->property_xalign() = 0.5;
-	
+
     add_attribute(*m_renderer, "pixbuf",
                   ui::ImageListStore::Columns::STRIP_THUMB_INDEX);
     add_attribute(*m_renderer, "libfile",
@@ -109,17 +116,56 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
 
 //  signal_drag_data_get().connect(
 //      sigc::mem_fun(*this, &ThumbStripView::on_drag_data_get));
+
+    setup_model(store);
 }
 
 void ThumbStripView::set_model(const Glib::RefPtr<ui::ImageListStore> & store)
 {
     m_store = store;
+    setup_model(store);
     IconView::set_model(store);
+}
+
+void ThumbStripView::setup_model(const Glib::RefPtr<ui::ImageListStore> & store)
+{
+    m_model_add.disconnect();
+    m_model_rm.disconnect();
+
+    m_model_item_count = m_store->get_count();
+    update_item_count();
+
+    m_model_add = store->signal_row_inserted()
+        .connect(sigc::mem_fun(*this, &ThumbStripView::row_added));
+    m_model_rm = store->signal_row_deleted()
+        .connect(sigc::mem_fun(*this, &ThumbStripView::row_deleted));
 }
 
 const Glib::RefPtr<ui::ImageListStore> & ThumbStripView::get_model() const
 {
     return m_store;
+}
+
+void ThumbStripView::row_added(const Gtk::TreeModel::Path&,
+                               const Gtk::TreeModel::iterator&)
+{
+    m_model_item_count++;
+    update_item_count();
+}
+
+void ThumbStripView::row_deleted(const Gtk::TreeModel::Path&)
+{
+    if(m_model_item_count) {
+        m_model_item_count--;
+        update_item_count();
+    }
+}
+
+void ThumbStripView::update_item_count()
+{
+    if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
+        set_columns(m_model_item_count);
+    }
 }
 
 void
@@ -159,12 +205,12 @@ ThumbStripView::update_visible_range (int start_thumb, int end_thumb)
 
     old_start_thumb = m_start_thumb;
     old_end_thumb = m_end_thumb;
-	
+
     if (start_thumb == old_start_thumb &&
         end_thumb == old_end_thumb) {
         return;
     }
-	
+
     if (old_start_thumb < start_thumb)
         clear_range (old_start_thumb, MIN (start_thumb - 1, old_end_thumb));
 
@@ -172,7 +218,7 @@ ThumbStripView::update_visible_range (int start_thumb, int end_thumb)
         clear_range (MAX (end_thumb + 1, old_start_thumb), old_end_thumb);
 
     add_range (start_thumb, end_thumb);
-	
+
     m_start_thumb = start_thumb;
     m_end_thumb = end_thumb;
 }
@@ -185,7 +231,7 @@ ThumbStripView::on_visible_range_changed()
     if (!get_visible_range (path1, path2)) {
         return;
     }
-		
+
     update_visible_range (path1[0], path2[0]);
 }
 
@@ -194,7 +240,7 @@ ThumbStripView::on_adjustment_changed ()
 {
     Gtk::TreePath path1, path2;
     int start_thumb, end_thumb;
-	
+
     if (!get_visible_range (path1, path2)) {
         return;
     }
@@ -202,7 +248,7 @@ ThumbStripView::on_adjustment_changed ()
     start_thumb = path1 [0];
     end_thumb = path2 [0];
 
-    add_range (start_thumb, end_thumb);	
+    add_range (start_thumb, end_thumb);
 
     /* case we added an image, we need to make sure that the shifted thumbnail is cleared */
     clear_range (end_thumb + 1, end_thumb + 1);
@@ -214,27 +260,27 @@ ThumbStripView::on_adjustment_changed ()
 void
 ThumbStripView::on_parent_set (Gtk::Widget */*old_parent*/)
 {
-    Gtk::ScrolledWindow *sw;
+    Gtk::Widget *parent = get_parent ();
+    Gtk::ScrolledWindow *sw = dynamic_cast<Gtk::ScrolledWindow*>(parent);
+    if (!sw) {
+        // TODO shouldn't we disconnect all of that?
+        return;
+    }
+
     Glib::RefPtr<Gtk::Adjustment> hadjustment;
     Glib::RefPtr<Gtk::Adjustment> vadjustment;
 
-    Gtk::Widget *parent = get_parent ();
-    sw = dynamic_cast<Gtk::ScrolledWindow*>(parent);
-    if (!sw) {
-        return;
-    }
-	
     /* if we have been set to a ScrolledWindow, we connect to the callback
        to set and unset thumbnails. */
     hadjustment = sw->get_hadjustment ();
     vadjustment = sw->get_vadjustment ();
-	
+
     /* when scrolling */
     hadjustment->signal_value_changed().connect(
         sigc::mem_fun(*this, &ThumbStripView::on_visible_range_changed));
     vadjustment->signal_value_changed().connect(
         sigc::mem_fun(*this, &ThumbStripView::on_visible_range_changed));
-	
+
     /* when the adjustment is changed, ie. probably we have new images added. */
     hadjustment->signal_changed().connect(
         sigc::mem_fun(*this, &ThumbStripView::on_adjustment_changed));
@@ -243,7 +289,7 @@ ThumbStripView::on_parent_set (Gtk::Widget */*old_parent*/)
 
     /* when resizing the scrolled window */
     sw->signal_size_allocate().connect(
-        sigc::hide<0>(sigc::mem_fun(*this, 
+        sigc::hide<0>(sigc::mem_fun(*this,
                                     &ThumbStripView::on_visible_range_changed)));
 }
 
