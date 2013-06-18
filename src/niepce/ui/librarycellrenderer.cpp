@@ -338,17 +338,17 @@ LibraryCellRenderer::activate_vfunc(GdkEvent *event, Gtk::Widget & ,
     return false;
 }
 
-Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> 	
+Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr>
 LibraryCellRenderer::property_libfile() const
 {
     return Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr>(this, "libfile");
 }
 
 
-Glib::PropertyProxy<eng::LibFile::Ptr> 	
+Glib::PropertyProxy<eng::LibFile::Ptr>
 LibraryCellRenderer::property_libfile()
 {
-    return Glib::PropertyProxy<eng::LibFile::Ptr>(this, "libfile");
+    return m_libfileproperty.get_proxy();
 }
 
 
