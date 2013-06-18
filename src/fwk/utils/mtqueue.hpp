@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/mtqueue.h
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ namespace fwk {
 		virtual ~MtQueue();
 
 		void add(const T &);
+		void add(T & ); // for unique_ptr<>
 		T pop();
 		bool empty() const;
 		void clear();
@@ -74,17 +75,23 @@ namespace fwk {
 		m_queue.push_back(op);
 	}
 
-	
+	// for unique_ptr<>
+	template < class T > void
+	MtQueue<T>::add(T &op)
+	{
+		mutex_t::Lock lock(m_mutex);
+		m_queue.push_back(std::move(op));
+	}
+
 	template < class T >
 	T MtQueue<T>::pop()
 	{
 		T elem;
-		mutex_t::Lock lock(m_mutex);		
-		elem = m_queue.front();
+		mutex_t::Lock lock(m_mutex);
+		elem = std::move(m_queue.front());
 		m_queue.pop_front();
 		return elem;
 	}
-
 
 	template < class T >
 	bool MtQueue<T>::empty() const

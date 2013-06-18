@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/op.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,26 +29,26 @@
 
 namespace eng {
 
-	/** a library operation */
-	class Op
-	{
-	public:
-		typedef std::shared_ptr< Op > Ptr;
-		typedef std::function<void (const Library::Ptr &)> function_t;
+/** a library operation */
+class Op
+{
+public:
+    typedef std::unique_ptr< Op > Ptr;
+    typedef std::function<void (const Library::Ptr &)> function_t;
 
-		Op(tid_t id, const function_t & func);
+    Op(tid_t id, const function_t & func);
 
-		tid_t id() const 
-			{ return m_id; }
+    tid_t id() const
+        { return m_id; }
 
-        void operator() (const Library::Ptr &);
-		const function_t & fn() const
-			{ return m_function; }
-	protected:
-	private:
-		tid_t   m_id;
-		function_t m_function;
-	};
+    void operator() (const Library::Ptr &);
+    const function_t & fn() const
+        { return m_function; }
+protected:
+private:
+    tid_t   m_id;
+    function_t m_function;
+};
 
 }
 

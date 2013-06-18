@@ -41,13 +41,16 @@ int test_main(int, char *[])
 
 	BOOST_CHECK(q.empty());
 
+	tid_t old_id = p->id();
+	Op* old_ptr = p.get();
 	q.add(p);
 	BOOST_CHECK(!q.empty());
+	BOOST_CHECK(p == nullptr);
 
 	Op::Ptr p2(q.pop());
-	BOOST_CHECK(p2 == p);
-	BOOST_CHECK(p2->id() == p->id());
-	BOOST_CHECK(q.empty());	
+	BOOST_CHECK(p2.get() == old_ptr);
+	BOOST_CHECK(p2->id() == old_id);
+	BOOST_CHECK(q.empty());
 	return 0;
 }
 

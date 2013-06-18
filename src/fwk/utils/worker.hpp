@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/worker.h
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __FWK_UTILS_WORKER_H__
 #define __FWK_UTILS_WORKER_H__
 
-
+#include <memory>
 #include <string>
 
 #include "fwk/utils/thread.hpp"
@@ -37,20 +37,23 @@ class Worker
 public:
     Worker();
     virtual ~Worker();
-    typedef MtQueue<T> queue_t;
-    
+    typedef std::unique_ptr<T> ptr_t;
+    typedef MtQueue<ptr_t> queue_t;
+
 #ifdef BOOST_AUTO_TEST_MAIN
-    queue_t & _tasks() 
+    queue_t & _tasks()
         { return m_tasks; }
 #endif
-    void schedule(const T & );
+    /** Schedule a task. Takes ownership of it.
+     */
+    void schedule(ptr_t & ); // must be a ref so that the pointer is moved
     void clear();
 protected:
     virtual void main();
-    
+
     queue_t      m_tasks;
 private:
-    virtual void execute(const T & _op) = 0;
+    virtual void execute(const ptr_t & _op) = 0;
     Glib::Threads::Mutex m_q_mutex;
     Glib::Threads::Cond m_wait_cond;
 };
@@ -79,9 +82,9 @@ template <class T>
 void Worker<T>::main()
 {
     m_terminated = false;
-    
+
     do {
-        T op;
+        ptr_t op;
         {
             // make sure we terminate the thread before we unlock
             // the task queue.
@@ -103,7 +106,7 @@ void Worker<T>::main()
 }
 
 template <class T>
-void Worker<T>::schedule(const T & _op)
+void Worker<T>::schedule(ptr_t & _op)
 {
     Glib::Threads::Mutex::Lock lock(m_q_mutex);
     m_tasks.add(_op);

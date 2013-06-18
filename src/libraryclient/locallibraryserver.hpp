@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/locallibraryserver.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA
  */
 
@@ -30,13 +30,13 @@
 namespace libraryclient {
 
 	class LocalLibraryServer
-		: public fwk::Worker< eng::Op::Ptr >
+		: public fwk::Worker<eng::Op>
 	{
 	public:
 		/** create the local server for the library whose dir is specified */
-		LocalLibraryServer(const std::string & dir, 
+		LocalLibraryServer(const std::string & dir,
 						   const fwk::NotificationCenter::Ptr & nc)
-			: fwk::Worker< eng::Op::Ptr >()
+			: fwk::Worker<eng::Op>()
 			, m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
 			{
 			}
@@ -45,7 +45,7 @@ namespace libraryclient {
 				return m_library && m_library->ok();
 			}
 	protected:
-		virtual void execute(const eng::Op::Ptr & _op);
+		virtual void execute(const ptr_t & _op);
 
 	private:
 		eng::Library::Ptr m_library;

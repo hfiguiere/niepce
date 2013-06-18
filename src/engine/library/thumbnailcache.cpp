@@ -137,7 +137,7 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
 
 }
 
-void ThumbnailCache::execute(const  ThumbnailTask::Ptr & task)
+void ThumbnailCache::execute(const ptr_t & task)
 {
     int w, h;
     w = task->width();

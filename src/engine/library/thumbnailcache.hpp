@@ -33,12 +33,12 @@ namespace eng {
 class ThumbnailTask
 {
 public:
-    typedef std::shared_ptr< ThumbnailTask > Ptr;
-		
+    typedef std::unique_ptr<ThumbnailTask> Ptr;
+
     ThumbnailTask(const LibFile::Ptr & f, int w, int h)
         : m_file(f), m_width(w), m_height(h)
         { }
-		
+
     const LibFile::Ptr & file()
         { return m_file; }
     int width() const
@@ -53,7 +53,7 @@ private:
 
 
 class ThumbnailCache
-    : private fwk::Worker< ThumbnailTask::Ptr >
+    : private fwk::Worker<ThumbnailTask>
 {
 public:
     ThumbnailCache(const std::string & dir,
@@ -66,7 +66,7 @@ public:
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 
 protected:
-    virtual void execute(const  ThumbnailTask::Ptr & task);
+    virtual void execute(const ptr_t & task);
 private:
     std::string                                 m_cacheDir;
     std::weak_ptr<fwk::NotificationCenter> m_notif_center;
