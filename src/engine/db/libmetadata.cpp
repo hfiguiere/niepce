@@ -1,7 +1,7 @@
 /*
  * niepce - db/libmetadata.cpp
  *
- * Copyright (C) 2008,2012 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,9 +86,9 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta,
 
     result = property_index_to_xmp(meta, ns, property);
     if(result) {
-        
+
         if(value.type() == typeid(int)) {
-            result = xmp_set_property_int32(xmp(), ns, property, 
+            result = xmp_set_property_int32(xmp(), ns, property,
                                             boost::get<int>(value), 0);
         }
         else if(value.type() == typeid(std::string)) {
@@ -105,12 +105,14 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta,
             fwk::StringArray v = boost::get<fwk::StringArray>(value);
             // TODO see if we can get that without deleting the whole property
             result = xmp_delete_property(xmp(), ns, property);
-            for(fwk::StringArray::const_iterator iter = v.begin(); 
-                iter != v.end(); ++iter) {
-                result = xmp_append_array_item(xmp(), ns, property, 
-                                               XMP_PROP_VALUE_IS_ARRAY,
-                                               iter->c_str(), 0);
-            }
+            std::for_each(v.begin(), v.end(),
+                          [this, ns, property] (const std::string & val) {
+                              /*result =*/
+                              xmp_append_array_item(this->xmp(),
+                                                    ns, property,
+                                                    XMP_PROP_VALUE_IS_ARRAY,
+                                                    val.c_str(), 0);
+                          });
         }
         else if(value.type() == typeid(fwk::Date)) {
             fwk::Date d = boost::get<fwk::Date>(value);
@@ -166,53 +168,55 @@ bool LibMetadata::getMetaData(fwk::PropertyIndex p,
 }
 
 void LibMetadata::to_properties(const fwk::PropertySet & propset,
-                                fwk::PropertyBag & properties)
+                                fwk::PropertyBag & props)
 {
-    fwk::PropertySet::const_iterator iter;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    fwk::PropertyValue propval;
-    for(iter = propset.begin(); iter != propset.end(); ++iter) {
-        fwk::PropertySet::key_type prop_id = *iter;
-        switch(prop_id) {
-        case NpXmpRatingProp:
-            properties.set_value_for_property(prop_id,
-                                              fwk::PropertyValue(rating()));
-            break;
-        case NpXmpLabelProp:
-            properties.set_value_for_property(prop_id,
-                                              fwk::PropertyValue(label()));
-            break;
-        case NpTiffOrientationProp:
-            properties.set_value_for_property(prop_id, 
-                                              fwk::PropertyValue(orientation()));
-            break;
-        case NpExifDateTimeOriginalProp:
-            properties.set_value_for_property(prop_id,
-                                              fwk::PropertyValue(creation_date()));
-            break;
-        case NpIptcKeywordsProp:
-        {
-            xmp::ScopedPtr<XmpIteratorPtr> 
-                iter(xmp_iterator_new(xmp(), NS_DC,
-                                      "subject", XMP_ITER_JUSTLEAFNODES));
-            fwk::StringArray vec;
-            while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
-                vec.push_back(xmp_string_cstr(value));
-            }
-            properties.set_value_for_property(prop_id,
-                                              fwk::PropertyValue(vec));
-            break;
-        }
-        default:
-            if(getMetaData(prop_id, propval)) {
-                properties.set_value_for_property(prop_id, propval);
-            }
-            else {
-                DBG_OUT("unknown prop %u", prop_id);
-            }
-            break;
-        }
-    }
+    std::for_each(propset.begin(), propset.end(),
+                  [&props, this] (fwk::PropertySet::key_type prop_id) {
+                      switch(prop_id) {
+                      case NpXmpRatingProp:
+                          props.set_value_for_property(prop_id,
+                                                       fwk::PropertyValue(rating()));
+                          break;
+                      case NpXmpLabelProp:
+                          props.set_value_for_property(prop_id,
+                                                       fwk::PropertyValue(label()));
+                          break;
+                      case NpTiffOrientationProp:
+                          props.set_value_for_property(prop_id,
+                                                       fwk::PropertyValue(orientation()));
+                          break;
+                      case NpExifDateTimeOriginalProp:
+                          props.set_value_for_property(prop_id,
+                                                       fwk::PropertyValue(creation_date()));
+                          break;
+                      case NpIptcKeywordsProp:
+                      {
+                          xmp::ScopedPtr<XmpIteratorPtr>
+                              iter(xmp_iterator_new(xmp(), NS_DC,
+                                                    "subject", XMP_ITER_JUSTLEAFNODES));
+                          fwk::StringArray vec;
+                          xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
+                          while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+                              vec.push_back(xmp_string_cstr(value));
+                          }
+                          props.set_value_for_property(prop_id,
+                                                       fwk::PropertyValue(vec));
+                          break;
+                      }
+                      default:
+                      {
+                          fwk::PropertyValue propval;
+                          if(getMetaData(prop_id, propval)) {
+                              props.set_value_for_property(prop_id, propval);
+                          }
+                          else {
+                              DBG_OUT("unknown prop %u", prop_id);
+                          }
+                          break;
+                      }
+                      }
+                  }
+        );
 }
 
 
