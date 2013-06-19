@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 22:12+0200\n"
-"PO-Revision-Date: 2013-06-10 22:13+0200\n"
+"POT-Creation-Date: 2013-06-19 15:48+0200\n"
+"PO-Revision-Date: 2013-06-19 15:49+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -52,22 +52,22 @@ msgid "Change Labels"
 msgstr "Zmień etykiety"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:80
+#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _6"
 msgstr "Etykieta _6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:85
+#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _7"
 msgstr "Etykieta _7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:90
+#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _8"
 msgstr "Etykieta _8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:95
+#: ../src/niepce/ui/moduleshell.cpp:94
 msgid "Label _9"
 msgstr "Etykieta _9"
 
@@ -164,39 +164,63 @@ msgstr "Interfejs _użytkownika"
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: ../src/niepce/ui/moduleshell.cpp:59
+#: ../src/niepce/ui/moduleshell.cpp:58
 msgid "_Image"
 msgstr "_Obraz"
 
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: ../src/niepce/ui/moduleshell.cpp:78
 msgid "Set _Label"
 msgstr "Ustaw _etykietę"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
+#: ../src/niepce/ui/moduleshell.cpp:100
 msgid "Set _Rating"
 msgstr "Ustaw o_cenę"
 
-#: ../src/niepce/ui/moduleshell.cpp:133
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "Unrated"
+msgstr "Bez oceny"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "Rating _1"
+msgstr "Ocena _1"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "Rating _2"
+msgstr "Ocena _2"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "Rating _3"
+msgstr "Ocena _3"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "Rating _4"
+msgstr "Ocena _4"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "Rating _5"
+msgstr "Ocena _5"
+
+#: ../src/niepce/ui/moduleshell.cpp:132
 msgid "Set _Flag"
 msgstr "Ustaw o_znaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:134
+#: ../src/niepce/ui/moduleshell.cpp:133
 msgid "Flag as _Rejected"
 msgstr "Oznacz jako od_rzucone"
 
-#: ../src/niepce/ui/moduleshell.cpp:139
+#: ../src/niepce/ui/moduleshell.cpp:138
 msgid "_Unflagged"
 msgstr "Usuń _oznaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:144
+#: ../src/niepce/ui/moduleshell.cpp:143
 msgid "Flag as _Pick"
 msgstr "Oznacz jako wy_brane"
 
-#: ../src/niepce/ui/moduleshell.cpp:195
+#: ../src/niepce/ui/moduleshell.cpp:194
 msgid "Library"
 msgstr "Kolekcja"
 
-#: ../src/niepce/ui/moduleshell.cpp:204
+#: ../src/niepce/ui/moduleshell.cpp:203
 msgid "Darkroom"
 msgstr "Ciemnia"
 
