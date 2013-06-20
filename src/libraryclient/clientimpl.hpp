@@ -25,7 +25,7 @@
 
 #include "fwk/base/moniker.hpp"
 #include "engine/library/clienttypes.hpp"
-
+#include "engine/library/op.hpp"
 
 namespace libraryclient {
 
@@ -68,6 +68,9 @@ public:
 protected:
     const fwk::Moniker m_moniker;
     LocalLibraryServer *m_localLibrary;
+private:
+    /** do the dirty work of scheduling the op */
+    eng::tid_t schedule_op(const eng::Op::function_t & func);
 };
 
 }

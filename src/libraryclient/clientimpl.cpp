@@ -60,140 +60,111 @@ bool ClientImpl::ok() const
     return m_localLibrary && m_localLibrary->ok();
 }
 
-tid_t ClientImpl::getAllKeywords()
+/**
+   Schedule an operation.
+   @param func the function to schedule
+   @return the tid
+ */
+tid_t ClientImpl::schedule_op(const Op::function_t & func)
 {
     tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, &Commands::cmdListAllKeywords));
+    Op::Ptr op(new Op(id, func));
     m_localLibrary->schedule(op);
     return id;
+}
+
+tid_t ClientImpl::getAllKeywords()
+{
+    return schedule_op(&Commands::cmdListAllKeywords);
 }
 
 
 tid_t ClientImpl::getAllFolders()
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, &Commands::cmdListAllFolders));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(&Commands::cmdListAllFolders);
 }
 
 tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdQueryFolderContent,
-                                      _1, folder_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdQueryFolderContent,
+                                 _1, folder_id));
 }
 
 
 tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdCountFolder,
-                                      _1, folder_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdCountFolder,
+                                 _1, folder_id));
 }
 
 
 tid_t ClientImpl::queryKeywordContent(eng::library_id_t keyword_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdQueryKeywordContent,
-                                      _1, keyword_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdQueryKeywordContent,
+                                 _1, keyword_id));
 }
 
 
 tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdRequestMetadata,
-                                      _1, file_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdRequestMetadata,
+                                 _1, file_id));
 }
 
 
 tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
                               const fwk::PropertyValue & value)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdSetMetadata, _1,
-                                      file_id, meta, value)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdSetMetadata, _1,
+                                 file_id, meta, value));
 }
 
 tid_t ClientImpl::write_metadata(eng::library_id_t file_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdWriteMetadata, _1,
-                                    file_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdWriteMetadata, _1,
+                                 file_id));
 }
 
 tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
                                    eng::library_id_t from_folder_id,
                                    eng::library_id_t to_folder_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdMoveFileToFolder, _1,
-                                      file_id, from_folder_id, to_folder_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdMoveFileToFolder, _1,
+                                 file_id, from_folder_id, to_folder_id));
 }
 
 
 tid_t ClientImpl::getAllLabels()
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, &Commands::cmdListAllLabels));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(&Commands::cmdListAllLabels);
 }
 
 
 tid_t ClientImpl::createLabel(const std::string & s, const std::string & colour)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdCreateLabel,
-                                      _1, s, colour)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdCreateLabel,
+                                 _1, s, colour));
 }
 
 tid_t ClientImpl::deleteLabel(int label_id)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdDeleteLabel,
-                                      _1, label_id)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdDeleteLabel,
+                                 _1, label_id));
 }
 
 tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
                               const std::string & new_name,
                               const std::string & new_colour)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdUpdateLabel,
-                                      _1, label_id, new_name, new_colour)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdUpdateLabel,
+                                 _1, label_id, new_name, new_colour));
 }
 
 
 tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
 {
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdProcessXmpUpdateQueue,
-                                      _1, write_xmp)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdProcessXmpUpdateQueue,
+                                 _1, write_xmp));
 }
 
 
@@ -203,11 +174,8 @@ tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 
     files = FileList::getFilesFromDirectory(dir, &fwk::filter_none);
 
-    tid_t id = LibraryClient::newTid();
-    Op::Ptr op(new Op(id, std::bind(&Commands::cmdImportFiles,
-                                      _1, dir, files, manage)));
-    m_localLibrary->schedule(op);
-    return id;
+    return schedule_op(std::bind(&Commands::cmdImportFiles,
+                                 _1, dir, files, manage));
 }
 
 }
