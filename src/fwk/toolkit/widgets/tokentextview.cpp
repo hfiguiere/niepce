@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/tokentextview.cpp
  *
- * Copyright (C) 2012 Hubert Figuiere
+ * Copyright (C) 2012-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,11 @@ void TokenTextView::get_tokens(Tokens & tokens)
 {
     Glib::ustring t = get_buffer()->get_text();
     boost::split(tokens, t.raw(), boost::is_any_of(","));
+    // trim the tokens from whitespace
+    for_each(tokens.begin(), tokens.end(),
+             [](std::string & token) {
+                 boost::trim(token);
+             });
 }
 
 }
