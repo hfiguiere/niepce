@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,6 +96,12 @@ eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta,
 {
     return m_pImpl->setMetadata(id, meta, value);
 }
+
+eng::tid_t LibraryClient::write_metadata(eng::library_id_t id)
+{
+    return m_pImpl->write_metadata(id);
+}
+
 
 eng::tid_t LibraryClient::moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
                                            eng::library_id_t to_folder)

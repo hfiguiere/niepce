@@ -96,6 +96,8 @@ public:
     void set_properties(const fwk::PropertyBag & props, 
                         const fwk::PropertyBag & old);
 
+    /** Write the file(s) metadata to disk. */
+    void write_metadata();
     void move_to_trash();
 
     /** get the current selection 

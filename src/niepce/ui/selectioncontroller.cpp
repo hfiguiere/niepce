@@ -278,6 +278,14 @@ void SelectionController::set_properties(const fwk::PropertyBag & props,
     }
 }
 
+void SelectionController::write_metadata()
+{
+    eng::library_id_t selection = get_selection();
+    if(selection >= 0) {
+         getLibraryClient()->write_metadata(selection);
+    }
+}
+
 void SelectionController::move_to_trash()
 {
     eng::library_id_t trash_folder = getLibraryClient()->trash_id();

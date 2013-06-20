@@ -125,6 +125,12 @@ void Commands::cmdSetMetadata(const Library::Ptr & lib,
     lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
 }
 
+void Commands::cmdWriteMetadata(const Library::Ptr & lib,
+                                 library_id_t file_id)
+{
+    lib->writeMetaData(file_id);
+}
+
 void Commands::cmdMoveFileToFolder(const Library::Ptr & lib, 
                                    library_id_t file_id, library_id_t from_folder_id,
                                    library_id_t to_folder_id)

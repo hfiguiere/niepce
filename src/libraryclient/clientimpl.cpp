@@ -127,6 +127,15 @@ tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
     return id;
 }
 
+tid_t ClientImpl::write_metadata(eng::library_id_t file_id)
+{
+    tid_t id = LibraryClient::newTid();
+    Op::Ptr op(new Op(id, std::bind(&Commands::cmdWriteMetadata, _1,
+                                    file_id)));
+    m_localLibrary->schedule(op);
+    return id;
+}
+
 tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
                                    eng::library_id_t from_folder_id,
                                    eng::library_id_t to_folder_id)

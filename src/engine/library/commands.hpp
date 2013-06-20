@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/commands.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@ public:
     static void cmdSetMetadata(const Library::Ptr & lib,
                                library_id_t file_id, fwk::PropertyIndex meta, 
                                const fwk::PropertyValue & value);
+    static void cmdWriteMetadata(const Library::Ptr & lib,
+                                 library_id_t file_id);
     static void cmdMoveFileToFolder(const Library::Ptr & lib, 
                                     library_id_t file_id, library_id_t from_folder_id,
                                     library_id_t to_folder_id);

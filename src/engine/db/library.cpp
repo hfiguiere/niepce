@@ -783,6 +783,10 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
     return retval;
 }
 
+bool Library::writeMetaData(library_id_t file_id)
+{
+    return rewriteXmpForId(file_id, true);
+}
 
 bool Library::moveFileToFolder(library_id_t file_id, library_id_t folder_id)
 {

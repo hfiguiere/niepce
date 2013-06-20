@@ -167,6 +167,7 @@ public:
     bool setMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     bool setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
                      const fwk::PropertyValue & value);
+    bool writeMetaData(library_id_t file_id);
 
     bool moveFileToFolder(library_id_t file_id, library_id_t folder_id);
 
