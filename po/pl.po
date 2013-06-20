@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 15:48+0200\n"
-"PO-Revision-Date: 2013-06-19 15:49+0200\n"
+"POT-Creation-Date: 2013-06-20 15:03+0200\n"
+"PO-Revision-Date: 2013-06-20 15:04+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -204,23 +204,27 @@ msgstr "Ocena _5"
 msgid "Set _Flag"
 msgstr "Ustaw o_znaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:133
+#: ../src/niepce/ui/moduleshell.cpp:134
 msgid "Flag as _Rejected"
 msgstr "Oznacz jako od_rzucone"
 
-#: ../src/niepce/ui/moduleshell.cpp:138
+#: ../src/niepce/ui/moduleshell.cpp:139
 msgid "_Unflagged"
 msgstr "Usuń _oznaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:143
+#: ../src/niepce/ui/moduleshell.cpp:144
 msgid "Flag as _Pick"
 msgstr "Oznacz jako wy_brane"
 
-#: ../src/niepce/ui/moduleshell.cpp:194
+#: ../src/niepce/ui/moduleshell.cpp:153
+msgid "Write metadata"
+msgstr "Zapisz metadane"
+
+#: ../src/niepce/ui/moduleshell.cpp:202
 msgid "Library"
 msgstr "Kolekcja"
 
-#: ../src/niepce/ui/moduleshell.cpp:203
+#: ../src/niepce/ui/moduleshell.cpp:211
 msgid "Darkroom"
 msgstr "Ciemnia"
 
@@ -428,7 +432,7 @@ msgstr "Ustaw właściwość"
 msgid "Set Properties"
 msgstr "Ustaw właściwości"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:290
+#: ../src/niepce/ui/selectioncontroller.cpp:298
 msgid "Move to Trash"
 msgstr "Przenieś do kosza"
 
