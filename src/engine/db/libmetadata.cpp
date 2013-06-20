@@ -93,12 +93,17 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta,
         }
         else if(value.type() == typeid(std::string)) {
             std::string val = boost::get<std::string>(value);
-            result = xmp_set_property(xmp(), ns, property, val.c_str(), 0);
-            // FIXME we should know in advance it is localized.
-            if(!result && (xmp_get_error() == XMPErr_BadXPath)) {
-                result = xmp_set_localized_text(xmp(), ns, property, 
-                                                "", "x-default", 
-                                                val.c_str(), 0);
+            if (val.empty()) {
+                result = xmp_delete_property(xmp(), ns, property);
+            }
+            else {
+                result = xmp_set_property(xmp(), ns, property, val.c_str(), 0);
+                // FIXME we should know in advance it is localized.
+                if(!result && (xmp_get_error() == XMPErr_BadXPath)) {
+                    result = xmp_set_localized_text(xmp(), ns, property,
+                                                    "", "x-default",
+                                                    val.c_str(), 0);
+                }
             }
         }
         else if(value.type() == typeid(fwk::StringArray)) {
