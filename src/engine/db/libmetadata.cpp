@@ -87,9 +87,12 @@ bool LibMetadata::setMetaData(fwk::PropertyIndex meta,
     result = property_index_to_xmp(meta, ns, property);
     if(result) {
 
-        if(value.type() == typeid(int)) {
+        if(fwk::is_empty(value)) {
+            result = xmp_delete_property(xmp(), ns, property);
+        }
+        else if(fwk::is_integer(value)) {
             result = xmp_set_property_int32(xmp(), ns, property,
-                                            boost::get<int>(value), 0);
+                                            fwk::get_integer(value), 0);
         }
         else if(value.type() == typeid(std::string)) {
             std::string val = boost::get<std::string>(value);
@@ -204,18 +207,20 @@ void LibMetadata::to_properties(const fwk::PropertySet & propset,
                           while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                               vec.push_back(xmp_string_cstr(value));
                           }
-                          props.set_value_for_property(prop_id,
-                                                       fwk::PropertyValue(vec));
+                          fwk::PropertyValue v(vec);
+                          //DBG_ASSERT(check_property_type(prop_id, v.type()), "wrong type");
+                          props.set_value_for_property(prop_id, v);
                           break;
                       }
                       default:
                       {
                           fwk::PropertyValue propval;
                           if(getMetaData(prop_id, propval)) {
+                              //DBG_ASSERT(check_property_type(prop_id, propval.type()), "wrong type");
                               props.set_value_for_property(prop_id, propval);
                           }
                           else {
-                              DBG_OUT("unknown prop %u", prop_id);
+                              DBG_OUT("missing prop %u", prop_id);
                           }
                           break;
                       }

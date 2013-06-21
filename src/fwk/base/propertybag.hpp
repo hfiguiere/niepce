@@ -33,10 +33,20 @@
 namespace fwk {
 
 typedef uint32_t PropertyIndex;
+/** The empty value */
+typedef boost::blank EmptyValue;
 typedef std::vector<std::string> StringArray;
-typedef boost::variant<int, std::string, StringArray, Date> PropertyValue;
+/** EmptyValue will be the default type */
+typedef boost::variant<EmptyValue, int, std::string, StringArray, Date> PropertyValue;
 
 typedef std::set<PropertyIndex> PropertySet;
+
+/** Return if the property value is empty */
+bool is_empty(const PropertyValue & v);
+/** Return if it is an integer */
+bool is_integer(const PropertyValue & v);
+/** Return the integer value (or 0 if empty) */
+int get_integer(const PropertyValue & v);
 
 /** a property bag
  * It is important that the values for PropertyIndex be properly name spaced

@@ -745,9 +745,8 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
     case eng::NpXmpLabelProp:
     case eng::NpTiffOrientationProp:
     case eng::NpNiepceFlagProp:
-        if(value.type() == typeid(int32_t)) {
+        if(is_empty(value) || is_integer(value)) {
             // internal.
-            int nvalue = boost::get<int>(value);
             // make the column mapping more generic.
             const char * col = NULL;
             switch(meta) {
@@ -765,7 +764,8 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
                 break;
             }
             if(col) {
-                retval = setInternalMetaDataInt(file_id, col, nvalue);
+                retval = setInternalMetaDataInt(file_id, col,
+                                                get_integer(value));
             }
         }
         break;

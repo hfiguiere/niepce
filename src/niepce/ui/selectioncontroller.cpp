@@ -203,7 +203,9 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         fwk::PropertyValue value;
         old.get_value_for_property(iter->first, value);
 
-        DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
+        if(value.type() != typeid(fwk::EmptyValue)) {
+            DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
+        }
 
         undo->new_command<void>(
             std::bind(&libraryclient::LibraryClient::setMetadata,

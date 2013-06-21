@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,21 @@
 
 namespace fwk {
 
+bool is_empty(const PropertyValue & v)
+{
+    return v.type() == typeid(EmptyValue);
+}
+
+bool is_integer(const PropertyValue & v)
+{
+    return v.type() == typeid(EmptyValue);
+}
+
+int get_integer(const PropertyValue & v)
+{
+    return is_empty(v) ? 0 : boost::get<int>(v);
+}
+
 bool PropertyBag::set_value_for_property(PropertyIndex idx, const PropertyValue & value)
 {
     bool removed = (m_bag.erase(idx) == 1);
@@ -41,20 +56,16 @@ bool PropertyBag::get_value_for_property(PropertyIndex idx, PropertyValue & valu
     return true;
 }
 
-
 bool PropertyBag::has_value_for_property(PropertyIndex idx) const
 {
     return m_bag.find(idx) != m_bag.end();
 }
-
 
 bool PropertyBag::remove_value_for_property(PropertyIndex idx)
 {
     _Map::size_type sz = m_bag.erase(idx);
     return sz == 1;
 }
-
-
 
 }
 /*
