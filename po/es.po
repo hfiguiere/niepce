@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 03:06+0000\n"
-"PO-Revision-Date: 2013-06-13 12:50+0200\n"
+"POT-Creation-Date: 2013-06-20 05:54+0000\n"
+"PO-Revision-Date: 2013-06-21 12:31+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -48,22 +48,22 @@ msgid "Change Labels"
 msgstr "Cambiar etiquetas"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:80
+#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _6"
 msgstr "Etiqueta _6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:85
+#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _7"
 msgstr "Etiqueta _7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:90
+#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _8"
 msgstr "Etiqueta _8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:95
+#: ../src/niepce/ui/moduleshell.cpp:94
 msgid "Label _9"
 msgstr "Etiqueta _9"
 
@@ -160,19 +160,48 @@ msgstr "Interfaz de _usuario"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../src/niepce/ui/moduleshell.cpp:59
+#: ../src/niepce/ui/moduleshell.cpp:58
 msgid "_Image"
 msgstr "_Imagen"
 
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: ../src/niepce/ui/moduleshell.cpp:78
 msgid "Set _Label"
 msgstr "Establecer _etiqueta"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
+#: ../src/niepce/ui/moduleshell.cpp:100
 msgid "Set _Rating"
 msgstr "Establecer p_untuación"
 
-#: ../src/niepce/ui/moduleshell.cpp:133
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "Unrated"
+msgstr "Sin puntuar"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+#| msgid "Rating:"
+msgid "Rating _1"
+msgstr "Puntuación _1:"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+#| msgid "Rating:"
+msgid "Rating _2"
+msgstr "Puntuación _2:"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+#| msgid "Rating:"
+msgid "Rating _3"
+msgstr "Puntuación _3:"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+#| msgid "Rating:"
+msgid "Rating _4"
+msgstr "Puntuación _4:"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+#| msgid "Rating:"
+msgid "Rating _5"
+msgstr "Puntuación _5:"
+
+#: ../src/niepce/ui/moduleshell.cpp:132
 msgid "Set _Flag"
 msgstr "Establecer _marca"
 
@@ -188,11 +217,15 @@ msgstr "_Sin marcar"
 msgid "Flag as _Pick"
 msgstr "Marcar como _aceptada"
 
-#: ../src/niepce/ui/moduleshell.cpp:195
+#: ../src/niepce/ui/moduleshell.cpp:153
+msgid "Write metadata"
+msgstr "Escribir metadatos"
+
+#: ../src/niepce/ui/moduleshell.cpp:202
 msgid "Library"
 msgstr "Biblioteca"
 
-#: ../src/niepce/ui/moduleshell.cpp:204
+#: ../src/niepce/ui/moduleshell.cpp:211
 msgid "Darkroom"
 msgstr "Cuarto oscuro"
 
@@ -400,7 +433,7 @@ msgstr "Establecer propiedad"
 msgid "Set Properties"
 msgstr "Establecer propiedades"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:290
+#: ../src/niepce/ui/selectioncontroller.cpp:298
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
@@ -499,7 +532,6 @@ msgid "_Erase after download"
 msgstr "_Borrar después de descargar"
 
 #: ../magellan/src/mgwindow.ui.h:2
-#| msgid "<b>Date:</b>"
 msgid "<b>GPS Device</b>"
 msgstr "<b>Dispositivo GPS</b>"
 
@@ -512,12 +544,10 @@ msgid "KML"
 msgstr "KML"
 
 #: ../magellan/src/mgwindow.ui.h:5
-#| msgid "<b>Date:</b>"
 msgid "<b>Format</b>"
 msgstr "<b>Formato</b>"
 
 #: ../magellan/src/mgwindow.ui.h:6
-#| msgid "<b>Date:</b>"
 msgid "<b>Output</b>"
 msgstr "<b>Salida</b>"
 
