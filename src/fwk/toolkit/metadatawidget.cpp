@@ -419,7 +419,7 @@ void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop,
                                            const fwk::PropertyValue & value)
 {
     fwk::PropertyBag props, old_props;
-    props.set_value_for_property(prop, fwk::PropertyValue(value));
+    props.set_value_for_property(prop, value);
     fwk::PropertyValue old_value;
     if(m_current_data.get_value_for_property(prop, old_value)) {
         old_props.set_value_for_property(prop, old_value);
