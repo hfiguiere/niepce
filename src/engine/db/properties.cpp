@@ -68,7 +68,8 @@ bool check_property_type(fwk::PropertyIndex idx, const std::type_info & ti)
     if(iter != propmap.end()) {
         return iter->second->type == ti;
     }
-    return false;
+    // we don't know the type. Assume it is OK
+    return true;
 }
 
 
