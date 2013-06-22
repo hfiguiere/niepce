@@ -39,7 +39,7 @@ Application::Ptr Application::m_application;
 
 Application::Application(int & argc, char** &argv, const char* app_id,
                          const char * name)
-    : m_config(name)
+    : m_config(Configuration::make_config_path(name))
     , m_refUIManager(Gtk::UIManager::create())
     , m_module_manager(new ModuleManager())
     , m_gtkapp(Gtk::Application::create(argc, argv, app_id))

@@ -14,6 +14,17 @@ noinst_LIBRARIES = libniepceframework.a
 noinst_HEADERS =   \
 	  goocanvas_proxy_header.hpp
 
+TESTS = testconfigdatabinder
+
+check_PROGRAMS = testconfigdatabinder
+
+testconfigdatabinder_SOURCES = t/testconfigdatabinder.cpp
+testconfigdatabinder_LDADD = libniepceframework.a \
+	../base/libfwkbase.a \
+	../utils/libniepceutils.a \
+        @LIBGLIBMM_LIBS@
+
+
 libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	application.hpp application.cpp \
 	dialog.hpp dialog.cpp \

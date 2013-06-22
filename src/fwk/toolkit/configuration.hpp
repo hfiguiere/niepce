@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/configuration.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,16 @@ class Configuration
 public:
     Configuration(const Glib::ustring & file);
     ~Configuration();
-    
+
+    static Glib::ustring make_config_path(const Glib::ustring & file);
+
     bool hasKey(const Glib::ustring & key) const;
     const Glib::ustring getValue(const Glib::ustring & key,
                                  const Glib::ustring & def) const;
-    
+
     void setValue(const Glib::ustring & key, const Glib::ustring & value);
 private:
-    
+
     void save();
 
     Glib::ustring          m_filename;

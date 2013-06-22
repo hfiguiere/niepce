@@ -1,7 +1,7 @@
 /*
  * niepce - framework/configuration.cpp
  *
- * Copyright (C) 2007-2008 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,20 @@
 
 namespace fwk {
 
-Configuration::Configuration(const Glib::ustring & file)
-    : m_root("main")
+
+Glib::ustring Configuration::make_config_path(const Glib::ustring & file)
 {
-    m_filename = Glib::build_filename(Glib::get_user_config_dir(),
+    Glib::ustring filename = Glib::build_filename(Glib::get_user_config_dir(),
                                       file);
-    m_filename = Glib::build_filename(m_filename, "config");
-    fwk::ensure_path_for_file(m_filename);
+    filename = Glib::build_filename(filename, "config");
+    fwk::ensure_path_for_file(filename);
+    return filename;
+}
+
+Configuration::Configuration(const Glib::ustring & file)
+    : m_filename(file)
+    , m_root("main")
+{
     try {
         m_keyfile.load_from_file(m_filename);
     }

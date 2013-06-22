@@ -47,6 +47,7 @@ src/fwk/utils/testpathutils
 src/fwk/utils/teststringutils
 src/fwk/utils/testufrawmeta
 src/fwk/utils/testxmp
+src/fwk/toolkit/testconfigdatabinder
 src/libraryclient/test_worker
 src/engine/db/test_library
 src/engine/db/test_filebundle
