@@ -122,7 +122,17 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
     {
         fwk::Configuration & cfg = fwk::Application::app()->config();
-        int write_xmp = boost::lexical_cast<int>(cfg.getValue("write_xmp_automatically", "0"));
+        int write_xmp = false;
+        Glib::ustring xmp_pref;
+        try {
+            xmp_pref = cfg.getValue("write_xmp_automatically", "0");
+            write_xmp = boost::lexical_cast<int>(xmp_pref);
+        }
+        catch(const std::exception & e)
+        {
+            ERR_OUT("couldn't cast %s: %s", xmp_pref.c_str(),
+                    e.what());
+        }
         getLibraryClient()->processXmpUpdateQueue(write_xmp);
         break;
     }

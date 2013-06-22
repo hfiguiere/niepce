@@ -41,8 +41,8 @@ public:
 	typedef Glib::PropertyProxy_Base property_t;
 
 	ConfigDataBinderBase(const property_t & property,
-						 Configuration & config, const std::string & key);
-	
+                             Configuration & config, const std::string & key);
+
 	virtual void on_changed(void) = 0;
 protected:
 	property_t        m_property;
@@ -53,54 +53,56 @@ protected:
 
 template <class T>
 class ConfigDataBinder
-	: public ConfigDataBinderBase
+    : public ConfigDataBinderBase
 {
 public:
-	typedef Glib::PropertyProxy<T> property_t;
+    typedef Glib::PropertyProxy<T> property_t;
 
-	ConfigDataBinder(const property_t & property,
-					 Configuration & config, const std::string & key)
-		: ConfigDataBinderBase(property, config, key)
-		{
-			Glib::ustring value;
-			value = m_config.getValue(m_config_key, "");
-			if(!value.empty()) {
-				try {
-					static_cast<property_t&>(m_property).set_value(
-						boost::lexical_cast<T>(value));
-				}
-				catch(const boost::bad_lexical_cast &)
-				{
-					ERR_OUT("exception converting %s", value.c_str());
-				}
-			}
-		}
+    ConfigDataBinder(const property_t & property,
+                     Configuration & config, const std::string & key)
+        : ConfigDataBinderBase(property, config, key)
+        {
+            Glib::ustring value;
+            value = m_config.getValue(m_config_key, "");
+            if(!value.empty()) {
+                try {
+                    T real_value;
+                    real_value = boost::lexical_cast<T>(value);
+                    static_cast<property_t&>(m_property).set_value(real_value);
+                }
+                catch(const boost::bad_lexical_cast &)
+                {
+                    ERR_OUT("exception converting %s", value.c_str());
+                }
+            }
+            m_value = static_cast<property_t&>(m_property).get_value();
+        }
 
-	virtual ~ConfigDataBinder()
-		{
-			try {
-				m_config.setValue(m_config_key, 
-								  boost::lexical_cast<std::string>(m_value));
-			}
-			catch(const boost::bad_lexical_cast &)
-			{
-				ERR_OUT("exception");
-			}
-		}
+    virtual ~ConfigDataBinder()
+        {
+            try {
+                m_config.setValue(m_config_key,
+                                  boost::lexical_cast<std::string>(m_value));
+            }
+            catch(const boost::bad_lexical_cast &)
+            {
+                ERR_OUT("exception");
+            }
+        }
 
 
-	virtual void on_changed(void)
-		{
-			try {
-				m_value = static_cast<property_t&>(m_property).get_value();
-			}
-			catch(const std::exception &)
-			{
-				ERR_OUT("exception");
-			}
-		}
+    virtual void on_changed(void)
+        {
+            try {
+                m_value = static_cast<property_t&>(m_property).get_value();
+            }
+            catch(const std::exception &)
+            {
+                ERR_OUT("exception");
+            }
+        }
 private:
-	T m_value;
+    T m_value;
 };
 
 
@@ -108,3 +110,12 @@ private:
 
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:80
+  End:
+*/
