@@ -40,8 +40,7 @@ namespace fwk {
 Glib::ustring Configuration::make_config_path(const Glib::ustring & file)
 {
     Glib::ustring filename = Glib::build_filename(Glib::get_user_config_dir(),
-                                      file);
-    filename = Glib::build_filename(filename, "config");
+                                                  file, "config");
     fwk::ensure_path_for_file(filename);
     return filename;
 }

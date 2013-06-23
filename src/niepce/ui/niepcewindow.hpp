@@ -50,8 +50,10 @@ public:
 
     virtual void set_title(const std::string & title);
 
-    libraryclient::LibraryClient::Ptr getLibraryClient()
+    libraryclient::LibraryClient::Ptr getLibraryClient() const
         { return m_libClient; }
+    fwk::Configuration::Ptr getLibraryConfig() const
+        { return m_library_cfg; }
 
 protected:
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
@@ -92,6 +94,7 @@ private:
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
     libraryclient::LibraryClient::Ptr m_libClient;
+    fwk::Configuration::Ptr        m_library_cfg;
 };
 
 }

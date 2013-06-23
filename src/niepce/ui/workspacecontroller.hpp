@@ -33,6 +33,7 @@
 #include "engine/db/libfolder.hpp"
 #include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notification.hpp"
+#include "niepce/ui/niepcewindow.hpp"
 
 namespace Gtk {
 }
@@ -86,8 +87,16 @@ public:
     
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 private:
-    libraryclient::LibraryClient::Ptr getLibraryClient();
-    
+    void on_row_expanded_collapsed(const Gtk::TreeIter& iter,
+                                   const Gtk::TreePath& path, bool expanded);
+    void on_row_expanded(const Gtk::TreeIter& iter,
+                         const Gtk::TreePath& path);
+    void on_row_collapsed(const Gtk::TreeIter& iter,
+                          const Gtk::TreePath& path);
+
+    libraryclient::LibraryClient::Ptr getLibraryClient() const;
+    fwk::Configuration::Ptr getLibraryConfig() const;
+
     /** add a folder item to the treeview */
     void add_folder_item(const eng::LibFolder::Ptr & f);
     /** add a keyword item to the treeview */

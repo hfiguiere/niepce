@@ -54,13 +54,14 @@ WorkspaceController::WorkspaceController()
         { ICON_KEYWORD, "application-certificate" },
         { 0, NULL }
     };
-    
+
     Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());
     int i = 0;
     while(icons[i].icon_name) {
         try {
             m_icons[icons[i].icon_id] = icon_theme->load_icon(
-            Glib::ustring(icons[i].icon_name), 16, Gtk::ICON_LOOKUP_USE_BUILTIN);
+                Glib::ustring(icons[i].icon_name), 16,
+                Gtk::ICON_LOOKUP_USE_BUILTIN);
         }
         catch(const Gtk::IconThemeError & e)
         {
@@ -70,11 +71,15 @@ WorkspaceController::WorkspaceController()
     }
 }
 
-libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient()
+libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient() const
 {
-    return	std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
+    return std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
 
+fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
+{
+    return std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryConfig();
+}
 
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
@@ -163,28 +168,67 @@ void WorkspaceController::on_count_notification(int)
 void WorkspaceController::on_libtree_selection()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = m_librarytree.get_selection();
-    Gtk::TreeModel::iterator selected = selection->get_selected();
-    if((*selected)[m_librarycolumns.m_type] == FOLDER_ITEM)
-    {
-        eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
+    auto selected = selection->get_selected();
+    int type = (*selected)[m_librarycolumns.m_type];
+    eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
+
+    switch(type) {
+
+    case FOLDER_ITEM:
         getLibraryClient()->queryFolderContent(id);
-    }
-    else if((*selected)[m_librarycolumns.m_type] == KEYWORD_ITEM)
-    {
-        eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
-        getLibraryClient()->queryKeywordContent(id);			
-    }
-    else 
-    {
+        break;
+
+    case KEYWORD_ITEM:
+        getLibraryClient()->queryKeywordContent(id);
+        break;
+
+    default:
         DBG_OUT("selected something not a folder");
     }
 }
 
+void WorkspaceController::on_row_expanded_collapsed(const Gtk::TreeIter& iter,
+                                                    const Gtk::TreePath& /*path*/,
+                                                    bool expanded)
+{
+    int type = (*iter)[m_librarycolumns.m_type];
+    fwk::Configuration::Ptr cfg = getLibraryConfig();
+    const char* key = nullptr;
+    switch(type) {
+    case FOLDERS_ITEM:
+        key = "workspace_folders_expanded";
+        break;
+    case PROJECTS_ITEM:
+        key = "workspace_projects_expanded";
+        break;
+    case KEYWORDS_ITEM:
+        key = "workspace_keywords_expanded";
+        break;
+    }
+    if(cfg && key) {
+        cfg->setValue(key,
+                      boost::lexical_cast<std::string>(expanded));
+    }
+}
+
+void WorkspaceController::on_row_expanded(const Gtk::TreeIter& iter,
+                                          const Gtk::TreePath& path)
+{
+    on_row_expanded_collapsed(iter, path, true);
+}
+
+void WorkspaceController::on_row_collapsed(const Gtk::TreeIter& iter,
+                                           const Gtk::TreePath& path)
+{
+    on_row_expanded_collapsed(iter, path, false);
+}
+
+
 void WorkspaceController::add_keyword_item(const eng::Keyword::Ptr & k)
 {
-    Gtk::TreeModel::iterator iter(add_item(m_treestore, m_keywordsNode->children(), 
-                                           m_icons[ICON_KEYWORD], k->keyword(), k->id(), 
-                                           KEYWORD_ITEM));
+    auto iter = add_item(m_treestore, m_keywordsNode->children(),
+                         m_icons[ICON_KEYWORD], k->keyword(), k->id(),
+                         KEYWORD_ITEM);
 //		getLibraryClient()->countKeyword(f->id());
     m_keywordsidmap[k->id()] = iter;
 }
@@ -196,10 +240,12 @@ void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
         icon_idx = ICON_TRASH;
         getLibraryClient()->set_trash_id(f->id());
     }
-    Gtk::TreeModel::iterator iter(add_item(m_treestore, 
-                                           m_folderNode->children(), 
-                                           m_icons[icon_idx], 
-                                           f->name(), f->id(), FOLDER_ITEM));
+    auto iter = add_item(m_treestore, m_folderNode->children(),
+                         m_icons[icon_idx],
+                         f->name(), f->id(), FOLDER_ITEM);
+    if(f->is_expanded()) {
+        m_librarytree.expand_row(m_treestore->get_path(iter), false);
+    }
     getLibraryClient()->countFolder(f->id());
     m_folderidmap[f->id()] = iter;
 }
@@ -232,6 +278,8 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
     m_widget = &m_vbox;
     m_treestore = Gtk::TreeStore::create(m_librarycolumns);
     m_librarytree.set_model(m_treestore);
+    DBG_ASSERT(m_treestore->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST,
+        "Model isn't persistent");
 
     m_folderNode = add_item(m_treestore, m_treestore->children(),
                             m_icons[ICON_FOLDER], 
@@ -245,7 +293,6 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
                               m_icons[ICON_KEYWORD],
                               Glib::ustring(_("Keywords")), 0,
                               KEYWORDS_ITEM);
-
     m_librarytree.set_headers_visible(false);
     m_librarytree.append_column("", m_librarycolumns.m_icon);
     int num = m_librarytree.append_column("", m_librarycolumns.m_label);
@@ -264,12 +311,52 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
     m_librarytree.get_selection()->signal_changed().connect (
         sigc::mem_fun(this, 
                       &WorkspaceController::on_libtree_selection));
+    m_librarytree.signal_row_expanded().connect(
+        sigc::mem_fun(this,
+                      &WorkspaceController::on_row_expanded));
+    m_librarytree.signal_row_collapsed().connect(
+        sigc::mem_fun(this,
+                      &WorkspaceController::on_row_collapsed));
 
     return m_widget;
 }
-	
+
 void WorkspaceController::on_ready()
 {
+    bool expanded = false;
+    fwk::Configuration::Ptr cfg = getLibraryConfig();
+
+    // pre-expand
+    try {
+        expanded =
+            boost::lexical_cast<int>(cfg->getValue("workspace_folders_expanded",
+                                                      "1"));
+        if(expanded) {
+            DBG_ASSERT(m_treestore->iter_is_valid(m_folderNode), "iter not valid");
+            expanded = m_librarytree.expand_row(m_treestore->get_path(m_folderNode),
+                                                false);
+            DBG_OUT("expanded %d", expanded);
+        }
+        expanded =
+            boost::lexical_cast<int>(cfg->getValue("workspace_projects_expanded",
+                                                      "0"));
+        if(expanded) {
+            m_librarytree.expand_row(m_treestore->get_path(m_projectNode),
+                                     true);
+        }
+        expanded =
+            boost::lexical_cast<int>(cfg->getValue("workspace_keywords_expanded",
+                                                      "0"));
+        if(expanded) {
+            m_librarytree.expand_row(m_treestore->get_path(m_keywordsNode),
+                                     true);
+        }
+    }
+    catch(const std::exception &e) {
+        ERR_OUT("error: %s", e.what());
+    }
+
+
     libraryclient::LibraryClient::Ptr libraryClient = getLibraryClient();
     if(libraryClient)
     {

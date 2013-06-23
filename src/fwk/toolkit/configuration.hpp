@@ -21,6 +21,8 @@
 #ifndef _FRAMEWORK_CONFIGURATION_H_
 #define _FRAMEWORK_CONFIGURATION_H_
 
+#include <memory>
+
 #include <glibmm/ustring.h>
 #include <glibmm/keyfile.h>
 
@@ -29,6 +31,8 @@ namespace fwk {
 class Configuration
 {
 public:
+    typedef std::shared_ptr<Configuration> Ptr;
+
     Configuration(const Glib::ustring & file);
     ~Configuration();
 

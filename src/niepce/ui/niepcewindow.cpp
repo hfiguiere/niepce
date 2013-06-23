@@ -20,6 +20,7 @@
 #include <string>
 
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/window.h>
 #include <gtkmm/action.h>
 #include <gtkmm/box.h>
@@ -156,8 +157,7 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
     m_notifcenter.reset(new niepce::NotificationCenter());
 
     Glib::ustring name("camera");
-    set_icon_from_theme(name);		
-
+    set_icon_from_theme(name);
 
     m_notifcenter->signal_lib_notification.connect(
         sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));
@@ -442,13 +442,18 @@ std::string NiepceWindow::prompt_open_library()
 
 bool NiepceWindow::open_library(const std::string & libMoniker)
 {
-    m_libClient = LibraryClient::Ptr(new LibraryClient(fwk::Moniker(libMoniker),
+    fwk::Moniker mon = fwk::Moniker(libMoniker);
+    m_libClient = LibraryClient::Ptr(new LibraryClient(mon,
                                                        m_notifcenter));
     if(!m_libClient->ok()) {
         m_libClient = nullptr;
         return false;
     }
     set_title(libMoniker);
+    m_library_cfg
+        = fwk::Configuration::Ptr(
+            new fwk::Configuration(
+                Glib::build_filename(mon.path(), "config.ini")));
     m_libClient->getAllLabels();
     if(!m_moduleshell) {
         _createModuleShell();
