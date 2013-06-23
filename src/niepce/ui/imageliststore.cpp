@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <mutex>
+
 #include <gtkmm/icontheme.h>
 
 #include "imageliststore.hpp"
@@ -29,11 +31,33 @@
 
 namespace ui {
 
+Glib::RefPtr<Gdk::Pixbuf> ImageListStore::get_loading_icon()
+{
+    Glib::RefPtr<Gdk::Pixbuf> icon;
+    if(!icon) {
+        static std::mutex m;
+        m.lock();
+        if (!icon) {
+            auto icon_theme(fwk::Application::app()->getIconTheme());
+            try {
+                icon = icon_theme->load_icon(
+                    Glib::ustring("image-loading"), 32,
+                    Gtk::ICON_LOOKUP_USE_BUILTIN);
+            }
+            catch(const Gtk::IconThemeError & e)
+            {
+                ERR_OUT("Exception %s.", e.what().c_str());
+            }
+        }
+        m.unlock();
+    }
+    return icon;
+}
+
 Glib::RefPtr<ImageListStore> ImageListStore::create()
 {
     static const Columns columns;
-    Glib::RefPtr<ImageListStore> p(new ImageListStore(columns));
-    return p;
+    return Glib::RefPtr<ImageListStore>(new ImageListStore(columns));
 }
 
 ImageListStore::ImageListStore(const Columns& _columns)
@@ -45,8 +69,7 @@ ImageListStore::ImageListStore(const Columns& _columns)
 
 Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id)
 {
-    std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
-        = m_idmap.find( id );
+    auto iter = m_idmap.find( id );
     if(iter != m_idmap.end()) {
         return iter->second;
     }
@@ -72,31 +95,21 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         eng::LibFile::ListPtr l 
             = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
         DBG_OUT("received folder content file # %lu", l->size());
-        Glib::RefPtr< Gtk::IconTheme > icon_theme(fwk::Application::app()->getIconTheme());
-        clear();
+        // clear the map before the list.
         m_idmap.clear();
+        clear();
         eng::LibFile::List::const_iterator iter = l->begin();
-        for( ; iter != l->end(); iter++ )
-        {
-            Gtk::TreeModel::iterator riter = append();
-            Gtk::TreeRow row = *riter;
-            // locate it in local cache...
-            // this would avoid exception handling.
-            Glib::RefPtr<Gdk::Pixbuf> icon;
-            try {
-                icon = icon_theme->load_icon(
-                    Glib::ustring("image-loading"), 32,
-                    Gtk::ICON_LOOKUP_USE_BUILTIN);
-            }
-            catch(const Gtk::IconThemeError & e)
-            {
-                ERR_OUT("Exception %s.", e.what().c_str());
-            }
-            row[m_columns.m_pix] = icon;
-            row[m_columns.m_libfile] = *iter;
-            row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(icon, 100);
-            m_idmap[(*iter)->id()] = riter;
-        }
+        for_each(l->begin(), l->end(),
+                 [this](const eng::LibFile::Ptr & f) {
+                     Gtk::TreeModel::iterator riter = append();
+                     Gtk::TreeRow row = *riter;
+                     Glib::RefPtr<Gdk::Pixbuf> icon = get_loading_icon();
+                     row[m_columns.m_pix] = icon;
+                     row[m_columns.m_libfile] = f;
+                     row[m_columns.m_strip_thumb]
+                         = fwk::gdkpixbuf_scale_to_fit(icon, 100);
+                     m_idmap[f->id()] = riter;
+                 });
         // at that point clear the cache because the icon view is populated.
         getLibraryClient()->thumbnailCache().request(l);
         break;

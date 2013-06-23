@@ -76,6 +76,7 @@ public:
 protected:
     ImageListStore(const Columns& columns);
 private:
+    static Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
     libraryclient::LibraryClient::Ptr getLibraryClient();
     static bool is_property_interesting(fwk::PropertyIndex idx);
 
