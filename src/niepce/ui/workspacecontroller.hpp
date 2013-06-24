@@ -114,6 +114,9 @@ private:
                                       const Glib::RefPtr<Gdk::Pixbuf> & icon,
                                       const Glib::ustring & label, 
                                       eng::library_id_t id, int type) const;
+
+    void expand_from_cfg(const char* key, const Gtk::TreeIter& treenode);
+
     enum {
         ICON_FOLDER = 0,
         ICON_PROJECT,

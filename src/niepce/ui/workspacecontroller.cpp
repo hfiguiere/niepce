@@ -226,11 +226,16 @@ void WorkspaceController::on_row_collapsed(const Gtk::TreeIter& iter,
 
 void WorkspaceController::add_keyword_item(const eng::Keyword::Ptr & k)
 {
-    auto iter = add_item(m_treestore, m_keywordsNode->children(),
+    auto children = m_keywordsNode->children();
+    bool was_empty = children.empty();
+    auto iter = add_item(m_treestore, children,
                          m_icons[ICON_KEYWORD], k->keyword(), k->id(),
                          KEYWORD_ITEM);
 //		getLibraryClient()->countKeyword(f->id());
     m_keywordsidmap[k->id()] = iter;
+    if(was_empty) {
+        expand_from_cfg("workspace_keywords_expanded", m_keywordsNode);
+    }
 }
 
 void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
@@ -240,7 +245,9 @@ void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
         icon_idx = ICON_TRASH;
         getLibraryClient()->set_trash_id(f->id());
     }
-    auto iter = add_item(m_treestore, m_folderNode->children(),
+    auto children = m_folderNode->children();
+    bool was_empty = children.empty();
+    auto iter = add_item(m_treestore, children,
                          m_icons[icon_idx],
                          f->name(), f->id(), FOLDER_ITEM);
     if(f->is_expanded()) {
@@ -248,6 +255,10 @@ void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
     }
     getLibraryClient()->countFolder(f->id());
     m_folderidmap[f->id()] = iter;
+    // expand if needed. Because Gtk is stupid and doesn't expand empty
+    if(was_empty) {
+        expand_from_cfg("workspace_folders_expanded", m_folderNode);
+    }
 }
 
 Gtk::TreeModel::iterator
@@ -321,42 +332,22 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
     return m_widget;
 }
 
-void WorkspaceController::on_ready()
+/** Expand treenode from a cfg key */
+void WorkspaceController::expand_from_cfg(const char* key,
+                                          const Gtk::TreeIter& treenode)
 {
-    bool expanded = false;
     fwk::Configuration::Ptr cfg = getLibraryConfig();
 
-    // pre-expand
-    try {
-        expanded =
-            boost::lexical_cast<int>(cfg->getValue("workspace_folders_expanded",
-                                                      "1"));
-        if(expanded) {
-            DBG_ASSERT(m_treestore->iter_is_valid(m_folderNode), "iter not valid");
-            expanded = m_librarytree.expand_row(m_treestore->get_path(m_folderNode),
-                                                false);
-            DBG_OUT("expanded %d", expanded);
-        }
-        expanded =
-            boost::lexical_cast<int>(cfg->getValue("workspace_projects_expanded",
-                                                      "0"));
-        if(expanded) {
-            m_librarytree.expand_row(m_treestore->get_path(m_projectNode),
-                                     true);
-        }
-        expanded =
-            boost::lexical_cast<int>(cfg->getValue("workspace_keywords_expanded",
-                                                      "0"));
-        if(expanded) {
-            m_librarytree.expand_row(m_treestore->get_path(m_keywordsNode),
-                                     true);
-        }
+    bool expanded =
+        boost::lexical_cast<int>(cfg->getValue(key, "1"));
+    if(expanded) {
+        m_librarytree.expand_row(m_treestore->get_path(treenode),
+                                 false);
     }
-    catch(const std::exception &e) {
-        ERR_OUT("error: %s", e.what());
-    }
+}
 
-
+void WorkspaceController::on_ready()
+{
     libraryclient::LibraryClient::Ptr libraryClient = getLibraryClient();
     if(libraryClient)
     {
