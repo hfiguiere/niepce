@@ -159,7 +159,8 @@ bool Library::_initDb()
     SQLStatement keywordTable("CREATE TABLE keywords (id INTEGER PRIMARY KEY,"
                               " keyword TEXT, parent_id INTEGER DEFAULT 0)");
     SQLStatement keywordingTable("CREATE TABLE keywording (file_id INTEGER,"
-                                 " keyword_id INTEGER)");
+                                 " keyword_id INTEGER,"
+                                 " UNIQUE(file_id, keyword_id))");
     SQLStatement labelTable("CREATE TABLE labels (id INTEGER PRIMARY KEY,"
                             " name TEXT, color TEXT)");
     SQLStatement xmpUpdateQueueTable("CREATE TABLE xmp_update_queue "
@@ -618,10 +619,29 @@ library_id_t Library::makeKeyword(const std::string & keyword)
 }
 
 
+bool Library::unassignAllKeywordsForFile(library_id_t file_id)
+{
+    bool ret = false;
+    SQLStatement sql(boost::format("DELETE FROM keywording"
+                                   " WHERE file_id='%1%'")
+                     % file_id);
+    try {
+        ret = m_dbdrv->execute_statement(sql);
+    }
+    catch(fwk::Exception & e)
+    {
+        DBG_OUT("db exception %s", e.what());
+    }
+    return ret;
+}
+
 bool Library::assignKeyword(library_id_t kw_id, library_id_t file_id)
 {
     bool ret = false;
-    SQLStatement sql(boost::format("INSERT INTO keywording (file_id, keyword_id) "
+    // we must IGNORE as there is a unicity constraint
+    // that way setting a keyword relationship is solid
+    SQLStatement sql(boost::format("INSERT OR IGNORE INTO keywording"
+                                   " (file_id, keyword_id) "
                                    " VALUES('%1%', '%2%');")
                      % file_id % kw_id );
     try {
@@ -769,6 +789,21 @@ bool Library::setMetaData(library_id_t file_id, fwk::PropertyIndex meta,
             }
         }
         break;
+    case eng::NpIptcKeywordsProp:
+    {
+        // unassign all keywords
+        unassignAllKeywordsForFile(file_id);
+
+        fwk::StringArray keywords(boost::get<fwk::StringArray>(value));
+        for_each(keywords.begin(), keywords.end(),
+                 [this, file_id](const std::string & s) {
+                     library_id_t kwid = makeKeyword(s);
+                     if(kwid != -1) {
+                         assignKeyword(kwid, file_id);
+                     }
+                 });
+        break;
+    }
     default:
         // external
         // TODO add the external metadata

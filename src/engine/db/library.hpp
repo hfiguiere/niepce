@@ -40,7 +40,7 @@
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.
-#define DB_SCHEMA_VERSION 5
+#define DB_SCHEMA_VERSION 6
 
 namespace fwk {
 class RgbColour;
@@ -192,6 +192,11 @@ public:
      * @return true if success, false if error
      */
     bool assignKeyword(library_id_t kw_id, library_id_t file_id);
+    /** Unassign all keyword for a file.
+     * @param file_id the file id
+     * @return true if success, false if error
+     */
+    bool unassignAllKeywordsForFile(library_id_t file_id);
 
     int checkDatabaseVersion();
 

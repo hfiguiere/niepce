@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/test_library.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
  */
 
 
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/init.hpp"
 #include "fwk/utils/db/sqlstatement.hpp"
 #include "fwk/utils/db/iconnectiondriver.hpp"
@@ -36,10 +37,12 @@ int test_main(int, char *[])
     fwk::utils::init();
     eng::Library lib("./", fwk::NotificationCenter::Ptr());
 
+    BOOST_CHECK(lib.ok());
+
     BOOST_CHECK(lib.checkDatabaseVersion() == DB_SCHEMA_VERSION);
 
     db::IConnectionDriver::Ptr db(lib.dbDriver());
-	
+
     eng::LibFolder::Ptr folder_added(lib.addFolder("foo"));
     BOOST_CHECK(folder_added);
     BOOST_CHECK(folder_added->id() > 0);
@@ -53,7 +56,7 @@ int test_main(int, char *[])
     lib.getAllFolders( l );
     // now we have the Trash folder created at startup
     BOOST_CHECK( l->size() == 3 );
-    
+
     int file_id = lib.addFile(folder_added->id(), "foo/myfile", false);
     BOOST_CHECK(file_id > 0);
 
@@ -67,6 +70,23 @@ int test_main(int, char *[])
     lib.getFolderContent(folder_added->id(), fl);
     BOOST_CHECK(fl->size() == (size_t)count);
     BOOST_CHECK(fl->front()->id() == file_id);
+
+    int kwid1 = lib.makeKeyword("foo");
+    BOOST_CHECK(kwid1 > 0);
+    int kwid2 = lib.makeKeyword("bar");
+    BOOST_CHECK(kwid2 > 0);
+
+    BOOST_CHECK(lib.assignKeyword(kwid1, file_id));
+    BOOST_CHECK(lib.assignKeyword(kwid2, file_id));
+
+    eng::LibFile::ListPtr fl2(new eng::LibFile::List);
+    lib.getKeywordContent(kwid1, fl2);
+    BOOST_CHECK(fl2->size() == 1);
+    BOOST_CHECK(fl2->front()->id() == file_id);
+
+    eng::Keyword::ListPtr kl(new eng::Keyword::List);
+    lib.getAllKeywords(kl);
+    BOOST_CHECK(kl->size() == 2);
 
     BOOST_CHECK(unlink(lib.dbName().c_str()) != -1);
     return 0;

@@ -8,7 +8,7 @@ admin	        key            Key
                 value	       Value
 
 The known keys are:
-version :       The version of the database. Current = 1.
+version :       The version of the database. Current = 6.
 
 
 Files in the library
