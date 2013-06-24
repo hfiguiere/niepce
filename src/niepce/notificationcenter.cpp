@@ -60,6 +60,12 @@ void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
     {
         ERR_OUT("improper notification data: %s", e.what());
     }
+    catch(const std::exception & e)
+    {
+        ERR_OUT("other exception notification type %d of %s: %s", n->type(),
+                n->data().type().name(),
+                e.what());
+    }
     catch(...)
     {
         ERR_OUT("unknown exception");
