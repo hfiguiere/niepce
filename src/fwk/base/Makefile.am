@@ -7,9 +7,11 @@ INCLUDES = -I$(top_srcdir)/src \
 noinst_LIBRARIES = libfwkbase.a
 
 
-TESTS = testmoniker testgeometry testfractions testdate testmap
+TESTS = testmoniker testgeometry testfractions testdate testmap\
+	testpropertybag
 
-check_PROGRAMS = testmoniker testgeometry testfractions testdate testmap
+check_PROGRAMS = testmoniker testgeometry testfractions testdate testmap\
+	testpropertybag
 
 testdate_SOURCES = t/testdate.cpp
 testdate_LDADD = libfwkbase.a \
@@ -29,6 +31,10 @@ testfractions_LDADD = libfwkbase.a \
 
 testmap_SOURCES = t/testmap.cpp
 testmap_LDADD = libfwkbase.a \
+	@LIBGLIBMM_LIBS@
+
+testpropertybag_SOURCES = t/testpropertybag.cpp
+testpropertybag_LDADD = libfwkbase.a \
 	@LIBGLIBMM_LIBS@
 
 libfwkbase_a_SOURCES = colour.hpp colour.cpp \

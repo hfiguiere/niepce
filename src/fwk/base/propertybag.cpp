@@ -30,7 +30,7 @@ bool is_empty(const PropertyValue & v)
 
 bool is_integer(const PropertyValue & v)
 {
-    return v.type() == typeid(EmptyValue);
+    return v.type() == typeid(int);
 }
 
 int get_integer(const PropertyValue & v)
