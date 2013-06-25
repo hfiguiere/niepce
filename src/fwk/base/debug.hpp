@@ -48,7 +48,7 @@ namespace fwk {
 #endif
 
 #define ERR_OUT(x, ...) \
-	fwk::err_print(x,  __FUNCTION__, ## __VA_ARGS__)
+    fwk::err_print(x,  __FUNCTION__, __FILE__, __LINE__, ## __VA_ARGS__)
 
 
 	/** print debug messages. printf format.
@@ -77,8 +77,9 @@ void dbg_assert(bool condvalue, const char* cond, const char* func,
 	 * @param fmt the formt string, printf style
 	 * @param func the func name
 	 */
-	void err_print(const char *fmt, const char* func, ...)
-    __attribute__ ((format (printf, 1, 3)));
+void err_print(const char *fmt, const char* func, const char* filen,
+               int linen, ...)
+    __attribute__ ((format (printf, 1, 5)));
 
 }
 

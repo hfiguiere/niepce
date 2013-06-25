@@ -45,6 +45,8 @@ namespace fwk {
 
 	static void _vprint(const char *prefix, const char *fmt, 
 										 const char* func,	va_list marker);
+static void _v2print(const char *prefix, const char* filen, int linen,
+                     const char *fmt, const char* func, va_list marker);
 	static void _print(const char *prefix, const char *fmt, 
 					   const char* func, ...);
 
@@ -79,19 +81,20 @@ namespace fwk {
 	}
 
 
-	void err_print(const char *fmt, const char* func, ...)
-	{
-#define ERROR_MSG "ERROR: "
-		va_list marker;
-		
-		va_start(marker, func);
-		// TODO make this atomic
-		_vprint(ERROR_MSG, fmt, func, marker);
+void err_print(const char *fmt, const char* func, const char* filen,
+               int linen, ...)
+{
+#define ERROR_MSG "ERROR %s:%d: "
+    va_list marker;
 
-		va_end(marker);
-		
+    va_start(marker, linen);
+    // TODO make this atomic
+    _v2print(ERROR_MSG, filen, linen, fmt, func, marker);
+
+    va_end(marker);
+
 #undef ERROR_MSG
-	}
+}
 
 
 	static void _print(const char *prefix, const char *fmt, 
@@ -122,6 +125,24 @@ namespace fwk {
 		vfprintf(stderr, fmt, marker);
 		fprintf(stderr, "\n");
 	}
+
+static void _v2print(const char* prefix, const char* filen, int linen,
+                     const char* fmt, const char* func, va_list marker)
+{
+    char buf[128];
+    snprintf(buf, 128, "(0x%lx) ", (unsigned long)pthread_self());
+    fwrite(buf, 1, strlen(buf), stderr);
+
+    fprintf(stderr, prefix, filen, linen);
+
+    if(func) {
+        fwrite(func, 1, strlen(func), stderr);
+        fwrite(" - ", 1, 3, stderr);
+    }
+
+    vfprintf(stderr, fmt, marker);
+    fprintf(stderr, "\n");
+}
 
 }
 /*
