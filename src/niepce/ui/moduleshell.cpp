@@ -77,54 +77,54 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     
     m_actionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
     m_actionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
-                          Gtk::AccelKey("6"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
+                       Gtk::AccelKey('6', Gdk::CONTROL_MASK), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_label),
                               1));
     m_actionGroup->add(Gtk::Action::create("SetLabel7", _("Label _7")),
-                          Gtk::AccelKey("7"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
+                       Gtk::AccelKey('7', Gdk::CONTROL_MASK), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_label),
                               2));
     m_actionGroup->add(Gtk::Action::create("SetLabel8", _("Label _8")),
-                          Gtk::AccelKey("8"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
+                       Gtk::AccelKey('8', Gdk::CONTROL_MASK), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_label),
                               3));
     m_actionGroup->add(Gtk::Action::create("SetLabel9", _("Label _9")),
-                          Gtk::AccelKey("9"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller, 
+                       Gtk::AccelKey('9', Gdk::CONTROL_MASK), sigc::bind(
+                              sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_label),
                               4));
     
     m_actionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_actionGroup->add(Gtk::Action::create("SetRating0", _("Unrated")),
-                          Gtk::AccelKey("0"), sigc::bind(
+                       Gtk::AccelKey('0', Gdk::CONTROL_MASK), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               0));
     m_actionGroup->add(Gtk::Action::create("SetRating1", _("Rating _1")),
-                          Gtk::AccelKey("1"), sigc::bind(
+                       Gtk::AccelKey('1', Gdk::CONTROL_MASK), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               1));
     m_actionGroup->add(Gtk::Action::create("SetRating2", _("Rating _2")),
-                          Gtk::AccelKey("2"), sigc::bind(
+                       Gtk::AccelKey('2', Gdk::CONTROL_MASK), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               2));
     m_actionGroup->add(Gtk::Action::create("SetRating3", _("Rating _3")),
-                          Gtk::AccelKey("3"), sigc::bind(
+                       Gtk::AccelKey('3', Gdk::CONTROL_MASK), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               3));
     m_actionGroup->add(Gtk::Action::create("SetRating4", _("Rating _4")),
-                          Gtk::AccelKey("4"), sigc::bind(
+                       Gtk::AccelKey('4', Gdk::CONTROL_MASK), sigc::bind(
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_rating),
                               4));
     m_actionGroup->add(Gtk::Action::create("SetRating5", _("Rating _5")),
-                       Gtk::AccelKey("5"), sigc::bind(
+                       Gtk::AccelKey('5', Gdk::CONTROL_MASK), sigc::bind(
                            sigc::mem_fun(*m_selection_controller,
                                          &SelectionController::set_rating),
                            5));
@@ -132,20 +132,23 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     m_actionGroup->add(Gtk::Action::create("SetFlag", _("Set _Flag")));
     m_actionGroup->add(Gtk::Action::create("SetFlagReject",
                                            _("Flag as _Rejected")),
-                          Gtk::AccelKey("x"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_flag),
-                              -1));
+                       Gtk::AccelKey('x', Gdk::CONTROL_MASK | Gdk::SHIFT_MASK),
+                       sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::set_flag),
+                           -1));
     m_actionGroup->add(Gtk::Action::create("SetFlagNone", _("_Unflagged")),
-                          Gtk::AccelKey("u"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_flag),
-                              0));
+                       Gtk::AccelKey('u', Gdk::CONTROL_MASK | Gdk::SHIFT_MASK),
+                       sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::set_flag),
+                           0));
     m_actionGroup->add(Gtk::Action::create("SetFlagPick", _("Flag as _Pick")),
-                          Gtk::AccelKey("p"), sigc::bind(
-                              sigc::mem_fun(*m_selection_controller,
-                                            &SelectionController::set_flag),
-                              1));
+                       Gtk::AccelKey('p', Gdk::CONTROL_MASK | Gdk::SHIFT_MASK),
+                       sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::set_flag),
+                           1));
 
     m_actionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
 
