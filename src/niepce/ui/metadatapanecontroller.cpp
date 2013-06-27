@@ -42,13 +42,13 @@ MetaDataPaneController::get_format()
     };
     static const fwk::MetaDataFormat s_shootinginfo_format[] = {
         { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::META_DT_STRING, true },
-        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::META_DT_STRING, true },
-        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::META_DT_FRAC, true },
+        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::META_DT_FRAC, true },
+        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::META_DT_FRAC_DEC, true },
         { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::META_DT_STRING, true },
-        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::META_DT_FRAC, true },
+        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::META_DT_FRAC_DEC, true },
         { _("Flash:"), eng::NpExifFlashFiredProp, fwk::META_DT_STRING, true },
         { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::META_DT_STRING, true },
-        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::META_DT_FRAC, true },
+        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::META_DT_FRAC_DEC, true },
         { _("White balance:"), eng::NpExifWbProp, fwk::META_DT_STRING, true },
         { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::META_DT_DATE, false },
         { NULL, 0, fwk::META_DT_NONE, true }

@@ -42,7 +42,8 @@ enum MetaDataType {
     META_DT_STRING_ARRAY,
     META_DT_TEXT,
     META_DT_DATE,
-    META_DT_FRAC, 
+    META_DT_FRAC,
+    META_DT_FRAC_DEC, // Fraction as decimal
     META_DT_STAR_RATING
 };
 
@@ -52,7 +53,7 @@ struct MetaDataFormat {
     MetaDataType type;
     bool         readonly;
 };
-	
+
 struct MetaDataSectionFormat {
     const char * section;
     const MetaDataFormat * formats;
@@ -61,17 +62,17 @@ struct MetaDataSectionFormat {
 class XmpMeta;
 class TokenTextView;
 
-class MetaDataWidget 
+class MetaDataWidget
 	: public fwk::ToolboxItemWidget
 {
 public:
     MetaDataWidget(const Glib::ustring & title);
-    
+
     void add_data(const MetaDataFormat * current,
                   const PropertyValue & value);
     void set_data_format(const MetaDataSectionFormat * fmt);
     void set_data_source(const fwk::PropertyBag & properties);
-    
+
     sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
 protected:
     bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
@@ -91,6 +92,9 @@ private:
     Gtk::Widget* create_date_widget(bool readonly, uint32_t id);
 
     // set data
+    // Fraction as a decimal
+    bool set_fraction_dec_data(Gtk::Widget* w, const PropertyValue & value);
+    // Fraction as fraction
     bool set_fraction_data(Gtk::Widget* w, const PropertyValue & value);
     bool set_star_rating_data(Gtk::Widget* w, const PropertyValue & value);
     bool set_string_array_data(Gtk::Widget* w, const PropertyValue & value);

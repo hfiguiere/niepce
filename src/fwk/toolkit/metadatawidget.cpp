@@ -22,6 +22,9 @@
 #include <functional>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+#include <boost/rational.hpp>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
@@ -242,13 +245,18 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
     }
 }
 
-bool MetaDataWidget::set_fraction_data(Gtk::Widget* w, const PropertyValue & value)
+bool MetaDataWidget::set_fraction_dec_data(Gtk::Widget* w,
+                                           const PropertyValue & value)
 {
+    if (!is_string(value)) {
+        ERR_OUT("Data not string(fraction)");
+        return false;
+    }
     try {
-        const std::string& str_value = boost::get<std::string>(value);
-        DBG_OUT("set fraction %s", str_value.c_str());
-        double decimal = fwk::fraction_to_decimal(str_value);
-        std::string frac = boost::lexical_cast<std::string>(decimal);
+        const std::string& str_value = get_string(value);
+        DBG_OUT("set fraction dec %s", str_value.c_str());
+        std::string frac = str(boost::format("%.1f")
+                               % fwk::fraction_to_decimal(str_value));
         AutoFlag flag(m_update);
         static_cast<Gtk::Label*>(w)->set_text(frac);
     }
@@ -258,10 +266,39 @@ bool MetaDataWidget::set_fraction_data(Gtk::Widget* w, const PropertyValue & val
     return true;
 }
 
-bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w, const PropertyValue & value)
+bool MetaDataWidget::set_fraction_data(Gtk::Widget* w,
+                                       const PropertyValue & value)
 {
+    if (!is_string(value)) {
+        ERR_OUT("Data not string(fraction)");
+        return false;
+    }
     try {
-        int rating = boost::get<int>(value);
+        const std::string& str_value = get_string(value);
+        DBG_OUT("set fraction %s", str_value.c_str());
+        boost::rational<int> r
+            = boost::lexical_cast<boost::rational<int> >(str_value);
+
+        std::string frac = str(boost::format("%1%/%2%")
+                               % r.numerator() % r.denominator());
+        AutoFlag flag(m_update);
+        static_cast<Gtk::Label*>(w)->set_text(frac);
+    }
+    catch(...) {
+        return false;
+    }
+    return true;
+}
+
+bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w,
+                                          const PropertyValue & value)
+{
+    if (!is_integer(value)) {
+        ERR_OUT("Data not integer");
+        return false;
+    }
+    try {
+        int rating = get_integer(value);
         AutoFlag flag(m_update);
         static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
     }
@@ -276,7 +313,7 @@ bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue &
     try {
         AutoFlag flag(m_update);
         fwk::StringArray tokens = boost::get<fwk::StringArray>(value);
-        
+
         static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
     }
     catch(...) {
@@ -288,31 +325,39 @@ bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue &
 bool MetaDataWidget::set_text_data(Gtk::Widget* w, bool readonly,
                                    const PropertyValue & value)
 {
+    if (!is_string(value)) {
+        ERR_OUT("Data not string");
+        return false;
+    }
     try {
         AutoFlag flag(m_update);
         if(readonly) {
-            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+            static_cast<Gtk::Label*>(w)->set_text(get_string(value));
         }
         else {
-            static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(boost::get<std::string>(value));
+            static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(get_string(value));
         }
     }
     catch(...) {
         return false;
     }
-    return true;    
+    return true;
 }
 
 bool MetaDataWidget::set_string_data(Gtk::Widget* w, bool readonly,
                                      const PropertyValue & value)
 {
+    if (!is_string(value)) {
+        ERR_OUT("Data not string");
+        return false;
+    }
     try {
         AutoFlag flag(m_update);
         if(readonly) {
-            static_cast<Gtk::Label*>(w)->set_text(boost::get<std::string>(value));
+            static_cast<Gtk::Label*>(w)->set_text(get_string(value));
         }
         else {
-            static_cast<Gtk::Entry*>(w)->set_text(boost::get<std::string>(value));
+            static_cast<Gtk::Entry*>(w)->set_text(get_string(value));
         }
     }
     catch(...) {
@@ -340,8 +385,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
                               const PropertyValue & value)
 {
     Gtk::Widget *w = NULL;
-    std::map<PropertyIndex, Gtk::Widget *>::iterator iter 
-        = m_data_map.find(current->id);
+    auto iter = m_data_map.find(current->id);
     if(iter == m_data_map.end()) {
         ERR_OUT("no widget for property");
         return;
@@ -350,6 +394,9 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     w = static_cast<Gtk::Label*>(iter->second);
 
     switch(current->type) {
+    case META_DT_FRAC_DEC:
+        set_fraction_dec_data(w, value);
+        break;
     case META_DT_FRAC:
         set_fraction_data(w, value);
         break;
