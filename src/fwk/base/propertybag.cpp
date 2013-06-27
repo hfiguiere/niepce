@@ -33,9 +33,19 @@ bool is_integer(const PropertyValue & v)
     return v.type() == typeid(int);
 }
 
+bool is_string(const PropertyValue & v)
+{
+    return v.type() == typeid(std::string);
+}
+
 int get_integer(const PropertyValue & v)
 {
     return is_empty(v) ? 0 : boost::get<int>(v);
+}
+
+const std::string & get_string(const PropertyValue & v)
+{
+    return boost::get<std::string>(v);
 }
 
 bool PropertyBag::set_value_for_property(PropertyIndex idx, const PropertyValue & value)

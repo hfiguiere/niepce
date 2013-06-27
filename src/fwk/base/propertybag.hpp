@@ -45,8 +45,11 @@ typedef std::set<PropertyIndex> PropertySet;
 bool is_empty(const PropertyValue & v);
 /** Return if it is an integer */
 bool is_integer(const PropertyValue & v);
+bool is_string(const PropertyValue & v);
 /** Return the integer value (or 0 if empty) */
 int get_integer(const PropertyValue & v);
+/** Return the string value */
+const std::string & get_string(const PropertyValue & v);
 
 /** a property bag
  * It is important that the values for PropertyIndex be properly name spaced
