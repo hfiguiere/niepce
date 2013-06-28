@@ -64,7 +64,7 @@ public:
 
 ThumbStripCell::ThumbStripCell()
     : Glib::ObjectBase(typeid(ThumbStripCell))
-    , LibraryCellRenderer(NULL)
+    , LibraryCellRenderer(nullptr)
 {
     set_pad(0);
     set_size(100);
@@ -302,21 +302,21 @@ void ThumbStripView::on_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
 	GList *node;
 	eng::LibFile *image;
 	const char *str;
-	gchar *uris = NULL;
+	gchar *uris = nullptr;
 	gchar *tmp_str;
 
 	list = eog_thumb_view_get_selected_images (EOG_THUMB_VIEW (widget));
 
-	for (node = list; node != NULL; node = node->next) {
+	for (node = list; node != nullptr; node = node->next) {
 		image = static_cast<eng::LibFile*>(node->data);
 		str = image->uri().c_str();
 		
 		/* build the "text/uri-list" string */
 		if (uris) {
-			tmp_str = g_strconcat (uris, str, "\r\n", NULL);
+			tmp_str = g_strconcat (uris, str, "\r\n", nullptr);
 			g_free (uris);
 		} else {
-			tmp_str = g_strconcat (str, "\r\n", NULL);
+			tmp_str = g_strconcat (str, "\r\n", nullptr);
 		}
 		uris = tmp_str;
 	}

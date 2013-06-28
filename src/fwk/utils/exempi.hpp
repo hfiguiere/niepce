@@ -4,7 +4,7 @@
 /*
  * niepce - utils/exempi.h
  *
- * Copyright (C) 2007-2008,2012 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,8 +108,8 @@ public:
     XmpMeta(const std::string & for_file, bool sidecar_only);
     virtual ~XmpMeta();
 
-    bool isOk() const 
-        { return m_xmp != NULL; }
+    bool isOk() const
+        { return m_xmp != nullptr; }
     XmpPtr xmp() const
         { return m_xmp; }
     /** serialize the XMP inline */

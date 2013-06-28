@@ -38,7 +38,7 @@ int main(int argc, char ** argv)
 
   fwk::utils::init();
 
-  fwk::ExempiManager ex_manager(NULL);
+  fwk::ExempiManager ex_manager(nullptr);
 
   fwk::Application::Ptr app = ui::NiepceApplication::create(argc, argv);
   return fwk::Application::main(app,

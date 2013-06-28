@@ -34,7 +34,7 @@ class Buffer {
 
 public:
 
-    Buffer (): m_data (NULL), m_len (0)
+    Buffer (): m_data (nullptr), m_len (0)
     {}
 
     Buffer (const char *a_buf, unsigned long a_len)

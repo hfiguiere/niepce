@@ -30,15 +30,15 @@
 #include "metadatapanecontroller.hpp"
 
 namespace ui {
-	
+
 const fwk::MetaDataSectionFormat *
-MetaDataPaneController::get_format() 
+MetaDataPaneController::get_format()
 {
     static const fwk::MetaDataFormat s_camerainfo_format[] = {
         { _("Make:"), eng::NpTiffMakeProp, fwk::META_DT_STRING, true },
         { _("Model:"), eng::NpTiffModelProp, fwk::META_DT_STRING, true },
         { _("Lens:"), eng::NpExifAuxLensProp, fwk::META_DT_STRING, true },
-        { NULL, 0, fwk::META_DT_NONE, true }
+        { nullptr, 0, fwk::META_DT_NONE, true }
     };
     static const fwk::MetaDataFormat s_shootinginfo_format[] = {
         { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::META_DT_STRING, true },
@@ -51,16 +51,16 @@ MetaDataPaneController::get_format()
         { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::META_DT_FRAC_DEC, true },
         { _("White balance:"), eng::NpExifWbProp, fwk::META_DT_STRING, true },
         { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::META_DT_DATE, false },
-        { NULL, 0, fwk::META_DT_NONE, true }
+        { nullptr, 0, fwk::META_DT_NONE, true }
     };
     static const fwk::MetaDataFormat s_iptc_format[] = {
         { _("Headline:"), eng::NpIptcHeadlineProp, fwk::META_DT_STRING, false },
         { _("Caption:"), eng::NpIptcDescriptionProp, fwk::META_DT_TEXT, false },
         { _("Rating:"), eng::NpXmpRatingProp, fwk::META_DT_STAR_RATING, false },
         // FIXME change this type to the right one when there is a widget
-        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, true },            
+        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, true },
         { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::META_DT_STRING_ARRAY, false },
-        { NULL, 0, fwk::META_DT_NONE, true }			
+        { nullptr, 0, fwk::META_DT_NONE, true }
     };
     static const fwk::MetaDataSectionFormat s_format[] = {
         { _("Camera Information"),
@@ -73,9 +73,9 @@ MetaDataPaneController::get_format()
           s_iptc_format
         },
         { _("Rights"),
-          NULL
+          nullptr
         },
-        { NULL, NULL
+        { nullptr, nullptr
         }
     };
     return s_format;

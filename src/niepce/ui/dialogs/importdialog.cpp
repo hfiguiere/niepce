@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/importdialog.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,11 +44,11 @@ namespace ui {
 
 ImportDialog::ImportDialog()
     : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog"),
-      m_date_tz_combo(NULL),
-	  m_ufraw_import_check(NULL),
-	  m_rawstudio_import_check(NULL),
-	  m_directory_name(NULL),
-      m_imagesList(NULL)
+      m_date_tz_combo(nullptr),
+	  m_ufraw_import_check(nullptr),
+	  m_rawstudio_import_check(nullptr),
+	  m_directory_name(nullptr),
+      m_imagesList(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ void ImportDialog::setup_widget()
     add_header(_("Import"));
 
     Glib::RefPtr<Gtk::Builder> _builder = builder();
-    Gtk::Button *select_directories = NULL;
+    Gtk::Button *select_directories = nullptr;
 
     _builder->get_widget("select_directories", select_directories);
     select_directories->signal_clicked().connect(

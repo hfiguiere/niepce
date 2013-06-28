@@ -51,7 +51,7 @@ namespace fwk {
 MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     : ToolboxItemWidget(title),
       m_table(1, 2, false),
-      m_fmt(NULL),
+      m_fmt(nullptr),
       m_update(false)
 {
     add(m_table);
@@ -141,7 +141,7 @@ MetaDataWidget::create_date_widget(bool /*readonly*/, uint32_t id)
 void 
 MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
 {
-    Gtk::Widget *w = NULL;
+    Gtk::Widget *w = nullptr;
     const MetaDataFormat * current = fmt->formats;
     int n_row = 0;
 
@@ -384,7 +384,7 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
 void MetaDataWidget::add_data(const MetaDataFormat * current,
                               const PropertyValue & value)
 {
-    Gtk::Widget *w = NULL;
+    Gtk::Widget *w = nullptr;
     auto iter = m_data_map.find(current->id);
     if(iter == m_data_map.end()) {
         ERR_OUT("no widget for property");

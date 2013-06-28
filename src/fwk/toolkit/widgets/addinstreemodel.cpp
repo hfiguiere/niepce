@@ -1,7 +1,7 @@
 /*
  * gnote
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -51,7 +51,7 @@ namespace fwk {
 
   fwk::DynamicModule * AddinsTreeModel::get_module(const Gtk::TreeIter & iter)
   {
-    fwk::DynamicModule * module = NULL;
+    fwk::DynamicModule * module = nullptr;
     if(iter) {
       iter->get_value(2, module);
     }

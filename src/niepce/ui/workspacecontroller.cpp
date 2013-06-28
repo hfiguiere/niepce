@@ -52,7 +52,7 @@ WorkspaceController::WorkspaceController()
         { ICON_ROLL, "emblem-photos" },
         { ICON_TRASH, "user-trash" },
         { ICON_KEYWORD, "application-certificate" },
-        { 0, NULL }
+        { 0, nullptr }
     };
 
     Glib::RefPtr< Gtk::IconTheme > icon_theme(Application::app()->getIconTheme());

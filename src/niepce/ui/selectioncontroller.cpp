@@ -244,7 +244,7 @@ void SelectionController::set_property(fwk::PropertyIndex idx, int value)
             eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
             DBG_OUT("old property is %d", file->property(idx));
             int old_value = file->property(idx);
-            const char *action = NULL;
+            const char *action = nullptr;
             switch(idx) {
             case eng::NpNiepceFlagProp:
                 action = _("Set Flag");

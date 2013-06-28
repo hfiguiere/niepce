@@ -2,7 +2,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2009, 2013 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ void Application::_add(const Controller::Ptr & sub, bool attach)
     UiController::Ptr uictrl = std::dynamic_pointer_cast<UiController>(sub);
     if(uictrl) {
         Gtk::Widget *w = uictrl->buildWidget(uiManager());
-        Gtk::Window *win = NULL;
+        Gtk::Window *win = nullptr;
         if(attach && m_gtkapp && (win = dynamic_cast<Gtk::Window*>(w))) {
             m_gtkapp->add_window(*win);
         }

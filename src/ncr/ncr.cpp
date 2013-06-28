@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/ncr.cpp
  *
- * Copyright (C) 2008,2011 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,7 @@ GeglBuffer* load_rawdata(ORRawDataRef rawdata)
     uint32_t x, y;
     void *data;
     if(or_rawdata_format(rawdata) != OR_DATA_TYPE_RAW) {
-        return NULL;
+        return nullptr;
     }
     /* TODO take the dest_x and dest_y into account */
     GeglRectangle rect = {0, 0, 0, 0};

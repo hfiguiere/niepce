@@ -43,7 +43,7 @@ ClientImpl *ClientImpl::makeClientImpl(const fwk::Moniker & moniker,
 
 ClientImpl::ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc)
     : m_moniker(moniker),
-      m_localLibrary(NULL)
+      m_localLibrary(nullptr)
 {
     DBG_OUT("creating implementation with moniker %s",
             moniker.c_str());

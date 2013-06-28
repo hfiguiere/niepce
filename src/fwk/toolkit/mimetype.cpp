@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/mimetype.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ MimeType::MimeType(const std::string & filename)
     catch(const Glib::Exception &e) {
         gboolean uncertainty = false;
         gchar *content_type = g_content_type_guess(filename.c_str(),
-                                                         NULL, 0, &uncertainty);
+                                                         nullptr, 0, &uncertainty);
         m_type = content_type;
         
         g_free(content_type);

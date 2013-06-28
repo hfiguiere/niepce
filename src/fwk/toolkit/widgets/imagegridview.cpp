@@ -43,7 +43,7 @@ bool ImageGridView::on_button_press_event(GdkEventButton *event)
 {
   bool ret = Gtk::IconView::on_button_press_event(event);
 
-  Gtk::CellRenderer* cell = NULL;
+  Gtk::CellRenderer* cell = nullptr;
   bool found = get_item_at_pos(event->x, event->y, cell);
   if(found) {
     ClickableCellRenderer* clickable_cell = dynamic_cast<ClickableCellRenderer*>(cell);

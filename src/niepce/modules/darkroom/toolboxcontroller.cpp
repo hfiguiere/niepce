@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/toolboxcontroller.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
     if(m_widget) {
         return m_widget;
     }
-    DrItemWidget *item = NULL;
-    fwk::EditableHScale *s = NULL;
+    DrItemWidget *item = nullptr;
+    fwk::EditableHScale *s = nullptr;
 
     Gtk::VBox *toolbox = Dockable::build_vbox();
     m_widget = toolbox;

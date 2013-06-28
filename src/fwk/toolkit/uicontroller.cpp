@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/uicontroller.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 namespace fwk {
 
 UiController::UiController()
-    : m_widget(NULL)
+    : m_widget(nullptr)
     , m_ui_merge_id(0)
 {
 }

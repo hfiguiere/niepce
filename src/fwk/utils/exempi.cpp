@@ -1,7 +1,7 @@
 /*
  * niepce - utils/exempi.cpp
  *
- * Copyright (C) 2007-2008,2012 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,17 +50,16 @@ ExempiManager::ExempiManager(const ns_defs_t* namespaces)
 {
     if(xmp_init()) {
         xmp_register_namespace(xmp::UFRAW_INTEROP_NAMESPACE,
-                               xmp::UFRAW_INTEROP_NS_PREFIX, NULL);
+                               xmp::UFRAW_INTEROP_NS_PREFIX, nullptr);
         xmp_register_namespace(xmp::NIEPCE_XMP_NAMESPACE,
-                               xmp::NIEPCE_XMP_NS_PREFIX, NULL);
+                               xmp::NIEPCE_XMP_NS_PREFIX, nullptr);
         
-        if(namespaces != NULL) {
-            const ns_defs_t* iter = namespaces;
-            for( ; iter->ns != NULL; iter++)	
+        if(namespaces != nullptr) {
+            for(auto iter = namespaces; iter->ns != nullptr; iter++)
             {
                 // TODO check the return code
                 xmp_register_namespace(iter->ns,
-                                       iter->prefix, NULL);
+                                       iter->prefix, nullptr);
             }
         }
     }
@@ -86,24 +85,24 @@ XmpMeta::XmpMeta()
  * It will locate the XMP sidecar for the file.
  */
 XmpMeta::XmpMeta(const std::string & file, bool sidecar_only)
-    : m_xmp(NULL),
+    : m_xmp(nullptr),
       m_keyword_fetched(false)
 {
     if(!sidecar_only) {
         DBG_OUT("trying to load the XMP from the file");
         xmp::ScopedPtr<XmpFilePtr> 
             xmpfile(xmp_files_open_new(file.c_str(), XMP_OPEN_READ));
-        if(xmpfile != NULL) {
+        if(xmpfile != nullptr) {
             m_xmp = xmp_files_get_new_xmp(xmpfile);
-            if(xmpfile == NULL) {
-                ERR_OUT("xmpfile is NULL");
+            if(xmpfile == nullptr) {
+                ERR_OUT("xmpfile is nullptr");
             }
         }
     }
 		
-    if(m_xmp == NULL) {
+    if(m_xmp == nullptr) {
         gsize len = 0;
-        char * buffer = NULL;
+        char * buffer = nullptr;
         std::string sidecar = fwk::path_replace_extension(file, ".xmp");
 			
         try {
@@ -119,7 +118,7 @@ XmpMeta::XmpMeta(const std::string & file, bool sidecar_only)
             m_xmp = xmp_new_empty();
             if(!xmp_parse(m_xmp, buffer, len)) {
                 xmp_free(m_xmp);
-                m_xmp = NULL;
+                m_xmp = nullptr;
             }
             g_free(buffer);
         }
@@ -169,7 +168,7 @@ int32_t XmpMeta::orientation() const
 {
     int32_t _orientation = 0;
    
-    if(!xmp_get_property_int32(m_xmp, NS_TIFF, "Orientation", &_orientation, NULL)) {
+    if(!xmp_get_property_int32(m_xmp, NS_TIFF, "Orientation", &_orientation, nullptr)) {
         ERR_OUT("get \"Orientation\" property failed: %d", xmp_get_error());
     }
     return _orientation;
@@ -180,7 +179,7 @@ std::string XmpMeta::label() const
 {
     std::string _label;
     xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    if(xmp_get_property(m_xmp, NS_XAP, "Label", value, NULL)) {
+    if(xmp_get_property(m_xmp, NS_XAP, "Label", value, nullptr)) {
         _label = xmp_string_cstr(value);
     }
     return _label;
@@ -190,7 +189,7 @@ std::string XmpMeta::label() const
 int32_t XmpMeta::rating() const
 {
     int32_t _rating = -1;
-    if(!xmp_get_property_int32(m_xmp, NS_XAP, "Rating", &_rating, NULL)) {
+    if(!xmp_get_property_int32(m_xmp, NS_XAP, "Rating", &_rating, nullptr)) {
         ERR_OUT("get \"Rating\" property failed: %d", xmp_get_error());
     }
     return _rating;
@@ -200,7 +199,7 @@ int32_t XmpMeta::flag() const
 {
     int32_t _flag = 0;
     if(!xmp_get_property_int32(m_xmp, xmp::NIEPCE_XMP_NAMESPACE, "Flag", 
-                               &_flag, NULL)) {
+                               &_flag, nullptr)) {
         ERR_OUT("get \"Flag\" property failed: %d", xmp_get_error());
     }
     return _flag;
@@ -210,7 +209,7 @@ fwk::Date XmpMeta::creation_date() const
 {
     XmpDateTime value;
     if(xmp_get_property_date(m_xmp, NS_EXIF, "DateTimeOriginal", 
-                             &value, NULL)) {
+                             &value, nullptr)) {
         return fwk::Date(value);
     }
     else {
@@ -224,7 +223,7 @@ std::string XmpMeta::creation_date_str() const
     std::string s;
     xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
     if(xmp_get_property(m_xmp, NS_EXIF, "DateTimeOriginal", 
-                        value, NULL)) {
+                        value, nullptr)) {
         s = xmp_string_cstr(value);
     }
     return s;
@@ -237,7 +236,7 @@ const std::vector< std::string > & XmpMeta::keywords() const
         xmp::ScopedPtr<XmpIteratorPtr> iter(xmp_iterator_new(m_xmp, NS_DC, "subject", 
                                                              XMP_ITER_JUSTLEAFNODES));
         xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-        while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+        while(xmp_iterator_next(iter, nullptr, nullptr, value, nullptr)) {
             m_keywords.push_back(xmp_string_cstr(value));
         }
         m_keyword_fetched = true;

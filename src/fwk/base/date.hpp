@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/date.hpp
  *
- * Copyright (C) 2012 Hubert Figuiere
+ * Copyright (C) 2012-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ XmpDateTime& make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
 class Date
 {
 public:
-    Date(const XmpDateTime& dt, const Timezone* tz = NULL);
-    Date(const time_t dt, const Timezone* tz = NULL);
+    Date(const XmpDateTime& dt, const Timezone* tz = nullptr);
+    Date(const time_t dt, const Timezone* tz = nullptr);
 
     std::string to_string() const;
     const XmpDateTime& xmp_date() const

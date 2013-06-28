@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/init.cpp
  *
- * Copyright (C) 2011 Hub Figuiere
+ * Copyright (C) 2011-2013 Hub Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@ namespace ncr {
 
 void init()
 {
-    gegl_init(0, NULL);
+    gegl_init(0, nullptr);
 }
 
 }

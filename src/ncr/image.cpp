@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/image.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,9 +40,9 @@ struct Image::Private {
         , m_orientation(0), m_vertical(false)
         , m_flip(false)
         , m_tilt(0.0)
-        , m_graph(NULL), m_rgb(NULL), m_rotate_n(NULL)
-        , m_scale(NULL)
-        , m_sink_buffer(NULL)
+        , m_graph(nullptr), m_rgb(nullptr), m_rotate_n(nullptr)
+        , m_scale(nullptr)
+        , m_sink_buffer(nullptr)
         {
         }
     ~Private()
@@ -87,7 +87,7 @@ Image::~Image()
 
 GeglNode* Image::Private::_rotate_node(int orientation)
 {
-//    GeglNode* rotateNode = gegl_node_new_child(m_graph, NULL, NULL);
+//    GeglNode* rotateNode = gegl_node_new_child(m_graph, nullptr, nullptr);
 
     DBG_OUT("rotation is %d", orientation);
     switch(orientation) {
@@ -123,13 +123,13 @@ GeglNode* Image::Private::_rotate_node(int orientation)
     // @todo find a test case.
 //    GeglNode* flipNode = gegl_node_new_child(rotateNode,
 //                                             "operation", "gegl:reflect",
-//                                             "x", (m_flip ? -1.0 : 1.0), NULL);
+//                                             "x", (m_flip ? -1.0 : 1.0), nullptr);
 
-    GeglNode* rotationNode = NULL;
+    GeglNode* rotationNode = nullptr;
     double rotate = m_orientation + m_tilt;
     rotationNode = gegl_node_new_child(m_graph,
                                        "operation", "gegl:rotate",
-                                       "degrees", rotate, NULL);
+                                       "degrees", rotate, nullptr);
 //    gegl_node_link(flipNode, rotationNode);
 
     return rotationNode;
@@ -140,32 +140,32 @@ GeglNode* Image::Private::_load_dcraw(const std::string &p)
 {
     return gegl_node_new_child(m_graph,
                                "operation", "gegl:raw-load",
-                               "path", p.c_str(), NULL);
+                               "path", p.c_str(), nullptr);
 }
 
 /** create the RAW pipeline */
 GeglNode* Image::Private::_load_raw(const std::string &p)
 {
-    GeglNode* rgb = NULL;
+    GeglNode* rgb = nullptr;
 
     ORRawDataRef rawdata;
     or_get_extract_rawdata(p.c_str(), 0, &rawdata);
     GeglBuffer* buffer = ncr::load_rawdata(rawdata);
-    // @todo can return a NULL buffer if load failed. Deal with that.
+    // @todo can return a nullptr buffer if load failed. Deal with that.
     GeglNode* load_file = gegl_node_new_child(m_graph,
                                               "operation", "gegl:buffer-source",
-                                              "buffer", buffer, NULL);
+                                              "buffer", buffer, nullptr);
     or_cfa_pattern pattern = or_rawdata_get_cfa_pattern(rawdata);
     or_rawdata_release(rawdata);
 
     GeglNode* stretch =
         gegl_node_new_child(m_graph,
                             "operation", "gegl:stretch-contrast",
-                            NULL);
+                            nullptr);
     GeglNode* demosaic =
         gegl_node_new_child(m_graph,
                             "operation", "gegl:demosaic-bimedian",
-                            NULL);
+                            nullptr);
     // @todo refactor somewhere.
     int npattern = 0;
     switch(pattern) {
@@ -184,9 +184,9 @@ GeglNode* Image::Private::_load_raw(const std::string &p)
     default:
         break;
     }
-    gegl_node_set(demosaic, "pattern", npattern, NULL);
+    gegl_node_set(demosaic, "pattern", npattern, nullptr);
 
-    gegl_node_link_many(load_file, stretch, demosaic, NULL);
+    gegl_node_link_many(load_file, stretch, demosaic, nullptr);
 
     rgb = demosaic;
     return rgb;
@@ -194,7 +194,7 @@ GeglNode* Image::Private::_load_raw(const std::string &p)
 
 GeglNode* Image::Private::_scale_node()
 {
-    return gegl_node_new_child(m_graph, "operation", "gegl:scale", NULL);
+    return gegl_node_new_child(m_graph, "operation", "gegl:scale", nullptr);
 }
 
 void Image::reload(const std::string & p, bool is_raw,
@@ -212,7 +212,7 @@ void Image::reload(const std::string & p, bool is_raw,
     if(!is_raw) {
         load_file = gegl_node_new_child(priv->m_graph,
                                         "operation", "gegl:load",
-                                        "path", p.c_str(), NULL);
+                                        "path", p.c_str(), nullptr);
     }
     else {
         load_file = priv->_load_dcraw(p);
@@ -225,10 +225,10 @@ void Image::reload(const std::string & p, bool is_raw,
 //        gegl_node_new_child(priv->m_graph,
 //                            "operation", "gegl:buffer-sink",
 //                            "format", babl_format("RGB u8"),
-//                            "buffer", &(priv->m_sink_buffer), NULL);
+//                            "buffer", &(priv->m_sink_buffer), nullptr);
 
     gegl_node_link_many(load_file, priv->m_rotate_n,
-                        priv->m_scale, priv->m_sink, NULL);
+                        priv->m_scale, priv->m_sink, nullptr);
 
 //    gegl_node_process(priv->m_sink);
     // DEBUG
@@ -236,11 +236,11 @@ void Image::reload(const std::string & p, bool is_raw,
     GeglNode* debugsink;
     GeglNode* graph =
         gegl_graph (debugsink=gegl_node ("gegl:save",
-                                         "path", "/tmp/gegl.png", NULL,
+                                         "path", "/tmp/gegl.png", nullptr,
                                          gegl_node ("gegl:buffer-source",
                                                     "buffer",
                                                     priv->m_sink_buffer,
-                                                    NULL)
+                                                    nullptr)
                         )
             );
     gegl_node_process (debugsink);
@@ -275,7 +275,7 @@ void Image::set_output_scale(double scale)
         DBG_OUT("nothing loaded");
         return;
     }
-    gegl_node_set(priv->m_scale, "x", scale, "y", scale, NULL);
+    gegl_node_set(priv->m_scale, "x", scale, "y", scale, nullptr);
 
     signal_update();
 }
@@ -290,7 +290,7 @@ void Image::set_tilt(double angle)
     }
     priv->m_tilt = angle;
     gegl_node_set(priv->m_rotate_n, "degrees",
-                  priv->m_orientation + priv->m_tilt, NULL);
+                  priv->m_orientation + priv->m_tilt, nullptr);
 
     signal_update();
 }
@@ -323,7 +323,7 @@ void Image::rotate_by(int degree)
         // within 0..359 degrees anyway
         priv->m_orientation %= 360;
     }
-    gegl_node_set(priv->m_rotate_n, "degrees", priv->m_orientation + priv->m_tilt, NULL);
+    gegl_node_set(priv->m_rotate_n, "degrees", priv->m_orientation + priv->m_tilt, nullptr);
     signal_update();
 }
 

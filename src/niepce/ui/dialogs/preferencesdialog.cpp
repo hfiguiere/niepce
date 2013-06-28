@@ -41,9 +41,9 @@ void PreferencesDialog::setup_widget()
 
     add_header(_("Preferences"));
 
-    Gtk::CheckButton* theme_checkbutton = NULL;
-    Gtk::CheckButton* reopen_checkbutton = NULL;
-    Gtk::CheckButton* write_xmp_checkbutton = NULL;
+    Gtk::CheckButton* theme_checkbutton = nullptr;
+    Gtk::CheckButton* reopen_checkbutton = nullptr;
+    Gtk::CheckButton* write_xmp_checkbutton = nullptr;
     fwk::DataBinderPool* binder_pool = new fwk::DataBinderPool();
 
     gtkDialog().signal_hide().connect(std::bind(&fwk::DataBinderPool::destroy,

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/widgets/editablehscale.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 namespace fwk {
 
 EditableHScale::EditableHScale(double min, double max, double step)
-    : m_icon(NULL),
+    : m_icon(nullptr),
       m_adj(Gtk::Adjustment::create(0, min, max, step)),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)

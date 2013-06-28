@@ -40,9 +40,9 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
                                const Glib::RefPtr<ImageListStore> & store)
   : m_shell(shell)
   , m_model(store)
-  , m_uidataprovider(NULL)
-  , m_librarylistview(NULL)
-  , m_dock(NULL)
+  , m_uidataprovider(nullptr)
+  , m_librarylistview(nullptr)
+  , m_dock(nullptr)
 {
     m_uidataprovider = m_shell.getLibraryClient()->getDataProvider();
     DBG_ASSERT(m_uidataprovider, "provider is NULL");
@@ -212,7 +212,7 @@ bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
     x = e->x;
     y = e->y;
     Gtk::TreeModel::Path path;
-    Gtk::CellRenderer * renderer = NULL;
+    Gtk::CellRenderer * renderer = nullptr;
     DBG_OUT("click (%f, %f)", x, y);
     m_librarylistview->convert_widget_to_bin_window_coords(x, y, bx, by);
     if(m_librarylistview->get_item_at_pos(bx, by, path, renderer)){

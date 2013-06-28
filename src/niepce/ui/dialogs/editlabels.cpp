@@ -96,7 +96,7 @@ void EditLabels::label_colour_changed(size_t idx)
 
 void EditLabels::update_labels(int /*response*/)
 {
-    fwk::UndoTransaction *undo = NULL;
+    fwk::UndoTransaction *undo = nullptr;
     for(size_t i = 0; i < 5; i++) {
         if(m_status[i]) {
             bool has_label = m_labels.size() > i;
