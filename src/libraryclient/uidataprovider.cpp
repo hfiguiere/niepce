@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/uidataprovider.cpp
  *
- * Copyright (C) 2011 Hub Figuiere
+ * Copyright (C) 2011-2013 Hub Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,12 +31,10 @@ namespace libraryclient {
 void UIDataProvider::updateLabel(const eng::Label::Ptr & l)
 {
     // TODO: will work as long as we have 5 labels or something.
-    for(eng::Label::List::iterator iter = m_labels.begin();
-        iter != m_labels.end(); ++iter) {
-
-        if((*iter)->id() == l->id()) {
-            (*iter)->set_label(l->label());
-            (*iter)->set_colour(l->colour());
+    for(auto iter : m_labels) {
+        if(iter->id() == l->id()) {
+            iter->set_label(l->label());
+            iter->set_colour(l->colour());
         }
     }
 }
@@ -44,9 +42,8 @@ void UIDataProvider::updateLabel(const eng::Label::Ptr & l)
 
 void UIDataProvider::addLabels(const eng::Label::ListPtr & l)
 {
-    for(eng::Label::List::const_iterator iter = l->begin();
-        iter != l->end(); ++iter) {
-        m_labels.push_back(eng::Label::Ptr(new eng::Label(*(iter->get()))));
+    for(auto iter : *l) {
+        m_labels.push_back(eng::Label::Ptr(new eng::Label(*iter)));
     }
 }
 
@@ -54,7 +51,7 @@ void UIDataProvider::addLabels(const eng::Label::ListPtr & l)
 void UIDataProvider::deleteLabel(int id)
 {
     // TODO: will work as long as we have 5 labels or something.
-    for(eng::Label::List::iterator iter = m_labels.begin();
+    for(auto iter = m_labels.begin();
         iter != m_labels.end(); ++iter) {
 
         if((*iter)->id() == id) {
@@ -67,13 +64,12 @@ void UIDataProvider::deleteLabel(int id)
 
 const fwk::RgbColour * UIDataProvider::colourForLabel(int id) const
 {
-    for(eng::Label::List::const_iterator iter = m_labels.begin();
-        iter != m_labels.end(); ++iter) {
-        if((*iter)->id() == id) {
-            return &((*iter)->colour());
+    for(auto iter : m_labels) {
+        if(iter->id() == id) {
+            return &(iter->colour());
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
