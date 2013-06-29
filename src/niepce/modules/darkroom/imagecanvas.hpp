@@ -1,7 +1,7 @@
 /*
- * niepce - darkroom/imagecanvas.h
+ * niepce - darkroom/imagecanvas.hpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,8 @@ public:
 protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 private:
+    void invalidate();
+
     void on_image_reloaded();
 
     void _calc_image_frame(int img_w, int img_h,

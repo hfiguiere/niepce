@@ -70,12 +70,14 @@ void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
 {
     if(m_imagefile.expired() || (file != m_imagefile.lock())) {
         m_imagefile = eng::LibFile::WeakPtr(file);
+        m_need_reload = true;
     }
-    else {
+    else if(!static_cast<bool>(file)) {
         m_imagefile.reset();
+        m_need_reload = true;
     }
-    m_need_reload = true;
-    if(m_active) {
+
+    if(m_need_reload && m_active) {
         reload_image();
     }
 }
@@ -150,6 +152,7 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 void DarkroomModule::on_selected(eng::library_id_t id)
 {
     eng::LibFile::Ptr file = m_shell.get_selection_controller()->get_file(id);
+    DBG_OUT("selection is %ld", id);
     set_image(file);
 }
 

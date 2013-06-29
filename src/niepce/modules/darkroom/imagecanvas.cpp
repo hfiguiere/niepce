@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,8 +58,16 @@ void ImageCanvas::set_image(const ncr::Image::Ptr & img)
 void ImageCanvas::on_image_reloaded()
 {
     m_need_redisplay = true;
+    invalidate();
 }
 
+void ImageCanvas::invalidate()
+{
+    Glib::RefPtr<Gdk::Window> w = get_window();
+    if(w) {
+        w->invalidate(false);
+    }
+}
 
 double ImageCanvas::_calc_image_scale(int img_w, int img_h)
 {
