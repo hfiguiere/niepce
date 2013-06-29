@@ -384,6 +384,10 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
 void MetaDataWidget::add_data(const MetaDataFormat * current,
                               const PropertyValue & value)
 {
+    if (is_empty(value)) {
+        return;
+    }
+
     Gtk::Widget *w = nullptr;
     auto iter = m_data_map.find(current->id);
     if(iter == m_data_map.end()) {
