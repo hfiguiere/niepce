@@ -1,7 +1,7 @@
 /*
  * niepce - ui/darkroommodule.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,21 +56,27 @@ void DarkroomModule::reload_image()
         const std::string& path = file->path();
         m_image->reload(path, isRaw,
                         file->orientation());
-        m_need_reload = false;
     }
     else {
         // reset
+        Glib::RefPtr<Gdk::Pixbuf> p = Gdk::Pixbuf::create_from_file(
+            DATADIR"/niepce/pixmaps/niepce-image-generic.png");
+        m_image->reload(p);
     }
+    m_need_reload = false;
 }
 
 void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
 {
     if(m_imagefile.expired() || (file != m_imagefile.lock())) {
         m_imagefile = eng::LibFile::WeakPtr(file);
-        m_need_reload = true;
-        if(m_active) {
-            reload_image();
-        }
+    }
+    else {
+        m_imagefile.reset();
+    }
+    m_need_reload = true;
+    if(m_active) {
+        reload_image();
     }
 }
 

@@ -27,6 +27,8 @@
 
 #include <gdkmm/pixbuf.h>
 
+typedef struct _GeglNode  GeglNode;
+
 namespace ncr {
 
 class Image
@@ -61,6 +63,7 @@ public:
 
     void reload(const std::string & p, bool is_raw,
         int orientation);
+    void reload(const Glib::RefPtr<Gdk::Pixbuf> & p);
     /** set the output scale */
     void set_output_scale(double scale);
 
@@ -85,6 +88,14 @@ public:
         image is changed. */
     sigc::signal<void> signal_update;
 private:
+
+    /** Call this to initialise the reload process */
+    void prepare_reload();
+    /** continue the reload
+     * @param node the node for the loaded image
+     * @param orientation the exif orientation.
+     */
+    void reload_node(GeglNode* node, int orientation);
 
     /** rotate by x degrees (orientation)
      *  ensure the end results is within 0..359.

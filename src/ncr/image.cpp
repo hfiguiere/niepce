@@ -73,6 +73,8 @@ struct Image::Private {
     GeglNode* _scale_node();
     GeglNode* _load_dcraw(const std::string &path);
     GeglNode* _load_raw(const std::string &path);
+
+    Glib::RefPtr<Gdk::Pixbuf> m_pixbuf_cache;
 };
 
 Image::Image()
@@ -197,15 +199,36 @@ GeglNode* Image::Private::_scale_node()
     return gegl_node_new_child(m_graph, "operation", "gegl:scale", nullptr);
 }
 
+
+void Image::prepare_reload()
+{
+    priv->m_status = STATUS_LOADING;
+    priv->m_pixbuf_cache.reset();
+
+    if(priv->m_graph) {
+        g_object_unref(priv->m_graph);
+    }
+    priv->m_graph = gegl_node_new();
+//    priv->m_graph->set("format", babl_format("RGB u16"));
+}
+
+void Image::reload(const Glib::RefPtr<Gdk::Pixbuf> & p)
+{
+    prepare_reload();
+    priv->m_pixbuf_cache = p;
+    GeglNode* load_file = gegl_node_new_child(priv->m_graph,
+                                              "operation", "gegl:pixbuf",
+                                              "pixbuf", p->gobj(), nullptr);
+
+    reload_node(load_file, 0);
+}
+
 void Image::reload(const std::string & p, bool is_raw,
     int orientation)
 {
+    prepare_reload();
+
     GeglNode* load_file;
-
-    priv->m_status = STATUS_LOADING;
-
-    priv->m_graph = gegl_node_new();
-//    priv->m_graph->set("format", babl_format("RGB u16"));
 
     DBG_OUT("loading file %s", p.c_str());
 
@@ -217,6 +240,12 @@ void Image::reload(const std::string & p, bool is_raw,
     else {
         load_file = priv->_load_dcraw(p);
     }
+    reload_node(load_file, orientation);
+}
+
+void Image::reload_node(GeglNode* node, int orientation)
+{
+    DBG_ASSERT(priv->m_status == STATUS_LOADING, "prepare_reload() might not have been called");
 
     priv->m_rotate_n = priv->_rotate_node(orientation);
     priv->m_scale = priv->_scale_node();
@@ -227,7 +256,7 @@ void Image::reload(const std::string & p, bool is_raw,
 //                            "format", babl_format("RGB u8"),
 //                            "buffer", &(priv->m_sink_buffer), nullptr);
 
-    gegl_node_link_many(load_file, priv->m_rotate_n,
+    gegl_node_link_many(node, priv->m_rotate_n,
                         priv->m_scale, priv->m_sink, nullptr);
 
 //    gegl_node_process(priv->m_sink);
@@ -249,7 +278,7 @@ void Image::reload(const std::string & p, bool is_raw,
     // END DEBUG
 
     int width, height;
-    GeglRectangle rect = gegl_node_get_bounding_box(load_file);
+    GeglRectangle rect = gegl_node_get_bounding_box(node);
     width = rect.width;
     height = rect.height;
     DBG_OUT("width %d height %d", width, height);
