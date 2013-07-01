@@ -40,6 +40,7 @@ namespace dr {
 
 ImageCanvas::ImageCanvas()
     : m_need_redisplay(true),
+      m_resized(false),
       m_zoom_mode(ZOOM_MODE_FIT)
 {
 }
@@ -109,6 +110,12 @@ Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_error_placeholder()
     return s;
 }
 
+void ImageCanvas::on_size_allocate(Gtk::Allocation &	allocation)
+{
+    m_resized = true;
+    DrawingArea::on_size_allocate(allocation);
+}
+
 bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 {
     // no image, just pass.
@@ -117,7 +124,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         return false;
     }
 
-    if(m_need_redisplay) {
+    if(m_need_redisplay || m_resized) {
         _redisplay();
 
         Cairo::RefPtr<Cairo::ImageSurface> img_s;
@@ -186,6 +193,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 //        sc->stroke();
 
         m_need_redisplay = false;
+        m_resized = false;
     }
 
     context->set_source(m_backingstore, 0, 0);

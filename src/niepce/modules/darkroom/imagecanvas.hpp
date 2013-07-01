@@ -54,6 +54,7 @@ public:
             return m_zoom_mode;
         }
 protected:
+    virtual void on_size_allocate(Gtk::Allocation & allocation);
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 private:
     void invalidate();
@@ -69,6 +70,7 @@ private:
     Cairo::RefPtr<Cairo::ImageSurface> _get_error_placeholder();
 
     bool                           m_need_redisplay;
+    bool                           m_resized;
     ZoomMode                       m_zoom_mode;
     ncr::Image::Ptr                m_image;
     Cairo::RefPtr<Cairo::Surface>  m_backingstore;
