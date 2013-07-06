@@ -50,10 +50,13 @@ namespace fwk {
 
 MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     : ToolboxItemWidget(title),
-      m_table(1, 2, false),
       m_fmt(nullptr),
       m_update(false)
 {
+    m_table.set_column_homogeneous(true);
+    m_table.set_row_homogeneous(false);
+    m_table.insert_column(0);
+    m_table.insert_column(0);
     add(m_table);
     set_sensitive(false);
 }
@@ -170,11 +173,9 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
             break;
         }
     
-        m_table.resize(n_row + 1, 2);
-        m_table.attach(*labelw, 0, 1, n_row, n_row+1, 
-                       Gtk::FILL, Gtk::SHRINK, 4, 0);
-        m_table.attach(*w, 1, 2, n_row, n_row+1, 
-                       Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK, 4, 0);
+        m_table.insert_row(n_row + 1);
+        m_table.attach(*labelw, 0, n_row, 1, 1);
+        m_table.attach_next_to(*w, *labelw, Gtk::POS_RIGHT, 1, 1);
         m_data_map.insert(std::make_pair(current->id, w));
 
         current++;

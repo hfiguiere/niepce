@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 
-#include <gtkmm/table.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/textview.h>
 
 #include "fwk/base/propertybag.hpp"
@@ -106,7 +106,7 @@ private:
 
     void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValue & value);
 
-    Gtk::Table    m_table;
+    Gtk::Grid    m_table;
     std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
     fwk::PropertyBag m_current_data;
     const MetaDataSectionFormat * m_fmt;
