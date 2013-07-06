@@ -282,7 +282,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
     DBG_ASSERT(folder_id != -1, "invalid folder ID");
     try {
         int32_t rating, orientation, flag;
-		library_id_t label_id;
+        library_id_t label_id;
         std::string label;
         fwk::MimeType mime = fwk::MimeType(file);
         eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
@@ -322,12 +322,9 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
             library_id_t id = m_dbdrv->last_row_id();
             DBG_OUT("last row inserted %d", (int)id);
             ret = id;
-            const std::vector< std::string > &keywords(meta.keywords());
-            std::vector< std::string >::const_iterator iter;
-            for(iter = keywords.begin();
-                iter != keywords.end(); iter++)
-            {
-                library_id_t kwid = makeKeyword(*iter);
+            auto & keywords = meta.keywords();
+            for(auto k : keywords) {
+                library_id_t kwid = makeKeyword(k);
                 if(kwid != -1) {
                     assignKeyword(kwid, id);
                 }
