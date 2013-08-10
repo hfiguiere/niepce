@@ -25,9 +25,8 @@
 #define __FWK_NOTIFICATION_H__
 
 #include <memory>
+#include <mutex>
 #include <boost/any.hpp>
-
-#include <glibmm/threads.h>
 
 namespace fwk {
 
@@ -36,13 +35,13 @@ namespace fwk {
 	{
 	public:
 		typedef std::shared_ptr<Notification> Ptr;
-	  typedef Glib::Threads::RecMutex mutex_t;
+		typedef std::recursive_mutex mutex_t;
 
 		Notification(int _type)
 			: m_type(_type)
 			{}
 		~Notification()
-			{ mutex_t::Lock lock(m_mutex); }
+			{ std::lock_guard<mutex_t> lock(m_mutex); }
 		mutex_t & mutex() const
 			{ return m_mutex; }
 		int type() const

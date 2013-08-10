@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/utils/thread.h
+ * niepce - fwk/utils/thread.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,7 @@
 
 
 #include <string>
-
-#include <glibmm/threads.h>
-
+#include <thread>
 
 namespace fwk {
 
@@ -33,20 +31,19 @@ namespace fwk {
 class Thread
 {
 public:
-    /** create the worker for the library whose dir is specified */
     Thread();
     virtual ~Thread();
-    
+
     void terminate()
         { m_terminated = true; }
 protected:
     void start();
     virtual void main() = 0;
     volatile bool m_terminated;
-    Glib::Threads::Thread * thread() const
+    std::thread * thread() const
         { return m_thrd; }
 private:
-    Glib::Threads::Thread *       m_thrd;
+    std::thread *       m_thrd;
 };
 
 }

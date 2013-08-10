@@ -22,6 +22,8 @@
 #define __FWK_NOTIFICATIONCENTER_H__
 
 #include <memory>
+#include <sigc++/trackable.h>
+#include <sigc++/signal.h>
 
 #include "fwk/toolkit/notification.hpp"
 

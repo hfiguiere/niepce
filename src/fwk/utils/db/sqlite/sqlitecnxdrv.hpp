@@ -27,9 +27,8 @@
 #ifndef __NEMIVER_SQLITE_CNX_DRV_H__
 #define __NEMIVER_SQLITE_CNX_DRV_H__
 
-#include <boost/scoped_ptr.hpp>
-
-#include <glibmm/threads.h>
+#include <mutex>
+#include <memory>
 
 #include "fwk/utils/db/iconnectiondriver.hpp"
 
@@ -43,8 +42,8 @@ namespace sqlite {
 class SqliteCnxDrv: public db::IConnectionDriver {
     struct Priv ;
     friend class SqliteCnxMgrDrv ;
-    boost::scoped_ptr<Priv> m_priv ;
-    mutable Glib::Threads::RecMutex m_mutex;
+    std::unique_ptr<Priv> m_priv ;
+    mutable std::recursive_mutex m_mutex;
 
     //forbid copy
     SqliteCnxDrv (const SqliteCnxDrv &) ;

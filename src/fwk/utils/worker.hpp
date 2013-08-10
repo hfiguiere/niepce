@@ -23,6 +23,8 @@
 
 #include <memory>
 #include <string>
+#include <mutex>
+#include <condition_variable>
 
 #include "fwk/utils/thread.hpp"
 #include "fwk/utils/mtqueue.hpp"
@@ -54,8 +56,8 @@ protected:
     queue_t      m_tasks;
 private:
     virtual void execute(const ptr_t & _op) = 0;
-    Glib::Threads::Mutex m_q_mutex;
-    Glib::Threads::Cond m_wait_cond;
+    std::mutex m_q_mutex;
+    std::condition_variable m_wait_cond;
 };
 
 template <class T>
@@ -70,9 +72,9 @@ Worker<T>::~Worker()
 {
     m_tasks.clear();
     {
-        Glib::Threads::Mutex::Lock lock(m_q_mutex);
+        std::lock_guard<std::mutex> lock(m_q_mutex);
         m_terminated = true;
-        m_wait_cond.broadcast();
+        m_wait_cond.notify_all();
     }
     thread()->join();
 }
@@ -88,7 +90,7 @@ void Worker<T>::main()
         {
             // make sure we terminate the thread before we unlock
             // the task queue.
-            Glib::Threads::Mutex::Lock lock(m_q_mutex);
+            std::lock_guard<std::mutex> lock(m_q_mutex);
             if(!m_tasks.empty()) {
                 op = m_tasks.pop();
             }
@@ -98,9 +100,9 @@ void Worker<T>::main()
             execute(op);
         }
 
-        Glib::Threads::Mutex::Lock lock(m_q_mutex);
+        std::unique_lock<std::mutex> lock(m_q_mutex);
         if(m_tasks.empty()) {
-            m_wait_cond.wait(m_q_mutex);
+            m_wait_cond.wait(lock);
         }
     } while(!m_terminated);
 }
@@ -108,15 +110,15 @@ void Worker<T>::main()
 template <class T>
 void Worker<T>::schedule(ptr_t & _op)
 {
-    Glib::Threads::Mutex::Lock lock(m_q_mutex);
+    std::lock_guard<std::mutex> lock(m_q_mutex);
     m_tasks.add(_op);
-    m_wait_cond.broadcast();
+    m_wait_cond.notify_all();
 }
 
 template <class T>
 void Worker<T>::clear()
 {
-    Glib::Threads::Mutex::Lock lock(m_q_mutex);
+    std::lock_guard<std::mutex> lock(m_q_mutex);
     m_tasks.clear();
 }
 

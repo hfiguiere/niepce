@@ -74,7 +74,7 @@ void NotificationCenter::_dispatch(void)
     /* this is not pop() like in STL. */
     Notification::Ptr notif( p->m_notificationQueue.pop() );
 
-    Notification::mutex_t::Lock lock(notif->mutex());
+    std::lock_guard<Notification::mutex_t> lock(notif->mutex());
     p->m_subscribers[notif->type()](notif);
 }
 

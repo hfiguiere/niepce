@@ -23,7 +23,7 @@
 #define __FWK_UTILS_MTQUEUE_H__
 
 #include <deque>
-#include <glibmm/threads.h>
+#include <mutex>
 
 namespace fwk {
 
@@ -36,7 +36,7 @@ namespace fwk {
 	class MtQueue
 	{
 	public:
-	  typedef Glib::Threads::RecMutex mutex_t;
+		typedef std::recursive_mutex mutex_t;
 		typedef T              value_type;
 
 		MtQueue();
@@ -65,13 +65,13 @@ namespace fwk {
 	template < class T >
 	MtQueue<T>::~MtQueue()
 	{
-		mutex_t::Lock lock(m_mutex);		
+		std::lock_guard<mutex_t> lock(m_mutex);
 	}
 
 	template < class T > void
 	MtQueue<T>::add(const T &op)
 	{
-		mutex_t::Lock lock(m_mutex);
+		std::lock_guard<mutex_t> lock(m_mutex);
 		m_queue.push_back(op);
 	}
 
@@ -79,7 +79,7 @@ namespace fwk {
 	template < class T > void
 	MtQueue<T>::add(T &op)
 	{
-		mutex_t::Lock lock(m_mutex);
+		std::lock_guard<mutex_t> lock(m_mutex);
 		m_queue.push_back(std::move(op));
 	}
 
@@ -87,7 +87,7 @@ namespace fwk {
 	T MtQueue<T>::pop()
 	{
 		T elem;
-		mutex_t::Lock lock(m_mutex);
+		std::lock_guard<mutex_t> lock(m_mutex);
 		elem = std::move(m_queue.front());
 		m_queue.pop_front();
 		return elem;
@@ -96,14 +96,14 @@ namespace fwk {
 	template < class T >
 	bool MtQueue<T>::empty() const
 	{
-		mutex_t::Lock lock(m_mutex);
+		std::lock_guard<mutex_t> lock(m_mutex);
 		return m_queue.empty();
 	}
 
 	template < class T >
 	void MtQueue<T>::clear() 
 	{
-		mutex_t::Lock lock(m_mutex);
+		std::lock_guard<mutex_t> lock(m_mutex);
 		m_queue.clear();
 	}
 }

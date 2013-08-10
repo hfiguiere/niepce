@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/thread.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include "fwk/base/debug.hpp"
 #include "thread.hpp"
 
 namespace fwk {
 
-
 Thread::Thread()
     : m_terminated(true),
-      m_thrd(NULL)
+      m_thrd(nullptr)
 {
 }
-
 
 Thread::~Thread()
 {
     terminate();
+    delete m_thrd;
 }
-
 
 void Thread::start()
 {
-    m_thrd = Glib::Threads::Thread::create(sigc::mem_fun(*this, &Thread::main));
+    DBG_ASSERT(!m_thrd, "Thread already start. Will cancel.");
+    if(m_thrd) {
+        delete m_thrd;
+    }
+    m_thrd = new std::thread(&Thread::main, this);
 // TODO add this thread to a manager for task management.
 //		thrd->join();
 }
