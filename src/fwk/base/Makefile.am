@@ -45,6 +45,7 @@ libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	moniker.hpp moniker.cpp \
 	geometry.hpp geometry.cpp \
 	singleton.hpp \
+	util.hpp \
 	map.hpp \
 	propertybag.hpp propertybag.cpp \
 	$(NULL)

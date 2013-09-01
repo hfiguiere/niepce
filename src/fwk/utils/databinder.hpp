@@ -27,14 +27,19 @@
 
 #include <boost/utility.hpp>
 
+#include "fwk/base/util.hpp"
+
 namespace fwk {
 
 /** @brief the base class for all the data binders */
 class DataBinderBase
-	: public boost::noncopyable
 {
 public:
-	virtual ~DataBinderBase() 
+	NON_COPYABLE(DataBinderBase);
+
+	DataBinderBase()
+		{}
+	virtual ~DataBinderBase()
 		{}
 };
 

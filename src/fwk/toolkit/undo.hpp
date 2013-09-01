@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/undo.hpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2013 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 #include <list>
 #include <stack>
 #include <string>
-#include <boost/noncopyable.hpp>
 
 #include <sigc++/signal.h>
 #include <sigc++/trackable.h>
 
 #include "fwk/toolkit/command.hpp"
+#include "fwk/base/util.hpp"
 
 namespace fwk {
 
@@ -37,8 +37,11 @@ namespace fwk {
 class UndoTransaction
 {
 public:
+    NON_COPYABLE(UndoTransaction);
+
     UndoTransaction(const std::string & n);
     ~UndoTransaction();
+
     template <typename _RetType>
     Command *new_command(const typename CommandWithArg<_RetType>::RedoFunction &,
                          const typename CommandWithArg<_RetType>::UndoFunction &);
@@ -68,12 +71,14 @@ Command *UndoTransaction::new_command(const typename CommandWithArg<_ArgType>::R
 
 
 class UndoHistory
-    : public boost::noncopyable
-    , public sigc::trackable
+    : public sigc::trackable
 {
 public:
+    NON_COPYABLE(UndoHistory);
+
+    UndoHistory() {}
     ~UndoHistory();
-		
+
     /** the history becomes owner */
     void add(UndoTransaction*);
     void undo();

@@ -24,10 +24,9 @@
 #include <vector>
 #include <string>
 
-#include <boost/noncopyable.hpp>
-
 #include <exempi/xmp.h>
 
+#include "fwk/base/util.hpp"
 
 namespace xmp {
 
@@ -61,9 +60,10 @@ void release(XmpPtr ptr)
  */
 template <class T>
 class ScopedPtr 
-    : boost::noncopyable
 {
 public:
+    NON_COPYABLE(ScopedPtr);
+
     ScopedPtr(T p)
         : _p(p)
         {}
@@ -88,9 +88,10 @@ namespace fwk {
 class Date;
 
 class ExempiManager
-    : public boost::noncopyable
 {
 public:
+    NON_COPYABLE(ExempiManager);
+
     struct ns_defs_t {
         const char *ns;
         const char *prefix;

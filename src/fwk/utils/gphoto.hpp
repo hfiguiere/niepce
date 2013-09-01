@@ -1,5 +1,5 @@
 /*
- * niepce - fwk/utils/gphoto.cpp
+ * niepce - fwk/utils/gphoto.hpp
  *
  * Copyright (C) 2009-2013 Hubert Figuiere
  *
@@ -25,21 +25,21 @@
 #include <string>
 #include <memory>
 
-#include <boost/noncopyable.hpp>
-
 extern "C" {
 #include <gphoto2-port-info-list.h>
 #include <gphoto2-abilities-list.h>
 }
 
+#include "fwk/base/util.hpp"
 #include "fwk/base/singleton.hpp"
 
 namespace fwk {
 
 class GpDevice
-  : public boost::noncopyable
 {
 public:
+  NON_COPYABLE(GpDevice);
+
   typedef std::shared_ptr<GpDevice> Ptr;
 
   GpDevice(const std::string & model, const std::string & path);
