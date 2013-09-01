@@ -25,7 +25,17 @@
 #include <array>
 #include <string>
 
-#include <boost/lexical_cast.hpp>
+namespace fwk {
+class Rect;
+}
+
+namespace std {
+/** convert to a string in the same format as
+ * accepted by the %Rect(const std::string & s) constructor.
+ * Override of std::to_string/.
+ */
+std::string to_string(const fwk::Rect &);
+}
 
 namespace fwk {
 
@@ -50,10 +60,8 @@ public:
         { return _r[W]; }
     int h() const
         { return _r[H]; }
-    /** convert to a string in the same format as
-     * accepted by the %Rect(const std::string & s) constructor.
-     */
-    std::string to_string() const;
+
+    friend std::string std::to_string(const Rect &);
 
     Rect & scale(double _s);
 

@@ -19,7 +19,6 @@
  */
 
 #include <functional>
-#include <boost/lexical_cast.hpp>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/main.h>
@@ -68,7 +67,7 @@ bool Application::get_use_dark_theme() const
 {
     bool v;
     try {
-        v = boost::lexical_cast<bool>(m_config.getValue("ui_dark_theme", "0"));
+        v = std::stoi(m_config.getValue("ui_dark_theme", "0"));
     }
     catch(...) {
         v = false;
@@ -79,7 +78,7 @@ bool Application::get_use_dark_theme() const
 void Application::set_use_dark_theme(bool value)
 {
     m_config.setValue("ui_dark_theme",
-                      boost::lexical_cast<Glib::ustring>(value));
+                      std::to_string(value));
 }
 
 /** Main loop.

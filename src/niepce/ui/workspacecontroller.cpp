@@ -124,7 +124,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         if(iter != m_folderidmap.end()) {
             Gtk::TreeRow row = *(iter->second);
             row[m_librarycolumns.m_count_n] = count.second;
-            row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(count.second);
+            row[m_librarycolumns.m_count] = std::to_string(count.second);
         }
 
         break;
@@ -139,7 +139,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
             Gtk::TreeRow row = *(iter->second);
             int new_count = row[m_librarycolumns.m_count_n] + count.second;
             row[m_librarycolumns.m_count_n] = new_count;
-            row[m_librarycolumns.m_count] = boost::lexical_cast<Glib::ustring>(new_count);
+            row[m_librarycolumns.m_count] = std::to_string(new_count);
         }
 
         break;
@@ -150,7 +150,6 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
                    "incorrect data type for the notification");
 
         std::pair<eng::library_id_t,eng::library_id_t> moved(boost::any_cast<std::pair<eng::library_id_t,eng::library_id_t> >(ln.param));
-        
 
         break;
     }
@@ -206,8 +205,7 @@ void WorkspaceController::on_row_expanded_collapsed(const Gtk::TreeIter& iter,
         break;
     }
     if(cfg && key) {
-        cfg->setValue(key,
-                      boost::lexical_cast<std::string>(expanded));
+        cfg->setValue(key, std::to_string(expanded));
     }
 }
 
@@ -338,8 +336,7 @@ void WorkspaceController::expand_from_cfg(const char* key,
 {
     fwk::Configuration::Ptr cfg = getLibraryConfig();
 
-    bool expanded =
-        boost::lexical_cast<int>(cfg->getValue(key, "1"));
+    bool expanded = std::stoi(cfg->getValue(key, "1"));
     if(expanded) {
         m_librarytree.expand_row(m_treestore->get_path(treenode),
                                  false);

@@ -29,8 +29,8 @@ using fwk::Rect;
 int test_main( int, char *[] )             // note the name!
 {
 	Rect r1(0,1,2,3);
-	BOOST_CHECK(r1.to_string() == "0 1 2 3");
-	
+	BOOST_CHECK(std::to_string(r1) == "0 1 2 3");
+
 	std::string s("100 100 250 250");
 	Rect r2(s);
 	BOOST_CHECK(r2.x() == 100);
@@ -64,34 +64,34 @@ int test_main( int, char *[] )             // note the name!
 
     // FIT
     result = source1.fit_into(dest1);
-    std::cout << result.to_string() << std::endl;
+    std::cout << std::to_string(result) << std::endl;
     BOOST_CHECK(result == Rect(0, 0, 640, 320));
     result = source1.fit_into(dest2);
-    std::cout << result.to_string() << std::endl;
-    BOOST_CHECK(result.w() == 480);    
+    std::cout << std::to_string(result) << std::endl;
+    BOOST_CHECK(result.w() == 480);
 
     result = source2.fit_into(dest1);
-    std::cout << result.to_string() << std::endl;
+    std::cout << std::to_string(result) << std::endl;
     BOOST_CHECK(result.h() == 480);
     result = source2.fit_into(dest2);
-    std::cout << result.to_string() << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 320, 640));    
+    std::cout << std::to_string(result) << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 320, 640));
 
     // FILL
     result = source1.fill_into(dest1);
-    std::cout << result.to_string() << std::endl;
+    std::cout << std::to_string(result) << std::endl;
     BOOST_CHECK(result.h() == 480);
     result = source1.fill_into(dest2);
-    std::cout << result.to_string() << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 1280, 640));    
+    std::cout << std::to_string(result) << std::endl;
+    BOOST_CHECK(result == Rect(0, 0, 1280, 640));
 
     result = source2.fill_into(dest1);
-    std::cout << result.to_string() << std::endl;
+    std::cout << std::to_string(result) << std::endl;
     BOOST_CHECK(result == Rect(0, 0, 640, 1280));
     result = source2.fill_into(dest2);
-    std::cout << result.to_string() << std::endl;
-    BOOST_CHECK(result.w() == 480);    
+    std::cout << std::to_string(result) << std::endl;
+    BOOST_CHECK(result.w() == 480);
 
-	return 0;
+    return 0;
 }
 

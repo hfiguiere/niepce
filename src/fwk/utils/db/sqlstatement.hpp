@@ -63,7 +63,7 @@ public:
             uint64_t a_value,
             bool a_auto_increment=false):
             m_name (a_name),
-            m_value (boost::lexical_cast<std::string>(a_value)),
+            m_value (std::to_string(a_value)),
             m_auto_increment (a_auto_increment)
     {}
 

@@ -23,7 +23,6 @@
 #include <iostream>
 #include <functional>
 
-#include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
 #include <glibmm/i18n.h>
@@ -215,7 +214,7 @@ int Library::checkDatabaseVersion()
         if(m_dbdrv->execute_statement(sql)) {
             if(m_dbdrv->read_next_row()
                && m_dbdrv->get_column_content(0, version)) {
-                v = boost::lexical_cast<int>(version);
+                v = std::stoi(version);
             }
         }
     }
@@ -224,7 +223,7 @@ int Library::checkDatabaseVersion()
         DBG_OUT("db exception %s", e.what());
         v = -1;
     }
-    catch(const boost::bad_lexical_cast &)
+    catch(const std::bad_cast &)
     {
         DBG_OUT("version is %s, can't convert to int", version.c_str());
         v = 0;

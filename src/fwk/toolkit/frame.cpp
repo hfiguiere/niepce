@@ -106,7 +106,7 @@ void Frame::set_title(const std::string & title)
 void Frame::toggle_tools_visible()
 {
     if(m_hide_tools_action->get_active()) {
-        signal_hide_tools.emit();   
+        signal_hide_tools.emit();
     }
     else {
         signal_show_tools.emit();
@@ -159,16 +159,16 @@ Glib::RefPtr<Gtk::Action> Frame::create_redo_action(const Glib::RefPtr<Gtk::Acti
 
 bool Frame::_close()
 {
-		if(Controller::Ptr parent = m_parent.lock()) {
+    if(Controller::Ptr parent = m_parent.lock()) {
         parent->remove(shared_from_this());
-		}
-		return false;
+    }
+    return false;
 }
 
 void Frame::frameRectFromConfig()
 {
-		DBG_OUT("loading frame rect (%s)", m_layout_cfg_key.c_str());
-		if(!m_layout_cfg_key.empty()) {
+    DBG_OUT("loading frame rect (%s)", m_layout_cfg_key.c_str());
+    if(!m_layout_cfg_key.empty()) {
         Configuration & cfg = Application::app()->config();
         std::string val;
         val = cfg.getValue(m_layout_cfg_key, "");
@@ -176,29 +176,29 @@ void Frame::frameRectFromConfig()
             try {
                 fwk::Rect r(val);
                 m_window->move(r.x(), r.y());
-                m_window->resize(r.w(), r.h());				
+                m_window->resize(r.w(), r.h());
             }
             catch(std::bad_cast)
             {
                 ERR_OUT("wrong value in configuration: %s", val.c_str());
             }
         }
-		}
+    }
 }
 
 
 void Frame::frameRectToConfig()
 {
-		DBG_OUT("saving frame rect (%s)", m_layout_cfg_key.c_str());
-		if(!m_layout_cfg_key.empty()) {
+    DBG_OUT("saving frame rect (%s)", m_layout_cfg_key.c_str());
+    if(!m_layout_cfg_key.empty()) {
         Configuration & cfg = Application::app()->config();
         int x, y, w, h;
         x = y = w = h = 0;
         m_window->get_position(x, y);
         m_window->get_size(w, h);
         fwk::Rect r(x, y, w, h);
-        cfg.setValue(m_layout_cfg_key, r.to_string());
-		}
+        cfg.setValue(m_layout_cfg_key, std::to_string(r));
+    }
 }
 
 /*

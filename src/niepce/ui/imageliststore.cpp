@@ -139,7 +139,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         Glib::ustring xmp_pref;
         try {
             xmp_pref = cfg.getValue("write_xmp_automatically", "0");
-            write_xmp = boost::lexical_cast<int>(xmp_pref);
+            write_xmp = std::stoi(xmp_pref);
         }
         catch(const std::exception & e)
         {

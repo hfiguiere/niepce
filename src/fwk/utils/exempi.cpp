@@ -21,8 +21,6 @@
 #include <string.h>
 #include <time.h>
 
-#include <boost/lexical_cast.hpp>
-
 #include <glib.h>
 #include <giomm/file.h>
 

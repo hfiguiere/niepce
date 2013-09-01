@@ -21,7 +21,6 @@
 
 #include <functional>
 #include <boost/any.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
 #include <gdkmm/pixbuf.h>
@@ -84,7 +83,7 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
     }
 
     DBG_OUT("MIME type %s", mime_type.string().c_str());
-	
+
     Glib::RefPtr<Gdk::Pixbuf> pix;
 
     if(mime_type.isUnknown()) {
@@ -114,9 +113,9 @@ Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, con
         catch(const Glib::Error & e) {
             ERR_OUT("exception thumbnailing image %s", e.what().c_str());
         }
-    }	
-    else {	
-        GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename.c_str(), 
+    }
+    else {
+        GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename.c_str(),
                                                                    std::min(w, h));
         if(pixbuf) {
             pix = Glib::wrap(pixbuf, true); // take ownership
@@ -176,7 +175,7 @@ std::string ThumbnailCache::path_for_thumbnail(const std::string & filename, lib
 
 std::string ThumbnailCache::dir_for_thumbnail(int size) const
 {
-    std::string subdir = size ? boost::lexical_cast<std::string>(size) : "full";
+    std::string subdir = size ? std::to_string(size) : "full";
     return Glib::build_filename(m_cacheDir, subdir);
 }
 

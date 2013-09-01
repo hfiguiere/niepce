@@ -331,7 +331,7 @@ void NiepceWindow::on_open_library()
     std::string libMoniker;
     int reopen = 0;
     try {
-        reopen = boost::lexical_cast<int>(cfg.getValue("reopen_last_library", "0"));
+        reopen = std::stoi(cfg.getValue("reopen_last_library", "0"));
     }
     catch(...)
     {

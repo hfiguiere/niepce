@@ -52,13 +52,20 @@ Rect::Rect(const std::string & s)
     v.reserve(4);
     boost::split(v, s, boost::is_any_of(" "));
     if(v.size() < 4) {
-        throw(std::bad_cast());
+        throw std::bad_cast();
     }
     int i = 0;
     for_each(v.begin(), v.end(),
              [&i, this] (const std::string &s) {
-                 _r[i] = boost::lexical_cast<int>(s);
-                 i++;
+                 try {
+                     _r[i] = std::stoi(s);
+                     i++;
+                 }
+                 catch(...) {
+                     // we likely got an invalid_argument.
+                     // Doesn't matter, at that point it is a bad_cast
+                     throw std::bad_cast();
+                 }
              }
         );
 }
@@ -122,12 +129,14 @@ Rect Rect::fill_into(const Rect & dest) const
     return result;
 }
 
+}
 
+namespace std {
 
-std::string Rect::to_string() const
+std::string to_string(const fwk::Rect & r)
 {
     return str(boost::format("%1% %2% %3% %4%")
-               % _r[X] % _r[Y] % _r[W] % _r[H]); 
+               % r._r[fwk::Rect::X] % r._r[fwk::Rect::Y] % r._r[fwk::Rect::W] % r._r[fwk::Rect::H]);
 }
 
 }
