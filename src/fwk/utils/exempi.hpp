@@ -105,6 +105,8 @@ public:
 class XmpMeta
 {
 public:
+    NON_COPYABLE(XmpMeta);
+
     XmpMeta();
     XmpMeta(const std::string & for_file, bool sidecar_only);
     virtual ~XmpMeta();
@@ -117,8 +119,8 @@ public:
     std::string serialize_inline() const;
     /** serialize the XMP (for the sidecar) */
     std::string serialize() const;
-    /** load the XMP from the unserialized buffer 
-     * (NUL terminated) 
+    /** load the XMP from the unserialized buffer
+     * (NUL terminated)
      */
     void unserialize(const char *);
 
@@ -131,9 +133,6 @@ public:
     std::string creation_date_str() const;
     const std::vector< std::string > & keywords() const;
 private:
-    XmpMeta( const XmpMeta & ); // copy constructor
-
-    XmpMeta & operator=(const XmpMeta &); // assignment
 
     XmpPtr m_xmp;
     // caches
