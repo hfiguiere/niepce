@@ -1,26 +1,27 @@
 # Greek translation for niepce.
 # Copyright (C) 2012 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-31 06:21+0000\n"
-"PO-Revision-Date: 2012-07-17 13:16+0200\n"
-"Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
-"Language-Team: Greek <team@lists.gnome.gr>\n"
+"POT-Creation-Date: 2014-02-02 11:50+0000\n"
+"PO-Revision-Date: 2014-02-02 22:37+0300\n"
+"Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
+"Language-Team: team@lists.gnome.gr\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
 
-#: ../src/fwk/toolkit/frame.cpp:124
+#: ../src/fwk/toolkit/frame.cpp:121
 msgid "Undo "
 msgstr "Αναίρεση"
 
-#: ../src/fwk/toolkit/frame.cpp:133
+#: ../src/fwk/toolkit/frame.cpp:130
 msgid "Redo "
 msgstr "Επανάληψη"
 
@@ -32,35 +33,35 @@ msgstr "Όνομα"
 msgid "Description"
 msgstr "Περιγραφή"
 
-#: ../src/engine/db/library.cpp:140
+#: ../src/engine/db/library.cpp:146
 msgid "Trash"
 msgstr "Απορρίμματα"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:57
+#: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
 msgstr "Επεξεργασία ετικετών"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:114
+#: ../src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
 msgstr "Αλλαγή ετικετών"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:80
+#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _6"
 msgstr "Ετικέτα _6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:85
+#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _7"
 msgstr "Ετικέτα _7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:90
+#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _8"
 msgstr "Ετικέτα _8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:95
+#: ../src/niepce/ui/moduleshell.cpp:94
 msgid "Label _9"
 msgstr "Ετικέτα _9"
 
@@ -93,6 +94,7 @@ msgid "Import picture folder"
 msgstr "Εισαγωγή φακέλου εικόνων"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../magellan/src/mgwindow.cpp:87
 msgid "_Import"
 msgstr "Ε_ισαγωγή"
 
@@ -152,52 +154,77 @@ msgstr "Χρήση της σκούρας διεπαφής"
 msgid "_User Interface"
 msgstr "Διεπαφή χρ_ήστη"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: ../src/niepce/ui/moduleshell.cpp:59
+#: ../src/niepce/ui/moduleshell.cpp:58
 msgid "_Image"
 msgstr "Ει_κόνα"
 
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: ../src/niepce/ui/moduleshell.cpp:78
 msgid "Set _Label"
 msgstr "Ορισμός ετ_ικέτας"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
+#: ../src/niepce/ui/moduleshell.cpp:100
 msgid "Set _Rating"
 msgstr "Ορισμός β_αθμολογίας"
 
-#: ../src/niepce/ui/moduleshell.cpp:133
+#: ../src/niepce/ui/moduleshell.cpp:101
+msgid "Unrated"
+msgstr "Αχαρακτήριστο"
+
+#: ../src/niepce/ui/moduleshell.cpp:106
+msgid "Rating _1"
+msgstr "Χαρακτηρισμός _1"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "Rating _2"
+msgstr "Χαρακτηρισμός _2"
+
+#: ../src/niepce/ui/moduleshell.cpp:116
+msgid "Rating _3"
+msgstr "Χαρακτηρισμός _3"
+
+#: ../src/niepce/ui/moduleshell.cpp:121
+msgid "Rating _4"
+msgstr "Χαρακτηρισμός _4"
+
+#: ../src/niepce/ui/moduleshell.cpp:126
+msgid "Rating _5"
+msgstr "Χαρακτηρισμός _5"
+
+#: ../src/niepce/ui/moduleshell.cpp:132
 msgid "Set _Flag"
 msgstr "Ορισμός ση_μαίας"
 
 #: ../src/niepce/ui/moduleshell.cpp:134
-#, fuzzy
 msgid "Flag as _Rejected"
-msgstr "Εγκατάσταση ως υπερχρήστης:"
+msgstr "Σημαία ως α_πορριφθέν"
 
-#: ../src/niepce/ui/moduleshell.cpp:139
+#: ../src/niepce/ui/moduleshell.cpp:140
 msgid "_Unflagged"
-msgstr ""
+msgstr "_Χωρίς σημαία"
 
-#: ../src/niepce/ui/moduleshell.cpp:144
-#, fuzzy
+#: ../src/niepce/ui/moduleshell.cpp:146
 msgid "Flag as _Pick"
-msgstr "Επιλογή με άλφα"
+msgstr "Σημαία ως επιλο_γή"
 
-#: ../src/niepce/ui/moduleshell.cpp:195
+#: ../src/niepce/ui/moduleshell.cpp:156
+msgid "Write metadata"
+msgstr "Εγγραφή μεταδεδομένων"
+
+#: ../src/niepce/ui/moduleshell.cpp:205
 msgid "Library"
 msgstr "Βιβλιοθήκη"
 
-#: ../src/niepce/ui/moduleshell.cpp:204
+#: ../src/niepce/ui/moduleshell.cpp:214
 msgid "Darkroom"
-msgstr ""
+msgstr "Σκοτεινός θάλαμος"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:38
-#, fuzzy
 msgid "Make:"
-msgstr "Make:"
+msgstr "Κατασκευή:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:39
 msgid "Model:"
@@ -232,9 +259,8 @@ msgid "Flash:"
 msgstr "Φλας:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:50
-#, fuzzy
 msgid "Flash compensation:"
-msgstr "Εργασία αντιστάθμισης"
+msgstr "Αναλαμπή αντιστάθμισης:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Focal length:"
@@ -289,7 +315,7 @@ msgstr "Δικαιωμάτα"
 msgid "Image Properties"
 msgstr "Ιδιότητες εικόνας"
 
-#: ../src/niepce/ui/niepceapplication.cpp:66
+#: ../src/niepce/ui/niepceapplication.cpp:70
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -303,122 +329,121 @@ msgstr ""
 msgid "Ready"
 msgstr "Έτοιμο"
 
-#: ../src/niepce/ui/niepcewindow.cpp:228
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "_Library"
 msgstr "Β_ιβλιοθήκη"
 
-#: ../src/niepce/ui/niepcewindow.cpp:234
+#: ../src/niepce/ui/niepcewindow.cpp:233
 msgid "New _Folder..."
 msgstr "Νέος _φάκελος..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:235
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "New _Project..."
 msgstr "Νέο έργ_ο..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:237
-#: ../camerawire/src/cwwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:236 ../camerawire/src/cwwindow.cpp:92
 msgid "_Import..."
 msgstr "Ε_ισαγωγή..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:247
-#: ../camerawire/src/cwwindow.cpp:102
+#: ../src/niepce/ui/niepcewindow.cpp:246 ../camerawire/src/cwwindow.cpp:102
+#: ../magellan/src/mgwindow.cpp:98
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: ../src/niepce/ui/niepcewindow.cpp:267
-#: ../camerawire/src/cwwindow.cpp:118
+#: ../src/niepce/ui/niepcewindow.cpp:266 ../camerawire/src/cwwindow.cpp:118
+#: ../magellan/src/mgwindow.cpp:114
 msgid "_Tools"
 msgstr "_Εργαλεία"
 
-#: ../src/niepce/ui/niepcewindow.cpp:268
+#: ../src/niepce/ui/niepcewindow.cpp:267
 msgid "_Edit Labels..."
 msgstr "_Επεξεργασία ετικετών..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:271
-#: ../camerawire/src/cwwindow.cpp:124
+#: ../src/niepce/ui/niepcewindow.cpp:270 ../camerawire/src/cwwindow.cpp:124
+#: ../magellan/src/mgwindow.cpp:120
 msgid "_Hide tools"
 msgstr "Από_κρυψη εργαλείων"
 
-#: ../src/niepce/ui/niepcewindow.cpp:275
-#: ../camerawire/src/cwwindow.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:274 ../camerawire/src/cwwindow.cpp:128
+#: ../magellan/src/mgwindow.cpp:124
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: ../src/niepce/ui/niepcewindow.cpp:344
-msgid "Create library"
-msgstr "Δημιουργία βιβλιοθήκης"
-
-#: ../src/niepce/ui/niepcewindow.cpp:348
-msgid "Create"
-msgstr "Δημιουργία"
-
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:393
+#: ../src/niepce/ui/niepcewindow.cpp:376
 msgid "Label 1"
 msgstr "Ετικέτα 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:394
+#: ../src/niepce/ui/niepcewindow.cpp:377
 msgid "Label 2"
 msgstr "Ετικέτα 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:395
+#: ../src/niepce/ui/niepcewindow.cpp:378
 msgid "Label 3"
 msgstr "Ετικέτα 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:396
+#: ../src/niepce/ui/niepcewindow.cpp:379
 msgid "Label 4"
 msgstr "Ετικέτα 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:397
+#: ../src/niepce/ui/niepcewindow.cpp:380
 msgid "Label 5"
 msgstr "Ετικέτα 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:460
+#: ../src/niepce/ui/niepcewindow.cpp:418
+msgid "Create library"
+msgstr "Δημιουργία βιβλιοθήκης"
+
+#: ../src/niepce/ui/niepcewindow.cpp:421
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: ../src/niepce/ui/niepcewindow.cpp:480
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:248
+#: ../src/niepce/ui/selectioncontroller.cpp:250
 msgid "Set Flag"
 msgstr "Ορισμός σημαίας"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:251
+#: ../src/niepce/ui/selectioncontroller.cpp:253
 msgid "Set Rating"
 msgstr "Ορισμός βαθμολογίας"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:254
+#: ../src/niepce/ui/selectioncontroller.cpp:256
 msgid "Set Label"
 msgstr "Ορισμός ετικέτας"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:257
+#: ../src/niepce/ui/selectioncontroller.cpp:259
 msgid "Set Property"
 msgstr "Ορισμός ιδιοτήτας"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:276
+#: ../src/niepce/ui/selectioncontroller.cpp:278
 msgid "Set Properties"
 msgstr "Ορισμός ιδιοτήτων"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:290
+#: ../src/niepce/ui/selectioncontroller.cpp:300
 msgid "Move to Trash"
 msgstr "Μετακίνηση στα απορρίμματα"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:235
+#: ../src/niepce/ui/workspacecontroller.cpp:295
 msgid "Pictures"
 msgstr "Εικόνες"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:239
+#: ../src/niepce/ui/workspacecontroller.cpp:299
 msgid "Projects"
 msgstr "Έργα"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:243
+#: ../src/niepce/ui/workspacecontroller.cpp:303
 msgid "Keywords"
 msgstr "Λέξεις κλειδιά"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:256
+#: ../src/niepce/ui/workspacecontroller.cpp:315
 msgid "_Workspace"
 msgstr "_Χώρος Εργασίας"
 
@@ -464,13 +489,12 @@ msgid "Recovery"
 msgstr "Ανάκτηση"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
-#, fuzzy
 msgid "Fill Light"
-msgstr "Έτη φωτός"
+msgstr "Συμπλήρωση φωτός"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:78
 msgid "Blacks"
-msgstr ""
+msgstr "Μαύρα"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:80
 msgid "Brightness"
@@ -486,13 +510,40 @@ msgstr "Κορεσμός"
 
 #: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:86
 msgid "Vibrance"
-msgstr ""
+msgstr "Ζωτικότητα"
 
 #: ../camerawire/src/cwwindow.cpp:67
 msgid "Camera"
 msgstr "Κάμερα"
 
-#: ../camerawire/src/cwwindow.cpp:91
+#: ../camerawire/src/cwwindow.cpp:91 ../magellan/src/mgwindow.cpp:86
 msgid "_File"
 msgstr "_Αρχείο"
 
+#: ../magellan/src/mgwindow.ui.h:1
+msgid "_Erase after download"
+msgstr "_Σβήσιμο μετά τη μεταφόρτωση"
+
+#: ../magellan/src/mgwindow.ui.h:2
+msgid "<b>GPS Device</b>"
+msgstr "<b>Συσκευή GPS</b>"
+
+#: ../magellan/src/mgwindow.ui.h:3
+msgid "GPX"
+msgstr "GPX"
+
+#: ../magellan/src/mgwindow.ui.h:4
+msgid "KML"
+msgstr "KML"
+
+#: ../magellan/src/mgwindow.ui.h:5
+msgid "<b>Format</b>"
+msgstr "<b>Μορφή</b>"
+
+#: ../magellan/src/mgwindow.ui.h:6
+msgid "<b>Output</b>"
+msgstr "<b>Έξοδος</b>"
+
+#: ../magellan/src/mgwindow.ui.h:7
+msgid "Download"
+msgstr "Λήψη"
