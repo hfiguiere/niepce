@@ -35,7 +35,7 @@ gegl >= 0.2.0
 babl
 libgphoto2
 
-Niepce is being developped on Linux. It should build and work on other
+Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
 
 
@@ -57,12 +57,12 @@ Obviously you have it.
 
 The most recent code is hosted on GNOME's git server. See:
 
-http://git.gnome.org/cgit/niepce/
+http://git.gnome.org/browse/niepce/
 
 Website
 -------
 
-https://wiki.gnome.org/Niepce
+https://wiki.gnome.org/Apps/Niepce
 
 IRC
 ---

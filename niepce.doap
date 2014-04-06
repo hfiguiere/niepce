@@ -9,11 +9,9 @@
        "Falling blocks game"
        "Internationalized text layout and rendering library"
   -->
-  <shortdesc xml:lang="en">A digital photo management application.</shortdesc>
-  <homepage rdf:resource="https://wiki.gnome.org/Niepce" />
-  <!--
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/desktop-devel-list" />
-  -->
+  <shortdesc xml:lang="en">A digital photo management application</shortdesc>
+  <homepage rdf:resource="https://wiki.gnome.org/Apps/Niepce" />
+  <mailing-list rdf:resource="https://mail.gna.org/listinfo/niepce-devel/" />
 
   <maintainer>
     <foaf:Person>
