@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/thumbstripview.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,20 +30,8 @@
 
 namespace ui {
 
-/** This is needed to implement the property
- * That must be registered before the Interface is registered
- */
-class ThumbStripViewBase
-    : public Gtk::IconView
-{
-protected:
-    ThumbStripViewBase(const Glib::RefPtr<ui::ImageListStore> & store);
-
-    Glib::Property<Gtk::Orientation> m_orientation_property;
-};
-
 class ThumbStripView
-  : public ThumbStripViewBase
+  : public Gtk::IconView
   , public Gtk::Orientable
 {
 public:
