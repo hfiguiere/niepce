@@ -1,17 +1,16 @@
 
 
-AM_CPPFLAGS = -DMG_LOCALEDIR=\"${MG_LOCALEDIR}\"
+AM_CPPFLAGS = -DMG_LOCALEDIR=\"${MG_LOCALEDIR}\" \
+	-DDATADIR=\"$(datadir)\" \
+	-DGLADEDIR=\"$(gladedir)\" \
+	-I$(top_srcdir)/src  \
+	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@
 
 gladefiles = mgwindow.ui
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
 
 bin_PROGRAMS = magellan
-
-INCLUDES = -DDATADIR=\"$(datadir)\" \
-	-DGLADEDIR=\"$(gladedir)\" \
-	-I$(top_srcdir)/src  \
-	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@
 
 magellan_SOURCES = \
 	mgapplication.hpp mgapplication.cpp \
