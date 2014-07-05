@@ -1,15 +1,12 @@
 
 
-AM_CPPFLAGS = -DCW_LOCALEDIR=\"${CW_LOCALEDIR}\"
-
-
-bin_PROGRAMS = camerawire
-
-INCLUDES = -DDATADIR=\"$(datadir)\" \
+AM_CPPFLAGS = -DCW_LOCALEDIR=\"${CW_LOCALEDIR}\" \
+	-DDATADIR=\"$(datadir)\" \
 	-I$(top_srcdir)/src  \
 	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@ \
 	@GPHOTO_CFLAGS@
 
+bin_PROGRAMS = camerawire
 
 camerawire_SOURCES = \
 	cwapplication.hpp cwapplication.cpp \
