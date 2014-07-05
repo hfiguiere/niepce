@@ -1,7 +1,7 @@
 
 
 
-INCLUDES = -I$(top_srcdir)/src  \
+AM_CPPFLAGS = -I$(top_srcdir)/src  \
 	@LIBGTKMM_CFLAGS@ \
 	@BABL_CFLAGS@ @GEGL_CFLAGS@ @OPENRAW_CFLAGS@
 

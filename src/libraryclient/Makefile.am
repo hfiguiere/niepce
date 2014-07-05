@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
 
 noinst_LIBRARIES = liblibraryclient.a
 

@@ -10,7 +10,7 @@ gladefiles = dialogs/preferences.ui \
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
 
-INCLUDES = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
@@ -24,7 +24,6 @@ noinst_LIBRARIES = libniepceui.a
 
 PUBLICHEADERS = ilibrarymodule.hpp imoduleshell.hpp
 
-libniepceui_a_CPPFLAGS = 
 libniepceui_a_SOURCES = \
 	niepcewindow.hpp niepcewindow.cpp \
 	niepceapplication.hpp niepceapplication.cpp \

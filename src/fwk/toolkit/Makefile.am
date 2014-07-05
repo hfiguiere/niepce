@@ -2,7 +2,7 @@
 
 
 
-INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
+AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \
 	@LIBGTKMM_CFLAGS@ \

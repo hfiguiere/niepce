@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src/ext/ @LIBGTKMM_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src/ext/ @LIBGTKMM_CFLAGS@
 
 noinst_LIBRARIES = libview.a
 

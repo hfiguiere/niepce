@@ -1,7 +1,7 @@
 
 DIST_SUBDIRS = db
 
-INCLUDES = -I$(top_srcdir)/src/ @LIBGLIBMM_CFLAGS@ \
+AM_CPPFLAGS = -I$(top_srcdir)/src/ @LIBGLIBMM_CFLAGS@ \
 	@EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@ @GPHOTO_CFLAGS@
 
 TESTS = testfiles testxmp \

@@ -1,6 +1,7 @@
 
 
-INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce -I$(top_srcdir)/src/ext \
+AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce \
+	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@LIBGLIBMM_CFLAGS@ \

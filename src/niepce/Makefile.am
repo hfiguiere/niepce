@@ -1,14 +1,13 @@
 
 SUBDIRS = ui modules
 
-INCLUDES = -DDATADIR=\"$(datadir)\" \
+AM_CPPFLAGS = -DDATADIR=\"$(datadir)\" \
 	-I$(top_srcdir)/src/niepce -I$(top_srcdir)/src  \
-	@EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
+	@EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@ \
+	@LIBGTKMM_CFLAGS@ \
+	-DNIEPCE_LOCALEDIR=\"@NIEPCE_LOCALEDIR@\"
 
 bin_PROGRAMS = niepce
-
-niepce_CPPFLAGS = @LIBGTKMM_CFLAGS@ \
-	-DNIEPCE_LOCALEDIR=\"@NIEPCE_LOCALEDIR@\"
 
 niepce_LDFLAGS =
 niepce_LDADD = \

@@ -1,5 +1,5 @@
 
-INCLUDES = -I$(top_srcdir)/src \
+AM_CPPFLAGS = -I$(top_srcdir)/src \
 	@BOOST_CPPFLAGS@ \
 	@EXEMPI_CFLAGS@ \
 	$(NULL)
