@@ -24,6 +24,7 @@
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/settings.h>
+#include <cluttermm/init.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/modulemanager.hpp"
@@ -43,6 +44,7 @@ Application::Application(int & argc, char** &argv, const char* app_id,
     , m_module_manager(new ModuleManager())
     , m_gtkapp(Gtk::Application::create(argc, argv, app_id))
 {
+    Clutter::init(argc, argv);
 }
 
 
