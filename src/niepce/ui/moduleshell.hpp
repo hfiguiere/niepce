@@ -1,7 +1,7 @@
 /*
  * niepce - ui/moduleshell.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "fwk/toolkit/notification.hpp"
 #include "niepce/ui/gridviewmodule.hpp"
 #include "modules/darkroom/darkroommodule.hpp"
+#include "modules/map/mapmodule.hpp"
 #include "imageliststore.hpp"
 #include "imoduleshell.hpp"
 
@@ -96,6 +97,7 @@ private:
     // these should be dynamic
     GridViewModule::Ptr           m_gridview;
     dr::DarkroomModule::Ptr       m_darkroom;
+    mapm::MapModule::Ptr          m_mapm;
 };
 
 }

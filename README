@@ -26,6 +26,7 @@ gtkmm 3.2
 giomm
 cairomm
 cluttermm 1.0
+champlain-gtk 0.12
 sqlite3
 libxml2 > 2.5.0
 boost 1.34

@@ -29,6 +29,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	frame.hpp frame.cpp \
 	controller.hpp controller.cpp \
 	uicontroller.hpp uicontroller.cpp \
+	mapcontroller.hpp mapcontroller.cpp \
 	notification.hpp \
 	mimetype.hpp mimetype.cpp \
 	movieutils.hpp movieutils.cpp \

@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/moduleshell.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,6 @@
 #include "metadatapanecontroller.hpp"
 
 namespace ui {
-
-
-
 
 Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 {
@@ -212,6 +209,9 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
 
     m_darkroom = dr::DarkroomModule::Ptr(new dr::DarkroomModule(*this, m_actionGroup));
     add_library_module(m_darkroom, _("Darkroom"));
+
+    m_mapm = mapm::MapModule::Ptr(new mapm::MapModule(*this, m_actionGroup));
+    add_library_module(m_mapm, _("Map"));
 
     m_shell.signal_activated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_activated));
     m_shell.signal_deactivated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_deactivated));
