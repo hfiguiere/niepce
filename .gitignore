@@ -16,6 +16,10 @@ libtool
 depcomp
 install-sh
 ltmain.sh
+test-driver
+test*.log
+test*.trs
+test-suite.log
 stamp-*
 autom4te.cache
 intltool-*.in
