@@ -2,7 +2,7 @@
 
 SUBDIRS =
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/  @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src/  @FRAMEWORK_CFLAGS@
 
 TESTS = test_library test_filebundle
 
@@ -11,10 +11,8 @@ TEST_LIBS =  \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
-	@LIBGTKMM_LIBS@ \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
-	@LIBGLIBMM_LIBS@ \
-	@SQLITE3_LIBS@ @EXEMPI_LIBS@
+	@FRAMEWORK_LIBS@
 
 check_PROGRAMS = test_library test_filebundle
 

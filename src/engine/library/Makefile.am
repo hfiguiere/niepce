@@ -1,8 +1,8 @@
 
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/ \
-	@LIBGLIBMM_CFLAGS@ @LIBGTKMM_CFLAGS@ \
-	@OPENRAW_CFLAGS@ @EXEMPI_CFLAGS@
+	@FRAMEWORK_CFLAGS@ \
+	@OPENRAW_CFLAGS@
 
 check_PROGRAMS = test_opqueue
 TESTS = test_opqueue
@@ -12,8 +12,8 @@ TEST_LIBS =  \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
-	@LIBGLIBMM_LIBS@ \
-	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@
+	@FRAMEWORK_LIBS@ \
+	@OPENRAW_LIBS@
 
 noinst_LIBRARIES = libniepcelibrary.a
 

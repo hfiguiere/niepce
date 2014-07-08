@@ -14,9 +14,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
 	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
-	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ \
-	@EXEMPI_CFLAGS@
+	@FRAMEWORK_CFLAGS@
 
 EXTRA_DIST = $(gladefiles)
 

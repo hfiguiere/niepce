@@ -1,7 +1,7 @@
 
 AM_CPPFLAGS = -I$(top_srcdir)/src \
 	@BOOST_CPPFLAGS@ \
-	@EXEMPI_CFLAGS@ \
+	@FRAMEWORK_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libfwkbase.a
@@ -15,27 +15,27 @@ check_PROGRAMS = testmoniker testgeometry testfractions testdate testmap\
 
 testdate_SOURCES = t/testdate.cpp
 testdate_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testmoniker_SOURCES = t/testmoniker.cpp
 testmoniker_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testgeometry_SOURCES = t/testgeometry.cpp
 testgeometry_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testfractions_SOURCES = t/testfractions.cpp
 testfractions_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testmap_SOURCES = t/testmap.cpp
 testmap_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testpropertybag_SOURCES = t/testpropertybag.cpp
 testpropertybag_LDADD = libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	autoflag.hpp \

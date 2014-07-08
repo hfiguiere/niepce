@@ -4,9 +4,7 @@
 
 AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
-	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ \
-	@EXEMPI_CFLAGS@ \
+	@FRAMEWORK_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a
@@ -22,7 +20,7 @@ testconfigdatabinder_SOURCES = t/testconfigdatabinder.cpp
 testconfigdatabinder_LDADD = libniepceframework.a \
 	../base/libfwkbase.a \
 	../utils/libniepceutils.a \
-        @LIBGLIBMM_LIBS@
+        @FRAMEWORK_LIBS@
 
 
 libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \

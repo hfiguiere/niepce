@@ -3,8 +3,7 @@ SUBDIRS = ui modules
 
 AM_CPPFLAGS = -DDATADIR=\"$(datadir)\" \
 	-I$(top_srcdir)/src/niepce -I$(top_srcdir)/src  \
-	@EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ \
+	@FRAMEWORK_CFLAGS@ \
 	-DNIEPCE_LOCALEDIR=\"@NIEPCE_LOCALEDIR@\"
 
 bin_PROGRAMS = niepce
@@ -24,10 +23,9 @@ niepce_LDADD = \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libview/libview.a \
-	@LIBGLIBMM_LIBS@ \
-	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ \
+	@FRAMEWORK_LIBS@ \
 	@BABL_LIBS@ \
-	@GEGL_LIBS@ @OPENRAW_LIBS@ @EXEMPI_LIBS@
+	@GEGL_LIBS@ @OPENRAW_LIBS@
 
 
 niepce_SOURCES = \

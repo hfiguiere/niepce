@@ -1,10 +1,7 @@
 
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/ \
-	@EXEMPI_CFLAGS@ \
-	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@
-
+	@FRAMEWORK_CFLAGS@
 
 noinst_HEADERS = ipostimportprocessing.hpp \
 	$(NULL)

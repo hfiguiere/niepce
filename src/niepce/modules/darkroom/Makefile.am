@@ -4,9 +4,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/niepce \
 	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
-	@LIBGLIBMM_CFLAGS@ \
-	@LIBGTKMM_CFLAGS@ \
-	@GEGL_CFLAGS@ @EXEMPI_CFLAGS@ @OPENRAW_CFLAGS@
+	@FRAMEWORK_CFLAGS@ \
+	@GEGL_CFLAGS@ @OPENRAW_CFLAGS@
 
 
 noinst_LIBRARIES=libmoduledarkroom.a

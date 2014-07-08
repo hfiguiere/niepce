@@ -1,8 +1,8 @@
 
 DIST_SUBDIRS = db
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ @LIBGLIBMM_CFLAGS@ \
-	@EXEMPI_CFLAGS@ @LIBXML2_CFLAGS@ @GPHOTO_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src/ \
+	@FRAMEWORK_CFLAGS@ @GPHOTO_CFLAGS@
 
 TESTS = testfiles testxmp \
 	testpathutils \
@@ -18,52 +18,47 @@ check_PROGRAMS = testfiles testxmp \
 testfiles_SOURCES = testfiles.cpp
 testfiles_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 
 testxmp_SOURCES = testxmp.cpp
 testxmp_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@EXEMPI_LIBS@ @LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 testufrawmeta_SOURCES = testufrawmeta.cpp
 testufrawmeta_CXXFLAGS =  -g -O0
 testufrawmeta_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@EXEMPI_LIBS@ @LIBXML2_LIBS@ \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 teststringutils_SOURCES = teststringutils.cpp
-teststringutils_LDADD = 
+teststringutils_LDADD =
 
 testpathutils_SOURCES = t/testpathutils.cpp
 testpathutils_LDADD = libniepceutils.a \
-	@LIBGLIBMM_LIBS@
+	@FRAMEWORK_LIBS@
 
 
 test_db_SOURCES = db/test_db.cpp
 test_db_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@LIBGLIBMM_LIBS@\
-	@SQLITE3_LIBS@
+	@FRAMEWORK_LIBS@
 
 test_db2_SOURCES = db/test_db2.cpp
 test_db2_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@LIBGLIBMM_LIBS@\
-	@SQLITE3_LIBS@
+	@FRAMEWORK_LIBS@
 
 test_db3_SOURCES = db/test_db3.cpp
 test_db3_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@LIBGLIBMM_LIBS@\
-	@SQLITE3_LIBS@
+	@FRAMEWORK_LIBS@
 
 test_db4_SOURCES = db/test_db4.cpp
 test_db4_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
-	@LIBGLIBMM_LIBS@\
-	@SQLITE3_LIBS@
+	@FRAMEWORK_LIBS@
 
 noinst_LIBRARIES = libniepceutils.a
 

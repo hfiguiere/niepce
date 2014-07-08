@@ -2,7 +2,7 @@
 
 
 AM_CPPFLAGS = -I$(top_srcdir)/src  \
-	@LIBGTKMM_CFLAGS@ \
+	@FRAMEWORK_CFLAGS@ \
 	@BABL_CFLAGS@ @GEGL_CFLAGS@ @OPENRAW_CFLAGS@
 
 niepcelibdir = @libdir@/niepce/

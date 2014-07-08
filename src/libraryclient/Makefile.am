@@ -1,6 +1,6 @@
 
 
-AM_CPPFLAGS = -I$(top_srcdir)/src @EXEMPI_CFLAGS@ @LIBGLIBMM_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src @FRAMEWORK_CFLAGS@
 
 noinst_LIBRARIES = liblibraryclient.a
 
@@ -14,9 +14,8 @@ TEST_LIBS =  \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
-	@LIBGLIBMM_LIBS@ \
-	@LIBGTKMM_LIBS@ @SQLITE3_LIBS@ @OPENRAW_LIBS@ \
-	@EXEMPI_LIBS@
+	@FRAMEWORK_LIBS@ \
+	@OPENRAW_LIBS@
 
 test_worker_SOURCES = test_worker.cpp
 test_worker_LDADD = $(TEST_LIBS)
