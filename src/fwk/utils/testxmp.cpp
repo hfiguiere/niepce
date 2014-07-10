@@ -21,6 +21,7 @@
 #include <boost/test/minimal.hpp>
 
 #include <stdlib.h>
+#include <math.h>
 #include <vector>
 
 #include <glibmm/init.h>
@@ -51,7 +52,32 @@ int test_main( int, char *[] )             // note the name!
 	BOOST_CHECK(keywords[2] == "ontario");
 	BOOST_CHECK(keywords[3] == "ottawa");
 	BOOST_CHECK(keywords[4] == "parliament of canada");
-	
+
+        double output = fwk::XmpMeta::gpsCoordFromXmp("foobar");
+        BOOST_CHECK(isnan(output));
+
+        // malformed 1
+        output = fwk::XmpMeta::gpsCoordFromXmp("45,29.6681666667");
+        BOOST_CHECK(isnan(output));
+
+        // malformed 2
+        output = fwk::XmpMeta::gpsCoordFromXmp("45,W");
+        BOOST_CHECK(isnan(output));
+
+        // out of bounds
+        output = fwk::XmpMeta::gpsCoordFromXmp("200,29.6681666667N");
+        BOOST_CHECK(isnan(output));
+
+        // well-formed 1
+        std::string gps1 = "45,29.6681666667N";
+        output = fwk::XmpMeta::gpsCoordFromXmp(gps1);
+        BOOST_CHECK(output == 45.494469444445002181964810006320476531982421875);
+
+        // well-formed 2
+        std::string gps2 = "73,38.2871666667W";
+        output = fwk::XmpMeta::gpsCoordFromXmp(gps2);
+        BOOST_CHECK(output == -73.6381194444449960201382054947316646575927734375);
+
 	return 0;
 }
 

@@ -132,6 +132,9 @@ public:
     fwk::Date  creation_date() const;
     std::string creation_date_str() const;
     const std::vector< std::string > & keywords() const;
+
+    static double gpsCoordFromXmp(const std::string & s);
+
 private:
 
     XmpPtr m_xmp;
