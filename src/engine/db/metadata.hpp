@@ -62,6 +62,8 @@ enum {
     META_EXIF_WB,                      // NS_EXIF, "WhiteBalance"
     META_EXIF_DATETIMEORIGINAL,        // NS_EXIF, "DateTimeOriginal"
     META_EXIF_FOCALLENGTH,             // NS_EXIF, "FocalLength"
+    META_EXIF_GPSLONGITUDE,            // NS_EXIF, "GPSLongitude"
+    META_EXIF_GPSLATITUDE,             // NS_EXIF, "GPSLatitude"
     
     _META_EXIF_LAST_
 };
