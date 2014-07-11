@@ -67,8 +67,10 @@ void NiepceApplication::on_about()
 //    dlg.set_name("Niepce");
     dlg.set_program_name("Niepce Digital");
     dlg.set_version(VERSION);
+    dlg.set_logo_icon_name("camera-photo");
+    dlg.set_license_type(Gtk::LICENSE_GPL_3_0);
     dlg.set_comments(Glib::ustring(_("A digital photo application.\n\n"
-                                     "Build options: ")) + 
+                                     "Build options: ")) +
                      NIEPCE_BUILD_CONFIG);
     dlg.run();
 }

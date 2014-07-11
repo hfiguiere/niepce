@@ -160,7 +160,7 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 
     m_notifcenter.reset(new niepce::NotificationCenter());
 
-    Glib::ustring name("camera");
+    Glib::ustring name("camera-photo");
     set_icon_from_theme(name);
 
     m_notifcenter->signal_lib_notification.connect(
