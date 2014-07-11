@@ -29,12 +29,18 @@ class MapController
   : public UiController
 {
 public:
-  typedef std::shared_ptr<MapController> Ptr;
+    typedef std::shared_ptr<MapController> Ptr;
 
-  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+
+    void centerOn(double lat, double longitude);
+
+    void zoomIn();
+    void zoomOut();
+    void setZoomLevel(uint8_t level); // 1 to 20
 
 private:
-  Glib::RefPtr<Clutter::Actor> m_clutter_map;
+    Glib::RefPtr<Clutter::Actor> m_clutter_map;
 };
 
 

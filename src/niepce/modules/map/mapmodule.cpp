@@ -21,6 +21,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "engine/db/properties.hpp"
 #include "mapmodule.hpp"
 
 namespace mapm {
@@ -62,6 +63,55 @@ Gtk::Widget * MapModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manage
     }
 
     return m_widget;
+}
+
+void
+MapModule::on_lib_notification(const eng::LibNotification &ln)
+{
+    if (!m_active) {
+        return;
+    }
+    switch(ln.type) {
+    case eng::Library::NOTIFY_METADATA_QUERIED:
+    {
+        DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
+                   "incorrect data type for the notification");
+        eng::LibMetadata::Ptr lm
+            = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
+        DBG_OUT("received metadata in MapModule");
+
+        if (lm) {
+            fwk::PropertyBag properties;
+            const fwk::PropertySet propset = { eng::NpExifGpsLongProp,
+                                               eng::NpExifGpsLatProp };
+            lm->to_properties(propset, properties);
+            double latitude, longitude;
+            latitude = longitude = NAN;
+            fwk::PropertyValue val;
+            if(properties.get_value_for_property(eng::NpExifGpsLongProp, val)) {
+                // it is a string
+                if (is_string(val)) {
+                    longitude = fwk::XmpMeta::gpsCoordFromXmp(
+                        fwk::get_string(val));
+                }
+            }
+            if(properties.get_value_for_property(eng::NpExifGpsLatProp, val)) {
+                // it is a string
+                if (is_string(val)) {
+                    latitude = fwk::XmpMeta::gpsCoordFromXmp(
+                        fwk::get_string(val));
+                }
+            }
+
+            if (!isnan(latitude) && !isnan(longitude)) {
+                m_map->centerOn(latitude, longitude);
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 }

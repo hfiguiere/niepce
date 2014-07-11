@@ -93,6 +93,10 @@ NiepceWindow::_createModuleShell()
         .connect(sigc::mem_fun(
                      *get_pointer(m_moduleshell->get_list_store()),
                      &ImageListStore::on_lib_notification));
+    m_notifcenter->signal_lib_notification
+        .connect(sigc::mem_fun(
+                     *m_moduleshell->get_map_module(),
+                     &mapm::MapModule::on_lib_notification));
     m_notifcenter->signal_thumbnail_notification
         .connect(sigc::mem_fun(
                      *get_pointer(m_moduleshell->get_list_store()), 

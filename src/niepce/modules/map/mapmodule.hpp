@@ -47,6 +47,8 @@ public:
 
     virtual void set_active(bool active);
 
+    void on_lib_notification(const eng::LibNotification &ln);
+
 protected:
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
 

@@ -58,6 +58,10 @@ public:
         {
             return m_gridview;
         }
+    const mapm::MapModule::Ptr & get_map_module() const
+        {
+            return m_mapm;
+        }
     const Glib::RefPtr<ImageListStore> & get_list_store() const
         { 
             return m_selection_controller->get_list_store(); 

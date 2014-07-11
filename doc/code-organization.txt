@@ -6,7 +6,7 @@ Here are the different directories for the source code:
 * src
     * ext - external code
         * libgdl - "stolen" from Inkscape, a fork of libgdl
-	           from Anjuta. Has matching C++ code in 
+	           from Anjuta. Has matching C++ code in
                    the framework.
     * fwk - the framework
         * utils - utilities
@@ -24,3 +24,4 @@ Here are the different directories for the source code:
         * ui - the UI code
         * modules - The different application modules
             * darkroom - The darkroom module
+            * map - The map module

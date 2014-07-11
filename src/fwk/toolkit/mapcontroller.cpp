@@ -37,8 +37,41 @@ MapController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
     gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
   m_clutter_map = Glib::wrap(CLUTTER_ACTOR(clutter_map), true);
 
+  // Default position. Somewhere over Montréal, QC
+  setZoomLevel(10);
+  centerOn(45.5030854,-73.5698944);
+
   return m_widget;
 }
 
+void MapController::centerOn(double lat, double longitude)
+{
+  champlain_view_center_on(CHAMPLAIN_VIEW(m_clutter_map->gobj()),
+                           lat, longitude);
+}
+
+void MapController::zoomIn()
+{
+  champlain_view_zoom_in(CHAMPLAIN_VIEW(m_clutter_map->gobj()));
+}
+
+void MapController::zoomOut()
+{
+  champlain_view_zoom_out(CHAMPLAIN_VIEW(m_clutter_map->gobj()));
+}
+
+void MapController::setZoomLevel(uint8_t level)
+{
+  champlain_view_set_zoom_level(CHAMPLAIN_VIEW(m_clutter_map->gobj()), level);
+}
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
