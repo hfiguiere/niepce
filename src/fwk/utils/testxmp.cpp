@@ -64,6 +64,10 @@ int test_main( int, char *[] )             // note the name!
         output = fwk::XmpMeta::gpsCoordFromXmp("45,W");
         BOOST_CHECK(isnan(output));
 
+        // malformed 3
+        output = fwk::XmpMeta::gpsCoordFromXmp("45,29,N");
+        BOOST_CHECK(isnan(output));
+
         // out of bounds
         output = fwk::XmpMeta::gpsCoordFromXmp("200,29.6681666667N");
         BOOST_CHECK(isnan(output));
@@ -77,6 +81,11 @@ int test_main( int, char *[] )             // note the name!
         std::string gps2 = "73,38.2871666667W";
         output = fwk::XmpMeta::gpsCoordFromXmp(gps2);
         BOOST_CHECK(output == -73.6381194444449960201382054947316646575927734375);
+
+        // well-formed 3
+        std::string gps3 = "45,29,30.45N";
+        output = fwk::XmpMeta::gpsCoordFromXmp(gps3);
+        BOOST_CHECK(output == 45.49179166666666418450404307805001735687255859375);
 
 	return 0;
 }

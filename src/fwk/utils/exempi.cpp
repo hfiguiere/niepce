@@ -286,30 +286,57 @@ XmpMeta::gpsCoordFromXmp(const std::string & xmps)
         return NAN;
     }
 
+    // extract minutes. There are two formats
+    double fminutes = 0.;
     const char *next = strchr(current, ',');
     if (next) {
-        // DD,mm,ss
-
+        // DD,mm,ss format
+        next++;
+        if (!*next) {
+            return NAN;
+        }
+        len = strlen(next);
+        if (len <= 1) {
+            // too short
+            return NAN;
+        }
+        std::string seconds = std::string(next, len - 1);
+        double sseconds = 0.;
+        try {
+            sseconds = boost::lexical_cast<double>(seconds) / 60;
+            std::string minutes = std::string(current, next - current - 1);
+            fminutes = boost::lexical_cast<double>(minutes);
+            fminutes += sseconds;
+        }
+        catch(const std::exception & e) {
+            return NAN;
+        }
     }
     else {
-        // DD,mm.mm ?
-        std::string minutes = std::string(current, len - 1);
-        double fminutes = 0.;
+        // DD,mm.mm format
         try {
-            coord = boost::lexical_cast<int>(degs);
-            if (coord > 180) {
-                return NAN;
-            }
+            std::string minutes = std::string(current, len - 1);
             fminutes = boost::lexical_cast<double>(minutes);
         }
         catch(const std::exception & e) {
             return NAN;
         }
-        coord += fminutes / 60.f;
+    }
 
-        if (*orientation == 'S' || *orientation == 'W') {
-            coord = -coord;
-        }
+    // degrees.
+    try {
+        coord = boost::lexical_cast<int>(degs);
+    }
+    catch(const std::exception & e) {
+        return NAN;
+    }
+    if (coord > 180) {
+        return NAN;
+    }
+    coord += fminutes / 60.f;
+
+    if (*orientation == 'S' || *orientation == 'W') {
+        coord = -coord;
     }
 
     return coord;
