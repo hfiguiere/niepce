@@ -316,7 +316,9 @@ Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager
     m_label.set_text_with_mnemonic(Glib::ustring(_("_Workspace")));
     m_label.set_mnemonic_widget(m_librarytree);
     m_vbox.pack_start(m_label, Gtk::PACK_SHRINK);
-    m_vbox.pack_start(m_librarytree);
+    Gtk::ScrolledWindow* scrolled = Gtk::manage(new Gtk::ScrolledWindow);
+    m_vbox.pack_start(*scrolled);
+    scrolled->add(m_librarytree);
 
     m_librarytree.get_selection()->signal_changed().connect (
         sigc::mem_fun(this, 
