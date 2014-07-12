@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/tokentextview.hpp
  *
- * Copyright (C) 2012 Hubert Figuiere
+ * Copyright (C) 2012-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ class TokenTextView
     : public NoTabTextView
 {
 public:
+    TokenTextView();
+
     typedef std::vector<std::string> Tokens;
     void set_tokens(const Tokens & tokens);
     void get_tokens(Tokens & tokens);

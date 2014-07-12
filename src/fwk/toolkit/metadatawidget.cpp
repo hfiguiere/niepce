@@ -152,7 +152,14 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
                                              Glib::ustring("<b>") 
                                              + current->label + "</b>"));
-        labelw->set_alignment(0.0f, 0.5f);
+        if(current->type != META_DT_STRING_ARRAY
+           && current->type != META_DT_TEXT) {
+            labelw->set_alignment(0.0f, 0.5f);
+        }
+        else {
+            // Text can wrap. Different alignment for the label
+            labelw->set_alignment(0.0f, 0.0f);
+        }
         labelw->set_use_markup(true);
     
         switch(current->type) {
