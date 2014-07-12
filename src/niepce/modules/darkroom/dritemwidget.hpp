@@ -37,7 +37,7 @@ public:
 
     void add_widget(const Glib::ustring & label, Gtk::Widget &);
 private:
-    Gtk::VBox   m_box;
+    Gtk::Box   m_box;
 };
 
 

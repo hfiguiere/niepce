@@ -16,7 +16,6 @@ src/niepce/ui/niepcewindow.cpp
 src/niepce/ui/selectioncontroller.cpp
 src/niepce/ui/workspacecontroller.cpp
 src/niepce/ui/thumbstripview.cpp
-src/niepce/stock.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
 camerawire/src/cwwindow.cpp
 magellan/src/mgwindow.cpp

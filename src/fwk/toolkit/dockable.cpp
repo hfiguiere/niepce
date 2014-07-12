@@ -22,8 +22,8 @@
 
 namespace fwk {
 
-Dockable::Dockable(const Glib::ustring& name, 
-                   const Glib::ustring& long_name, 
+Dockable::Dockable(const Glib::ustring& name,
+                   const Glib::ustring& long_name,
                    const Glib::ustring& icon_name)
     : m_name(name)
     , m_long_name(long_name)
@@ -31,14 +31,14 @@ Dockable::Dockable(const Glib::ustring& name,
 {
 }
 
-Gtk::VBox * 
+Gtk::Box *
 Dockable::build_vbox()
 {
-    m_vbox = Gtk::manage(new Gtk::VBox());
+    m_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     // do the label, the name, etc.
 
     // TODO
-    return m_vbox;
+    return m_box;
 }
 
 }

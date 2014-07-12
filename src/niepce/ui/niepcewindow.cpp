@@ -22,15 +22,13 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <gtkmm/window.h>
+#include <gtkmm/accelkey.h>
 #include <gtkmm/action.h>
-#include <gtkmm/box.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
 
 #include "niepce/notifications.hpp"
 #include "niepce/notificationcenter.hpp"
-#include "niepce/stock.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/base/moniker.hpp"
 #include "fwk/utils/boost.hpp"
@@ -59,6 +57,7 @@ namespace ui {
 
 NiepceWindow::NiepceWindow()
     : fwk::Frame("mainWindow-frame")
+    , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
 }
 
@@ -69,7 +68,7 @@ NiepceWindow::~NiepceWindow()
     pApp->uiManager()->remove_action_group(m_refActionGroup);
 }
 
-void 
+void
 NiepceWindow::_createModuleShell()
 {
     DBG_ASSERT(m_uimanager, "UI manager NULL");
@@ -227,25 +226,27 @@ void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
     Glib::RefPtr<Gtk::Action> an_action;
 
     m_refActionGroup = Gtk::ActionGroup::create();
-		
+
     m_refActionGroup->add(Gtk::Action::create("MenuLibrary", _("_Library")));
-    m_refActionGroup->add(Gtk::Action::create("NewLibrary", Gtk::Stock::NEW));
-    m_refActionGroup->add(Gtk::Action::create("OpenLibrary", Gtk::Stock::OPEN),
-                          sigc::mem_fun(*this, 
+    m_refActionGroup->add(Gtk::Action::create("NewLibrary", _("New")));
+    m_refActionGroup->add(Gtk::Action::create("OpenLibrary", _("Open")),
+                          sigc::mem_fun(*this,
                                         &NiepceWindow::on_action_file_open));
 
     m_refActionGroup->add(Gtk::Action::create("NewFolder", _("New _Folder...")));
     m_refActionGroup->add(Gtk::Action::create("NewProject", _("New _Project...")));
 
     m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-                          sigc::mem_fun(*this, 
+                          sigc::mem_fun(*this,
                                         &NiepceWindow::on_action_file_import));
-    m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
-                          sigc::mem_fun(gtkWindow(), 
-                                        &Gtk::Window::hide));			
-    m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-                          sigc::mem_fun(*Application::app(), 
-                                        &Application::quit));	
+    m_refActionGroup->add(Gtk::Action::create("Close", _("Close")),
+                          Gtk::AccelKey("<ctrl>w"),
+                          sigc::mem_fun(gtkWindow(),
+                                        &Gtk::Window::hide));
+    m_refActionGroup->add(Gtk::Action::create("Quit", _("Quit")),
+                          Gtk::AccelKey("<ctrl>q"),
+                          sigc::mem_fun(*Application::app(),
+                                        &Application::quit));
 
     m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
 
@@ -253,14 +254,16 @@ void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
     create_redo_action(m_refActionGroup);
 
     // FIXME: bind
-    m_refActionGroup->add(Gtk::Action::create("Cut", Gtk::Stock::CUT));
-    m_refActionGroup->add(Gtk::Action::create("Copy", Gtk::Stock::COPY));
-    m_refActionGroup->add(Gtk::Action::create("Paste", Gtk::Stock::PASTE));
-    m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE),
+    m_refActionGroup->add(Gtk::Action::create("Cut", _("Cut")),
+                          Gtk::AccelKey("<ctrl>x"));
+    m_refActionGroup->add(Gtk::Action::create("Copy", _("Copy")),
+                          Gtk::AccelKey("<ctrl>c"));
+    m_refActionGroup->add(Gtk::Action::create("Paste", _("Paste")),
+                          Gtk::AccelKey("<ctrl>v"));
+    m_refActionGroup->add(Gtk::Action::create("Delete", _("Delete")),
                           sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete));
 
-    m_refActionGroup->add(Gtk::Action::create("Preferences", 
-                                              Gtk::Stock::PREFERENCES),
+    m_refActionGroup->add(Gtk::Action::create("Preferences", _("Preferences...")),
                           sigc::mem_fun(*this,
                                         &NiepceWindow::on_preferences));
 
@@ -276,8 +279,8 @@ void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
                           sigc::mem_fun(*this, &Frame::toggle_tools_visible));
 
     m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
-    m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));
-    m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT),
+    m_refActionGroup->add(Gtk::Action::create("Help", _("Help")));
+    m_refActionGroup->add(Gtk::Action::create("About", _("About")),
                           sigc::mem_fun(*Application::app(),
                                         &Application::about));
 
@@ -421,7 +424,7 @@ std::string NiepceWindow::prompt_open_library()
     std::string libMoniker;
     Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
                                   Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
-    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
     dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
 
     int result = dialog.run();

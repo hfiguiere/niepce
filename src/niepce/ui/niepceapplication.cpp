@@ -23,7 +23,6 @@
 #include <gtkmm/aboutdialog.h>
 
 #include "fwk/utils/modulemanager.hpp"
-#include "niepce/stock.hpp"
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
 
@@ -35,8 +34,6 @@ namespace ui {
 NiepceApplication::NiepceApplication(int & argc, char** & argv)
     : Application(argc, argv, "net.figuiere.Niepce", PACKAGE)
 {
-    niepce::Stock::registerStockItems();
-
     fwk::ModuleManager * modmgr = module_manager();
     DBG_ASSERT(modmgr != NULL, "module manager is NULL.");
     if(modmgr) {

@@ -23,7 +23,6 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/stock.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
@@ -133,7 +132,7 @@ void Frame::redo_state()
 
 Glib::RefPtr<Gtk::Action> Frame::create_undo_action(const Glib::RefPtr<Gtk::ActionGroup> & g)
 {
-    m_undo_action = Gtk::Action::create("Undo", Gtk::Stock::UNDO);
+    m_undo_action = Gtk::Action::create("Undo", _("Undo"));
     g->add(m_undo_action, Gtk::AccelKey("<control>Z"),
            sigc::mem_fun(Application::app()->undo_history(),
                          &UndoHistory::undo));
@@ -146,7 +145,7 @@ Glib::RefPtr<Gtk::Action> Frame::create_undo_action(const Glib::RefPtr<Gtk::Acti
 
 Glib::RefPtr<Gtk::Action> Frame::create_redo_action(const Glib::RefPtr<Gtk::ActionGroup> & g)
 {
-    m_redo_action = Gtk::Action::create("Redo", Gtk::Stock::REDO);
+    m_redo_action = Gtk::Action::create("Redo", _("Redo"));
     g->add(m_redo_action, Gtk::AccelKey("<control><shift>Z"),
            sigc::mem_fun(Application::app()->undo_history(),
                          &UndoHistory::redo));

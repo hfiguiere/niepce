@@ -42,6 +42,7 @@ namespace ui {
 
 WorkspaceController::WorkspaceController()
     : fwk::UiController()
+    , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     static struct _Icons {
         int icon_id;

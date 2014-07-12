@@ -70,8 +70,8 @@ private:
 
   CameraTreeRecord               m_camera_tree_record;
   Glib::RefPtr<Gtk::ListStore>   m_camera_tree_model;
-  Gtk::VBox                      m_vbox;
-  Gtk::HBox                      m_hbox;
+  Gtk::Box                       m_vbox;
+  Gtk::Box                       m_hbox;
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 };
 

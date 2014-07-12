@@ -86,7 +86,7 @@ private:
 		
     niepce::NotificationCenter::Ptr m_notifcenter;
 
-    Gtk::VBox                      m_vbox;
+    Gtk::Box                       m_vbox;
     Gtk::HPaned                    m_hbox;
     ModuleShell::Ptr               m_moduleshell; // the main views stacked.
     WorkspaceController::Ptr       m_workspacectrl;

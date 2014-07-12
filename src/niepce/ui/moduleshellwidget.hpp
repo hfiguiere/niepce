@@ -35,7 +35,7 @@ namespace ui {
 
 
 class ModuleShellWidget
-    : public Gtk::VBox
+    : public Gtk::Box
 {
 public:
     ModuleShellWidget();

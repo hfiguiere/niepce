@@ -68,7 +68,7 @@ private:
     const ui::IModuleShell &     m_shell;
     // darkroom split view
     Gtk::HPaned                  m_dr_splitview;
-    Gtk::VBox                    m_vbox;
+    Gtk::Box                     m_vbox;
     ImageCanvas*                 m_imagecanvas;
     Gtk::ScrolledWindow          m_canvas_scroll;
     ToolboxController::Ptr       m_toolbox_ctrl;

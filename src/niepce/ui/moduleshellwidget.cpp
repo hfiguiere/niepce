@@ -25,7 +25,7 @@
 namespace ui {
 
 ModuleShellWidget::ModuleShellWidget()
-    : Gtk::VBox(),
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL),
       m_currentpage(-1)
 {
     set_spacing(4);

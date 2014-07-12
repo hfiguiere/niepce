@@ -22,7 +22,6 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/stock.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
@@ -103,7 +102,7 @@ const fwk::PropertySet & MetaDataPaneController::get_property_set()
   
 MetaDataPaneController::MetaDataPaneController()
     : Dockable("Metadata", _("Image Properties"), 
-	       Gtk::Stock::PROPERTIES.id /*, DockItem::DOCKED_STATE*/),
+	       "document-properties" /*, DockItem::DOCKED_STATE*/),
       m_fileid(0)
 {
 }
@@ -118,16 +117,16 @@ MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
     if(m_widget) {
         return m_widget;
     }
-    Gtk::VBox *vbox = build_vbox();
-    m_widget = vbox;
-    DBG_ASSERT(vbox, "dockable vbox not found");
+    Gtk::Box *box = build_vbox();
+    m_widget = box;
+    DBG_ASSERT(box, "dockable vbox not found");
     
     const fwk::MetaDataSectionFormat * formats = get_format();
     
     const fwk::MetaDataSectionFormat * current = formats;
     while(current->section) {
         fwk::MetaDataWidget *w = Gtk::manage(new fwk::MetaDataWidget(current->section));
-        vbox->pack_start(*w, Gtk::PACK_SHRINK, 0);
+        box->pack_start(*w, Gtk::PACK_SHRINK, 0);
         w->set_data_format(current);
         m_widgets.push_back(w);
         w->signal_metadata_changed.connect(

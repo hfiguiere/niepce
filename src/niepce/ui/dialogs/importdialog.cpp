@@ -28,7 +28,6 @@
 #include <gtkmm/iconview.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/builder.h>
 
 #include "fwk/base/debug.hpp"
@@ -86,7 +85,7 @@ void ImportDialog::do_select_directories()
     Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
                                   Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	
-    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
     dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
     dialog.set_select_multiple(false);
     std::string last_import_location;

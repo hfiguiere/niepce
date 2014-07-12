@@ -30,7 +30,6 @@ niepce_LDADD = \
 
 
 niepce_SOURCES = \
-	stock.hpp stock.cpp \
 	notificationcenter.hpp notificationcenter.cpp \
         notifications.hpp \
 	main.cpp

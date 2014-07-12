@@ -28,7 +28,8 @@
 namespace fwk {
 
 EditableHScale::EditableHScale(double min, double max, double step)
-    : m_icon(nullptr),
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
+      m_icon(nullptr),
       m_adj(Gtk::Adjustment::create(0, min, max, step)),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)
@@ -39,7 +40,8 @@ EditableHScale::EditableHScale(double min, double max, double step)
 
 EditableHScale::EditableHScale(const std::string & icon_path, 
                                double min, double max, double step)
-    : m_icon(Gtk::manage(new Gtk::Image(icon_path))),
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
+      m_icon(Gtk::manage(new Gtk::Image(icon_path))),
       m_adj(Gtk::Adjustment::create(0, min, max, step)),
       m_scale(m_adj), m_entry(m_adj),
       m_dirty(false)

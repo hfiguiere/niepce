@@ -25,6 +25,7 @@ namespace dr {
 
 DrItemWidget::DrItemWidget(const Glib::ustring & title)
     : fwk::ToolboxItemWidget(title)
+    , m_box(Gtk::ORIENTATION_VERTICAL)
 {
     add(m_box);
     m_box.set_border_width(6);

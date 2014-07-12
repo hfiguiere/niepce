@@ -19,7 +19,6 @@
 
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/toolbar.h>
-#include <gtkmm/stock.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -33,6 +32,7 @@ namespace dr {
 DarkroomModule::DarkroomModule(const ui::IModuleShell & shell, 
                                const Glib::RefPtr<Gtk::ActionGroup> & action_group)
     : m_shell(shell)
+    , m_vbox(Gtk::ORIENTATION_VERTICAL)
     , m_actionGroup(action_group)
     , m_image(new ncr::Image)
     , m_active(false)

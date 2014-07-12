@@ -12,7 +12,6 @@
 #include <gtk/gtk.h>
 
 #include <gtkmm/invisible.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/icontheme.h>
 
 #include "dock-item.hpp"

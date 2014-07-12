@@ -23,11 +23,9 @@
 
 #include <gtkmm/celllayout.h>
 #include <gtkmm/cellrenderer.h>
-#include <gtkmm/stock.h>
 
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
-#include "niepce/stock.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/libfile.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -54,24 +52,24 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
 
     m_actionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
-    m_actionGroup->add(Gtk::Action::create("PrevImage", Gtk::Stock::GO_BACK),
+    m_actionGroup->add(Gtk::Action::create_with_icon_name("PrevImage", "go-previous", _("Back"), ""),
                           Gtk::AccelKey(GDK_KEY_Left, Gdk::ModifierType(0)),
                           sigc::mem_fun(*m_selection_controller,
                                         &SelectionController::select_previous));
-    m_actionGroup->add(Gtk::Action::create("NextImage", Gtk::Stock::GO_FORWARD),
+    m_actionGroup->add(Gtk::Action::create_with_icon_name("NextImage", "go-next", _("Forward"), ""),
                           Gtk::AccelKey(GDK_KEY_Right, Gdk::ModifierType(0)),
                           sigc::mem_fun(*m_selection_controller,
                                         &SelectionController::select_next));
-    
-    an_action = Gtk::Action::create("RotateLeft", niepce::Stock::ROTATE_LEFT);
-    m_actionGroup->add(an_action, sigc::bind(
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::rotate), -90));
-    an_action = Gtk::Action::create("RotateRight", niepce::Stock::ROTATE_RIGHT);
-    m_actionGroup->add(an_action, sigc::bind(
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::rotate), 90));
-    
+
+    an_action = Gtk::Action::create_with_icon_name("RotateLeft", "object-rotate-left", _("Rotate Left"), "");
+    m_actionGroup->add(an_action, Gtk::AccelKey("["), sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::rotate), -90));
+    an_action = Gtk::Action::create_with_icon_name("RotateRight", "object-rotate-right", _("Rotate Right"), "");
+    m_actionGroup->add(an_action, Gtk::AccelKey("]"), sigc::bind(
+                           sigc::mem_fun(*m_selection_controller,
+                                         &SelectionController::rotate), 90));
+
     m_actionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
     m_actionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
                        Gtk::AccelKey('6', Gdk::CONTROL_MASK), sigc::bind(
@@ -93,7 +91,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
                               sigc::mem_fun(*m_selection_controller,
                                             &SelectionController::set_label),
                               4));
-    
+
     m_actionGroup->add(Gtk::Action::create("SetRating", _("Set _Rating")));
     m_actionGroup->add(Gtk::Action::create("SetRating0", _("Unrated")),
                        Gtk::AccelKey('0', Gdk::CONTROL_MASK), sigc::bind(
@@ -147,7 +145,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
                                          &SelectionController::set_flag),
                            1));
 
-    m_actionGroup->add(Gtk::Action::create("DeleteImage", Gtk::Stock::DELETE));
+    m_actionGroup->add(Gtk::Action::create("DeleteImage", _("Delete Image")));
 
     m_actionGroup->add(Gtk::Action::create("WriteMetadata",
                                            _("Write metadata")),

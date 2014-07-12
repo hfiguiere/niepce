@@ -22,7 +22,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/stock.h>
 
 #include "toolboxcontroller.hpp"
 #include "fwk/base/debug.hpp"
@@ -36,7 +35,7 @@
 namespace dr {
 
 ToolboxController::ToolboxController()
-    : Dockable("tools", _("Develop"), Gtk::Stock::APPLY.id)
+    : Dockable("tools", _("Develop"), "apply") // FIXME there is no equivalent it seems.
 {
 
 }
@@ -50,7 +49,7 @@ ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
     DrItemWidget *item = nullptr;
     fwk::EditableHScale *s = nullptr;
 
-    Gtk::VBox *toolbox = Dockable::build_vbox();
+    Gtk::Box *toolbox = Dockable::build_vbox();
     m_widget = toolbox;
     DBG_ASSERT(toolbox, "vbox not found.");
 

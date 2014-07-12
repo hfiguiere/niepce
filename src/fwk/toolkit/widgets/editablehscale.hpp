@@ -31,7 +31,7 @@ namespace fwk {
 
 /** A widget similar to a Gtk::HScale with a edit box */
 class EditableHScale
-    : public Gtk::HBox
+    : public Gtk::Box
 {
 public:
     EditableHScale(double min, double max, double step);

@@ -40,14 +40,14 @@ public:
              const Glib::ustring& icon_name);
 
     /** return the vbox controlled (construct it if needed) */
-    Gtk::VBox * build_vbox();
+    Gtk::Box * build_vbox();
 
     const Glib::ustring & get_name() const
         {
             return m_name;
         }
 private:
-    Gtk::VBox * m_vbox;
+    Gtk::Box * m_box;
     Glib::ustring m_name;
     Glib::ustring m_long_name;
     Glib::ustring m_icon_name;

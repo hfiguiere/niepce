@@ -127,7 +127,7 @@ private:
     };
     std::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
     WorkspaceTreeColumns           m_librarycolumns;
-    Gtk::VBox                      m_vbox;
+    Gtk::Box                       m_vbox;
     Gtk::Label                     m_label;
     Gtk::TreeView                  m_librarytree;
     Gtk::TreeModel::iterator       m_folderNode;  /**< the folder node */
