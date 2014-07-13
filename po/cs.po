@@ -1,14 +1,14 @@
 # Czech translation for niepce.
 # Copyright (C) 2009 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012, 2013.
+# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-20 05:54+0000\n"
-"PO-Revision-Date: 2013-06-24 10:26+0200\n"
+"POT-Creation-Date: 2014-07-12 17:01+0000\n"
+"PO-Revision-Date: 2014-07-13 08:06+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,12 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: ../src/fwk/toolkit/frame.cpp:121
+#: ../src/fwk/toolkit/frame.cpp:120
 msgid "Undo "
 msgstr "Zpět "
 
-#: ../src/fwk/toolkit/frame.cpp:130
+#: ../src/fwk/toolkit/frame.cpp:129
 msgid "Redo "
+msgstr "Znovu "
+
+#: ../src/fwk/toolkit/frame.cpp:135
+msgid "Undo"
+msgstr "Zpět "
+
+#: ../src/fwk/toolkit/frame.cpp:148
+msgid "Redo"
 msgstr "Znovu "
 
 #: ../src/fwk/toolkit/widgets/addinstreemodel.cpp:64
@@ -34,7 +42,7 @@ msgstr "Název"
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/engine/db/library.cpp:147
+#: ../src/engine/db/library.cpp:146
 msgid "Trash"
 msgstr "Koš"
 
@@ -47,22 +55,22 @@ msgid "Change Labels"
 msgstr "Změna popisků"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: ../src/niepce/ui/moduleshell.cpp:74
 msgid "Label _6"
 msgstr "Popisek 6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:84
+#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _7"
 msgstr "Popisek 7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:89
+#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _8"
 msgstr "Popisek 8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:94
+#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _9"
 msgstr "Popisek 9"
 
@@ -84,15 +92,20 @@ msgstr "<b>Popisky</b>"
 #. fill-column:99
 #. End:
 #.
-#: ../src/niepce/ui/dialogs/importdialog.cpp:62
-#: ../src/niepce/ui/dialogs/importdialog.cpp:90
+#: ../src/niepce/ui/dialogs/importdialog.cpp:61
+#: ../src/niepce/ui/dialogs/importdialog.cpp:89
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:1
 msgid "Import"
 msgstr "Import"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:86
+#: ../src/niepce/ui/dialogs/importdialog.cpp:85
 msgid "Import picture folder"
 msgstr "Import složky s obrázky"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:88
+#: ../src/niepce/ui/niepcewindow.cpp:427
+msgid "Cancel"
+msgstr "Zrušit"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
 #: ../magellan/src/mgwindow.cpp:87
@@ -159,164 +172,188 @@ msgstr "_Uživatelské rozhraní"
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: ../src/niepce/ui/moduleshell.cpp:58
+#: ../src/niepce/ui/moduleshell.cpp:53
 msgid "_Image"
 msgstr "_Obrázek"
 
-#: ../src/niepce/ui/moduleshell.cpp:78
+#: ../src/niepce/ui/moduleshell.cpp:55
+msgid "Back"
+msgstr "Zpět"
+
+#: ../src/niepce/ui/moduleshell.cpp:59
+msgid "Forward"
+msgstr "Vpřed"
+
+#: ../src/niepce/ui/moduleshell.cpp:64
+msgid "Rotate Left"
+msgstr "Otočit vlevo"
+
+#: ../src/niepce/ui/moduleshell.cpp:68
+msgid "Rotate Right"
+msgstr "Otočit vpravo"
+
+#: ../src/niepce/ui/moduleshell.cpp:73
 msgid "Set _Label"
 msgstr "Nastavit _popisek"
 
-#: ../src/niepce/ui/moduleshell.cpp:100
+#: ../src/niepce/ui/moduleshell.cpp:95
 msgid "Set _Rating"
 msgstr "Nastavit _hodnocení"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
+#: ../src/niepce/ui/moduleshell.cpp:96
 msgid "Unrated"
 msgstr "Nehodnoceno"
 
-#: ../src/niepce/ui/moduleshell.cpp:106
+#: ../src/niepce/ui/moduleshell.cpp:101
 msgid "Rating _1"
 msgstr "Hodnocení _1"
 
-#: ../src/niepce/ui/moduleshell.cpp:111
+#: ../src/niepce/ui/moduleshell.cpp:106
 msgid "Rating _2"
 msgstr "Hodnocení _2"
 
-#: ../src/niepce/ui/moduleshell.cpp:116
+#: ../src/niepce/ui/moduleshell.cpp:111
 msgid "Rating _3"
 msgstr "Hodnocení _3"
 
-#: ../src/niepce/ui/moduleshell.cpp:121
+#: ../src/niepce/ui/moduleshell.cpp:116
 msgid "Rating _4"
 msgstr "Hodnocení _4"
 
-#: ../src/niepce/ui/moduleshell.cpp:126
+#: ../src/niepce/ui/moduleshell.cpp:121
 msgid "Rating _5"
 msgstr "Hodnocení _5"
 
-#: ../src/niepce/ui/moduleshell.cpp:132
+#: ../src/niepce/ui/moduleshell.cpp:127
 msgid "Set _Flag"
 msgstr "Nastavit _příznak"
 
-#: ../src/niepce/ui/moduleshell.cpp:134
+#: ../src/niepce/ui/moduleshell.cpp:129
 msgid "Flag as _Rejected"
 msgstr "Příznak _odmítnutí"
 
-#: ../src/niepce/ui/moduleshell.cpp:139
+#: ../src/niepce/ui/moduleshell.cpp:135
 msgid "_Unflagged"
 msgstr "Bez příznak_u"
 
-#: ../src/niepce/ui/moduleshell.cpp:144
+#: ../src/niepce/ui/moduleshell.cpp:141
 msgid "Flag as _Pick"
 msgstr "_Příznak výběru"
 
-#: ../src/niepce/ui/moduleshell.cpp:153
+#: ../src/niepce/ui/moduleshell.cpp:148
+msgid "Delete Image"
+msgstr "Smazat obrázek"
+
+#: ../src/niepce/ui/moduleshell.cpp:151
 msgid "Write metadata"
 msgstr "Zapsat metadata"
 
-#: ../src/niepce/ui/moduleshell.cpp:202
+#: ../src/niepce/ui/moduleshell.cpp:200
 msgid "Library"
 msgstr "Sbírka"
 
-#: ../src/niepce/ui/moduleshell.cpp:211
+#: ../src/niepce/ui/moduleshell.cpp:209
 msgid "Darkroom"
 msgstr "Temná komora"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:38
+#: ../src/niepce/ui/moduleshell.cpp:212
+msgid "Map"
+msgstr "Mapa"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:37
 msgid "Make:"
 msgstr "Výrobce:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:39
+#: ../src/niepce/ui/metadatapanecontroller.cpp:38
 msgid "Model:"
 msgstr "Model:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:40
+#: ../src/niepce/ui/metadatapanecontroller.cpp:39
 msgid "Lens:"
 msgstr "Čočky:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+#: ../src/niepce/ui/metadatapanecontroller.cpp:43
 msgid "Exposure Program:"
 msgstr "Expoziční režim:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Speed:"
 msgstr "Závěrka:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:46
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Aperture:"
 msgstr "Clona:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:47
+#: ../src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "ISO:"
 msgstr "ISO:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:48
+#: ../src/niepce/ui/metadatapanecontroller.cpp:47
 msgid "Exposure Bias:"
 msgstr "Korekce expozice:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+#: ../src/niepce/ui/metadatapanecontroller.cpp:48
 msgid "Flash:"
 msgstr "Blesk:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
 msgid "Flash compensation:"
 msgstr "Kompenzace blesku:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Focal length:"
 msgstr "Ohnisková vzdálenost:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "White balance:"
 msgstr "Vyvážení bílé:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:53
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Date:"
 msgstr "Datum:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+#: ../src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Headline:"
 msgstr "Titulek:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Caption:"
 msgstr "Legenda:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "Rating:"
 msgstr "Hodnocení:"
 
 #. FIXME change this type to the right one when there is a widget
-#: ../src/niepce/ui/metadatapanecontroller.cpp:61
+#: ../src/niepce/ui/metadatapanecontroller.cpp:60
 msgid "Label:"
 msgstr "Popis:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:62
+#: ../src/niepce/ui/metadatapanecontroller.cpp:61
 msgid "Keywords:"
 msgstr "Klíčová slova:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:66
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Camera Information"
 msgstr "Informace o fotoaparátu"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+#: ../src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Shooting Information"
 msgstr "Informace o pořízení"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+#: ../src/niepce/ui/metadatapanecontroller.cpp:71
 msgid "IPTC"
 msgstr "Informace IPTC"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+#: ../src/niepce/ui/metadatapanecontroller.cpp:74
 msgid "Rights"
 msgstr "Práva"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:105
+#: ../src/niepce/ui/metadatapanecontroller.cpp:104
 msgid "Image Properties"
 msgstr "Vlastnosti obrázku"
 
-#: ../src/niepce/ui/niepceapplication.cpp:66
+#: ../src/niepce/ui/niepceapplication.cpp:69
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -326,198 +363,235 @@ msgstr ""
 "\n"
 "Volby sestavení: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:131
+#: ../src/niepce/ui/niepcewindow.cpp:135
 msgid "Ready"
 msgstr "Připraven"
 
-#: ../src/niepce/ui/niepcewindow.cpp:227
+#: ../src/niepce/ui/niepcewindow.cpp:230
 msgid "_Library"
 msgstr "_Sbírka"
 
-#: ../src/niepce/ui/niepcewindow.cpp:233
+#: ../src/niepce/ui/niepcewindow.cpp:231
+msgid "New"
+msgstr "Nový"
+
+#: ../src/niepce/ui/niepcewindow.cpp:232
+msgid "Open"
+msgstr "Otevřít"
+
+#: ../src/niepce/ui/niepcewindow.cpp:236
 msgid "New _Folder..."
 msgstr "Nová _složka…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:234
+#: ../src/niepce/ui/niepcewindow.cpp:237
 msgid "New _Project..."
 msgstr "Nový _projekt…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:236 ../camerawire/src/cwwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:239 ../camerawire/src/cwwindow.cpp:94
 msgid "_Import..."
 msgstr "_Import…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:246 ../camerawire/src/cwwindow.cpp:102
+#: ../src/niepce/ui/niepcewindow.cpp:242
+msgid "Close"
+msgstr "Zavřít"
+
+#: ../src/niepce/ui/niepcewindow.cpp:246
+msgid "Quit"
+msgstr "Ukončit"
+
+#: ../src/niepce/ui/niepcewindow.cpp:251 ../camerawire/src/cwwindow.cpp:104
 #: ../magellan/src/mgwindow.cpp:98
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/niepce/ui/niepcewindow.cpp:266 ../camerawire/src/cwwindow.cpp:118
+#. FIXME: bind
+#: ../src/niepce/ui/niepcewindow.cpp:257
+msgid "Cut"
+msgstr "Vyjmout"
+
+#: ../src/niepce/ui/niepcewindow.cpp:259
+msgid "Copy"
+msgstr "Kopírovat"
+
+#: ../src/niepce/ui/niepcewindow.cpp:261
+msgid "Paste"
+msgstr "Vložit"
+
+#: ../src/niepce/ui/niepcewindow.cpp:263
+msgid "Delete"
+msgstr "Smazat"
+
+#: ../src/niepce/ui/niepcewindow.cpp:266
+msgid "Preferences..."
+msgstr "Předvolby…"
+
+#: ../src/niepce/ui/niepcewindow.cpp:273 ../camerawire/src/cwwindow.cpp:120
 #: ../magellan/src/mgwindow.cpp:114
 msgid "_Tools"
 msgstr "Nás_troje"
 
-#: ../src/niepce/ui/niepcewindow.cpp:267
+#: ../src/niepce/ui/niepcewindow.cpp:274
 msgid "_Edit Labels..."
 msgstr "_Upravit popisky…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:270 ../camerawire/src/cwwindow.cpp:124
+#: ../src/niepce/ui/niepcewindow.cpp:277 ../camerawire/src/cwwindow.cpp:126
 #: ../magellan/src/mgwindow.cpp:120
 msgid "_Hide tools"
 msgstr "Skrý_t nástroje"
 
-#: ../src/niepce/ui/niepcewindow.cpp:274 ../camerawire/src/cwwindow.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:281 ../camerawire/src/cwwindow.cpp:130
 #: ../magellan/src/mgwindow.cpp:124
 msgid "_Help"
 msgstr "_Nápověda"
 
+#: ../src/niepce/ui/niepcewindow.cpp:282
+msgid "Help"
+msgstr "Nápověda"
+
+#: ../src/niepce/ui/niepcewindow.cpp:283
+msgid "About"
+msgstr "O aplikaci"
+
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:376
+#: ../src/niepce/ui/niepcewindow.cpp:383
 msgid "Label 1"
 msgstr "Popisek 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:377
+#: ../src/niepce/ui/niepcewindow.cpp:384
 msgid "Label 2"
 msgstr "Popisek 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:378
+#: ../src/niepce/ui/niepcewindow.cpp:385
 msgid "Label 3"
 msgstr "Popisek 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:379
+#: ../src/niepce/ui/niepcewindow.cpp:386
 msgid "Label 4"
 msgstr "Popisek 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:380
+#: ../src/niepce/ui/niepcewindow.cpp:387
 msgid "Label 5"
 msgstr "Popisek 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:418
+#: ../src/niepce/ui/niepcewindow.cpp:425
 msgid "Create library"
 msgstr "Založení sbírky"
 
-#: ../src/niepce/ui/niepcewindow.cpp:421
+#: ../src/niepce/ui/niepcewindow.cpp:428
 msgid "Create"
 msgstr "Vytvořit"
 
-#: ../src/niepce/ui/niepcewindow.cpp:475
+#: ../src/niepce/ui/niepcewindow.cpp:487
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:248
+#: ../src/niepce/ui/selectioncontroller.cpp:250
 msgid "Set Flag"
 msgstr "Natavit příznak"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:251
+#: ../src/niepce/ui/selectioncontroller.cpp:253
 msgid "Set Rating"
 msgstr "Natavit hodnocení"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:254
+#: ../src/niepce/ui/selectioncontroller.cpp:256
 msgid "Set Label"
 msgstr "Natavit popisek"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:257
+#: ../src/niepce/ui/selectioncontroller.cpp:259
 msgid "Set Property"
 msgstr "Nastavit vlastnost"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:276
+#: ../src/niepce/ui/selectioncontroller.cpp:278
 msgid "Set Properties"
 msgstr "Nastavit vlastnosti"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:298
+#: ../src/niepce/ui/selectioncontroller.cpp:300
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:238
+#: ../src/niepce/ui/workspacecontroller.cpp:296
 msgid "Pictures"
 msgstr "Obrázky"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:242
+#: ../src/niepce/ui/workspacecontroller.cpp:300
 msgid "Projects"
 msgstr "Projekty"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:246
+#: ../src/niepce/ui/workspacecontroller.cpp:304
 msgid "Keywords"
 msgstr "Klíčová slova"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:259
+#: ../src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Pracovní plocha"
 
-#: ../src/niepce/stock.cpp:46
-msgid "Rotate L_eft"
-msgstr "Otočit v_levo"
-
-#: ../src/niepce/stock.cpp:49
-msgid "Rotate R_ight"
-msgstr "Otočit vp_ravo"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:39
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:38
 msgid "Develop"
 msgstr "Vyvolat"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:57
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
 msgid "Crop"
 msgstr "Oříznout"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:60
 msgid "Tilt"
 msgstr "Náklon"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:63
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
 msgid "White balance"
 msgstr "Vyvážení bílé"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:66
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
 msgid "Color temperature"
 msgstr "Teplota barev"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:68
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
 msgid "Tone and colour"
 msgstr "Odstín a barva"
 
 #. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:72
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
 msgid "Exposure"
 msgstr "Expozice"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:74
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
 msgid "Recovery"
 msgstr "Obnovení"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
 msgid "Fill Light"
 msgstr "Jas tmavých tónů"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:78
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
 msgid "Blacks"
 msgstr "Tmavost tmavých tónů"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:80
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
 msgid "Brightness"
 msgstr "Jas"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:82
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:81
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:84
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:83
 msgid "Saturation"
 msgstr "Sytost"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:86
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:85
 msgid "Vibrance"
 msgstr "Sytost bledých tónů"
 
-#: ../camerawire/src/cwwindow.cpp:67
+#: ../camerawire/src/cwwindow.cpp:69
 msgid "Camera"
 msgstr "Fotoaparát"
 
-#: ../camerawire/src/cwwindow.cpp:91 ../magellan/src/mgwindow.cpp:86
+#: ../camerawire/src/cwwindow.cpp:93 ../magellan/src/mgwindow.cpp:86
 msgid "_File"
 msgstr "_Soubor"
 
