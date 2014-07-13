@@ -37,16 +37,19 @@ namespace Gtk {
 
 namespace fwk {
 
-class Frame 
-		: public UiController
+class Frame
+    : public UiController
 {
-public:
-		typedef std::shared_ptr<Frame> Ptr;
+protected:
+    Frame(Gtk::Window* win, const std::string & layout_cfg_key = "");
 
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
+public:
+    typedef std::shared_ptr<Frame> Ptr;
+
+    Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "");
-		Frame(const std::string & layout_cfg_key = "");
-		virtual ~Frame();
+    Frame(const std::string & layout_cfg_key = "");
+    virtual ~Frame();
 
     /** convenience to return the Frame::Ptr from this */
     Ptr shared_frame_ptr()

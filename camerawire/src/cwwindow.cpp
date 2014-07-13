@@ -35,7 +35,7 @@ namespace cw {
 
 
 CwWindow::CwWindow()
-  : fwk::Frame("cw-window-frame")
+  : fwk::AppFrame("cw-window-frame")
   , m_vbox(Gtk::ORIENTATION_VERTICAL)
   , m_hbox(Gtk::ORIENTATION_HORIZONTAL)
 {

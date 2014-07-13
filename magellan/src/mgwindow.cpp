@@ -36,7 +36,7 @@ namespace mg {
 
 
 MgWindow::MgWindow()
-    : fwk::Frame("mg-window-frame")
+    : fwk::AppFrame("mg-window-frame")
 {
 }
 

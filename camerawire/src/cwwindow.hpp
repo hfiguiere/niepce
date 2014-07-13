@@ -29,12 +29,12 @@
 #include <gtkmm/treeview.h>
 
 #include "fwk/utils/gphoto.hpp"
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 
 namespace cw {
 
 class CwWindow
-  : public fwk::Frame
+  : public fwk::AppFrame
 {
 public:
   CwWindow();

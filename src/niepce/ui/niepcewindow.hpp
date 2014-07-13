@@ -28,7 +28,7 @@
 #include <gtkmm/statusbar.h>
 #include <gtkmm/paned.h>
 
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
@@ -41,7 +41,7 @@
 namespace ui {
 
 class NiepceWindow
-    : public fwk::Frame
+    : public fwk::AppFrame
 {
 public:
     NiepceWindow();
@@ -83,7 +83,7 @@ private:
     bool open_library(const std::string & libMoniker);
 
     void _createModuleShell();
-		
+
     niepce::NotificationCenter::Ptr m_notifcenter;
 
     Gtk::Box                       m_vbox;

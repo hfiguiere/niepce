@@ -28,12 +28,12 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 
 namespace mg {
 
 class MgWindow
-  : public fwk::Frame
+  : public fwk::AppFrame
 {
 public:
   MgWindow();

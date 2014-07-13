@@ -29,32 +29,39 @@
 #include "frame.hpp"
 #include "application.hpp"
 
-
-
 namespace fwk {
 
-Frame::Frame(const std::string & layout_cfg_key)
-		: m_window(new Gtk::Window()),
-		  m_builder(nullptr),
-		  m_layout_cfg_key(layout_cfg_key)
+Frame::Frame(Gtk::Window* win, const std::string & layout_cfg_key)
+    : m_window(win),
+      m_builder(nullptr),
+      m_layout_cfg_key(layout_cfg_key)
 {
-		connectSignals();
-		frameRectFromConfig();
+    connectSignals();
+    frameRectFromConfig();
+}
+
+Frame::Frame(const std::string & layout_cfg_key)
+    : m_window(new Gtk::Window()),
+      m_builder(nullptr),
+      m_layout_cfg_key(layout_cfg_key)
+{
+    connectSignals();
+    frameRectFromConfig();
 }
 
 
-Frame::Frame(const std::string & gladeFile, 
+Frame::Frame(const std::string & gladeFile,
              const Glib::ustring & widgetName,
              const std::string & layout_cfg_key)
-		: m_window(nullptr),
-		  m_builder(Gtk::Builder::create_from_file(gladeFile)),
-		  m_layout_cfg_key(layout_cfg_key)
+    : m_window(nullptr),
+      m_builder(Gtk::Builder::create_from_file(gladeFile)),
+      m_layout_cfg_key(layout_cfg_key)
 {
-		if (m_builder) {
+    if (m_builder) {
         m_builder->get_widget(widgetName, m_window);
         connectSignals();
         frameRectFromConfig();
-		}
+    }
 }
 
 

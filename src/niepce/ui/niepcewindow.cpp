@@ -56,7 +56,7 @@ namespace ui {
 
 
 NiepceWindow::NiepceWindow()
-    : fwk::Frame("mainWindow-frame")
+    : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
 }
