@@ -4,29 +4,38 @@
 # Djavan Fagundes <djavan@comum.org>, 2010.
 # Enrico Nicoletto <liverig@gmail.com>, 2013.
 # Júnior Pires <juniorpiresupe@gmail.com>, 2013.
+# Rafael Ferreira <rafael.f.f1@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-08 02:10+0000\n"
-"PO-Revision-Date: 2013-07-21 22:16-0300\n"
-"Last-Translator: Júnior Pires <juniorpiresupe@gmail.com>\n"
+"POT-Creation-Date: 2014-07-12 17:01+0000\n"
+"PO-Revision-Date: 2014-07-15 12:11-0300\n"
+"Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_BR-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.5\n"
 
-#: ../src/fwk/toolkit/frame.cpp:121
+#: ../src/fwk/toolkit/frame.cpp:120
 msgid "Undo "
 msgstr "Desfazer "
 
-#: ../src/fwk/toolkit/frame.cpp:130
+#: ../src/fwk/toolkit/frame.cpp:129
 msgid "Redo "
 msgstr "Refazer "
+
+#: ../src/fwk/toolkit/frame.cpp:135
+msgid "Undo"
+msgstr "Desfazer"
+
+#: ../src/fwk/toolkit/frame.cpp:148
+msgid "Redo"
+msgstr "Refazer"
 
 #: ../src/fwk/toolkit/widgets/addinstreemodel.cpp:64
 msgid "Name"
@@ -36,7 +45,7 @@ msgstr "Nome"
 msgid "Description"
 msgstr "Descrição"
 
-#: ../src/engine/db/library.cpp:147
+#: ../src/engine/db/library.cpp:146
 msgid "Trash"
 msgstr "Lixeira"
 
@@ -49,22 +58,22 @@ msgid "Change Labels"
 msgstr "Alterar rótulos"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: ../src/niepce/ui/moduleshell.cpp:74
 msgid "Label _6"
 msgstr "Rótulo _6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:84
+#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _7"
 msgstr "Rótulo _7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:89
+#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _8"
 msgstr "Rótulo _8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:94
+#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _9"
 msgstr "Rótulo _9"
 
@@ -86,15 +95,20 @@ msgstr "<b>Rótulos</b>"
 #. fill-column:99
 #. End:
 #.
-#: ../src/niepce/ui/dialogs/importdialog.cpp:62
-#: ../src/niepce/ui/dialogs/importdialog.cpp:90
+#: ../src/niepce/ui/dialogs/importdialog.cpp:61
+#: ../src/niepce/ui/dialogs/importdialog.cpp:89
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:1
 msgid "Import"
 msgstr "Importar"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:86
+#: ../src/niepce/ui/dialogs/importdialog.cpp:85
 msgid "Import picture folder"
 msgstr "Importar pasta de fotos"
+
+#: ../src/niepce/ui/dialogs/importdialog.cpp:88
+#: ../src/niepce/ui/niepcewindow.cpp:427
+msgid "Cancel"
+msgstr "Cancelar"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
 #: ../magellan/src/mgwindow.cpp:87
@@ -161,164 +175,188 @@ msgstr "Interface do _usuário"
 msgid "Preferences"
 msgstr "Preferências"
 
-#: ../src/niepce/ui/moduleshell.cpp:58
+#: ../src/niepce/ui/moduleshell.cpp:53
 msgid "_Image"
 msgstr "_Imagem"
 
-#: ../src/niepce/ui/moduleshell.cpp:78
+#: ../src/niepce/ui/moduleshell.cpp:55
+msgid "Back"
+msgstr "Voltar"
+
+#: ../src/niepce/ui/moduleshell.cpp:59
+msgid "Forward"
+msgstr "Avançar"
+
+#: ../src/niepce/ui/moduleshell.cpp:64
+msgid "Rotate Left"
+msgstr "Girar para esquerda"
+
+#: ../src/niepce/ui/moduleshell.cpp:68
+msgid "Rotate Right"
+msgstr "Girar para direita"
+
+#: ../src/niepce/ui/moduleshell.cpp:73
 msgid "Set _Label"
 msgstr "Definir rótu_lo"
 
-#: ../src/niepce/ui/moduleshell.cpp:100
+#: ../src/niepce/ui/moduleshell.cpp:95
 msgid "Set _Rating"
 msgstr "Definir _avaliação"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
+#: ../src/niepce/ui/moduleshell.cpp:96
 msgid "Unrated"
 msgstr "Não avaliada"
 
-#: ../src/niepce/ui/moduleshell.cpp:106
+#: ../src/niepce/ui/moduleshell.cpp:101
 msgid "Rating _1"
 msgstr "Avaliação _1"
 
-#: ../src/niepce/ui/moduleshell.cpp:111
+#: ../src/niepce/ui/moduleshell.cpp:106
 msgid "Rating _2"
 msgstr "Avaliação _2"
 
-#: ../src/niepce/ui/moduleshell.cpp:116
+#: ../src/niepce/ui/moduleshell.cpp:111
 msgid "Rating _3"
 msgstr "Avaliação _3"
 
-#: ../src/niepce/ui/moduleshell.cpp:121
+#: ../src/niepce/ui/moduleshell.cpp:116
 msgid "Rating _4"
 msgstr "Avaliação _4"
 
-#: ../src/niepce/ui/moduleshell.cpp:126
+#: ../src/niepce/ui/moduleshell.cpp:121
 msgid "Rating _5"
 msgstr "Avaliação _5"
 
-#: ../src/niepce/ui/moduleshell.cpp:132
+#: ../src/niepce/ui/moduleshell.cpp:127
 msgid "Set _Flag"
 msgstr "Definir _sinalização"
 
-#: ../src/niepce/ui/moduleshell.cpp:134
+#: ../src/niepce/ui/moduleshell.cpp:129
 msgid "Flag as _Rejected"
 msgstr "Sinalizar como _rejeitada"
 
-#: ../src/niepce/ui/moduleshell.cpp:140
+#: ../src/niepce/ui/moduleshell.cpp:135
 msgid "_Unflagged"
 msgstr "_Não sinalizada"
 
-#: ../src/niepce/ui/moduleshell.cpp:146
+#: ../src/niepce/ui/moduleshell.cpp:141
 msgid "Flag as _Pick"
 msgstr "Sinalizar como _escolhida"
 
-#: ../src/niepce/ui/moduleshell.cpp:156
+#: ../src/niepce/ui/moduleshell.cpp:148
+msgid "Delete Image"
+msgstr "Excluir imagem"
+
+#: ../src/niepce/ui/moduleshell.cpp:151
 msgid "Write metadata"
 msgstr "Escrever metadados"
 
-#: ../src/niepce/ui/moduleshell.cpp:205
+#: ../src/niepce/ui/moduleshell.cpp:200
 msgid "Library"
 msgstr "Biblioteca"
 
-#: ../src/niepce/ui/moduleshell.cpp:214
+#: ../src/niepce/ui/moduleshell.cpp:209
 msgid "Darkroom"
 msgstr "Sala escura"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:38
+#: ../src/niepce/ui/moduleshell.cpp:212
+msgid "Map"
+msgstr "Mapa"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:37
 msgid "Make:"
 msgstr "Capturador:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:39
+#: ../src/niepce/ui/metadatapanecontroller.cpp:38
 msgid "Model:"
 msgstr "Modelo:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:40
+#: ../src/niepce/ui/metadatapanecontroller.cpp:39
 msgid "Lens:"
 msgstr "Lentes:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+#: ../src/niepce/ui/metadatapanecontroller.cpp:43
 msgid "Exposure Program:"
 msgstr "Programa de exposição:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Speed:"
 msgstr "Velocidade:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:46
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Aperture:"
 msgstr "Abertura:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:47
+#: ../src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "ISO:"
 msgstr "ISO:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:48
+#: ../src/niepce/ui/metadatapanecontroller.cpp:47
 msgid "Exposure Bias:"
 msgstr "Inclinação de exposição:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+#: ../src/niepce/ui/metadatapanecontroller.cpp:48
 msgid "Flash:"
 msgstr "Flash:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
 msgid "Flash compensation:"
 msgstr "Compensação de flash:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Focal length:"
 msgstr "Comprimento focal:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "White balance:"
 msgstr "Equilíbrio de branco:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:53
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Date:"
 msgstr "Data:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+#: ../src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Headline:"
 msgstr "Cabeçalho:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Caption:"
 msgstr "Legenda:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "Rating:"
 msgstr "Avaliação:"
 
 #. FIXME change this type to the right one when there is a widget
-#: ../src/niepce/ui/metadatapanecontroller.cpp:61
+#: ../src/niepce/ui/metadatapanecontroller.cpp:60
 msgid "Label:"
 msgstr "Rótulo:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:62
+#: ../src/niepce/ui/metadatapanecontroller.cpp:61
 msgid "Keywords:"
 msgstr "Palavras-chave:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:66
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Camera Information"
 msgstr "Informações da câmera"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+#: ../src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Shooting Information"
 msgstr "Informações de captura"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+#: ../src/niepce/ui/metadatapanecontroller.cpp:71
 msgid "IPTC"
 msgstr "IPTC"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+#: ../src/niepce/ui/metadatapanecontroller.cpp:74
 msgid "Rights"
 msgstr "Direitos"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:105
+#: ../src/niepce/ui/metadatapanecontroller.cpp:104
 msgid "Image Properties"
 msgstr "Propriedades da imagem"
 
-#: ../src/niepce/ui/niepceapplication.cpp:66
+#: ../src/niepce/ui/niepceapplication.cpp:69
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -328,85 +366,130 @@ msgstr ""
 "\n"
 "Opções de compilação: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:132
+#: ../src/niepce/ui/niepcewindow.cpp:135
 msgid "Ready"
 msgstr "Pronto"
 
-#: ../src/niepce/ui/niepcewindow.cpp:227
+#: ../src/niepce/ui/niepcewindow.cpp:230
 msgid "_Library"
 msgstr "_Biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:233
+#: ../src/niepce/ui/niepcewindow.cpp:231
+msgid "New"
+msgstr "Nova"
+
+#: ../src/niepce/ui/niepcewindow.cpp:232
+msgid "Open"
+msgstr "Abrir"
+
+#: ../src/niepce/ui/niepcewindow.cpp:236
 msgid "New _Folder..."
 msgstr "_Nova pasta..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:234
+#: ../src/niepce/ui/niepcewindow.cpp:237
 msgid "New _Project..."
 msgstr "Novo _projeto ..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:236 ../camerawire/src/cwwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:239 ../camerawire/src/cwwindow.cpp:94
 msgid "_Import..."
 msgstr "_Importar..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:246 ../camerawire/src/cwwindow.cpp:102
+#: ../src/niepce/ui/niepcewindow.cpp:242
+msgid "Close"
+msgstr "Fechar"
+
+#: ../src/niepce/ui/niepcewindow.cpp:246
+msgid "Quit"
+msgstr "Sair"
+
+#: ../src/niepce/ui/niepcewindow.cpp:251 ../camerawire/src/cwwindow.cpp:104
 #: ../magellan/src/mgwindow.cpp:98
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/niepce/ui/niepcewindow.cpp:266 ../camerawire/src/cwwindow.cpp:118
+#. FIXME: bind
+#: ../src/niepce/ui/niepcewindow.cpp:257
+msgid "Cut"
+msgstr "Recortar"
+
+#: ../src/niepce/ui/niepcewindow.cpp:259
+msgid "Copy"
+msgstr "Copiar"
+
+#: ../src/niepce/ui/niepcewindow.cpp:261
+msgid "Paste"
+msgstr "Colar"
+
+#: ../src/niepce/ui/niepcewindow.cpp:263
+msgid "Delete"
+msgstr "Excluir"
+
+#: ../src/niepce/ui/niepcewindow.cpp:266
+msgid "Preferences..."
+msgstr "Preferências..."
+
+#: ../src/niepce/ui/niepcewindow.cpp:273 ../camerawire/src/cwwindow.cpp:120
 #: ../magellan/src/mgwindow.cpp:114
 msgid "_Tools"
 msgstr "Ferra_mentas"
 
-#: ../src/niepce/ui/niepcewindow.cpp:267
+#: ../src/niepce/ui/niepcewindow.cpp:274
 msgid "_Edit Labels..."
 msgstr "_Editar rótulos..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:270 ../camerawire/src/cwwindow.cpp:124
+#: ../src/niepce/ui/niepcewindow.cpp:277 ../camerawire/src/cwwindow.cpp:126
 #: ../magellan/src/mgwindow.cpp:120
 msgid "_Hide tools"
 msgstr "_Ocultar ferramentas"
 
-#: ../src/niepce/ui/niepcewindow.cpp:274 ../camerawire/src/cwwindow.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:281 ../camerawire/src/cwwindow.cpp:130
 #: ../magellan/src/mgwindow.cpp:124
 msgid "_Help"
 msgstr "A_juda"
 
+#: ../src/niepce/ui/niepcewindow.cpp:282
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../src/niepce/ui/niepcewindow.cpp:283
+msgid "About"
+msgstr "Sobre"
+
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:376
+#: ../src/niepce/ui/niepcewindow.cpp:383
 msgid "Label 1"
 msgstr "Rótulo 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:377
+#: ../src/niepce/ui/niepcewindow.cpp:384
 msgid "Label 2"
 msgstr "Rótulo 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:378
+#: ../src/niepce/ui/niepcewindow.cpp:385
 msgid "Label 3"
 msgstr "Rótulo 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:379
+#: ../src/niepce/ui/niepcewindow.cpp:386
 msgid "Label 4"
 msgstr "Rótulo 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:380
+#: ../src/niepce/ui/niepcewindow.cpp:387
 msgid "Label 5"
 msgstr "Rótulo 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:418
+#: ../src/niepce/ui/niepcewindow.cpp:425
 msgid "Create library"
 msgstr "Criar biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:421
+#: ../src/niepce/ui/niepcewindow.cpp:428
 msgid "Create"
 msgstr "Criar"
 
 # Nome do aplicativo
-#: ../src/niepce/ui/niepcewindow.cpp:480
+#: ../src/niepce/ui/niepcewindow.cpp:487
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -434,93 +517,85 @@ msgstr "Definir propriedades"
 msgid "Move to Trash"
 msgstr "Mover para a lixeira"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:297
+#: ../src/niepce/ui/workspacecontroller.cpp:296
 msgid "Pictures"
 msgstr "Imagens"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:301
+#: ../src/niepce/ui/workspacecontroller.cpp:300
 msgid "Projects"
 msgstr "Projetos"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:305
+#: ../src/niepce/ui/workspacecontroller.cpp:304
 msgid "Keywords"
 msgstr "Palavras-chave"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:317
+#: ../src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Espaço de trabalho"
 
-#: ../src/niepce/stock.cpp:46
-msgid "Rotate L_eft"
-msgstr "Girar para _esquerda"
-
-#: ../src/niepce/stock.cpp:49
-msgid "Rotate R_ight"
-msgstr "Girar para d_ireita"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:39
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:38
 msgid "Develop"
 msgstr "Desenvolvimento"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:57
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
 msgid "Crop"
 msgstr "Cortar"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:60
 msgid "Tilt"
 msgstr "Inclinar"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:63
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
 msgid "White balance"
 msgstr "Equilíbrio de branco"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:66
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
 msgid "Color temperature"
 msgstr "Temperatura de cor"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:68
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
 msgid "Tone and colour"
 msgstr "Tom e cor"
 
 #. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:72
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
 msgid "Exposure"
 msgstr "Exposição"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:74
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
 msgid "Recovery"
 msgstr "Recuperar"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:76
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
 msgid "Fill Light"
 msgstr "Inserir luz"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:78
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
 msgid "Blacks"
 msgstr "Escuros"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:80
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
 msgid "Brightness"
 msgstr "Brilho"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:82
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:81
 msgid "Contrast"
 msgstr "Contraste"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:84
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:83
 msgid "Saturation"
 msgstr "Saturação"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:86
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:85
 msgid "Vibrance"
 msgstr "Vitalidade"
 
-#: ../camerawire/src/cwwindow.cpp:67
+#: ../camerawire/src/cwwindow.cpp:69
 msgid "Camera"
 msgstr "Câmera"
 
-#: ../camerawire/src/cwwindow.cpp:91 ../magellan/src/mgwindow.cpp:86
+#: ../camerawire/src/cwwindow.cpp:93 ../magellan/src/mgwindow.cpp:86
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -575,9 +650,6 @@ msgstr "Baixar"
 
 #~ msgid "Niepce Dark"
 #~ msgstr "Niepce negro"
-
-#~ msgid "Master"
-#~ msgstr "Mestre"
 
 #~ msgid "GdlDockMaster object which the dockbar widget is attached to"
 #~ msgstr "Objeto GdlDockMaster na qual a barra dock estará anexada"
