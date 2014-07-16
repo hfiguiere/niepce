@@ -41,9 +41,10 @@ namespace mg {
   }
 
 
-  fwk::Frame::Ptr MgApplication::makeMainFrame()
+  fwk::AppFrame::Ptr MgApplication::makeMainFrame()
   {
-    return fwk::Frame::Ptr(new MgWindow);
+    m_main_frame = fwk::AppFrame::Ptr(new MgWindow);
+    return m_main_frame;
   }
 
 }

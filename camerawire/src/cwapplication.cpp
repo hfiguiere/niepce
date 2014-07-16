@@ -41,9 +41,10 @@ namespace cw {
   }
 
 
-  fwk::Frame::Ptr CwApplication::makeMainFrame()
+  fwk::AppFrame::Ptr CwApplication::makeMainFrame()
   {
-    return fwk::Frame::Ptr(new CwWindow);
+    m_main_frame = fwk::AppFrame::Ptr(new CwWindow);
+    return m_main_frame;
   }
 
 }

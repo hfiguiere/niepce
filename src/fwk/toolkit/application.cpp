@@ -1,8 +1,7 @@
-
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +27,7 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/modulemanager.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "application.hpp"
 #include "uicontroller.hpp"
 #include "frame.hpp"
@@ -40,11 +40,12 @@ Application::Ptr Application::m_application;
 Application::Application(int & argc, char** &argv, const char* app_id,
                          const char * name)
     : m_config(Configuration::make_config_path(name))
-    , m_refUIManager(Gtk::UIManager::create())
     , m_module_manager(new ModuleManager())
     , m_gtkapp(Gtk::Application::create(argc, argv, app_id))
 {
     Clutter::init(argc, argv);
+    m_gtkapp->signal_startup().connect(
+        sigc::mem_fun(*this, &Application::on_startup));
 }
 
 
@@ -90,21 +91,65 @@ void Application::set_use_dark_theme(bool value)
  * @return main return code
  */
 int Application::main(const Application::Ptr & app,
-                      int /*argc*/, char ** /*argv*/)
+                      int argc, char ** argv)
 {
     bool use_dark = app->get_use_dark_theme();
     Glib::RefPtr<Gtk::Settings> settings = Gtk::Settings::get_default();
     settings->set_property("gtk-application-prefer-dark-theme", use_dark);
 
-    Frame::Ptr window(app->makeMainFrame());
+    AppFrame::Ptr window = app->makeMainFrame();
     app->_add(window, false);
-    // signal_run() is gone in Gtkmm3. Call directly. Should work.
     app->_ready();
-    app->m_gtkapp->run(window->gtkWindow());
+    app->m_gtkapp->run(window->gtkWindow(), argc, argv);
 
     return 0;
 }
 
+void Application::on_startup()
+{
+    set_menubar(m_main_frame->get_menu());
+    init_actions();
+}
+
+void Application::init_actions()
+{
+    Glib::RefPtr<Gio::Menu> menu;
+    Glib::RefPtr<Gio::Menu> section;
+
+    menu = Gio::Menu::create();
+
+    section = Gio::Menu::create();
+
+    menu->append_section(section);
+    section->append(_("New"), "action");
+    fwk::add_action(m_gtkapp, "OpenLibrary",
+                    sigc::mem_fun(*this,
+                                  &Application::on_action_file_open),
+                    section, _("Open"), "app", "<Primary>o");
+
+
+    section = Gio::Menu::create();
+    menu->append_section(section);
+    fwk::add_action(m_gtkapp, "Help",
+                    sigc::mem_fun(*this,
+                                  &Application::about),
+                    section, _("Help"), "app", nullptr);
+
+    fwk::add_action(m_gtkapp, "About",
+                    sigc::mem_fun(*this,
+                                  &Application::about),
+                    section, _("About"), "app", nullptr);
+
+    section = Gio::Menu::create();
+    menu->append_section(section);
+
+    fwk::add_action(m_gtkapp, "Quit",
+                    sigc::mem_fun(*this,
+                                  &Application::quit),
+                    section, _("Quit"), "app", "<Primary>q");
+
+    m_gtkapp->set_app_menu(menu);
+}
 
 void Application::terminate()
 {
@@ -141,12 +186,16 @@ void Application::_add(const Controller::Ptr & sub, bool attach)
     Controller::add(sub);
     UiController::Ptr uictrl = std::dynamic_pointer_cast<UiController>(sub);
     if(uictrl) {
-        Gtk::Widget *w = uictrl->buildWidget(uiManager());
+        Gtk::Widget *w = uictrl->buildWidget(Glib::RefPtr<Gtk::UIManager>());
         Gtk::Window *win = nullptr;
         if(attach && m_gtkapp && (win = dynamic_cast<Gtk::Window*>(w))) {
             m_gtkapp->add_window(*win);
         }
     }
+}
+
+void Application::on_action_file_open()
+{
 }
 
 void Application::on_about()

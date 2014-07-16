@@ -22,10 +22,12 @@
 #include <functional>
 
 #include <glibmm/i18n.h>
+#include <giomm/simpleaction.h>
 #include <gtkmm/dialog.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "frame.hpp"
 #include "application.hpp"
 
@@ -111,38 +113,44 @@ void Frame::set_title(const std::string & title)
 
 void Frame::toggle_tools_visible()
 {
-    if(m_hide_tools_action->get_active()) {
+#if 0
+    if(m_hide_tools_action->get_state()) {
         signal_hide_tools.emit();
     }
     else {
         signal_show_tools.emit();
     }
+#endif
 }
 
 void Frame::undo_state()
 {
+    DBG_ASSERT(m_undo_action, "undo action is NULL");
     fwk::UndoHistory & history(Application::app()->undo_history());
-    m_undo_action->set_sensitive(history.has_undo());
+    m_undo_action->set_enabled(history.has_undo());
     std::string s = history.next_undo();
-    m_undo_action->property_label() = Glib::ustring(_("Undo ")) + s;
+//    m_undo_action->property_label() = Glib::ustring(_("Undo ")) + s;
 }
 
 
 void Frame::redo_state()
 {
+    DBG_ASSERT(m_redo_action, "redo action is NULL");
     fwk::UndoHistory & history(Application::app()->undo_history());
-    m_redo_action->set_sensitive(history.has_redo());
+    m_redo_action->set_enabled(history.has_redo());
     std::string s = history.next_redo();
-    m_redo_action->property_label() = Glib::ustring(_("Redo ")) + s;
+//    m_redo_action->property_label() = Glib::ustring(_("Redo ")) + s;
 }
 
 
-Glib::RefPtr<Gtk::Action> Frame::create_undo_action(const Glib::RefPtr<Gtk::ActionGroup> & g)
+Glib::RefPtr<Gio::Action>
+Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
+                          const Glib::RefPtr<Gio::Menu> & menu)
 {
-    m_undo_action = Gtk::Action::create("Undo", _("Undo"));
-    g->add(m_undo_action, Gtk::AccelKey("<control>Z"),
-           sigc::mem_fun(Application::app()->undo_history(),
-                         &UndoHistory::undo));
+    m_undo_action = fwk::add_action(g, "Undo",
+                                        sigc::mem_fun(Application::app()->undo_history(),
+                                                          &UndoHistory::undo),
+                                        menu, _("Undo"), "win", "<control>Z");
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &Frame::undo_state));
     undo_state();
@@ -150,12 +158,14 @@ Glib::RefPtr<Gtk::Action> Frame::create_undo_action(const Glib::RefPtr<Gtk::Acti
 }
 
 
-Glib::RefPtr<Gtk::Action> Frame::create_redo_action(const Glib::RefPtr<Gtk::ActionGroup> & g)
+Glib::RefPtr<Gio::Action>
+Frame::create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g,
+                          const Glib::RefPtr<Gio::Menu> & menu)
 {
-    m_redo_action = Gtk::Action::create("Redo", _("Redo"));
-    g->add(m_redo_action, Gtk::AccelKey("<control><shift>Z"),
-           sigc::mem_fun(Application::app()->undo_history(),
-                         &UndoHistory::redo));
+    m_redo_action = fwk::add_action(g, "Redo",
+                                    sigc::mem_fun(Application::app()->undo_history(),
+                                                  &UndoHistory::redo),
+                                    menu, _("Redo"), "win", "<control><shift>Z");
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &Frame::redo_state));
     redo_state();

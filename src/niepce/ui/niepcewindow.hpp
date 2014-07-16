@@ -22,6 +22,7 @@
 #define _UI_NIEPCEWINDOW_H_
 
 
+#include <giomm/simpleactiongroup.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>
 #include <gtkmm/menubar.h>
@@ -60,8 +61,6 @@ protected:
 private:
     void on_action_file_import();
 
-    void on_action_file_quit();
-    void on_action_file_open();
     void on_open_library();
     void on_action_edit_labels();
     void on_action_edit_delete();
@@ -73,8 +72,8 @@ private:
     void create_initial_labels();
     void on_lib_notification(const eng::LibNotification & n);
 
-    void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
-    void init_actions(const Glib::RefPtr<Gtk::UIManager> & manager);
+    void init_ui();
+    void init_actions();
 
     // UI to open library
     std::string prompt_open_library();
@@ -92,7 +91,7 @@ private:
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
     Gtk::Statusbar                 m_statusBar;
-    Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+    Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
     libraryclient::LibraryClient::Ptr m_libClient;
     fwk::Configuration::Ptr        m_library_cfg;
 };

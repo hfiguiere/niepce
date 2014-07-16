@@ -33,7 +33,7 @@ class MgApplication
 public:
   static fwk::Application::Ptr create(int & argc, char** & argv);
 
-  virtual fwk::Frame::Ptr makeMainFrame();
+  virtual fwk::AppFrame::Ptr makeMainFrame();
 protected:
   MgApplication(int & argc, char** & argv);
 

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/gtkutils.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@
 #define __FWK_GTKUTILS_H__
 
 #include <string>
+
+#include <giomm/simpleactiongroup.h>
+#include <giomm/menu.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -29,8 +32,20 @@
 
 namespace fwk {
 
+/** Helper to add an action.
+ * @param group the action group
+ * @param name the action name
+ */
+Glib::RefPtr<Gio::SimpleAction>
+add_action(const Glib::RefPtr<Gio::ActionMap> & group,
+           const char* name,
+           const Gio::ActionMap::ActivateSlot& slot,
+           const Glib::RefPtr<Gio::Menu> & menu = Glib::RefPtr<Gio::Menu>(),
+           const char* label = nullptr, const char* context = nullptr,
+           const char* accel = nullptr);
 
-/** a simple model record with one text column. 
+
+/** a simple model record with one text column.
  * This class is "abstract".
  */
 class ModelRecord

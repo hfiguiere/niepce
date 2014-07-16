@@ -33,7 +33,7 @@ class CwApplication
 public:
   static fwk::Application::Ptr create(int & argc, char** & argv);
 
-  virtual fwk::Frame::Ptr makeMainFrame();
+  virtual fwk::AppFrame::Ptr makeMainFrame();
 protected:
   CwApplication(int & argc, char** & argv);
 

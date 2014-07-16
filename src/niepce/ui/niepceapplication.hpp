@@ -31,9 +31,11 @@ class NiepceApplication
 public:
     static fwk::Application::Ptr create(int & argc, char** & argv);
 
-    virtual fwk::Frame::Ptr makeMainFrame();
+    virtual fwk::AppFrame::Ptr makeMainFrame();
 protected:
     NiepceApplication(int & argc, char** & argv);
+
+    virtual void on_action_file_open();
     virtual void on_about();
 };
 
