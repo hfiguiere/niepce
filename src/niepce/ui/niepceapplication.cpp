@@ -25,6 +25,7 @@
 
 #include "fwk/utils/modulemanager.hpp"
 #include "fwk/toolkit/appframe.hpp"
+#include "dialogs/preferencesdialog.hpp"
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
 
@@ -80,6 +81,15 @@ void NiepceApplication::on_about()
     dlg.run();
 }
 
+void NiepceApplication::on_action_preferences()
+{
+    DBG_OUT("on_preferences");
+
+    auto dlg(new PreferencesDialog());
+    dlg->run_modal(m_main_frame);
+
+    DBG_OUT("end on_preferences");
+}
 
 }
 

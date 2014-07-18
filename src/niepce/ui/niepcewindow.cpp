@@ -44,7 +44,6 @@
 #include "thumbstripview.hpp"
 #include "niepcewindow.hpp"
 #include "dialogs/importdialog.hpp"
-#include "dialogs/preferencesdialog.hpp"
 #include "dialogs/editlabels.hpp"
 #include "selectioncontroller.hpp"
 
@@ -233,13 +232,6 @@ void NiepceWindow::init_actions()
                     "Delete",
                     sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
                     section, _("Delete"), "win", nullptr);
-    // separator
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-    fwk::add_action(m_action_group, "Preferences",
-                    sigc::mem_fun(*this,
-                                  &NiepceWindow::on_preferences),
-                    section, _("Preferences..."), "win", nullptr);
 
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Tools"), submenu);
@@ -313,21 +305,6 @@ void NiepceWindow::on_open_library()
         }
     }
 }
-
-
-
-
-void NiepceWindow::on_preferences()
-{
-    DBG_OUT("on_preferences");
-
-    fwk::Dialog::Ptr dlg(new PreferencesDialog());
-    dlg->run_modal(shared_frame_ptr());
-
-    DBG_OUT("end on_preferences");
-}
-
-
 
 void NiepceWindow::create_initial_labels()
 {

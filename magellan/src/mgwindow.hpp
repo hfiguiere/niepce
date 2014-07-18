@@ -1,7 +1,7 @@
 /*
  * niepce - mgwindow.hpp
  *
- * Copyright (C) 2013 Hubert Figuiere
+ * Copyright (C) 2013-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@ private:
 
   void init_actions();
   void on_action_import();
-  void on_preferences();
 
   void detect_devices();
 

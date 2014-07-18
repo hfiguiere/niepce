@@ -124,6 +124,14 @@ void Application::init_actions()
                     section, _("Open"), "app", "<Primary>o");
 
 
+    // separator
+    section = Gio::Menu::create();
+    menu->append_section(section);
+    fwk::add_action(m_gtkapp, "Preferences",
+                    sigc::mem_fun(*this,
+                                  &Application::on_action_preferences),
+                    section, _("Preferences..."), "app", nullptr);
+
     section = Gio::Menu::create();
     menu->append_section(section);
     fwk::add_action(m_gtkapp, "Help",

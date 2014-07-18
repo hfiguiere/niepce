@@ -1,7 +1,7 @@
 /*
  * niepce - ui/dialogs/preferencesdialog.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #ifndef _UI_PREFERENCESDIALOG_H_
 #define _UI_PREFERENCESDIALOG_H_
 
+#include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/dialog.hpp"
 
 namespace ui {

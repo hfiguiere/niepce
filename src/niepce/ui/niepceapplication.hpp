@@ -37,6 +37,7 @@ protected:
 
     virtual void on_action_file_open();
     virtual void on_about();
+    virtual void on_action_preferences();
 };
 
 }

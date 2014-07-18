@@ -1,7 +1,7 @@
 /*
  * niepce - cwapplication.cpp
  *
- * Copyright (C) 2009, 2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,5 +46,9 @@ namespace cw {
     m_main_frame = fwk::AppFrame::Ptr(new CwWindow);
     return m_main_frame;
   }
+
+void CwApplication::on_action_preferences()
+{
+}
 
 }

@@ -116,14 +116,6 @@ void MgWindow::init_actions()
                     Gio::ActionMap::ActivateSlot(), section,
                     _("Paste"), "win" "<control>v");
 
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-    fwk::add_action(m_actionGroup,
-                    "Preferences",
-                    sigc::mem_fun(*this,
-                                  &MgWindow::on_preferences),
-                    section, _("Preferences"), "win", nullptr);
-
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Tools"), submenu);
 
@@ -145,13 +137,6 @@ void MgWindow::on_action_import()
 {
   DBG_OUT("import");
 }
-
-
-void MgWindow::on_preferences()
-{
-  DBG_OUT("prefs");
-}
-
 
 void MgWindow::detect_devices()
 {

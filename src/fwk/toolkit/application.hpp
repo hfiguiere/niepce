@@ -87,6 +87,7 @@ protected:
     void _add(const Controller::Ptr & sub, bool attach = true);
     virtual void on_action_file_open();
     virtual void on_about();
+    virtual void on_action_preferences() = 0;
 
     void init_actions();
 

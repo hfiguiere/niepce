@@ -65,10 +65,6 @@ private:
     void on_action_edit_labels();
     void on_action_edit_delete();
 
-    void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
-                                 Gtk::Dialog *);
-    void on_preferences();
-
     void create_initial_labels();
     void on_lib_notification(const eng::LibNotification & n);
 

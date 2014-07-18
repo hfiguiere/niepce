@@ -63,7 +63,6 @@ private:
   void init_ui();
   void init_actions();
   void on_action_import();
-  void on_preferences();
 
   void reload_camera_list();
 

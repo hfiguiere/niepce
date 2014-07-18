@@ -120,14 +120,6 @@ void CwWindow::init_actions()
                     Gio::ActionMap::ActivateSlot(), section,
                     _("Paste"), "win" "<control>v");
 
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-    fwk::add_action(m_actionGroup,
-                    "Preferences",
-                    sigc::mem_fun(*this,
-                                  &CwWindow::on_preferences),
-                    section, _("Preferences"), "win", nullptr);
-
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Tools"), submenu);
 
@@ -148,12 +140,6 @@ void CwWindow::init_actions()
 void CwWindow::on_action_import()
 {
 }
-
-
-void CwWindow::on_preferences()
-{
-}
-
 
 void CwWindow::reload_camera_list()
 {

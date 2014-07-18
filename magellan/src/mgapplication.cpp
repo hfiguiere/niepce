@@ -47,4 +47,7 @@ namespace mg {
     return m_main_frame;
   }
 
+  void MgApplication::on_action_preferences()
+  {
+  }
 }
