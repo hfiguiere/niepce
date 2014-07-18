@@ -77,6 +77,9 @@ public:
             return m_libraryclient;
         }
 
+    Glib::RefPtr<Gio::Menu> getMenu() const
+        { return m_menu; }
+
     /** called when something is selected by the shared selection */
     void on_selected(eng::library_id_t id);
     void on_image_activated(eng::library_id_t id);
@@ -96,6 +99,7 @@ private:
 
     // managed widgets...
     ModuleShellWidget             m_shell;
+    Glib::RefPtr<Gio::Menu>       m_menu;
 
     ui::SelectionController::Ptr  m_selection_controller;
     std::vector<ILibraryModule::Ptr> m_modules;

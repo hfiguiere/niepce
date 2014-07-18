@@ -1,7 +1,7 @@
 /*
- * niepce - modules/darkroom/darkroommodule.h
+ * niepce - modules/darkroom/darkroommodule.hpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 #include "niepce/ui/imoduleshell.hpp"
 #include "modules/darkroom/imagecanvas.hpp"
 #include "modules/darkroom/toolboxcontroller.hpp"
-	
+
 namespace fwk {
 class Dock;
 }
@@ -55,6 +55,9 @@ public:
     virtual void dispatch_action(const std::string & action_name);
 
     virtual void set_active(bool active);
+
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+        { return Glib::RefPtr<Gio::MenuModel>(); }
 
 protected:
     void reload_image();

@@ -110,10 +110,10 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     m_imagecanvas->set_image(m_image);
 
     // build the toolbar.
-    Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
+    auto toolbar = Gtk::manage(new Gtk::Toolbar);
 
     Glib::RefPtr<Gio::Action> an_action;
-    Gtk::ToolButton * tool_item = new Gtk::ToolButton();
+    auto tool_item = new Gtk::ToolButton();
     gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
                                    "shell.PrevImage");
     tool_item->set_icon_name("go-previous");
@@ -156,7 +156,7 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
 void DarkroomModule::on_selected(eng::library_id_t id)
 {
-    eng::LibFile::Ptr file = m_shell.get_selection_controller()->get_file(id);
+    auto file = m_shell.get_selection_controller()->get_file(id);
     DBG_OUT("selection is %ld", id);
     set_image(file);
 }

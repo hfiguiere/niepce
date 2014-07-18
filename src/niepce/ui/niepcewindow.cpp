@@ -85,6 +85,8 @@ NiepceWindow::_createModuleShell()
     m_moduleshell->buildWidget(m_uimanager);
 
     add(m_moduleshell);
+    auto shell_menu = m_moduleshell->getMenu();
+    m_menu->append_submenu(_("Image"), shell_menu);
 
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(

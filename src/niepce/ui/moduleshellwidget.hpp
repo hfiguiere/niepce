@@ -1,7 +1,7 @@
 /*
  * niepce - ui/moduleshellwidget.hpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,10 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
+#include <gtkmm/menubutton.h>
 
 namespace Gtk {
-	class ToggleButton;
+class ToggleButton;
 }
 
 namespace ui {
@@ -39,17 +40,22 @@ class ModuleShellWidget
 {
 public:
     ModuleShellWidget();
-    
+
     int append_page(Gtk::Widget & w, const Glib::ustring & label);
     void activate_page(int);
+
+    Gtk::MenuButton & getMenuButton()
+        { return m_menubutton; }
 
     sigc::signal<void, int> signal_activated;
     sigc::signal<void, int> signal_deactivated;
 protected:
-    
+
     void set_current_page(int, Gtk::ToggleButton *);
 private:
-    Gtk::HButtonBox         m_mainbar;
+    Gtk::Box                m_mainbox;
+    Gtk::ButtonBox          m_mainbar;
+    Gtk::MenuButton         m_menubutton;
     Gtk::Notebook           m_notebook;
     int                     m_currentpage;
     std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;

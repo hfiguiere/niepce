@@ -42,9 +42,11 @@ public:
 
     MapModule(const ui::IModuleShell & shell);
 
+    /* ILibraryModule */
     virtual void dispatch_action(const std::string & action_name);
-
     virtual void set_active(bool active);
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+        { return Glib::RefPtr<Gio::MenuModel>(); }
 
     void on_lib_notification(const eng::LibNotification &ln);
 

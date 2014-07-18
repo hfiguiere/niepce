@@ -55,7 +55,7 @@ Gtk::Widget * MapModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manage
 
     m_map = fwk::MapController::Ptr(new fwk::MapController());
     add(m_map);
-    Gtk::Widget* w = m_map->buildWidget(manager);
+    auto w = m_map->buildWidget(manager);
     if (w) {
         m_box->pack_start(*w);
     }
@@ -74,8 +74,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
     {
         DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
                    "incorrect data type for the notification");
-        eng::LibMetadata::Ptr lm
-            = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
+        auto lm = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
         DBG_OUT("received metadata in MapModule");
 
         if (lm) {
