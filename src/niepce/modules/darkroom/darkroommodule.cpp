@@ -29,11 +29,9 @@
 
 namespace dr {
 
-DarkroomModule::DarkroomModule(const ui::IModuleShell & shell, 
-                               const Glib::RefPtr<Gtk::ActionGroup> & action_group)
+DarkroomModule::DarkroomModule(const ui::IModuleShell & shell)
     : m_shell(shell)
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
-    , m_actionGroup(action_group)
     , m_image(new ncr::Image)
     , m_active(false)
     , m_need_reload(true)
@@ -114,22 +112,29 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     // build the toolbar.
     Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
 
-    Glib::RefPtr<Gtk::Action> an_action;
-    Gtk::ToolItem * tool_item;
-    an_action = m_actionGroup->get_action("PrevImage");
-    tool_item = an_action->create_tool_item();
+    Glib::RefPtr<Gio::Action> an_action;
+    Gtk::ToolButton * tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.PrevImage");
+    tool_item->set_icon_name("go-previous");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("NextImage");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.NextImage");
+    tool_item->set_icon_name("go-next");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("RotateLeft");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.RotateLeft");
+    tool_item->set_icon_name("object-rotate-left");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("RotateRight");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.RotateRight");
+    tool_item->set_icon_name("object-rotate-right");
     toolbar->append(*manage(tool_item));
 
     m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);

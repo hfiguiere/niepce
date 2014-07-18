@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imoduleshell.hpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

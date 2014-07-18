@@ -29,6 +29,7 @@
 #include "engine/db/library.hpp"
 #include "engine/db/libfile.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "moduleshell.hpp"
 #include "niepcewindow.hpp"
 #include "metadatapanecontroller.hpp"
@@ -40,35 +41,56 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     if(m_widget) {
         return m_widget;
     }
-    DBG_ASSERT(manager, "manager is NULL");
 
     m_widget = &m_shell;
-    m_ui_manager = manager;
+    m_shell.insert_action_group("shell", m_actionGroup);
 
     m_selection_controller = SelectionController::Ptr(new SelectionController);
     add(m_selection_controller);
 
-    Glib::RefPtr<Gtk::Action> an_action;
+    Glib::RefPtr<Gio::Menu> menu = Gio::Menu::create();
+//    m_actionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
 
-    m_actionGroup->add(Gtk::Action::create("MenuImage", _("_Image")));
+    fwk::add_action(m_actionGroup, "PrevImage",
+                    sigc::mem_fun(*m_selection_controller,
+                                  &SelectionController::select_previous),
+                    menu, _("Back"), "shell", "Left");
 
-    m_actionGroup->add(Gtk::Action::create_with_icon_name("PrevImage", "go-previous", _("Back"), ""),
-                          Gtk::AccelKey(GDK_KEY_Left, Gdk::ModifierType(0)),
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::select_previous));
-    m_actionGroup->add(Gtk::Action::create_with_icon_name("NextImage", "go-next", _("Forward"), ""),
-                          Gtk::AccelKey(GDK_KEY_Right, Gdk::ModifierType(0)),
-                          sigc::mem_fun(*m_selection_controller,
-                                        &SelectionController::select_next));
+    fwk::add_action(m_actionGroup, "NextImage",
+                    sigc::mem_fun(*m_selection_controller,
+                                  &SelectionController::select_next),
+                    menu, _("Forward"), "shell", "Right");
 
-    an_action = Gtk::Action::create_with_icon_name("RotateLeft", "object-rotate-left", _("Rotate Left"), "");
-    m_actionGroup->add(an_action, Gtk::AccelKey("["), sigc::bind(
-                           sigc::mem_fun(*m_selection_controller,
-                                         &SelectionController::rotate), -90));
-    an_action = Gtk::Action::create_with_icon_name("RotateRight", "object-rotate-right", _("Rotate Right"), "");
-    m_actionGroup->add(an_action, Gtk::AccelKey("]"), sigc::bind(
-                           sigc::mem_fun(*m_selection_controller,
-                                         &SelectionController::rotate), 90));
+    fwk::add_action(m_actionGroup, "RotateLeft",
+                    sigc::bind(
+                        sigc::mem_fun(*m_selection_controller,
+                                      &SelectionController::rotate), -90),
+                    menu, _("Rotate Left"), "shell", "bracketleft");
+
+    fwk::add_action(m_actionGroup, "RotateRight",
+                    sigc::bind(
+                        sigc::mem_fun(*m_selection_controller,
+                                      &SelectionController::rotate), 90),
+                    menu, _("Rotate Right"), "shell", "bracketright");
+
+//    m_actionGroup->add(Gtk::Action::create_with_icon_name("PrevImage", "go-previous", _("Back"), ""),
+//                          Gtk::AccelKey(GDK_KEY_Left, Gdk::ModifierType(0)),
+//                          sigc::mem_fun(*m_selection_controller,
+//                                        &SelectionController::select_previous));
+#if 0
+//    m_actionGroup->add(Gtk::Action::create_with_icon_name("NextImage", "go-next", _("Forward"), ""),
+//                          Gtk::AccelKey(GDK_KEY_Right, Gdk::ModifierType(0)),
+//                          sigc::mem_fun(*m_selection_controller,
+//                                        &SelectionController::select_next));
+
+//    an_action = Gtk::Action::create_with_icon_name("RotateLeft", "object-rotate-left", _("Rotate Left"), "");
+//    m_actionGroup->add(an_action, Gtk::AccelKey("["), sigc::bind(
+//                           sigc::mem_fun(*m_selection_controller,
+//                                         &SelectionController::rotate), -90));
+//    an_action = Gtk::Action::create_with_icon_name("RotateRight", "object-rotate-right", _("Rotate Right"), "");
+//    m_actionGroup->add(an_action, Gtk::AccelKey("]"), sigc::bind(
+//                           sigc::mem_fun(*m_selection_controller,
+//                                         &SelectionController::rotate), 90));
 
     m_actionGroup->add(Gtk::Action::create("SetLabel", _("Set _Label")));
     m_actionGroup->add(Gtk::Action::create("SetLabel6", _("Label _6")),
@@ -151,8 +173,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
                                            _("Write metadata")),
                        sigc::mem_fun(*m_selection_controller,
                                      &SelectionController::write_metadata));
-
-    manager->insert_action_group(m_actionGroup);
+#endif
 
 
     Glib::ustring ui_info =
@@ -192,8 +213,8 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
         "    </menu>"
         "  </menubar>"
         "</ui>";
-    m_ui_merge_id = manager->add_ui_from_string(ui_info);
-    DBG_ASSERT(m_ui_merge_id, "merge failed");
+//    m_ui_merge_id = manager->add_ui_from_string(ui_info);
+//    DBG_ASSERT(m_ui_merge_id, "merge failed");
 
     m_gridview = GridViewModule::Ptr(
         new GridViewModule(*this, m_selection_controller->get_list_store()));
@@ -205,10 +226,10 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
     m_selection_controller->signal_activated
         .connect(sigc::mem_fun(*this, &ModuleShell::on_image_activated));
 
-    m_darkroom = dr::DarkroomModule::Ptr(new dr::DarkroomModule(*this, m_actionGroup));
+    m_darkroom = dr::DarkroomModule::Ptr(new dr::DarkroomModule(*this));
     add_library_module(m_darkroom, _("Darkroom"));
 
-    m_mapm = mapm::MapModule::Ptr(new mapm::MapModule(*this, m_actionGroup));
+    m_mapm = mapm::MapModule::Ptr(new mapm::MapModule(*this));
     add_library_module(m_mapm, _("Map"));
 
     m_shell.signal_activated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_activated));
@@ -228,7 +249,7 @@ void ModuleShell::action_edit_delete()
 void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
                                                    const std::string & label)
 {
-    Gtk::Widget * w = module->buildWidget(m_ui_manager);
+    Gtk::Widget * w = module->buildWidget(Glib::RefPtr<Gtk::UIManager>());
     if(w) {
         add(module);
         m_shell.append_page(*w, label);

@@ -26,10 +26,8 @@
 
 namespace mapm {
 
-MapModule::MapModule(const ui::IModuleShell & shell,
-                               const Glib::RefPtr<Gtk::ActionGroup> & action_group)
+MapModule::MapModule(const ui::IModuleShell & shell)
     : m_shell(shell)
-    , m_actionGroup(action_group)
     , m_box(nullptr)
     , m_active(false)
 {

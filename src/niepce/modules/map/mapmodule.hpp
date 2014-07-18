@@ -40,8 +40,7 @@ class MapModule
 public:
     typedef std::shared_ptr<MapModule> Ptr;
 
-    MapModule(const ui::IModuleShell & shell,
-                   const Glib::RefPtr<Gtk::ActionGroup> & action_group);
+    MapModule(const ui::IModuleShell & shell);
 
     virtual void dispatch_action(const std::string & action_name);
 
@@ -56,7 +55,6 @@ private:
     void on_selected(eng::library_id_t id);
 
     const ui::IModuleShell &     m_shell;
-    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     Gtk::Box*                    m_box;
     fwk::MapController::Ptr           m_map;
 

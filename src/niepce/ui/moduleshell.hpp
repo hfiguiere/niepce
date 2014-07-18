@@ -23,6 +23,8 @@
 
 #include <vector>
 
+#include <giomm/simpleactiongroup.h>
+
 #include "moduleshellwidget.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/uicontroller.hpp"
@@ -46,10 +48,10 @@ class ModuleShell
 public:
     typedef std::shared_ptr<ModuleShell> Ptr;
     typedef std::weak_ptr<ModuleShell> WeakPtr;
-    
+
     ModuleShell(const libraryclient::LibraryClient::Ptr & libclient)
         : m_libraryclient(libclient)
-        , m_actionGroup(Gtk::ActionGroup::create("ModuleShell"))
+        , m_actionGroup(Gio::SimpleActionGroup::create())
         {
         }
 
@@ -63,8 +65,8 @@ public:
             return m_mapm;
         }
     const Glib::RefPtr<ImageListStore> & get_list_store() const
-        { 
-            return m_selection_controller->get_list_store(); 
+        {
+            return m_selection_controller->get_list_store();
         }
     virtual const SelectionController::Ptr & get_selection_controller() const
         {
@@ -78,7 +80,7 @@ public:
     /** called when something is selected by the shared selection */
     void on_selected(eng::library_id_t id);
     void on_image_activated(eng::library_id_t id);
-    
+
     virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
 
     void action_edit_delete();
@@ -90,12 +92,11 @@ protected:
     void on_module_activated(int idx);
 private:
     libraryclient::LibraryClient::Ptr m_libraryclient;
-    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
-    
+    Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
+
     // managed widgets...
     ModuleShellWidget             m_shell;
-    Glib::RefPtr<Gtk::UIManager>  m_ui_manager;
-    
+
     ui::SelectionController::Ptr  m_selection_controller;
     std::vector<ILibraryModule::Ptr> m_modules;
     // these should be dynamic
