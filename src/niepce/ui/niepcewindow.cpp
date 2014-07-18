@@ -83,8 +83,6 @@ NiepceWindow::_createModuleShell()
     m_moduleshell->buildWidget();
 
     add(m_moduleshell);
-    auto shell_menu = m_moduleshell->getMenu();
-    m_menu->append_submenu(_("Image"), shell_menu);
 
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(
@@ -100,7 +98,7 @@ NiepceWindow::_createModuleShell()
                      &mapm::MapModule::on_lib_notification));
     m_notifcenter->signal_thumbnail_notification
         .connect(sigc::mem_fun(
-                     *get_pointer(m_moduleshell->get_list_store()), 
+                     *get_pointer(m_moduleshell->get_list_store()),
                      &ImageListStore::on_tnail_notification));
 
 

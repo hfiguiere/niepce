@@ -205,6 +205,10 @@ Gtk::Widget * ModuleShell::buildWidget()
         "  </menubar>"
         "</ui>";
 
+    m_module_menu = Gio::Menu::create();
+    m_menu->append_section(m_module_menu);
+
+    m_shell.getMenuButton().set_menu_model(m_menu);
 
     m_gridview = GridViewModule::Ptr(
         new GridViewModule(*this, m_selection_controller->get_list_store()));
@@ -278,13 +282,17 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
 void ModuleShell::on_module_deactivated(int idx)
 {
     DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
+    m_module_menu->remove_all();
     m_modules[idx]->set_active(false);
 }
 
 void ModuleShell::on_module_activated(int idx)
 {
     DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
-    m_shell.getMenuButton().set_menu_model(m_modules[idx]->getMenu());
+    auto menu = m_modules[idx]->getMenu();
+    if (menu) {
+        m_module_menu->append_section(menu);
+    }
     m_modules[idx]->set_active(true);
 }
 

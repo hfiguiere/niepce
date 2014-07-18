@@ -100,6 +100,7 @@ private:
     // managed widgets...
     ModuleShellWidget             m_shell;
     Glib::RefPtr<Gio::Menu>       m_menu;
+    Glib::RefPtr<Gio::Menu>       m_module_menu;
 
     ui::SelectionController::Ptr  m_selection_controller;
     std::vector<ILibraryModule::Ptr> m_modules;
