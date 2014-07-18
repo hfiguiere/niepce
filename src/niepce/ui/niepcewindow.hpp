@@ -57,7 +57,7 @@ public:
         { return m_library_cfg; }
 
 protected:
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+    virtual Gtk::Widget * buildWidget();
 private:
     void on_action_file_import();
 

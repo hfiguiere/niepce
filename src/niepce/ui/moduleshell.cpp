@@ -36,7 +36,7 @@
 
 namespace ui {
 
-Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * ModuleShell::buildWidget()
 {
     if(m_widget) {
         return m_widget;
@@ -204,8 +204,7 @@ Gtk::Widget * ModuleShell::buildWidget(const Glib::RefPtr<Gtk::UIManager> & mana
         "    </menu>"
         "  </menubar>"
         "</ui>";
-//    m_ui_merge_id = manager->add_ui_from_string(ui_info);
-//    DBG_ASSERT(m_ui_merge_id, "merge failed");
+
 
     m_gridview = GridViewModule::Ptr(
         new GridViewModule(*this, m_selection_controller->get_list_store()));
@@ -240,7 +239,7 @@ void ModuleShell::action_edit_delete()
 void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
                                                    const std::string & label)
 {
-    auto w = module->buildWidget(Glib::RefPtr<Gtk::UIManager>());
+    auto w = module->buildWidget();
     if(w) {
         add(module);
         m_shell.append_page(*w, label);

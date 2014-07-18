@@ -280,7 +280,7 @@ WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> &treestore,
 }
 
 
-Gtk::Widget * WorkspaceController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+Gtk::Widget * WorkspaceController::buildWidget()
 {
     if(m_widget) {
         return m_widget;

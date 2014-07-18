@@ -94,10 +94,10 @@ int Application::main(const Application::Ptr & app,
                       int argc, char ** argv)
 {
     bool use_dark = app->get_use_dark_theme();
-    Glib::RefPtr<Gtk::Settings> settings = Gtk::Settings::get_default();
+    auto settings = Gtk::Settings::get_default();
     settings->set_property("gtk-application-prefer-dark-theme", use_dark);
 
-    AppFrame::Ptr window = app->makeMainFrame();
+    auto window = app->makeMainFrame();
     app->_add(window, false);
     app->_ready();
     app->m_gtkapp->run(window->gtkWindow(), argc, argv);
@@ -113,12 +113,8 @@ void Application::on_startup()
 
 void Application::init_actions()
 {
-    Glib::RefPtr<Gio::Menu> menu;
-    Glib::RefPtr<Gio::Menu> section;
-
-    menu = Gio::Menu::create();
-
-    section = Gio::Menu::create();
+    auto menu = Gio::Menu::create();
+    auto section = Gio::Menu::create();
 
     menu->append_section(section);
     section->append(_("New"), "action");
@@ -186,7 +182,7 @@ void Application::_add(const Controller::Ptr & sub, bool attach)
     Controller::add(sub);
     UiController::Ptr uictrl = std::dynamic_pointer_cast<UiController>(sub);
     if(uictrl) {
-        Gtk::Widget *w = uictrl->buildWidget(Glib::RefPtr<Gtk::UIManager>());
+        auto w = uictrl->buildWidget();
         Gtk::Window *win = nullptr;
         if(attach && m_gtkapp && (win = dynamic_cast<Gtk::Window*>(w))) {
             m_gtkapp->add_window(*win);
@@ -206,7 +202,7 @@ void Application::on_about()
 
 UndoTransaction * Application::begin_undo(const std::string & label)
 {
-    fwk::UndoTransaction *undo = new fwk::UndoTransaction(label);
+    auto undo = new fwk::UndoTransaction(label);
     undo_history().add(undo);
     return undo;
 }

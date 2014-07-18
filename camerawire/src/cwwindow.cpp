@@ -42,7 +42,7 @@ CwWindow::CwWindow()
 }
 
 
-Gtk::Widget * CwWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * CwWindow::buildWidget()
 {
   if(m_widget) {
     return m_widget;
@@ -179,7 +179,7 @@ void CwWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
     "  </toolbar>"
     "</ui>";
   manager->add_ui_from_string(ui_info);
-} 
+}
 
 
 void CwWindow::on_action_import()

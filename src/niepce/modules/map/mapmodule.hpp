@@ -51,7 +51,7 @@ public:
     void on_lib_notification(const eng::LibNotification &ln);
 
 protected:
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget();
 
 private:
     void on_selected(eng::library_id_t id);

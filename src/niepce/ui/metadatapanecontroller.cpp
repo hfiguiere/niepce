@@ -112,29 +112,29 @@ MetaDataPaneController::~MetaDataPaneController()
 }
 
 Gtk::Widget * 
-MetaDataPaneController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
+MetaDataPaneController::buildWidget()
 {
     if(m_widget) {
         return m_widget;
     }
-    Gtk::Box *box = build_vbox();
+    auto box = build_vbox();
     m_widget = box;
     DBG_ASSERT(box, "dockable vbox not found");
-    
-    const fwk::MetaDataSectionFormat * formats = get_format();
-    
-    const fwk::MetaDataSectionFormat * current = formats;
+
+    auto formats = get_format();
+
+    auto current = formats;
     while(current->section) {
-        fwk::MetaDataWidget *w = Gtk::manage(new fwk::MetaDataWidget(current->section));
+        auto w = Gtk::manage(new fwk::MetaDataWidget(current->section));
         box->pack_start(*w, Gtk::PACK_SHRINK, 0);
         w->set_data_format(current);
         m_widgets.push_back(w);
         w->signal_metadata_changed.connect(
-            sigc::mem_fun(*this, 
+            sigc::mem_fun(*this,
                           &MetaDataPaneController::on_metadata_changed));
         current++;
     }
-    
+
     return m_widget;
 }
   

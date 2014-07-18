@@ -44,7 +44,7 @@ void MapModule::set_active(bool active)
 }
 
 
-Gtk::Widget * MapModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * MapModule::buildWidget()
 {
     if(m_widget) {
         return m_widget;
@@ -55,7 +55,7 @@ Gtk::Widget * MapModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manage
 
     m_map = fwk::MapController::Ptr(new fwk::MapController());
     add(m_map);
-    auto w = m_map->buildWidget(manager);
+    auto w = m_map->buildWidget();
     if (w) {
         m_box->pack_start(*w);
     }

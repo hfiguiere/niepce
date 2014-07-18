@@ -39,7 +39,7 @@ public:
   MgWindow();
 
 protected:
-  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+  virtual Gtk::Widget * buildWidget();
 
 private:
 

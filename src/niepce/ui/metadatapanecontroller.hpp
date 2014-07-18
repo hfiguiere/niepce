@@ -35,7 +35,7 @@ class PropertyBag;
 }
 
 namespace ui {
-	
+
 class MetaDataPaneController
     : public fwk::Dockable
 {
@@ -43,21 +43,21 @@ public:
     typedef std::shared_ptr<MetaDataPaneController> Ptr;
     MetaDataPaneController();
     ~MetaDataPaneController();
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget();
     void display(eng::library_id_t file_id, const eng::LibMetadata::Ptr & meta);
-    eng::library_id_t displayed_file() const 
+    eng::library_id_t displayed_file() const
         { return m_fileid; }
 
     sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
 private:
-    void on_metadata_changed(const fwk::PropertyBag &, 
+    void on_metadata_changed(const fwk::PropertyBag &,
                              const fwk::PropertyBag & old);
 
     std::vector<fwk::MetaDataWidget *> m_widgets;
-    
+
     static const fwk::MetaDataSectionFormat * get_format();
     static const fwk::PropertySet & get_property_set();
-    
+
     eng::library_id_t m_fileid;
 };
 

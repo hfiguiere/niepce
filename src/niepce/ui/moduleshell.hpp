@@ -84,7 +84,7 @@ public:
     void on_selected(eng::library_id_t id);
     void on_image_activated(eng::library_id_t id);
 
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+    virtual Gtk::Widget * buildWidget();
 
     void action_edit_delete();
 protected:

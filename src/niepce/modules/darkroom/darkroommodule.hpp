@@ -62,7 +62,7 @@ public:
 protected:
     void reload_image();
 
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget();
 
 private:
     void on_selected(eng::library_id_t id);

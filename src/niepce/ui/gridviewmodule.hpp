@@ -74,7 +74,7 @@ public:
   virtual void select_image(eng::library_id_t id);
 
 protected:
-  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+  virtual Gtk::Widget * buildWidget();
 
 
 private:

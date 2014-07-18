@@ -41,7 +41,7 @@ MgWindow::MgWindow()
 }
 
 
-Gtk::Widget * MgWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * MgWindow::buildWidget()
 {
   if(m_widget) {
     return m_widget;

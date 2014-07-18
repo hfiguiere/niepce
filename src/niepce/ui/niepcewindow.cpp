@@ -73,7 +73,6 @@ NiepceWindow::~NiepceWindow()
 void
 NiepceWindow::_createModuleShell()
 {
-    DBG_ASSERT(m_uimanager, "UI manager NULL");
     DBG_ASSERT(static_cast<bool>(m_libClient), "libclient not initialized");
     DBG_ASSERT(m_widget, "widget not built");
 
@@ -82,7 +81,7 @@ NiepceWindow::_createModuleShell()
     // main view
     m_moduleshell = ModuleShell::Ptr(
         new ModuleShell(getLibraryClient()));
-    m_moduleshell->buildWidget(m_uimanager);
+    m_moduleshell->buildWidget();
 
     add(m_moduleshell);
     auto shell_menu = m_moduleshell->getMenu();
@@ -115,8 +114,8 @@ NiepceWindow::_createModuleShell()
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
-    m_hbox.pack1(*(m_workspacectrl->buildWidget(m_uimanager)), Gtk::EXPAND);
-    m_hbox.pack2(*(m_moduleshell->buildWidget(m_uimanager)), Gtk::EXPAND);
+    m_hbox.pack1(*(m_workspacectrl->buildWidget()), Gtk::EXPAND);
+    m_hbox.pack2(*(m_moduleshell->buildWidget()), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
@@ -131,7 +130,7 @@ NiepceWindow::_createModuleShell()
     m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_moduleshell->get_list_store()));
     add(m_filmstrip);
 
-    m_vbox.pack_start(*(m_filmstrip->buildWidget(m_uimanager)), Gtk::PACK_SHRINK);
+    m_vbox.pack_start(*(m_filmstrip->buildWidget()), Gtk::PACK_SHRINK);
 
     // status bar
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
@@ -145,14 +144,11 @@ NiepceWindow::_createModuleShell()
 
 
 Gtk::Widget *
-NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+NiepceWindow::buildWidget()
 {
-    DBG_ASSERT(manager, "manager is NULL");
-
     if(m_widget) {
         return m_widget;
     }
-    m_uimanager = manager;
     Gtk::Window & win(gtkWindow());
 
     m_widget = &win;
@@ -177,51 +173,6 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 
 void NiepceWindow::init_ui()
 {
-#if 0
-    Glib::ustring ui_info =
-        "<ui>"
-        "  <menubar name='MenuBar'>"
-        "    <menu action='MenuLibrary'>"
-        "      <menuitem action='NewLibrary' />"
-        "      <menuitem action='OpenLibrary' />"
-        "      <separator/>"
-        "      <menuitem action='NewFolder'/>"
-        "      <menuitem action='NewProject'/>"
-        "      <menuitem action='Import'/>"
-        "      <separator/>"
-        "      <menuitem action='Close'/>"
-        "      <menuitem action='Quit'/>"
-        "    </menu>"
-        "    <menu action='MenuEdit'>"
-        "      <menuitem action='Undo'/>"
-        "      <menuitem action='Redo'/>"
-        "      <separator/>"
-        "      <menuitem action='Cut'/>"
-        "      <menuitem action='Copy'/>"
-        "      <menuitem action='Paste'/>"
-        "      <menuitem action='Delete'/>"
-        "      <separator/>"
-        "      <menuitem action='Preferences'/>"
-        "    </menu>"
-        "    <menu action='MenuImage' />"
-        "    <menu action='MenuTools'>"
-        "      <menuitem action='EditLabels'/>"
-        "      <separator/>"        
-        "      <menuitem action='ToggleToolsVisible'/>"
-        "      <separator/>"        
-        "    </menu>"
-        "    <menu action='MenuHelp'>"
-        "      <menuitem action='Help'/>"
-        "      <menuitem action='About'/>"
-        "    </menu>"
-        "  </menubar>"
-        "  <toolbar  name='ToolBar'>"
-        "    <toolitem action='Import'/>"
-        "    <toolitem action='Quit'/>"
-        "  </toolbar>"
-        "</ui>";
-    m_ui_merge_id = manager->add_ui_from_string(ui_info);
-#endif
 }
 
 void NiepceWindow::init_actions()
