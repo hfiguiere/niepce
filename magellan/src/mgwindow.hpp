@@ -21,8 +21,9 @@
 #ifndef __MG_WINDOW_HPP_
 #define __MG_WINDOW_HPP_
 
+#include <giomm/simpleactiongroup.h>
+
 #include <gtkmm/action.h>
-#include <gtkmm/actiongroup.h>
 #include <gtkmm/box.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
@@ -43,7 +44,6 @@ protected:
 
 private:
 
-  void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
   void init_actions();
   void on_action_import();
   void on_preferences();
@@ -51,8 +51,7 @@ private:
   void detect_devices();
 
   Gtk::VBox                      m_vbox;
-  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
-	Glib::RefPtr<Gtk::Action>      m_importAction;
+  Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
 };
 
 }
