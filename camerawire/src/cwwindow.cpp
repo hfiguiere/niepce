@@ -25,6 +25,7 @@
 
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/undo.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "cwwindow.hpp"
 
 
@@ -36,7 +37,6 @@ namespace cw {
 
 CwWindow::CwWindow()
   : fwk::AppFrame("cw-window-frame")
-  , m_vbox(Gtk::ORIENTATION_VERTICAL)
   , m_hbox(Gtk::ORIENTATION_HORIZONTAL)
 {
 }
@@ -51,25 +51,18 @@ Gtk::Widget * CwWindow::buildWidget()
   Gtk::Window & win(gtkWindow());
   m_widget = &win;
 
-  Application::Ptr pApp = Application::app();
+  auto pApp = Application::app();
 
   init_actions();
-  init_ui(manager);
 
-  win.add(m_vbox);
-
-  Gtk::Widget* pMenuBar = pApp->uiManager()->get_widget("/MenuBar");
-  m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
-  m_vbox.pack_start(m_hbox, true, true, 4);
+  win.add(m_hbox);
 
   m_camera_tree_model = Gtk::ListStore::create(m_camera_tree_record);
-  Gtk::TreeView *treeview = manage(new Gtk::TreeView(m_camera_tree_model));
-  Gtk::TreeViewColumn *column;
-
-  column = manage(new Gtk::TreeViewColumn(_("Camera")));
-  Gtk::CellRendererToggle *cell = manage(new Gtk::CellRendererToggle);
+  auto treeview = manage(new Gtk::TreeView(m_camera_tree_model));
+  auto column = manage(new Gtk::TreeViewColumn(_("Camera")));
+  auto cell = manage(new Gtk::CellRendererToggle);
   column->pack_start(*cell, false);
-  column->add_attribute(cell->property_active(), 
+  column->add_attribute(cell->property_active(),
                         m_camera_tree_record.m_persistent);
   column->pack_start(m_camera_tree_record.m_icon, false);
   column->pack_start(m_camera_tree_record.m_label);
@@ -86,99 +79,69 @@ Gtk::Widget * CwWindow::buildWidget()
 
 void CwWindow::init_actions()
 {
-    Glib::RefPtr<Gtk::Action> an_action;
+    m_actionGroup = Gio::SimpleActionGroup::create();
+    gtkWindow().insert_action_group("win", m_actionGroup);
 
-    m_refActionGroup = Gtk::ActionGroup::create();
-		
-    m_refActionGroup->add(Gtk::Action::create("MenuFile", _("_File")));
-    m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-                          sigc::mem_fun(*this, 
-                                        &CwWindow::on_action_import));
-    m_refActionGroup->add(Gtk::Action::create("Close", Gtk::Stock::CLOSE),
-                          sigc::mem_fun(gtkWindow(), 
-                                        &Gtk::Window::hide));			
-    m_refActionGroup->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-                          sigc::mem_fun(*Application::app(), 
-                                        &Application::quit));	
+    m_menu = Gio::Menu::create();
+    auto submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("File"), submenu);
 
-    m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
+    fwk::add_action(m_actionGroup, "Import",
+                    sigc::mem_fun(*this,
+                                  &CwWindow::on_action_import),
+                    submenu, _("_Import..."), "win", nullptr);
+    fwk::add_action(m_actionGroup, "Close",
+                    sigc::mem_fun(gtkWindow(),
+                                  &Gtk::Window::hide),
+                    submenu, _("Close"), "win", "<Primary>w");
 
-    create_undo_action(m_refActionGroup);
-    create_redo_action(m_refActionGroup);
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Edit"), submenu);
+    auto section = Gio::Menu::create();
+    submenu->append_section(section);
+
+    create_undo_action(m_actionGroup, section);
+    create_redo_action(m_actionGroup, section);
 
     // FIXME: bind
-    m_refActionGroup->add(Gtk::Action::create("Cut", Gtk::Stock::CUT));
-    m_refActionGroup->add(Gtk::Action::create("Copy", Gtk::Stock::COPY));
-    m_refActionGroup->add(Gtk::Action::create("Paste", Gtk::Stock::PASTE));
-    m_refActionGroup->add(Gtk::Action::create("Delete", Gtk::Stock::DELETE));
+    section = Gio::Menu::create();
+    submenu->append_section(section);
 
-    m_refActionGroup->add(Gtk::Action::create("Preferences", 
-                                              Gtk::Stock::PREFERENCES),
-                          sigc::mem_fun(*this,
-                                        &CwWindow::on_preferences));
+    fwk::add_action(m_actionGroup,
+                    "Cut",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Cut"), "win", "<control>x");
+    fwk::add_action(m_actionGroup,
+                    "Copy",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Copy"), "win", "<control>c");
+    fwk::add_action(m_actionGroup,
+                    "Paste",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Paste"), "win" "<control>v");
 
-    m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
-    m_refActionGroup->add(Gtk::Action::create("ReloadCameras",
-                                              Gtk::Stock::REFRESH),
-                          Gtk::AccelKey("F5"),
-                          sigc::mem_fun(*this, &CwWindow::reload_camera_list));
-    m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
-                                                    _("_Hide tools"));
-    m_refActionGroup->add(m_hide_tools_action,
-                          sigc::mem_fun(*this, &Frame::toggle_tools_visible));
+    section = Gio::Menu::create();
+    submenu->append_section(section);
+    fwk::add_action(m_actionGroup,
+                    "Preferences",
+                    sigc::mem_fun(*this,
+                                  &CwWindow::on_preferences),
+                    section, _("Preferences"), "win", nullptr);
 
-    m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
-    m_refActionGroup->add(Gtk::Action::create("Help", Gtk::Stock::HELP));
-    m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT),
-                          sigc::mem_fun(*Application::app(),
-                                        &Application::about));
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Tools"), submenu);
 
-    Application::app()->uiManager()->insert_action_group(m_refActionGroup);		
-		
-    gtkWindow().add_accel_group(Application::app()
-                                ->uiManager()->get_accel_group());
-}
+    fwk::add_action(m_actionGroup,
+                    "ReloadCameras",
+                    sigc::mem_fun(*this, &CwWindow::reload_camera_list),
+                    submenu, _("Refresh"), "win", "F5");
 
 
-void CwWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
-{
-  Glib::ustring ui_info =
-    "<ui>"
-    "  <menubar name='MenuBar'>"
-    "    <menu action='MenuFile'>"
-    "      <menuitem action='Import'/>"
-    "      <separator/>"
-    "      <menuitem action='Close'/>"
-    "      <menuitem action='Quit'/>"
-    "    </menu>"
-    "    <menu action='MenuEdit'>"
-    "      <menuitem action='Undo'/>"
-    "      <menuitem action='Redo'/>"
-    "      <separator/>"
-    "      <menuitem action='Cut'/>"
-    "      <menuitem action='Copy'/>"
-    "      <menuitem action='Paste'/>"
-    "      <menuitem action='Delete'/>"
-    "      <separator/>"
-    "      <menuitem action='Preferences'/>"
-    "    </menu>"
-    "    <menu action='MenuTools'>"
-    "      <menuitem action='ReloadCameras' />"
-    "      <separator/>"        
-    "      <menuitem action='ToggleToolsVisible'/>"
-    "      <separator/>"        
-    "    </menu>"
-    "    <menu action='MenuHelp'>"
-    "      <menuitem action='Help'/>"
-    "      <menuitem action='About'/>"
-    "    </menu>"
-    "  </menubar>"
-    "  <toolbar  name='ToolBar'>"
-    "    <toolitem action='Import'/>"
-    "    <toolitem action='Quit'/>"
-    "  </toolbar>"
-    "</ui>";
-  manager->add_ui_from_string(ui_info);
+    m_hide_tools_action
+        = fwk::add_action(m_actionGroup, "ToggleToolsVisible",
+                          sigc::mem_fun(*this, &Frame::toggle_tools_visible),
+                          submenu, _("Hide tools"), "win",
+                          nullptr);
 }
 
 

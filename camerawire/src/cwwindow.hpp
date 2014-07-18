@@ -21,8 +21,7 @@
 #ifndef __CW_WINDOW_HPP_
 #define __CW_WINDOW_HPP_
 
-#include <gtkmm/action.h>
-#include <gtkmm/actiongroup.h>
+#include <giomm/simpleactiongroup.h>
 #include <gtkmm/box.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
@@ -61,7 +60,7 @@ private:
     Gtk::TreeModelColumn<bool>               m_persistent;
   };
 
-  void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
+  void init_ui();
   void init_actions();
   void on_action_import();
   void on_preferences();
@@ -70,9 +69,8 @@ private:
 
   CameraTreeRecord               m_camera_tree_record;
   Glib::RefPtr<Gtk::ListStore>   m_camera_tree_model;
-  Gtk::Box                       m_vbox;
   Gtk::Box                       m_hbox;
-  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+  Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
 };
 
 }
