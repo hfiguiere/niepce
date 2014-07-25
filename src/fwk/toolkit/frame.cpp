@@ -64,15 +64,15 @@ Frame::Frame(const std::string & gladeFile,
 
 void Frame::connectSignals()
 {
-		m_window->signal_delete_event().connect(
+    m_window->signal_delete_event().connect(
         sigc::hide(sigc::mem_fun(this, &Frame::_close)));
-		m_window->signal_hide().connect(
+    m_window->signal_hide().connect(
         sigc::retype_return<void>(sigc::mem_fun(this, &Frame::_close)));
 }
 
 Frame::~Frame()
 {
-		frameRectToConfig();
+    frameRectToConfig();
     DBG_OUT("destroy Frame");
     delete m_window;
 }
