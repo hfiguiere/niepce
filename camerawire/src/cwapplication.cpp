@@ -43,8 +43,9 @@ namespace cw {
 
   fwk::AppFrame::Ptr CwApplication::makeMainFrame()
   {
-    m_main_frame = fwk::AppFrame::Ptr(new CwWindow);
-    return m_main_frame;
+    auto ptr = fwk::AppFrame::Ptr(new CwWindow);
+    m_main_frame = ptr;
+    return ptr;
   }
 
 void CwApplication::on_action_preferences()

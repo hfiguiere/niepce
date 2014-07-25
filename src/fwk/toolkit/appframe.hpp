@@ -13,10 +13,16 @@ class AppFrame
 {
 public:
   typedef std::shared_ptr<AppFrame> Ptr;
+  typedef std::weak_ptr<AppFrame> WeakPtr;
 
   AppFrame(const std::string & layout_cfg_key = "")
     : Frame(new Gtk::ApplicationWindow(), layout_cfg_key)
     {
+    }
+
+  virtual void on_ready()
+    {
+      gtkWindow().show();
     }
 
   Glib::RefPtr<Gio::Menu> get_menu() const

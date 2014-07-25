@@ -97,18 +97,23 @@ int Application::main(const Application::Ptr & app,
     auto settings = Gtk::Settings::get_default();
     settings->set_property("gtk-application-prefer-dark-theme", use_dark);
 
-    auto window = app->makeMainFrame();
-    app->_add(window, false);
-    app->_ready();
-    app->m_gtkapp->run(window->gtkWindow(), argc, argv);
+    app->m_gtkapp->run(argc, argv);
+
+    DBG_OUT("end run");
+    app->terminate();
 
     return 0;
 }
 
 void Application::on_startup()
 {
-    set_menubar(m_main_frame->get_menu());
     init_actions();
+
+    auto window = makeMainFrame();
+    _add(window, true);
+    _ready();
+
+    set_menubar(window->get_menu());
 }
 
 void Application::init_actions()
@@ -157,18 +162,14 @@ void Application::init_actions()
 
 void Application::terminate()
 {
-    using std::placeholders::_1;
-    std::for_each(m_subs.begin(), m_subs.end(),
-                  std::bind(&Controller::terminate, _1));
-    std::for_each(m_subs.begin(), m_subs.end(),
-                  std::bind(&Controller::clearParent, _1));
-    m_subs.clear();
+    DBG_OUT("terminating");
+    Controller::terminate();
+    DBG_OUT("done terminating");
 }
 
 
 void Application::quit()
 {
-    terminate();
     m_gtkapp->quit();
 }
 

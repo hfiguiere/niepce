@@ -91,12 +91,12 @@ protected:
 
     void init_actions();
 
-    const AppFrame::Ptr & get_main_frame() const
-        { return m_main_frame; }
+    const AppFrame::Ptr get_main_frame() const
+        { return AppFrame::Ptr(m_main_frame); }
     /** bound the the GtkApplication startup signal */
     void on_startup();
 
-    AppFrame::Ptr                   m_main_frame;
+    AppFrame::WeakPtr            m_main_frame;
 private:
     Configuration                m_config;
     UndoHistory                  m_undo;

@@ -68,7 +68,6 @@ private:
     void create_initial_labels();
     void on_lib_notification(const eng::LibNotification & n);
 
-    void init_ui();
     void init_actions();
 
     // UI to open library

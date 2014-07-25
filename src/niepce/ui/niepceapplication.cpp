@@ -58,8 +58,9 @@ Application::Ptr NiepceApplication::create(int & argc, char** & argv)
 
 AppFrame::Ptr NiepceApplication::makeMainFrame()
 {
-    m_main_frame = AppFrame::Ptr(new NiepceWindow);
-    return m_main_frame;
+    auto ptr = AppFrame::Ptr(new NiepceWindow);
+    m_main_frame = ptr;
+    return ptr;
 }
 
 void NiepceApplication::on_action_file_open()
@@ -86,7 +87,7 @@ void NiepceApplication::on_action_preferences()
     DBG_OUT("on_preferences");
 
     auto dlg(new PreferencesDialog());
-    dlg->run_modal(m_main_frame);
+    dlg->run_modal(AppFrame::Ptr(m_main_frame));
 
     DBG_OUT("end on_preferences");
 }

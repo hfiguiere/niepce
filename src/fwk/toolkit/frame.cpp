@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/application.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,14 +43,9 @@ Frame::Frame(Gtk::Window* win, const std::string & layout_cfg_key)
 }
 
 Frame::Frame(const std::string & layout_cfg_key)
-    : m_window(new Gtk::Window()),
-      m_builder(nullptr),
-      m_layout_cfg_key(layout_cfg_key)
+    : Frame(new Gtk::Window(), layout_cfg_key)
 {
-    connectSignals();
-    frameRectFromConfig();
 }
-
 
 Frame::Frame(const std::string & gladeFile,
              const Glib::ustring & widgetName,
