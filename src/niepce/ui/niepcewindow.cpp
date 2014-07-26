@@ -151,7 +151,6 @@ NiepceWindow::buildWidget()
     m_widget = &win;
 
     init_actions();
-    init_ui();
 
     m_notifcenter.reset(new niepce::NotificationCenter());
 
@@ -167,10 +166,6 @@ NiepceWindow::buildWidget()
     return &win;
 }
 
-
-void NiepceWindow::init_ui()
-{
-}
 
 void NiepceWindow::init_actions()
 {
@@ -349,10 +344,10 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
 std::string NiepceWindow::prompt_open_library()
 {
     std::string libMoniker;
-    Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
-                                  Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
+    Gtk::FileChooserDialog dialog(gtkWindow(), _("Open library"),
+                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
     dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-    dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
+    dialog.add_button(_("Open"), Gtk::RESPONSE_OK);
 
     int result = dialog.run();
     Glib::ustring libraryToCreate;
