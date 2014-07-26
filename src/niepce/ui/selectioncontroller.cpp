@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,21 +78,20 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
 
 void SelectionController::selected(IImageSelectable * selectable)
 {
-	if(m_in_handler) {
-		DBG_OUT("%p already in handler", (void*)this);
-		return;
-	}
+    if(m_in_handler) {
+        DBG_OUT("%p already in handler", (void*)this);
+        return;
+    }
 
-	fwk::AutoFlag f(m_in_handler);
+    fwk::AutoFlag f(m_in_handler);
 
-	eng::library_id_t selection = selectable->get_selected();
-	std::vector<IImageSelectable *>::iterator iter;
-	for(iter = m_selectables.begin(); iter != m_selectables.end(); iter++) {
-		if(*iter != selectable) {
-			(*iter)->select_image(selection);
-		}
-	}
-	signal_selected(selection);
+    auto selection = selectable->get_selected();
+    for(auto iter : m_selectables) {
+        if(iter != selectable) {
+            iter->select_image(selection);
+        }
+    }
+    signal_selected(selection);
 }
 
 

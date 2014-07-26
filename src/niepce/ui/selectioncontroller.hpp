@@ -1,7 +1,7 @@
 /*
  * niepce - ui/selectioncontroller.h
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@
 #include "ui/imageliststore.hpp"
 
 namespace Gtk {
-	class IconView;
-	class Widget;
+class IconView;
+class Widget;
 }
 
 namespace ui {
@@ -40,14 +40,14 @@ namespace ui {
 /** interface for selectable image. Make the controller
  *  inherit/implement it.
  */
-class IImageSelectable 
+class IImageSelectable
 {
 public:
     virtual ~IImageSelectable() {}
     virtual Gtk::IconView * image_list() = 0;
     /** Return the id of the selection. <= 0 is none. */
     virtual eng::library_id_t get_selected() = 0;
-    /** select the image a specific id 
+    /** select the image a specific id
      *  might emit the signals.
      */
     virtual void select_image(eng::library_id_t id) = 0;
@@ -55,26 +55,26 @@ public:
 
 
 class SelectionController
-	: public fwk::Controller
+    : public fwk::Controller
 {
 public:
-	typedef std::shared_ptr<SelectionController> Ptr;
-	SelectionController();
+    typedef std::shared_ptr<SelectionController> Ptr;
+    SelectionController();
 
-	void add_selectable(IImageSelectable *);
+    void add_selectable(IImageSelectable *);
 
-	void activated(const Gtk::TreeModel::Path & /*path*/,
-				   IImageSelectable * selectable);
-	void selected(IImageSelectable *);
+    void activated(const Gtk::TreeModel::Path & /*path*/,
+                   IImageSelectable * selectable);
+    void selected(IImageSelectable *);
 
 
-	const Glib::RefPtr<ImageListStore> & get_list_store() const
-		{ return m_imageliststore; }
+    const Glib::RefPtr<ImageListStore> & get_list_store() const
+        { return m_imageliststore; }
 
-	// the signal to call when selection is changed.
+    // the signal to call when selection is changed.
     sigc::signal<void, eng::library_id_t> signal_selected;
 
-	// signal for when the item is activated (ie double-click)
+    // signal for when the item is activated (ie double-click)
     sigc::signal<void, eng::library_id_t> signal_activated;
 
     /////////
@@ -93,14 +93,14 @@ public:
 
     void set_property(fwk::PropertyIndex idx, int value);
 
-    void set_properties(const fwk::PropertyBag & props, 
+    void set_properties(const fwk::PropertyBag & props,
                         const fwk::PropertyBag & old);
 
     /** Write the file(s) metadata to disk. */
     void write_metadata();
     void move_to_trash();
 
-    /** get the current selection 
+    /** get the current selection
      *  todo: change it to support multiple
      */
     eng::library_id_t get_selection() const;
@@ -110,22 +110,22 @@ protected:
 private:
     libraryclient::LibraryClient::Ptr getLibraryClient();
 
-    bool _set_metadata(const std::string & undo_label, 
+    bool _set_metadata(const std::string & undo_label,
                        const eng::LibFile::Ptr & file,
-                       fwk::PropertyIndex meta, 
+                       fwk::PropertyIndex meta,
                        int old_value, int new_value);
-    bool _set_metadata(const std::string & undo_label, 
+    bool _set_metadata(const std::string & undo_label,
                        const eng::LibFile::Ptr & file,
                        const fwk::PropertyBag & props,
                        const fwk::PropertyBag & old);
-    /** move the selection and emit the signal 
+    /** move the selection and emit the signal
      * @param backwards true if the move is backwards.
      */
     void _selection_move(bool backwards);
 
-	Glib::RefPtr<ImageListStore>  m_imageliststore;
-	bool m_in_handler;
-	std::vector<IImageSelectable *> m_selectables;
+    Glib::RefPtr<ImageListStore>  m_imageliststore;
+    bool m_in_handler;
+    std::vector<IImageSelectable *> m_selectables;
 };
 
 }
