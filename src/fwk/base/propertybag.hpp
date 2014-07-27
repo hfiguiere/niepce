@@ -61,6 +61,7 @@ public:
     typedef std::shared_ptr<PropertyBag> Ptr;
     typedef std::map<PropertyIndex, PropertyValue> _Map;
     typedef _Map::const_iterator const_iterator;
+    typedef _Map::value_type value_type;
 
     bool empty() const
         {

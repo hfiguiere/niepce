@@ -125,7 +125,7 @@ eng::library_id_t SelectionController::get_selection() const
 
 eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
 {
-    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(id);
+    auto iter = m_imageliststore->get_iter_from_id(id);
     if(iter) {
         return (*iter)[m_imageliststore->columns().m_libfile];
     }
@@ -183,7 +183,7 @@ void SelectionController::select_next()
 void SelectionController::rotate(int angle)
 {
     DBG_OUT("angle = %d", angle);
-	eng::library_id_t selection = get_selection();
+    auto selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
@@ -193,9 +193,9 @@ void SelectionController::rotate(int angle)
 }
 
 
-bool SelectionController::_set_metadata(const std::string & undo_label, 
+bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFile::Ptr & file,
-                                        fwk::PropertyIndex meta, 
+                                        fwk::PropertyIndex meta,
                                         int old_value, int new_value)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
@@ -209,27 +209,27 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
     return true;
 }
 
-bool SelectionController::_set_metadata(const std::string & undo_label, 
+bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFile::Ptr & file,
                                         const fwk::PropertyBag & props,
                                         const fwk::PropertyBag & old)
 {
-    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
-    for(fwk::PropertyBag::const_iterator iter = props.begin(); 
-        iter != props.end(); ++iter) {
-
+    auto undo = fwk::Application::app()->begin_undo(undo_label);
+    for(auto iter : props) {
         fwk::PropertyValue value;
-        old.get_value_for_property(iter->first, value);
+        old.get_value_for_property(iter.first, value);
 
         if(value.type() != typeid(fwk::EmptyValue)) {
-            DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
+            DBG_ASSERT(value.type() == iter.second.type(),
+                       "Value type mismatch");
         }
 
         undo->new_command<void>(
             std::bind(&libraryclient::LibraryClient::setMetadata,
-                        getLibraryClient(), file->id(), iter->first, iter->second),
+                      getLibraryClient(), file->id(),
+                      iter.first, iter.second),
             std::bind(&libraryclient::LibraryClient::setMetadata,
-                        getLibraryClient(), file->id(), iter->first, value)
+                      getLibraryClient(), file->id(), iter.first, value)
             );
     }
     undo->execute();
