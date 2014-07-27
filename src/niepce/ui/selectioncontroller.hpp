@@ -21,6 +21,8 @@
 #ifndef _UI_SELECTIONCONTROLLER_H__
 #define _UI_SELECTIONCONTROLLER_H__
 
+#include <memory>
+
 #include <gtk/gtk.h>
 
 #include <sigc++/signal.h>
@@ -43,6 +45,9 @@ namespace ui {
 class IImageSelectable
 {
 public:
+    typedef std::shared_ptr<IImageSelectable> Ptr;
+    typedef std::weak_ptr<IImageSelectable> WeakPtr;
+
     virtual ~IImageSelectable() {}
     virtual Gtk::IconView * image_list() = 0;
     /** Return the id of the selection. <= 0 is none. */
@@ -61,11 +66,11 @@ public:
     typedef std::shared_ptr<SelectionController> Ptr;
     SelectionController();
 
-    void add_selectable(IImageSelectable *);
+    void add_selectable(const IImageSelectable::WeakPtr &);
 
     void activated(const Gtk::TreeModel::Path & /*path*/,
-                   IImageSelectable * selectable);
-    void selected(IImageSelectable *);
+                   const IImageSelectable::WeakPtr & selectable);
+    void selected(const IImageSelectable::WeakPtr &);
 
 
     const Glib::RefPtr<ImageListStore> & get_list_store() const
@@ -125,7 +130,7 @@ private:
 
     Glib::RefPtr<ImageListStore>  m_imageliststore;
     bool m_in_handler;
-    std::vector<IImageSelectable *> m_selectables;
+    std::vector<IImageSelectable::WeakPtr> m_selectables;
 };
 
 }

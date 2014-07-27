@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ NiepceWindow::_createModuleShell()
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
     m_statusBar.push(Glib::ustring(_("Ready")));
 
-    selection_controller->add_selectable(m_filmstrip.get());
+    selection_controller->add_selectable(m_filmstrip);
 
     m_vbox.show_all_children();
     m_vbox.show();

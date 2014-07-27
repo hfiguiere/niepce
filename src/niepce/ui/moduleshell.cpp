@@ -195,7 +195,7 @@ Gtk::Widget * ModuleShell::buildWidget()
         new GridViewModule(*this, m_selection_controller->get_list_store()));
     add_library_module(m_gridview, _("Library"));
 
-    m_selection_controller->add_selectable(m_gridview.get());
+    m_selection_controller->add_selectable(m_gridview);
     m_selection_controller->signal_selected
         .connect(sigc::mem_fun(*this, &ModuleShell::on_selected));
     m_selection_controller->signal_activated

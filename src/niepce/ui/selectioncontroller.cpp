@@ -48,24 +48,27 @@ void SelectionController::_added()
 	m_imageliststore->set_parent_controller(m_parent);
 }
 
-void SelectionController::add_selectable(IImageSelectable * selectable)
-{ 
-    DBG_OUT("added %p", (void*)selectable);
-    m_selectables.push_back(selectable);
+void SelectionController::add_selectable(const IImageSelectable::WeakPtr & selectableWeak)
+{
+    auto selectable = selectableWeak.lock();
+    DBG_OUT("added %p", (void*)selectable.get());
+    m_selectables.push_back(selectableWeak);
     selectable->image_list()->signal_selection_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &SelectionController::selected),
-                   selectable));
+        [this, selectableWeak](){
+            this->selected(selectableWeak);
+        });
     selectable->image_list()->signal_item_activated().connect(
-        sigc::bind(sigc::mem_fun(*this, &SelectionController::activated),
-                   selectable));
+        sigc::bind(
+            sigc::mem_fun(*this, &SelectionController::activated),
+                   selectableWeak));
 }
 
 
 void SelectionController::activated(const Gtk::TreeModel::Path & path,
-                                    IImageSelectable * /*selectable*/)
+                                    const IImageSelectable::WeakPtr & /*selectable*/)
 {
     fwk::AutoFlag f(m_in_handler);
-    Gtk::TreeIter iter = m_imageliststore->get_iter(path);
+    auto iter = m_imageliststore->get_iter(path);
     if(iter) {
         eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
         if(file) {
@@ -76,7 +79,7 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
     }
 }
 
-void SelectionController::selected(IImageSelectable * selectable)
+void SelectionController::selected(const IImageSelectable::WeakPtr & selectableWeak)
 {
     if(m_in_handler) {
         DBG_OUT("%p already in handler", (void*)this);
@@ -85,9 +88,17 @@ void SelectionController::selected(IImageSelectable * selectable)
 
     fwk::AutoFlag f(m_in_handler);
 
+    auto selectable = selectableWeak.lock();
+    if (!selectable) {
+        // it can be, but at that point we should be terminating the app.
+        ERR_OUT("selectable is null");
+        return;
+    }
+
     auto selection = selectable->get_selected();
-    for(auto iter : m_selectables) {
-        if(iter != selectable) {
+    for(auto iterWeak : m_selectables) {
+        auto iter = iterWeak.lock();
+        if(iter && iter != selectable) {
             iter->select_image(selection);
         }
     }
@@ -105,7 +116,11 @@ libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
 eng::library_id_t SelectionController::get_selection() const
 {
     DBG_ASSERT(!m_selectables.empty(), "selectables list can't be empty");
-    return m_selectables[0]->get_selected();
+
+    auto selectable = m_selectables[0].lock();
+    DBG_ASSERT(static_cast<bool>(selectable), "selectable is null");
+
+    return selectable->get_selected();
 }
 
 eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
@@ -119,31 +134,35 @@ eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
 
 void SelectionController::_selection_move(bool backwards)
 {
-	eng::library_id_t selection = get_selection();
-    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+    auto selection = get_selection();
+    auto iter = m_imageliststore->get_iter_from_id(selection);
+    if(!iter) {
+        return;
+    }
+
+    if(backwards) {
+        if(iter != m_imageliststore->children().begin()) {
+            --iter;
+        }
+    }
+    else {
+        iter++;
+    }
     if(iter) {
-        if(backwards) {
-            if(iter != m_imageliststore->children().begin()) {
-                --iter;
-            }
-        }
-        else {
-            iter++;
-        }
-        if(iter) {
-            // make sure the iterator is valid...
-            eng::LibFile::Ptr libfile 
-                = (*iter)[m_imageliststore->columns().m_libfile];
-            selection = libfile->id();
+        // make sure the iterator is valid...
+        eng::LibFile::Ptr libfile
+            = (*iter)[m_imageliststore->columns().m_libfile];
+        selection = libfile->id();
 
-            fwk::AutoFlag f(m_in_handler);
+        fwk::AutoFlag f(m_in_handler);
 
-            using std::placeholders::_1;
-            std::for_each(m_selectables.begin(), m_selectables.end(),
-                          std::bind(&IImageSelectable::select_image, _1,
-                                      selection));
-            signal_selected(selection);
-        }
+        std::for_each(m_selectables.begin(), m_selectables.end(),
+                      [selection] (const IImageSelectable::WeakPtr & s) {
+                          if (!s.expired()) {
+                              s.lock()->select_image(selection);
+                          }
+                      });
+        signal_selected(selection);
     }
 }
 
