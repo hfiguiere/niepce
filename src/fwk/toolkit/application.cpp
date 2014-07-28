@@ -100,8 +100,6 @@ int Application::main(const Application::Ptr & app,
     app->m_gtkapp->run(argc, argv);
 
     DBG_OUT("end run");
-    app->terminate();
-
     return 0;
 }
 
@@ -170,7 +168,9 @@ void Application::terminate()
 
 void Application::quit()
 {
-    m_gtkapp->quit();
+    // TODO check we can quit
+
+    terminate();
 }
 
 void Application::about()
