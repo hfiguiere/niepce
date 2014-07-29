@@ -59,7 +59,7 @@ NiepceWindow::NiepceWindow()
     : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
-    gtkWindow().property_hide_titlebar_when_maximized() = true;
+//    gtkWindow().property_hide_titlebar_when_maximized() = true;
 }
 
 

@@ -109,9 +109,10 @@ void Application::on_startup()
 
     auto window = makeMainFrame();
     _add(window, true);
-    _ready();
 
     set_menubar(window->get_menu());
+
+    _ready();
 }
 
 void Application::init_actions()
