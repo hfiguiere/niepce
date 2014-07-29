@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,24 +48,27 @@ void SelectionController::_added()
 	m_imageliststore->set_parent_controller(m_parent);
 }
 
-void SelectionController::add_selectable(IImageSelectable * selectable)
-{ 
-    DBG_OUT("added %p", (void*)selectable);
-    m_selectables.push_back(selectable);
+void SelectionController::add_selectable(const IImageSelectable::WeakPtr & selectableWeak)
+{
+    auto selectable = selectableWeak.lock();
+    DBG_OUT("added %p", (void*)selectable.get());
+    m_selectables.push_back(selectableWeak);
     selectable->image_list()->signal_selection_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &SelectionController::selected),
-                   selectable));
+        [this, selectableWeak](){
+            this->selected(selectableWeak);
+        });
     selectable->image_list()->signal_item_activated().connect(
-        sigc::bind(sigc::mem_fun(*this, &SelectionController::activated),
-                   selectable));
+        sigc::bind(
+            sigc::mem_fun(*this, &SelectionController::activated),
+                   selectableWeak));
 }
 
 
 void SelectionController::activated(const Gtk::TreeModel::Path & path,
-                                    IImageSelectable * /*selectable*/)
+                                    const IImageSelectable::WeakPtr & /*selectable*/)
 {
     fwk::AutoFlag f(m_in_handler);
-    Gtk::TreeIter iter = m_imageliststore->get_iter(path);
+    auto iter = m_imageliststore->get_iter(path);
     if(iter) {
         eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
         if(file) {
@@ -76,23 +79,30 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
     }
 }
 
-void SelectionController::selected(IImageSelectable * selectable)
+void SelectionController::selected(const IImageSelectable::WeakPtr & selectableWeak)
 {
-	if(m_in_handler) {
-		DBG_OUT("%p already in handler", (void*)this);
-		return;
-	}
+    if(m_in_handler) {
+        DBG_OUT("%p already in handler", (void*)this);
+        return;
+    }
 
-	fwk::AutoFlag f(m_in_handler);
+    fwk::AutoFlag f(m_in_handler);
 
-	eng::library_id_t selection = selectable->get_selected();
-	std::vector<IImageSelectable *>::iterator iter;
-	for(iter = m_selectables.begin(); iter != m_selectables.end(); iter++) {
-		if(*iter != selectable) {
-			(*iter)->select_image(selection);
-		}
-	}
-	signal_selected(selection);
+    auto selectable = selectableWeak.lock();
+    if (!selectable) {
+        // it can be, but at that point we should be terminating the app.
+        ERR_OUT("selectable is null");
+        return;
+    }
+
+    auto selection = selectable->get_selected();
+    for(auto iterWeak : m_selectables) {
+        auto iter = iterWeak.lock();
+        if(iter && iter != selectable) {
+            iter->select_image(selection);
+        }
+    }
+    signal_selected(selection);
 }
 
 
@@ -106,12 +116,16 @@ libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
 eng::library_id_t SelectionController::get_selection() const
 {
     DBG_ASSERT(!m_selectables.empty(), "selectables list can't be empty");
-    return m_selectables[0]->get_selected();
+
+    auto selectable = m_selectables[0].lock();
+    DBG_ASSERT(static_cast<bool>(selectable), "selectable is null");
+
+    return selectable->get_selected();
 }
 
 eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
 {
-    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(id);
+    auto iter = m_imageliststore->get_iter_from_id(id);
     if(iter) {
         return (*iter)[m_imageliststore->columns().m_libfile];
     }
@@ -120,31 +134,35 @@ eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
 
 void SelectionController::_selection_move(bool backwards)
 {
-	eng::library_id_t selection = get_selection();
-    Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
+    auto selection = get_selection();
+    auto iter = m_imageliststore->get_iter_from_id(selection);
+    if(!iter) {
+        return;
+    }
+
+    if(backwards) {
+        if(iter != m_imageliststore->children().begin()) {
+            --iter;
+        }
+    }
+    else {
+        iter++;
+    }
     if(iter) {
-        if(backwards) {
-            if(iter != m_imageliststore->children().begin()) {
-                --iter;
-            }
-        }
-        else {
-            iter++;
-        }
-        if(iter) {
-            // make sure the iterator is valid...
-            eng::LibFile::Ptr libfile 
-                = (*iter)[m_imageliststore->columns().m_libfile];
-            selection = libfile->id();
+        // make sure the iterator is valid...
+        eng::LibFile::Ptr libfile
+            = (*iter)[m_imageliststore->columns().m_libfile];
+        selection = libfile->id();
 
-            fwk::AutoFlag f(m_in_handler);
+        fwk::AutoFlag f(m_in_handler);
 
-            using std::placeholders::_1;
-            std::for_each(m_selectables.begin(), m_selectables.end(),
-                          std::bind(&IImageSelectable::select_image, _1,
-                                      selection));
-            signal_selected(selection);
-        }
+        std::for_each(m_selectables.begin(), m_selectables.end(),
+                      [selection] (const IImageSelectable::WeakPtr & s) {
+                          if (!s.expired()) {
+                              s.lock()->select_image(selection);
+                          }
+                      });
+        signal_selected(selection);
     }
 }
 
@@ -165,7 +183,7 @@ void SelectionController::select_next()
 void SelectionController::rotate(int angle)
 {
     DBG_OUT("angle = %d", angle);
-	eng::library_id_t selection = get_selection();
+    auto selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
@@ -175,9 +193,9 @@ void SelectionController::rotate(int angle)
 }
 
 
-bool SelectionController::_set_metadata(const std::string & undo_label, 
+bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFile::Ptr & file,
-                                        fwk::PropertyIndex meta, 
+                                        fwk::PropertyIndex meta,
                                         int old_value, int new_value)
 {
     fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
@@ -191,27 +209,27 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
     return true;
 }
 
-bool SelectionController::_set_metadata(const std::string & undo_label, 
+bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFile::Ptr & file,
                                         const fwk::PropertyBag & props,
                                         const fwk::PropertyBag & old)
 {
-    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
-    for(fwk::PropertyBag::const_iterator iter = props.begin(); 
-        iter != props.end(); ++iter) {
-
+    auto undo = fwk::Application::app()->begin_undo(undo_label);
+    for(auto iter : props) {
         fwk::PropertyValue value;
-        old.get_value_for_property(iter->first, value);
+        old.get_value_for_property(iter.first, value);
 
         if(value.type() != typeid(fwk::EmptyValue)) {
-            DBG_ASSERT(value.type() == iter->second.type(), "Value type mismatch");
+            DBG_ASSERT(value.type() == iter.second.type(),
+                       "Value type mismatch");
         }
 
         undo->new_command<void>(
             std::bind(&libraryclient::LibraryClient::setMetadata,
-                        getLibraryClient(), file->id(), iter->first, iter->second),
+                      getLibraryClient(), file->id(),
+                      iter.first, iter.second),
             std::bind(&libraryclient::LibraryClient::setMetadata,
-                        getLibraryClient(), file->id(), iter->first, value)
+                      getLibraryClient(), file->id(), iter.first, value)
             );
     }
     undo->execute();

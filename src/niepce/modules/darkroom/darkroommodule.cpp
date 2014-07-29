@@ -29,11 +29,9 @@
 
 namespace dr {
 
-DarkroomModule::DarkroomModule(const ui::IModuleShell & shell, 
-                               const Glib::RefPtr<Gtk::ActionGroup> & action_group)
+DarkroomModule::DarkroomModule(const ui::IModuleShell & shell)
     : m_shell(shell)
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
-    , m_actionGroup(action_group)
     , m_image(new ncr::Image)
     , m_active(false)
     , m_need_reload(true)
@@ -97,7 +95,7 @@ void DarkroomModule::set_active(bool active)
 }
 
 
-Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * DarkroomModule::buildWidget()
 {
     if(m_widget) {
         return m_widget;
@@ -112,24 +110,31 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
     m_imagecanvas->set_image(m_image);
 
     // build the toolbar.
-    Gtk::Toolbar * toolbar = Gtk::manage(new Gtk::Toolbar);
+    auto toolbar = Gtk::manage(new Gtk::Toolbar);
 
-    Glib::RefPtr<Gtk::Action> an_action;
-    Gtk::ToolItem * tool_item;
-    an_action = m_actionGroup->get_action("PrevImage");
-    tool_item = an_action->create_tool_item();
+    Glib::RefPtr<Gio::Action> an_action;
+    auto tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.PrevImage");
+    tool_item->set_icon_name("go-previous");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("NextImage");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.NextImage");
+    tool_item->set_icon_name("go-next");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("RotateLeft");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.RotateLeft");
+    tool_item->set_icon_name("object-rotate-left");
     toolbar->append(*manage(tool_item));
 
-    an_action = m_actionGroup->get_action("RotateRight");
-    tool_item = an_action->create_tool_item();
+    tool_item = new Gtk::ToolButton();
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
+                                   "shell.RotateRight");
+    tool_item->set_icon_name("object-rotate-right");
     toolbar->append(*manage(tool_item));
 
     m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
@@ -144,14 +149,14 @@ Gtk::Widget * DarkroomModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
 
     m_toolbox_ctrl = ToolboxController::Ptr(new ToolboxController);
     add(m_toolbox_ctrl);
-    m_dock->vbox().pack_start(*m_toolbox_ctrl->buildWidget(manager));
+    m_dock->vbox().pack_start(*m_toolbox_ctrl->buildWidget());
 
     return m_widget;
 }
 
 void DarkroomModule::on_selected(eng::library_id_t id)
 {
-    eng::LibFile::Ptr file = m_shell.get_selection_controller()->get_file(id);
+    auto file = m_shell.get_selection_controller()->get_file(id);
     DBG_OUT("selection is %ld", id);
     set_image(file);
 }

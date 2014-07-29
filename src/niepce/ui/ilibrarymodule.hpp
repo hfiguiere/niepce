@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/niepcelibrarymodule.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include <string>
 #include <memory>
 
+#include <giomm/menumodel.h>
+
 #include "fwk/toolkit/uicontroller.hpp"
 
 namespace ui {
@@ -42,6 +44,8 @@ public:
       @param active true if brought to the front, false if defocused.
    */
   virtual void set_active(bool active) = 0;
+  /** Get the module menu */
+  virtual Glib::RefPtr<Gio::MenuModel> getMenu() = 0;
 };
 
 

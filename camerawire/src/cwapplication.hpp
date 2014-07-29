@@ -1,7 +1,7 @@
 /*
  * niepce - cwwindow.hpp
  *
- * Copyright (C) 2009, 2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,11 @@ class CwApplication
 public:
   static fwk::Application::Ptr create(int & argc, char** & argv);
 
-  virtual fwk::Frame::Ptr makeMainFrame();
+  virtual fwk::AppFrame::Ptr makeMainFrame();
 protected:
   CwApplication(int & argc, char** & argv);
+
+  virtual void on_action_preferences();
 
 };
 

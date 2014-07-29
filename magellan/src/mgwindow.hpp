@@ -1,7 +1,7 @@
 /*
  * niepce - mgwindow.hpp
  *
- * Copyright (C) 2013 Hubert Figuiere
+ * Copyright (C) 2013-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,38 +21,36 @@
 #ifndef __MG_WINDOW_HPP_
 #define __MG_WINDOW_HPP_
 
+#include <giomm/simpleactiongroup.h>
+
 #include <gtkmm/action.h>
-#include <gtkmm/actiongroup.h>
 #include <gtkmm/box.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 
 namespace mg {
 
 class MgWindow
-  : public fwk::Frame
+  : public fwk::AppFrame
 {
 public:
   MgWindow();
 
 protected:
-  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+  virtual Gtk::Widget * buildWidget();
 
 private:
 
-  void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
   void init_actions();
   void on_action_import();
-  void on_preferences();
 
   void detect_devices();
 
   Gtk::VBox                      m_vbox;
-  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
-	Glib::RefPtr<Gtk::Action>      m_importAction;
+  Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
 };
 
 }

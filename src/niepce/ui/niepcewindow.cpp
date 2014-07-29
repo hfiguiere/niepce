@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
+#include <giomm/menu.h>
 #include <gtkmm/window.h>
 #include <gtkmm/accelkey.h>
 #include <gtkmm/action.h>
@@ -43,7 +44,6 @@
 #include "thumbstripview.hpp"
 #include "niepcewindow.hpp"
 #include "dialogs/importdialog.hpp"
-#include "dialogs/preferencesdialog.hpp"
 #include "dialogs/editlabels.hpp"
 #include "selectioncontroller.hpp"
 
@@ -56,22 +56,22 @@ namespace ui {
 
 
 NiepceWindow::NiepceWindow()
-    : fwk::Frame("mainWindow-frame")
+    : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
+//    gtkWindow().property_hide_titlebar_when_maximized() = true;
 }
 
 
 NiepceWindow::~NiepceWindow()
 {
-    Application::Ptr pApp = Application::app();
-    pApp->uiManager()->remove_action_group(m_refActionGroup);
+//    Application::Ptr pApp = Application::app();
+//    pApp->uiManager()->remove_action_group(m_refActionGroup);
 }
 
 void
 NiepceWindow::_createModuleShell()
 {
-    DBG_ASSERT(m_uimanager, "UI manager NULL");
     DBG_ASSERT(static_cast<bool>(m_libClient), "libclient not initialized");
     DBG_ASSERT(m_widget, "widget not built");
 
@@ -80,7 +80,7 @@ NiepceWindow::_createModuleShell()
     // main view
     m_moduleshell = ModuleShell::Ptr(
         new ModuleShell(getLibraryClient()));
-    m_moduleshell->buildWidget(m_uimanager);
+    m_moduleshell->buildWidget();
 
     add(m_moduleshell);
 
@@ -98,7 +98,7 @@ NiepceWindow::_createModuleShell()
                      &mapm::MapModule::on_lib_notification));
     m_notifcenter->signal_thumbnail_notification
         .connect(sigc::mem_fun(
-                     *get_pointer(m_moduleshell->get_list_store()), 
+                     *get_pointer(m_moduleshell->get_list_store()),
                      &ImageListStore::on_tnail_notification));
 
 
@@ -111,16 +111,15 @@ NiepceWindow::_createModuleShell()
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
-    m_hbox.pack1(*(m_workspacectrl->buildWidget(m_uimanager)), Gtk::EXPAND);
-    m_hbox.pack2(*(m_moduleshell->buildWidget(m_uimanager)), Gtk::EXPAND);
+    m_hbox.pack1(*(m_workspacectrl->buildWidget()), Gtk::EXPAND);
+    m_hbox.pack2(*(m_moduleshell->buildWidget()), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),
                                                                   Application::app()->config(),
                                                                   "workspace_splitter"));
 
     static_cast<Gtk::Window*>(m_widget)->add(m_vbox);
 
-    Gtk::Widget* pMenuBar = m_uimanager->get_widget("/MenuBar");
-    m_vbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
+    static_cast<Gtk::ApplicationWindow&>(gtkWindow()).set_show_menubar(true);
     m_vbox.pack_start(m_hbox);
 
 
@@ -128,34 +127,30 @@ NiepceWindow::_createModuleShell()
     m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_moduleshell->get_list_store()));
     add(m_filmstrip);
 
-    m_vbox.pack_start(*(m_filmstrip->buildWidget(m_uimanager)), Gtk::PACK_SHRINK);
+    m_vbox.pack_start(*(m_filmstrip->buildWidget()), Gtk::PACK_SHRINK);
 
     // status bar
     m_vbox.pack_start(m_statusBar, Gtk::PACK_SHRINK);
     m_statusBar.push(Glib::ustring(_("Ready")));
 
-    selection_controller->add_selectable(m_filmstrip.get());
+    selection_controller->add_selectable(m_filmstrip);
 
     m_vbox.show_all_children();
     m_vbox.show();
 }
 
 
-Gtk::Widget * 
-NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget *
+NiepceWindow::buildWidget()
 {
-    DBG_ASSERT(manager, "manager is NULL");
-
     if(m_widget) {
         return m_widget;
     }
-    m_uimanager = manager;
     Gtk::Window & win(gtkWindow());
 
     m_widget = &win;
 
-    init_actions(manager);
-    init_ui(manager);
+    init_actions();
 
     m_notifcenter.reset(new niepce::NotificationCenter());
 
@@ -172,121 +167,76 @@ NiepceWindow::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
 }
 
 
-void NiepceWindow::init_ui(const Glib::RefPtr<Gtk::UIManager> & manager)
+void NiepceWindow::init_actions()
 {
-    Glib::ustring ui_info =
-        "<ui>"
-        "  <menubar name='MenuBar'>"
-        "    <menu action='MenuLibrary'>"
-        "      <menuitem action='NewLibrary' />"
-        "      <menuitem action='OpenLibrary' />"
-        "      <separator/>"
-        "      <menuitem action='NewFolder'/>"
-        "      <menuitem action='NewProject'/>"
-        "      <menuitem action='Import'/>"
-        "      <separator/>"
-        "      <menuitem action='Close'/>"
-        "      <menuitem action='Quit'/>"
-        "    </menu>"
-        "    <menu action='MenuEdit'>"
-        "      <menuitem action='Undo'/>"
-        "      <menuitem action='Redo'/>"
-        "      <separator/>"
-        "      <menuitem action='Cut'/>"
-        "      <menuitem action='Copy'/>"
-        "      <menuitem action='Paste'/>"
-        "      <menuitem action='Delete'/>"
-        "      <separator/>"
-        "      <menuitem action='Preferences'/>"
-        "    </menu>"
-        "    <menu action='MenuImage' />"
-        "    <menu action='MenuTools'>"
-        "      <menuitem action='EditLabels'/>"
-        "      <separator/>"        
-        "      <menuitem action='ToggleToolsVisible'/>"
-        "      <separator/>"        
-        "    </menu>"
-        "    <menu action='MenuHelp'>"
-        "      <menuitem action='Help'/>"
-        "      <menuitem action='About'/>"
-        "    </menu>"
-        "  </menubar>"
-        "  <toolbar  name='ToolBar'>"
-        "    <toolitem action='Import'/>"
-        "    <toolitem action='Quit'/>"
-        "  </toolbar>"
-        "</ui>";
-    m_ui_merge_id = manager->add_ui_from_string(ui_info);
-} 
+    m_menu = Gio::Menu::create();
+    Glib::RefPtr<Gio::Menu> submenu;
+    Glib::RefPtr<Gio::Menu> section;
 
+    m_action_group = Gio::SimpleActionGroup::create();
+    gtkWindow().insert_action_group("win", m_action_group);
 
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Library"), submenu);
 
-void NiepceWindow::init_actions(const Glib::RefPtr<Gtk::UIManager> & manager)
-{
-    Glib::RefPtr<Gtk::Action> an_action;
+    // move to the workspace
+    section = Gio::Menu::create();
+    submenu->append_section(section);
+    section->append(_("New Folder..."), "action");
+    section->append(_("New Project..."), "action");
+    fwk::add_action(m_action_group, "Import",
+                    sigc::mem_fun(*this,
+                                  &NiepceWindow::on_action_file_import),
+                    section, _("_Import..."), "win");
 
-    m_refActionGroup = Gtk::ActionGroup::create();
+    section = Gio::Menu::create();
+    submenu->append_section(section);
+    fwk::add_action(m_action_group, "Close",
+                    sigc::mem_fun(gtkWindow(),
+                                  &Gtk::Window::hide),
+                    section, _("Close"), "win", "<Primary>w");
 
-    m_refActionGroup->add(Gtk::Action::create("MenuLibrary", _("_Library")));
-    m_refActionGroup->add(Gtk::Action::create("NewLibrary", _("New")));
-    m_refActionGroup->add(Gtk::Action::create("OpenLibrary", _("Open")),
-                          sigc::mem_fun(*this,
-                                        &NiepceWindow::on_action_file_open));
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Edit"), submenu);
 
-    m_refActionGroup->add(Gtk::Action::create("NewFolder", _("New _Folder...")));
-    m_refActionGroup->add(Gtk::Action::create("NewProject", _("New _Project...")));
+    section = Gio::Menu::create();
+    submenu->append_section(section);
 
-    m_refActionGroup->add(Gtk::Action::create("Import", _("_Import...")),
-                          sigc::mem_fun(*this,
-                                        &NiepceWindow::on_action_file_import));
-    m_refActionGroup->add(Gtk::Action::create("Close", _("Close")),
-                          Gtk::AccelKey("<ctrl>w"),
-                          sigc::mem_fun(gtkWindow(),
-                                        &Gtk::Window::hide));
-    m_refActionGroup->add(Gtk::Action::create("Quit", _("Quit")),
-                          Gtk::AccelKey("<ctrl>q"),
-                          sigc::mem_fun(*Application::app(),
-                                        &Application::quit));
-
-    m_refActionGroup->add(Gtk::Action::create("MenuEdit", _("_Edit")));
-
-    create_undo_action(m_refActionGroup);
-    create_redo_action(m_refActionGroup);
+    create_undo_action(m_action_group, section);
+    create_redo_action(m_action_group, section);
 
     // FIXME: bind
-    m_refActionGroup->add(Gtk::Action::create("Cut", _("Cut")),
-                          Gtk::AccelKey("<ctrl>x"));
-    m_refActionGroup->add(Gtk::Action::create("Copy", _("Copy")),
-                          Gtk::AccelKey("<ctrl>c"));
-    m_refActionGroup->add(Gtk::Action::create("Paste", _("Paste")),
-                          Gtk::AccelKey("<ctrl>v"));
-    m_refActionGroup->add(Gtk::Action::create("Delete", _("Delete")),
-                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete));
+    section = Gio::Menu::create();
+    submenu->append_section(section);
 
-    m_refActionGroup->add(Gtk::Action::create("Preferences", _("Preferences...")),
-                          sigc::mem_fun(*this,
-                                        &NiepceWindow::on_preferences));
+    fwk::add_action(m_action_group,
+                    "Cut",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Cut"), "win", "<control>x");
+    fwk::add_action(m_action_group,
+                    "Copy",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Copy"), "win", "<control>c");
+    fwk::add_action(m_action_group,
+                    "Paste",
+                    Gio::ActionMap::ActivateSlot(), section,
+                    _("Paste"), "win" "<control>v");
+    fwk::add_action(m_action_group,
+                    "Delete",
+                    sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
+                    section, _("Delete"), "win", nullptr);
 
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Tools"), submenu);
+    fwk::add_action(m_action_group, "EditLabels",
+                    sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
+                    submenu, _("Edit Labels..."), "win", nullptr);
 
-
-
-    m_refActionGroup->add(Gtk::Action::create("MenuTools", _("_Tools")));
-    m_refActionGroup->add(Gtk::Action::create("EditLabels", _("_Edit Labels...")),
-                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels));
-    m_hide_tools_action = Gtk::ToggleAction::create("ToggleToolsVisible",
-                                                    _("_Hide tools"));
-    m_refActionGroup->add(m_hide_tools_action,
-                          sigc::mem_fun(*this, &Frame::toggle_tools_visible));
-
-    m_refActionGroup->add(Gtk::Action::create("MenuHelp", _("_Help")));
-    m_refActionGroup->add(Gtk::Action::create("Help", _("Help")));
-    m_refActionGroup->add(Gtk::Action::create("About", _("About")),
-                          sigc::mem_fun(*Application::app(),
-                                        &Application::about));
-
-    manager->insert_action_group(m_refActionGroup);		
-		
-    gtkWindow().add_accel_group(manager->get_accel_group());
+    m_hide_tools_action
+        = fwk::add_action(m_action_group, "ToggleToolsVisible",
+                          sigc::mem_fun(*this, &Frame::toggle_tools_visible),
+                          submenu, _("Hide tools"), "win",
+                          nullptr);
 }
 
 
@@ -294,7 +244,7 @@ void NiepceWindow::on_action_file_import()
 {
     int result;
     Configuration & cfg = Application::app()->config();
-	
+
     ImportDialog::Ptr import_dialog(new ImportDialog());
 
     result = import_dialog->run_modal(shared_frame_ptr());
@@ -305,7 +255,7 @@ void NiepceWindow::on_action_file_import()
         Glib::ustring to_import = import_dialog->path_to_import();
         if(!to_import.empty()) {
             cfg.setValue("last_import_location", import_dialog->path_to_import());
-			
+
             //DBG_OUT("%s", to_import.c_str());
             m_libClient->importFromDirectory(to_import, false);
         }
@@ -317,19 +267,6 @@ void NiepceWindow::on_action_file_import()
     default:
         break;
     }
-}
-
-
-
-void NiepceWindow::on_action_file_quit()
-{
-    Application::app()->quit();
-}
-
-
-void NiepceWindow::on_action_file_open()
-{
-    DBG_OUT("there");
 }
 
 void NiepceWindow::on_open_library()
@@ -361,21 +298,6 @@ void NiepceWindow::on_open_library()
         }
     }
 }
-
-
-
-
-void NiepceWindow::on_preferences()
-{
-    DBG_OUT("on_preferences");
-
-    fwk::Dialog::Ptr dlg(new PreferencesDialog());
-    dlg->run_modal(shared_frame_ptr());
-
-    DBG_OUT("end on_preferences");
-}
-
-
 
 void NiepceWindow::create_initial_labels()
 {
@@ -422,10 +344,10 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
 std::string NiepceWindow::prompt_open_library()
 {
     std::string libMoniker;
-    Gtk::FileChooserDialog dialog(gtkWindow(), _("Create library"),
-                                  Gtk::FILE_CHOOSER_ACTION_CREATE_FOLDER);
+    Gtk::FileChooserDialog dialog(gtkWindow(), _("Open library"),
+                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
     dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-    dialog.add_button(_("Create"), Gtk::RESPONSE_OK);
+    dialog.add_button(_("Open"), Gtk::RESPONSE_OK);
 
     int result = dialog.run();
     Glib::ustring libraryToCreate;

@@ -47,7 +47,7 @@ public:
 	virtual eng::library_id_t get_selected();
 	virtual void select_image(eng::library_id_t id);
 
-	virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+	virtual Gtk::Widget * buildWidget();
 
 private:
 	Gtk::IconView * m_thumbview;

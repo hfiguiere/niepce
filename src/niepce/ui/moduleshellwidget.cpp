@@ -1,7 +1,7 @@
 /*
  * niepce - ui/moduleshellwidget.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,19 @@
 namespace ui {
 
 ModuleShellWidget::ModuleShellWidget()
-    : Gtk::Box(Gtk::ORIENTATION_VERTICAL),
-      m_currentpage(-1)
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
+    , m_mainbox(Gtk::ORIENTATION_HORIZONTAL)
+    , m_mainbar(Gtk::ORIENTATION_HORIZONTAL)
+    , m_currentpage(-1)
 {
     set_spacing(4);
     m_mainbar.set_layout(Gtk::BUTTONBOX_START);
     m_mainbar.set_spacing(4);
+    m_menubutton.set_direction(Gtk::ARROW_NONE);
     m_notebook.set_show_tabs(false);
-    pack_start(m_mainbar, Gtk::PACK_SHRINK);
+    m_mainbox.pack_end(m_menubutton, Gtk::PACK_SHRINK);
+    m_mainbox.pack_start(m_mainbar, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(m_mainbox, Gtk::PACK_SHRINK);
     pack_start(m_notebook);
 }
 

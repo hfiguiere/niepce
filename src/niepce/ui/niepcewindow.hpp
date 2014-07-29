@@ -22,13 +22,14 @@
 #define _UI_NIEPCEWINDOW_H_
 
 
+#include <giomm/simpleactiongroup.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/box.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/statusbar.h>
 #include <gtkmm/paned.h>
 
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
@@ -41,7 +42,7 @@
 namespace ui {
 
 class NiepceWindow
-    : public fwk::Frame
+    : public fwk::AppFrame
 {
 public:
     NiepceWindow();
@@ -56,25 +57,18 @@ public:
         { return m_library_cfg; }
 
 protected:
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+    virtual Gtk::Widget * buildWidget();
 private:
     void on_action_file_import();
 
-    void on_action_file_quit();
-    void on_action_file_open();
     void on_open_library();
     void on_action_edit_labels();
     void on_action_edit_delete();
 
-    void preference_dialog_setup(const Glib::RefPtr<Gtk::Builder> &,
-                                 Gtk::Dialog *);
-    void on_preferences();
-
     void create_initial_labels();
     void on_lib_notification(const eng::LibNotification & n);
 
-    void init_ui(const Glib::RefPtr<Gtk::UIManager> & manager);
-    void init_actions(const Glib::RefPtr<Gtk::UIManager> & manager);
+    void init_actions();
 
     // UI to open library
     std::string prompt_open_library();
@@ -83,7 +77,7 @@ private:
     bool open_library(const std::string & libMoniker);
 
     void _createModuleShell();
-		
+
     niepce::NotificationCenter::Ptr m_notifcenter;
 
     Gtk::Box                       m_vbox;
@@ -92,7 +86,7 @@ private:
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
     Gtk::Statusbar                 m_statusBar;
-    Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+    Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
     libraryclient::LibraryClient::Ptr m_libClient;
     fwk::Configuration::Ptr        m_library_cfg;
 };

@@ -36,7 +36,7 @@ FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & st
 {
 }
 
-Gtk::Widget * FilmStripController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+Gtk::Widget * FilmStripController::buildWidget()
 {
     if(m_widget) {
         return m_widget;

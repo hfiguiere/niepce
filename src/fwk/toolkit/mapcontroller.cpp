@@ -21,20 +21,21 @@
 
 #include <champlain-gtk/champlain-gtk.h>
 
+#include <gtkmm/widget.h>
+
 namespace fwk {
 
 Gtk::Widget *
-MapController::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+MapController::buildWidget()
 {
   if(m_widget) {
     return m_widget;
   }
 
-  GtkWidget * embed = gtk_champlain_embed_new();
+  auto embed = gtk_champlain_embed_new();
   m_widget = Gtk::manage(Glib::wrap(embed));
 
-  ChamplainView* clutter_map =
-    gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
+  auto clutter_map = gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
   m_clutter_map = Glib::wrap(CLUTTER_ACTOR(clutter_map), true);
 
   // Default position. Somewhere over Montréal, QC

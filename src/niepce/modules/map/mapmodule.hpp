@@ -40,23 +40,23 @@ class MapModule
 public:
     typedef std::shared_ptr<MapModule> Ptr;
 
-    MapModule(const ui::IModuleShell & shell,
-                   const Glib::RefPtr<Gtk::ActionGroup> & action_group);
+    MapModule(const ui::IModuleShell & shell);
 
+    /* ILibraryModule */
     virtual void dispatch_action(const std::string & action_name);
-
     virtual void set_active(bool active);
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+        { return Glib::RefPtr<Gio::MenuModel>(); }
 
     void on_lib_notification(const eng::LibNotification &ln);
 
 protected:
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget();
 
 private:
     void on_selected(eng::library_id_t id);
 
     const ui::IModuleShell &     m_shell;
-    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
     Gtk::Box*                    m_box;
     fwk::MapController::Ptr           m_map;
 

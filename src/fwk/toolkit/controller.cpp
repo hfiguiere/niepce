@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/controller.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-//    DBG_OUT("destroy Controllers");
+    DBG_DTOR;
 }
 
 
@@ -48,7 +48,7 @@ Controller::add(const Controller::Ptr & sub)
 
 void Controller::remove(const Ptr & sub)
 {
-    std::list<Ptr>::iterator iter = std::find(m_subs.begin(), 
+    std::list<Ptr>::iterator iter = std::find(m_subs.begin(),
                                               m_subs.end(), sub);
     if(iter != m_subs.end()) {
         (*iter)->clearParent();
@@ -63,6 +63,12 @@ bool Controller::canTerminate()
 
 void Controller::terminate()
 {
+    DBG_OUT("terminating controller");
+    using std::placeholders::_1;
+    std::for_each(m_subs.begin(), m_subs.end(),
+                  std::bind(&Controller::terminate, _1));
+    clearParent();
+    m_subs.clear();
 }
 
 void Controller::_added()

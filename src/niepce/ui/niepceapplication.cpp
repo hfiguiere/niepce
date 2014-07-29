@@ -20,13 +20,16 @@
 #include "config.h"
 
 #include <glibmm/i18n.h>
+#include <giomm/menu.h>
 #include <gtkmm/aboutdialog.h>
 
 #include "fwk/utils/modulemanager.hpp"
+#include "fwk/toolkit/appframe.hpp"
+#include "dialogs/preferencesdialog.hpp"
 #include "niepceapplication.hpp"
 #include "niepcewindow.hpp"
 
-using fwk::Frame;
+using fwk::AppFrame;
 using fwk::Application;
 
 namespace ui {
@@ -53,9 +56,16 @@ Application::Ptr NiepceApplication::create(int & argc, char** & argv)
 }
 
 
-Frame::Ptr NiepceApplication::makeMainFrame()
+AppFrame::Ptr NiepceApplication::makeMainFrame()
 {
-    return Frame::Ptr(new NiepceWindow);
+    auto ptr = AppFrame::Ptr(new NiepceWindow);
+    m_main_frame = ptr;
+    return ptr;
+}
+
+void NiepceApplication::on_action_file_open()
+{
+    
 }
 
 void NiepceApplication::on_about()
@@ -72,6 +82,15 @@ void NiepceApplication::on_about()
     dlg.run();
 }
 
+void NiepceApplication::on_action_preferences()
+{
+    DBG_OUT("on_preferences");
+
+    auto dlg(new PreferencesDialog());
+    dlg->run_modal(AppFrame::Ptr(m_main_frame));
+
+    DBG_OUT("end on_preferences");
+}
 
 }
 

@@ -41,9 +41,14 @@ namespace mg {
   }
 
 
-  fwk::Frame::Ptr MgApplication::makeMainFrame()
+  fwk::AppFrame::Ptr MgApplication::makeMainFrame()
   {
-    return fwk::Frame::Ptr(new MgWindow);
+    auto ptr = fwk::AppFrame::Ptr(new MgWindow);
+    m_main_frame = ptr;
+    return ptr;
   }
 
+  void MgApplication::on_action_preferences()
+  {
+  }
 }

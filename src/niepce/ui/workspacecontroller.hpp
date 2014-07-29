@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.h
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ public:
     void on_count_notification(int);
     void on_libtree_selection();
     
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget * buildWidget();
 private:
     void on_row_expanded_collapsed(const Gtk::TreeIter& iter,
                                    const Gtk::TreePath& path, bool expanded);

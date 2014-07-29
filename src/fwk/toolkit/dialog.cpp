@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/dialog.cpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ void Dialog::add_header(const std::string & label)
     Gtk::Box * vbox;
 
     builder()->get_widget("dialog-vbox1", vbox);
-    std::string markup = str(boost::format("<span size=\"x-large\">%1%</span>") % label);
-    view::Header * header = manage(new view::Header(markup));
+    auto markup = str(boost::format("<span size=\"x-large\">%1%</span>") % label);
+    auto header = manage(new view::Header(markup));
     header->show();
     vbox->pack_start(*header, false, true);
 }
@@ -45,14 +45,14 @@ int Dialog::run_modal(const Frame::Ptr & parent)
     if(!m_is_setup) {
         setup_widget();
     }
-		gtkDialog().set_transient_for(parent->gtkWindow());
-		gtkDialog().set_default_response(Gtk::RESPONSE_CLOSE);
-		result = gtkDialog().run();
-		gtkDialog().hide();
-		return result;
+    gtkDialog().set_transient_for(parent->gtkWindow());
+    gtkDialog().set_default_response(Gtk::RESPONSE_CLOSE);
+    result = gtkDialog().run();
+    gtkDialog().hide();
+    return result;
 }
 
-Gtk::Widget *Dialog::buildWidget(const Glib::RefPtr<Gtk::UIManager> &)
+Gtk::Widget *Dialog::buildWidget()
 {
     return &gtkWindow();
 }

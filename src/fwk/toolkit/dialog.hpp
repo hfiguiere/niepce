@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/dialog.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,23 +27,23 @@
 
 namespace fwk {
 
-/** 
+/**
  * Implement a dialog.
- */ 
+ */
 class Dialog
 	: public fwk::Frame
 {
 public:
     typedef std::shared_ptr<Dialog> Ptr;
 
-		Dialog(const std::string & gladeFile, const Glib::ustring & widgetName,
-          const std::string & layout_cfg_key = "")
+    Dialog(const std::string & gladeFile, const Glib::ustring & widgetName,
+           const std::string & layout_cfg_key = "")
         : Frame(gladeFile, widgetName, layout_cfg_key)
         , m_is_setup(false)
-        { 
+        {
         }
 
-    /** this is called prior to show the dialog 
+    /** this is called prior to show the dialog
      * subclass must implement and set %m_is_setup to true
      */
     virtual void setup_widget() = 0;
@@ -57,7 +57,7 @@ public:
     int run_modal();
     int run_modal(const Frame::Ptr & parent);
 protected:
-    virtual Gtk::Widget *buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
+    virtual Gtk::Widget *buildWidget();
 
     bool m_is_setup;
 };

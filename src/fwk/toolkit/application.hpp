@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.h
  *
- * Copyright (C) 2007-2008, 2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,13 @@
 #include <functional>
 
 #include <glibmm/refptr.h>
+#include <giomm/menu.h>
 #include <gtkmm/application.h>
 #include <gtkmm/uimanager.h>
 #include <gtkmm/icontheme.h>
 
 #include "fwk/toolkit/configuration.hpp"
-#include "fwk/toolkit/frame.hpp"
+#include "fwk/toolkit/appframe.hpp"
 #include "fwk/toolkit/undo.hpp"
 
 
@@ -37,7 +38,7 @@ namespace fwk {
 
 class ModuleManager;
 
-class Application 
+class Application
     : public Controller
 {
 public:
@@ -49,15 +50,13 @@ public:
     virtual bool get_use_dark_theme() const;
     virtual void set_use_dark_theme(bool value);
 
-    virtual Frame::Ptr makeMainFrame() = 0;
+    // MUST set m_main_frame
+    virtual AppFrame::Ptr makeMainFrame() = 0;
+    const Glib::RefPtr<Gtk::Application> & gtkApp() const
+        { return m_gtkapp; }
 
     Configuration & config()
         { return m_config; }
-    Glib::RefPtr<Gtk::UIManager> uiManager()
-        { 
-            return m_refUIManager; 
-        }
-
 
     virtual void quit();
     void about();
@@ -65,6 +64,8 @@ public:
     virtual void terminate();
 
     Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
+    void set_menubar(const Glib::RefPtr<Gio::Menu> & menu)
+        { m_gtkapp->set_menubar(menu); }
 
     static Application::Ptr app();
     static int main(const Application::Ptr & app,
@@ -75,7 +76,7 @@ public:
     UndoTransaction * begin_undo(const std::string & label);
 
     // Module management
-    /** @return the module manager 
+    /** @return the module manager
      *  It is guaranted to be safe to call from the constructor
      */
     ModuleManager * module_manager() const
@@ -84,10 +85,20 @@ protected:
     Application(int & argc, char** &argv, const char* app_id, const char *name);
     static Application::Ptr m_application;
     void _add(const Controller::Ptr & sub, bool attach = true);
+    virtual void on_action_file_open();
     virtual void on_about();
+    virtual void on_action_preferences() = 0;
+
+    void init_actions();
+
+    const AppFrame::Ptr get_main_frame() const
+        { return AppFrame::Ptr(m_main_frame); }
+    /** bound the the GtkApplication startup signal */
+    void on_startup();
+
+    AppFrame::WeakPtr            m_main_frame;
 private:
     Configuration                m_config;
-    Glib::RefPtr<Gtk::UIManager> m_refUIManager;
     UndoHistory                  m_undo;
     ModuleManager               *m_module_manager;
     Glib::RefPtr<Gtk::Application> m_gtkapp;

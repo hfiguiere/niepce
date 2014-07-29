@@ -96,7 +96,7 @@ void GridViewModule::display_none()
 }
 
 
-Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager)
+Gtk::Widget * GridViewModule::buildWidget()
 {
   if(m_widget) {
     return m_widget;
@@ -132,7 +132,7 @@ Gtk::Widget * GridViewModule::buildWidget(const Glib::RefPtr<Gtk::UIManager> & m
       sigc::mem_fun(*this, &GridViewModule::on_metadata_changed));
   add(m_metapanecontroller);
   m_lib_splitview.pack2(*m_dock);
-  m_dock->vbox().pack_start(*m_metapanecontroller->buildWidget(manager));
+  m_dock->vbox().pack_start(*m_metapanecontroller->buildWidget());
 
   m_databinders.add_binder(new fwk::ConfigDataBinder<int>(
                              m_lib_splitview.property_position(),

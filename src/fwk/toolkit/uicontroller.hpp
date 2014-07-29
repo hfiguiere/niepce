@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/uicontroller.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,10 @@
 #define __FRAMEWORK_UICONTROLLER_H__
 
 
-#include <gtkmm/uimanager.h>
-
 #include "fwk/toolkit/controller.hpp"
 
 namespace Gtk {
-	class Widget;
+class Widget;
 }
 
 namespace fwk {
@@ -40,15 +38,13 @@ public:
 
     UiController();
     virtual ~UiController();
-  
+
     /** return the widget controlled (construct it if needed) */
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager) = 0;
+    virtual Gtk::Widget * buildWidget() = 0;
     Gtk::Widget * widget() const;
 
 protected:
     Gtk::Widget*                 m_widget;
-    Glib::RefPtr<Gtk::UIManager> m_uimanager;
-    Gtk::UIManager::ui_merge_id  m_ui_merge_id;
 };
 
 }

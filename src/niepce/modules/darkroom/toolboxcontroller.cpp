@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/toolboxcontroller.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ ToolboxController::ToolboxController()
 }
 
 Gtk::Widget * 
-ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
+ToolboxController::buildWidget()
 {
     if(m_widget) {
         return m_widget;
@@ -56,7 +56,7 @@ ToolboxController::buildWidget(const Glib::RefPtr<Gtk::UIManager> & )
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
     s = Gtk::manage(new fwk::EditableHScale(DATADIR"/niepce/pixmaps/niepce-transform-rotate.png",
-                                            -45.0, 45.0, 0.5));    
+                                            -45.0, 45.0, 0.5));
     item->add_widget(_("Tilt"), *s);
 
     item = manage(new DrItemWidget(_("White balance")));

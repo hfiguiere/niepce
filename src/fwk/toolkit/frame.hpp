@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/frame.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,9 @@
 #include <functional>
 
 #include <sigc++/signal.h>
-#include <gtkmm/toggleaction.h>
+#include <giomm/action.h>
+#include <giomm/actiongroup.h>
+#include <giomm/menu.h>
 #include <gtkmm/builder.h>
 
 #include "fwk/toolkit/uicontroller.hpp"
@@ -37,16 +39,19 @@ namespace Gtk {
 
 namespace fwk {
 
-class Frame 
-		: public UiController
+class Frame
+    : public UiController
 {
-public:
-		typedef std::shared_ptr<Frame> Ptr;
+protected:
+    Frame(Gtk::Window* win, const std::string & layout_cfg_key = "");
 
-		Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
+public:
+    typedef std::shared_ptr<Frame> Ptr;
+
+    Frame(const std::string & gladeFile, const Glib::ustring & widgetName,
           const std::string & layout_cfg_key = "");
-		Frame(const std::string & layout_cfg_key = "");
-		virtual ~Frame();
+    Frame(const std::string & layout_cfg_key = "");
+    virtual ~Frame();
 
     /** convenience to return the Frame::Ptr from this */
     Ptr shared_frame_ptr()
@@ -54,7 +59,7 @@ public:
             return std::static_pointer_cast<Frame>(shared_from_this());
         }
 
-		Gtk::Window & gtkWindow()
+    Gtk::Window & gtkWindow()
         {
             return *m_window; 
         }
@@ -80,26 +85,28 @@ protected:
 
     void undo_state();
     void redo_state();
-    Glib::RefPtr<Gtk::Action> create_undo_action(const Glib::RefPtr<Gtk::ActionGroup> & g);
-    Glib::RefPtr<Gtk::Action> create_redo_action(const Glib::RefPtr<Gtk::ActionGroup> & g);
+    Glib::RefPtr<Gio::Action> create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
+                                                 const Glib::RefPtr<Gio::Menu> & menu);
+    Glib::RefPtr<Gio::Action> create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g,
+                                                 const Glib::RefPtr<Gio::Menu> & menu);
 
-		/** close signal handler */
-		virtual bool _close();
-    Glib::RefPtr<Gtk::ToggleAction> m_hide_tools_action;
-    Glib::RefPtr<Gtk::Action>      m_undo_action;
-    Glib::RefPtr<Gtk::Action>      m_redo_action;
+    /** close signal handler */
+    virtual bool _close();
+    Glib::RefPtr<Gio::SimpleAction> m_hide_tools_action;
+    Glib::RefPtr<Gio::SimpleAction>      m_undo_action;
+    Glib::RefPtr<Gio::SimpleAction>      m_redo_action;
 
 private:
     /** frame have the widget set at construction time
      * from a ui file or directly.
      */
-		void connectSignals();
-		void frameRectFromConfig();
-		void frameRectToConfig();
+    void connectSignals();
+    void frameRectFromConfig();
+    void frameRectToConfig();
 
-		Gtk::Window *m_window;
+    Gtk::Window *m_window;
     Glib::RefPtr<Gtk::Builder> m_builder;
-		std::string m_layout_cfg_key;
+    std::string m_layout_cfg_key;
 };
 
 }

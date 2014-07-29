@@ -1,7 +1,7 @@
 /*
- * niepce - modules/darkroom/darkroommodule.h
+ * niepce - modules/darkroom/darkroommodule.hpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 #include "niepce/ui/imoduleshell.hpp"
 #include "modules/darkroom/imagecanvas.hpp"
 #include "modules/darkroom/toolboxcontroller.hpp"
-	
+
 namespace fwk {
 class Dock;
 }
@@ -47,21 +47,23 @@ class DarkroomModule
 {
 public:
     typedef std::shared_ptr<DarkroomModule> Ptr;
-    
-    DarkroomModule(const ui::IModuleShell & shell, 
-                   const Glib::RefPtr<Gtk::ActionGroup> & action_group);
-    
+
+    DarkroomModule(const ui::IModuleShell & shell);
+
     void set_image(const eng::LibFile::Ptr & file);
-    
+
     virtual void dispatch_action(const std::string & action_name);
 
     virtual void set_active(bool active);
-    
-protected:
-	void reload_image();
 
-    virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> &);
-    
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+        { return Glib::RefPtr<Gio::MenuModel>(); }
+
+protected:
+    void reload_image();
+
+    virtual Gtk::Widget * buildWidget();
+
 private:
     void on_selected(eng::library_id_t id);
 

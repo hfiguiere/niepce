@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,8 @@ public:
   /* ILibraryModule */
   virtual void dispatch_action(const std::string & action_name);
   virtual void set_active(bool active);
+  virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+    { return Glib::RefPtr<Gio::MenuModel>(); }
 
   /* IImageSelectable */
   virtual Gtk::IconView * image_list();
@@ -72,7 +74,7 @@ public:
   virtual void select_image(eng::library_id_t id);
 
 protected:
-  virtual Gtk::Widget * buildWidget(const Glib::RefPtr<Gtk::UIManager> & manager);
+  virtual Gtk::Widget * buildWidget();
 
 
 private:

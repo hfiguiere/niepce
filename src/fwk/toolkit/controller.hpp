@@ -40,37 +40,37 @@ class Controller
     , public sigc::trackable
 {
 public:
-		typedef std::shared_ptr<Controller> Ptr;
-		typedef std::weak_ptr<Controller> WeakPtr;
+    typedef std::shared_ptr<Controller> Ptr;
+    typedef std::weak_ptr<Controller> WeakPtr;
 
-		Controller();
-		virtual ~Controller();
+    Controller();
+    virtual ~Controller();
 
-		/** add a subcontroller to this one */
-		void add(const Ptr & sub);
-		/** clear the parent. Usually called by the parent when unparenting */
-		void clearParent()
+    /** add a subcontroller to this one */
+    void add(const Ptr & sub);
+    /** clear the parent. Usually called by the parent when unparenting */
+    void clearParent()
         { m_parent.reset(); }
-		void remove(const Ptr & sub);
-		
-		virtual bool canTerminate();
-		/** signal that the controller needs to terminate */
-		virtual void terminate();
+    void remove(const Ptr & sub);
 
-		/** called when everything is ready 
-		 * subclasses should reimplement if needed
-		 */
-		virtual void on_ready();
+    virtual bool canTerminate();
+    /** signal that the controller needs to terminate */
+    virtual void terminate();
+
+    /** called when everything is ready
+     * subclasses should reimplement if needed
+     */
+    virtual void on_ready();
 protected:
-		/** called when the controller has been added to a parent. */
-		virtual void _added();
+    /** called when the controller has been added to a parent. */
+    virtual void _added();
 
-		void _ready();
+    void _ready();
 
-		WeakPtr          m_parent;
-		std::list<Ptr> m_subs; /**< sub controllers */
+    WeakPtr          m_parent;
+    std::list<Ptr> m_subs; /**< sub controllers */
 
-		DataBinderPool m_databinders;
+    DataBinderPool m_databinders;
 };
 
 }
