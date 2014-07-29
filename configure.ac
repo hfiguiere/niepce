@@ -113,31 +113,17 @@ BOOST_CONVERSION
 BOOST_FORMAT
 BOOST_TEST([s])
 
-AC_LANG_PUSH(C++)
-dnl -Wmissing-noreturn -Wshadow
-if test "$GCC" = "yes"; then
-        NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG gcc-options="
-        for option in -Wall -Wextra -Wsign-compare -Wpointer-arith \
-                      -Wchar-subscripts -Wwrite-strings \
-                      -Wunused -Wpointer-arith ; do
-                SAVE_CXXFLAGS="$CXXFLAGS"
-                CXXFLAGS="$CXXFLAGS $option"
-		NIEPCE_BUILD_CONFIG="$NIEPCE_BUILD_CONFIG$option "
-                AC_MSG_CHECKING([whether gcc understands $option])
-                AC_TRY_COMPILE([], [],
-                        has_option=yes,
-                        has_option=no,)
-                if test $has_option = no; then
-                  CXXFLAGS="$SAVE_CXXFLAGS"
-                fi
-                AC_MSG_RESULT($has_option)
-                unset has_option
-                unset SAVE_CXXFLAGS
-        done
-        unset option
-fi
-AC_LANG_POP
+AX_CFLAGS_GCC_OPTION([-Wextra -Wall -Wsign-compare -Wpointer-arith -Wchar-subscripts -Wwrite-strings -Wunused -Wpointer-arith])
+AX_CXXFLAGS_GCC_OPTION([-Wextra -Wall -Wsign-compare -Wpointer-arith -Wchar-subscripts -Wwrite-strings -Wunused -Wpointer-arith])
 
+AC_ARG_ENABLE(asan,[  --enable-asan    Turn on address sanitizer],[
+    AX_CFLAGS_GCC_OPTION([-fsanitize=address -fno-omit-frame-pointer])
+    AX_CXXFLAGS_GCC_OPTION([-fsanitize=address -fno-omit-frame-pointer])
+]
+,
+[
+
+])
 
 IT_PROG_INTLTOOL([0.35.0])
 
