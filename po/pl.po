@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-13 19:23+0200\n"
-"PO-Revision-Date: 2014-07-13 19:25+0200\n"
+"POT-Creation-Date: 2014-07-29 18:04+0200\n"
+"PO-Revision-Date: 2014-07-29 18:05+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,19 +23,36 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
-#: ../src/fwk/toolkit/frame.cpp:120
-msgid "Undo "
-msgstr "Cofnij "
+#: ../src/fwk/toolkit/application.cpp:124
+msgid "New"
+msgstr "Nowe"
 
-#: ../src/fwk/toolkit/frame.cpp:129
-msgid "Redo "
-msgstr "Ponów "
+#: ../src/fwk/toolkit/application.cpp:128
+#: ../src/niepce/ui/niepcewindow.cpp:350
+msgid "Open"
+msgstr "Otwórz"
 
-#: ../src/fwk/toolkit/frame.cpp:135
+#: ../src/fwk/toolkit/application.cpp:137
+msgid "Preferences..."
+msgstr "Preferencje..."
+
+#: ../src/fwk/toolkit/application.cpp:144
+msgid "Help"
+msgstr "Pomoc"
+
+#: ../src/fwk/toolkit/application.cpp:149
+msgid "About"
+msgstr "O programie"
+
+#: ../src/fwk/toolkit/application.cpp:157
+msgid "Quit"
+msgstr "Zakończ"
+
+#: ../src/fwk/toolkit/frame.cpp:148
 msgid "Undo"
 msgstr "Cofnij"
 
-#: ../src/fwk/toolkit/frame.cpp:148
+#: ../src/fwk/toolkit/frame.cpp:163
 msgid "Redo"
 msgstr "Ponów"
 
@@ -60,22 +77,18 @@ msgid "Change Labels"
 msgstr "Zmień etykiety"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-#: ../src/niepce/ui/moduleshell.cpp:74
 msgid "Label _6"
 msgstr "Etykieta _6"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-#: ../src/niepce/ui/moduleshell.cpp:79
 msgid "Label _7"
 msgstr "Etykieta _7"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:84
 msgid "Label _8"
 msgstr "Etykieta _8"
 
 #: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:89
 msgid "Label _9"
 msgstr "Etykieta _9"
 
@@ -108,12 +121,11 @@ msgid "Import picture folder"
 msgstr "Importuje katalog obrazów"
 
 #: ../src/niepce/ui/dialogs/importdialog.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:427
+#: ../src/niepce/ui/niepcewindow.cpp:349
 msgid "Cancel"
 msgstr "Anuluj"
 
 #: ../src/niepce/ui/dialogs/importdialog.ui.h:2
-#: ../magellan/src/mgwindow.cpp:87
 msgid "_Import"
 msgstr "Za_importuj"
 
@@ -177,91 +189,102 @@ msgstr "Interfejs _użytkownika"
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: ../src/niepce/ui/moduleshell.cpp:53
-msgid "_Image"
-msgstr "_Obraz"
-
-#: ../src/niepce/ui/moduleshell.cpp:55
+#: ../src/niepce/ui/moduleshell.cpp:57
 msgid "Back"
 msgstr "Wstecz"
 
-#: ../src/niepce/ui/moduleshell.cpp:59
+#: ../src/niepce/ui/moduleshell.cpp:63
 msgid "Forward"
 msgstr "Dalej"
 
-#: ../src/niepce/ui/moduleshell.cpp:64
+#: ../src/niepce/ui/moduleshell.cpp:73
 msgid "Rotate Left"
 msgstr "Obróć w lewo"
 
-#: ../src/niepce/ui/moduleshell.cpp:68
+#: ../src/niepce/ui/moduleshell.cpp:80
 msgid "Rotate Right"
 msgstr "Obróć w prawo"
 
-#: ../src/niepce/ui/moduleshell.cpp:73
-msgid "Set _Label"
-msgstr "Ustaw _etykietę"
+#: ../src/niepce/ui/moduleshell.cpp:86
+#: ../src/niepce/ui/selectioncontroller.cpp:274
+msgid "Set Label"
+msgstr "Ustaw etykietę"
 
-#: ../src/niepce/ui/moduleshell.cpp:95
-msgid "Set _Rating"
-msgstr "Ustaw o_cenę"
+#: ../src/niepce/ui/moduleshell.cpp:93
+msgid "Label 6"
+msgstr "Etykieta 6"
 
-#: ../src/niepce/ui/moduleshell.cpp:96
+#: ../src/niepce/ui/moduleshell.cpp:99
+msgid "Label 7"
+msgstr "Etykieta 7"
+
+#: ../src/niepce/ui/moduleshell.cpp:105
+msgid "Label 8"
+msgstr "Etykieta 8"
+
+#: ../src/niepce/ui/moduleshell.cpp:111
+msgid "Label 9"
+msgstr "Etykieta 9"
+
+#: ../src/niepce/ui/moduleshell.cpp:115
+#: ../src/niepce/ui/selectioncontroller.cpp:271
+msgid "Set Rating"
+msgstr "Ustaw ocenę"
+
+#: ../src/niepce/ui/moduleshell.cpp:122
 msgid "Unrated"
 msgstr "Bez oceny"
 
-#: ../src/niepce/ui/moduleshell.cpp:101
-msgid "Rating _1"
-msgstr "Ocena _1"
+#: ../src/niepce/ui/moduleshell.cpp:128
+msgid "Rating 1"
+msgstr "Ocena 1"
 
-#: ../src/niepce/ui/moduleshell.cpp:106
-msgid "Rating _2"
-msgstr "Ocena _2"
+#: ../src/niepce/ui/moduleshell.cpp:134
+msgid "Rating 2"
+msgstr "Ocena 2"
 
-#: ../src/niepce/ui/moduleshell.cpp:111
-msgid "Rating _3"
-msgstr "Ocena _3"
+#: ../src/niepce/ui/moduleshell.cpp:140
+msgid "Rating 3"
+msgstr "Ocena 3"
 
-#: ../src/niepce/ui/moduleshell.cpp:116
-msgid "Rating _4"
-msgstr "Ocena _4"
+#: ../src/niepce/ui/moduleshell.cpp:146
+msgid "Rating 4"
+msgstr "Ocena 4"
 
-#: ../src/niepce/ui/moduleshell.cpp:121
-msgid "Rating _5"
-msgstr "Ocena _5"
+#: ../src/niepce/ui/moduleshell.cpp:152
+msgid "Rating 5"
+msgstr "Ocena 5"
 
-#: ../src/niepce/ui/moduleshell.cpp:127
-msgid "Set _Flag"
-msgstr "Ustaw o_znaczenie"
+#: ../src/niepce/ui/moduleshell.cpp:155
+#: ../src/niepce/ui/selectioncontroller.cpp:268
+msgid "Set Flag"
+msgstr "Ustaw oznaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:129
-msgid "Flag as _Rejected"
-msgstr "Oznacz jako od_rzucone"
+#: ../src/niepce/ui/moduleshell.cpp:163
+msgid "Flag as Rejected"
+msgstr "Oznacz jako odrzucone"
 
-#: ../src/niepce/ui/moduleshell.cpp:135
-msgid "_Unflagged"
-msgstr "Usuń _oznaczenie"
+#: ../src/niepce/ui/moduleshell.cpp:170
+msgid "Unflagged"
+msgstr "Usuń oznaczenie"
 
-#: ../src/niepce/ui/moduleshell.cpp:141
-msgid "Flag as _Pick"
-msgstr "Oznacz jako wy_brane"
+#: ../src/niepce/ui/moduleshell.cpp:177
+msgid "Flag as Pick"
+msgstr "Oznacz jako wybrane"
 
-#: ../src/niepce/ui/moduleshell.cpp:148
-msgid "Delete Image"
-msgstr "Usuń obraz"
-
-#: ../src/niepce/ui/moduleshell.cpp:151
+#: ../src/niepce/ui/moduleshell.cpp:186
 msgid "Write metadata"
 msgstr "Zapisz metadane"
 
-#: ../src/niepce/ui/moduleshell.cpp:200
+#: ../src/niepce/ui/moduleshell.cpp:196 ../src/niepce/ui/niepcewindow.cpp:180
 msgid "Library"
 msgstr "Kolekcja"
 
-#: ../src/niepce/ui/moduleshell.cpp:209
+#: ../src/niepce/ui/moduleshell.cpp:205
 msgid "Darkroom"
 msgstr "Ciemnia"
 
-#: ../src/niepce/ui/moduleshell.cpp:212
+#: ../src/niepce/ui/moduleshell.cpp:208
 msgid "Map"
 msgstr "Mapa"
 
@@ -358,7 +381,7 @@ msgstr "Prawa"
 msgid "Image Properties"
 msgstr "Właściwości obrazu"
 
-#: ../src/niepce/ui/niepceapplication.cpp:69
+#: ../src/niepce/ui/niepceapplication.cpp:79
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -368,153 +391,108 @@ msgstr ""
 "\n"
 "Opcje budowania: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:135
+#: ../src/niepce/ui/niepcewindow.cpp:134
 msgid "Ready"
 msgstr "Gotowe"
 
-#: ../src/niepce/ui/niepcewindow.cpp:230
-msgid "_Library"
-msgstr "_Kolekcja"
+#: ../src/niepce/ui/niepcewindow.cpp:185
+msgid "New Folder..."
+msgstr "Nowy katalog..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:231
-msgid "New"
-msgstr "Nowe"
+#: ../src/niepce/ui/niepcewindow.cpp:186
+msgid "New Project..."
+msgstr "Nowy projekt..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:232
-msgid "Open"
-msgstr "Otwórz"
-
-#: ../src/niepce/ui/niepcewindow.cpp:236
-msgid "New _Folder..."
-msgstr "_Nowy katalog..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:237
-msgid "New _Project..."
-msgstr "N_owy projekt..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:239 ../camerawire/src/cwwindow.cpp:94
+#: ../src/niepce/ui/niepcewindow.cpp:190 ../camerawire/src/cwwindow.cpp:92
+#: ../magellan/src/mgwindow.cpp:88
 msgid "_Import..."
 msgstr "Za_importuj..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:242
+#: ../src/niepce/ui/niepcewindow.cpp:197 ../camerawire/src/cwwindow.cpp:96
+#: ../magellan/src/mgwindow.cpp:92
 msgid "Close"
 msgstr "Zamknij"
 
-#: ../src/niepce/ui/niepcewindow.cpp:246
-msgid "Quit"
-msgstr "Zakończ"
+#: ../src/niepce/ui/niepcewindow.cpp:200 ../camerawire/src/cwwindow.cpp:99
+#: ../magellan/src/mgwindow.cpp:95
+msgid "Edit"
+msgstr "Edycja"
 
-#: ../src/niepce/ui/niepcewindow.cpp:251 ../camerawire/src/cwwindow.cpp:104
-#: ../magellan/src/mgwindow.cpp:98
-msgid "_Edit"
-msgstr "_Edycja"
-
-#. FIXME: bind
-#: ../src/niepce/ui/niepcewindow.cpp:257
+#: ../src/niepce/ui/niepcewindow.cpp:215 ../camerawire/src/cwwindow.cpp:113
+#: ../magellan/src/mgwindow.cpp:109
 msgid "Cut"
 msgstr "Wytnij"
 
-#: ../src/niepce/ui/niepcewindow.cpp:259
+#: ../src/niepce/ui/niepcewindow.cpp:219 ../camerawire/src/cwwindow.cpp:117
+#: ../magellan/src/mgwindow.cpp:113
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: ../src/niepce/ui/niepcewindow.cpp:261
+#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:121
+#: ../magellan/src/mgwindow.cpp:117
 msgid "Paste"
 msgstr "Wklej"
 
-#: ../src/niepce/ui/niepcewindow.cpp:263
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "Delete"
 msgstr "Usuń"
 
-#: ../src/niepce/ui/niepcewindow.cpp:266
-msgid "Preferences..."
-msgstr "Preferencje..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:273 ../camerawire/src/cwwindow.cpp:120
-#: ../magellan/src/mgwindow.cpp:114
-msgid "_Tools"
-msgstr "_Narzędzia"
-
-#: ../src/niepce/ui/niepcewindow.cpp:274
-msgid "_Edit Labels..."
-msgstr "_Modyfikuj etykiety..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:277 ../camerawire/src/cwwindow.cpp:126
+#: ../src/niepce/ui/niepcewindow.cpp:230 ../camerawire/src/cwwindow.cpp:124
 #: ../magellan/src/mgwindow.cpp:120
-msgid "_Hide tools"
-msgstr "_Ukryj narzędzia"
+msgid "Tools"
+msgstr "Narzędzia"
 
-#: ../src/niepce/ui/niepcewindow.cpp:281 ../camerawire/src/cwwindow.cpp:130
-#: ../magellan/src/mgwindow.cpp:124
-msgid "_Help"
-msgstr "Pomo_c"
+#: ../src/niepce/ui/niepcewindow.cpp:233
+msgid "Edit Labels..."
+msgstr "Modyfikuj etykiety..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:282
-msgid "Help"
-msgstr "Pomoc"
-
-#: ../src/niepce/ui/niepcewindow.cpp:283
-msgid "About"
-msgstr "O programie"
+#: ../src/niepce/ui/niepcewindow.cpp:238 ../camerawire/src/cwwindow.cpp:135
+#: ../magellan/src/mgwindow.cpp:131
+msgid "Hide tools"
+msgstr "Ukryj narzędzia"
 
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:383
+#: ../src/niepce/ui/niepcewindow.cpp:305
 msgid "Label 1"
 msgstr "Etykieta 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:384
+#: ../src/niepce/ui/niepcewindow.cpp:306
 msgid "Label 2"
 msgstr "Etykieta 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:385
+#: ../src/niepce/ui/niepcewindow.cpp:307
 msgid "Label 3"
 msgstr "Etykieta 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:386
+#: ../src/niepce/ui/niepcewindow.cpp:308
 msgid "Label 4"
 msgstr "Etykieta 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:387
+#: ../src/niepce/ui/niepcewindow.cpp:309
 msgid "Label 5"
 msgstr "Etykieta 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:425
-msgid "Create library"
-msgstr "Utwórz kolekcję"
+#: ../src/niepce/ui/niepcewindow.cpp:347
+msgid "Open library"
+msgstr "Otwórz kolekcję"
 
-#: ../src/niepce/ui/niepcewindow.cpp:428
-msgid "Create"
-msgstr "Utwórz"
-
-#: ../src/niepce/ui/niepcewindow.cpp:487
+#: ../src/niepce/ui/niepcewindow.cpp:409
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:250
-msgid "Set Flag"
-msgstr "Ustaw oznaczenie"
-
-#: ../src/niepce/ui/selectioncontroller.cpp:253
-msgid "Set Rating"
-msgstr "Ustaw ocenę"
-
-#: ../src/niepce/ui/selectioncontroller.cpp:256
-msgid "Set Label"
-msgstr "Ustaw etykietę"
-
-#: ../src/niepce/ui/selectioncontroller.cpp:259
+#: ../src/niepce/ui/selectioncontroller.cpp:277
 msgid "Set Property"
 msgstr "Ustaw właściwość"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:278
+#: ../src/niepce/ui/selectioncontroller.cpp:296
 msgid "Set Properties"
 msgstr "Ustaw właściwości"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:300
+#: ../src/niepce/ui/selectioncontroller.cpp:318
 msgid "Move to Trash"
 msgstr "Przenieś do kosza"
 
@@ -592,13 +570,17 @@ msgstr "Nasycenie"
 msgid "Vibrance"
 msgstr "Jaskrawość"
 
-#: ../camerawire/src/cwwindow.cpp:69
+#: ../camerawire/src/cwwindow.cpp:62
 msgid "Camera"
 msgstr "Aparat"
 
-#: ../camerawire/src/cwwindow.cpp:93 ../magellan/src/mgwindow.cpp:86
-msgid "_File"
-msgstr "_Plik"
+#: ../camerawire/src/cwwindow.cpp:87 ../magellan/src/mgwindow.cpp:83
+msgid "File"
+msgstr "Plik"
+
+#: ../camerawire/src/cwwindow.cpp:129 ../magellan/src/mgwindow.cpp:125
+msgid "Refresh"
+msgstr "Odśwież"
 
 #: ../magellan/src/mgwindow.ui.h:1
 msgid "_Erase after download"
