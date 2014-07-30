@@ -20,3 +20,5 @@ src/niepce/modules/darkroom/toolboxcontroller.cpp
 camerawire/src/cwwindow.cpp
 magellan/src/mgwindow.cpp
 [type: gettext/glade]magellan/src/mgwindow.ui
+[encoding: UTF-8]
+data/niepce.appdata.xml.in

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+_Name=Niepce Digital
+_Comment=Manage and edit your photos.
+_Keywords=photo;
+Exec=niepce %u
+Icon=niepce
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Graphics;Photo;
