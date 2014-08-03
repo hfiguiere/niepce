@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 18:04+0200\n"
-"PO-Revision-Date: 2014-07-29 18:05+0200\n"
+"POT-Creation-Date: 2014-08-03 20:25+0200\n"
+"PO-Revision-Date: 2014-08-03 20:27+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -22,6 +22,122 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
+
+#: ../camerawire/src/cwwindow.cpp:62
+msgid "Camera"
+msgstr "Aparat"
+
+#: ../camerawire/src/cwwindow.cpp:87 ../magellan/src/mgwindow.cpp:83
+msgid "File"
+msgstr "Plik"
+
+#: ../camerawire/src/cwwindow.cpp:92 ../magellan/src/mgwindow.cpp:88
+#: ../src/niepce/ui/niepcewindow.cpp:190
+msgid "_Import..."
+msgstr "Za_importuj..."
+
+#: ../camerawire/src/cwwindow.cpp:96 ../magellan/src/mgwindow.cpp:92
+#: ../src/niepce/ui/niepcewindow.cpp:197
+msgid "Close"
+msgstr "Zamknij"
+
+#: ../camerawire/src/cwwindow.cpp:99 ../magellan/src/mgwindow.cpp:95
+#: ../src/niepce/ui/niepcewindow.cpp:200
+msgid "Edit"
+msgstr "Edycja"
+
+#: ../camerawire/src/cwwindow.cpp:113 ../magellan/src/mgwindow.cpp:109
+#: ../src/niepce/ui/niepcewindow.cpp:215
+msgid "Cut"
+msgstr "Wytnij"
+
+#: ../camerawire/src/cwwindow.cpp:117 ../magellan/src/mgwindow.cpp:113
+#: ../src/niepce/ui/niepcewindow.cpp:219
+msgid "Copy"
+msgstr "Skopiuj"
+
+#: ../camerawire/src/cwwindow.cpp:121 ../magellan/src/mgwindow.cpp:117
+#: ../src/niepce/ui/niepcewindow.cpp:223
+msgid "Paste"
+msgstr "Wklej"
+
+#: ../camerawire/src/cwwindow.cpp:124 ../magellan/src/mgwindow.cpp:120
+#: ../src/niepce/ui/niepcewindow.cpp:230
+msgid "Tools"
+msgstr "Narzędzia"
+
+#: ../camerawire/src/cwwindow.cpp:129 ../magellan/src/mgwindow.cpp:125
+msgid "Refresh"
+msgstr "Odśwież"
+
+#: ../camerawire/src/cwwindow.cpp:135 ../magellan/src/mgwindow.cpp:131
+#: ../src/niepce/ui/niepcewindow.cpp:238
+msgid "Hide tools"
+msgstr "Ukryj narzędzia"
+
+#: ../data/niepce.appdata.xml.in.h:1
+msgid "Niepce Digital is an application used to manage and edit photos."
+msgstr "Niepce Digital jest programem do zarządzania i modyfikowania zdjęć."
+
+#: ../data/niepce.appdata.xml.in.h:2
+msgid "Features:"
+msgstr "Funkcje:"
+
+#: ../data/niepce.appdata.xml.in.h:3
+msgid "Photo library management"
+msgstr "Zarządzanie kolekcją zdjęć"
+
+#: ../data/niepce.appdata.xml.in.h:4
+msgid "Non destructive image editing"
+msgstr "Niedestruktywne modyfikowanie zdjęć"
+
+#: ../data/niepce.appdata.xml.in.h:5
+msgid "RAW processing"
+msgstr "Przetwarzanie plików RAW"
+
+#: ../data/niepce.desktop.in.in.h:1
+msgid "Niepce Digital"
+msgstr "Niepce Digital"
+
+#: ../data/niepce.desktop.in.in.h:2
+msgid "Manage and edit your photos."
+msgstr "Zarządzanie i modyfikowanie zdjęć."
+
+#: ../data/niepce.desktop.in.in.h:3
+msgid "photo;"
+msgstr "zdjęcie;zdjęcia;"
+
+#: ../magellan/src/mgwindow.ui.h:1
+msgid "_Erase after download"
+msgstr "_Czyszczenie po pobraniu"
+
+#: ../magellan/src/mgwindow.ui.h:2
+msgid "<b>GPS Device</b>"
+msgstr "<b>Urządzenie GPS</b>"
+
+#: ../magellan/src/mgwindow.ui.h:3
+msgid "GPX"
+msgstr "GPX"
+
+#: ../magellan/src/mgwindow.ui.h:4
+msgid "KML"
+msgstr "KML"
+
+#: ../magellan/src/mgwindow.ui.h:5
+msgid "<b>Format</b>"
+msgstr "<b>Format</b>"
+
+#: ../magellan/src/mgwindow.ui.h:6
+msgid "<b>Output</b>"
+msgstr "<b>Wyjście</b>"
+
+#: ../magellan/src/mgwindow.ui.h:7
+msgid "Download"
+msgstr "Pobierz"
+
+#: ../src/engine/db/library.cpp:146
+msgid "Trash"
+msgstr "Kosz"
 
 #: ../src/fwk/toolkit/application.cpp:124
 msgid "New"
@@ -64,9 +180,62 @@ msgstr "Nazwa"
 msgid "Description"
 msgstr "Opis"
 
-#: ../src/engine/db/library.cpp:146
-msgid "Trash"
-msgstr "Kosz"
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:38
+msgid "Develop"
+msgstr "Wywołaj"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+msgid "Crop"
+msgstr "Przytnij"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:60
+msgid "Tilt"
+msgstr "Przechyl"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
+msgid "White balance"
+msgstr "Balans bieli"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
+msgid "Color temperature"
+msgstr "Temperatura kolorów"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
+msgid "Tone and colour"
+msgstr "Ton i kolor"
+
+#. s->signal_value_changed().connect();
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
+msgid "Exposure"
+msgstr "Naświetlanie"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
+msgid "Recovery"
+msgstr "Przywracanie"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
+msgid "Fill Light"
+msgstr "Wypełnij światło"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
+msgid "Blacks"
+msgstr "Czerń"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
+msgid "Brightness"
+msgstr "Jasność"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:81
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:83
+msgid "Saturation"
+msgstr "Nasycenie"
+
+#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:85
+msgid "Vibrance"
+msgstr "Jaskrawość"
 
 #: ../src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
@@ -165,6 +334,10 @@ msgstr "<b>Data:</b>"
 msgid "_Options"
 msgstr "_Opcje"
 
+#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
+msgid "Preferences"
+msgstr "Preferencje"
+
 #: ../src/niepce/ui/dialogs/preferences.ui.h:1
 msgid "_Reopen Library"
 msgstr "Ot_wórz ponownie kolekcję"
@@ -185,9 +358,98 @@ msgstr "Użycie ciemnego interfejsu"
 msgid "_User Interface"
 msgstr "Interfejs _użytkownika"
 
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
-msgid "Preferences"
-msgstr "Preferencje"
+#: ../src/niepce/ui/metadatapanecontroller.cpp:37
+msgid "Make:"
+msgstr "Producent:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "Model:"
+msgstr "Model:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "Lens:"
+msgstr "Soczewki:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:43
+msgid "Exposure Program:"
+msgstr "Program do naświetlania:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:44
+msgid "Speed:"
+msgstr "Prędkość:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:45
+msgid "Aperture:"
+msgstr "Przesłona:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:46
+msgid "ISO:"
+msgstr "ISO:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:47
+msgid "Exposure Bias:"
+msgstr "Wpływ na naświetlanie:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:48
+msgid "Flash:"
+msgstr "Lampa błyskowa:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:49
+msgid "Flash compensation:"
+msgstr "Korekcja lampy błyskowej:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:50
+msgid "Focal length:"
+msgstr "Ogniskowa:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:51
+msgid "White balance:"
+msgstr "Balans bieli:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "Date:"
+msgstr "Data:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:56
+msgid "Headline:"
+msgstr "Nagłówek:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:57
+msgid "Caption:"
+msgstr "Podpis:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:58
+msgid "Rating:"
+msgstr "Ocena:"
+
+#. FIXME change this type to the right one when there is a widget
+#: ../src/niepce/ui/metadatapanecontroller.cpp:60
+msgid "Label:"
+msgstr "Etykieta:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:61
+msgid "Keywords:"
+msgstr "Słowa kluczowe:"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:65
+msgid "Camera Information"
+msgstr "Informacje o aparacie"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:68
+msgid "Shooting Information"
+msgstr "Informacje o wykonaniu zdjęcia"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:71
+msgid "IPTC"
+msgstr "IPTC"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:74
+msgid "Rights"
+msgstr "Prawa"
+
+#: ../src/niepce/ui/metadatapanecontroller.cpp:104
+msgid "Image Properties"
+msgstr "Właściwości obrazu"
 
 #: ../src/niepce/ui/moduleshell.cpp:57
 msgid "Back"
@@ -288,99 +550,6 @@ msgstr "Ciemnia"
 msgid "Map"
 msgstr "Mapa"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:37
-msgid "Make:"
-msgstr "Producent:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:38
-msgid "Model:"
-msgstr "Model:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:39
-msgid "Lens:"
-msgstr "Soczewki:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:43
-msgid "Exposure Program:"
-msgstr "Program do naświetlania:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:44
-msgid "Speed:"
-msgstr "Prędkość:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:45
-msgid "Aperture:"
-msgstr "Przesłona:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:46
-msgid "ISO:"
-msgstr "ISO:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:47
-msgid "Exposure Bias:"
-msgstr "Wpływ na naświetlanie:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:48
-msgid "Flash:"
-msgstr "Lampa błyskowa:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:49
-msgid "Flash compensation:"
-msgstr "Korekcja lampy błyskowej:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:50
-msgid "Focal length:"
-msgstr "Ogniskowa:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:51
-msgid "White balance:"
-msgstr "Balans bieli:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
-msgid "Date:"
-msgstr "Data:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:56
-msgid "Headline:"
-msgstr "Nagłówek:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:57
-msgid "Caption:"
-msgstr "Podpis:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:58
-msgid "Rating:"
-msgstr "Ocena:"
-
-#. FIXME change this type to the right one when there is a widget
-#: ../src/niepce/ui/metadatapanecontroller.cpp:60
-msgid "Label:"
-msgstr "Etykieta:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:61
-msgid "Keywords:"
-msgstr "Słowa kluczowe:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:65
-msgid "Camera Information"
-msgstr "Informacje o aparacie"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:68
-msgid "Shooting Information"
-msgstr "Informacje o wykonaniu zdjęcia"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:71
-msgid "IPTC"
-msgstr "IPTC"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:74
-msgid "Rights"
-msgstr "Prawa"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:104
-msgid "Image Properties"
-msgstr "Właściwości obrazu"
-
 #: ../src/niepce/ui/niepceapplication.cpp:79
 msgid ""
 "A digital photo application.\n"
@@ -403,53 +572,13 @@ msgstr "Nowy katalog..."
 msgid "New Project..."
 msgstr "Nowy projekt..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:190 ../camerawire/src/cwwindow.cpp:92
-#: ../magellan/src/mgwindow.cpp:88
-msgid "_Import..."
-msgstr "Za_importuj..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:197 ../camerawire/src/cwwindow.cpp:96
-#: ../magellan/src/mgwindow.cpp:92
-msgid "Close"
-msgstr "Zamknij"
-
-#: ../src/niepce/ui/niepcewindow.cpp:200 ../camerawire/src/cwwindow.cpp:99
-#: ../magellan/src/mgwindow.cpp:95
-msgid "Edit"
-msgstr "Edycja"
-
-#: ../src/niepce/ui/niepcewindow.cpp:215 ../camerawire/src/cwwindow.cpp:113
-#: ../magellan/src/mgwindow.cpp:109
-msgid "Cut"
-msgstr "Wytnij"
-
-#: ../src/niepce/ui/niepcewindow.cpp:219 ../camerawire/src/cwwindow.cpp:117
-#: ../magellan/src/mgwindow.cpp:113
-msgid "Copy"
-msgstr "Skopiuj"
-
-#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:121
-#: ../magellan/src/mgwindow.cpp:117
-msgid "Paste"
-msgstr "Wklej"
-
 #: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "Delete"
 msgstr "Usuń"
 
-#: ../src/niepce/ui/niepcewindow.cpp:230 ../camerawire/src/cwwindow.cpp:124
-#: ../magellan/src/mgwindow.cpp:120
-msgid "Tools"
-msgstr "Narzędzia"
-
 #: ../src/niepce/ui/niepcewindow.cpp:233
 msgid "Edit Labels..."
 msgstr "Modyfikuj etykiety..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:238 ../camerawire/src/cwwindow.cpp:135
-#: ../magellan/src/mgwindow.cpp:131
-msgid "Hide tools"
-msgstr "Ukryj narzędzia"
 
 #. TODO make this parametric from resources
 #: ../src/niepce/ui/niepcewindow.cpp:305
@@ -512,100 +641,3 @@ msgstr "Słowa kluczowe"
 #: ../src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Obszar roboczy"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:38
-msgid "Develop"
-msgstr "Wywołaj"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
-msgid "Crop"
-msgstr "Przytnij"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:60
-msgid "Tilt"
-msgstr "Przechyl"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:62
-msgid "White balance"
-msgstr "Balans bieli"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
-msgid "Color temperature"
-msgstr "Temperatura kolorów"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
-msgid "Tone and colour"
-msgstr "Ton i kolor"
-
-#. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
-msgid "Exposure"
-msgstr "Naświetlanie"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
-msgid "Recovery"
-msgstr "Przywracanie"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
-msgid "Fill Light"
-msgstr "Wypełnij światło"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
-msgid "Blacks"
-msgstr "Czerń"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
-msgid "Brightness"
-msgstr "Jasność"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:81
-msgid "Contrast"
-msgstr "Kontrast"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:83
-msgid "Saturation"
-msgstr "Nasycenie"
-
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:85
-msgid "Vibrance"
-msgstr "Jaskrawość"
-
-#: ../camerawire/src/cwwindow.cpp:62
-msgid "Camera"
-msgstr "Aparat"
-
-#: ../camerawire/src/cwwindow.cpp:87 ../magellan/src/mgwindow.cpp:83
-msgid "File"
-msgstr "Plik"
-
-#: ../camerawire/src/cwwindow.cpp:129 ../magellan/src/mgwindow.cpp:125
-msgid "Refresh"
-msgstr "Odśwież"
-
-#: ../magellan/src/mgwindow.ui.h:1
-msgid "_Erase after download"
-msgstr "_Czyszczenie po pobraniu"
-
-#: ../magellan/src/mgwindow.ui.h:2
-msgid "<b>GPS Device</b>"
-msgstr "<b>Urządzenie GPS</b>"
-
-#: ../magellan/src/mgwindow.ui.h:3
-msgid "GPX"
-msgstr "GPX"
-
-#: ../magellan/src/mgwindow.ui.h:4
-msgid "KML"
-msgstr "KML"
-
-#: ../magellan/src/mgwindow.ui.h:5
-msgid "<b>Format</b>"
-msgstr "<b>Format</b>"
-
-#: ../magellan/src/mgwindow.ui.h:6
-msgid "<b>Output</b>"
-msgstr "<b>Wyjście</b>"
-
-#: ../magellan/src/mgwindow.ui.h:7
-msgid "Download"
-msgstr "Pobierz"
