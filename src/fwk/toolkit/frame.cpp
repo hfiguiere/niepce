@@ -35,6 +35,7 @@ namespace fwk {
 
 Frame::Frame(Gtk::Window* win, const std::string & layout_cfg_key)
     : m_window(win),
+      m_header(nullptr),
       m_builder(nullptr),
       m_layout_cfg_key(layout_cfg_key)
 {
@@ -102,7 +103,12 @@ void Frame::set_icon_from_theme(const Glib::ustring & name)
 
 void Frame::set_title(const std::string & title)
 {
-		gtkWindow().set_title(Glib::ustring(title));
+    if (m_header) {
+        m_header->set_title(Glib::ustring(title));
+    }
+    else {
+        gtkWindow().set_title(Glib::ustring(title));
+    }
 }
 
 

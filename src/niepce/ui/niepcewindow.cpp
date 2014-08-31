@@ -59,14 +59,16 @@ NiepceWindow::NiepceWindow()
     : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
-//    gtkWindow().property_hide_titlebar_when_maximized() = true;
+    // headerbar.
+    Gtk::HeaderBar *header = Gtk::manage(new Gtk::HeaderBar);
+    header->set_show_close_button(true);
+    header->set_has_subtitle(true);
+    setHeaderBar(header);
 }
 
 
 NiepceWindow::~NiepceWindow()
 {
-//    Application::Ptr pApp = Application::app();
-//    pApp->uiManager()->remove_action_group(m_refActionGroup);
 }
 
 void

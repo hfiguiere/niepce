@@ -30,6 +30,7 @@
 #include <giomm/actiongroup.h>
 #include <giomm/menu.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/headerbar.h>
 
 #include "fwk/toolkit/uicontroller.hpp"
 
@@ -66,16 +67,27 @@ public:
     Glib::RefPtr<Gtk::Builder> & builder()
         { return m_builder; }
 
-		/** set the title of the window.
-		 * @param title the title of the window.
-		 * 
-		 * override to provide you own hooks - behaviour.
-		 */
-		virtual void set_title(const std::string & title);
-		/** set the window icon from the theme 
-		 * @param name the icon name in the theme
-		 */
-		void set_icon_from_theme(const Glib::ustring & name);
+    /** @param header MUST be managed */
+    void setHeaderBar(Gtk::HeaderBar* header)
+        {
+            m_header = header;
+            if (m_header) {
+                m_window->set_titlebar(*m_header);
+            }
+        }
+    Gtk::HeaderBar* getHeaderBar() const
+        { return m_header; }
+
+    /** set the title of the window.
+     * @param title the title of the window.
+     *
+     * override to provide you own hooks - behaviour.
+     */
+    virtual void set_title(const std::string & title);
+    /** set the window icon from the theme
+     * @param name the icon name in the theme
+     */
+    void set_icon_from_theme(const Glib::ustring & name);
 
     void toggle_tools_visible();
 
@@ -105,6 +117,7 @@ private:
     void frameRectToConfig();
 
     Gtk::Window *m_window;
+    Gtk::HeaderBar *m_header;
     Glib::RefPtr<Gtk::Builder> m_builder;
     std::string m_layout_cfg_key;
 };
