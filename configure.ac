@@ -1,7 +1,7 @@
 AC_INIT(niepce-suite, 2013.6.1)
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR(README)
-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz subdir-objects])
 m4_ifndef([AM_SILENT_RULES], [m4_define([AM_SILENT_RULES],[])])
 AM_SILENT_RULES([yes])
 AC_CONFIG_HEADER(config.h)
