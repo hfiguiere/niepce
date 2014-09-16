@@ -187,6 +187,7 @@ src/niepce/modules/darkroom/Makefile
 src/niepce/modules/interfaces/Makefile
 src/niepce/modules/map/Makefile
 src/niepce/Makefile
+data/niepce.desktop.in
 ])
 
 fi

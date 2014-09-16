@@ -1,5 +1,7 @@
 SUBDIRS = icons themes
 
+@INTLTOOL_DESKTOP_RULE@
+
 desktop_in_files = niepce.desktop.in
 desktop_files    = $(desktop_in_files:.desktop.in=.desktop)
 
@@ -24,3 +26,6 @@ CLEANFILES = \
 DISTCLEANFILES =                                \
         $(desktop_files)                        \
 	$(null)
+
+check:
+	desktop-file-validate $(desktop_files)
