@@ -146,8 +146,6 @@ src/fwk/utils/db/Makefile
 src/fwk/utils/db/sqlite/Makefile
 src/fwk/toolkit/Makefile
 src/engine/Makefile
-src/engine/db/Makefile
-src/engine/library/Makefile
 src/libraryclient/Makefile
 src/ncr/Makefile
 po/Makefile.in

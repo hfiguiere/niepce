@@ -54,8 +54,8 @@ src/fwk/utils/testufrawmeta
 src/fwk/utils/testxmp
 src/fwk/toolkit/testconfigdatabinder
 src/libraryclient/test_worker
-src/engine/db/test_library
-src/engine/db/test_filebundle
+src/engine/test_library
+src/engine/test_filebundle
 src/engine/library/test_opqueue
 src/niepce/niepce
 camerawire/src/camerawire
