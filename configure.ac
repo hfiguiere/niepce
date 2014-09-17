@@ -180,8 +180,6 @@ AC_DEFINE_UNQUOTED([NIEPCE_BUILD_CONFIG], ["$NIEPCE_BUILD_CONFIG"], [The string 
 
 AC_CONFIG_FILES([
 src/niepce/ui/Makefile
-src/niepce/ui/dialogs/Makefile
-src/niepce/ui/thumb-view/Makefile
 src/niepce/modules/Makefile
 src/niepce/modules/darkroom/Makefile
 src/niepce/modules/interfaces/Makefile

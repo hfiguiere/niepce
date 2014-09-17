@@ -1,7 +1,5 @@
 
 
-DIST_SUBDIRS = thumb-view dialogs
-
 gladefiles = dialogs/preferences.ui \
 	dialogs/importdialog.ui \
 	dialogs/editlabels.ui \
@@ -10,7 +8,7 @@ gladefiles = dialogs/preferences.ui \
 gladedir = @datarootdir@/niepce/glade/
 glade_DATA = $(gladefiles)
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. -I$(srcdir)/thumb-view \
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. \
 	-I$(top_srcdir)/src/ext \
 	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \

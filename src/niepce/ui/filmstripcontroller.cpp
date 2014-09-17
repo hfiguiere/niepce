@@ -25,7 +25,7 @@
 #include "engine/library/thumbnailnotification.hpp"
 #include "fwk/base/debug.hpp"
 
-#include "eog-thumb-nav.hpp"
+#include "thumb-view/eog-thumb-nav.hpp"
 #include "thumbstripview.hpp"
 #include "filmstripcontroller.hpp"
 
