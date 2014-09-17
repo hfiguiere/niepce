@@ -1,2 +1,1 @@
-src/niepce/ui/dialogs/importdialog.glade
-src/niepce/ui/dialogs/preferences.glade
+data/niepce.desktop.in
