@@ -30,6 +30,7 @@ intltool-*.in
 *~
 *.bak
 TAGS
+.dirstamp
 m4/intltool.m4
 m4/libtool.m4
 m4/ltoptions.m4
@@ -37,6 +38,9 @@ m4/ltsugar.m4
 m4/ltversion.m4
 m4/lt~obsolete.m4
 po/Makefile.in.in
+data/niepce.appdata.xml
+data/niepce.desktop
+data/niepce.desktop.in
 src/fwk/base/testmoniker
 src/fwk/base/testgeometry
 src/fwk/base/testfractions
@@ -56,7 +60,7 @@ src/fwk/toolkit/testconfigdatabinder
 src/libraryclient/test_worker
 src/engine/test_library
 src/engine/test_filebundle
-src/engine/library/test_opqueue
+src/engine/test_opqueue
 src/niepce/niepce
 camerawire/src/camerawire
 camerawire/po/POTFILES
