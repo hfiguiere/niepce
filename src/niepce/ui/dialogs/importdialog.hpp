@@ -42,7 +42,7 @@ namespace Gtk {
 
 namespace ui {
 
-class ImportDialog 
+class ImportDialog
 	: public fwk::Dialog
 {
 public:
@@ -54,15 +54,15 @@ public:
 
 //	const std::list<std::string> & to_import() const
 //		{ return m_list_to_import; }
-    const Glib::ustring & path_to_import() const
+    const Glib::ustring & pathToImport() const
         { return m_folder_path_to_import; }
-	void set_to_import(const Glib::ustring & f);
+	void setToImport(const Glib::ustring & f);
 
 private:
 	class ImportParam;
 
-	void do_select_directories();
-	
+	void doSelectDirectories();
+
   Glib::ustring m_folder_path_to_import;
 //	std::list<std::string> m_list_to_import;
 

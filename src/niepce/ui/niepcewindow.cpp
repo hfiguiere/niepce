@@ -255,9 +255,10 @@ void NiepceWindow::on_action_file_import()
     case 0:
     {
         // import
-        Glib::ustring to_import = import_dialog->path_to_import();
+        // XXX change the API to provide more details.
+        Glib::ustring to_import = import_dialog->pathToImport();
         if(!to_import.empty()) {
-            cfg.setValue("last_import_location", import_dialog->path_to_import());
+            cfg.setValue("last_import_location", to_import);
 
             //DBG_OUT("%s", to_import.c_str());
             m_libClient->importFromDirectory(to_import, false);
