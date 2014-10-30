@@ -48,6 +48,11 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
     DBG_ASSERT(m_uidataprovider, "provider is NULL");
 }
 
+GridViewModule::~GridViewModule()
+{
+    m_widget = nullptr;
+}
+
 void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {

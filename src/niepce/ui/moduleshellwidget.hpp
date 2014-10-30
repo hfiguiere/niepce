@@ -23,10 +23,11 @@
 #include <vector>
 #include <utility>
 
-#include <gtkmm/notebook.h>
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/menubutton.h>
+#include <gtkmm/stack.h>
+#include <gtkmm/stackswitcher.h>
 
 namespace Gtk {
 class ToggleButton;
@@ -41,24 +42,25 @@ class ModuleShellWidget
 public:
     ModuleShellWidget();
 
-    int append_page(Gtk::Widget & w, const Glib::ustring & label);
-    void activate_page(int);
+    void appendPage(Gtk::Widget & w,
+                     const Glib::ustring & name,
+                     const Glib::ustring & label);
+    void activatePage(const std::string &);
 
     Gtk::MenuButton & getMenuButton()
         { return m_menubutton; }
+//    Gtk::Stack* getStack() const
+//        { return m_stack; }
 
-    sigc::signal<void, int> signal_activated;
-    sigc::signal<void, int> signal_deactivated;
-protected:
+    sigc::signal<void, const std::string &> signal_activated;
+    sigc::signal<void, const std::string &> signal_deactivated;
 
-    void set_current_page(int, Gtk::ToggleButton *);
 private:
     Gtk::Box                m_mainbox;
     Gtk::ButtonBox          m_mainbar;
     Gtk::MenuButton         m_menubutton;
-    Gtk::Notebook           m_notebook;
-    int                     m_currentpage;
-    std::vector<std::pair<Gtk::ToggleButton*, sigc::connection> > m_buttons;
+    Gtk::Stack              m_stack;
+    Gtk::StackSwitcher      m_switcher;
 };
 
 }

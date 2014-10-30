@@ -57,7 +57,7 @@ public:
 
   GridViewModule(const IModuleShell & shell,
                  const Glib::RefPtr<ImageListStore> & store);
-
+  virtual ~GridViewModule();
 
   void on_lib_notification(const eng::LibNotification &);
   void display_none();

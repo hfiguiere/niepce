@@ -54,7 +54,7 @@ public:
         , m_actionGroup(Gio::SimpleActionGroup::create())
         {
         }
-
+    virtual ~ModuleShell();
 
     const GridViewModule::Ptr & get_gridview() const
         {
@@ -89,10 +89,11 @@ public:
     void action_edit_delete();
 protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
+                                    const std::string & name,
                                     const std::string & label);
     virtual void on_ready();
-    void on_module_deactivated(int idx);
-    void on_module_activated(int idx);
+    void on_module_deactivated(const std::string & name) const;
+    void on_module_activated(const std::string & name) const;
 private:
     libraryclient::LibraryClient::Ptr m_libraryclient;
     Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
@@ -103,7 +104,7 @@ private:
     Glib::RefPtr<Gio::Menu>       m_module_menu;
 
     ui::SelectionController::Ptr  m_selection_controller;
-    std::vector<ILibraryModule::Ptr> m_modules;
+    std::map<std::string, ILibraryModule::Ptr> m_modules;
     // these should be dynamic
     GridViewModule::Ptr           m_gridview;
     dr::DarkroomModule::Ptr       m_darkroom;

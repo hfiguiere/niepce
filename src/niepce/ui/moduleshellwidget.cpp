@@ -18,6 +18,7 @@
  */
 
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/stackswitcher.h>
 
 #include "fwk/base/debug.hpp"
 #include "ui/moduleshellwidget.hpp"
@@ -28,69 +29,39 @@ ModuleShellWidget::ModuleShellWidget()
     : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , m_mainbox(Gtk::ORIENTATION_HORIZONTAL)
     , m_mainbar(Gtk::ORIENTATION_HORIZONTAL)
-    , m_currentpage(-1)
 {
     set_spacing(4);
     m_mainbar.set_layout(Gtk::BUTTONBOX_START);
     m_mainbar.set_spacing(4);
     m_menubutton.set_direction(Gtk::ARROW_NONE);
-    m_notebook.set_show_tabs(false);
     m_mainbox.pack_end(m_menubutton, Gtk::PACK_SHRINK);
     m_mainbox.pack_start(m_mainbar, Gtk::PACK_EXPAND_WIDGET);
     pack_start(m_mainbox, Gtk::PACK_SHRINK);
-    pack_start(m_notebook);
-}
 
-int
-ModuleShellWidget::append_page(Gtk::Widget & w, const Glib::ustring & label)
-{
-    int idx;
-    
-    Gtk::ToggleButton* button = Gtk::manage(new Gtk::ToggleButton(label));
-    m_mainbar.pack_start(*button);
-    idx = m_notebook.append_page(w, label);
-    sigc::connection conn = button->signal_toggled().connect(
-        sigc::bind(sigc::mem_fun(this, &ModuleShellWidget::set_current_page),
-                   idx, button));
-    if(m_currentpage == -1) {
-        set_current_page(idx, button);
-    }
-    if((int)m_buttons.size() < idx + 1) {
-        m_buttons.resize(idx + 1);
-    }
-    m_buttons[idx] = std::make_pair(button, conn);
-    return idx;
-}
-	
-void ModuleShellWidget::activate_page(int idx)
-{
-    if(m_currentpage != idx) {
-        Gtk::ToggleButton * btn = m_buttons[idx].first;
-        set_current_page(idx, btn);
-    }
+    m_mainbox.pack_start(m_switcher);
+    pack_start(m_stack);
+
+    m_switcher.set_stack(m_stack);
 }
 
 
-void ModuleShellWidget::set_current_page(int idx, Gtk::ToggleButton * btn)
+
+void
+ModuleShellWidget::appendPage(Gtk::Widget & w, const Glib::ustring & name,
+                              const Glib::ustring & label)
 {
-    if(m_currentpage == idx) {
-        // just preempt. Make sure the button is still active.
-        // otherwise it cause an infinite loop.
-        m_buttons[m_currentpage].second.block();
-        m_buttons[m_currentpage].first->set_active(true);
-        m_buttons[m_currentpage].second.unblock();
-        return;
+    m_stack.add(w, name, label);
+}
+
+void ModuleShellWidget::activatePage(const std::string & name)
+{
+    Glib::ustring current_name
+        = m_stack.get_visible_child_name();
+    if(current_name != name) {
+        signal_deactivated(current_name);
+        m_stack.set_visible_child(name);
+        signal_activated(name);
     }
-    m_notebook.set_current_page(idx);
-    if(m_currentpage >= 0) {
-        m_buttons[m_currentpage].second.block();
-        m_buttons[m_currentpage].first->set_active(false);
-        m_buttons[m_currentpage].second.unblock();
-    }
-    btn->set_active(true);
-    signal_deactivated(m_currentpage);
-    m_currentpage = idx;
-    signal_activated(idx);
 }
 
 }

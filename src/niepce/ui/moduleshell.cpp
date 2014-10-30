@@ -36,6 +36,11 @@
 
 namespace ui {
 
+ModuleShell::~ModuleShell()
+{
+    m_widget = nullptr;
+}
+
 Gtk::Widget * ModuleShell::buildWidget()
 {
     if(m_widget) {
@@ -193,7 +198,7 @@ Gtk::Widget * ModuleShell::buildWidget()
 
     m_gridview = GridViewModule::Ptr(
         new GridViewModule(*this, m_selection_controller->get_list_store()));
-    add_library_module(m_gridview, _("Library"));
+    add_library_module(m_gridview, "grid", _("Library"));
 
     m_selection_controller->add_selectable(m_gridview);
     m_selection_controller->signal_selected
@@ -202,10 +207,10 @@ Gtk::Widget * ModuleShell::buildWidget()
         .connect(sigc::mem_fun(*this, &ModuleShell::on_image_activated));
 
     m_darkroom = dr::DarkroomModule::Ptr(new dr::DarkroomModule(*this));
-    add_library_module(m_darkroom, _("Darkroom"));
+    add_library_module(m_darkroom, "darkroom", _("Darkroom"));
 
     m_mapm = mapm::MapModule::Ptr(new mapm::MapModule(*this));
-    add_library_module(m_mapm, _("Map"));
+    add_library_module(m_mapm, "map", _("Map"));
 
     m_shell.signal_activated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_activated));
     m_shell.signal_deactivated.connect(sigc::mem_fun(*this, &ModuleShell::on_module_deactivated));
@@ -222,13 +227,14 @@ void ModuleShell::action_edit_delete()
 }
 
 void ModuleShell::add_library_module(const ILibraryModule::Ptr & module,
-                                                   const std::string & label)
+                                     const std::string & name,
+                                     const std::string & label)
 {
     auto w = module->buildWidget();
     if(w) {
         add(module);
-        m_shell.append_page(*w, label);
-        m_modules.push_back(module);
+        m_shell.appendPage(*w, name, label);
+        m_modules.insert(std::make_pair(name, module));
     }
 }
 
@@ -256,25 +262,29 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
     if(iter) {
         auto libfile = (*iter)[store->columns().m_libfile];
         m_darkroom->set_image(libfile);
-        m_shell.activate_page(1);
+        m_shell.activatePage("darkroom");
     }
 }
 
-void ModuleShell::on_module_deactivated(int idx)
+void ModuleShell::on_module_deactivated(const std::string & name) const
 {
-    DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
-    m_module_menu->remove_all();
-    m_modules[idx]->set_active(false);
+    auto module = m_modules.find(name);
+    if (module != m_modules.end()) {
+        m_module_menu->remove_all();
+        module->second->set_active(false);
+    }
 }
 
-void ModuleShell::on_module_activated(int idx)
+void ModuleShell::on_module_activated(const std::string & name) const
 {
-    DBG_ASSERT((idx >= 0) && ((unsigned)idx < m_modules.size()), "wrong module index");
-    auto menu = m_modules[idx]->getMenu();
-    if (menu) {
-        m_module_menu->append_section(menu);
+    auto module = m_modules.find(name);
+    if (module != m_modules.end()) {
+        auto menu = module->second->getMenu();
+        if (menu) {
+            m_module_menu->append_section(menu);
+        }
+        module->second->set_active(true);
     }
-    m_modules[idx]->set_active(true);
 }
 
 
