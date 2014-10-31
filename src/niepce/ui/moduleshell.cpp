@@ -188,7 +188,7 @@ Gtk::Widget * ModuleShell::buildWidget()
                     "WriteMetadata",
                     sigc::mem_fun(*m_selection_controller,
                                   &SelectionController::write_metadata),
-                    submenu, _("Write metadata"), "shell", nullptr);
+                    section, _("Write metadata"), "shell", nullptr);
 
     // Module menu placeholder
     m_module_menu = Gio::Menu::create();
