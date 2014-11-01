@@ -311,7 +311,8 @@ eog_thumb_nav_init (EogThumbNav *nav)
         priv->button_left = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (priv->button_left), GTK_RELIEF_NONE);
 
-	arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN); 
+	arrow = gtk_image_new_from_icon_name ("pan-start-symbolic",
+                                              GTK_ICON_SIZE_BUTTON);
 	gtk_container_add (GTK_CONTAINER (priv->button_left), arrow);
 
 	gtk_widget_set_size_request (GTK_WIDGET (priv->button_left), 20, 0);
@@ -349,7 +350,8 @@ eog_thumb_nav_init (EogThumbNav *nav)
         priv->button_right = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (priv->button_right), GTK_RELIEF_NONE);
 
-	arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE); 
+	arrow = gtk_image_new_from_icon_name ("pan-end-symbolic",
+                                              GTK_ICON_SIZE_BUTTON);
 	gtk_container_add (GTK_CONTAINER (priv->button_right), arrow);
 
 	gtk_widget_set_size_request (GTK_WIDGET (priv->button_right), 20, 0);
@@ -431,9 +433,6 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 	switch (mode)
 	{
 	case EOG_THUMB_NAV_MODE_ONE_ROW:
-//		priv->thumbview->set_columns (-1);
-		priv->thumbview->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
-
 		priv->thumbview->set_size_request (-1, -1);
 		priv->thumbview->set_item_height (100);
 
@@ -446,7 +445,6 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 		break;
 
 	case EOG_THUMB_NAV_MODE_ONE_COLUMN:
-		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -458,11 +456,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_widget_hide (priv->button_left);
 		gtk_widget_hide (priv->button_right);
-		
+
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_ROWS:
-		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -474,11 +471,10 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_widget_hide (priv->button_left);
 		gtk_widget_hide (priv->button_right);
-		
+
 		break;
 
 	case EOG_THUMB_NAV_MODE_MULTIPLE_COLUMNS:
-		priv->thumbview->set_orientation(Gtk::ORIENTATION_VERTICAL);
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -490,7 +486,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		gtk_widget_hide (priv->button_left);
 		gtk_widget_hide (priv->button_right);
-		
+
 		break;
 	}
 }

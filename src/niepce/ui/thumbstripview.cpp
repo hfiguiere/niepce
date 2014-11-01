@@ -78,7 +78,6 @@ ThumbStripCell::ThumbStripCell()
 ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
     : Glib::ObjectBase(typeid(ThumbStripView))
     , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
-    , Gtk::Orientable()
     , m_start_thumb(0)
     , m_end_thumb(0)
     , m_store(store)
@@ -156,9 +155,7 @@ void ThumbStripView::row_deleted(const Gtk::TreeModel::Path&)
 
 void ThumbStripView::update_item_count()
 {
-    if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
-        set_columns(m_model_item_count);
-    }
+    set_columns(m_model_item_count);
 }
 
 void

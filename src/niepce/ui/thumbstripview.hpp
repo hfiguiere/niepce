@@ -32,7 +32,6 @@ namespace ui {
 
 class ThumbStripView
   : public Gtk::IconView
-  , public Gtk::Orientable
 {
 public:
     ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store);
