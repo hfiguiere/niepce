@@ -32,12 +32,13 @@
 #include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/dialog.hpp"
 #include "imageliststore.hpp"
+#include "metadatapanecontroller.hpp"
 
 namespace Gtk {
-	class Dialog;
-	class ComboBox;
-	class CheckButton;
-	class TreeView;
+class Dialog;
+class ComboBox;
+class CheckButton;
+class TreeView;
 }
 
 namespace ui {
@@ -48,32 +49,35 @@ class ImportDialog
 public:
     typedef std::shared_ptr<ImportDialog> Ptr;
 
-	ImportDialog();
+    ImportDialog();
 
- 	virtual void setup_widget();
+    void setup_widget() override;
 
-//	const std::list<std::string> & to_import() const
-//		{ return m_list_to_import; }
+//  const std::list<std::string> & to_import() const
+//      { return m_list_to_import; }
     const Glib::ustring & pathToImport() const
         { return m_folder_path_to_import; }
-	void setToImport(const Glib::ustring & f);
+    void setToImport(const Glib::ustring & f);
 
 private:
-	class ImportParam;
+    class ImportParam;
 
-	void doSelectDirectories();
+    void doSelectDirectories();
 
   Glib::ustring m_folder_path_to_import;
-//	std::list<std::string> m_list_to_import;
+//  std::list<std::string> m_list_to_import;
 
-	Gtk::ComboBox *m_date_tz_combo;
-	Gtk::CheckButton *m_ufraw_import_check;
-	Gtk::CheckButton *m_rawstudio_import_check;
-	Gtk::Label *m_directory_name;
+    Gtk::ComboBox *m_date_tz_combo;
+    Gtk::CheckButton *m_ufraw_import_check;
+    Gtk::CheckButton *m_rawstudio_import_check;
+    Gtk::Label *m_directory_name;
     Gtk::Entry *m_destinationFolder;
-	Gtk::TreeView *m_imagesList;
+    Gtk::ScrolledWindow *m_attributesScrolled;
+    Gtk::TreeView *m_imagesList;
     fwk::TextModelRecord m_imagesListModelRecord;
     Glib::RefPtr<Gtk::ListStore> m_imagesListModel;
+
+    MetaDataPaneController::Ptr m_metadata_pane;
 };
 
 }

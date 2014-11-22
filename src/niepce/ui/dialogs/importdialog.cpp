@@ -48,6 +48,8 @@ ImportDialog::ImportDialog()
     , m_ufraw_import_check(nullptr)
     , m_rawstudio_import_check(nullptr)
     , m_directory_name(nullptr)
+    , m_destinationFolder(nullptr)
+    , m_attributesScrolled(nullptr)
     , m_imagesList(nullptr)
 {
 }
@@ -73,6 +75,14 @@ void ImportDialog::setup_widget()
     a_builder->get_widget("directory_name", m_directory_name);
     a_builder->get_widget("imagesList", m_imagesList);
     a_builder->get_widget("destinationFolder", m_destinationFolder);
+
+    a_builder->get_widget("attributes_scrolled", m_attributesScrolled);
+    // this is where we'll put the metadata controller.
+    m_metadata_pane = MetaDataPaneController::Ptr(new MetaDataPaneController);
+    auto w = m_metadata_pane->buildWidget();
+    add(m_metadata_pane);
+    m_attributesScrolled->add(*w);
+    w->show_all();
 
     m_imagesListModel = m_imagesListModelRecord.inject(*m_imagesList);
     m_imagesList->set_model(m_imagesListModel);
