@@ -90,7 +90,7 @@ private:
   fwk::ImageGridView*          m_librarylistview;
   Gtk::ScrolledWindow          m_scrollview;
   MetaDataPaneController::Ptr  m_metapanecontroller;
-  Gtk::HPaned                  m_lib_splitview;
+  Gtk::Paned                   m_lib_splitview;
   fwk::Dock                   *m_dock;
 };
 

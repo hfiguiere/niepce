@@ -58,6 +58,7 @@ namespace ui {
 NiepceWindow::NiepceWindow()
     : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
+    , m_hbox(Gtk::ORIENTATION_HORIZONTAL)
 {
     // headerbar.
     Gtk::HeaderBar *header = Gtk::manage(new Gtk::HeaderBar);

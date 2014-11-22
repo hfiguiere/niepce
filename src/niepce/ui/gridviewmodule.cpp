@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.cpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2014 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
   , m_model(store)
   , m_uidataprovider(nullptr)
   , m_librarylistview(nullptr)
+  , m_lib_splitview(Gtk::ORIENTATION_HORIZONTAL)
   , m_dock(nullptr)
 {
     m_uidataprovider = m_shell.getLibraryClient()->getDataProvider();
