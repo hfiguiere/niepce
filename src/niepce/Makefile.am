@@ -10,12 +10,9 @@ bin_PROGRAMS = niepce
 
 niepce_LDFLAGS =
 niepce_LDADD = \
-	$(top_builddir)/src/engine/db/libniepcedb.a \
 	$(top_builddir)/src/niepce/ui/libniepceui.a \
-	$(top_builddir)/src/engine/library/libniepcelibrary.a \
 	$(top_builddir)/src/libraryclient/liblibraryclient.a \
-	$(top_builddir)/src/engine/library/libniepcelibrary.a \
-	$(top_builddir)/src/engine/db/libniepcedb.a \
+	$(top_builddir)/src/engine/libniepceengine.a \
 	$(top_builddir)/src/niepce/modules/darkroom/libmoduledarkroom.a \
 	$(top_builddir)/src/niepce/modules/map/libmodulemap.a \
 	$(top_builddir)/src/niepce/modules/interfaces/libinterfaces.a \
