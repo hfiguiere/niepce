@@ -29,6 +29,7 @@
 
 #include <glibmm/refptr.h>
 
+#include "engine/importer/importedfile.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/dialog.hpp"
 #include "imageliststore.hpp"
@@ -41,6 +42,14 @@ class CheckButton;
 class TreeView;
 }
 
+namespace fwk {
+class ImageGridView;
+}
+
+namespace eng {
+class IImporter;
+}
+
 namespace ui {
 
 class ImportDialog
@@ -49,7 +58,19 @@ class ImportDialog
 public:
     typedef std::shared_ptr<ImportDialog> Ptr;
 
+    class PreviewGridModel
+        : public Gtk::TreeModel::ColumnRecord
+    {
+    public:
+        Gtk::TreeModelColumn<Glib::ustring> filename;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
+        Gtk::TreeModelColumn<eng::ImportedFile::Ptr> file;
+        PreviewGridModel()
+            { add(filename); add(pixbuf); add(file); }
+    };
+
     ImportDialog();
+    virtual ~ImportDialog();
 
     void setup_widget() override;
 
@@ -64,8 +85,8 @@ private:
 
     void doSelectDirectories();
 
-  Glib::ustring m_folder_path_to_import;
-//  std::list<std::string> m_list_to_import;
+    eng::IImporter *m_importer;
+    Glib::ustring m_folder_path_to_import;
 
     Gtk::ComboBox *m_date_tz_combo;
     Gtk::CheckButton *m_ufraw_import_check;
@@ -73,9 +94,11 @@ private:
     Gtk::Label *m_directory_name;
     Gtk::Entry *m_destinationFolder;
     Gtk::ScrolledWindow *m_attributesScrolled;
-    Gtk::TreeView *m_imagesList;
-    fwk::TextModelRecord m_imagesListModelRecord;
+    Gtk::ScrolledWindow *m_images_list_scrolled;
+    PreviewGridModel m_grid_columns;
     Glib::RefPtr<Gtk::ListStore> m_imagesListModel;
+
+    Gtk::IconView *m_gridview;
 
     MetaDataPaneController::Ptr m_metadata_pane;
 };

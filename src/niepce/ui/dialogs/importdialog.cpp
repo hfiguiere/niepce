@@ -35,6 +35,9 @@
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/widgets/imagegridview.hpp"
+#include "engine/importer/directoryimporter.hpp"
+#include "engine/importer/importedfile.hpp"
 #include "importdialog.hpp"
 
 using fwk::Configuration;
@@ -44,24 +47,27 @@ namespace ui {
 
 ImportDialog::ImportDialog()
     : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog")
+    , m_importer(nullptr)
     , m_date_tz_combo(nullptr)
     , m_ufraw_import_check(nullptr)
     , m_rawstudio_import_check(nullptr)
     , m_directory_name(nullptr)
     , m_destinationFolder(nullptr)
     , m_attributesScrolled(nullptr)
-    , m_imagesList(nullptr)
+    , m_images_list_scrolled(nullptr)
 {
 }
 
+ImportDialog::~ImportDialog()
+{
+    delete m_importer;
+}
 
 void ImportDialog::setup_widget()
 {
     if(m_is_setup) {
         return;
     }
-
-    add_header(_("Import"));
 
     Glib::RefPtr<Gtk::Builder> a_builder = builder();
     Gtk::Button *select_directories = nullptr;
@@ -73,19 +79,26 @@ void ImportDialog::setup_widget()
     a_builder->get_widget("ufraw_import_check", m_ufraw_import_check);
     a_builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
     a_builder->get_widget("directory_name", m_directory_name);
-    a_builder->get_widget("imagesList", m_imagesList);
     a_builder->get_widget("destinationFolder", m_destinationFolder);
 
+    // Metadata pane.
     a_builder->get_widget("attributes_scrolled", m_attributesScrolled);
-    // this is where we'll put the metadata controller.
     m_metadata_pane = MetaDataPaneController::Ptr(new MetaDataPaneController);
     auto w = m_metadata_pane->buildWidget();
     add(m_metadata_pane);
     m_attributesScrolled->add(*w);
     w->show_all();
 
-    m_imagesListModel = m_imagesListModelRecord.inject(*m_imagesList);
-    m_imagesList->set_model(m_imagesListModel);
+    // Gridview of previews.
+    a_builder->get_widget("images_list_scrolled", m_images_list_scrolled);
+    m_imagesListModel = Gtk::ListStore::create(m_grid_columns);
+    m_gridview = Gtk::manage(
+        new Gtk::IconView(
+            Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(m_imagesListModel)));
+    m_gridview->set_pixbuf_column(m_grid_columns.pixbuf);
+    m_gridview->set_text_column(m_grid_columns.filename);
+    m_gridview->show();
+    m_images_list_scrolled->add(*m_gridview);
     m_is_setup = true;
 }
 
@@ -119,12 +132,15 @@ void ImportDialog::doSelectDirectories()
 
 void ImportDialog::setToImport(const Glib::ustring & f)
 {
-
-    auto future1 = std::async(std::launch::async,
-                              [f] () {
-                                  return fwk::FileList::getFilesFromDirectory(
-                                      f, &fwk::filter_xmp_out);
-                              });
+    if (!m_importer) {
+        // FIXME this should be the right kind
+        m_importer = new eng::DirectoryImporter;
+    }
+    auto target_content = std::async(std::launch::async,
+                                     [f, this] () {
+                                         return m_importer->listTargetContent(
+                                             f);
+                                     });
 
     m_folder_path_to_import = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
@@ -132,15 +148,16 @@ void ImportDialog::setToImport(const Glib::ustring & f)
 
     m_imagesListModel->clear();
 
-    auto list_to_import = future1.get();
+    if(target_content.get()) {
+        auto list_to_import = m_importer->getTargetContent();
 
-    std::for_each(list_to_import->begin(), list_to_import->end(),
-                  [this] (const std::string & s) {
-                      DBG_OUT("selected %s", s.c_str());
-                      Gtk::TreeIter iter = m_imagesListModel->append();
-                      iter->set_value(m_imagesListModelRecord.m_col1, s);
-                  }
-        );
+        for(const auto & f : list_to_import) {
+            DBG_OUT("selected %s", f->name().c_str());
+            Gtk::TreeIter iter = m_imagesListModel->append();
+            iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
+            iter->set_value(m_grid_columns.file, std::move(f));
+        }
+    }
 }
 
 }
@@ -150,6 +167,7 @@ void ImportDialog::setToImport(const Glib::ustring & f)
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset:2
   indent-tabs-mode:nil
   tab-width:2
   fill-column:99

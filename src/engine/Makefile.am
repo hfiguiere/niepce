@@ -49,4 +49,9 @@ libniepceengine_a_SOURCES = \
 	library/commands.hpp library/commands.cpp \
 	library/thumbnailcache.hpp library/thumbnailcache.cpp \
 	library/thumbnailnotification.hpp \
+	importer/iimporter.hpp \
+	importer/directoryimporter.hpp \
+	importer/directoryimporter.cpp \
+	importer/importedfile.hpp \
+	importer/importedfile.cpp \
 	$(NULL)
