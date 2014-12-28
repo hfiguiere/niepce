@@ -8,8 +8,7 @@ check_PROGRAMS = test_worker
 TESTS = test_worker
 TEST_LIBS =  \
 	liblibraryclient.a \
-        $(top_builddir)/src/engine/library/libniepcelibrary.a \
-	$(top_builddir)/src/engine/db/libniepcedb.a \
+	$(top_builddir)/src/engine/libniepceengine.a \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
