@@ -91,10 +91,10 @@ void ImportDialog::setup_widget()
 
     // Gridview of previews.
     a_builder->get_widget("images_list_scrolled", m_images_list_scrolled);
-    m_imagesListModel = Gtk::ListStore::create(m_grid_columns);
+    m_images_list_model = Gtk::ListStore::create(m_grid_columns);
     m_gridview = Gtk::manage(
         new Gtk::IconView(
-            Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(m_imagesListModel)));
+            Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(m_images_list_model)));
     m_gridview->set_pixbuf_column(m_grid_columns.pixbuf);
     m_gridview->set_text_column(m_grid_columns.filename);
     m_gridview->show();
@@ -102,7 +102,7 @@ void ImportDialog::setup_widget()
     m_is_setup = true;
 }
 
-
+// XXX doesn't belong here
 void ImportDialog::doSelectDirectories()
 {
     Configuration & cfg = Application::app()->config();
@@ -130,6 +130,7 @@ void ImportDialog::doSelectDirectories()
     }
 }
 
+// XXX doesn't belong here. Or must be deeply modified to deal with the Importer
 void ImportDialog::setToImport(const Glib::ustring & f)
 {
     if (!m_importer) {
@@ -146,14 +147,14 @@ void ImportDialog::setToImport(const Glib::ustring & f)
     m_destinationFolder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
 
-    m_imagesListModel->clear();
+    m_images_list_model->clear();
 
     if(target_content.get()) {
         auto list_to_import = m_importer->getTargetContent();
 
         for(const auto & f : list_to_import) {
             DBG_OUT("selected %s", f->name().c_str());
-            Gtk::TreeIter iter = m_imagesListModel->append();
+            Gtk::TreeIter iter = m_images_list_model->append();
             iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
             iter->set_value(m_grid_columns.file, std::move(f));
         }

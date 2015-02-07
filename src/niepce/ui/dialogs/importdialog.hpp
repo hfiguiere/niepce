@@ -96,7 +96,7 @@ private:
     Gtk::ScrolledWindow *m_attributesScrolled;
     Gtk::ScrolledWindow *m_images_list_scrolled;
     PreviewGridModel m_grid_columns;
-    Glib::RefPtr<Gtk::ListStore> m_imagesListModel;
+    Glib::RefPtr<Gtk::ListStore> m_images_list_model;
 
     Gtk::IconView *m_gridview;
 
