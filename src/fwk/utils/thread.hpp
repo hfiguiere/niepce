@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/thread.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __FWK_UTILS_THREAD_H__
 #define __FWK_UTILS_THREAD_H__
 
-
+#include <atomic>
 #include <string>
 #include <thread>
 
@@ -39,7 +39,7 @@ public:
 protected:
     void start();
     virtual void main() = 0;
-    volatile bool m_terminated;
+    std::atomic_bool m_terminated;
     std::thread * thread() const
         { return m_thrd; }
 private:
