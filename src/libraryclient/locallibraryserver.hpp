@@ -19,8 +19,6 @@
  * 02110-1301, USA
  */
 
-
-
 #ifndef _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 #define _LIBRARYCLIENT_LOCALLIBRARYSERVER_H_
 
@@ -29,29 +27,23 @@
 #include "engine/db/library.hpp"
 namespace libraryclient {
 
-	class LocalLibraryServer
-		: public fwk::Worker<eng::Op>
-	{
-	public:
-		/** create the local server for the library whose dir is specified */
-		LocalLibraryServer(const std::string & dir,
-						   const fwk::NotificationCenter::Ptr & nc)
-			: fwk::Worker<eng::Op>()
-			, m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
-			{
-			}
-		bool ok() const
-			{
-				return m_library && m_library->ok();
-			}
-	protected:
-		virtual void execute(const ptr_t & _op) override;
+class LocalLibraryServer : public fwk::Worker<eng::Op> {
+public:
+    /** create the local server for the library whose dir is specified */
+    LocalLibraryServer(const std::string& dir,
+                       const fwk::NotificationCenter::Ptr& nc)
+        : fwk::Worker<eng::Op>()
+        , m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
+    {
+    }
+    bool ok() const { return m_library && m_library->ok(); }
 
-	private:
-		eng::Library::Ptr m_library;
-	};
+protected:
+    virtual void execute(const ptr_t& _op) override;
 
+private:
+    eng::Library::Ptr m_library;
+};
 }
-
 
 #endif

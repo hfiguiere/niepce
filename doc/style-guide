@@ -14,8 +14,10 @@ This is the style guide for the Niepce project.
 INDENTATION
 -----------
 
+There is a .clang-format that will do the formatting for you.
+
 Spaces, not tab.
-2 spaces.
+4 spaces.
 
 Curly braces are mandatory.
 
