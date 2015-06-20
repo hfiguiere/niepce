@@ -74,7 +74,7 @@ public:
    * Used to work around the activate that don't pass an event.
    * https://bugzilla.gnome.org/show_bug.cgi?id=664368
    */
-  virtual bool on_button_press_event(GdkEventButton *event);
+  virtual bool on_button_press_event(GdkEventButton *event) override;
 
 private:
 };

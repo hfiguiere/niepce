@@ -31,7 +31,7 @@ class MapController
 public:
     typedef std::shared_ptr<MapController> Ptr;
 
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 
     void centerOn(double lat, double longitude);
 

@@ -51,7 +51,7 @@ public:
     void schedule(ptr_t & ); // must be a ref so that the pointer is moved
     void clear();
 protected:
-    virtual void main();
+    virtual void main() override;
 
     queue_t      m_tasks;
 private:

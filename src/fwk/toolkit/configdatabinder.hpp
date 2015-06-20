@@ -91,7 +91,7 @@ public:
         }
 
 
-    virtual void on_changed(void)
+    virtual void on_changed(void) override
         {
             try {
                 m_value = static_cast<property_t&>(m_property).get_value();

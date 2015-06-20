@@ -33,7 +33,7 @@ public:
         : fwk::Dialog(GLADEDIR"preferences.ui", "preferences", "")
         {
         }
-    virtual void setup_widget();
+    virtual void setup_widget() override;
 
 private:
     fwk::TextPairModelRecord m_theme_combo_model;

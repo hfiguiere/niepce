@@ -28,7 +28,7 @@ namespace fwk {
 class Command
 {
 public:
-	virtual ~Command() {}
+    virtual ~Command() {}
     typedef std::function<void (void)> Function;
     virtual void undo() = 0;
     virtual void redo() = 0;
@@ -48,11 +48,11 @@ public:
         {
         }
         
-    virtual void undo()
+    virtual void undo() override
         {
             m_undo(m_argstorage);
         }
-    virtual void redo()
+    virtual void redo() override
         {
             m_argstorage = m_redo();
         }
@@ -76,11 +76,11 @@ public:
         {
         }
         
-    virtual void undo()
+    virtual void undo() override
         {
             m_undo();
         }
-    virtual void redo()
+    virtual void redo() override
         {
             m_redo();
         }

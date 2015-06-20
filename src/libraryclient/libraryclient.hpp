@@ -93,7 +93,7 @@ public:
         { return m_thumbnailCache; }
     
     /* sync call */
-    virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords);
+    virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords) override;
     UIDataProvider *getDataProvider() const
         { return m_uidataprovider; }
     

@@ -43,7 +43,7 @@ public:
     typedef std::shared_ptr<MetaDataPaneController> Ptr;
     MetaDataPaneController();
     ~MetaDataPaneController();
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
     void display(eng::library_id_t file_id, const eng::LibMetadata::Ptr & meta);
     eng::library_id_t displayed_file() const
         { return m_fileid; }

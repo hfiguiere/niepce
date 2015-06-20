@@ -50,7 +50,7 @@ public:
    void SetAlignment(Alignment align);
 
 protected:
-  void on_style_updated();
+  void on_style_updated() override;
 
 private:
    Gtk::Label mLabel;

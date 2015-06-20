@@ -79,13 +79,13 @@ public:
         Gtk::TreeModelColumn<int> m_count_n;
     };
     
-    virtual void on_ready();
+    virtual void on_ready() override;
     
     void on_lib_notification(const eng::LibNotification &);
     void on_count_notification(int);
     void on_libtree_selection();
     
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 private:
     void on_row_expanded_collapsed(const Gtk::TreeIter& iter,
                                    const Gtk::TreePath& path, bool expanded);

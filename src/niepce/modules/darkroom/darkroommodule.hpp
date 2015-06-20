@@ -52,17 +52,17 @@ public:
 
     void set_image(const eng::LibFile::Ptr & file);
 
-    virtual void dispatch_action(const std::string & action_name);
+    virtual void dispatch_action(const std::string & action_name) override;
 
-    virtual void set_active(bool active);
+    virtual void set_active(bool active) override;
 
-    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu() override
         { return Glib::RefPtr<Gio::MenuModel>(); }
 
 protected:
     void reload_image();
 
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 
 private:
     void on_selected(eng::library_id_t id);

@@ -45,7 +45,7 @@ private:
     void on_visible_range_changed();
     void on_adjustment_changed();
     void on_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
-                          Gtk::SelectionData&,guint,guint);
+                          Gtk::SelectionData&,guint,guint) override;
     void update_visible_range(int, int);
     void add_range(int, int);
     void clear_range (int start_thumb, int end_thumb);

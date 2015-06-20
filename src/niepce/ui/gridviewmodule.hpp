@@ -63,18 +63,18 @@ public:
   void display_none();
 
   /* ILibraryModule */
-  virtual void dispatch_action(const std::string & action_name);
-  virtual void set_active(bool active);
-  virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+  virtual void dispatch_action(const std::string & action_name) override;
+  virtual void set_active(bool active) override;
+  virtual Glib::RefPtr<Gio::MenuModel> getMenu() override
     { return Glib::RefPtr<Gio::MenuModel>(); }
 
   /* IImageSelectable */
-  virtual Gtk::IconView * image_list();
-  virtual eng::library_id_t get_selected();
-  virtual void select_image(eng::library_id_t id);
+  virtual Gtk::IconView * image_list() override;
+  virtual eng::library_id_t get_selected() override;
+  virtual void select_image(eng::library_id_t id) override;
 
 protected:
-  virtual Gtk::Widget * buildWidget();
+  virtual Gtk::Widget * buildWidget() override;
 
 
 private:

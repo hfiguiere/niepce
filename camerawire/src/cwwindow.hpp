@@ -39,7 +39,7 @@ public:
   CwWindow();
 
 protected:
-  virtual Gtk::Widget * buildWidget();
+  virtual Gtk::Widget * buildWidget() override;
 
 private:
   class CameraTreeRecord

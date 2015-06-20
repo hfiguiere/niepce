@@ -68,11 +68,11 @@ public:
         {
             return m_selection_controller->get_list_store();
         }
-    virtual const SelectionController::Ptr & get_selection_controller() const
+    virtual const SelectionController::Ptr & get_selection_controller() const override
         {
             return m_selection_controller;
         }
-    virtual libraryclient::LibraryClient::Ptr getLibraryClient() const
+    virtual libraryclient::LibraryClient::Ptr getLibraryClient() const override
         {
             return m_libraryclient;
         }
@@ -84,14 +84,14 @@ public:
     void on_selected(eng::library_id_t id);
     void on_image_activated(eng::library_id_t id);
 
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 
     void action_edit_delete();
 protected:
     virtual void add_library_module(const ILibraryModule::Ptr & module,
                                     const std::string & name,
                                     const std::string & label);
-    virtual void on_ready();
+    virtual void on_ready() override;
     void on_module_deactivated(const std::string & name) const;
     void on_module_activated(const std::string & name) const;
 private:

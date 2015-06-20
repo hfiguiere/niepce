@@ -47,7 +47,7 @@ public:
     Exception (const std::exception &) ;
     Exception& operator= (const Exception &a_other) ;
     virtual ~Exception () throw ();
-    const char* what () const throw ();
+    const char* what () const throw () override;
 };//class Exception
 
 #define THROW_IF_FAIL(a_cond) \

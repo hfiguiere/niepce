@@ -45,7 +45,7 @@ namespace libraryclient {
 				return m_library && m_library->ok();
 			}
 	protected:
-		virtual void execute(const ptr_t & _op);
+		virtual void execute(const ptr_t & _op) override;
 
 	private:
 		eng::Library::Ptr m_library;

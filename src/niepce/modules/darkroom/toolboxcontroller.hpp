@@ -31,7 +31,7 @@ class ToolboxController
 public:
     typedef std::shared_ptr<ToolboxController> Ptr;
     ToolboxController();
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 };
 
 }

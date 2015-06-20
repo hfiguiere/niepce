@@ -50,7 +50,7 @@ public:
 
     db::IConnectionDriver::Ptr connect_to_db(const db::DBDesc &a_desc,
                                              const std::string &a_user,
-                                             const std::string &a_pass) ;
+                                             const std::string &a_pass) override;
 };//end SqliteCnxMgrDrv
 
 }//end namespace sqlite

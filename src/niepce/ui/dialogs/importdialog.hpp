@@ -50,7 +50,7 @@ public:
 
 	ImportDialog();
 
- 	virtual void setup_widget();
+ 	virtual void setup_widget() override;
 
 //	const std::list<std::string> & to_import() const
 //		{ return m_list_to_import; }

@@ -44,7 +44,7 @@ public:
     sigc::signal<void,double> & signal_value_changed();
     sigc::signal<void,double> & signal_value_changing();
 
-    bool on_button_press_event(GdkEventButton *event);
+    bool on_button_press_event(GdkEventButton *event) override;
 
 private:
 

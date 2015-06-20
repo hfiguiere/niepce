@@ -54,8 +54,8 @@ public:
             return m_zoom_mode;
         }
 protected:
-    virtual void on_size_allocate(Gtk::Allocation & allocation);
-    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    virtual void on_size_allocate(Gtk::Allocation & allocation) override;
+    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 private:
     void invalidate();
 
