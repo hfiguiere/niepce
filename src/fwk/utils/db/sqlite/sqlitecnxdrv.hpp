@@ -75,7 +75,7 @@ public:
     unsigned int get_number_of_columns () const override;
 
     bool get_column_type (uint32_t a_offset,
-                          enum db::ColumnType &a_type) const override;
+                          db::ColumnType &a_type) const override;
 
     bool get_column_name (uint32_t a_offset, fwk::Buffer &a_name) const override;
 

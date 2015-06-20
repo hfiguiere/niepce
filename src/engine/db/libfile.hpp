@@ -42,12 +42,12 @@ public:
     typedef std::list< Ptr > List;
     typedef std::shared_ptr< List > ListPtr;
 
-    enum FileType {
-        FILE_TYPE_UNKNOWN = 0,
-        FILE_TYPE_RAW = 1,
-        FILE_TYPE_RAW_JPEG = 2,
-        FILE_TYPE_IMAGE = 3,
-        FILE_TYPE_VIDEO = 4
+    enum class FileType {
+        UNKNOWN = 0,
+        RAW = 1,
+        RAW_JPEG = 2,
+        IMAGE = 3,
+        VIDEO = 4
     };
 
     static FileType mimetype_to_filetype(fwk::MimeType mime);

@@ -89,8 +89,8 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
     switch(ln.type) {
-    case eng::Library::NOTIFY_FOLDER_CONTENT_QUERIED:
-    case eng::Library::NOTIFY_KEYWORD_CONTENT_QUERIED:
+    case eng::Library::NotifyType::FOLDER_CONTENT_QUERIED:
+    case eng::Library::NotifyType::KEYWORD_CONTENT_QUERIED:
     {
         eng::LibFile::ListPtr l 
             = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
@@ -114,7 +114,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         getLibraryClient()->thumbnailCache().request(l);
         break;
     }
-    case eng::Library::NOTIFY_METADATA_CHANGED:
+    case eng::Library::NotifyType::METADATA_CHANGED:
     {
         eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
         fwk::PropertyIndex prop = m.meta;
@@ -132,7 +132,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::Library::NOTIFY_XMP_NEEDS_UPDATE:
+    case eng::Library::NotifyType::XMP_NEEDS_UPDATE:
     {
         fwk::Configuration & cfg = fwk::Application::app()->config();
         int write_xmp = false;

@@ -38,15 +38,15 @@ class Buffer ;
 
 namespace db {
 
-enum ColumnType {
-    COLUMN_TYPE_INT=1,
-    COLUMN_TYPE_BIG_INT=1<<1,
-    COLUMN_TYPE_DECIMAL=1<<2,
-    COLUMN_TYPE_DOUBLE=1<<3,
-    COLUMN_TYPE_DATETIME=1<<3,
-    COLUMN_TYPE_STRING=1<<4,
-    COLUMN_TYPE_BLOB=1<<5,
-    COLUMN_TYPE_UNKNOWN=1<<30// should be last
+enum class ColumnType {
+    INT=1,
+    BIG_INT=1<<1,
+    DECIMAL=1<<2,
+    DOUBLE=1<<3,
+    DATETIME=1<<3,
+    STRING=1<<4,
+    BLOB=1<<5,
+    UNKNOWN=1<<30// should be last
 };
 
 class SQLStatement;
@@ -84,7 +84,7 @@ public:
     virtual unsigned int get_number_of_columns () const = 0;
 
     virtual bool get_column_type (uint32_t a_offset,
-                                  enum ColumnType &) const = 0;
+                                  ColumnType &) const = 0;
 
     virtual bool get_column_name (uint32_t a_offset,
                                   fwk::Buffer &a_name) const = 0;

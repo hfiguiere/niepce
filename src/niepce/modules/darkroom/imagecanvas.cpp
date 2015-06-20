@@ -132,7 +132,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         int img_w, img_h;
         double scale = 1.0;
 
-        if(m_image->get_status() != ncr::Image::STATUS_ERROR) {
+        if(m_image->get_status() != ncr::Image::status_t::ERROR) {
 
             // calculate the image scale
             img_w = m_image->get_original_width();
@@ -205,7 +205,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 
 void ImageCanvas::_redisplay()
 {
-    if (m_image->get_status() == ncr::Image::STATUS_ERROR) {
+    if (m_image->get_status() == ncr::Image::status_t::ERROR) {
         ERR_OUT("Image is in error");
         return;
     }

@@ -34,32 +34,32 @@ const fwk::MetaDataSectionFormat *
 MetaDataPaneController::get_format()
 {
     static const fwk::MetaDataFormat s_camerainfo_format[] = {
-        { _("Make:"), eng::NpTiffMakeProp, fwk::META_DT_STRING, true },
-        { _("Model:"), eng::NpTiffModelProp, fwk::META_DT_STRING, true },
-        { _("Lens:"), eng::NpExifAuxLensProp, fwk::META_DT_STRING, true },
-        { nullptr, 0, fwk::META_DT_NONE, true }
+        { _("Make:"), eng::NpTiffMakeProp, fwk::MetaDT::STRING, true },
+        { _("Model:"), eng::NpTiffModelProp, fwk::MetaDT::STRING, true },
+        { _("Lens:"), eng::NpExifAuxLensProp, fwk::MetaDT::STRING, true },
+        { nullptr, 0, fwk::MetaDT::NONE, true }
     };
     static const fwk::MetaDataFormat s_shootinginfo_format[] = {
-        { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::META_DT_STRING, true },
-        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::META_DT_FRAC, true },
-        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::META_DT_FRAC_DEC, true },
-        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::META_DT_STRING, true },
-        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::META_DT_FRAC_DEC, true },
-        { _("Flash:"), eng::NpExifFlashFiredProp, fwk::META_DT_STRING, true },
-        { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::META_DT_STRING, true },
-        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::META_DT_FRAC_DEC, true },
-        { _("White balance:"), eng::NpExifWbProp, fwk::META_DT_STRING, true },
-        { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::META_DT_DATE, false },
-        { nullptr, 0, fwk::META_DT_NONE, true }
+        { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::MetaDT::STRING, true },
+        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::MetaDT::FRAC, true },
+        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::MetaDT::FRAC_DEC, true },
+        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::MetaDT::STRING, true },
+        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::MetaDT::FRAC_DEC, true },
+        { _("Flash:"), eng::NpExifFlashFiredProp, fwk::MetaDT::STRING, true },
+        { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::MetaDT::STRING, true },
+        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::MetaDT::FRAC_DEC, true },
+        { _("White balance:"), eng::NpExifWbProp, fwk::MetaDT::STRING, true },
+        { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::MetaDT::DATE, false },
+        { nullptr, 0, fwk::MetaDT::NONE, true }
     };
     static const fwk::MetaDataFormat s_iptc_format[] = {
-        { _("Headline:"), eng::NpIptcHeadlineProp, fwk::META_DT_STRING, false },
-        { _("Caption:"), eng::NpIptcDescriptionProp, fwk::META_DT_TEXT, false },
-        { _("Rating:"), eng::NpXmpRatingProp, fwk::META_DT_STAR_RATING, false },
+        { _("Headline:"), eng::NpIptcHeadlineProp, fwk::MetaDT::STRING, false },
+        { _("Caption:"), eng::NpIptcDescriptionProp, fwk::MetaDT::TEXT, false },
+        { _("Rating:"), eng::NpXmpRatingProp, fwk::MetaDT::STAR_RATING, false },
         // FIXME change this type to the right one when there is a widget
-        { _("Label:"), eng::NpXmpLabelProp, fwk::META_DT_STRING, true },
-        { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::META_DT_STRING_ARRAY, false },
-        { nullptr, 0, fwk::META_DT_NONE, true }
+        { _("Label:"), eng::NpXmpLabelProp, fwk::MetaDT::STRING, true },
+        { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::MetaDT::STRING_ARRAY, false },
+        { nullptr, 0, fwk::MetaDT::NONE, true }
     };
     static const fwk::MetaDataSectionFormat s_format[] = {
         { _("Camera Information"),

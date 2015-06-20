@@ -36,21 +36,21 @@ struct MetaDataFormat;
 
 namespace fwk {
 
-enum MetaDataType {
-    META_DT_NONE = 0,
-    META_DT_STRING,
-    META_DT_STRING_ARRAY,
-    META_DT_TEXT,
-    META_DT_DATE,
-    META_DT_FRAC,
-    META_DT_FRAC_DEC, // Fraction as decimal
-    META_DT_STAR_RATING
+enum class MetaDT {
+    NONE = 0,
+    STRING,
+    STRING_ARRAY,
+    TEXT,
+    DATE,
+    FRAC,
+    FRAC_DEC, // Fraction as decimal
+    STAR_RATING
 };
 
 struct MetaDataFormat {
     const char * label;
     uint32_t     id;
-    MetaDataType type;
+    MetaDT       type;
     bool         readonly;
 };
 

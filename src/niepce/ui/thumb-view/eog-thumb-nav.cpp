@@ -201,7 +201,7 @@ eog_thumb_nav_get_property (GObject    *object,
 
 	case PROP_MODE:
 		g_value_set_int (value, 
-			eog_thumb_nav_get_mode (nav));
+                                 static_cast<gint>(eog_thumb_nav_get_mode (nav)));
 		break;
 	}
 }
@@ -280,15 +280,16 @@ eog_thumb_nav_class_init (EogThumbNavClass *klass)
 								G_PARAM_READABLE | 
 								G_PARAM_WRITABLE)));
 
-	g_object_class_install_property (g_object_class,
-	                                 PROP_MODE,
-	                                 g_param_spec_int ("mode",
-	                                                   "Mode",
-	                                                   "Thumb navigator mode",
-	                                                   EOG_THUMB_NAV_MODE_ONE_ROW,
-							   EOG_THUMB_NAV_MODE_MULTIPLE_ROWS,
-							   EOG_THUMB_NAV_MODE_ONE_ROW,
-	                                                   (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE)));
+	g_object_class_install_property (
+          g_object_class,
+          PROP_MODE,
+          g_param_spec_int ("mode",
+                            "Mode",
+                            "Thumb navigator mode",
+                            static_cast<gint>(EogThumbNavMode::ONE_ROW),
+                            static_cast<gint>(EogThumbNavMode::MULTIPLE_ROWS),
+                            static_cast<gint>(EogThumbNavMode::ONE_ROW),
+                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
 	g_type_class_add_private (g_object_class, sizeof (EogThumbNavPrivate));
 }
@@ -304,7 +305,7 @@ eog_thumb_nav_init (EogThumbNav *nav)
 
 	priv = nav->priv;
 
-	priv->mode = EOG_THUMB_NAV_MODE_ONE_ROW;
+	priv->mode = EogThumbNavMode::ONE_ROW;
 
 	priv->show_buttons = TRUE;
 
@@ -402,7 +403,7 @@ eog_thumb_nav_set_show_buttons (EogThumbNav *nav, gboolean show_buttons)
 	nav->priv->show_buttons = show_buttons;
 
 	if (show_buttons && 
-	    nav->priv->mode == EOG_THUMB_NAV_MODE_ONE_ROW) {
+	    nav->priv->mode == EogThumbNavMode::ONE_ROW) {
 		gtk_widget_show_all (nav->priv->button_left);
 		gtk_widget_show_all (nav->priv->button_right);
 	} else {
@@ -432,7 +433,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 	switch (mode)
 	{
-	case EOG_THUMB_NAV_MODE_ONE_ROW:
+	case EogThumbNavMode::ONE_ROW:
 		priv->thumbview->set_size_request (-1, -1);
 		priv->thumbview->set_item_height (100);
 
@@ -444,7 +445,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		break;
 
-	case EOG_THUMB_NAV_MODE_ONE_COLUMN:
+	case EogThumbNavMode::ONE_COLUMN:
 		priv->thumbview->set_columns (1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -459,7 +460,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		break;
 
-	case EOG_THUMB_NAV_MODE_MULTIPLE_ROWS:
+	case EogThumbNavMode::MULTIPLE_ROWS:
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);
@@ -474,7 +475,7 @@ eog_thumb_nav_set_mode (EogThumbNav *nav, EogThumbNavMode mode)
 
 		break;
 
-	case EOG_THUMB_NAV_MODE_MULTIPLE_COLUMNS:
+	case EogThumbNavMode::MULTIPLE_COLUMNS:
 		priv->thumbview->set_columns (-1);
 
 		priv->thumbview->set_size_request (-1, -1);

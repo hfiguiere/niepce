@@ -44,7 +44,7 @@ Gtk::Widget * FilmStripController::buildWidget()
     DBG_ASSERT(m_store, "m_store NULL");
     m_thumbview = manage(new ThumbStripView(m_store));
     GtkWidget *thn = eog_thumb_nav_new(m_thumbview,
-                                       EOG_THUMB_NAV_MODE_ONE_ROW, true);
+                                       EogThumbNavMode::ONE_ROW, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);
     m_widget = Glib::wrap(thn);
     m_widget->set_size_request(-1, 134);

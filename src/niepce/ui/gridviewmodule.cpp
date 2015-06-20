@@ -58,7 +58,7 @@ void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {
     switch(ln.type) {
-    case eng::Library::NOTIFY_METADATA_QUERIED:
+    case eng::Library::NotifyType::METADATA_QUERIED:
     {
         DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
                    "incorrect data type for the notification");
@@ -68,7 +68,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         m_metapanecontroller->display(lm->id(), lm);
         break;
     }
-    case eng::Library::NOTIFY_METADATA_CHANGED:
+    case eng::Library::NotifyType::METADATA_CHANGED:
     {
         DBG_OUT("metadata changed");
         DBG_ASSERT(ln.param.type() == typeid(eng::metadata_desc_t),
@@ -80,7 +80,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::Library::NOTIFY_FILE_MOVED:
+    case eng::Library::NotifyType::FILE_MOVED:
     {
         DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
                    "incorrect data type for the notification");

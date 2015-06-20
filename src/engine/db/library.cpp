@@ -80,7 +80,7 @@ Library::~Library()
 void Library::triggerRewriteXmp(void)
 {
     DBG_OUT("rewrite_xmp");
-    notify(NOTIFY_XMP_NEEDS_UPDATE, boost::any());
+    notify(NotifyType::XMP_NEEDS_UPDATE, boost::any());
 }
 
 void Library::notify(NotifyType t, const boost::any & param)
@@ -144,7 +144,7 @@ bool Library::_initDb()
         boost::format("insert into folders (name, locked, virtual, parent_id) "
                       " values ('%1%', 1, %2%, 0)")
         % _("Trash")
-        % int(LibFolder::VIRTUAL_TRASH));
+        % int(LibFolder::VirtualType::TRASH));
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " main_file INTEGER, name TEXT, parent_id INTEGER,"
                            " orientation INTEGER, file_type INTEGER, "
@@ -197,7 +197,7 @@ bool Library::_initDb()
 
     m_dbdrv->execute_statement(fileUpdateTrigger);
     m_dbdrv->execute_statement(xmpUpdateTrigger);
-    notify(NOTIFY_NEW_LIBRARY_CREATED, boost::any());
+    notify(NotifyType::NEW_LIBRARY_CREATED, boost::any());
     return true;
 }
 
@@ -285,7 +285,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
         std::string label;
         fwk::MimeType mime = fwk::MimeType(file);
         eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
-        fwk::XmpMeta meta(file, file_type == eng::LibFile::FILE_TYPE_RAW);
+        fwk::XmpMeta meta(file, file_type == eng::LibFile::FileType::RAW);
         label_id = 0;
         orientation = meta.orientation();
         rating = meta.rating();
@@ -314,7 +314,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
                          % fs_file_id % fwk::path_basename(file) % folder_id
                          % time(NULL)
                          % orientation % creation_date % rating
-                         % label_id % file_type % flag);
+                         % label_id % static_cast<int>(file_type) % flag);
         std::string buf = meta.serialize_inline();
         sql.bind(1, buf);
         if(m_dbdrv->execute_statement(sql)) {
@@ -405,7 +405,8 @@ bool Library::addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id)
     SQLStatement sql(boost::format("UPDATE files SET jpeg_file='%2%',"
                                    " file_type='%3%' "
                                    " WHERE id='%1%';")
-                     % file_id % fsfile_id % LibFile::FILE_TYPE_RAW_JPEG);
+                     % file_id % fsfile_id
+                     % static_cast<int>(LibFile::FileType::RAW_JPEG));
     try {
         return m_dbdrv->execute_statement(sql);
     }
@@ -602,7 +603,7 @@ library_id_t Library::makeKeyword(const std::string & keyword)
             if(m_dbdrv->execute_statement(sql2)) {
                 keyword_id = m_dbdrv->last_row_id();
                 Keyword::Ptr kw(new Keyword(keyword_id, keyword));
-                notify(NOTIFY_ADDED_KEYWORD, boost::any(kw));
+                notify(NotifyType::ADDED_KEYWORD, boost::any(kw));
             }
         }
         catch(fwk::Exception & e)

@@ -43,7 +43,7 @@ void Commands::cmdListAllKeywords(const Library::Ptr & lib)
     lib->getAllKeywords( l );
     /////
     // notify folder added l
-    lib->notify(Library::NOTIFY_ADDED_KEYWORDS, boost::any(l));
+    lib->notify(Library::NotifyType::ADDED_KEYWORDS, boost::any(l));
 }
 
 void Commands::cmdListAllFolders(const Library::Ptr & lib)
@@ -52,7 +52,7 @@ void Commands::cmdListAllFolders(const Library::Ptr & lib)
     lib->getAllFolders( l );
     /////
     // notify folder added l
-    lib->notify(Library::NOTIFY_ADDED_FOLDERS, boost::any(l));
+    lib->notify(Library::NotifyType::ADDED_FOLDERS, boost::any(l));
 }
 	
 void Commands::cmdImportFiles(const Library::Ptr & lib, 
@@ -70,14 +70,14 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
         pf = lib->addFolder(folder);
         LibFolder::ListPtr l( new LibFolder::List );
         l->push_back(pf);
-        lib->notify(Library::NOTIFY_ADDED_FOLDERS,
+        lib->notify(Library::NotifyType::ADDED_FOLDERS,
                     boost::any(l));
     }
     using std::placeholders::_1;
     std::for_each( bundles->begin(), bundles->end(),
                    std::bind(&Library::addBundle, std::ref(lib),
                         pf->id(), _1, manage) );
-    lib->notify(Library::NOTIFY_ADDED_FILES,
+    lib->notify(Library::NotifyType::ADDED_FILES,
                 boost::any());
 }
 
@@ -87,14 +87,14 @@ void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getFolderContent(folder_id, fl);
-    lib->notify(Library::NOTIFY_FOLDER_CONTENT_QUERIED, boost::any(fl));		
+    lib->notify(Library::NotifyType::FOLDER_CONTENT_QUERIED, boost::any(fl));		
 }
 
 void Commands::cmdCountFolder(const Library::Ptr & lib, 
                               eng::library_id_t folder_id)
 {
     int count = lib->countFolder(folder_id);
-    lib->notify(Library::NOTIFY_FOLDER_COUNTED, boost::any(std::make_pair(folder_id, count)));
+    lib->notify(Library::NotifyType::FOLDER_COUNTED, boost::any(std::make_pair(folder_id, count)));
 }
 
 void Commands::cmdQueryKeywordContent(const Library::Ptr & lib, 
@@ -102,7 +102,7 @@ void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getKeywordContent(keyword_id, fl);
-    lib->notify(Library::NOTIFY_KEYWORD_CONTENT_QUERIED, boost::any(fl));		
+    lib->notify(Library::NotifyType::KEYWORD_CONTENT_QUERIED, boost::any(fl));		
 }
 
 void Commands::cmdRequestMetadata(const Library::Ptr & lib,
@@ -110,7 +110,7 @@ void Commands::cmdRequestMetadata(const Library::Ptr & lib,
 {
     LibMetadata::Ptr lm(new LibMetadata(file_id));
     lib->getMetaData(file_id, lm);
-    lib->notify(Library::NOTIFY_METADATA_QUERIED, boost::any(lm));
+    lib->notify(Library::NotifyType::METADATA_QUERIED, boost::any(lm));
 }
 
 void Commands::cmdSetMetadata(const Library::Ptr & lib,
@@ -122,7 +122,7 @@ void Commands::cmdSetMetadata(const Library::Ptr & lib,
     m.meta = meta;
     m.value = value;
     lib->setMetaData(file_id, meta, value);
-    lib->notify(Library::NOTIFY_METADATA_CHANGED, boost::any(m));
+    lib->notify(Library::NotifyType::METADATA_CHANGED, boost::any(m));
 }
 
 void Commands::cmdWriteMetadata(const Library::Ptr & lib,
@@ -139,9 +139,9 @@ void Commands::cmdMoveFileToFolder(const Library::Ptr & lib,
         std::pair<library_id_t, library_id_t> move;
         move.first = file_id;
         move.second = to_folder_id;
-        lib->notify(Library::NOTIFY_FILE_MOVED, boost::any(move));
-        lib->notify(Library::NOTIFY_FOLDER_COUNT_CHANGE, boost::any(std::make_pair(from_folder_id, -1)));
-        lib->notify(Library::NOTIFY_FOLDER_COUNT_CHANGE, boost::any(std::make_pair(to_folder_id, 1)));
+        lib->notify(Library::NotifyType::FILE_MOVED, boost::any(move));
+        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE, boost::any(std::make_pair(from_folder_id, -1)));
+        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE, boost::any(std::make_pair(to_folder_id, 1)));
     }
 }
 
@@ -149,7 +149,7 @@ void Commands::cmdListAllLabels(const Library::Ptr & lib)
 {
     eng::Label::ListPtr l(new eng::Label::List);
     lib->getAllLabels(l);
-    lib->notify(Library::NOTIFY_ADDED_LABELS, boost::any(l));
+    lib->notify(Library::NotifyType::ADDED_LABELS, boost::any(l));
 }
 
 void Commands::cmdCreateLabel(const Library::Ptr & lib,
@@ -159,7 +159,7 @@ void Commands::cmdCreateLabel(const Library::Ptr & lib,
     if(id != -1) {
         eng::Label::ListPtr l(new eng::Label::List);
         l->push_back(eng::Label::Ptr(new eng::Label(id, s, color)));
-        lib->notify(Library::NOTIFY_ADDED_LABELS, boost::any(l));
+        lib->notify(Library::NotifyType::ADDED_LABELS, boost::any(l));
     }
 }
 
@@ -168,7 +168,7 @@ void Commands::cmdDeleteLabel(const Library::Ptr & lib,
                               int label_id)
 {
     lib->deleteLabel(label_id);
-    lib->notify(Library::NOTIFY_LABEL_DELETED, boost::any(label_id));
+    lib->notify(Library::NotifyType::LABEL_DELETED, boost::any(label_id));
 }
 
 
@@ -178,7 +178,7 @@ void Commands::cmdUpdateLabel(const Library::Ptr & lib,
 {
     lib->updateLabel(label_id, name, color);
     eng::Label::Ptr label(new eng::Label(label_id, name, color));
-    lib->notify(Library::NOTIFY_LABEL_CHANGED, boost::any(label));
+    lib->notify(Library::NotifyType::LABEL_CHANGED, boost::any(label));
 }
 
 

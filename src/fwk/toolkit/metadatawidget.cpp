@@ -152,8 +152,8 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
                                              Glib::ustring("<b>") 
                                              + current->label + "</b>"));
-        if(current->type != META_DT_STRING_ARRAY
-           && current->type != META_DT_TEXT) {
+        if(current->type != MetaDT::STRING_ARRAY
+           && current->type != MetaDT::TEXT) {
             labelw->set_alignment(0.0f, 0.5f);
         }
         else {
@@ -163,16 +163,16 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
         labelw->set_use_markup(true);
     
         switch(current->type) {
-        case META_DT_STAR_RATING:
+        case MetaDT::STAR_RATING:
             w = create_star_rating_widget(current->readonly, current->id);
             break;
-        case META_DT_STRING_ARRAY:
+        case MetaDT::STRING_ARRAY:
             w = create_string_array_widget(current->readonly, current->id);
             break;
-        case META_DT_TEXT:
+        case MetaDT::TEXT:
             w = create_text_widget(current->readonly, current->id);
             break;
-        case META_DT_DATE:
+        case MetaDT::DATE:
             w = create_date_widget(current->readonly, current->id);
             break;
         default:
@@ -406,22 +406,22 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     w = static_cast<Gtk::Label*>(iter->second);
 
     switch(current->type) {
-    case META_DT_FRAC_DEC:
+    case MetaDT::FRAC_DEC:
         set_fraction_dec_data(w, value);
         break;
-    case META_DT_FRAC:
+    case MetaDT::FRAC:
         set_fraction_data(w, value);
         break;
-    case META_DT_STAR_RATING:
+    case MetaDT::STAR_RATING:
         set_star_rating_data(w, value);
         break;
-    case META_DT_STRING_ARRAY:
+    case MetaDT::STRING_ARRAY:
         set_string_array_data(w, value);
         break;
-    case META_DT_TEXT:
+    case MetaDT::TEXT:
         set_text_data(w, current->readonly, value);
         break;
-    case META_DT_DATE:
+    case MetaDT::DATE:
         set_date_data(w, value);
         break;
     default:

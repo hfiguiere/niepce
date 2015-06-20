@@ -32,7 +32,7 @@ LibFile::LibFile(library_id_t _id, library_id_t _folderId, library_id_t _fsfilei
     m_main_file(_fsfileid, p),
 	  m_orientation(0), m_rating(0), m_label(0),
     m_flag(0),
-    m_file_type(FILE_TYPE_UNKNOWN)
+    m_file_type(FileType::UNKNOWN)
 {
     
 }
@@ -117,19 +117,19 @@ LibFile::FileType LibFile::mimetype_to_filetype(fwk::MimeType mime)
 {
     if(mime.isDigicamRaw())
     {
-        return FILE_TYPE_RAW;
+        return FileType::RAW;
     }
     else if(mime.isImage())
     {
-        return FILE_TYPE_IMAGE;
+        return FileType::IMAGE;
     }
     else if(mime.isMovie())
     {
-        return FILE_TYPE_VIDEO;
+        return FileType::VIDEO;
     }
     else
     {
-        return FILE_TYPE_UNKNOWN;
+        return FileType::UNKNOWN;
     }
 }
 

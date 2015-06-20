@@ -35,7 +35,7 @@ namespace ncr {
 struct Image::Private {
     Private(Image& self)
         : m_self(self)
-        , m_status(Image::STATUS_UNSET)
+        , m_status(Image::status_t::UNSET)
         , m_width(0)
         , m_height(0)
         , m_orientation(0), m_vertical(false)
@@ -213,7 +213,7 @@ GeglNode* Image::Private::_scale_node()
 
 void Image::Private::prepare_reload()
 {
-    m_status = STATUS_LOADING;
+    m_status = status_t::LOADING;
     m_pixbuf_cache.reset();
 
     if(m_graph) {
@@ -256,7 +256,7 @@ void Image::reload(const std::string & p, bool is_raw,
 
 void Image::Private::reload_node(GeglNode* node, int orientation)
 {
-    DBG_ASSERT(m_status == STATUS_LOADING, "prepare_reload() might not have been called");
+    DBG_ASSERT(m_status == status_t::LOADING, "prepare_reload() might not have been called");
 
     m_rotate_n = _rotate_node(orientation);
     m_scale = _scale_node();
@@ -294,7 +294,7 @@ void Image::Private::reload_node(GeglNode* node, int orientation)
     height = rect.height;
     DBG_OUT("width %d height %d", width, height);
     if(!width || !height) {
-        m_status = STATUS_ERROR;
+        m_status = status_t::ERROR;
     }
     if(m_vertical) {
         m_width = height;
@@ -371,7 +371,7 @@ void Image::rotate_by(int degree)
 
 Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
 {
-    if(priv->m_status == STATUS_ERROR) {
+    if(priv->m_status == status_t::ERROR) {
         // return the error
         DBG_OUT("error");
         return Cairo::RefPtr<Cairo::ImageSurface>();
@@ -380,7 +380,7 @@ Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
         DBG_OUT("nothing loaded");
         return Cairo::RefPtr<Cairo::ImageSurface>();
     }
-    DBG_ASSERT(priv->m_status == STATUS_LOADING, "wrong status for image");
+    DBG_ASSERT(priv->m_status == status_t::LOADING, "wrong status for image");
     DBG_OUT("processing");
     gegl_node_process(priv->m_scale);
     GeglRectangle roi = gegl_node_get_bounding_box(priv->m_scale);
@@ -401,7 +401,7 @@ Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
     // If you don't do that, it will never paint().
     // Thanks to mitch for the tip in #gegl
     surface->mark_dirty();
-    priv->m_status = STATUS_LOADED;
+    priv->m_status = status_t::LOADED;
     return surface;
 }
 

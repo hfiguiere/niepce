@@ -37,17 +37,17 @@ public:
     typedef std::shared_ptr< LibFolder > Ptr;
     typedef std::list< Ptr > List;
     typedef std::shared_ptr< List > ListPtr;
-    typedef enum {
-        VIRTUAL_NONE = 0,
-        VIRTUAL_TRASH = 1,
+    enum class VirtualType {
+        NONE = 0,
+        TRASH = 1,
 
-        _VIRTUAL_LAST
-    } VirtualType;
+        _LAST
+    };
 
     LibFolder(library_id_t _id, std::string _name)
         : m_id(_id), m_name(_name)
         , m_locked(false)
-        , m_virtual(VIRTUAL_NONE)
+        , m_virtual(VirtualType::NONE)
         {
         }
     library_id_t id() const

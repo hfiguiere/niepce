@@ -34,13 +34,13 @@ class Image
 {
 public:
     typedef std::shared_ptr<Image> Ptr;
-    typedef enum {
-        STATUS_UNSET,
-        STATUS_LOADING,
-        STATUS_LOADED,
-        STATUS_ERROR,
-        _STATUS_LAST
-    } status_t;
+    enum class status_t {
+        UNSET,
+        LOADING,
+        LOADED,
+        ERROR,
+        _LAST
+    };
 
     Image();
     virtual ~Image();

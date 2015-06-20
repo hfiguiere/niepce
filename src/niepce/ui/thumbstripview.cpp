@@ -43,15 +43,15 @@ namespace ui {
 #define THUMB_STRIP_VIEW_SPACING 0
 
 /* Drag 'n Drop */
-enum {
-	TARGET_PLAIN,
-	TARGET_PLAIN_UTF8,
-	TARGET_URILIST
+enum class Target {
+	PLAIN,
+	PLAIN_UTF8,
+	URILIST
 };
 
 #if 0
 static GtkTargetEntry target_table[] = {
-	{ const_cast<gchar*>("text/uri-list"), 0, TARGET_URILIST },
+    { const_cast<gchar*>("text/uri-list"), 0, Target::URILIST },
 };
 #endif
 

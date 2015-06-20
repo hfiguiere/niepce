@@ -53,25 +53,25 @@ class Library
 public:
     typedef std::shared_ptr<Library> Ptr;
 
-    typedef enum {
-        NOTIFY_NONE = 0,
-        NOTIFY_NEW_LIBRARY_CREATED,
-        NOTIFY_ADDED_FOLDERS,
-        NOTIFY_ADDED_FILES,
-        NOTIFY_ADDED_KEYWORDS,
-        NOTIFY_ADDED_KEYWORD,
-        NOTIFY_ADDED_LABELS,
-        NOTIFY_FOLDER_CONTENT_QUERIED,
-        NOTIFY_KEYWORD_CONTENT_QUERIED,
-        NOTIFY_METADATA_QUERIED,
-        NOTIFY_METADATA_CHANGED,
-        NOTIFY_LABEL_CHANGED,
-        NOTIFY_LABEL_DELETED,
-        NOTIFY_XMP_NEEDS_UPDATE,
-        NOTIFY_FOLDER_COUNTED,
-        NOTIFY_FOLDER_COUNT_CHANGE,
-        NOTIFY_FILE_MOVED
-    } NotifyType;
+    enum class NotifyType {
+        NONE = 0,
+        NEW_LIBRARY_CREATED,
+        ADDED_FOLDERS,
+        ADDED_FILES,
+        ADDED_KEYWORDS,
+        ADDED_KEYWORD,
+        ADDED_LABELS,
+        FOLDER_CONTENT_QUERIED,
+        KEYWORD_CONTENT_QUERIED,
+        METADATA_QUERIED,
+        METADATA_CHANGED,
+        LABEL_CHANGED,
+        LABEL_DELETED,
+        XMP_NEEDS_UPDATE,
+        FOLDER_COUNTED,
+        FOLDER_COUNT_CHANGE,
+        FILE_MOVED
+    };
 
     Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
     virtual ~Library();
