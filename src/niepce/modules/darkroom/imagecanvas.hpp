@@ -32,13 +32,13 @@ class ImageCanvas
     : public Gtk::DrawingArea
 {
 public:
-    typedef enum {
-        ZOOM_MODE_NONE = 0,
-        ZOOM_MODE_FIT,
-        ZOOM_MODE_FILL,
-        ZOOM_MODE_100P,
-        ZOOM_MODE_CUSTOM
-    } ZoomMode;
+    enum class ZoomMode {
+        NONE = 0,
+        FIT,
+        FILL,
+        ONE_ONE, // 100%
+        CUSTOM
+    };
     ImageCanvas();
 
     void set_image(const ncr::Image::Ptr & img);

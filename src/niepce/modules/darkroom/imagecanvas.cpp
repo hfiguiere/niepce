@@ -41,7 +41,7 @@ namespace dr {
 ImageCanvas::ImageCanvas()
     : m_need_redisplay(true),
       m_resized(false),
-      m_zoom_mode(ZOOM_MODE_FIT)
+      m_zoom_mode(ZoomMode::FIT)
 {
 }
 
@@ -219,10 +219,10 @@ void ImageCanvas::_redisplay()
     fwk::Rect frame;
     switch(m_zoom_mode)
     {
-    case ZOOM_MODE_FIT:
+    case ZoomMode::FIT:
         frame = source.fit_into(dest);
         break;
-    case ZOOM_MODE_FILL:
+    case ZoomMode::FILL:
         frame = source.fill_into(dest);
         break;
     default:
