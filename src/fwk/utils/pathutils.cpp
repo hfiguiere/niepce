@@ -32,21 +32,21 @@ void _path_remove_recursive(const Glib::RefPtr<Gio::File> & dir);
  */
 std::string path_basename(const std::string & path)
 {
-    std::string::size_type slash_idx = path.find_last_of("/");
+    auto slash_idx = path.find_last_of("/");
     if(slash_idx == std::string::npos) {
         return path;
     }
-    return std::string(path.begin() + slash_idx + 1, path.end());
+    return std::string(path.cbegin() + slash_idx + 1, path.cend());
 }
 
 static
 std::string::size_type _path_extension_pos(const std::string &path)
 {
-    std::string::size_type idx = path.find_last_of(".");
+    auto idx = path.find_last_of(".");
     if(idx == std::string::npos) {
         return std::string::npos;
     }
-    std::string::size_type slash_idx = path.find_last_of("/");
+    auto slash_idx = path.find_last_of("/");
     // if the '.' is not part of the last component
     if((slash_idx != std::string::npos) && (idx < slash_idx)) {
         return std::string::npos;
@@ -60,22 +60,20 @@ std::string::size_type _path_extension_pos(const std::string &path)
  */
 std::string path_stem(const std::string & path)
 {
-    std::string stem;
-    std::string::size_type idx;
-    idx = _path_extension_pos(path);
+    auto idx = _path_extension_pos(path);
     if(idx == std::string::npos) {
         return path;
     }
-    return std::string(path.begin(), path.begin() + idx);
+    return std::string(path.cbegin(), path.cbegin() + idx);
 }
 
 std::string path_dirname(const std::string & path)
 {
-    std::string::size_type slash_idx = path.find_last_of("/");
+    auto slash_idx = path.find_last_of("/");
     if(slash_idx == std::string::npos) {
         return "";
     }
-    return std::string(path.begin(), path.begin() + slash_idx + 1);
+    return std::string(path.cbegin(), path.cbegin() + slash_idx + 1);
 }
 
 /** return the extension of a path
@@ -85,9 +83,9 @@ std::string path_dirname(const std::string & path)
 std::string path_extension(const std::string & path)
 {
     std::string extension;
-    std::string::size_type idx = _path_extension_pos(path);
+    auto idx = _path_extension_pos(path);
     if(idx != std::string::npos) {
-        extension = std::string(path.begin() + idx, path.end());
+        extension = std::string(path.cbegin() + idx, path.cend());
     }
 
     return extension;
@@ -95,9 +93,9 @@ std::string path_extension(const std::string & path)
 
 
 std::string path_replace_extension(const std::string & path, const char * ext)
-{ 
+{
     std::string result = path;
-    std::string::size_type idx = _path_extension_pos(result);
+    auto idx = _path_extension_pos(result);
     if(idx != std::string::npos) {
         result.replace(result.begin() + idx, result.end(), ext);
     }

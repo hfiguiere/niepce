@@ -38,7 +38,7 @@ namespace fwk {
   void map_get_keys(const _Map & m, std::vector<typename _Map::key_type> & l)
   {
     l.clear();
-    std::for_each(m.begin(), m.end(),
+    std::for_each(m.cbegin(), m.cend(),
                   [&l] (const typename _Map::value_type & p) {
                       l.push_back(p.first);
                   }
@@ -51,7 +51,7 @@ namespace fwk {
   void map_get_values(const _Map & m, std::vector<typename _Map::mapped_type> & l)
   {
     l.clear();
-    std::for_each(m.begin(), m.end(),
+    std::for_each(m.cbegin(), m.cend(),
                   [&l] (const typename _Map::value_type & p) {
                       l.push_back(p.second);
                   }
@@ -63,7 +63,7 @@ namespace fwk {
   template <typename _Map>
   void map_delete_all_second(const _Map & m)
   {
-    std::for_each(m.begin(), m.end(),
+    std::for_each(m.cbegin(), m.cend(),
                   [] (const typename _Map::value_type & p) {
                       delete p.second;
                   }

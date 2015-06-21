@@ -296,9 +296,9 @@ namespace db { namespace sqlite {
 			return false ;
 		  }
 
-		  const std::vector< SQLStatement::binder_t > & bindings = a_statement.bindings();
-		  for(std::vector< SQLStatement::binder_t >::const_iterator iter = bindings.begin();
-			  iter != bindings.end(); iter++) 
+		  const auto & bindings = a_statement.bindings();
+		  for(auto iter = bindings.cbegin();
+			  iter != bindings.cend(); iter++) 
 		  {
 			ColumnType ctype = iter->get<0>();
 			int idx = iter->get<1>();

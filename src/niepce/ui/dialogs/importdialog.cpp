@@ -115,7 +115,7 @@ void ImportDialog::set_to_import(const Glib::ustring & f)
     fwk::FileList::Ptr list_to_import
         = fwk::FileList::getFilesFromDirectory(f, &fwk::filter_xmp_out);
 
-    std::for_each(list_to_import->begin(), list_to_import->end(),
+    std::for_each(list_to_import->cbegin(), list_to_import->cend(),
                   [this] (const std::string & s) {
                       DBG_OUT("selected %s", s.c_str());
                       Gtk::TreeIter iter = m_imagesListModel->append();
