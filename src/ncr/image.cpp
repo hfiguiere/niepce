@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/image.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2015 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,9 @@
 
 extern "C" {
 #include <babl/babl.h>
-#include <gegl.h>
 }
+
+#include <gegl.h>
 
 #include <libopenraw/libopenraw.h>
 
@@ -207,7 +208,7 @@ GeglNode* Image::Private::_load_raw(const std::string &p)
 
 GeglNode* Image::Private::_scale_node()
 {
-    return gegl_node_new_child(m_graph, "operation", "gegl:scale", nullptr);
+    return gegl_node_new_child(m_graph, "operation", "gegl:scale-ratio", nullptr);
 }
 
 
