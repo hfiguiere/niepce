@@ -44,7 +44,7 @@ struct Image::Private {
         , m_tilt(0.0)
         , m_graph(nullptr), m_rgb(nullptr), m_rotate_n(nullptr)
         , m_scale(nullptr)
-        , m_sink_buffer(nullptr)
+        , m_sink(nullptr), m_sink_buffer(nullptr)
         {
         }
     ~Private()
@@ -208,7 +208,8 @@ GeglNode* Image::Private::_load_raw(const std::string &p)
 
 GeglNode* Image::Private::_scale_node()
 {
-    return gegl_node_new_child(m_graph, "operation", "gegl:scale-ratio", nullptr);
+    return gegl_node_new_child(m_graph,
+                               "operation", "gegl:scale-ratio", nullptr);
 }
 
 
@@ -257,7 +258,8 @@ void Image::reload(const std::string & p, bool is_raw,
 
 void Image::Private::reload_node(GeglNode* node, int orientation)
 {
-    DBG_ASSERT(m_status == status_t::LOADING, "prepare_reload() might not have been called");
+    DBG_ASSERT(m_status == status_t::LOADING,
+               "prepare_reload() might not have been called");
 
     m_rotate_n = _rotate_node(orientation);
     m_scale = _scale_node();
@@ -364,7 +366,8 @@ void Image::rotate_by(int degree)
         // within 0..359 degrees anyway
         priv->m_orientation %= 360;
     }
-    gegl_node_set(priv->m_rotate_n, "degrees", priv->m_orientation + priv->m_tilt, nullptr);
+    gegl_node_set(priv->m_rotate_n, "degrees",
+                  priv->m_orientation + priv->m_tilt, nullptr);
     signal_update();
 }
 
