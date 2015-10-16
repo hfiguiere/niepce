@@ -57,6 +57,10 @@ namespace fwk {
 		static Ptr getFilesFromDirectory(const value_type & dir,
 						 std::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter);
 
+		const_iterator begin() const
+			{ return _impltype_t::cbegin(); }
+		const_iterator end() const
+			{ return _impltype_t::cend(); }
 		const_iterator cbegin() const
 			{ return _impltype_t::cbegin(); }
 		const_iterator cend() const
