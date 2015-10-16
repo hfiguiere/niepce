@@ -40,7 +40,7 @@ public:
   MgWindow();
 
 protected:
-  virtual Gtk::Widget * buildWidget();
+  virtual Gtk::Widget * buildWidget() override;
 
 private:
 

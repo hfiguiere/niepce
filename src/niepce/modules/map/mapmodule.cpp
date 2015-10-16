@@ -70,7 +70,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
         return;
     }
     switch(ln.type) {
-    case eng::Library::NOTIFY_METADATA_QUERIED:
+    case eng::Library::NotifyType::METADATA_QUERIED:
     {
         DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
                    "incorrect data type for the notification");

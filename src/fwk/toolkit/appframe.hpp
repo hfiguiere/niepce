@@ -20,7 +20,7 @@ public:
     {
     }
 
-  virtual void on_ready()
+  virtual void on_ready() override
     {
       gtkWindow().show();
     }

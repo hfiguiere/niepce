@@ -41,7 +41,7 @@ namespace dr {
 ImageCanvas::ImageCanvas()
     : m_need_redisplay(true),
       m_resized(false),
-      m_zoom_mode(ZOOM_MODE_FIT)
+      m_zoom_mode(ZoomMode::FIT)
 {
 }
 
@@ -132,7 +132,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         int img_w, img_h;
         double scale = 1.0;
 
-        if(m_image->get_status() != ncr::Image::STATUS_ERROR) {
+        if(m_image->get_status() != ncr::Image::status_t::ERROR) {
 
             // calculate the image scale
             img_w = m_image->get_original_width();
@@ -205,7 +205,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 
 void ImageCanvas::_redisplay()
 {
-    if (m_image->get_status() == ncr::Image::STATUS_ERROR) {
+    if (m_image->get_status() == ncr::Image::status_t::ERROR) {
         ERR_OUT("Image is in error");
         return;
     }
@@ -219,10 +219,10 @@ void ImageCanvas::_redisplay()
     fwk::Rect frame;
     switch(m_zoom_mode)
     {
-    case ZOOM_MODE_FIT:
+    case ZoomMode::FIT:
         frame = source.fit_into(dest);
         break;
-    case ZOOM_MODE_FILL:
+    case ZoomMode::FILL:
         frame = source.fill_into(dest);
         break;
     default:

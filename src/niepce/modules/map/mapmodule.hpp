@@ -43,15 +43,15 @@ public:
     MapModule(const ui::IModuleShell & shell);
 
     /* ILibraryModule */
-    virtual void dispatch_action(const std::string & action_name);
-    virtual void set_active(bool active);
-    virtual Glib::RefPtr<Gio::MenuModel> getMenu()
+    virtual void dispatch_action(const std::string & action_name) override;
+    virtual void set_active(bool active) override;
+    virtual Glib::RefPtr<Gio::MenuModel> getMenu() override
         { return Glib::RefPtr<Gio::MenuModel>(); }
 
     void on_lib_notification(const eng::LibNotification &ln);
 
 protected:
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 
 private:
     void on_selected(eng::library_id_t id);

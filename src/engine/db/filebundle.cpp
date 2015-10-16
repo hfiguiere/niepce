@@ -38,21 +38,21 @@ FileBundle::add(const std::string & path)
         if(mime_type.isDigicamRaw()) {
             if(!m_main.empty() && m_jpeg.empty()) {
                 m_jpeg = m_main;
-                m_type = LibFile::FILE_TYPE_RAW_JPEG;
+                m_type = LibFile::FileType::RAW_JPEG;
             }
             else {
-                m_type = LibFile::FILE_TYPE_RAW;
+                m_type = LibFile::FileType::RAW;
             }
             m_main = path;
         }
         else {
             if(!m_main.empty()) {
                 m_jpeg = path;
-                m_type = LibFile::FILE_TYPE_RAW_JPEG;
+                m_type = LibFile::FileType::RAW_JPEG;
             }
             else {
                 m_main = path;
-                m_type = LibFile::FILE_TYPE_IMAGE;
+                m_type = LibFile::FileType::IMAGE;
             }
         }
     }
@@ -61,7 +61,7 @@ FileBundle::add(const std::string & path)
     }
     else if(mime_type.isMovie()) {
         m_main = path;
-        m_type = LibFile::FILE_TYPE_VIDEO;
+        m_type = LibFile::FileType::VIDEO;
     }
     else {
         DBG_OUT("Unkown file %s of type %s\n", path.c_str(), 
@@ -81,7 +81,7 @@ FileBundle::filter_bundles(const fwk::FileList::Ptr & files)
 
     files->sort();
 
-    std::for_each(files->begin(), files->end(),
+    std::for_each(files->cbegin(), files->cend(),
                   [&current_base, &bundles, &current_bundle]
                   (const std::string & f) {
                       std::string basename = fwk::path_stem(f);

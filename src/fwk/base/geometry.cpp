@@ -55,7 +55,7 @@ Rect::Rect(const std::string & s)
         throw std::bad_cast();
     }
     int i = 0;
-    for_each(v.begin(), v.end(),
+    for_each(v.cbegin(), v.cend(),
              [&i, this] (const std::string &s) {
                  try {
                      _r[i] = std::stoi(s);

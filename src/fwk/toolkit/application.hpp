@@ -61,7 +61,7 @@ public:
     virtual void quit();
     void about();
     virtual void add(const Controller::Ptr & sub);
-    virtual void terminate();
+    virtual void terminate() override;
 
     Glib::RefPtr<Gtk::IconTheme> getIconTheme() const;
     void set_menubar(const Glib::RefPtr<Gio::Menu> & menu)

@@ -54,47 +54,47 @@ class SqliteCnxDrv: public db::IConnectionDriver {
 public:
     virtual ~SqliteCnxDrv () ;
     sqlite3* sqlite_handle() const;
-    const char* get_last_error () const ;
+    const char* get_last_error () const override;
 
-    bool start_transaction () ;
+    bool start_transaction () override;
 
-    bool commit_transaction () ;
+    bool commit_transaction () override;
 
-    bool rollback_transaction () ;
+    bool rollback_transaction () override;
 
-    bool execute_statement (const db::SQLStatement &a_statement) ;
+    bool execute_statement (const db::SQLStatement &a_statement) override;
 
-    bool create_function0(const std::string & name, const f0_t & f);
+    bool create_function0(const std::string & name, const f0_t & f) override;
 
-    bool should_have_data () const ;
+    bool should_have_data () const override;
 
-    bool read_next_row () ;
+    bool read_next_row () override;
 
-    virtual int64_t last_row_id();
+    virtual int64_t last_row_id() override;
 
-    unsigned int get_number_of_columns () const ;
+    unsigned int get_number_of_columns () const override;
 
     bool get_column_type (uint32_t a_offset,
-                          enum db::ColumnType &a_type) const ;
+                          db::ColumnType &a_type) const override;
 
-    bool get_column_name (uint32_t a_offset, fwk::Buffer &a_name) const ;
-
-    bool get_column_content (uint32_t a_offset,
-                             fwk::Buffer &a_column_content) const ;
+    bool get_column_name (uint32_t a_offset, fwk::Buffer &a_name) const override;
 
     bool get_column_content (uint32_t a_offset,
-                             int32_t &a_column_content) const ;
+                             fwk::Buffer &a_column_content) const override;
 
     bool get_column_content (uint32_t a_offset,
-                             int64_t &a_column_content) const ;
+                             int32_t &a_column_content) const override;
 
     bool get_column_content (uint32_t a_offset,
-                             double& a_column_content) const ;
+                             int64_t &a_column_content) const override;
 
     bool get_column_content (uint32_t a_offset,
-                             std::string& a_column_content) const ;
+                             double& a_column_content) const override;
 
-    void close () ;
+    bool get_column_content (uint32_t a_offset,
+                             std::string& a_column_content) const override;
+
+    void close () override;
 };//end IConnectionDriver
 
 }//end namespace sqlite

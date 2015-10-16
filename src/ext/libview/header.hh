@@ -42,15 +42,15 @@ class Header
    : public Gtk::MenuItem
 {
 public:
-   enum Alignment { LEFT, CENTER, RIGHT };
+   enum class Alignment { LEFT, CENTER, RIGHT };
 
-   Header(const Glib::ustring &markup, Alignment align = LEFT);
+   Header(const Glib::ustring &markup, Alignment align = Alignment::LEFT);
 
    void SetMarkup(const Glib::ustring &markup);
    void SetAlignment(Alignment align);
 
 protected:
-  void on_style_updated();
+  void on_style_updated() override;
 
 private:
    Gtk::Label mLabel;

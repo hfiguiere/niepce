@@ -49,7 +49,7 @@ public:
     virtual ~NiepceWindow();
 
 
-    virtual void set_title(const std::string & title);
+    virtual void set_title(const std::string & title) override;
 
     libraryclient::LibraryClient::Ptr getLibraryClient() const
         { return m_libClient; }
@@ -57,7 +57,7 @@ public:
         { return m_library_cfg; }
 
 protected:
-    virtual Gtk::Widget * buildWidget();
+    virtual Gtk::Widget * buildWidget() override;
 private:
     void on_action_file_import();
 

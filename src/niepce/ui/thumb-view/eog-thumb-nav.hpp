@@ -41,12 +41,12 @@ typedef struct _EogThumbNavPrivate EogThumbNavPrivate;
 #define EOG_IS_THUMB_NAV_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  EOG_TYPE_THUMB_NAV))
 #define EOG_THUMB_NAV_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  EOG_TYPE_THUMB_NAV, EogThumbNavClass))
 
-typedef enum {
-	EOG_THUMB_NAV_MODE_ONE_ROW,
-	EOG_THUMB_NAV_MODE_ONE_COLUMN,
-	EOG_THUMB_NAV_MODE_MULTIPLE_ROWS,
-	EOG_THUMB_NAV_MODE_MULTIPLE_COLUMNS
-} EogThumbNavMode;
+enum class EogThumbNavMode {
+	ONE_ROW,
+	ONE_COLUMN,
+	MULTIPLE_ROWS,
+	MULTIPLE_COLUMNS
+};
 
 struct _EogThumbNav {
 	GtkBox base_instance;

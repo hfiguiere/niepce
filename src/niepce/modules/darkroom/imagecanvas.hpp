@@ -32,13 +32,13 @@ class ImageCanvas
     : public Gtk::DrawingArea
 {
 public:
-    typedef enum {
-        ZOOM_MODE_NONE = 0,
-        ZOOM_MODE_FIT,
-        ZOOM_MODE_FILL,
-        ZOOM_MODE_100P,
-        ZOOM_MODE_CUSTOM
-    } ZoomMode;
+    enum class ZoomMode {
+        NONE = 0,
+        FIT,
+        FILL,
+        ONE_ONE, // 100%
+        CUSTOM
+    };
     ImageCanvas();
 
     void set_image(const ncr::Image::Ptr & img);
@@ -54,8 +54,8 @@ public:
             return m_zoom_mode;
         }
 protected:
-    virtual void on_size_allocate(Gtk::Allocation & allocation);
-    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    virtual void on_size_allocate(Gtk::Allocation & allocation) override;
+    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 private:
     void invalidate();
 

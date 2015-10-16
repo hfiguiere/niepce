@@ -41,7 +41,7 @@ public:
     typedef std::shared_ptr<EditLabels> Ptr;
     EditLabels(const libraryclient::LibraryClient::Ptr &);
 
-    virtual void setup_widget();
+    virtual void setup_widget() override;
 private:
     void label_name_changed(size_t idx);
     void label_colour_changed(size_t idx);

@@ -57,7 +57,7 @@ public:
     int run_modal();
     int run_modal(const Frame::Ptr & parent);
 protected:
-    virtual Gtk::Widget *buildWidget();
+    virtual Gtk::Widget *buildWidget() override;
 
     bool m_is_setup;
 };

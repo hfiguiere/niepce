@@ -70,12 +70,21 @@ public:
 
     const_iterator begin() const
         {
-            return m_bag.begin();
+            return m_bag.cbegin();
         }
     const_iterator end() const
         {
-            return m_bag.end();
+            return m_bag.cend();
         }
+    const_iterator cbegin() const
+        {
+            return m_bag.cbegin();
+        }
+    const_iterator cend() const
+        {
+            return m_bag.cend();
+        }
+
 
     /** return true if a property was removed prior to insertion */
     bool set_value_for_property(PropertyIndex idx, const PropertyValue & value);

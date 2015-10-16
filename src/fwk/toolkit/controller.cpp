@@ -48,9 +48,8 @@ Controller::add(const Controller::Ptr & sub)
 
 void Controller::remove(const Ptr & sub)
 {
-    std::list<Ptr>::iterator iter = std::find(m_subs.begin(),
-                                              m_subs.end(), sub);
-    if(iter != m_subs.end()) {
+    auto iter = std::find(m_subs.cbegin(), m_subs.cend(), sub);
+    if(iter != m_subs.cend()) {
         (*iter)->clearParent();
         m_subs.erase(iter);
     }
@@ -65,7 +64,7 @@ void Controller::terminate()
 {
     DBG_OUT("terminating controller");
     using std::placeholders::_1;
-    std::for_each(m_subs.begin(), m_subs.end(),
+    std::for_each(m_subs.cbegin(), m_subs.cend(),
                   std::bind(&Controller::terminate, _1));
     clearParent();
     m_subs.clear();
@@ -79,7 +78,7 @@ void Controller::_ready()
 {
     using std::placeholders::_1;
 
-    std::for_each(m_subs.begin(), m_subs.end(),
+    std::for_each(m_subs.cbegin(), m_subs.cend(),
                   std::bind(&Controller::_ready, _1));
     on_ready();
 }

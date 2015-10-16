@@ -64,7 +64,7 @@ SQLStatement::escape_string (const std::string &a_sql_string)
 bool 
 SQLStatement::bind(int idx, const std::string & text)
 {
-    m_bindings.push_back(binder_t(COLUMN_TYPE_STRING, idx, 
+    m_bindings.push_back(binder_t(ColumnType::STRING, idx, 
                                   boost::any(text)));
     return true;
 }
@@ -73,7 +73,7 @@ SQLStatement::bind(int idx, const std::string & text)
 bool 
 SQLStatement::bind(int idx, const fwk::Buffer & blob)
 {
-    m_bindings.push_back(binder_t(COLUMN_TYPE_BLOB, idx, 
+    m_bindings.push_back(binder_t(ColumnType::BLOB, idx, 
                                       boost::any(&blob)));
     return true;
 }

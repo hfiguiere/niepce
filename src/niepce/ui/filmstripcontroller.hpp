@@ -43,11 +43,11 @@ public:
 
 	FilmStripController(const Glib::RefPtr<ImageListStore> & store);
 
-	virtual Gtk::IconView * image_list();
-	virtual eng::library_id_t get_selected();
-	virtual void select_image(eng::library_id_t id);
+	virtual Gtk::IconView * image_list() override;
+	virtual eng::library_id_t get_selected() override;
+	virtual void select_image(eng::library_id_t id) override;
 
-	virtual Gtk::Widget * buildWidget();
+	virtual Gtk::Widget * buildWidget() override;
 
 private:
 	Gtk::IconView * m_thumbview;

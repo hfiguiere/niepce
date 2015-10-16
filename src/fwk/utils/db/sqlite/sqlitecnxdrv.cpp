@@ -296,14 +296,14 @@ namespace db { namespace sqlite {
 			return false ;
 		  }
 
-		  const std::vector< SQLStatement::binder_t > & bindings = a_statement.bindings();
-		  for(std::vector< SQLStatement::binder_t >::const_iterator iter = bindings.begin();
-			  iter != bindings.end(); iter++) 
+		  const auto & bindings = a_statement.bindings();
+		  for(auto iter = bindings.cbegin();
+			  iter != bindings.cend(); iter++) 
 		  {
 			ColumnType ctype = iter->get<0>();
 			int idx = iter->get<1>();
 			switch(ctype) {
-			case COLUMN_TYPE_STRING:
+			case ColumnType::STRING:
 			{
 			  try {
 				std::string text(boost::any_cast<std::string>(iter->get<2>()));
@@ -316,7 +316,7 @@ namespace db { namespace sqlite {
 			  }
 			  break;
 			}
-			case COLUMN_TYPE_BLOB:
+			case ColumnType::BLOB:
 			{
 			  try {
 				const fwk::Buffer* blob(boost::any_cast<const fwk::Buffer*>(iter->get<2>()));
@@ -504,7 +504,7 @@ namespace db { namespace sqlite {
 
 		bool
 		SqliteCnxDrv::get_column_type (uint32_t a_offset,
-									   enum ColumnType &a_type) const
+									  ColumnType &a_type) const
 		{
                     std::lock_guard<std::recursive_mutex> lock(m_mutex);
 			THROW_IF_FAIL (m_priv) ;
@@ -513,23 +513,23 @@ namespace db { namespace sqlite {
 
 			switch (type) {
 			case SQLITE_INTEGER:
-				a_type = COLUMN_TYPE_INT ;
+                                a_type = ColumnType::INT ;
 				break;
 			case SQLITE_FLOAT:
-				a_type = COLUMN_TYPE_DOUBLE ;
+                                a_type = ColumnType::DOUBLE ;
 				break;
 			case SQLITE_TEXT:
-				a_type = COLUMN_TYPE_STRING ;
+				a_type = ColumnType::STRING ;
 				break ;
 			case SQLITE_BLOB:
-				a_type = COLUMN_TYPE_BLOB ;
+				a_type = ColumnType::BLOB ;
 				break;
 
 			case SQLITE_NULL:
-				a_type = COLUMN_TYPE_BLOB ;
+				a_type = ColumnType::BLOB ;
 				break ;
 			default:
-				a_type = COLUMN_TYPE_UNKNOWN ;
+				a_type = ColumnType::UNKNOWN ;
 				break;
 			}
 			return true ;

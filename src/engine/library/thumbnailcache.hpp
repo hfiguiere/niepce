@@ -66,7 +66,7 @@ public:
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 
 protected:
-    virtual void execute(const ptr_t & task);
+    virtual void execute(const ptr_t & task) override;
 private:
     std::string                                 m_cacheDir;
     std::weak_ptr<fwk::NotificationCenter> m_notif_center;

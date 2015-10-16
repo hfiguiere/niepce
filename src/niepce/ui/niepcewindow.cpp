@@ -317,24 +317,24 @@ void NiepceWindow::create_initial_labels()
 void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
 {
     switch(ln.type) {
-    case eng::Library::NOTIFY_NEW_LIBRARY_CREATED:
+    case eng::Library::NotifyType::NEW_LIBRARY_CREATED:
         create_initial_labels();
         break;
-    case eng::Library::NOTIFY_ADDED_LABELS:
+    case eng::Library::NotifyType::ADDED_LABELS:
     {
         eng::Label::ListPtr l 
             = boost::any_cast<eng::Label::ListPtr>(ln.param);
         m_libClient->getDataProvider()->addLabels(l);
         break;
     }
-    case eng::Library::NOTIFY_LABEL_CHANGED:
+    case eng::Library::NotifyType::LABEL_CHANGED:
     {
         const eng::Label::Ptr & l 
             = boost::any_cast<const eng::Label::Ptr &>(ln.param);
         m_libClient->getDataProvider()->updateLabel(l);
         break;
     }
-    case eng::Library::NOTIFY_LABEL_DELETED:
+    case eng::Library::NotifyType::LABEL_DELETED:
     {
         int id = boost::any_cast<int>(ln.param);
         m_libClient->getDataProvider()->deleteLabel(id);

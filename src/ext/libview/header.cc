@@ -111,17 +111,17 @@ void
 Header::SetAlignment(Alignment align) // IN: The new alignment
 {
    switch (align) {
-   case LEFT:
+   case Alignment::LEFT:
       mLabel.set_alignment(0, 0.5);
       mLabel.set_justify(Gtk::JUSTIFY_LEFT);
       break;
 
-   case CENTER:
+   case Alignment::CENTER:
       mLabel.set_alignment(0.5, 0.5);
       mLabel.set_justify(Gtk::JUSTIFY_CENTER);
       break;
 
-   case RIGHT:
+   case Alignment::RIGHT:
       mLabel.set_alignment(1, 0.5);
       mLabel.set_justify(Gtk::JUSTIFY_RIGHT);
       break;

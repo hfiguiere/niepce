@@ -31,13 +31,13 @@ class NiepceApplication
 public:
     static fwk::Application::Ptr create(int & argc, char** & argv);
 
-    virtual fwk::AppFrame::Ptr makeMainFrame();
+    virtual fwk::AppFrame::Ptr makeMainFrame() override;
 protected:
     NiepceApplication(int & argc, char** & argv);
 
-    virtual void on_action_file_open();
-    virtual void on_about();
-    virtual void on_action_preferences();
+    virtual void on_action_file_open() override;
+    virtual void on_about() override;
+    virtual void on_action_preferences() override;
 };
 
 }

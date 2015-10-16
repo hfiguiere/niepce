@@ -33,7 +33,7 @@ boost 1.34
  -boost test (for the unit test)
 exempi >= 2.2.0
 libopenraw >= 0.1.0
-gegl >= 0.2.0
+gegl >= 0.3.0
 babl
 libgphoto2
 

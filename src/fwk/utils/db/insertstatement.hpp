@@ -46,7 +46,7 @@ public:
                      ColumnList &a_columns) ;
     ~InsertStatement() ;
 
-    const std::string& to_string() const ;
+    const std::string& to_string() const override;
 
     const ColumnList& get_columns() const ;
 

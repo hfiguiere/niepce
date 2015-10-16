@@ -50,8 +50,8 @@ void DarkroomModule::reload_image()
     if(file) {
         // currently we treat RAW + JPEG as RAW.
         // TODO: have a way to actually choose the JPEG.
-        bool isRaw = (file->fileType() == eng::LibFile::FILE_TYPE_RAW)
-            || (file->fileType() == eng::LibFile::FILE_TYPE_RAW_JPEG);
+        bool isRaw = (file->fileType() == eng::LibFile::FileType::RAW)
+            || (file->fileType() == eng::LibFile::FileType::RAW_JPEG);
         const std::string& path = file->path();
         m_image->reload(path, isRaw,
                         file->orientation());

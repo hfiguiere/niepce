@@ -33,11 +33,11 @@ class MgApplication
 public:
   static fwk::Application::Ptr create(int & argc, char** & argv);
 
-  virtual fwk::AppFrame::Ptr makeMainFrame();
+  virtual fwk::AppFrame::Ptr makeMainFrame() override;
 protected:
   MgApplication(int & argc, char** & argv);
 
-  virtual void on_action_preferences();
+  virtual void on_action_preferences() override;
 };
 
 }

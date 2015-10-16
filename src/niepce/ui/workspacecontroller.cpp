@@ -88,17 +88,17 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
     DBG_OUT("notification for workspace");
     switch(ln.type) {
-    case eng::Library::NOTIFY_ADDED_FOLDERS:
+    case eng::Library::NotifyType::ADDED_FOLDERS:
     {
         eng::LibFolder::ListPtr l
             = boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
         DBG_OUT("received added folders # %lu", l->size());
-        for_each(l->begin(), l->end(),
+        for_each(l->cbegin(), l->cend(),
                  std::bind(&WorkspaceController::add_folder_item,
                              this, _1));
         break;
     }
-    case eng::Library::NOTIFY_ADDED_KEYWORD:
+    case eng::Library::NotifyType::ADDED_KEYWORD:
     {
         eng::Keyword::Ptr k
             = boost::any_cast<eng::Keyword::Ptr>(ln.param);
@@ -106,23 +106,23 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         add_keyword_item(k);
         break;
     }
-    case eng::Library::NOTIFY_ADDED_KEYWORDS:
+    case eng::Library::NotifyType::ADDED_KEYWORDS:
     {
         eng::Keyword::ListPtr l
             = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
         DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
-        for_each(l->begin(), l->end(),
+        for_each(l->cbegin(), l->cend(),
                  std::bind(&WorkspaceController::add_keyword_item,
                              this, _1));
         break;
     }
-    case eng::Library::NOTIFY_FOLDER_COUNTED:
+    case eng::Library::NotifyType::FOLDER_COUNTED:
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
         DBG_OUT("count for folder %Ld is %d", (long long)count.first, count.second);
-        std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
             = m_folderidmap.find( count.first );
-        if(iter != m_folderidmap.end()) {
+        if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             row[m_librarycolumns.m_count_n] = count.second;
             row[m_librarycolumns.m_count] = std::to_string(count.second);
@@ -130,13 +130,13 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
         break;
     }
-    case eng::Library::NOTIFY_FOLDER_COUNT_CHANGE:
+    case eng::Library::NotifyType::FOLDER_COUNT_CHANGE:
     {
         std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
         DBG_OUT("count change for folder %Ld is %d", (long long)count.first, count.second);
-        std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
             = m_folderidmap.find( count.first );
-        if(iter != m_folderidmap.end()) {
+        if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             int new_count = row[m_librarycolumns.m_count_n] + count.second;
             row[m_librarycolumns.m_count_n] = new_count;
@@ -145,7 +145,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
         break;
     }
-    case eng::Library::NOTIFY_FILE_MOVED:
+    case eng::Library::NotifyType::FILE_MOVED:
     {
         DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
                    "incorrect data type for the notification");
@@ -240,7 +240,7 @@ void WorkspaceController::add_keyword_item(const eng::Keyword::Ptr & k)
 void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
 {
     int icon_idx = ICON_ROLL;
-    if(f->virtual_type() == eng::LibFolder::VIRTUAL_TRASH) {
+    if(f->virtual_type() == eng::LibFolder::VirtualType::TRASH) {
         icon_idx = ICON_TRASH;
         getLibraryClient()->set_trash_id(f->id());
     }

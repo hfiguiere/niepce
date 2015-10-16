@@ -45,8 +45,8 @@ namespace fwk {
 
   ModuleManager::~ModuleManager()
   {
-    for(ModuleList::const_iterator mod_iter = m_modules.begin();
-        mod_iter != m_modules.end(); ++mod_iter) {
+    for(ModuleList::const_iterator mod_iter = m_modules.cbegin();
+        mod_iter != m_modules.cend(); ++mod_iter) {
       delete *mod_iter;
     }
   }
@@ -65,14 +65,14 @@ namespace fwk {
 
     std::string ext = std::string(".") + G_MODULE_SUFFIX;
 
-    for(std::set<std::string>::const_iterator iter = m_dirs.begin();
-        iter != m_dirs.end(); ++iter) {
+    for(auto iter = m_dirs.cbegin();
+        iter != m_dirs.cend(); ++iter) {
 
       fwk::FileList::Ptr l;
       l = FileList::getFilesFromDirectory(*iter, std::bind(&fwk::filter_ext, _1, ext));
 
-      for(FileList::const_iterator mod_iter = l->begin();
-          mod_iter != l->end(); ++mod_iter) {
+      for(auto mod_iter = l->cbegin();
+          mod_iter != l->cend(); ++mod_iter) {
 
         Glib::Module module(*iter + "/" + path_basename(*mod_iter), 
                             Glib::MODULE_BIND_LOCAL);

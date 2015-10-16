@@ -257,16 +257,16 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         Cairo::RefPtr<Cairo::ImageSurface> emblem;
         
         switch(file->fileType()) {
-        case eng::LibFile::FILE_TYPE_RAW:
+        case eng::LibFile::FileType::RAW:
             emblem = m_raw_format_emblem;
             break;
-        case eng::LibFile::FILE_TYPE_RAW_JPEG:
+        case eng::LibFile::FileType::RAW_JPEG:
             emblem = m_rawjpeg_format_emblem;
             break;
-        case eng::LibFile::FILE_TYPE_IMAGE:
+        case eng::LibFile::FileType::IMAGE:
             emblem = m_img_format_emblem;
             break;
-        case eng::LibFile::FILE_TYPE_VIDEO:
+        case eng::LibFile::FileType::VIDEO:
             emblem = m_video_format_emblem;
             break;
         default:

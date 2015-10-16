@@ -38,7 +38,7 @@ public:
     typedef std::shared_ptr<List> ListPtr;
 
     FileBundle()
-        : m_type(LibFile::FILE_TYPE_UNKNOWN)
+        : m_type(LibFile::FileType::UNKNOWN)
         { }
     LibFile::FileType type() const
         { return m_type; }
