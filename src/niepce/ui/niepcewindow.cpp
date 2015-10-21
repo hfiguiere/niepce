@@ -39,6 +39,7 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/undo.hpp"
 #include "engine/db/library.hpp"
+#include "engine/importer/iimporter.hpp"
 #include "libraryclient/uidataprovider.hpp"
 
 #include "thumbstripview.hpp"
@@ -260,9 +261,15 @@ void NiepceWindow::on_action_file_import()
         if(!source.empty()) {
             cfg.setValue("last_import_location", source);
 
-            // XXX actually use the import module associated.
-            //DBG_OUT("%s", source.c_str());
-            m_libClient->importFromDirectory(source, false);
+            eng::IImporter* importer = import_dialog->importer();
+            DBG_ASSERT(importer, "Import can't be null if we clicked import");
+            if (importer) {
+                importer->doImport(
+                    source,
+                    [this] (const std::string & path, bool manage) {
+                        m_libClient->importFromDirectory(path, manage);
+                    });
+            }
         }
         break;
     }

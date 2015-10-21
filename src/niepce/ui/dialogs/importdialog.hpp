@@ -77,7 +77,8 @@ public:
     const Glib::ustring & sourcePath() const
         { return m_folder_path_source; }
     void setToImport(const Glib::ustring & f);
-
+    eng::IImporter* importer() const
+        { return m_importer; }
 private:
     class ImportParam;
 

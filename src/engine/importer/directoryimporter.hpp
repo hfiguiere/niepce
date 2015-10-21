@@ -38,7 +38,8 @@ public:
 
   bool listSourceContent(const std::string & source) override;
   std::list<ImportedFile::Ptr> getSourceContent() override;
-
+  bool doImport(const std::string & source,
+                const file_importer & importer) override;
 private:
   std::mutex m_content_lock;
   std::list<ImportedFile::Ptr> m_content;

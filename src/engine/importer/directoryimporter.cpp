@@ -19,7 +19,7 @@
 
 #include <glibmm/i18n.h>
 
-#include "fwk/utils/files.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "engine/importer/directoryimporter.hpp"
 #include "engine/importer/importedfile.hpp"
@@ -80,6 +80,16 @@ std::list<ImportedFile::Ptr> DirectoryImporter::getSourceContent()
     m_content.clear();
   }
   return content;
+}
+
+bool DirectoryImporter::doImport(const std::string & source,
+                                 const file_importer & importer)
+{
+  // pretty trivial, we have the source path.
+  importer(source, false);
+
+  // XXX return a real error
+  return true;
 }
 
 }

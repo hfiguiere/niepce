@@ -31,6 +31,9 @@ class IImporter {
 public:
   virtual ~IImporter() {}
 
+  /** file importer callback */
+  typedef std::function<void (const std::string&, bool)> file_importer;
+
   /** User visible importer name. */
   virtual std::string name() const = 0;
 
@@ -39,6 +42,11 @@ public:
 
   /** get the source content. */
   virtual std::list<ImportedFile::Ptr> getSourceContent() = 0;
+
+  /** perform import from source */
+  virtual bool doImport(const std::string & source,
+                        const file_importer & importer) = 0;
+
 };
 
 }
