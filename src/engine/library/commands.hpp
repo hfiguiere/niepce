@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/commands.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,9 @@ public:
 
 		static void cmdListAllFolders(const Library::Ptr & lib);
 		static void cmdListAllKeywords(const Library::Ptr & lib);
+		static void cmdImportFile(const Library::Ptr & lib,
+                               const std::string & path,
+                               bool manage);
 		static void cmdImportFiles(const Library::Ptr & lib, 
                                const std::string & folder, 
                                const fwk::FileList::Ptr & files, 

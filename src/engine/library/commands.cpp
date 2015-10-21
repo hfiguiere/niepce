@@ -1,7 +1,7 @@
 /*
  * niepce - library/commands.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <boost/any.hpp>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/libfolder.hpp"
 #include "engine/db/libfile.hpp"
@@ -54,7 +55,32 @@ void Commands::cmdListAllFolders(const Library::Ptr & lib)
     // notify folder added l
     lib->notify(Library::NotifyType::ADDED_FOLDERS, boost::any(l));
 }
-	
+
+void Commands::cmdImportFile(const Library::Ptr & lib,
+                              const std::string & file_path,
+                              bool manage)
+{
+    DBG_ASSERT(!manage, "managing file is currently unsupported");
+
+    FileBundle::Ptr bundle(new FileBundle);
+    bundle->add(file_path);
+
+    std::string folder = fwk::path_dirname(file_path);
+
+    LibFolder::Ptr pf;
+    pf = lib->getFolder(folder);
+    if(!pf) {
+        pf = lib->addFolder(folder);
+        LibFolder::ListPtr l(new LibFolder::List);
+        l->push_back(pf);
+        lib->notify(Library::NotifyType::ADDED_FOLDERS,
+                    boost::any(l));
+    }
+    lib->addBundle(pf->id(), bundle, manage);
+    lib->notify(Library::NotifyType::ADDED_FILES,
+                boost::any());
+}
+
 void Commands::cmdImportFiles(const Library::Ptr & lib, 
                               const std::string & folder, 
                               const FileList::Ptr & files, bool manage)
@@ -65,8 +91,7 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 
     LibFolder::Ptr pf;
     pf = lib->getFolder(folder);
-    if(pf == NULL)
-    {
+    if(!pf) {
         pf = lib->addFolder(folder);
         LibFolder::ListPtr l( new LibFolder::List );
         l->push_back(pf);

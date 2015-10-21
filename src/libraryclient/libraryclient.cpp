@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,6 +136,11 @@ eng::tid_t LibraryClient::updateLabel(library_id_t id, const std::string & new_n
 eng::tid_t LibraryClient::processXmpUpdateQueue(bool write_xmp)
 {
     return m_pImpl->processXmpUpdateQueue(write_xmp);
+}
+
+void LibraryClient::importFile(const std::string & path, bool manage)
+{
+    m_pImpl->importFile(path, manage);
 }
 
 void LibraryClient::importFromDirectory(const std::string & dir, bool manage)

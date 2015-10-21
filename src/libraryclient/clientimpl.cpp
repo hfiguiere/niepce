@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -167,6 +167,11 @@ tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
                                  _1, write_xmp));
 }
 
+tid_t ClientImpl::importFile(const std::string & path, bool manage)
+{
+    return schedule_op(std::bind(&Commands::cmdImportFile,
+                                 _1, path, manage));
+}
 
 tid_t ClientImpl::importFromDirectory(const std::string & dir, bool manage)
 {
