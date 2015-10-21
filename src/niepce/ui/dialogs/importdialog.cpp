@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/importdialog.cpp
  *
- * Copyright (C) 2008-2014 Hubert Figuiere
+ * Copyright (C) 2008-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,20 +137,21 @@ void ImportDialog::setToImport(const Glib::ustring & f)
         // FIXME this should be the right kind
         m_importer = new eng::DirectoryImporter;
     }
-    auto target_content = std::async(std::launch::async,
+    auto source_content = std::async(std::launch::async,
                                      [f, this] () {
-                                         return m_importer->listTargetContent(
+                                         return m_importer->listSourceContent(
                                              f);
                                      });
 
-    m_folder_path_to_import = f;
+    m_folder_path_source = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
 
     m_images_list_model->clear();
 
-    if(target_content.get()) {
-        auto list_to_import = m_importer->getTargetContent();
+    // XXX this should be an event from the async result instead
+    if(source_content.get()) {
+        auto list_to_import = m_importer->getSourceContent();
 
         for(const auto & f : list_to_import) {
             DBG_OUT("selected %s", f->name().c_str());

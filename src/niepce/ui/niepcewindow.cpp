@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2014 Hubert Figuiere
+ * Copyright (C) 2007-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -256,12 +256,13 @@ void NiepceWindow::on_action_file_import()
     {
         // import
         // XXX change the API to provide more details.
-        Glib::ustring to_import = import_dialog->pathToImport();
-        if(!to_import.empty()) {
-            cfg.setValue("last_import_location", to_import);
+        Glib::ustring source = import_dialog->sourcePath();
+        if(!source.empty()) {
+            cfg.setValue("last_import_location", source);
 
-            //DBG_OUT("%s", to_import.c_str());
-            m_libClient->importFromDirectory(to_import, false);
+            // XXX actually use the import module associated.
+            //DBG_OUT("%s", source.c_str());
+            m_libClient->importFromDirectory(source, false);
         }
         break;
     }

@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/directoryimporter.cpp
  *
- * Copyright (C) 2014 Hubert Figuiere
+ * Copyright (C) 2014-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,10 +58,11 @@ std::string DirectoryImporter::name() const
   return _("Directory");
 }
 
-bool DirectoryImporter::listTargetContent(const std::string & target)
+bool DirectoryImporter::listSourceContent(const std::string & source)
 {
-  auto content = fwk::FileList::getFilesFromDirectory(target,
-                                                   &fwk::filter_xmp_out);
+  auto content =
+    fwk::FileList::getFilesFromDirectory(source,
+                                         &fwk::filter_xmp_out);
   for(const auto & entry : *content)
   {
     std::lock_guard<std::mutex> lock(m_content_lock);
@@ -70,7 +71,7 @@ bool DirectoryImporter::listTargetContent(const std::string & target)
   return true;
 }
 
-std::list<ImportedFile::Ptr> DirectoryImporter::getTargetContent()
+std::list<ImportedFile::Ptr> DirectoryImporter::getSourceContent()
 {
   std::list<ImportedFile::Ptr> content;
   {

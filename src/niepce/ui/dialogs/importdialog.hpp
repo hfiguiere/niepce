@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/importdialog.h
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,7 @@
 
 
 
-
-#ifndef __UI_IMPORTDIALOG_H__
-#define __UI_IMPORTDIALOG_H__
+#pragma once
 
 #include <list>
 #include <memory>
@@ -76,8 +74,8 @@ public:
 
 //  const std::list<std::string> & to_import() const
 //      { return m_list_to_import; }
-    const Glib::ustring & pathToImport() const
-        { return m_folder_path_to_import; }
+    const Glib::ustring & sourcePath() const
+        { return m_folder_path_source; }
     void setToImport(const Glib::ustring & f);
 
 private:
@@ -86,7 +84,7 @@ private:
     void doSelectDirectories();
 
     eng::IImporter *m_importer;
-    Glib::ustring m_folder_path_to_import;
+    Glib::ustring m_folder_path_source;
 
     Gtk::ComboBox *m_date_tz_combo;
     Gtk::CheckButton *m_ufraw_import_check;
@@ -115,6 +113,4 @@ private:
   fill-column:80
   End:
 */
-
-#endif
 

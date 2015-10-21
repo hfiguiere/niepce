@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/iimporter.hpp
  *
- * Copyright (C) 2014 Hubert Figuiere
+ * Copyright (C) 2014-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ public:
   /** User visible importer name. */
   virtual std::string name() const = 0;
 
-  /** list the target content and store it. */
-  virtual bool listTargetContent(const std::string & target) = 0;
+  /** list the source content and store it. */
+  virtual bool listSourceContent(const std::string & source) = 0;
 
-  /** get the target content. */
-  virtual std::list<ImportedFile::Ptr> getTargetContent() = 0;
+  /** get the source content. */
+  virtual std::list<ImportedFile::Ptr> getSourceContent() = 0;
 };
 
 }
