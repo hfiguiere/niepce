@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/pathutils.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,9 +71,9 @@ std::string path_dirname(const std::string & path)
 {
     auto slash_idx = path.find_last_of("/");
     if(slash_idx == std::string::npos) {
-        return "";
+        return ".";
     }
-    return std::string(path.cbegin(), path.cbegin() + slash_idx + 1);
+    return std::string(path.cbegin(), path.cbegin() + slash_idx);
 }
 
 /** return the extension of a path

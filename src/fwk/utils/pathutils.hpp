@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/pathutils.hpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2015 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@
  */
 
 
-
-#ifndef __FWK_PATHUTILS_HPP_
-#define __FWK_PATHUTILS_HPP_
+#pragma once
 
 #include <string>
 
@@ -36,8 +34,9 @@ std::string path_basename(const std::string & path);
  */
 std::string path_stem(const std::string & path);
 
-/** return the dirname of a path. Assume the last component is a file.
-    /foo/bar/baz.txt returns /foo/bar/
+/** return the dirname of a path and trailing slash removed.
+    Assume the last component is a file.
+    /foo/bar/baz.txt returns /foo/bar
  */
 std::string path_dirname(const std::string & path);
 
@@ -66,4 +65,3 @@ void path_remove_recursive(const std::string & path);
   fill-column:99
   End:
 */
-#endif
