@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail Navigator
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2015 Hubert Figuière
  *
  * Original author: Lucas Rocha <lucasr@gnome.org>
  *
@@ -114,12 +114,12 @@ eog_thumb_nav_scroll_left (gpointer user_data)
 		      "value", &value,
 		      NULL);
 
-	if (i == EOG_THUMB_NAV_SCROLL_MOVE || 
+	if (i == EOG_THUMB_NAV_SCROLL_MOVE ||
 	    value - EOG_THUMB_NAV_SCROLL_INC < 0) {
 		i = 0;
-		gtk_adjustment_value_changed (adj);
+		g_signal_emit_by_name(adj, "value-changed", 0);
 		return FALSE;
-	} 
+	}
 
 	i++;
 
@@ -153,7 +153,6 @@ eog_thumb_nav_scroll_right (gpointer user_data)
 
 	move = MIN (EOG_THUMB_NAV_SCROLL_MOVE, upper - page_size - value);
 	gtk_adjustment_set_value (adj, value + move);
-	gtk_adjustment_value_changed (adj);
 
 	return TRUE;
 }
@@ -364,7 +363,7 @@ eog_thumb_nav_init (EogThumbNav *nav)
 			  G_CALLBACK (eog_thumb_nav_right_button_clicked), 
 			  nav);
 
-	gtk_adjustment_value_changed (adj);
+	g_signal_emit_by_name (adj, "value-changed", 0);
 }
 
 GtkWidget *
