@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NPiece\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-13 11:18+0000\n"
-"PO-Revision-Date: 2015-11-13 10:05+0000\n"
-"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"POT-Creation-Date: 2015-11-13 10:06+0000\n"
+"PO-Revision-Date: 2015-11-13 10:09+0000\n"
+"Last-Translator:  <>\n"
 "Language-Team: GNOME Pt\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -19,6 +19,7 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: ../camerawire/src/cwwindow.cpp:62
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
 msgid "Camera"
 msgstr "Câmara"
 
@@ -27,37 +28,37 @@ msgid "File"
 msgstr "Ficheiro"
 
 #: ../camerawire/src/cwwindow.cpp:92 ../magellan/src/mgwindow.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:193
+#: ../src/niepce/ui/niepcewindow.cpp:194
 msgid "_Import..."
 msgstr "_Importar..."
 
 #: ../camerawire/src/cwwindow.cpp:96 ../magellan/src/mgwindow.cpp:92
-#: ../src/niepce/ui/niepcewindow.cpp:200
+#: ../src/niepce/ui/niepcewindow.cpp:201
 msgid "Close"
 msgstr "Fechar"
 
 #: ../camerawire/src/cwwindow.cpp:99 ../magellan/src/mgwindow.cpp:95
-#: ../src/niepce/ui/niepcewindow.cpp:203
+#: ../src/niepce/ui/niepcewindow.cpp:204
 msgid "Edit"
 msgstr "Editar"
 
 #: ../camerawire/src/cwwindow.cpp:113 ../magellan/src/mgwindow.cpp:109
-#: ../src/niepce/ui/niepcewindow.cpp:218
+#: ../src/niepce/ui/niepcewindow.cpp:219
 msgid "Cut"
 msgstr "Cortar"
 
 #: ../camerawire/src/cwwindow.cpp:117 ../magellan/src/mgwindow.cpp:113
-#: ../src/niepce/ui/niepcewindow.cpp:222
+#: ../src/niepce/ui/niepcewindow.cpp:223
 msgid "Copy"
 msgstr "Copiar"
 
 #: ../camerawire/src/cwwindow.cpp:121 ../magellan/src/mgwindow.cpp:117
-#: ../src/niepce/ui/niepcewindow.cpp:226
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "Paste"
 msgstr "Colar"
 
 #: ../camerawire/src/cwwindow.cpp:124 ../magellan/src/mgwindow.cpp:120
-#: ../src/niepce/ui/niepcewindow.cpp:233
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "Tools"
 msgstr "Ferramentas"
 
@@ -66,7 +67,7 @@ msgid "Refresh"
 msgstr "Atualizar"
 
 #: ../camerawire/src/cwwindow.cpp:135 ../magellan/src/mgwindow.cpp:131
-#: ../src/niepce/ui/niepcewindow.cpp:241
+#: ../src/niepce/ui/niepcewindow.cpp:242
 msgid "Hide tools"
 msgstr "Ocultar ferramentas"
 
@@ -134,12 +135,28 @@ msgstr "Transferir"
 msgid "Trash"
 msgstr "Lixo"
 
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. c-basic-offset:2
+#. indent-tabs-mode:nil
+#. tab-width:2
+#. fill-column:99
+#. End:
+#.
+#: ../src/engine/importer/directoryimporter.cpp:58
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
+#| msgid "_Directory:"
+msgid "Directory"
+msgstr "Pasta:"
+
 #: ../src/fwk/toolkit/application.cpp:131
 msgid "New"
 msgstr "Novo"
 
-#: ../src/fwk/toolkit/application.cpp:135
-#: ../src/niepce/ui/niepcewindow.cpp:353
+#: ../src/fwk/toolkit/application.cpp:135 ../src/niepce/ui/niepcewindow.cpp:362
 msgid "Open"
 msgstr "Abrir"
 
@@ -264,70 +281,90 @@ msgstr "Rótulo _10"
 msgid "<b>Labels</b>"
 msgstr "<b>Rótulos</b>"
 
-#.
-#. Local Variables:
-#. mode:c++
-#. c-file-style:"stroustrup"
-#. c-file-offsets:((innamespace . 0))
-#. indent-tabs-mode:nil
-#. tab-width:4
-#. fill-column:99
-#. End:
-#.
-#: ../src/niepce/ui/dialogs/importdialog.cpp:61
-#: ../src/niepce/ui/dialogs/importdialog.cpp:89
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
-msgid "Import"
-msgstr "Importar"
-
-#: ../src/niepce/ui/dialogs/importdialog.cpp:85
+#: ../src/niepce/ui/dialogs/importdialog.cpp:110
 msgid "Import picture folder"
 msgstr "Importar pasta de imagens"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:352
+#: ../src/niepce/ui/dialogs/importdialog.cpp:113
+#: ../src/niepce/ui/niepcewindow.cpp:361
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../src/niepce/ui/dialogs/importdialog.cpp:114
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+msgid "Import"
+msgstr "Importar"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+msgid "(none)"
+msgstr "(nenhum)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+msgid "NONE"
+msgstr "NENHUM"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+msgid "local"
+msgstr "local"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#| msgid "Cut"
+msgid "utc"
+msgstr "utc"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
 msgid "_Import"
 msgstr "_Importar"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
 msgid "_Directory:"
 msgstr "_Pasta:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
 msgid "..."
 msgstr "..."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
 msgid "_Images to import"
 msgstr "_Imagens a importar"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:12
 msgid "Destination _Folder"
 msgstr "_Pasta de destino"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:13
 msgid "Import _UFRaw"
 msgstr "Importar _UFRaw"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:14
 msgid "Import Raw_Studio"
 msgstr "Importar Raw_Studio"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:15
+msgid "_Options"
+msgstr "_Opções"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:16
+msgid "Presets:"
+msgstr "Predefinições:"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:17
 msgid "You can still change this after importing the pictures."
 msgstr "Ainda pode alterar isto após importar as fotografias."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
-msgid "<b>Date:</b>"
-msgstr "<b>Data:</b>"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:18
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "Date:"
+msgstr "Data:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
-msgid "_Options"
-msgstr "_Opções"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:19
+msgid "Attributes:"
+msgstr "Atributos"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:20
+#| msgid "Write metadata"
+msgid "Metadata"
+msgstr "Metadados"
 
 #: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
@@ -400,10 +437,6 @@ msgstr "Distância focal:"
 #: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "White balance:"
 msgstr "Equilíbrio de brancos:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
-msgid "Date:"
-msgstr "Data:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Headline:"
@@ -533,7 +566,7 @@ msgstr "Marcar como escolhida"
 msgid "Write metadata"
 msgstr "Escrever metadados"
 
-#: ../src/niepce/ui/moduleshell.cpp:201 ../src/niepce/ui/niepcewindow.cpp:183
+#: ../src/niepce/ui/moduleshell.cpp:201 ../src/niepce/ui/niepcewindow.cpp:184
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -555,56 +588,56 @@ msgstr ""
 "\n"
 "Opções de compilação: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:137
+#: ../src/niepce/ui/niepcewindow.cpp:138
 msgid "Ready"
 msgstr "Pronto"
 
-#: ../src/niepce/ui/niepcewindow.cpp:188
+#: ../src/niepce/ui/niepcewindow.cpp:189
 msgid "New Folder..."
 msgstr "Nova pasta..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:189
+#: ../src/niepce/ui/niepcewindow.cpp:190
 msgid "New Project..."
 msgstr "Novo projeto..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:230
+#: ../src/niepce/ui/niepcewindow.cpp:231
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/niepce/ui/niepcewindow.cpp:236
+#: ../src/niepce/ui/niepcewindow.cpp:237
 msgid "Edit Labels..."
 msgstr "Editar rótulos..."
 
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:308
+#: ../src/niepce/ui/niepcewindow.cpp:317
 msgid "Label 1"
 msgstr "Rótulo 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:309
+#: ../src/niepce/ui/niepcewindow.cpp:318
 msgid "Label 2"
 msgstr "Rótulo 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:310
+#: ../src/niepce/ui/niepcewindow.cpp:319
 msgid "Label 3"
 msgstr "Rótulo 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:311
+#: ../src/niepce/ui/niepcewindow.cpp:320
 msgid "Label 4"
 msgstr "Rótulo 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:312
+#: ../src/niepce/ui/niepcewindow.cpp:321
 msgid "Label 5"
 msgstr "Rótulo 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:350
+#: ../src/niepce/ui/niepcewindow.cpp:359
 msgid "Open library"
 msgstr "Abrir biblioteca"
 
-#: ../src/niepce/ui/niepcewindow.cpp:412
+#: ../src/niepce/ui/niepcewindow.cpp:421
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -636,3 +669,6 @@ msgstr "Palavras chave"
 #: ../src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Espaço de trabalho"
+
+#~ msgid "<b>Date:</b>"
+#~ msgstr "<b>Data:</b>"
