@@ -1,14 +1,14 @@
 # Hungarian translation for niepce.
-# Copyright (C) 2014 niepce's COPYRIGHT HOLDER
+# Copyright (C) 2014-2016 Free Software Foundation, Inc.
 # This file is distributed under the same license as the niepce package.
 #
-# Balázs Úr <urbalazs@gmail.com>, 2014.
+# Balázs Úr <urbalazs@gmail.com>, 2014, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-23 23:20+0000\n"
-"PO-Revision-Date: 2014-12-24 09:39+0100\n"
+"POT-Creation-Date: 2015-10-22 15:27+0000\n"
+"PO-Revision-Date: 2016-03-06 23:32+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list@gnome.org>\n"
 "Language: hu\n"
@@ -19,6 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 
 #: ../camerawire/src/cwwindow.cpp:62
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
 msgid "Camera"
 msgstr "Fényképezőgép"
 
@@ -27,37 +28,37 @@ msgid "File"
 msgstr "Fájl"
 
 #: ../camerawire/src/cwwindow.cpp:92 ../magellan/src/mgwindow.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:192
+#: ../src/niepce/ui/niepcewindow.cpp:194
 msgid "_Import..."
 msgstr "_Importálás…"
 
 #: ../camerawire/src/cwwindow.cpp:96 ../magellan/src/mgwindow.cpp:92
-#: ../src/niepce/ui/niepcewindow.cpp:199
+#: ../src/niepce/ui/niepcewindow.cpp:201
 msgid "Close"
 msgstr "Bezárás"
 
 #: ../camerawire/src/cwwindow.cpp:99 ../magellan/src/mgwindow.cpp:95
-#: ../src/niepce/ui/niepcewindow.cpp:202
+#: ../src/niepce/ui/niepcewindow.cpp:204
 msgid "Edit"
 msgstr "Szerkesztés"
 
 #: ../camerawire/src/cwwindow.cpp:113 ../magellan/src/mgwindow.cpp:109
-#: ../src/niepce/ui/niepcewindow.cpp:217
+#: ../src/niepce/ui/niepcewindow.cpp:219
 msgid "Cut"
 msgstr "Kivágás"
 
 #: ../camerawire/src/cwwindow.cpp:117 ../magellan/src/mgwindow.cpp:113
-#: ../src/niepce/ui/niepcewindow.cpp:221
+#: ../src/niepce/ui/niepcewindow.cpp:223
 msgid "Copy"
 msgstr "Másolás"
 
 #: ../camerawire/src/cwwindow.cpp:121 ../magellan/src/mgwindow.cpp:117
-#: ../src/niepce/ui/niepcewindow.cpp:225
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "Paste"
 msgstr "Beillesztés"
 
 #: ../camerawire/src/cwwindow.cpp:124 ../magellan/src/mgwindow.cpp:120
-#: ../src/niepce/ui/niepcewindow.cpp:232
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -66,7 +67,7 @@ msgid "Refresh"
 msgstr "Frissítés"
 
 #: ../camerawire/src/cwwindow.cpp:135 ../magellan/src/mgwindow.cpp:131
-#: ../src/niepce/ui/niepcewindow.cpp:240
+#: ../src/niepce/ui/niepcewindow.cpp:242
 msgid "Hide tools"
 msgstr "Eszközök elrejtése"
 
@@ -136,28 +137,44 @@ msgstr "Letöltés"
 msgid "Trash"
 msgstr "Kuka"
 
-#: ../src/fwk/toolkit/application.cpp:124
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. c-basic-offset:2
+#. indent-tabs-mode:nil
+#. tab-width:2
+#. fill-column:99
+#. End:
+#.
+#: ../src/engine/importer/directoryimporter.cpp:58
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
+#| msgid "_Directory:"
+msgid "Directory"
+msgstr "Könyvtár"
+
+#: ../src/fwk/toolkit/application.cpp:131
 msgid "New"
 msgstr "Új"
 
-#: ../src/fwk/toolkit/application.cpp:128
-#: ../src/niepce/ui/niepcewindow.cpp:352
+#: ../src/fwk/toolkit/application.cpp:135 ../src/niepce/ui/niepcewindow.cpp:362
 msgid "Open"
 msgstr "Megnyitás"
 
-#: ../src/fwk/toolkit/application.cpp:137
+#: ../src/fwk/toolkit/application.cpp:144
 msgid "Preferences..."
 msgstr "Beállítások…"
 
-#: ../src/fwk/toolkit/application.cpp:144
+#: ../src/fwk/toolkit/application.cpp:151
 msgid "Help"
 msgstr "Súgó"
 
-#: ../src/fwk/toolkit/application.cpp:149
+#: ../src/fwk/toolkit/application.cpp:156
 msgid "About"
 msgstr "Névjegy"
 
-#: ../src/fwk/toolkit/application.cpp:157
+#: ../src/fwk/toolkit/application.cpp:164
 msgid "Quit"
 msgstr "Kilépés"
 
@@ -266,70 +283,90 @@ msgstr "_10. címke"
 msgid "<b>Labels</b>"
 msgstr "<b>Címkék</b>"
 
-#.
-#. Local Variables:
-#. mode:c++
-#. c-file-style:"stroustrup"
-#. c-file-offsets:((innamespace . 0))
-#. indent-tabs-mode:nil
-#. tab-width:4
-#. fill-column:99
-#. End:
-#.
-#: ../src/niepce/ui/dialogs/importdialog.cpp:61
-#: ../src/niepce/ui/dialogs/importdialog.cpp:89
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
-msgid "Import"
-msgstr "Importálás"
-
-#: ../src/niepce/ui/dialogs/importdialog.cpp:85
+#: ../src/niepce/ui/dialogs/importdialog.cpp:110
 msgid "Import picture folder"
 msgstr "Fényképmappa importálása"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:351
+#: ../src/niepce/ui/dialogs/importdialog.cpp:113
+#: ../src/niepce/ui/niepcewindow.cpp:361
 msgid "Cancel"
 msgstr "Mégse"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../src/niepce/ui/dialogs/importdialog.cpp:114
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+msgid "Import"
+msgstr "Importálás"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+msgid "(none)"
+msgstr "(nincs)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+msgid "NONE"
+msgstr "NINCS"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+msgid "local"
+msgstr "helyi"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#| msgid "Cut"
+msgid "utc"
+msgstr "utc"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
 msgid "_Import"
 msgstr "_Importálás"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
 msgid "_Directory:"
 msgstr "_Könyvtár:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
 msgid "..."
 msgstr "…"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
 msgid "_Images to import"
 msgstr "_Importálandó képek"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:12
 msgid "Destination _Folder"
 msgstr "_Célmappa"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:13
 msgid "Import _UFRaw"
 msgstr "_UFRaw importálása"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:14
 msgid "Import Raw_Studio"
 msgstr "Raw_Studio importálása"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:15
+msgid "_Options"
+msgstr "_Beállítások"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:16
+msgid "Presets:"
+msgstr "Előbeállítások:"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:17
 msgid "You can still change this after importing the pictures."
 msgstr "Ezt még a fényképek importálása után is megváltoztathatja."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
-msgid "<b>Date:</b>"
-msgstr "<b>Dátum:</b>"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:18
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "Date:"
+msgstr "Dátum:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
-msgid "_Options"
-msgstr "_Beállítások"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:19
+msgid "Attributes:"
+msgstr "Attribútumok:"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:20
+#| msgid "Write metadata"
+msgid "Metadata"
+msgstr "Metaadatok"
 
 #: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
@@ -402,10 +439,6 @@ msgstr "Fókusztávolság:"
 #: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "White balance:"
 msgstr "Fehéregyensúly:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
-msgid "Date:"
-msgstr "Dátum:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Headline:"
@@ -535,7 +568,7 @@ msgstr "Megjelölés kiválasztottként"
 msgid "Write metadata"
 msgstr "Metaadatok írása"
 
-#: ../src/niepce/ui/moduleshell.cpp:201 ../src/niepce/ui/niepcewindow.cpp:182
+#: ../src/niepce/ui/moduleshell.cpp:201 ../src/niepce/ui/niepcewindow.cpp:184
 msgid "Library"
 msgstr "Gyűjtemény"
 
@@ -557,56 +590,56 @@ msgstr ""
 "\n"
 "Fordítási beállítások: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:136
+#: ../src/niepce/ui/niepcewindow.cpp:138
 msgid "Ready"
 msgstr "Kész"
 
-#: ../src/niepce/ui/niepcewindow.cpp:187
+#: ../src/niepce/ui/niepcewindow.cpp:189
 msgid "New Folder..."
 msgstr "Új mappa…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:188
+#: ../src/niepce/ui/niepcewindow.cpp:190
 msgid "New Project..."
 msgstr "Új projekt…"
 
-#: ../src/niepce/ui/niepcewindow.cpp:229
+#: ../src/niepce/ui/niepcewindow.cpp:231
 msgid "Delete"
 msgstr "Törlés"
 
-#: ../src/niepce/ui/niepcewindow.cpp:235
+#: ../src/niepce/ui/niepcewindow.cpp:237
 msgid "Edit Labels..."
 msgstr "Címkék szerkesztése…"
 
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:307
+#: ../src/niepce/ui/niepcewindow.cpp:317
 msgid "Label 1"
 msgstr "1. címke"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:308
+#: ../src/niepce/ui/niepcewindow.cpp:318
 msgid "Label 2"
 msgstr "2. címke"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:309
+#: ../src/niepce/ui/niepcewindow.cpp:319
 msgid "Label 3"
 msgstr "3. címke"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:310
+#: ../src/niepce/ui/niepcewindow.cpp:320
 msgid "Label 4"
 msgstr "4. címke"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:311
+#: ../src/niepce/ui/niepcewindow.cpp:321
 msgid "Label 5"
 msgstr "5. címke"
 
-#: ../src/niepce/ui/niepcewindow.cpp:349
+#: ../src/niepce/ui/niepcewindow.cpp:359
 msgid "Open library"
 msgstr "Gyűjtemény megnyitása"
 
-#: ../src/niepce/ui/niepcewindow.cpp:411
+#: ../src/niepce/ui/niepcewindow.cpp:421
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -639,3 +672,5 @@ msgstr "Kulcsszavak"
 msgid "_Workspace"
 msgstr "_Munkaterület"
 
+#~ msgid "<b>Date:</b>"
+#~ msgstr "<b>Dátum:</b>"
