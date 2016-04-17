@@ -6,18 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-24 23:30+0000\n"
-"PO-Revision-Date: 2015-02-25 14:12+0200\n"
-"Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
+"POT-Creation-Date: 2015-10-22 15:27+0000\n"
+"PO-Revision-Date: 2016-03-10 21:48+0200\n"
+"Last-Translator: Yannis Koutsoukos <giankoyt@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.4\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../camerawire/src/cwwindow.cpp:62
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
 msgid "Camera"
 msgstr "Κάμερα"
 
@@ -26,37 +27,37 @@ msgid "File"
 msgstr "Αρχείο"
 
 #: ../camerawire/src/cwwindow.cpp:92 ../magellan/src/mgwindow.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:193
+#: ../src/niepce/ui/niepcewindow.cpp:194
 msgid "_Import..."
 msgstr "Ε_ισαγωγή..."
 
 #: ../camerawire/src/cwwindow.cpp:96 ../magellan/src/mgwindow.cpp:92
-#: ../src/niepce/ui/niepcewindow.cpp:200
+#: ../src/niepce/ui/niepcewindow.cpp:201
 msgid "Close"
 msgstr "Κλείσιμο"
 
 #: ../camerawire/src/cwwindow.cpp:99 ../magellan/src/mgwindow.cpp:95
-#: ../src/niepce/ui/niepcewindow.cpp:203
+#: ../src/niepce/ui/niepcewindow.cpp:204
 msgid "Edit"
 msgstr "Επεξεργασία"
 
 #: ../camerawire/src/cwwindow.cpp:113 ../magellan/src/mgwindow.cpp:109
-#: ../src/niepce/ui/niepcewindow.cpp:218
+#: ../src/niepce/ui/niepcewindow.cpp:219
 msgid "Cut"
 msgstr "Αποκοπή"
 
 #: ../camerawire/src/cwwindow.cpp:117 ../magellan/src/mgwindow.cpp:113
-#: ../src/niepce/ui/niepcewindow.cpp:222
+#: ../src/niepce/ui/niepcewindow.cpp:223
 msgid "Copy"
 msgstr "Αντιγραφή"
 
 #: ../camerawire/src/cwwindow.cpp:121 ../magellan/src/mgwindow.cpp:117
-#: ../src/niepce/ui/niepcewindow.cpp:226
+#: ../src/niepce/ui/niepcewindow.cpp:227
 msgid "Paste"
 msgstr "Επικόλληση"
 
 #: ../camerawire/src/cwwindow.cpp:124 ../magellan/src/mgwindow.cpp:120
-#: ../src/niepce/ui/niepcewindow.cpp:233
+#: ../src/niepce/ui/niepcewindow.cpp:234
 msgid "Tools"
 msgstr "Εργαλεία"
 
@@ -65,7 +66,7 @@ msgid "Refresh"
 msgstr "Ανανέωση"
 
 #: ../camerawire/src/cwwindow.cpp:135 ../magellan/src/mgwindow.cpp:131
-#: ../src/niepce/ui/niepcewindow.cpp:241
+#: ../src/niepce/ui/niepcewindow.cpp:242
 msgid "Hide tools"
 msgstr "Απόκρυψη εργαλείων"
 
@@ -135,28 +136,45 @@ msgstr "Λήψη"
 msgid "Trash"
 msgstr "Απορρίμματα"
 
-#: ../src/fwk/toolkit/application.cpp:124
+#.
+#. Local Variables:
+#. mode:c++
+#. c-file-style:"stroustrup"
+#. c-file-offsets:((innamespace . 0))
+#. c-basic-offset:2
+#. indent-tabs-mode:nil
+#. tab-width:2
+#. fill-column:99
+#. End:
+#.
+#: ../src/engine/importer/directoryimporter.cpp:58
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
+#| msgid "_Directory:"
+msgid "Directory"
+msgstr "Κατάλογος"
+
+#: ../src/fwk/toolkit/application.cpp:131
 msgid "New"
 msgstr "Νέο"
 
-#: ../src/fwk/toolkit/application.cpp:128
-#: ../src/niepce/ui/niepcewindow.cpp:353
+#: ../src/fwk/toolkit/application.cpp:135
+#: ../src/niepce/ui/niepcewindow.cpp:362
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: ../src/fwk/toolkit/application.cpp:137
+#: ../src/fwk/toolkit/application.cpp:144
 msgid "Preferences..."
 msgstr "Προτιμήσεις"
 
-#: ../src/fwk/toolkit/application.cpp:144
+#: ../src/fwk/toolkit/application.cpp:151
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/fwk/toolkit/application.cpp:149
+#: ../src/fwk/toolkit/application.cpp:156
 msgid "About"
 msgstr "Περί"
 
-#: ../src/fwk/toolkit/application.cpp:157
+#: ../src/fwk/toolkit/application.cpp:164
 msgid "Quit"
 msgstr "Έξοδος"
 
@@ -265,70 +283,90 @@ msgstr "Ετικέτα _10"
 msgid "<b>Labels</b>"
 msgstr "<b>Ετικέτες</b>"
 
-#.
-#. Local Variables:
-#. mode:c++
-#. c-file-style:"stroustrup"
-#. c-file-offsets:((innamespace . 0))
-#. indent-tabs-mode:nil
-#. tab-width:4
-#. fill-column:99
-#. End:
-#.
-#: ../src/niepce/ui/dialogs/importdialog.cpp:61
-#: ../src/niepce/ui/dialogs/importdialog.cpp:89
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
-msgid "Import"
-msgstr "Εισαγωγή"
-
-#: ../src/niepce/ui/dialogs/importdialog.cpp:85
+#: ../src/niepce/ui/dialogs/importdialog.cpp:110
 msgid "Import picture folder"
 msgstr "Εισαγωγή φακέλου εικόνων"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:88
-#: ../src/niepce/ui/niepcewindow.cpp:352
+#: ../src/niepce/ui/dialogs/importdialog.cpp:113
+#: ../src/niepce/ui/niepcewindow.cpp:361
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
+#: ../src/niepce/ui/dialogs/importdialog.cpp:114
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+msgid "Import"
+msgstr "Εισαγωγή"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+msgid "(none)"
+msgstr "(κανένας)"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+msgid "NONE"
+msgstr "ΚΑΝΈΝΑΣ"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+msgid "local"
+msgstr "τοπικό"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#| msgid "Cut"
+msgid "utc"
+msgstr "utc"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
 msgid "_Import"
 msgstr "Ε_ισαγωγή"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
 msgid "_Directory:"
 msgstr "Κ_ατάλογος:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
 msgid "..."
 msgstr "..."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
 msgid "_Images to import"
 msgstr "Ε_ικόνες για εισαγωγή"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:12
 msgid "Destination _Folder"
 msgstr "_Φάκελος προορισμού"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:13
 msgid "Import _UFRaw"
 msgstr "Εισαγωγή _UFRaw"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:14
 msgid "Import Raw_Studio"
 msgstr "Εισαγωγή Raw_Studio"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:15
+msgid "_Options"
+msgstr "Επι_λογές"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:16
+msgid "Presets:"
+msgstr "Προεπιλογές:"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:17
 msgid "You can still change this after importing the pictures."
 msgstr "Μπορείτε να το αλλάξετε και μετά την εισαγωγή των εικόνων."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
-msgid "<b>Date:</b>"
-msgstr "<b>Ημερομηνία:</b>"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:18
+#: ../src/niepce/ui/metadatapanecontroller.cpp:52
+msgid "Date:"
+msgstr "Ημερομηνία:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:11
-msgid "_Options"
-msgstr "Επι_λογές"
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:19
+msgid "Attributes:"
+msgstr "Χαρακτηριστικά :"
+
+#: ../src/niepce/ui/dialogs/importdialog.ui.h:20
+#| msgid "Write metadata"
+msgid "Metadata"
+msgstr "Mεταδεδομένα"
 
 #: ../src/niepce/ui/dialogs/preferencesdialog.cpp:42
 msgid "Preferences"
@@ -401,10 +439,6 @@ msgstr "Εστιακή απόσταση:"
 #: ../src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "White balance:"
 msgstr "Ισορροπία λευκού:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
-msgid "Date:"
-msgstr "Ημερομηνία:"
 
 #: ../src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Headline:"
@@ -534,8 +568,7 @@ msgstr "Σημείωση ως επιλογή"
 msgid "Write metadata"
 msgstr "Εγγραφή μεταδεδομένων"
 
-#: ../src/niepce/ui/moduleshell.cpp:201
-#: ../src/niepce/ui/niepcewindow.cpp:183
+#: ../src/niepce/ui/moduleshell.cpp:201 ../src/niepce/ui/niepcewindow.cpp:184
 msgid "Library"
 msgstr "Βιβλιοθήκη"
 
@@ -557,56 +590,56 @@ msgstr ""
 "\n"
 "Επιλογές οικοδόμισης: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:137
+#: ../src/niepce/ui/niepcewindow.cpp:138
 msgid "Ready"
 msgstr "Έτοιμο"
 
-#: ../src/niepce/ui/niepcewindow.cpp:188
+#: ../src/niepce/ui/niepcewindow.cpp:189
 msgid "New Folder..."
 msgstr "Νέος φάκελος..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:189
+#: ../src/niepce/ui/niepcewindow.cpp:190
 msgid "New Project..."
 msgstr "Νέο έργο..."
 
-#: ../src/niepce/ui/niepcewindow.cpp:230
+#: ../src/niepce/ui/niepcewindow.cpp:231
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: ../src/niepce/ui/niepcewindow.cpp:236
+#: ../src/niepce/ui/niepcewindow.cpp:237
 msgid "Edit Labels..."
 msgstr "Επεξεργασία ετικετών..."
 
 #. TODO make this parametric from resources
-#: ../src/niepce/ui/niepcewindow.cpp:308
+#: ../src/niepce/ui/niepcewindow.cpp:317
 msgid "Label 1"
 msgstr "Ετικέτα 1"
 
 #. 217, 37, 17
-#: ../src/niepce/ui/niepcewindow.cpp:309
+#: ../src/niepce/ui/niepcewindow.cpp:318
 msgid "Label 2"
 msgstr "Ετικέτα 2"
 
 #. 97, 217, 17
-#: ../src/niepce/ui/niepcewindow.cpp:310
+#: ../src/niepce/ui/niepcewindow.cpp:319
 msgid "Label 3"
 msgstr "Ετικέτα 3"
 
 #. 17, 197, 217
-#: ../src/niepce/ui/niepcewindow.cpp:311
+#: ../src/niepce/ui/niepcewindow.cpp:320
 msgid "Label 4"
 msgstr "Ετικέτα 4"
 
 #. 137, 17, 217
-#: ../src/niepce/ui/niepcewindow.cpp:312
+#: ../src/niepce/ui/niepcewindow.cpp:321
 msgid "Label 5"
 msgstr "Ετικέτα 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:350
+#: ../src/niepce/ui/niepcewindow.cpp:359
 msgid "Open library"
 msgstr "Άνοιγμα της βιβλιοθήκης"
 
-#: ../src/niepce/ui/niepcewindow.cpp:412
+#: ../src/niepce/ui/niepcewindow.cpp:421
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -638,6 +671,9 @@ msgstr "Λέξεις κλειδιά"
 #: ../src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Χώρος εργασίας"
+
+#~ msgid "<b>Date:</b>"
+#~ msgstr "<b>Ημερομηνία:</b>"
 
 #~ msgid "_Image"
 #~ msgstr "Ει_κόνα"
