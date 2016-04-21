@@ -100,7 +100,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
                 }
             }
 
-            if (!isnan(latitude) && !isnan(longitude)) {
+            if (!std::isnan(latitude) && !std::isnan(longitude)) {
                 m_map->centerOn(latitude, longitude);
             }
         }
