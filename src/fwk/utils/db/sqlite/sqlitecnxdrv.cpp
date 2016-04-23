@@ -266,7 +266,7 @@ namespace db { namespace sqlite {
 		bool
 		SqliteCnxDrv::execute_statement (const SQLStatement &a_statement)
 		{
-      std::lock_guard<std::recursive_mutex> lock(m_mutex);
+		  std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
 		  THROW_IF_FAIL (m_priv && m_priv->sqlite) ;
 		  DBG_OUT("sql string: %s", a_statement.to_string().c_str()) ;
@@ -306,9 +306,9 @@ namespace db { namespace sqlite {
 			case ColumnType::STRING:
 			{
 			  try {
-				std::string text(boost::any_cast<std::string>(iter->get<2>()));
-				sqlite3_bind_text(m_priv->cur_stmt, idx, text.c_str(), 
-								  text.size(), SQLITE_STATIC);
+				const std::string & text(boost::any_cast<std::string>(iter->get<2>()));
+				sqlite3_bind_text(m_priv->cur_stmt, idx, text.c_str(),
+								  text.size(), SQLITE_TRANSIENT);
 			  }
 			  catch(...)
 			  {
@@ -321,7 +321,7 @@ namespace db { namespace sqlite {
 			  try {
 				const fwk::Buffer* blob(boost::any_cast<const fwk::Buffer*>(iter->get<2>()));
 				sqlite3_bind_blob(m_priv->cur_stmt, idx, blob->get_data(), 
-								  blob->get_len(), SQLITE_STATIC);
+								  blob->get_len(), SQLITE_TRANSIENT);
 			  }
 			  catch(...)
 			  {

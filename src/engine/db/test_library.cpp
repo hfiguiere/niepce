@@ -76,6 +76,11 @@ int test_main(int, char *[])
     int kwid2 = lib.makeKeyword("bar");
     BOOST_CHECK(kwid2 > 0);
 
+    // duplicate keyword
+    int kwid3 = lib.makeKeyword("foo");
+    // should return kwid1 because it already exists.
+    BOOST_CHECK(kwid3 == kwid1);
+
     BOOST_CHECK(lib.assignKeyword(kwid1, file_id));
     BOOST_CHECK(lib.assignKeyword(kwid2, file_id));
 
