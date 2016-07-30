@@ -153,11 +153,11 @@ void ImportDialog::setToImport(const Glib::ustring & f)
     if(source_content.get()) {
         auto list_to_import = m_importer->getSourceContent();
 
-        for(const auto & f : list_to_import) {
-            DBG_OUT("selected %s", f->name().c_str());
+        for(const auto & _f : list_to_import) {
+            DBG_OUT("selected %s", _f->name().c_str());
             Gtk::TreeIter iter = m_images_list_model->append();
-            iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
-            iter->set_value(m_grid_columns.file, std::move(f));
+            iter->set_value(m_grid_columns.filename, Glib::ustring(_f->name()));
+            iter->set_value(m_grid_columns.file, std::move(_f));
         }
     }
 }

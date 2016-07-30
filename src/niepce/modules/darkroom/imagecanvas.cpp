@@ -130,6 +130,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         Cairo::RefPtr<Cairo::ImageSurface> img_s;
 
         int img_w, img_h;
+        img_w = img_h = 0;
         double scale = 1.0;
 
         if(m_image->get_status() != ncr::Image::status_t::ERROR) {
