@@ -113,12 +113,37 @@ BOOST_CONVERSION
 BOOST_FORMAT
 BOOST_TEST([s])
 
-AX_CFLAGS_GCC_OPTION([-Wextra -Wall -Wsign-compare -Wpointer-arith -Wchar-subscripts -Wwrite-strings -Wunused -Wpointer-arith])
-AX_CXXFLAGS_GCC_OPTION([-Wextra -Wall -Wsign-compare -Wpointer-arith -Wchar-subscripts -Wwrite-strings -Wunused -Wpointer-arith])
+dnl ***************************************************************
+dnl Excessive warnings
+dnl ***************************************************************
+AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option], [
+	ax_compiler_flags_test="-Werror=unknown-warning-option"
+], [
+	ax_compiler_flags_test=""
+])
+AX_APPEND_COMPILE_FLAGS([ \
+   -Wchar-subscripts \
+   -Wcast-align \
+   -Wextra \
+   -Wheader-guard \
+   -Wformat-nonliteral \
+   -Wformat-security \
+   -Wlogical-not-parentheses \
+   -Wmisleading-indentation \
+   -Wmissing-noreturn \
+dnl   -Wno-overloaded-virtual \
+   -Wpointer-arith \
+dnl   -Wredundant-decls \
+   -Wpointer-bool-conversion \
+   -Wshadow \
+   -Wsign-compare \
+   -Wunreachable-code \
+   -Wunused \
+   -Wwrite-strings \
+], [], [$ax_compiler_flags_test])
 
 AC_ARG_ENABLE(asan,[  --enable-asan    Turn on address sanitizer],[
-    AX_CFLAGS_GCC_OPTION([-fsanitize=address -fno-omit-frame-pointer])
-    AX_CXXFLAGS_GCC_OPTION([-fsanitize=address -fno-omit-frame-pointer])
+    AX_APPEND_COMPILE_FLAGS([-fsanitize=address -fno-omit-frame-pointer])
 ]
 ,
 [
