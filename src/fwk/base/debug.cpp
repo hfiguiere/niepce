@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/debug.cpp
  *
- * Copyright (C) 2007-2012 Hubert Figuiere
+ * Copyright (C) 2007-2016 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,11 @@ static void _v2print(const char* prefix, const char* filen, int linen,
     snprintf(buf, 128, "(0x%lx) ", (unsigned long)pthread_self());
     fwrite(buf, 1, strlen(buf), stderr);
 
+    // the format has been checked.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
     fprintf(stderr, prefix, filen, linen);
+#pragma GCC diagnostic pop
 
     if(func) {
         fwrite(func, 1, strlen(func), stderr);
