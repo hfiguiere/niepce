@@ -131,7 +131,7 @@ AX_APPEND_COMPILE_FLAGS([ \
    -Wlogical-not-parentheses \
    -Wmisleading-indentation \
    -Wmissing-noreturn \
-dnl   -Wno-overloaded-virtual \
+   -Woverloaded-virtual \
    -Wpointer-arith \
 dnl   -Wredundant-decls \
    -Wpointer-bool-conversion \
