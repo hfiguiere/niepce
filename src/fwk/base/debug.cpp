@@ -43,42 +43,41 @@ extern "C" void dbg_assert_raised()
 
 namespace fwk {
 
-	static void _vprint(const char *prefix, const char *fmt, 
-										 const char* func,	va_list marker);
+static void _vprint(const char *prefix, const char *fmt,
+                    const char* func,	va_list marker);
 static void _v2print(const char *prefix, const char* filen, int linen,
                      const char *fmt, const char* func, va_list marker);
-	static void _print(const char *prefix, const char *fmt, 
-					   const char* func, ...);
+static void _print(const char *prefix, const char *fmt,
+                   const char* func, ...);
 
-	void dbg_print(const char *fmt, const char* func, ...)
-	{
+void dbg_print(const char *fmt, const char* func, ...)
+{
 #ifdef DEBUG
 #define DEBUG_MSG "DEBUG: "
-		va_list marker;
-		
-		va_start(marker, func);
-		// TODO make this atomic
-		_vprint(DEBUG_MSG, fmt, func, marker);
+    va_list marker;
 
-		va_end(marker);
-		
+    va_start(marker, func);
+    // TODO make this atomic
+    _vprint(DEBUG_MSG, fmt, func, marker);
+
+    va_end(marker);
 #undef DEBUG_MSG
 #endif
-	}
+}
 
 
-	/** assert 
-	 * 
-	 */
-	void dbg_assert(bool condvalue, const char* cond, 
-                        const char* func, const char* filen,
-                        int linen, const char* reason)
-	{
-            if(!condvalue) {
-                _print("ASSERT: ", "[%s] %s:%d %s", func, cond, filen, linen, reason);
-                dbg_assert_raised();
-            }
-	}
+/** assert
+ *
+ */
+void dbg_assert(bool condvalue, const char* cond,
+                const char* func, const char* filen,
+                int linen, const char* reason)
+{
+    if(!condvalue) {
+        _print("ASSERT: ", "[%s] %s:%d %s", func, cond, filen, linen, reason);
+        dbg_assert_raised();
+    }
+}
 
 
 void err_print(const char *fmt, const char* func, const char* filen,
@@ -97,34 +96,34 @@ void err_print(const char *fmt, const char* func, const char* filen,
 }
 
 
-	static void _print(const char *prefix, const char *fmt, 
-							const char* func, ...)
-	{
-		va_list marker;
-		
-		va_start(marker, func);
+static void _print(const char *prefix, const char *fmt,
+                   const char* func, ...)
+{
+    va_list marker;
 
-		_vprint(prefix, fmt, func, marker);
+    va_start(marker, func);
 
-		va_end(marker);
-	}
+    _vprint(prefix, fmt, func, marker);
 
-	static void _vprint(const char *prefix, const char *fmt, 
-							const char* func,	va_list marker)
-	{
-		char buf[128];
-		snprintf(buf, 128, "(0x%lx) ", (unsigned long)pthread_self());
-		fwrite(buf, 1, strlen(buf), stderr);
-		fwrite(prefix, 1, strlen(prefix), stderr);
+    va_end(marker);
+}
 
-		if(func) {
-			fwrite(func, 1, strlen(func), stderr);
-			fwrite(" - ", 1, 3, stderr);
-		}
+static void _vprint(const char *prefix, const char *fmt,
+                    const char* func,	va_list marker)
+{
+    char buf[128];
+    snprintf(buf, 128, "(0x%lx) ", (unsigned long)pthread_self());
+    fwrite(buf, 1, strlen(buf), stderr);
+    fwrite(prefix, 1, strlen(prefix), stderr);
 
-		vfprintf(stderr, fmt, marker);
-		fprintf(stderr, "\n");
-	}
+    if(func) {
+        fwrite(func, 1, strlen(func), stderr);
+        fwrite(" - ", 1, 3, stderr);
+    }
+
+    vfprintf(stderr, fmt, marker);
+    fprintf(stderr, "\n");
+}
 
 static void _v2print(const char* prefix, const char* filen, int linen,
                      const char* fmt, const char* func, va_list marker)
