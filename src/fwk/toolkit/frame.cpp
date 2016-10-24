@@ -126,7 +126,7 @@ void Frame::toggle_tools_visible()
 
 void Frame::undo_state()
 {
-    DBG_ASSERT(m_undo_action, "undo action is NULL");
+    DBG_ASSERT(static_cast<bool>(m_undo_action), "undo action is NULL");
     fwk::UndoHistory & history(Application::app()->undo_history());
     m_undo_action->set_enabled(history.has_undo());
     std::string s = history.next_undo();
@@ -136,7 +136,7 @@ void Frame::undo_state()
 
 void Frame::redo_state()
 {
-    DBG_ASSERT(m_redo_action, "redo action is NULL");
+    DBG_ASSERT(static_cast<bool>(m_redo_action), "redo action is NULL");
     fwk::UndoHistory & history(Application::app()->undo_history());
     m_redo_action->set_enabled(history.has_redo());
     std::string s = history.next_redo();

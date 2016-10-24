@@ -41,14 +41,14 @@ MimeType::MimeType(const std::string & filename)
         gchar *content_type = g_content_type_guess(filename.c_str(),
                                                          nullptr, 0, &uncertainty);
         m_type = content_type;
-        
+
         g_free(content_type);
     }
 }
 
 MimeType::MimeType(const Glib::RefPtr<Gio::File> & file)
 {
-    DBG_ASSERT(file, "file can't be NULL");
+    DBG_ASSERT(static_cast<bool>(file), "file can't be NULL");
     m_fileinfo = file->query_info();
     m_name = m_fileinfo->get_name();
 		m_type = m_fileinfo->get_content_type();

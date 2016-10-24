@@ -41,7 +41,7 @@ Gtk::Widget * FilmStripController::buildWidget()
     if(m_widget) {
         return m_widget;
     }
-    DBG_ASSERT(m_store, "m_store NULL");
+    DBG_ASSERT(static_cast<bool>(m_store), "m_store NULL");
     m_thumbview = manage(new ThumbStripView(m_store));
     GtkWidget *thn = eog_thumb_nav_new(m_thumbview,
                                        EogThumbNavMode::ONE_ROW, true);
