@@ -2,8 +2,6 @@
 camerawire/src/cwwindow.cpp
 data/niepce.appdata.xml.in
 data/niepce.desktop.in.in
-magellan/src/mgwindow.cpp
-[type: gettext/glade]magellan/src/mgwindow.ui
 src/engine/db/library.cpp
 src/engine/importer/directoryimporter.cpp
 src/fwk/toolkit/application.cpp

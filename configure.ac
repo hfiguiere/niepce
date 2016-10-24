@@ -61,20 +61,10 @@ AC_ARG_ENABLE(camerawire,[  --enable-camerawire   Enable building Camerawire],[
 ],[
     NP_APP_CAMERAWIRE=no
 ])
-AC_ARG_ENABLE(magellan,[  --enable-magellan   Enable building Magellan],[
-    NP_APP_MAGELLAN=yes
-    if test ! -z "$NP_APPS" ; then
-        NP_APPS="$NP_APPS,"
-    fi
-    NP_APPS="$NP_APPSmagellan"
-],[
-    NP_APP_MAGELLAN=no
-])
 AC_ARG_ENABLE(allapps, [  --enable-allapps   Enable all apps],[
     NP_APP_NIEPCE=yes
     NP_APP_CAMERAWIRE=yes
-    NP_APP_MAGELLAN=yes
-    NP_APPS="niepce,camerawire,magellan"
+    NP_APPS="niepce,camerawire"
 ],[
 
 ])
@@ -243,39 +233,6 @@ camerawire/Makefile
 camerawire/src/Makefile
 camerawire/po/Makefile.in
 camerawire/po/Makefile
-])
-
-fi
-
-dnl ================
-dnl magellan
-dnl ================
-
-AM_CONDITIONAL(MG_BUILD, test "$NP_APP_MAGELLAN" = "yes")
-if test "$NP_APP_MAGELLAN" = "yes" ; then
-MAJOR_VERSION=0
-MINOR_VERSION=0
-MICRO_VERSION=1
-
-MG_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION"
-AC_SUBST(MG_VERSION)
-
-MG_GETTEXT_PACKAGE=magellan
-AC_SUBST(MG_GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED([MG_GETTEXT_PACKAGE], ["$MG_GETTEXT_PACKAGE"],
-                   [The domain to use with gettext])
-AM_GLIB_GNU_GETTEXT
-
-MG_LOCALEDIR=[${datadir}/locale]
-AC_SUBST(MG_LOCALEDIR)
-
-AC_DEFINE_UNQUOTED([MG_BUILD_CONFIG], ["$MG_BUILD_CONFIG"], [The string used to hardcode the build config.])
-
-AC_CONFIG_FILES([
-magellan/Makefile
-magellan/src/Makefile
-magellan/po/Makefile.in
-magellan/po/Makefile
 ])
 
 fi
