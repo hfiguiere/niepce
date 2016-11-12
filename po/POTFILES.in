@@ -1,7 +1,6 @@
-[encoding: UTF-8]
 camerawire/src/cwwindow.cpp
-data/niepce.appdata.xml.in
-data/niepce.desktop.in.in
+data/niepce.appdata.xml
+data/niepce.desktop
 src/engine/db/library.cpp
 src/engine/importer/directoryimporter.cpp
 src/fwk/toolkit/application.cpp
@@ -10,11 +9,11 @@ src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/widgets/addinstreemodel.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
 src/niepce/ui/dialogs/editlabels.cpp
-[type: gettext/glade]src/niepce/ui/dialogs/editlabels.ui
+src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
-[type: gettext/glade]src/niepce/ui/dialogs/importdialog.ui
+src/niepce/ui/dialogs/importdialog.ui
 src/niepce/ui/dialogs/preferencesdialog.cpp
-[type: gettext/glade]src/niepce/ui/dialogs/preferences.ui
+src/niepce/ui/dialogs/preferences.ui
 src/niepce/ui/metadatapanecontroller.cpp
 src/niepce/ui/moduleshell.cpp
 src/niepce/ui/niepceapplication.cpp

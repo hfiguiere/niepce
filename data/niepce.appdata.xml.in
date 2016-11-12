@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
- <id type="desktop">niepce.desktop</id>
+<component type="desktop">
+ <id>net.figuiere.Niepce</id>
  <!-- this is the licence of the appdata file, not the project. Permitted values are 'CC0', 'CC BY' and 'CC BY-SA' -->
  <licence>CC0</licence>
  <project_license>GPL-3.0+</project_license>
@@ -9,15 +9,15 @@
  <!-- Only include 'summary' if you want the software center name to be different to the 'Comment' in the .desktop file -->
  <summary>Advanced Photo Editing</summary>
  <description>
-  <_p>
+  <p>
     Niepce Digital is an application used to manage and edit photos.
-  </_p>
-  <_p>Features:</_p>
+  </p>
+  <p>Features:</p>
   <!-- try not to use lists unless you have to. Paragraphs look a lot better in nearly all cases -->
   <ul>
-   <_li>Photo library management</_li>
-   <_li>Non destructive image editing</_li>
-   <_li>RAW processing</_li>
+   <li>Photo library management</li>
+   <li>Non destructive image editing</li>
+   <li>RAW processing</li>
   </ul>
  </description>
  <screenshots>
@@ -27,4 +27,6 @@
  <url type="homepage">https://wiki.gnome.org/Apps/Niepce</url>
  <!-- this is someone that wants to be notified when we add to the appdata specification -->
  <updatecontact>hub@figuiere.net</updatecontact>
-</application>
+
+ <translation type="gettext">niepce</translation>
+</component>

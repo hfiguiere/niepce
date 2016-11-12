@@ -1,52 +1,41 @@
 #!/bin/sh
+# Run this to generate all the initial makefiles, etc.
 
-#
-# part of niepce
-#
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
 
+(test -f $srcdir/src/niepce/main.cpp) || {
+    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+    echo " top-level niepce directory"
+    exit 1
+}
 
-topsrcdir=`dirname $0`
-if test x$topsrcdir = x ; then
-        topsrcdir=.
-fi
+olddir=`pwd`
 
-builddir=`pwd`
+cd $srcdir
 
-AUTOCONF=autoconf
-if test -x /usr/bin/glibtool ; then
-    LIBTOOL=glibtool
+touch ChangeLog
+touch INSTALL
+
+aclocal --install -I m4 || exit 1
+# gtkdocize || exit 1
+
+#if command -v mm-common-prepare 2>/dev/null; then
+#    mm-common-prepare --copy --force $srcdir/libidemm
+#fi
+
+autoreconf --force --install -Wno-portability || exit 1
+
+cd $olddir
+
+if [ "$NOCONFIGURE" = "" ]; then
+        $srcdir/configure "$@" || exit 1
+
+        if [ "$1" = "--help" ]; then exit 0 else
+                echo "Now type \`make\' to compile" || exit 1
+        fi
 else
-    LIBTOOL=libtool
-fi
-if test -x /usr/bin/glibtoolize ; then
-    LIBTOOLIZE=glibtoolize
-else
-    LIBTOOLIZE=libtoolize
-fi
-AUTOMAKE=automake
-ACLOCAL=aclocal
-
-cd $topsrcdir
-
-rm -f autogen.err
-$LIBTOOLIZE --force
-$ACLOCAL -I m4 >> autogen.err 2>&1
-
-intltoolize
-
-autoheader --force
-$AUTOCONF
-$AUTOMAKE --add-missing --copy --foreign 
-
-cd $builddir
-
-if test -z "$NOCONFIGURE" ; then 
-	if test -z "$*"; then
-		echo "I am going to run ./configure with --enable-maintainer-mode"
-		echo "If you wish to pass any to it, please specify them on "
-		echo "the $0 command line."
-	fi
-	echo "Running configure..."
-	$topsrcdir/configure --enable-maintainer-mode "$@"
+        echo "Skipping configure process."
 fi
 
+set +x

@@ -1,8 +1,8 @@
 
 [Desktop Entry]
-_Name=Niepce Digital
-_Comment=Manage and edit your photos.
-_Keywords=photo;
+Name=Niepce Digital
+Comment=Manage and edit your photos.
+Keywords=photo;
 Exec=niepce %u
 Icon=niepce
 StartupNotify=true

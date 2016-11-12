@@ -1,4 +1,4 @@
-AC_INIT(niepce-suite, 2013.6.1)
+AC_INIT(niepce, 2013.6.1)
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR(README)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz subdir-objects])
@@ -140,8 +140,6 @@ AC_ARG_ENABLE(asan,[  --enable-asan    Turn on address sanitizer],[
 
 ])
 
-IT_PROG_INTLTOOL([0.35.0])
-
 AC_CONFIG_FILES([
 Makefile
 art/Makefile
@@ -164,7 +162,6 @@ src/engine/Makefile
 src/libraryclient/Makefile
 src/ncr/Makefile
 po/Makefile.in
-po/Makefile
 ])
 
 dnl =============
@@ -184,7 +181,8 @@ GETTEXT_PACKAGE=niepce
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
                    [The domain to use with gettext])
-AM_GLIB_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.19])
+AM_GNU_GETTEXT([external])
 
 NIEPCE_LOCALEDIR=[${datadir}/locale]
 AC_SUBST(NIEPCE_LOCALEDIR)
@@ -198,7 +196,6 @@ src/niepce/modules/darkroom/Makefile
 src/niepce/modules/interfaces/Makefile
 src/niepce/modules/map/Makefile
 src/niepce/Makefile
-data/niepce.desktop.in
 ])
 
 fi
@@ -232,7 +229,6 @@ AC_CONFIG_FILES([
 camerawire/Makefile
 camerawire/src/Makefile
 camerawire/po/Makefile.in
-camerawire/po/Makefile
 ])
 
 fi
