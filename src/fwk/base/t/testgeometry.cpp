@@ -41,10 +41,10 @@ int test_main( int, char *[] )             // note the name!
 	vtest.push_back("a b c d");
 	vtest.push_back("100 100 150");
 	std::for_each(vtest.begin(), vtest.end(),
-		      [] (const std::string & s) {
+		      [] (const std::string & value) {
 			      bool raised = false;
 			      try {
-				      Rect r3(s);
+				      Rect r3(value);
 			      }
 			      catch(std::bad_cast) {
 				      raised = true;
