@@ -47,24 +47,28 @@ time_t make_time_value(const Date & d)
     return date;
 }
 
-XmpDateTime& make_xmp_date_time(time_t t, XmpDateTime& xmp_dt)
+bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt)
 {
-    // FIXME find a better way. This should work.
     struct tm gmt;
     struct tm* pgmt = gmtime_r(&t, &gmt);
     DBG_ASSERT(pgmt == &gmt, "gmtime failed");
 
-    xmp_dt.year = gmt.tm_year + 1900;
-    xmp_dt.month = gmt.tm_mon + 1;
-    xmp_dt.day = gmt.tm_mday;
-    xmp_dt.hour = gmt.tm_hour;
-    xmp_dt.minute = gmt.tm_min;
-    xmp_dt.second = gmt.tm_sec;
+    if (!pgmt) {
+        return false;
+    }
+
+    xmp_dt.year = pgmt->tm_year + 1900;
+    xmp_dt.month = pgmt->tm_mon + 1;
+    xmp_dt.day = pgmt->tm_mday;
+    xmp_dt.hour = pgmt->tm_hour;
+    xmp_dt.minute = pgmt->tm_min;
+    xmp_dt.second = pgmt->tm_sec;
     xmp_dt.tzSign = 0;
     xmp_dt.tzHour = 0;
     xmp_dt.tzMinute = 0;
     xmp_dt.nanoSecond = 0;
-    return xmp_dt;
+
+    return true;
 }
 
 Date::Date(const XmpDateTime& dt, const Timezone* tz)
@@ -89,7 +93,7 @@ std::string Date::to_string() const
              m_datetime.minute, m_datetime.second,
              m_datetime.tzSign >= 0 ? '+' : '-',
              m_datetime.tzHour, m_datetime.tzMinute);
-    
+
     return buffer;
 }
 

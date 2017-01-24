@@ -28,7 +28,11 @@ namespace fwk {
 
 class Timezone;
 
-XmpDateTime& make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
+/**
+ * Fill the XmpDateTime %xmp_dt from a %t
+ * @return false if gmtime_r failed.
+ */
+bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
 
 /**
  * Class to deal with ISO8601 string dates as used by XMP.
