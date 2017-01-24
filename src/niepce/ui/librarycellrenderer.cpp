@@ -291,11 +291,11 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 
 
 bool
-LibraryCellRenderer::activate_vfunc(GdkEvent *event, Gtk::Widget & ,
+LibraryCellRenderer::activate_vfunc(GdkEvent * /*event*/, Gtk::Widget & ,
                                     const Glib::ustring &, const Gdk::Rectangle& /*bg*/,
                                     const Gdk::Rectangle & cell_area, Gtk::CellRendererState)
 {
-    DBG_OUT("On click. Event %p", event);
+    DBG_OUT("activate event");
     if(this->ClickableCellRenderer::is_hit()) {
 
         this->ClickableCellRenderer::reset_hit();
@@ -319,7 +319,7 @@ LibraryCellRenderer::activate_vfunc(GdkEvent *event, Gtk::Widget & ,
         y = this->ClickableCellRenderer::y();
         DBG_OUT("r(%d, %d, %d, %d) p(%f, %f)", rect.x, rect.y,
                 rect.width, rect.height, x, y);
-        bool hit = (rect.x <= x) && (rect.x + rect.width >= x) 
+        bool hit = (rect.x <= x) && (rect.x + rect.width >= x)
             && (rect.y <= y) && (rect.y + rect.height >= y);
         if(!hit) {
             DBG_OUT("not a hit");
