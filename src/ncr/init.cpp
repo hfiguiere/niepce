@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/init.cpp
  *
- * Copyright (C) 2011-2013 Hub Figuiere
+ * Copyright (C) 2011-2017 Hubert Figuière
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,7 +14,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, see 
+ * License along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
  */
 
@@ -26,7 +26,15 @@ namespace ncr {
 
 void init()
 {
-    gegl_init(0, nullptr);
+  // Disable OpenCL for now, it causes hang on my system.
+  // XXX evaluate a better way to enable-disable as needed
+  // XXX my system == old laptop requiring nouveau gfx driver.
+  GeglConfig *config = gegl_config();
+  GValue value = G_VALUE_INIT;
+  g_value_init(&value, G_TYPE_BOOLEAN);
+  g_value_set_boolean(&value, FALSE);
+  g_object_set_property(G_OBJECT(config), "use-opencl", &value);
+  gegl_init(0, nullptr);
 }
 
 }
