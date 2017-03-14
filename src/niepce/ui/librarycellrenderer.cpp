@@ -164,10 +164,9 @@ int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr,
 }
 
 void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr, 
-               int right, const fwk::RgbColour * colour,
+               int right, const fwk::RgbColour & colour,
                const GdkRectangle & r)
 {
-    DBG_ASSERT(colour, "colour is NULL");
     const int label_size = 15;
     double x, y;
     x = r.x + r.width - CELL_PADDING - right - CELL_PADDING - label_size;
@@ -177,7 +176,7 @@ void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr,
     cr->set_source_rgb(1.0, 1.0, 1.0);
     cr->stroke();
     cr->rectangle(x, y, label_size, label_size);
-    Gdk::Cairo::set_source_rgba(cr, fwk::rgbcolour_to_gdkcolor(*colour));
+    Gdk::Cairo::set_source_rgba(cr, fwk::rgbcolour_to_gdkcolor(colour));
     cr->fill();
 }
 
@@ -279,10 +278,10 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
             DBG_ASSERT(m_uiDataProvider, "no UIDataProvider");
             uint32_t label_id = file->label();
             if(label_id != 0) {
-                const fwk::RgbColour * label_colour = m_uiDataProvider->colourForLabel(label_id);
-                DBG_ASSERT(label_colour, "colour not found");
-                if(label_colour) {
-                    drawLabel(cr, left, label_colour, r);
+                auto result = m_uiDataProvider->colourForLabel(label_id);
+                DBG_ASSERT(!result.empty(), "colour not found");
+                if (!result.empty()) {
+                    drawLabel(cr, left, result.unwrap(), r);
                 }
             }
         }

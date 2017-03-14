@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/uidataprovider.cpp
  *
- * Copyright (C) 2011-2013 Hub Figuiere
+ * Copyright (C) 2011-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,14 +62,14 @@ void UIDataProvider::deleteLabel(int id)
     }
 }
 
-const fwk::RgbColour * UIDataProvider::colourForLabel(int id) const
+fwk::Option<fwk::RgbColour> UIDataProvider::colourForLabel(int id) const
 {
     for(auto iter : m_labels) {
         if(iter->id() == id) {
-            return &(iter->colour());
+            return fwk::Option<fwk::RgbColour>(iter->colour());
         }
     }
-    return nullptr;
+    return fwk::Option<fwk::RgbColour>();
 }
 
 

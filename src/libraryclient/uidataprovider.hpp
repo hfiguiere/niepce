@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/uidataprovider.hpp
  *
- * Copyright (C) 2011 Hub Figuiere
+ * Copyright (C) 2011-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 
+#include "fwk/base/option.hpp"
 #include "engine/db/label.hpp"
 
 namespace fwk {
@@ -38,7 +39,7 @@ public:
     void updateLabel(const eng::Label::Ptr &);
     void addLabels(const eng::Label::ListPtr & l);
     void deleteLabel(int id);
-    const fwk::RgbColour * colourForLabel(int id) const;
+    fwk::Option<fwk::RgbColour> colourForLabel(int id) const;
     const eng::Label::List & getLabels() const
         { return m_labels; }
 private:
