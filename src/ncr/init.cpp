@@ -18,22 +18,28 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "init.hpp"
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <gegl.h>
+
+#include "init.hpp"
 
 namespace ncr {
 
 void init()
 {
-  // Disable OpenCL for now, it causes hang on my system.
-  // XXX evaluate a better way to enable-disable as needed
-  // XXX my system == old laptop requiring nouveau gfx driver.
-  GeglConfig *config = gegl_config();
-  GValue value = G_VALUE_INIT;
-  g_value_init(&value, G_TYPE_BOOLEAN);
-  g_value_set_boolean(&value, FALSE);
-  g_object_set_property(G_OBJECT(config), "use-opencl", &value);
+  if (getenv("DISABLE_OPENCL")) {
+    // Disable OpenCL for when it causes hang on your system.
+    // XXX evaluate a better way to enable-disable as needed
+    // XXX my old system == old laptop requiring nouveau gfx driver.
+    GeglConfig *config = gegl_config();
+    GValue value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_BOOLEAN);
+    g_value_set_boolean(&value, FALSE);
+    fprintf(stderr, "Disabling opencl\n");
+    g_object_set_property(G_OBJECT(config), "use-opencl", &value);
+  }
   gegl_init(0, nullptr);
 }
 
