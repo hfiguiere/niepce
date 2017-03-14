@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011-2013 Hubert Figuiere
+ * Copyright (C) 2011-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,15 +55,14 @@ bool PropertyBag::set_value_for_property(PropertyIndex idx, const PropertyValue 
     return removed;
 }
 
-/** return true if a property is found */
-bool PropertyBag::get_value_for_property(PropertyIndex idx, PropertyValue & value) const
+/** return an option */
+fwk::Option<PropertyValue> PropertyBag::get_value_for_property(PropertyIndex idx) const
 {
     _Map::const_iterator iter = m_bag.find(idx);
     if(iter == m_bag.end()) {
         return false;
     }
-    value = iter->second;
-    return true;
+    return fwk::Option<PropertyValue>(iter->second);
 }
 
 bool PropertyBag::has_value_for_property(PropertyIndex idx) const

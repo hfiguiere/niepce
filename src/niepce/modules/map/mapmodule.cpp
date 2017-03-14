@@ -1,7 +1,7 @@
 /*
  * niepce - modules/map/mapmodule.cpp
  *
- * Copyright (C) 2014 Hubert Figuiere
+ * Copyright (C) 2014-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,15 +84,18 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
             lm->to_properties(propset, properties);
             double latitude, longitude;
             latitude = longitude = NAN;
-            fwk::PropertyValue val;
-            if(properties.get_value_for_property(eng::NpExifGpsLongProp, val)) {
+            auto result = properties.get_value_for_property(eng::NpExifGpsLongProp);
+            if (!result.empty()) {
+                fwk::PropertyValue val = result.unwrap();
                 // it is a string
                 if (is_string(val)) {
                     longitude = fwk::XmpMeta::gpsCoordFromXmp(
                         fwk::get_string(val));
                 }
             }
-            if(properties.get_value_for_property(eng::NpExifGpsLatProp, val)) {
+            result = properties.get_value_for_property(eng::NpExifGpsLatProp);
+            if (!result.empty()) {
+                fwk::PropertyValue val = result.unwrap();
                 // it is a string
                 if (is_string(val)) {
                     latitude = fwk::XmpMeta::gpsCoordFromXmp(

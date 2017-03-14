@@ -29,6 +29,7 @@
 #include <boost/variant.hpp>
 
 #include "fwk/base/date.hpp"
+#include "fwk/base/option.hpp"
 
 namespace fwk {
 
@@ -88,8 +89,8 @@ public:
 
     /** return true if a property was removed prior to insertion */
     bool set_value_for_property(PropertyIndex idx, const PropertyValue & value);
-    /** return true if a property is found */
-    bool get_value_for_property(PropertyIndex idx, PropertyValue & value) const;
+    /** return property or an empty option */
+    fwk::Option<PropertyValue> get_value_for_property(PropertyIndex idx) const;
     /** return true if property exist */
     bool has_value_for_property(PropertyIndex idx) const;
     /** return true if the property was removed */

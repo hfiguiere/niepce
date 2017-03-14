@@ -8,10 +8,10 @@ noinst_LIBRARIES = libfwkbase.a
 
 
 TESTS = testmoniker testgeometry testfractions testdate testmap\
-	testpropertybag
+	testoption testpropertybag
 
 check_PROGRAMS = testmoniker testgeometry testfractions testdate testmap\
-	testpropertybag
+	testoption testpropertybag
 
 testdate_SOURCES = t/testdate.cpp
 testdate_LDADD = libfwkbase.a \
@@ -33,6 +33,10 @@ testmap_SOURCES = t/testmap.cpp
 testmap_LDADD = libfwkbase.a \
 	@FRAMEWORK_LIBS@
 
+testoption_SOURCES = t/testoption.cpp
+testoption_LDADD = libfwkbase.a \
+	@FRAMEWORK_LIBS@
+
 testpropertybag_SOURCES = t/testpropertybag.cpp
 testpropertybag_LDADD = libfwkbase.a \
 	@FRAMEWORK_LIBS@
@@ -47,5 +51,6 @@ libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	singleton.hpp \
 	util.hpp \
 	map.hpp \
+	option.hpp \
 	propertybag.hpp propertybag.cpp \
 	$(NULL)

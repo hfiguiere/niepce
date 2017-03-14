@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008-2014 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,11 +217,14 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
     auto undo = fwk::Application::app()->begin_undo(undo_label);
     for(auto iter : props) {
         fwk::PropertyValue value;
-        old.get_value_for_property(iter.first, value);
+        auto result = old.get_value_for_property(iter.first);
 
-        if(value.type() != typeid(fwk::EmptyValue)) {
-            DBG_ASSERT(value.type() == iter.second.type(),
-                       "Value type mismatch");
+        if (!result.empty()) {
+            value = result.unwrap();
+            if(value.type() != typeid(fwk::EmptyValue)) {
+                DBG_ASSERT(value.type() == iter.second.type(),
+                           "Value type mismatch");
+            }
         }
 
         undo->new_command<void>(

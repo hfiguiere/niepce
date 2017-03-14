@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -241,9 +241,9 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
 
     const MetaDataFormat * current = m_fmt->formats;
     while(current && current->label) {
-        PropertyValue v;
-        if(properties.get_value_for_property(current->id, v) || !current->readonly) {
-            add_data(current, v);
+        auto result = properties.get_value_for_property(current->id);
+        if(!result.empty() || !current->readonly) {
+            add_data(current, result.unwrap());
         }
         else {
             DBG_OUT("get_property failed id = %d, label = %s",
@@ -474,14 +474,14 @@ void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
     emit_metadata_changed(prop, fwk::PropertyValue(value));
 }
 
-void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop, 
+void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop,
                                            const fwk::PropertyValue & value)
 {
     fwk::PropertyBag props, old_props;
     props.set_value_for_property(prop, value);
-    fwk::PropertyValue old_value;
-    if(m_current_data.get_value_for_property(prop, old_value)) {
-        old_props.set_value_for_property(prop, old_value);
+    auto result = m_current_data.get_value_for_property(prop);
+    if (!result.empty()) {
+        old_props.set_value_for_property(prop, result.unwrap());
     }
     signal_metadata_changed.emit(props, old_props);
 }
