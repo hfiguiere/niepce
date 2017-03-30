@@ -2,6 +2,7 @@
 # Copyright (C) 2011 niepce's COPYRIGHT HOLDER.
 # This file is distributed under the same license as the niepce package.
 # Joe Hansen (joedalton2@yahoo.dk), 2010, 2011.
+# Alan Mortensen <alanmortensen.am@gmail.com>, 2017.
 #
 # item -> element
 #
@@ -9,273 +10,536 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-26 14:51+0100\n"
-"PO-Revision-Date: 2011-03-17 23:52+0100\n"
-"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
+"POT-Creation-Date: 2017-02-23 01:23+0000\n"
+"PO-Revision-Date: 2017-03-29 19:46+0200\n"
+"Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: ../src/fwk/toolkit/application.cpp:45
-msgid "System"
-msgstr "System"
+#: camerawire/src/cwwindow.cpp:62 src/niepce/ui/dialogs/importdialog.ui:18
+msgid "Camera"
+msgstr "Kamera"
 
-#: ../src/fwk/toolkit/frame.cpp:124
-msgid "Undo "
-msgstr "Fortryd "
+#: camerawire/src/cwwindow.cpp:87
+msgid "File"
+msgstr "Fil"
 
-#: ../src/fwk/toolkit/frame.cpp:133
-msgid "Redo "
-msgstr "Omgør "
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/niepcewindow.cpp:194
+msgid "_Import..."
+msgstr "_Importér …"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:56
+#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:201
+msgid "Close"
+msgstr "Luk"
+
+#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:204
+msgid "Edit"
+msgstr "Redigér"
+
+#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:219
+msgid "Cut"
+msgstr "Klip"
+
+#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:223
+msgid "Copy"
+msgstr "Kopiér"
+
+#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:227
+msgid "Paste"
+msgstr "Indsæt"
+
+#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:234
+msgid "Tools"
+msgstr "Værktøjer"
+
+#: camerawire/src/cwwindow.cpp:129
+msgid "Refresh"
+msgstr "Opdatér"
+
+#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:242
+msgid "Hide tools"
+msgstr "Skjul værktøjer"
+
+#. Only include 'name' if you want the software center name to be different to the 'Name' in the .desktop file
+#: data/niepce.appdata.xml.in:8 data/niepce.desktop.in:3
+msgid "Niepce Digital"
+msgstr "Niepce Digital"
+
+#. Only include 'summary' if you want the software center name to be different to the 'Comment' in the .desktop file
+#: data/niepce.appdata.xml.in:10
+msgid "Advanced Photo Editing"
+msgstr "Avanceret billedredigering"
+
+#: data/niepce.appdata.xml.in:12
+msgid "Niepce Digital is an application used to manage and edit photos."
+msgstr "Niepce Digital er et program til at håndtere og redigere billeder."
+
+#: data/niepce.appdata.xml.in:15
+msgid "Features:"
+msgstr "Funktioner:"
+
+#: data/niepce.appdata.xml.in:18
+msgid "Photo library management"
+msgstr "Håndtering af billedbibliotek"
+
+#: data/niepce.appdata.xml.in:19
+msgid "Non destructive image editing"
+msgstr "Ikke-ødelæggende billedredigering"
+
+#: data/niepce.appdata.xml.in:20
+msgid "RAW processing"
+msgstr "RAW-behandling"
+
+#: data/niepce.desktop.in:4
+msgid "Manage and edit your photos"
+msgstr "Håndtér og redigér dine billeder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/niepce.desktop.in:6
+msgid "photo;"
+msgstr "foto;billede;"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/niepce.desktop.in:9
+msgid "niepce"
+msgstr "niepce"
+
+#: src/engine/db/library.cpp:146
+msgid "Trash"
+msgstr "Papirkurv"
+
+#: src/engine/importer/directoryimporter.cpp:58
+#: src/niepce/ui/dialogs/importdialog.ui:14
+msgid "Directory"
+msgstr "Mappe"
+
+#: src/fwk/toolkit/application.cpp:131
+msgid "New"
+msgstr "Ny(t)"
+
+#: src/fwk/toolkit/application.cpp:135 src/niepce/ui/niepcewindow.cpp:362
+msgid "Open"
+msgstr "Åbn"
+
+#: src/fwk/toolkit/application.cpp:144
+msgid "Preferences..."
+msgstr "Indstillinger …"
+
+#: src/fwk/toolkit/application.cpp:151
+msgid "Help"
+msgstr "Hjælp"
+
+#: src/fwk/toolkit/application.cpp:156
+msgid "About"
+msgstr "Om"
+
+#: src/fwk/toolkit/application.cpp:164
+msgid "Quit"
+msgstr "Afslut"
+
+#: src/fwk/toolkit/frame.cpp:154
+msgid "Undo"
+msgstr "Fortryd"
+
+#: src/fwk/toolkit/frame.cpp:169
+msgid "Redo"
+msgstr "Omgør"
+
+#: src/fwk/toolkit/widgets/addinstreemodel.cpp:64
+msgid "Name"
+msgstr "Navn"
+
+#: src/fwk/toolkit/widgets/addinstreemodel.cpp:65
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:38
+msgid "Develop"
+msgstr "Udvikl"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:56
+msgid "Crop"
+msgstr "Beskær"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:60
+msgid "Tilt"
+msgstr "Vælt"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:62
+msgid "White balance"
+msgstr "Hvidbalance"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:65
+msgid "Color temperature"
+msgstr "Farvetemperatur"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:67
+msgid "Tone and colour"
+msgstr "Tone og farve"
+
+#. s->signal_value_changed().connect();
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:71
+msgid "Exposure"
+msgstr "Belysning"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:73
+msgid "Recovery"
+msgstr "Gendannelse"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:75
+msgid "Fill Light"
+msgstr "Udfyldningslys"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:77
+msgid "Blacks"
+msgstr "Sorte områder"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:79
+msgid "Brightness"
+msgstr "Lysstyrke"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:81
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:83
+msgid "Saturation"
+msgstr "Mætning"
+
+#: src/niepce/modules/darkroom/toolboxcontroller.cpp:85
+msgid "Vibrance"
+msgstr "Levende farver"
+
+#: src/niepce/ui/dialogs/editlabels.cpp:56
 msgid "Edit Labels"
-msgstr "Rediger etiketter"
+msgstr "Redigér etiketter"
 
-#: ../src/niepce/ui/dialogs/editlabels.cpp:113
+#: src/niepce/ui/dialogs/editlabels.cpp:113
 msgid "Change Labels"
 msgstr "Ændr etiketter"
 
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:1
-msgid "<b>Labels</b>"
-msgstr "<b>Etiketter</b>"
-
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:2
-msgid "Label _10"
-msgstr "Etiket _10"
-
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:3
-#: ../src/niepce/ui/moduleshell.cpp:79
+#: src/niepce/ui/dialogs/editlabels.ui:71
 msgid "Label _6"
 msgstr "Etiket _6"
 
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:4
-#: ../src/niepce/ui/moduleshell.cpp:84
+#: src/niepce/ui/dialogs/editlabels.ui:85
 msgid "Label _7"
 msgstr "Etiket _7"
 
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:5
-#: ../src/niepce/ui/moduleshell.cpp:89
+#: src/niepce/ui/dialogs/editlabels.ui:99
 msgid "Label _8"
 msgstr "Etiket _8"
 
-#: ../src/niepce/ui/dialogs/editlabels.ui.h:6
-#: ../src/niepce/ui/moduleshell.cpp:94
+#: src/niepce/ui/dialogs/editlabels.ui:113
 msgid "Label _9"
 msgstr "Etiket _9"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:58
-#: ../src/niepce/ui/dialogs/importdialog.cpp:84
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:3
-msgid "Import"
-msgstr "Importer"
+#: src/niepce/ui/dialogs/editlabels.ui:172
+msgid "Label _10"
+msgstr "Etiket _10"
 
-#: ../src/niepce/ui/dialogs/importdialog.cpp:80
+#: src/niepce/ui/dialogs/editlabels.ui:280
+msgid "<b>Labels</b>"
+msgstr "<b>Etiketter</b>"
+
+#: src/niepce/ui/dialogs/importdialog.cpp:110
 msgid "Import picture folder"
-msgstr "Importer billedmappe"
+msgstr "Importér billedmappe"
 
-#.
-#. Local Variables:
-#. mode:c++
-#. c-file-style:"stroustrup"
-#. c-file-offsets:((innamespace . 0))
-#. indent-tabs-mode:nil
-#. fill-column:99
-#. End:
-#.
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:1
-msgid "..."
-msgstr "..."
+#: src/niepce/ui/dialogs/importdialog.cpp:113
+#: src/niepce/ui/niepcewindow.cpp:361
+msgid "Cancel"
+msgstr "Annullér"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:2
-msgid "<b>Date:</b>"
-msgstr "<b>Dato:</b>"
+#: src/niepce/ui/dialogs/importdialog.cpp:114
+#: src/niepce/ui/dialogs/importdialog.ui:59
+msgid "Import"
+msgstr "Importér"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:4
-msgid "Import Raw_Studio"
-msgstr "Importer Raw_Studio"
+#: src/niepce/ui/dialogs/importdialog.ui:32
+msgid "(none)"
+msgstr "(ingen)"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:5
-msgid "Import _UFRaw"
-msgstr "Importer _UFRaw"
+#: src/niepce/ui/dialogs/importdialog.ui:33
+msgid "NONE"
+msgstr "INGEN"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:6
-msgid "You can still change this after importing the pictures."
-msgstr "Du kan stadig ændre dette efter import af billederne."
+#: src/niepce/ui/dialogs/importdialog.ui:47
+msgid "local"
+msgstr "lokal"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:7
+#: src/niepce/ui/dialogs/importdialog.ui:51
+msgid "utc"
+msgstr "utc"
+
+#: src/niepce/ui/dialogs/importdialog.ui:95
+msgid "_Import"
+msgstr "_Importér"
+
+#: src/niepce/ui/dialogs/importdialog.ui:159
 msgid "_Directory:"
 msgstr "_Mappe:"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:8
-msgid "_Folders"
-msgstr "_Mapper"
+#: src/niepce/ui/dialogs/importdialog.ui:183
+msgid "..."
+msgstr "..."
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:9
-msgid "_Import"
-msgstr "_Importer"
+#: src/niepce/ui/dialogs/importdialog.ui:207
+msgid "_Images to import"
+msgstr "_Billeder der skal importeres"
 
-#: ../src/niepce/ui/dialogs/importdialog.ui.h:10
+#: src/niepce/ui/dialogs/importdialog.ui:255
+msgid "Destination _Folder"
+msgstr "M_ålmappe"
+
+#: src/niepce/ui/dialogs/importdialog.ui:299
+msgid "Import _UFRaw"
+msgstr "Importér _UFRaw"
+
+#: src/niepce/ui/dialogs/importdialog.ui:317
+msgid "Import Raw_Studio"
+msgstr "Importér Raw_Studio"
+
+#: src/niepce/ui/dialogs/importdialog.ui:339
 msgid "_Options"
 msgstr "_Indstillinger"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:1
-msgid "_General"
-msgstr "_Generelt"
+#: src/niepce/ui/dialogs/importdialog.ui:395
+msgid "Presets:"
+msgstr "Forudindstillinger:"
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:2
-msgid "_Reopen Library"
-msgstr "_Genåbn bibliotek"
+#: src/niepce/ui/dialogs/importdialog.ui:454
+msgid "You can still change this after importing the pictures."
+msgstr "Du kan stadig ændre dette efter import af billederne."
 
-#: ../src/niepce/ui/dialogs/preferences.ui.h:3
-msgid "_Theme:\t"
-msgstr "_Tema:\t"
-
-#: ../src/niepce/ui/dialogs/preferences.ui.h:4
-msgid "_User Interface"
-msgstr "_Brugerflade"
-
-#: ../src/niepce/ui/dialogs/preferencesdialog.cpp:43
-msgid "Preferences"
-msgstr "Indstillinger"
-
-#: ../src/niepce/ui/moduleshell.cpp:58
-msgid "_Image"
-msgstr "_Billede"
-
-#: ../src/niepce/ui/moduleshell.cpp:78
-msgid "Set _Label"
-msgstr "Angiv _etiket"
-
-#: ../src/niepce/ui/moduleshell.cpp:100
-msgid "Set _Rating"
-msgstr "Angiv _bedømmelse"
-
-#: ../src/niepce/ui/moduleshell.cpp:101
-msgid "_No Rating"
-msgstr "_Ingen bedømmelse"
-
-#: ../src/niepce/ui/moduleshell.cpp:106
-msgid "_1 Star"
-msgstr "_1 stjerne"
-
-#: ../src/niepce/ui/moduleshell.cpp:111
-msgid "_2 Stars"
-msgstr "_2 stjerner"
-
-#: ../src/niepce/ui/moduleshell.cpp:116
-msgid "_3 Stars"
-msgstr "_3 stjerner"
-
-#: ../src/niepce/ui/moduleshell.cpp:121
-msgid "_4 Stars"
-msgstr "_4 stjerner"
-
-#: ../src/niepce/ui/moduleshell.cpp:126
-msgid "_5 Stars"
-msgstr "_5 stjerner"
-
-#: ../src/niepce/ui/moduleshell.cpp:172
-msgid "Library"
-msgstr "Bibliotek"
-
-#: ../src/niepce/ui/moduleshell.cpp:183
-msgid "Darkroom"
-msgstr "Mørkerum"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:43
-msgid "Make:"
-msgstr "Mærke:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:44
-msgid "Model:"
-msgstr "Model:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:45
-msgid "Lens:"
-msgstr "Linser:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:49
-msgid "Exposure Program:"
-msgstr "Belysningsprogram:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:50
-msgid "Speed:"
-msgstr "Hastighed:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:51
-msgid "Aperture:"
-msgstr "Blændetal:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:52
-msgid "ISO:"
-msgstr "ISO:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:53
-msgid "Exposure Bias:"
-msgstr "Belysningsbias:"
-
-#. this one is fishy as it hardcode the prefix.
-#: ../src/niepce/ui/metadatapanecontroller.cpp:55
-msgid "Flash:"
-msgstr "Blitz:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:56
-msgid "Flash compensation:"
-msgstr "Blitzkompensation:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:57
-msgid "Focal length:"
-msgstr "Brændvidde:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:58
-msgid "White balance:"
-msgstr "Hvidbalance:"
-
-#: ../src/niepce/ui/metadatapanecontroller.cpp:59
+#: src/niepce/ui/dialogs/importdialog.ui:476
+#: src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Date:"
 msgstr "Dato:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:63
+#: src/niepce/ui/dialogs/importdialog.ui:520
+msgid "Attributes:"
+msgstr "Attributter:"
+
+#: src/niepce/ui/dialogs/importdialog.ui:539
+msgid "Metadata"
+msgstr "Metadata"
+
+#: src/niepce/ui/dialogs/preferencesdialog.cpp:42
+msgid "Preferences"
+msgstr "Indstillinger"
+
+#: src/niepce/ui/dialogs/preferences.ui:67
+msgid "_Reopen Library"
+msgstr "_Genåbn bibliotek"
+
+#: src/niepce/ui/dialogs/preferences.ui:84
+msgid "Write XMP automatically (not recommended)"
+msgstr "Skriv XMP automatisk (ikke anbefalet)"
+
+#: src/niepce/ui/dialogs/preferences.ui:104
+msgid "_General"
+msgstr "_Generelt"
+
+#: src/niepce/ui/dialogs/preferences.ui:118
+msgid "Use dark interface"
+msgstr "Brug mørk grænseflade"
+
+#: src/niepce/ui/dialogs/preferences.ui:141
+msgid "_User Interface"
+msgstr "_Brugerflade"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:37
+msgid "Make:"
+msgstr "Mærke:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "Model:"
+msgstr "Model:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "Lens:"
+msgstr "Linse:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:43
+msgid "Exposure Program:"
+msgstr "Belysningsprogram:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:44
+msgid "Speed:"
+msgstr "Hastighed:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:45
+msgid "Aperture:"
+msgstr "Blændetal:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:46
+msgid "ISO:"
+msgstr "ISO:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:47
+msgid "Exposure Bias:"
+msgstr "Belysningsbias:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:48
+msgid "Flash:"
+msgstr "Blitz:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:49
+msgid "Flash compensation:"
+msgstr "Blitzkompensation:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:50
+msgid "Focal length:"
+msgstr "Brændvidde:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:51
+msgid "White balance:"
+msgstr "Hvidbalance:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:56
+msgid "Headline:"
+msgstr "Overskrift:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:57
+msgid "Caption:"
+msgstr "Billedtekst:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "Rating:"
 msgstr "Bedømmelse:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:64
+#. FIXME change this type to the right one when there is a widget
+#: src/niepce/ui/metadatapanecontroller.cpp:60
 msgid "Label:"
 msgstr "Etiket:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:65
+#: src/niepce/ui/metadatapanecontroller.cpp:61
 msgid "Keywords:"
 msgstr "Nøgleord:"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:69
+#: src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Camera Information"
 msgstr "Kamerainformation"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:72
+#: src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Shooting Information"
 msgstr "Optageinformation"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:75
+#: src/niepce/ui/metadatapanecontroller.cpp:71
 msgid "IPTC"
 msgstr "IPTC"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:78
+#: src/niepce/ui/metadatapanecontroller.cpp:74
 msgid "Rights"
 msgstr "Rettigheder"
 
-#: ../src/niepce/ui/metadatapanecontroller.cpp:88
+#: src/niepce/ui/metadatapanecontroller.cpp:104
 msgid "Image Properties"
 msgstr "Billedegenskaber"
 
-#: ../src/niepce/ui/niepceapplication.cpp:40
-msgid "Niepce Dark"
-msgstr "Niepce - mørk"
+#: src/niepce/ui/moduleshell.cpp:62
+msgid "Back"
+msgstr "Tilbage"
 
-#: ../src/niepce/ui/niepceapplication.cpp:64
+#: src/niepce/ui/moduleshell.cpp:68
+msgid "Forward"
+msgstr "Frem"
+
+#: src/niepce/ui/moduleshell.cpp:78
+msgid "Rotate Left"
+msgstr "Rotér til venstre"
+
+#: src/niepce/ui/moduleshell.cpp:85
+msgid "Rotate Right"
+msgstr "Rotér til højre"
+
+#: src/niepce/ui/moduleshell.cpp:91 src/niepce/ui/selectioncontroller.cpp:274
+msgid "Set Label"
+msgstr "Angiv etiket"
+
+#: src/niepce/ui/moduleshell.cpp:98
+msgid "Label 6"
+msgstr "Etiket 6"
+
+#: src/niepce/ui/moduleshell.cpp:104
+msgid "Label 7"
+msgstr "Etiket 7"
+
+#: src/niepce/ui/moduleshell.cpp:110
+msgid "Label 8"
+msgstr "Etiket 8"
+
+#: src/niepce/ui/moduleshell.cpp:116
+msgid "Label 9"
+msgstr "Etiket 9"
+
+#: src/niepce/ui/moduleshell.cpp:120 src/niepce/ui/selectioncontroller.cpp:271
+msgid "Set Rating"
+msgstr "Angiv bedømmelse"
+
+#: src/niepce/ui/moduleshell.cpp:127
+msgid "Unrated"
+msgstr "Uden bedømmelse"
+
+#: src/niepce/ui/moduleshell.cpp:133
+msgid "Rating 1"
+msgstr "Bedømmelse 1"
+
+#: src/niepce/ui/moduleshell.cpp:139
+msgid "Rating 2"
+msgstr "Bedømmelse 2"
+
+#: src/niepce/ui/moduleshell.cpp:145
+msgid "Rating 3"
+msgstr "Bedømmelse 3"
+
+#: src/niepce/ui/moduleshell.cpp:151
+msgid "Rating 4"
+msgstr "Bedømmelse 4"
+
+#: src/niepce/ui/moduleshell.cpp:157
+msgid "Rating 5"
+msgstr "Bedømmelse 5"
+
+#: src/niepce/ui/moduleshell.cpp:160 src/niepce/ui/selectioncontroller.cpp:268
+msgid "Set Flag"
+msgstr "Angiv markering"
+
+#: src/niepce/ui/moduleshell.cpp:168
+msgid "Flag as Rejected"
+msgstr "Markér som afvist"
+
+#: src/niepce/ui/moduleshell.cpp:175
+msgid "Unflagged"
+msgstr "Umarkeret"
+
+#: src/niepce/ui/moduleshell.cpp:182
+msgid "Flag as Pick"
+msgstr "Markér som det bedste"
+
+#: src/niepce/ui/moduleshell.cpp:191
+msgid "Write metadata"
+msgstr "Skriv metadata"
+
+#: src/niepce/ui/moduleshell.cpp:201 src/niepce/ui/niepcewindow.cpp:184
+msgid "Library"
+msgstr "Bibliotek"
+
+#: src/niepce/ui/moduleshell.cpp:210
+msgid "Darkroom"
+msgstr "Mørkerum"
+
+#: src/niepce/ui/moduleshell.cpp:213
+msgid "Map"
+msgstr "Kort"
+
+#: src/niepce/ui/niepceapplication.cpp:79
 msgid ""
 "A digital photo application.\n"
 "\n"
@@ -285,602 +549,385 @@ msgstr ""
 "\n"
 "Kompileret med disse tilvalg: "
 
-#: ../src/niepce/ui/niepcewindow.cpp:148
+#: src/niepce/ui/niepcewindow.cpp:138
 msgid "Ready"
 msgstr "Klar"
 
-#: ../src/niepce/ui/niepcewindow.cpp:214
-msgid "_Library"
-msgstr "_Bibliotek"
+#: src/niepce/ui/niepcewindow.cpp:189
+msgid "New Folder..."
+msgstr "Ny mappe …"
 
-#: ../src/niepce/ui/niepcewindow.cpp:220
-msgid "New _Folder..."
-msgstr "Ny _mappe..."
+#: src/niepce/ui/niepcewindow.cpp:190
+msgid "New Project..."
+msgstr "Nyt projekt …"
 
-#: ../src/niepce/ui/niepcewindow.cpp:221
-msgid "New _Project..."
-msgstr "Nyt _projekt..."
+#: src/niepce/ui/niepcewindow.cpp:231
+msgid "Delete"
+msgstr "Slet"
 
-#: ../src/niepce/ui/niepcewindow.cpp:223 ../camerawire/src/cwwindow.cpp:92
-msgid "_Import..."
-msgstr "_Importer..."
+#: src/niepce/ui/niepcewindow.cpp:237
+msgid "Edit Labels..."
+msgstr "Redigér etiketter …"
 
-#: ../src/niepce/ui/niepcewindow.cpp:233 ../camerawire/src/cwwindow.cpp:102
-msgid "_Edit"
-msgstr "_Rediger"
-
-#: ../src/niepce/ui/niepcewindow.cpp:252 ../camerawire/src/cwwindow.cpp:118
-msgid "_Tools"
-msgstr "_Værktøjer"
-
-#: ../src/niepce/ui/niepcewindow.cpp:253
-msgid "_Edit Labels..."
-msgstr "_Rediger etiketter..."
-
-#: ../src/niepce/ui/niepcewindow.cpp:256 ../camerawire/src/cwwindow.cpp:124
-msgid "_Hide tools"
-msgstr "_Skjul værktøjer"
-
-#: ../src/niepce/ui/niepcewindow.cpp:260 ../camerawire/src/cwwindow.cpp:128
-msgid "_Help"
-msgstr "_Hjælp"
-
-#: ../src/niepce/ui/niepcewindow.cpp:331
-msgid "Create library"
-msgstr "Opret bibliotek"
-
-#: ../src/niepce/ui/niepcewindow.cpp:335
-msgid "Create"
-msgstr "Opret"
-
-#: ../src/niepce/ui/niepcewindow.cpp:377
+#. TODO make this parametric from resources
+#: src/niepce/ui/niepcewindow.cpp:317
 msgid "Label 1"
 msgstr "Etiket 1"
 
-#: ../src/niepce/ui/niepcewindow.cpp:378
+#. 217, 37, 17
+#: src/niepce/ui/niepcewindow.cpp:318
 msgid "Label 2"
 msgstr "Etiket 2"
 
-#: ../src/niepce/ui/niepcewindow.cpp:379
+#. 97, 217, 17
+#: src/niepce/ui/niepcewindow.cpp:319
 msgid "Label 3"
 msgstr "Etiket 3"
 
-#: ../src/niepce/ui/niepcewindow.cpp:380
+#. 17, 197, 217
+#: src/niepce/ui/niepcewindow.cpp:320
 msgid "Label 4"
 msgstr "Etiket 4"
 
-#: ../src/niepce/ui/niepcewindow.cpp:381
+#. 137, 17, 217
+#: src/niepce/ui/niepcewindow.cpp:321
 msgid "Label 5"
 msgstr "Etiket 5"
 
-#: ../src/niepce/ui/niepcewindow.cpp:456
+#: src/niepce/ui/niepcewindow.cpp:359
+msgid "Open library"
+msgstr "Åbn bibliotek"
+
+#: src/niepce/ui/niepcewindow.cpp:421
 msgid "Niepce Digital - "
-msgstr "Niepce digital - "
+msgstr "Niepce Digital - "
 
-#: ../src/niepce/ui/selectioncontroller.cpp:194
-msgid "Set Label"
-msgstr "Angiv etiket"
+#: src/niepce/ui/selectioncontroller.cpp:277
+msgid "Set Property"
+msgstr "Angiv egenskab"
 
-#: ../src/niepce/ui/selectioncontroller.cpp:215
-msgid "Set Rating"
-msgstr "Angiv bedømmelse"
+#: src/niepce/ui/selectioncontroller.cpp:296
+msgid "Set Properties"
+msgstr "Angiv egenskaber"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:195
+#: src/niepce/ui/selectioncontroller.cpp:318
+msgid "Move to Trash"
+msgstr "Flyt til papirkurven"
+
+#: src/niepce/ui/workspacecontroller.cpp:296
 msgid "Pictures"
 msgstr "Billeder"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:199
+#: src/niepce/ui/workspacecontroller.cpp:300
 msgid "Projects"
 msgstr "Projekter"
 
-#: ../src/niepce/ui/workspacecontroller.cpp:203
+#: src/niepce/ui/workspacecontroller.cpp:304
 msgid "Keywords"
 msgstr "Nøgleord"
 
 #. TODO make it a mnemonic
-#: ../src/niepce/ui/workspacecontroller.cpp:216
+#: src/niepce/ui/workspacecontroller.cpp:316
 msgid "_Workspace"
 msgstr "_Arbejdsområde"
 
-#: ../src/niepce/stock.cpp:46
-msgid "Rotate L_eft"
-msgstr "Roter til _venstre"
+#~ msgid "System"
+#~ msgstr "System"
 
-#: ../src/niepce/stock.cpp:49
-msgid "Rotate R_ight"
-msgstr "Roter til _højre"
+#~ msgid "<b>Date:</b>"
+#~ msgstr "<b>Dato:</b>"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:35
-msgid "Develop"
-msgstr "Udvikl"
+#~ msgid "_Folders"
+#~ msgstr "_Mapper"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:51
-msgid "Crop"
-msgstr "Beskær"
+#~ msgid "_Theme:\t"
+#~ msgstr "_Tema:\t"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:54
-msgid "Tilt"
-msgstr "Vælt"
+#~ msgid "_Image"
+#~ msgstr "_Billede"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:56
-msgid "White balance"
-msgstr "Hvidbalance"
+#~ msgid "Set _Label"
+#~ msgstr "Angiv _etiket"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:59
-msgid "Color temperature"
-msgstr "Farvetemperatur"
+#~ msgid "Set _Rating"
+#~ msgstr "Angiv _bedømmelse"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:61
-msgid "Tone and colour"
-msgstr "Tone og farve"
+#~ msgid "_No Rating"
+#~ msgstr "_Ingen bedømmelse"
 
-#. s->signal_value_changed().connect();
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:65
-msgid "Exposure"
-msgstr "Belysning"
+#~ msgid "_1 Star"
+#~ msgstr "_1 stjerne"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:67
-msgid "Recovery"
-msgstr "Gendannelse"
+#~ msgid "_2 Stars"
+#~ msgstr "_2 stjerner"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:69
-msgid "Fill Light"
-msgstr "Fyld lys"
+#~ msgid "_3 Stars"
+#~ msgstr "_3 stjerner"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:71
-msgid "Blacks"
-msgstr "Sorte områder"
+#~ msgid "_4 Stars"
+#~ msgstr "_4 stjerner"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:73
-msgid "Brightness"
-msgstr "Lysfølsomhed"
+#~ msgid "_5 Stars"
+#~ msgstr "_5 stjerner"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:75
-msgid "Contrast"
-msgstr "Kontrast"
+#~ msgid "Niepce Dark"
+#~ msgstr "Niepce - mørk"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:77
-msgid "Saturation"
-msgstr "Mætning"
+#~ msgid "_Library"
+#~ msgstr "_Bibliotek"
 
-#: ../src/niepce/modules/darkroom/toolboxcontroller.cpp:79
-msgid "Vibrance"
-msgstr "Vibrering"
+#~ msgid "Create library"
+#~ msgstr "Opret bibliotek"
 
-#: ../src/ext/libgdl/gdl-dock-bar.c:108
-msgid "Master"
-msgstr "Master"
+#~ msgid "Create"
+#~ msgstr "Opret"
 
-#: ../src/ext/libgdl/gdl-dock-bar.c:109
-msgid "GdlDockMaster object which the dockbar widget is attached to"
-msgstr "GdlDockMaster-objekt som dokkens kontrol er tilføjet til"
+#~ msgid "GdlDockMaster object which the dockbar widget is attached to"
+#~ msgstr "GdlDockMaster-objekt som dokkens kontrol er tilføjet til"
 
-#: ../src/ext/libgdl/gdl-dock-bar.c:116
-msgid "Dockbar style"
-msgstr "Dokkens stil"
+#~ msgid "Dockbar style"
+#~ msgstr "Dokkens stil"
 
-#: ../src/ext/libgdl/gdl-dock-bar.c:117
-msgid "Dockbar style to show items on it"
-msgstr "Dokkens stil for visning af enheder på den"
+#~ msgid "Dockbar style to show items on it"
+#~ msgstr "Dokkens stil for visning af enheder på den"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
-msgid "Iconify"
-msgstr "Ikonificer"
+#~ msgid "Iconify"
+#~ msgstr "Ikonificer"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:393
-msgid "Iconify this dock"
-msgstr "Ikonificer dokken"
+#~ msgid "Iconify this dock"
+#~ msgstr "Ikonificer dokken"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
-msgid "Close"
-msgstr "Luk"
+#~ msgid "Close this dock"
+#~ msgstr "Luk dokken"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:395
-msgid "Close this dock"
-msgstr "Luk dokken"
+#~ msgid "Controlling dock item"
+#~ msgstr "Kontrollerer dokenhed"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:704
-#: ../src/ext/libgdl/gdl-dock-tablabel.c:128
-msgid "Controlling dock item"
-msgstr "Kontrollerer dokenhed"
+#~ msgid "Dockitem which 'owns' this grip"
+#~ msgstr "Dokenhed som 'ejer' dette greb"
 
-#: ../src/ext/libgdl/gdl-dock-item-grip.c:705
-msgid "Dockitem which 'owns' this grip"
-msgstr "Dokenhed som 'ejer' dette greb"
+#~ msgid "Orientation"
+#~ msgstr "Retning"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:287
-msgid "Orientation"
-msgstr "Retning"
+#~ msgid "Orientation of the docking item"
+#~ msgstr "Retning på dokelementet"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:288
-msgid "Orientation of the docking item"
-msgstr "Retning på dokelementet"
+#~ msgid "Resizable"
+#~ msgstr "Størrelse kan ændres"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:303
-msgid "Resizable"
-msgstr "Størrelse kan ændres"
+#~ msgid "If set, the dock item can be resized when docked in a panel"
+#~ msgstr "Hvis angivet kan størrelsen på dokelementet ændret når der er dokket i et panel"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:304
-msgid "If set, the dock item can be resized when docked in a panel"
-msgstr ""
-"Hvis angivet kan størrelsen på dokelementet ændret når der er dokket i et "
-"panel"
+#~ msgid "Item behavior"
+#~ msgstr "Elementopførsel"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:311
-msgid "Item behavior"
-msgstr "Elementopførsel"
+#~ msgid "General behavior for the dock item (i.e. whether it can float, if it's locked, etc.)"
+#~ msgstr "Generel opførsel for dokelementet (det vil sige om hvorvidt den kan flyde frit eller om den er låst et cetera)"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:312
-msgid ""
-"General behavior for the dock item (i.e. whether it can float, if it's "
-"locked, etc.)"
-msgstr ""
-"Generel opførsel for dokelementet (det vil sige om hvorvidt den kan flyde "
-"frit eller om den er låst et cetera)"
+#~ msgid "Locked"
+#~ msgstr "Låst"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:320
-#: ../src/ext/libgdl/gdl-dock-master.c:151
-msgid "Locked"
-msgstr "Låst"
+#~ msgid "If set, the dock item cannot be dragged around and it doesn't show a grip"
+#~ msgstr "Hvis angivet kan dokelementet ikke trækkes omkring og viser ikke et greb"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:321
-msgid ""
-"If set, the dock item cannot be dragged around and it doesn't show a grip"
-msgstr ""
-"Hvis angivet kan dokelementet ikke trækkes omkring og viser ikke et greb"
+#~ msgid "Preferred width"
+#~ msgstr "Foretrukken bredde"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:329
-msgid "Preferred width"
-msgstr "Foretrukken bredde"
+#~ msgid "Preferred width for the dock item"
+#~ msgstr "Foretrukken bredde for dokelementet"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:330
-msgid "Preferred width for the dock item"
-msgstr "Foretrukken bredde for dokelementet"
+#~ msgid "Preferred height"
+#~ msgstr "Foretrukken højde"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:336
-msgid "Preferred height"
-msgstr "Foretrukken højde"
+#~ msgid "Preferred height for the dock item"
+#~ msgstr "Foretrukken højde for dokelementet"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:337
-msgid "Preferred height for the dock item"
-msgstr "Foretrukken højde for dokelementet"
+#~ msgid "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or some other compound dock object."
+#~ msgstr "Du kan ikke tilføje et dokobjekt (%p af type %s) inden i en %s. Brug en GdlDock eller et andet sammensat dokobjekt."
 
-#: ../src/ext/libgdl/gdl-dock-item.c:616
-#, c-format
-msgid ""
-"You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
-"some other compound dock object."
-msgstr ""
-"Du kan ikke tilføje et dokobjekt (%p af type %s) inden i en %s. Brug en "
-"GdlDock eller et andet sammensat dokobjekt."
+#~ msgid "Attempting to add a widget with type %s to a %s, but it can only contain one widget at a time; it already contains a widget of type %s"
+#~ msgstr "Forsøger at tilføje en kontrol med typen %s til en %s, men den kan kun indeholde en kontrol ad gangen; den indeholder allerede en kontrol af typen %s"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:623
-#, c-format
-msgid ""
-"Attempting to add a widget with type %s to a %s, but it can only contain one "
-"widget at a time; it already contains a widget of type %s"
-msgstr ""
-"Forsøger at tilføje en kontrol med typen %s til en %s, men den kan kun "
-"indeholde en kontrol ad gangen; den indeholder allerede en kontrol af typen "
-"%s"
+#~ msgid "Unsupported docking strategy %s in dock object of type %s"
+#~ msgstr "Ikke understøttet dokstrategi %s i dokobjekt af typen %s"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:1345
-#: ../src/ext/libgdl/gdl-dock-item.c:1390
-#, c-format
-msgid "Unsupported docking strategy %s in dock object of type %s"
-msgstr "Ikke understøttet dokstrategi %s i dokobjekt af typen %s"
+#~ msgid "UnLock"
+#~ msgstr "Fjern lås"
 
-#. UnLock menuitem
-#: ../src/ext/libgdl/gdl-dock-item.c:1479
-msgid "UnLock"
-msgstr "Fjern lås"
+#~ msgid "Hide"
+#~ msgstr "Skjul"
 
-#. Hide menuitem.
-#: ../src/ext/libgdl/gdl-dock-item.c:1486
-msgid "Hide"
-msgstr "Skjul"
+#~ msgid "Lock"
+#~ msgstr "Lås"
 
-#. Lock menuitem
-#: ../src/ext/libgdl/gdl-dock-item.c:1491
-msgid "Lock"
-msgstr "Lås"
+#~ msgid "Attempt to bind an unbound item %p"
+#~ msgstr "Forsøg at fæstne et ufæstet element %p"
 
-#: ../src/ext/libgdl/gdl-dock-item.c:1717
-#, c-format
-msgid "Attempt to bind an unbound item %p"
-msgstr "Forsøg at fæstne et ufæstet element %p"
+#~ msgid "Default title"
+#~ msgstr "Standardtitel"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:144 ../src/ext/libgdl/gdl-dock.c:183
-msgid "Default title"
-msgstr "Standardtitel"
-
-#: ../src/ext/libgdl/gdl-dock-master.c:145
-msgid "Default title for newly created floating docks"
-msgstr "Standardtitel for nyligt oprettede flydende dokke"
+#~ msgid "Default title for newly created floating docks"
+#~ msgstr "Standardtitel for nyligt oprettede flydende dokke"
 
 # manglende it på engelsk?
-#: ../src/ext/libgdl/gdl-dock-master.c:152
-msgid ""
-"If is set to 1, all the dock items bound to the master are locked; if it's "
-"0, all are unlocked; -1 indicates inconsistency among the items"
-msgstr ""
-"Hvis den er angivet til 1, vil alle dokelementerne bundet til masteren være "
-"låst; hvis den er 0, er alle ulåste; -1 indikerer manglende konsistens "
-"mellem elementerne"
+#~ msgid "If is set to 1, all the dock items bound to the master are locked; if it's 0, all are unlocked; -1 indicates inconsistency among the items"
+#~ msgstr "Hvis den er angivet til 1, vil alle dokelementerne bundet til masteren være låst; hvis den er 0, er alle ulåste; -1 indikerer manglende konsistens mellem elementerne"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:160
-#: ../src/ext/libgdl/gdl-switcher.c:702
-msgid "Switcher Style"
-msgstr "Stil for netværksveksler (switcher)"
+#~ msgid "Switcher Style"
+#~ msgstr "Stil for netværksveksler (switcher)"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:161
-#: ../src/ext/libgdl/gdl-switcher.c:703
-msgid "Switcher buttons style"
-msgstr "Stil for netværksvekslerens (switcher) knapper"
+#~ msgid "Switcher buttons style"
+#~ msgstr "Stil for netværksvekslerens (switcher) knapper"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:168
-msgid "Expand direction"
-msgstr "Udvid retning"
+#~ msgid "Expand direction"
+#~ msgstr "Udvid retning"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:169
-msgid ""
-"Allow the master's dock items to expand their container dock objects in the "
-"given direction"
-msgstr ""
-"Tillader elementerne hos masterdokken at udvide deres objekter for "
-"containerdokken i den angivne retning"
+#~ msgid "Allow the master's dock items to expand their container dock objects in the given direction"
+#~ msgstr "Tillader elementerne hos masterdokken at udvide deres objekter for containerdokken i den angivne retning"
 
-#: ../src/ext/libgdl/gdl-dock-master.c:794
-#, c-format
-msgid ""
-"master %p: unable to add object %p[%s] to the hash.  There already is an "
-"item with that name (%p)."
-msgstr ""
-"master %p: kunne ikke tilføje objekt %p[%s] til hashen. Der er allerede et "
-"element med det navn (%p)."
+#~ msgid "master %p: unable to add object %p[%s] to the hash.  There already is an item with that name (%p)."
+#~ msgstr "master %p: kunne ikke tilføje objekt %p[%s] til hashen. Der er allerede et element med det navn (%p)."
 
-#: ../src/ext/libgdl/gdl-dock-master.c:967
-#, c-format
-msgid ""
-"The new dock controller %p is automatic.  Only manual dock objects should be "
-"named controller."
-msgstr ""
-"Den nye dokkontrollør %p er automatisk. Kun manuelle dokobjekter bør gives "
-"navnet kontrollør."
+#~ msgid "The new dock controller %p is automatic.  Only manual dock objects should be named controller."
+#~ msgstr "Den nye dokkontrollør %p er automatisk. Kun manuelle dokobjekter bør gives navnet kontrollør."
 
-#: ../src/ext/libgdl/gdl-dock-notebook.c:134
-msgid "Page"
-msgstr "Side"
+#~ msgid "Page"
+#~ msgstr "Side"
 
-#: ../src/ext/libgdl/gdl-dock-notebook.c:135
-msgid "The index of the current page"
-msgstr "Indeks for den aktuelle side"
+#~ msgid "The index of the current page"
+#~ msgstr "Indeks for den aktuelle side"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:120
-msgid "Name"
-msgstr "Navn"
+#~ msgid "Unique name for identifying the dock object"
+#~ msgstr "Unikt navn for identifikation af dokobjektet"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:121
-msgid "Unique name for identifying the dock object"
-msgstr "Unikt navn for identifikation af dokobjektet"
+#~ msgid "Long name"
+#~ msgstr "Langt navn"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:128
-msgid "Long name"
-msgstr "Langt navn"
+#~ msgid "Human readable name for the dock object"
+#~ msgstr "Brugerlæsbart navn for dokobjektet"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:129
-msgid "Human readable name for the dock object"
-msgstr "Brugerlæsbart navn for dokobjektet"
+#~ msgid "Stock Icon"
+#~ msgstr "Lagerikon"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:135
-msgid "Stock Icon"
-msgstr "Lagerikon"
+#~ msgid "Stock icon for the dock object"
+#~ msgstr "Lagerikon for dokobjektet"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:136
-msgid "Stock icon for the dock object"
-msgstr "Lagerikon for dokobjektet"
+#~ msgid "Pixbuf Icon"
+#~ msgstr "Pixbuf-ikon"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:142
-msgid "Pixbuf Icon"
-msgstr "Pixbuf-ikon"
+#~ msgid "Pixbuf icon for the dock object"
+#~ msgstr "Pixbuf-ikon for dokobjektet"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:143
-msgid "Pixbuf icon for the dock object"
-msgstr "Pixbuf-ikon for dokobjektet"
+#~ msgid "Dock master"
+#~ msgstr "Dokmaster"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:148
-msgid "Dock master"
-msgstr "Dokmaster"
+#~ msgid "Dock master this dock object is bound to"
+#~ msgstr "Dokmaster som dette dokobjekt er bundet til"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:149
-msgid "Dock master this dock object is bound to"
-msgstr "Dokmaster som dette dokobjekt er bundet til"
+#~ msgid "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which hasn't implemented this method"
+#~ msgstr "Kald til gdl_dock_object_dock i et dokobjekt %p (objektype er %s) som ikke har implementeret denne metode"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:436
-#, c-format
-msgid ""
-"Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
-"hasn't implemented this method"
-msgstr ""
-"Kald til gdl_dock_object_dock i et dokobjekt %p (objektype er %s) som ikke "
-"har implementeret denne metode"
+#~ msgid "Dock operation requested in a non-bound object %p. The application might crash"
+#~ msgstr "Anmodning om dokhandling i et ikkebundet objekt %p. Programmet kan bryde ned"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:565
-#, c-format
-msgid ""
-"Dock operation requested in a non-bound object %p. The application might "
-"crash"
-msgstr ""
-"Anmodning om dokhandling i et ikkebundet objekt %p. Programmet kan bryde ned"
+#~ msgid "Cannot dock %p to %p because they belong to different masters"
+#~ msgstr "Kan ikke dokke %p til %p da de tilhører forskellige masterer"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:572
-#, c-format
-msgid "Cannot dock %p to %p because they belong to different masters"
-msgstr "Kan ikke dokke %p til %p da de tilhører forskellige masterer"
+#~ msgid "Attempt to bind to %p an already bound dock object %p (current master: %p)"
+#~ msgstr "Forsøg på at binde et til %p allerede bundet dokobjekt %p (aktuel master: %p)"
 
-#: ../src/ext/libgdl/gdl-dock-object.c:614
-#, c-format
-msgid ""
-"Attempt to bind to %p an already bound dock object %p (current master: %p)"
-msgstr ""
-"Forsøg på at binde et til %p allerede bundet dokobjekt %p (aktuel master: %p)"
+#~ msgid "Position of the divider in pixels"
+#~ msgstr "Placeringen af opdeleren i billedpunkter"
 
-#: ../src/ext/libgdl/gdl-dock-paned.c:131
-msgid "Position"
-msgstr "Placering"
+#~ msgid "Sticky"
+#~ msgstr "Klæbende"
 
-#: ../src/ext/libgdl/gdl-dock-paned.c:132
-msgid "Position of the divider in pixels"
-msgstr "Placeringen af opdeleren i billedpunkter"
+#~ msgid "Whether the placeholder will stick to its host or move up the hierarchy when the host is redocked"
+#~ msgstr "Hvorvidt pladsholderen vil forblive hos sin vært eller flytte op i hierarkiet når værten bliver gendokket"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:143
-msgid "Sticky"
-msgstr "Klæbende"
+#~ msgid "Host"
+#~ msgstr "Vært"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:144
-msgid ""
-"Whether the placeholder will stick to its host or move up the hierarchy when "
-"the host is redocked"
-msgstr ""
-"Hvorvidt pladsholderen vil forblive hos sin vært eller flytte op i "
-"hierarkiet når værten bliver gendokket"
+#~ msgid "The dock object this placeholder is attached to"
+#~ msgstr "Dokobjektet denne pladsholder er tilsluttet"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:151
-msgid "Host"
-msgstr "Vært"
+#~ msgid "Next placement"
+#~ msgstr "Næste placering"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:152
-msgid "The dock object this placeholder is attached to"
-msgstr "Dokobjektet denne pladsholder er tilsluttet"
+#~ msgid "The position an item will be docked to our host if a request is made to dock to us"
+#~ msgstr "Placeringen hvor et element vil blive dokket til vores vært hvis en forespørgsel om at dokke kommer frem til os"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:159
-msgid "Next placement"
-msgstr "Næste placering"
+#~ msgid "Width"
+#~ msgstr "Bredde"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:160
-msgid ""
-"The position an item will be docked to our host if a request is made to dock "
-"to us"
-msgstr ""
-"Placeringen hvor et element vil blive dokket til vores vært hvis en "
-"forespørgsel om at dokke kommer frem til os"
+#~ msgid "Width for the widget when it's attached to the placeholder"
+#~ msgstr "Bredde for kontrollen når den er tilsluttet til pladsholderen"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:169
-#: ../src/ext/libgdl/gdl-dock.c:190
-msgid "Width"
-msgstr "Bredde"
+#~ msgid "Height"
+#~ msgstr "Højde"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:170
-msgid "Width for the widget when it's attached to the placeholder"
-msgstr "Bredde for kontrollen når den er tilsluttet til pladsholderen"
+#~ msgid "Height for the widget when it's attached to the placeholder"
+#~ msgstr "Højde på kontrollen når den er tilsluttet pladsholderen"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:177
-#: ../src/ext/libgdl/gdl-dock.c:198
-msgid "Height"
-msgstr "Højde"
+#~ msgid "Floating Toplevel"
+#~ msgstr "Flydende overniveau"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:178
-msgid "Height for the widget when it's attached to the placeholder"
-msgstr "Højde på kontrollen når den er tilsluttet pladsholderen"
+#~ msgid "Whether the placeholder is standing in for a floating toplevel dock"
+#~ msgstr "Hvorvidt pladsholderen erstatter en flydende overniveau dok"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:184
-msgid "Floating Toplevel"
-msgstr "Flydende overniveau"
+#~ msgid "X-Coordinate"
+#~ msgstr "X-koordinater"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:185
-msgid "Whether the placeholder is standing in for a floating toplevel dock"
-msgstr "Hvorvidt pladsholderen erstatter en flydende overniveau dok"
+#~ msgid "X coordinate for dock when floating"
+#~ msgstr "X-koordinat for dok når den flyder"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:191
-msgid "X-Coordinate"
-msgstr "X-koordinater"
+#~ msgid "Y-Coordinate"
+#~ msgstr "Y-koordinat"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:192
-msgid "X coordinate for dock when floating"
-msgstr "X-koordinat for dok når den flyder"
+#~ msgid "Y coordinate for dock when floating"
+#~ msgstr "Y-koordinat for dok når den flyder"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:198
-msgid "Y-Coordinate"
-msgstr "Y-koordinat"
+#~ msgid "Attempt to dock a dock object to an unbound placeholder"
+#~ msgstr "Forsøg på at dokke et dokobjekt til en ubundet pladsholder"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:199
-msgid "Y coordinate for dock when floating"
-msgstr "Y-koordinat for dok når den flyder"
+#~ msgid "Got a detach signal from an object (%p) who is not our host %p"
+#~ msgstr "Modtog et tilslutningssignal fra et objekt (%p) som ikke er vores vært %p"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:494
-msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr "Forsøg på at dokke et dokobjekt til en ubundet pladsholder"
+#~ msgid "Something weird happened while getting the child placement for %p from parent %p"
+#~ msgstr "Noget mærkeligt skete under hentning af underplaceringen for %p fra overdelen %p"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:618
-#, c-format
-msgid "Got a detach signal from an object (%p) who is not our host %p"
-msgstr ""
-"Modtog et tilslutningssignal fra et objekt (%p) som ikke er vores vært %p"
+#~ msgid "Dockitem which 'owns' this tablabel"
+#~ msgstr "Dokelement som 'ejer' denne fanebladsetiket"
 
-#: ../src/ext/libgdl/gdl-dock-placeholder.c:643
-#, c-format
-msgid ""
-"Something weird happened while getting the child placement for %p from "
-"parent %p"
-msgstr ""
-"Noget mærkeligt skete under hentning af underplaceringen for %p fra "
-"overdelen %p"
+#~ msgid "Floating"
+#~ msgstr "Flydende"
 
-#: ../src/ext/libgdl/gdl-dock-tablabel.c:129
-msgid "Dockitem which 'owns' this tablabel"
-msgstr "Dokelement som 'ejer' denne fanebladsetiket"
+#~ msgid "Whether the dock is floating in its own window"
+#~ msgstr "Hvorvidt dokken flyder i sit eget vindue"
 
-#: ../src/ext/libgdl/gdl-dock.c:175
-msgid "Floating"
-msgstr "Flydende"
+#~ msgid "Default title for the newly created floating docks"
+#~ msgstr "Standardtitel på de netop oprettede flydende dokker"
 
-#: ../src/ext/libgdl/gdl-dock.c:176
-msgid "Whether the dock is floating in its own window"
-msgstr "Hvorvidt dokken flyder i sit eget vindue"
+#~ msgid "Width for the dock when it's of floating type"
+#~ msgstr "Bredden på dokken når den er af den flydende slags"
 
-#: ../src/ext/libgdl/gdl-dock.c:184
-msgid "Default title for the newly created floating docks"
-msgstr "Standardtitel på de netop oprettede flydende dokker"
+#~ msgid "Height for the dock when it's of floating type"
+#~ msgstr "Højde på dokken når den er af den flydende slags"
 
-#: ../src/ext/libgdl/gdl-dock.c:191
-msgid "Width for the dock when it's of floating type"
-msgstr "Bredden på dokken når den er af den flydende slags"
+#~ msgid "Float X"
+#~ msgstr "Flydende X"
 
-#: ../src/ext/libgdl/gdl-dock.c:199
-msgid "Height for the dock when it's of floating type"
-msgstr "Højde på dokken når den er af den flydende slags"
+#~ msgid "X coordinate for a floating dock"
+#~ msgstr "X-koordinat for en flydende dok"
 
-#: ../src/ext/libgdl/gdl-dock.c:206
-msgid "Float X"
-msgstr "Flydende X"
+#~ msgid "Float Y"
+#~ msgstr "Flydende Y"
 
-#: ../src/ext/libgdl/gdl-dock.c:207
-msgid "X coordinate for a floating dock"
-msgstr "X-koordinat for en flydende dok"
+#~ msgid "Y coordinate for a floating dock"
+#~ msgstr "Y-koordinat for en flydende dok"
 
-#: ../src/ext/libgdl/gdl-dock.c:214
-msgid "Float Y"
-msgstr "Flydende Y"
-
-#: ../src/ext/libgdl/gdl-dock.c:215
-msgid "Y coordinate for a floating dock"
-msgstr "Y-koordinat for en flydende dok"
-
-#: ../src/ext/libgdl/gdl-dock.c:499
-#, c-format
-msgid "Dock #%d"
-msgstr "Dok #%d"
-
-#: ../camerawire/src/cwwindow.cpp:67
-msgid "Camera"
-msgstr "Kamera"
-
-#: ../camerawire/src/cwwindow.cpp:91
-msgid "_File"
-msgstr "_Fil"
+#~ msgid "Dock #%d"
+#~ msgstr "Dok #%d"
 
 #~ msgid "gtk-close"
 #~ msgstr "gtk-close"
-
-#~ msgid "gtk-cancel"
-#~ msgstr "gtk-cancel"
