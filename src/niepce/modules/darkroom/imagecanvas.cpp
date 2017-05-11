@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,10 +169,11 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 //        sc->set_antialias(Cairo::ANTIALIAS_NONE);
 
         // paint the background
-        sc->rectangle(0, 0, canvas_w, canvas_h);
-        Gdk::RGBA color = get_style_context()->get_background_color(Gtk::STATE_FLAG_NORMAL);
-        Gdk::Cairo::set_source_rgba(sc, color);
-        sc->fill();
+        auto ctxt = get_style_context();
+        ctxt->context_save();
+        ctxt->set_state(Gtk::STATE_FLAG_NORMAL);
+        ctxt->render_background(sc, 0, 0, canvas_w, canvas_h);
+        ctxt->context_restore();
 
 
         double out_w = (img_w * scale);

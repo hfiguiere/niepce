@@ -100,7 +100,8 @@ MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
 {
     if(readonly) {
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
-        l->set_alignment(0.0f, 0.5f);
+        l->set_xalign(0.0f);
+        l->set_yalign(0.5f);
         return l;
     }
 
@@ -109,7 +110,7 @@ MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
     e->set_wrap_mode(Gtk::WRAP_WORD);
     e->signal_focus_out_event().connect(
         sigc::bind(
-            sigc::mem_fun(*this, 
+            sigc::mem_fun(*this,
                           &MetaDataWidget::on_text_changed),
             e->get_buffer(), id));
     return e;
@@ -120,7 +121,8 @@ MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
 {
     if(readonly) {
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
-        l->set_alignment(0.0f, 0.5f);
+        l->set_xalign(0.0f);
+        l->set_yalign(0.5f);
         return l;
     }
 
@@ -128,7 +130,7 @@ MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
     e->set_has_frame(false); // TODO make that a custom widget
     e->signal_focus_out_event().connect(
         sigc::bind(
-            sigc::mem_fun(*this, 
+            sigc::mem_fun(*this,
                           &MetaDataWidget::on_str_changed),
             e, id));
     return e;
@@ -141,7 +143,7 @@ MetaDataWidget::create_date_widget(bool /*readonly*/, uint32_t id)
     return create_string_widget(true, id);
 }
 
-void 
+void
 MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
 {
     Gtk::Widget *w = nullptr;
@@ -150,18 +152,20 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
 
     while(current && current->label) {
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
-                                             Glib::ustring("<b>") 
+                                             Glib::ustring("<b>")
                                              + current->label + "</b>"));
         if(current->type != MetaDT::STRING_ARRAY
            && current->type != MetaDT::TEXT) {
-            labelw->set_alignment(0.0f, 0.5f);
+            labelw->set_xalign(0.0f);
+            labelw->set_yalign(0.5f);
         }
         else {
             // Text can wrap. Different alignment for the label
-            labelw->set_alignment(0.0f, 0.0f);
+            labelw->set_xalign(0.0f);
+            labelw->set_yalign(0.0f);
         }
         labelw->set_use_markup(true);
-    
+
         switch(current->type) {
         case MetaDT::STAR_RATING:
             w = create_star_rating_widget(current->readonly, current->id);
@@ -179,7 +183,7 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
             w = create_string_widget(current->readonly, current->id);
             break;
         }
-    
+
         m_table.insert_row(n_row + 1);
         m_table.attach(*labelw, 0, n_row, 1, 1);
         m_table.attach_next_to(*w, *labelw, Gtk::POS_RIGHT, 1, 1);

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,26 +215,21 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     eng::LibFile::Ptr file = m_libfileproperty.get_value();
 
     Glib::RefPtr<Gtk::StyleContext> style_context = widget.get_style_context();
-    Gdk::RGBA colour;
+
+    style_context->context_save();
     if(flags & Gtk::CELL_RENDERER_SELECTED) {
-        colour = style_context->get_background_color(Gtk::STATE_FLAG_SELECTED);
+        style_context->set_state(Gtk::STATE_FLAG_SELECTED);
     }
     else {
-        colour = style_context->get_background_color(Gtk::STATE_FLAG_NORMAL);
+        style_context->set_state(Gtk::STATE_FLAG_NORMAL);
     }
-
-    Gdk::Cairo::set_source_rgba(cr, colour);
-    cr->rectangle(r.x, r.y, r.width, r.height);
-    cr->fill();
+    style_context->render_background(cr, r.x, r.y, r.width, r.height);
 
     if(m_drawborder) {
-        colour = style_context->get_border_color(Gtk::STATE_FLAG_SELECTED);
-        Gdk::Cairo::set_source_rgba(cr, colour);
-        cr->set_line_width(1.0);
-        cr->rectangle(r.x, r.y, r.width, r.height);
-        cr->stroke();
+        style_context->render_frame(cr, r.x, r.y, r.width, r.height);
     }
-    
+    style_context->context_restore();
+
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
     _drawThumbnail(cr, pixbuf, r);
     if(m_drawrating) {

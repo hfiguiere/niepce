@@ -31,7 +31,8 @@ EditableHScale::EditableHScale(double min, double max, double step)
     : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
       m_icon(nullptr),
       m_adj(Gtk::Adjustment::create(0, min, max, step)),
-      m_scale(m_adj), m_entry(m_adj),
+      m_scale(m_adj, Gtk::ORIENTATION_HORIZONTAL),
+      m_entry(m_adj),
       m_dirty(false)
 {
     _init();

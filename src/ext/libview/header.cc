@@ -112,17 +112,20 @@ Header::SetAlignment(Alignment align) // IN: The new alignment
 {
    switch (align) {
    case Alignment::LEFT:
-      mLabel.set_alignment(0, 0.5);
+      mLabel.set_xalign(0);
+      mLabel.set_yalign(0.5);
       mLabel.set_justify(Gtk::JUSTIFY_LEFT);
       break;
 
    case Alignment::CENTER:
-      mLabel.set_alignment(0.5, 0.5);
+      mLabel.set_xalign(0.5);
+      mLabel.set_yalign(0.5);
       mLabel.set_justify(Gtk::JUSTIFY_CENTER);
       break;
 
    case Alignment::RIGHT:
-      mLabel.set_alignment(1, 0.5);
+      mLabel.set_xalign(1);
+      mLabel.set_yalign(0.5);
       mLabel.set_justify(Gtk::JUSTIFY_RIGHT);
       break;
 

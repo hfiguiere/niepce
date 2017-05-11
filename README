@@ -5,7 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files may be under GPL version 2 or later.
 
-(c) 2006-2014 Hubert Figuière
+(c) 2006-2017 Hubert Figuière
 Some portions are written by other people.
 
 What is this?
@@ -22,7 +22,7 @@ A C++11 compiler
 gtk+ 3.12
 cairo 1.1
 glibmm 2.32
-gtkmm 3.12
+gtkmm 3.16
 giomm
 cairomm
 cluttermm 1.0

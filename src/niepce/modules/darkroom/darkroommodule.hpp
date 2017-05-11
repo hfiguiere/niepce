@@ -1,7 +1,7 @@
 /*
  * niepce - modules/darkroom/darkroommodule.hpp
  *
- * Copyright (C) 2008-2014 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ private:
     ImageCanvas*                 m_imagecanvas;
     Gtk::ScrolledWindow          m_canvas_scroll;
     ToolboxController::Ptr       m_toolbox_ctrl;
-    Glib::RefPtr<Gtk::ActionGroup> m_actionGroup;
+    Glib::RefPtr<Gio::ActionGroup> m_actionGroup;
     eng::LibFile::WeakPtr        m_imagefile;
     ncr::Image::Ptr              m_image;
     fwk::Dock                   *m_dock;

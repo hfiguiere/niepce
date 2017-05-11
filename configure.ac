@@ -13,7 +13,7 @@ dnl all the library version.
 dnl if one is harcoded elsewhere, it is a bug
 LIBGIOMM_VERSION=2.16
 LIBGLIBMM_VERSION=2.32
-LIBGTKMM_VERSION=3.14
+LIBGTKMM_VERSION=3.16
 EXEMPI_VERSION=2.2.0
 SQLITE_VERSION=3.0
 GEGL_VERSION=0.3.0

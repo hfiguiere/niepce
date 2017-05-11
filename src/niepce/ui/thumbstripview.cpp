@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail View
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2007-2014 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * C++-ization: Hubert Figuiere <hub@figuiere.net>
  * Original Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
@@ -86,9 +86,6 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
     m_renderer = manage(new ThumbStripCell());
 
     pack_start(*m_renderer, FALSE);
-    if (gtk_check_version(3, 16, 0) != nullptr) {
-        m_renderer->property_follow_state() = true;
-    }
     m_renderer->property_height() = 100;
     m_renderer->property_yalign() = 0.5;
     m_renderer->property_xalign() = 0.5;

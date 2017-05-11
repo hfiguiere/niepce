@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/widgets/editablehscale.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 namespace fwk {
 
-/** A widget similar to a Gtk::HScale with a edit box */
+/** A widget similar to a Gtk::Scale with a edit box */
 class EditableHScale
     : public Gtk::Box
 {
@@ -54,7 +54,7 @@ private:
 
     Gtk::Image      *m_icon;
     Glib::RefPtr<Gtk::Adjustment>  m_adj;
-    Gtk::HScale      m_scale;
+    Gtk::Scale       m_scale;
     Gtk::SpinButton  m_entry;
     bool             m_dirty;
     /** emitted once the value changed */
