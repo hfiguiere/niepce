@@ -2,9 +2,12 @@
 .deps
 Makefile
 Makefile.in
-config.guess
+ABOUT-NLS
 autogen.err
+compile
+config.guess
 config.log
+config.rpath
 config.sub
 config.status
 config.h
@@ -15,6 +18,9 @@ missing
 libtool
 depcomp
 install-sh
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
 ltmain.sh
 test-driver
 test*.log
@@ -64,6 +70,7 @@ camerawire/po/POTFILES
 camerawire/po/Makefile.in
 doc/Doxyfile
 doc/doxygen/html
+po/*.pot
 po/*.gmo
 po/POTFILES
 po/Makefile.in.in
@@ -74,5 +81,4 @@ po/en@boldquot.header
 po/en@quot.header
 po/insert-header.sin
 po/quot.sed
-po/remove-potcdate.sed
-po/remove-potcdate.sin
+po/remove-potcdate.s*

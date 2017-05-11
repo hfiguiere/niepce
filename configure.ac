@@ -121,6 +121,7 @@ AX_APPEND_COMPILE_FLAGS([ \
    -Wcast-align \
    -Wextra \
    -Wheader-guard \
+   -Wformat \
    -Wformat-nonliteral \
    -Wformat-security \
    -Wlogical-not-parentheses \
