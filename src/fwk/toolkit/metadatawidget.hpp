@@ -81,7 +81,7 @@ protected:
                                  fwk::PropertyIndex prop);
     void on_int_changed(int, fwk::PropertyIndex prop);
 private:
-    void clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p);
+    void clear_widget(const std::pair<const PropertyIndex, Gtk::Widget *> & p);
     void create_widgets_for_format(const MetaDataSectionFormat * fmt);
 
     // the widget factory

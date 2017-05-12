@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/editlabels.cpp
  *
- * Copyright (C) 2009, 2013 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 
 #include <algorithm>
-#include <functional>
 
 #include <boost/format.hpp>
 

@@ -1,7 +1,7 @@
 /*
  * niepce - library/commands.cpp
  *
- * Copyright (C) 2007-2015 Hubert Figuière
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 
 #include <array>
-#include <functional>
 
 #include <boost/any.hpp>
 
@@ -98,10 +97,10 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
         lib->notify(Library::NotifyType::ADDED_FOLDERS,
                     boost::any(l));
     }
-    using std::placeholders::_1;
-    std::for_each( bundles->begin(), bundles->end(),
-                   std::bind(&Library::addBundle, std::ref(lib),
-                        pf->id(), _1, manage) );
+    std::for_each(bundles->begin(), bundles->end(),
+                  [&lib, &pf, manage] (const auto& fb) {
+                      lib->addBundle(pf->id(), fb, manage);
+                  });
     lib->notify(Library::NotifyType::ADDED_FILES,
                 boost::any());
 }

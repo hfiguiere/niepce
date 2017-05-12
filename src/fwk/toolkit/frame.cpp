@@ -19,7 +19,6 @@
 
 #include <list>
 #include <vector>
-#include <functional>
 
 #include <glibmm/i18n.h>
 #include <giomm/simpleaction.h>

@@ -1,7 +1,7 @@
 /*
  * niepce - framework/undo.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 
 #include <algorithm>
-#include <functional>
+
 #include <boost/checked_delete.hpp>
 
 #include "fwk/base/debug.hpp"
@@ -48,17 +48,19 @@ void UndoTransaction::add(Command * cmd)
 void UndoTransaction::undo()
 {
     DBG_OUT("undo transaction %lu cmd", (unsigned long)m_operations.size());
-    using std::placeholders::_1;
     std::for_each(m_operations.rbegin(), m_operations.rend(),
-                  std::bind(&Command::undo, _1));
+                  [] (auto cmd) {
+                      cmd->undo();
+                  });
 }
 
 void UndoTransaction::redo()
 {
     DBG_OUT("redo transaction %lu cmd", (unsigned long)m_operations.size());
-    using std::placeholders::_1;
     std::for_each(m_operations.begin(), m_operations.end(),
-                  std::bind(&Command::redo, _1));
+                  [] (auto cmd) {
+                      cmd->redo();
+                  });
 }
 
 UndoHistory::~UndoHistory()

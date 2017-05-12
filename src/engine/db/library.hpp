@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.h
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -206,8 +206,6 @@ private:
     bool init();
     bool _initDb();
 
-    /** external sqlite fucntion to trigger the rewrite of the XMP */
-    void triggerRewriteXmp(void);
     bool getXmpIdsInQueue(std::vector<library_id_t> & ids);
     /** rewrite the XMP sidecar for the file whose id is %id
      * and remove it from the queue.

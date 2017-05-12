@@ -18,8 +18,6 @@
  */
 /** @brief unit test for files */
 
-#include <functional>
-
 #include <boost/test/minimal.hpp>
 
 #include <stdlib.h>
@@ -28,7 +26,6 @@
 #include "init.hpp"
 
 using fwk::FileList;
-using std::placeholders::_1;
 
 int test_main( int, char *[] )             // note the name!
 {

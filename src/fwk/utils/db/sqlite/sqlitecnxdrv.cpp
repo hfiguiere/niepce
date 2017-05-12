@@ -125,8 +125,8 @@ namespace db { namespace sqlite {
 
 			//the result of the last sqlite3_step() function, or -333
 			int last_execution_result ;
-            
-            std::list<std::function<void (void)> > userfunctions;
+
+			std::list<std::function<void (void)> > userfunctions;
 
 			Priv():
 				sqlite(NULL),

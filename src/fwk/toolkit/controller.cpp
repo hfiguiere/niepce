@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/controller.cpp
  *
- * Copyright (C) 2007-2014 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <functional>
 
 #include <gtkmm/widget.h>
 
@@ -63,9 +61,10 @@ bool Controller::canTerminate()
 void Controller::terminate()
 {
     DBG_OUT("terminating controller");
-    using std::placeholders::_1;
     std::for_each(m_subs.cbegin(), m_subs.cend(),
-                  std::bind(&Controller::terminate, _1));
+                  [] (const auto& ctrl) {
+                    ctrl->terminate();
+                  });
     clearParent();
     m_subs.clear();
 }
@@ -76,10 +75,10 @@ void Controller::_added()
 
 void Controller::_ready()
 {
-    using std::placeholders::_1;
-
     std::for_each(m_subs.cbegin(), m_subs.cend(),
-                  std::bind(&Controller::_ready, _1));
+                  [] (const auto& ctrl) {
+                    ctrl->_ready();
+                  });
     on_ready();
 }
 

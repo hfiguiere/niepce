@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <functional>
-
 #include <glibmm/i18n.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>

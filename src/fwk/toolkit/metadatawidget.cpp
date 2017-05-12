@@ -19,7 +19,6 @@
 
 
 #include <utility>
-#include <functional>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
@@ -195,7 +194,7 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
     m_table.show_all();
 }
 
-void MetaDataWidget::clear_widget(std::pair<const PropertyIndex, Gtk::Widget *> & p)
+void MetaDataWidget::clear_widget(const std::pair<const PropertyIndex, Gtk::Widget *> & p)
 {
     AutoFlag flag(m_update);
     Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
@@ -230,9 +229,10 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBag & properties)
     DBG_OUT("set data source");
     m_current_data = properties;
     if(!m_data_map.empty()) {
-        using std::placeholders::_1;
-        std::for_each(m_data_map.begin(), m_data_map.end(),
-                      std::bind(&MetaDataWidget::clear_widget, this, _1));
+        std::for_each(m_data_map.cbegin(), m_data_map.cend(),
+                      [this] (const auto& p) {
+                          this->clear_widget(p);
+                      });
     }
     set_sensitive(!properties.empty());
     if(properties.empty()) {

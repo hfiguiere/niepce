@@ -72,7 +72,7 @@ public:
     virtual bool rollback_transaction () = 0 ;
 
     virtual bool execute_statement (const SQLStatement &a_statement) = 0;
-    
+
     virtual bool create_function0(const std::string & name, const f0_t & f) = 0;
 
     virtual bool should_have_data () const = 0;

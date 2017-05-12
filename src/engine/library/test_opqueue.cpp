@@ -1,7 +1,7 @@
 /*
  * niepce - library/test_opqueue.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,23 +21,16 @@
 #include "op.hpp"
 #include "opqueue.hpp"
 
-#include <functional>
-
 #include <boost/test/minimal.hpp>
 
 using namespace eng;
-
-void foo(const eng::Library::Ptr &)
-{
-}
-
 
 //BOOST_AUTO_TEST_CASE(opqueue_test)
 int test_main(int, char *[])
 {
 	OpQueue q;
 
-	Op::Ptr p(new Op(1, std::bind(&foo, eng::Library::Ptr())));
+	Op::Ptr p(new Op(1, [](const Library::Ptr &){}));
 
 	BOOST_CHECK(q.empty());
 

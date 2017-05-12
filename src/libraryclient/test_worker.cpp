@@ -1,7 +1,7 @@
 /*
  * niepce - library/test_worker.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,11 @@
 #define BOOST_AUTO_TEST_MAIN
 #include "locallibraryserver.hpp"
 
-#include <functional>
 #include <boost/test/minimal.hpp>
 
 
 using namespace eng;
 using namespace libraryclient;
-
-void foo(const Library::Ptr &)
-{
-}
-
 
 //BOOST_AUTO_TEST_CASE(worker_test)
 int test_main(int, char *[])
@@ -50,7 +44,7 @@ int test_main(int, char *[])
 
 		BOOST_CHECK(w._tasks().empty());
 
-		Op::Ptr p(new Op(0, std::bind(&foo, eng::Library::Ptr())));
+		Op::Ptr p(new Op(0, [](const Library::Ptr &){}));
 		w.schedule(p);
 	}
     return 0;

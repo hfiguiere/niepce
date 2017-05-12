@@ -61,7 +61,6 @@ public:
     ~ThumbnailCache();
 
     void request(const LibFile::ListPtr & fl);
-    void requestForFile(const LibFile::Ptr & f);
 
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 

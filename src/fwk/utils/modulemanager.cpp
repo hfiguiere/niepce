@@ -3,7 +3,7 @@
  * copied from
  * gnote
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuiere
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,8 +27,6 @@
 
 
 #include <dlfcn.h>
-
-#include <functional>
 
 #include <gmodule.h>
 #include <glibmm/module.h>
@@ -61,15 +59,15 @@ namespace fwk {
 
   void ModuleManager::load_modules()
   {
-    using std::placeholders::_1;
-
     std::string ext = std::string(".") + G_MODULE_SUFFIX;
 
     for(auto iter = m_dirs.cbegin();
         iter != m_dirs.cend(); ++iter) {
 
       fwk::FileList::Ptr l;
-      l = FileList::getFilesFromDirectory(*iter, std::bind(&fwk::filter_ext, _1, ext));
+      l = FileList::getFilesFromDirectory(*iter, [ext] (const auto& f) {
+          return fwk::filter_ext(f, ext);
+      });
 
       for(auto mod_iter = l->cbegin();
           mod_iter != l->cend(); ++mod_iter) {

@@ -1,7 +1,7 @@
 /*
  * niepce - library/thumbnailcache.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#include <functional>
 #include <boost/any.hpp>
 #include <boost/format.hpp>
 
@@ -52,16 +51,11 @@ ThumbnailCache::~ThumbnailCache()
 void ThumbnailCache::request(const LibFile::ListPtr & fl)
 {
     clear();
-    using std::placeholders::_1;
     std::for_each(fl->begin(), fl->end(),
-                  std::bind(&ThumbnailCache::requestForFile, this,
-                              _1));
-}
-
-void ThumbnailCache::requestForFile(const LibFile::Ptr & f)
-{
-    ThumbnailTask::Ptr task(new ThumbnailTask(f, 160, 160));
-    schedule( task );
+                  [this] (const auto& f) {
+                      ThumbnailTask::Ptr task(new ThumbnailTask(f, 160, 160));
+                      this->schedule(task);
+                  });
 }
 
 namespace {

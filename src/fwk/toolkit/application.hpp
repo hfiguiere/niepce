@@ -21,8 +21,6 @@
 #ifndef _FRAMEWORK_APPLICATION_H_
 #define _FRAMEWORK_APPLICATION_H_
 
-#include <functional>
-
 #include <glibmm/refptr.h>
 #include <giomm/menu.h>
 #include <gtkmm/application.h>

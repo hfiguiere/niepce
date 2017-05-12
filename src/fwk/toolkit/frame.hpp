@@ -23,7 +23,6 @@
 
 #include <memory>
 #include <string>
-#include <functional>
 
 #include <sigc++/signal.h>
 #include <giomm/action.h>

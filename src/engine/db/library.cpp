@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include <stdio.h>
 
 #include <iostream>
-#include <functional>
 
 #include <boost/format.hpp>
 
@@ -64,8 +63,10 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
         m_inited = init();
 
         m_dbdrv->create_function0("rewrite_xmp",
-                                  std::bind(&Library::triggerRewriteXmp,
-                                            this));
+                                  [this] () {
+                                      DBG_OUT("rewrite_xmp");
+                                      notify(NotifyType::XMP_NEEDS_UPDATE, boost::any());
+                                  });
     }
     catch(const std::exception &e)
     {
@@ -75,12 +76,6 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
 
 Library::~Library()
 {
-}
-
-void Library::triggerRewriteXmp(void)
-{
-    DBG_OUT("rewrite_xmp");
-    notify(NotifyType::XMP_NEEDS_UPDATE, boost::any());
 }
 
 void Library::notify(NotifyType t, const boost::any & param)
@@ -1010,11 +1005,11 @@ bool Library::processXmpUpdateQueue(bool write_xmp)
     bool retval = false;
     std::vector<library_id_t> ids;
     retval = getXmpIdsInQueue(ids);
-    if(retval) {
-        using std::placeholders::_1;
+    if (retval) {
         std::for_each(ids.begin(), ids.end(),
-                     std::bind(&Library::rewriteXmpForId,
-                                 this, _1, write_xmp));
+                      [this, write_xmp] (auto id){
+                          this->rewriteXmpForId(id, write_xmp);
+                      });
     }
     return retval;
 }

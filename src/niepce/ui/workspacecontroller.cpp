@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <functional>
-
 #include <boost/any.hpp>
 
 #include <glibmm/i18n.h>

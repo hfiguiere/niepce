@@ -19,7 +19,6 @@
 
 
 #include <future>
-#include <functional>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
