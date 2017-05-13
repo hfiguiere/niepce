@@ -77,14 +77,14 @@ public:
     const Glib::ustring & sourcePath() const
         { return m_folder_path_source; }
     void setToImport(const Glib::ustring & f);
-    eng::IImporter* importer() const
+    const std::shared_ptr<eng::IImporter>& importer() const
         { return m_importer; }
 private:
     class ImportParam;
 
     void doSelectDirectories();
 
-    eng::IImporter *m_importer;
+    std::shared_ptr<eng::IImporter> m_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
 
     Gtk::ComboBox *m_date_tz_combo;

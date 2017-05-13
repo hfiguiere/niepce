@@ -263,8 +263,8 @@ void NiepceWindow::on_action_file_import()
         if(!source.empty()) {
             cfg.setValue("last_import_location", source);
 
-            eng::IImporter* importer = import_dialog->importer();
-            DBG_ASSERT(importer, "Import can't be null if we clicked import");
+            auto importer = import_dialog->importer();
+            DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
             if (importer) {
                 importer->doImport(
                     source,

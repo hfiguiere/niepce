@@ -59,7 +59,6 @@ ImportDialog::ImportDialog()
 
 ImportDialog::~ImportDialog()
 {
-    delete m_importer;
 }
 
 void ImportDialog::setup_widget()
@@ -134,13 +133,14 @@ void ImportDialog::setToImport(const Glib::ustring & f)
 {
     if (!m_importer) {
         // FIXME this should be the right kind
-        m_importer = new eng::DirectoryImporter;
+        m_importer = std::make_shared<eng::DirectoryImporter>();
     }
-    auto source_content = std::async(std::launch::async,
-                                     [f, this] () {
-                                         return m_importer->listSourceContent(
-                                             f);
-                                     });
+    auto importer = m_importer;
+    auto source_content =
+      std::async(std::launch::async,
+                 [f, importer] () {
+                   return importer->listSourceContent(f);
+                 });
 
     m_folder_path_source = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
@@ -149,7 +149,7 @@ void ImportDialog::setToImport(const Glib::ustring & f)
     m_images_list_model->clear();
 
     // XXX this should be an event from the async result instead
-    if(source_content.get()) {
+    if (source_content.get()) {
         auto list_to_import = m_importer->getSourceContent();
 
         for(const auto & _f : list_to_import) {
