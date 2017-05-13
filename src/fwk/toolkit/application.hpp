@@ -71,7 +71,7 @@ public:
 
     UndoHistory & undo_history()
         { return m_undo; }
-    UndoTransaction * begin_undo(const std::string & label);
+    std::shared_ptr<UndoTransaction> begin_undo(const std::string & label);
 
     // Module management
     /** @return the module manager

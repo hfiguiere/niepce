@@ -215,9 +215,9 @@ void Application::on_about()
     dlg.run();
 }
 
-UndoTransaction * Application::begin_undo(const std::string & label)
+std::shared_ptr<UndoTransaction> Application::begin_undo(const std::string & label)
 {
-    auto undo = new fwk::UndoTransaction(label);
+    auto undo = std::make_shared<fwk::UndoTransaction>(label);
     undo_history().add(undo);
     return undo;
 }

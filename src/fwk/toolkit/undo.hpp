@@ -24,6 +24,7 @@
 #include <list>
 #include <stack>
 #include <string>
+#include <memory>
 
 #include <sigc++/signal.h>
 #include <sigc++/trackable.h>
@@ -43,8 +44,9 @@ public:
     ~UndoTransaction();
 
     template <typename _RetType>
-    Command *new_command(const typename CommandWithArg<_RetType>::RedoFunction &,
-                         const typename CommandWithArg<_RetType>::UndoFunction &);
+    std::shared_ptr<Command> new_command(
+        const typename CommandWithArg<_RetType>::RedoFunction&,
+        const typename CommandWithArg<_RetType>::UndoFunction&);
     void undo();
     void redo();
     /** execute the transaction after adding it. (calls %undo) */
@@ -54,17 +56,18 @@ public:
         { return m_name; }
 protected:
     /** add the command. Use %new_command instead */
-    void add(Command *);
+    void add(const std::shared_ptr<Command>&);
 private:
-    std::list<Command *> m_operations;
+    std::list<std::shared_ptr<Command>> m_operations;
     std::string m_name;
 };
 
 template <typename _ArgType>
-Command *UndoTransaction::new_command(const typename CommandWithArg<_ArgType>::RedoFunction & _redo,
-                                      const typename CommandWithArg<_ArgType>::UndoFunction & _undo)
+std::shared_ptr<Command> UndoTransaction::new_command(
+    const typename CommandWithArg<_ArgType>::RedoFunction & _redo,
+    const typename CommandWithArg<_ArgType>::UndoFunction & _undo)
 {
-    Command *cmd = new CommandWithArg<_ArgType>(_redo, _undo);
+    auto cmd = std::make_shared<CommandWithArg<_ArgType>>(_redo, _undo);
     add(cmd);
     return cmd;
 }
@@ -80,7 +83,7 @@ public:
     ~UndoHistory();
 
     /** the history becomes owner */
-    void add(UndoTransaction*);
+    void add(const std::shared_ptr<UndoTransaction>&);
     void undo();
     void redo();
     void clear();
@@ -94,13 +97,9 @@ public:
     // called when the undo history change.
     sigc::signal<void> signal_changed;
 private:
-    void clear(std::list<UndoTransaction*> & l);
-
-    std::list<UndoTransaction*> m_undos;
-    std::list<UndoTransaction*> m_redos;
+    std::list<std::shared_ptr<UndoTransaction>> m_undos;
+    std::list<std::shared_ptr<UndoTransaction>> m_redos;
 };
-
-	
 
 }
 

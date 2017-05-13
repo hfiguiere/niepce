@@ -196,7 +196,7 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
                                         fwk::PropertyIndex meta,
                                         int old_value, int new_value)
 {
-    fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(undo_label);
+    std::shared_ptr<fwk::UndoTransaction> undo = fwk::Application::app()->begin_undo(undo_label);
     undo->new_command<void>(
         std::bind(&libraryclient::LibraryClient::setMetadata,
                     getLibraryClient(), file->id(), meta, fwk::PropertyValue(new_value)),
@@ -316,7 +316,8 @@ void SelectionController::move_to_trash()
         if(iter) {
             eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
             eng::library_id_t from_folder = file->folderId();
-            fwk::UndoTransaction *undo = fwk::Application::app()->begin_undo(_("Move to Trash"));
+            std::shared_ptr<fwk::UndoTransaction> undo =
+                fwk::Application::app()->begin_undo(_("Move to Trash"));
             undo->new_command<void>(
                 std::bind(&libraryclient::LibraryClient::moveFileToFolder,
                             getLibraryClient(), selection, from_folder, trash_folder),

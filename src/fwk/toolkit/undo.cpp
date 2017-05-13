@@ -35,12 +35,10 @@ UndoTransaction::UndoTransaction(const std::string & n)
 
 UndoTransaction::~UndoTransaction()
 {
-    std::for_each(m_operations.begin(), m_operations.end(),
-                  &boost::checked_delete<Command>);
 }
 
 
-void UndoTransaction::add(Command * cmd)
+void UndoTransaction::add(const std::shared_ptr<Command>& cmd)
 {
     m_operations.push_back(cmd);
 }
@@ -66,14 +64,12 @@ void UndoTransaction::redo()
 UndoHistory::~UndoHistory()
 {
     // DO NOT CALL UndoHistory::clear() !!!
-    clear(m_undos);
-    clear(m_redos);
 }
 
-void UndoHistory::add(UndoTransaction* t)
+void UndoHistory::add(const std::shared_ptr<UndoTransaction>& t)
 {
     m_undos.push_front(t);
-    clear(m_redos);
+    m_redos.clear();
 
     signal_changed();
 }
@@ -82,7 +78,7 @@ void UndoHistory::undo()
 {
     DBG_OUT("run undo history");
     if(!m_undos.empty()) {
-        UndoTransaction * t = m_undos.front();
+        std::shared_ptr<UndoTransaction> t = m_undos.front();
         if(t) {
             t->undo();
             m_undos.pop_front();
@@ -96,7 +92,7 @@ void UndoHistory::redo()
 {
     DBG_OUT("run redo history");
     if(!m_redos.empty()) {
-        UndoTransaction * t = m_redos.front();
+        std::shared_ptr<UndoTransaction> t = m_redos.front();
         if(t) {
             t->redo();
             m_redos.pop_front();
@@ -116,7 +112,7 @@ void UndoHistory::clear()
 std::string UndoHistory::next_undo() const
 {
     if(!m_undos.empty()) {
-        UndoTransaction * t = m_undos.front();
+        auto t = m_undos.front();
         if(t) {
             return t->name();
         }
@@ -127,20 +123,12 @@ std::string UndoHistory::next_undo() const
 std::string UndoHistory::next_redo() const
 {
     if(!m_redos.empty()) {
-        UndoTransaction * t = m_redos.front();
+        auto t = m_redos.front();
         if(t) {
             return t->name();
         }
     }
     return "";
-}
-
-	
-void UndoHistory::clear(std::list<UndoTransaction*> & l)
-{
-    std::for_each(l.begin(), l.end(),
-                  &boost::checked_delete<UndoTransaction>);
-    l.clear();
 }
 
 }
