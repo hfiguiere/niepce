@@ -32,6 +32,7 @@ namespace Gtk {
 
 namespace ui {
 
+class IModuleShell;
 
 class FilmStripController
 	: public fwk::UiController,
@@ -41,7 +42,8 @@ public:
 	typedef std::shared_ptr<FilmStripController> Ptr;
 	typedef std::weak_ptr<FilmStripController> WeakPtr;
 
-	FilmStripController(const Glib::RefPtr<ImageListStore> & store);
+	FilmStripController(const Glib::RefPtr<ImageListStore>& store,
+	                    const IModuleShell& shell);
 
 	virtual Gtk::IconView * image_list() override;
 	virtual eng::library_id_t get_selected() override;
@@ -50,6 +52,7 @@ public:
 	virtual Gtk::Widget * buildWidget() override;
 
 private:
+	const IModuleShell& m_shell;
 	Gtk::IconView * m_thumbview;
 	Glib::RefPtr<ImageListStore> m_store;
 };

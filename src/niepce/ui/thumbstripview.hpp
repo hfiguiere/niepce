@@ -30,11 +30,13 @@
 
 namespace ui {
 
+class IModuleShell;
+
 class ThumbStripView
   : public Gtk::IconView
 {
 public:
-    ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store);
+    ThumbStripView(const Glib::RefPtr<ui::ImageListStore>& store, const IModuleShell& shell);
 
     void set_model(const Glib::RefPtr<ui::ImageListStore> & store);
     const Glib::RefPtr<ui::ImageListStore> & get_model() const;

@@ -32,24 +32,22 @@ using eng::tid_t;
 
 namespace libraryclient {
 
-ClientImpl *ClientImpl::makeClientImpl(const fwk::Moniker & moniker,
-                                       const fwk::NotificationCenter::Ptr & nc)
+std::unique_ptr<ClientImpl> ClientImpl::makeClientImpl(const fwk::Moniker & moniker,
+                                                       const fwk::NotificationCenter::Ptr & nc)
 {
-    return new ClientImpl(moniker, nc);
+    return std::unique_ptr<ClientImpl>(new ClientImpl(moniker, nc));
 }
 
 ClientImpl::ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc)
     : m_moniker(moniker),
-      m_localLibrary(nullptr)
+      m_localLibrary(new LocalLibraryServer(moniker.path(), nc))
 {
     DBG_OUT("creating implementation with moniker %s",
             moniker.c_str());
-    m_localLibrary = new LocalLibraryServer(moniker.path(), nc);
 }
 
 ClientImpl::~ClientImpl()
 {
-    delete m_localLibrary;
 }
 
 bool ClientImpl::ok() const

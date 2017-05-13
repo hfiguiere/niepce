@@ -104,11 +104,11 @@ void SelectionController::selected(const IImageSelectable::WeakPtr & selectableW
 }
 
 
-libraryclient::LibraryClient::Ptr SelectionController::getLibraryClient()
+libraryclient::LibraryClientPtr SelectionController::getLibraryClient()
 {
     ModuleShell::Ptr shell = std::dynamic_pointer_cast<ModuleShell>(m_parent.lock());
     DBG_ASSERT(static_cast<bool>(shell), "parent not a ModuleShell");
-    return	shell->getLibraryClient();
+    return shell->getLibraryClient();
 }
 
 eng::library_id_t SelectionController::get_selection() const

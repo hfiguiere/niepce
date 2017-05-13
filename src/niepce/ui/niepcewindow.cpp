@@ -49,6 +49,7 @@
 #include "selectioncontroller.hpp"
 
 using libraryclient::LibraryClient;
+using libraryclient::LibraryClientPtr;
 using fwk::Application;
 using fwk::Configuration;
 using fwk::UndoHistory;
@@ -128,7 +129,8 @@ NiepceWindow::_createModuleShell()
 
 
     SelectionController::Ptr selection_controller = m_moduleshell->get_selection_controller();
-    m_filmstrip = FilmStripController::Ptr(new FilmStripController(m_moduleshell->get_list_store()));
+    m_filmstrip = FilmStripController::Ptr(
+        new FilmStripController(m_moduleshell->get_list_store(), *m_moduleshell));
     add(m_filmstrip);
 
     m_vbox.pack_start(*(m_filmstrip->buildWidget()), Gtk::PACK_SHRINK);
@@ -384,8 +386,8 @@ std::string NiepceWindow::prompt_open_library()
 bool NiepceWindow::open_library(const std::string & libMoniker)
 {
     fwk::Moniker mon = fwk::Moniker(libMoniker);
-    m_libClient = LibraryClient::Ptr(new LibraryClient(mon,
-                                                       m_notifcenter));
+    m_libClient = LibraryClientPtr(new LibraryClient(mon,
+                                                     m_notifcenter));
     if(!m_libClient->ok()) {
         m_libClient = nullptr;
         return false;

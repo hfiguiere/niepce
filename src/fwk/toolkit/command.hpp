@@ -47,7 +47,7 @@ public:
         , m_undo(_undo)
         {
         }
-        
+
     virtual void undo() override
         {
             m_undo(m_argstorage);
@@ -75,7 +75,7 @@ public:
         , m_undo(_undo)
         {
         }
-        
+
     virtual void undo() override
         {
             m_undo();

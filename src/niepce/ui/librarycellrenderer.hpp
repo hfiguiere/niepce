@@ -30,18 +30,16 @@
 #include "engine/db/label.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 
-namespace libraryclient {
-class UIDataProvider;
-}
-
 namespace ui {
+
+class IModuleShell;
 
 class LibraryCellRenderer
 	: public Gtk::CellRendererPixbuf
         , public fwk::ClickableCellRenderer
 {
 public:
-    LibraryCellRenderer(libraryclient::UIDataProvider *provider);
+    LibraryCellRenderer(const IModuleShell& shell);
     
     virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const override;
     virtual void get_preferred_height_vfunc(Gtk::Widget& widget, int& minimum_height, int& natural_height) const override;
@@ -86,6 +84,7 @@ protected:
     void _drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
                    int flag_value, double x, double y);
 private:
+    const IModuleShell& m_shell;
     int                                 m_size;
     int                                 m_pad;
     bool                                m_drawborder;
@@ -93,9 +92,8 @@ private:
     bool                                m_drawrating;
     bool                                m_drawlabel;
     bool                                m_drawflag;
-    libraryclient::UIDataProvider      *m_uiDataProvider;
     Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
-    
+
     Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;

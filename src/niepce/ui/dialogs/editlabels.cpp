@@ -35,11 +35,11 @@
 #include "editlabels.hpp"
 
 
-using libraryclient::LibraryClient;
+using libraryclient::LibraryClientPtr;
 
 namespace ui {
 
-EditLabels::EditLabels(const LibraryClient::Ptr & libclient)
+EditLabels::EditLabels(const LibraryClientPtr & libclient)
     : fwk::Dialog(GLADEDIR"editlabels.ui", "editLabels")
     , m_labels(libclient->getDataProvider()->getLabels())
     , m_lib_client(libclient)

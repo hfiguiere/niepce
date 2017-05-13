@@ -113,7 +113,7 @@ public:
 protected:
     virtual void _added() override;
 private:
-    libraryclient::LibraryClient::Ptr getLibraryClient();
+    libraryclient::LibraryClientPtr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label,
                        const eng::LibFile::Ptr & file,

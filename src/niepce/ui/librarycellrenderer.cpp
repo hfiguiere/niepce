@@ -26,6 +26,7 @@
 #include "engine/db/label.hpp"
 #include "libraryclient/uidataprovider.hpp"
 #include "librarycellrenderer.hpp"
+#include "imoduleshell.hpp"
 
 #include <gdkmm/general.h>
 
@@ -37,9 +38,10 @@
 
 namespace ui {
 
-LibraryCellRenderer::LibraryCellRenderer(libraryclient::UIDataProvider *provider)
+LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
     : Glib::ObjectBase(typeid(LibraryCellRenderer)),
       Gtk::CellRendererPixbuf(),
+      m_shell(shell),
       m_size(160),
       m_pad(16),
       m_drawborder(true),
@@ -47,7 +49,6 @@ LibraryCellRenderer::LibraryCellRenderer(libraryclient::UIDataProvider *provider
       m_drawrating(true),
       m_drawlabel(true),
       m_drawflag(true),
-      m_uiDataProvider(provider),
       m_libfileproperty(*this, "libfile")
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -270,10 +271,9 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 
         int left = drawFormatEmblem(cr, emblem, r);
         if(m_drawlabel) {
-            DBG_ASSERT(m_uiDataProvider, "no UIDataProvider");
             uint32_t label_id = file->label();
             if(label_id != 0) {
-                auto result = m_uiDataProvider->colourForLabel(label_id);
+                auto result = m_shell.get_ui_data_provider()->colourForLabel(label_id);
                 DBG_ASSERT(!result.empty(), "colour not found");
                 if (!result.empty()) {
                     drawLabel(cr, left, result.unwrap(), r);

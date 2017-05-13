@@ -59,12 +59,12 @@ class ThumbStripCell
     : public LibraryCellRenderer
 {
 public:
-    ThumbStripCell();
+    ThumbStripCell(const IModuleShell& shell);
 };
 
-ThumbStripCell::ThumbStripCell()
+ThumbStripCell::ThumbStripCell(const IModuleShell& shell)
     : Glib::ObjectBase(typeid(ThumbStripCell))
-    , LibraryCellRenderer(nullptr)
+    , LibraryCellRenderer(shell)
 {
     set_pad(0);
     set_size(100);
@@ -75,7 +75,8 @@ ThumbStripCell::ThumbStripCell()
     set_drawflag(false);
 }
 
-ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
+ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
+                               const IModuleShell& shell)
     : Glib::ObjectBase(typeid(ThumbStripView))
     , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
     , m_start_thumb(0)
@@ -83,7 +84,7 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store)
     , m_store(store)
     , m_model_item_count(0)
 {
-    m_renderer = manage(new ThumbStripCell());
+    m_renderer = manage(new ThumbStripCell(shell));
 
     pack_start(*m_renderer, FALSE);
     m_renderer->property_height() = 100;

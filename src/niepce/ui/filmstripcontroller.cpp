@@ -31,8 +31,10 @@
 
 namespace ui {
 
-FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & store)
-    : m_store(store)
+FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & store,
+                                         const IModuleShell& shell)
+    : m_shell(shell)
+    , m_store(store)
 {
 }
 
@@ -42,7 +44,7 @@ Gtk::Widget * FilmStripController::buildWidget()
         return m_widget;
     }
     DBG_ASSERT(static_cast<bool>(m_store), "m_store NULL");
-    m_thumbview = manage(new ThumbStripView(m_store));
+    m_thumbview = manage(new ThumbStripView(m_store, m_shell));
     GtkWidget *thn = eog_thumb_nav_new(m_thumbview,
                                        EogThumbNavMode::ONE_ROW, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);

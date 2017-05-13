@@ -51,7 +51,7 @@ public:
 
     virtual void set_title(const std::string & title) override;
 
-    libraryclient::LibraryClient::Ptr getLibraryClient() const
+    libraryclient::LibraryClientPtr getLibraryClient() const
         { return m_libClient; }
     fwk::Configuration::Ptr getLibraryConfig() const
         { return m_library_cfg; }
@@ -87,7 +87,7 @@ private:
     FilmStripController::Ptr       m_filmstrip;
     Gtk::Statusbar                 m_statusBar;
     Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
-    libraryclient::LibraryClient::Ptr m_libClient;
+    libraryclient::LibraryClientPtr m_libClient;
     fwk::Configuration::Ptr        m_library_cfg;
 };
 

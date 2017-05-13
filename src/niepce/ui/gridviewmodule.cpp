@@ -40,13 +40,10 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
                                const Glib::RefPtr<ImageListStore> & store)
   : m_shell(shell)
   , m_model(store)
-  , m_uidataprovider(nullptr)
   , m_librarylistview(nullptr)
   , m_lib_splitview(Gtk::ORIENTATION_HORIZONTAL)
   , m_dock(nullptr)
 {
-    m_uidataprovider = m_shell.getLibraryClient()->getDataProvider();
-    DBG_ASSERT(m_uidataprovider, "provider is NULL");
 }
 
 GridViewModule::~GridViewModule()
@@ -119,8 +116,9 @@ Gtk::Widget * GridViewModule::buildWidget()
       .connect(sigc::mem_fun(*this,  &GridViewModule::on_librarylistview_click));
 
   // the main cell
-  LibraryCellRenderer * libcell = Gtk::manage(new LibraryCellRenderer(m_uidataprovider));
-  libcell->signal_rating_changed.connect(sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
+  LibraryCellRenderer* libcell = Gtk::manage(new LibraryCellRenderer(m_shell));
+  libcell->signal_rating_changed.connect(
+      sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
 
   Glib::RefPtr<Gtk::CellArea> cell_area = m_librarylistview->property_cell_area();
   cell_area->pack_start(*libcell, FALSE);

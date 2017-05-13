@@ -84,7 +84,6 @@ private:
 
   const IModuleShell &               m_shell;
   Glib::RefPtr<ImageListStore> m_model;
-  libraryclient::UIDataProvider *m_uidataprovider;
 
   // library split view
   fwk::ImageGridView*          m_librarylistview;

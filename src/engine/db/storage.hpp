@@ -27,16 +27,17 @@
 
 namespace eng {
 
-	/** @brief the interface for a storage */
-	class Storage
-	{
-	public:
-		typedef std::shared_ptr<Storage> Ptr;
+/** @brief the interface for a storage */
+class Storage
+{
+public:
 
-		virtual ~Storage();
+    virtual ~Storage();
 
-		virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
-	};
+    virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
+};
+
+typedef std::shared_ptr<Storage> StoragePtr;
 
 }
 

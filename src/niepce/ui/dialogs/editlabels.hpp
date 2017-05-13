@@ -39,18 +39,18 @@ class EditLabels
 {
 public:
     typedef std::shared_ptr<EditLabels> Ptr;
-    EditLabels(const libraryclient::LibraryClient::Ptr &);
+    EditLabels(const libraryclient::LibraryClientPtr &);
 
     virtual void setup_widget() override;
 private:
     void label_name_changed(size_t idx);
     void label_colour_changed(size_t idx);
     void update_labels(int /*response*/);
-    const eng::Label::List            & m_labels;
+    const eng::Label::List& m_labels;
     std::array<Gtk::ColorButton*, 5> m_colours;
-    std::array<Gtk::Entry*, 5>   m_entries;
-    std::array<bool, 5>          m_status;
-    libraryclient::LibraryClient::Ptr m_lib_client;
+    std::array<Gtk::Entry*, 5> m_entries;
+    std::array<bool, 5> m_status;
+    libraryclient::LibraryClientPtr m_lib_client;
 };
 
 

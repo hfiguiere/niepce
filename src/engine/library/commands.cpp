@@ -39,8 +39,8 @@ namespace eng {
 
 void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 {
-    Keyword::ListPtr l( new Keyword::List );
-    lib->getAllKeywords( l );
+    Keyword::ListPtr l(new Keyword::List);
+    lib->getAllKeywords(l);
     /////
     // notify folder added l
     lib->notify(Library::NotifyType::ADDED_KEYWORDS, boost::any(l));
@@ -48,16 +48,16 @@ void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 
 void Commands::cmdListAllFolders(const Library::Ptr & lib)
 {
-    LibFolder::ListPtr l( new LibFolder::List );
-    lib->getAllFolders( l );
+    LibFolder::ListPtr l(new LibFolder::List);
+    lib->getAllFolders(l);
     /////
     // notify folder added l
     lib->notify(Library::NotifyType::ADDED_FOLDERS, boost::any(l));
 }
 
 void Commands::cmdImportFile(const Library::Ptr & lib,
-                              const std::string & file_path,
-                              bool manage)
+                             const std::string & file_path,
+                             bool manage)
 {
     DBG_ASSERT(!manage, "managing file is currently unsupported");
 
@@ -66,8 +66,7 @@ void Commands::cmdImportFile(const Library::Ptr & lib,
 
     std::string folder = fwk::path_dirname(file_path);
 
-    LibFolder::Ptr pf;
-    pf = lib->getFolder(folder);
+    LibFolder::Ptr pf = lib->getFolder(folder);
     if(!pf) {
         pf = lib->addFolder(folder);
         LibFolder::ListPtr l(new LibFolder::List);
@@ -80,16 +79,15 @@ void Commands::cmdImportFile(const Library::Ptr & lib,
                 boost::any());
 }
 
-void Commands::cmdImportFiles(const Library::Ptr & lib, 
-                              const std::string & folder, 
+void Commands::cmdImportFiles(const Library::Ptr & lib,
+                              const std::string & folder,
                               const FileList::Ptr & files, bool manage)
 {
     DBG_ASSERT(!manage, "managing file is currently unsupported");
 
     FileBundle::ListPtr bundles = FileBundle::filter_bundles(files);
 
-    LibFolder::Ptr pf;
-    pf = lib->getFolder(folder);
+    LibFolder::Ptr pf = lib->getFolder(folder);
     if(!pf) {
         pf = lib->addFolder(folder);
         LibFolder::ListPtr l( new LibFolder::List );
@@ -106,27 +104,28 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 }
 
 
-void Commands::cmdQueryFolderContent(const Library::Ptr & lib, 
+void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
                                      library_id_t folder_id)
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getFolderContent(folder_id, fl);
-    lib->notify(Library::NotifyType::FOLDER_CONTENT_QUERIED, boost::any(fl));		
+    lib->notify(Library::NotifyType::FOLDER_CONTENT_QUERIED, boost::any(fl));
 }
 
-void Commands::cmdCountFolder(const Library::Ptr & lib, 
+void Commands::cmdCountFolder(const Library::Ptr & lib,
                               eng::library_id_t folder_id)
 {
     int count = lib->countFolder(folder_id);
-    lib->notify(Library::NotifyType::FOLDER_COUNTED, boost::any(std::make_pair(folder_id, count)));
+    lib->notify(Library::NotifyType::FOLDER_COUNTED,
+                boost::any(std::make_pair(folder_id, count)));
 }
 
-void Commands::cmdQueryKeywordContent(const Library::Ptr & lib, 
+void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
                                       library_id_t keyword_id)
 {
     LibFile::ListPtr fl(new LibFile::List());
     lib->getKeywordContent(keyword_id, fl);
-    lib->notify(Library::NotifyType::KEYWORD_CONTENT_QUERIED, boost::any(fl));		
+    lib->notify(Library::NotifyType::KEYWORD_CONTENT_QUERIED, boost::any(fl));
 }
 
 void Commands::cmdRequestMetadata(const Library::Ptr & lib,
@@ -138,7 +137,7 @@ void Commands::cmdRequestMetadata(const Library::Ptr & lib,
 }
 
 void Commands::cmdSetMetadata(const Library::Ptr & lib,
-                              library_id_t file_id, fwk::PropertyIndex meta, 
+                              library_id_t file_id, fwk::PropertyIndex meta,
                               const fwk::PropertyValue & value)
 {
     metadata_desc_t m;
@@ -155,17 +154,17 @@ void Commands::cmdWriteMetadata(const Library::Ptr & lib,
     lib->writeMetaData(file_id);
 }
 
-void Commands::cmdMoveFileToFolder(const Library::Ptr & lib, 
+void Commands::cmdMoveFileToFolder(const Library::Ptr & lib,
                                    library_id_t file_id, library_id_t from_folder_id,
                                    library_id_t to_folder_id)
 {
     if(lib->moveFileToFolder(file_id, to_folder_id)) {
-        std::pair<library_id_t, library_id_t> move;
-        move.first = file_id;
-        move.second = to_folder_id;
-        lib->notify(Library::NotifyType::FILE_MOVED, boost::any(move));
-        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE, boost::any(std::make_pair(from_folder_id, -1)));
-        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE, boost::any(std::make_pair(to_folder_id, 1)));
+        lib->notify(Library::NotifyType::FILE_MOVED,
+                    boost::any(std::make_pair(file_id, to_folder_id)));
+        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE,
+                    boost::any(std::make_pair(from_folder_id, -1)));
+        lib->notify(Library::NotifyType::FOLDER_COUNT_CHANGE,
+                    boost::any(std::make_pair(to_folder_id, 1)));
     }
 }
 

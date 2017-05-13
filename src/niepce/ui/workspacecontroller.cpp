@@ -70,7 +70,7 @@ WorkspaceController::WorkspaceController()
     }
 }
 
-libraryclient::LibraryClient::Ptr WorkspaceController::getLibraryClient() const
+libraryclient::LibraryClientPtr WorkspaceController::getLibraryClient() const
 {
     return std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryClient();
 }
@@ -346,9 +346,8 @@ void WorkspaceController::expand_from_cfg(const char* key,
 
 void WorkspaceController::on_ready()
 {
-    libraryclient::LibraryClient::Ptr libraryClient = getLibraryClient();
-    if(libraryClient)
-    {
+    libraryclient::LibraryClientPtr libraryClient = getLibraryClient();
+    if (libraryClient) {
         libraryClient->getAllFolders();
         libraryClient->getAllKeywords();
     }

@@ -44,15 +44,14 @@ class LibraryClient
     : public eng::Storage
 {
 public:
-    typedef std::shared_ptr< LibraryClient > Ptr;
-    
+
     LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
     virtual ~LibraryClient();
     // @return false in case of error.
     bool ok() const;
 
     static eng::tid_t newTid();
-    /** get all the keywords 
+    /** get all the keywords
      * @return transaction ID
      */
     eng::tid_t getAllKeywords();
@@ -60,26 +59,26 @@ public:
      * @return transaction ID
      */
     eng::tid_t getAllFolders();
-    
+
     eng::tid_t queryFolderContent(eng::library_id_t id);
     eng::tid_t queryKeywordContent(eng::library_id_t id);
     eng::tid_t countFolder(eng::library_id_t id);
     eng::tid_t requestMetadata(eng::library_id_t id);
-    
+
     /** set the metadata */
     eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
     eng::tid_t moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
                                 eng::library_id_t to_folder);
     eng::tid_t write_metadata(eng::library_id_t file_id);
-    
+
     /** get all the labels */
     eng::tid_t getAllLabels();
     eng::tid_t createLabel(const std::string & s, const std::string & color);
     eng::tid_t deleteLabel(int id);
     /** update a label */
-    eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name, 
+    eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name,
                            const std::string & new_color);
-    
+
     /** tell to process the Xmp update Queue */
     eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
@@ -94,34 +93,36 @@ public:
      * @param manage true if imports have to be managed
      */
     void importFromDirectory(const std::string & dir, bool manage);
-    
+
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }
-    
+
     /* sync call */
     virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords) override;
-    UIDataProvider *getDataProvider() const
+    const std::unique_ptr<UIDataProvider>& getDataProvider() const
         { return m_uidataprovider; }
-    
+
     // state
     eng::library_id_t trash_id() const
         {
 	    return m_trash_id;
         }
-    void set_trash_id(eng::library_id_t id) 
+    void set_trash_id(eng::library_id_t id)
         {
 	    m_trash_id = id;
         }
 private:
-    ClientImpl* m_pImpl;
-    
-    eng::ThumbnailCache                    m_thumbnailCache;
-    UIDataProvider *m_uidataprovider;
+    std::unique_ptr<ClientImpl> m_pImpl;
+
+    eng::ThumbnailCache m_thumbnailCache;
+    std::unique_ptr<UIDataProvider> m_uidataprovider;
     eng::library_id_t m_trash_id;
-    
-    LibraryClient(const LibraryClient &);
-    LibraryClient & operator=(const LibraryClient &);
+
+    LibraryClient(const LibraryClient &) = delete;
+    LibraryClient & operator=(const LibraryClient &) = delete;
 };
+
+typedef std::shared_ptr<LibraryClient> LibraryClientPtr;
 
 }
 

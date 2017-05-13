@@ -49,7 +49,7 @@ public:
     typedef std::shared_ptr<ModuleShell> Ptr;
     typedef std::weak_ptr<ModuleShell> WeakPtr;
 
-    ModuleShell(const libraryclient::LibraryClient::Ptr & libclient)
+    ModuleShell(const libraryclient::LibraryClientPtr& libclient)
         : m_libraryclient(libclient)
         , m_actionGroup(Gio::SimpleActionGroup::create())
         {
@@ -72,11 +72,14 @@ public:
         {
             return m_selection_controller;
         }
-    virtual libraryclient::LibraryClient::Ptr getLibraryClient() const override
+    virtual libraryclient::LibraryClientPtr getLibraryClient() const override
         {
             return m_libraryclient;
         }
-
+    virtual const std::unique_ptr<libraryclient::UIDataProvider>& get_ui_data_provider() const override
+        {
+            return m_libraryclient->getDataProvider();
+        }
     Glib::RefPtr<Gio::Menu> getMenu() const
         { return m_menu; }
 
@@ -95,7 +98,7 @@ protected:
     void on_module_deactivated(const std::string & name) const;
     void on_module_activated(const std::string & name) const;
 private:
-    libraryclient::LibraryClient::Ptr m_libraryclient;
+    libraryclient::LibraryClientPtr m_libraryclient;
     Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
 
     // managed widgets...

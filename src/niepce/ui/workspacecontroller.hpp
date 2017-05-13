@@ -94,7 +94,7 @@ private:
     void on_row_collapsed(const Gtk::TreeIter& iter,
                           const Gtk::TreePath& path);
 
-    libraryclient::LibraryClient::Ptr getLibraryClient() const;
+    libraryclient::LibraryClientPtr getLibraryClient() const;
     fwk::Configuration::Ptr getLibraryConfig() const;
 
     /** add a folder item to the treeview */

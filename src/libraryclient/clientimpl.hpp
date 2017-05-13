@@ -34,8 +34,8 @@ class LocalLibraryServer;
 class ClientImpl
 {
 public:
-    static ClientImpl *makeClientImpl(const fwk::Moniker & moniker,
-                                      const fwk::NotificationCenter::Ptr & nc);
+    static std::unique_ptr<ClientImpl> makeClientImpl(const fwk::Moniker & moniker,
+                                                      const fwk::NotificationCenter::Ptr & nc);
 
     ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
     virtual ~ClientImpl();
@@ -68,7 +68,7 @@ public:
 
 protected:
     const fwk::Moniker m_moniker;
-    LocalLibraryServer *m_localLibrary;
+    std::unique_ptr<LocalLibraryServer> m_localLibrary;
 private:
     /** do the dirty work of scheduling the op */
     eng::tid_t schedule_op(const eng::Op::function_t & func);
