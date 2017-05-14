@@ -44,17 +44,20 @@ void PreferencesDialog::setup_widget()
     Gtk::CheckButton* write_xmp_checkbutton = nullptr;
     fwk::DataBinderPool* binder_pool = new fwk::DataBinderPool();
 
-    gtkDialog().signal_hide().connect(std::bind(&fwk::DataBinderPool::destroy,
-                                              binder_pool));
-		
+    gtkDialog().signal_hide().connect(
+        [binder_pool] () {
+            fwk::DataBinderPool::destroy(binder_pool);
+        });
+
     builder()->get_widget("dark_theme_checkbox", theme_checkbutton);
-    
+
     theme_checkbutton->set_active(fwk::Application::app()
                             ->get_use_dark_theme());
+    auto app = fwk::Application::app();
     theme_checkbutton->signal_toggled().connect(
-	    std::bind(&fwk::Application::set_use_dark_theme,
-			fwk::Application::app(),
-			theme_checkbutton->property_active()));
+        [app, theme_checkbutton] () {
+            app->set_use_dark_theme(theme_checkbutton->property_active());
+        });
 
     builder()->get_widget("reopen_checkbutton", reopen_checkbutton);
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(

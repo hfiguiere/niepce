@@ -82,8 +82,6 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
-    using std::placeholders::_1;
-
     DBG_OUT("notification for workspace");
     switch(ln.type) {
     case eng::Library::NotifyType::ADDED_FOLDERS:
@@ -92,8 +90,9 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
             = boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
         DBG_OUT("received added folders # %lu", l->size());
         for_each(l->cbegin(), l->cend(),
-                 std::bind(&WorkspaceController::add_folder_item,
-                             this, _1));
+                 [this] (const eng::LibFolder::Ptr& f) {
+                     this->add_folder_item(f);
+                 });
         break;
     }
     case eng::Library::NotifyType::ADDED_KEYWORD:
@@ -110,8 +109,9 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
             = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
         DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
         for_each(l->cbegin(), l->cend(),
-                 std::bind(&WorkspaceController::add_keyword_item,
-                             this, _1));
+                 [this] (const eng::Keyword::Ptr& k) {
+                     this->add_keyword_item(k);
+                 });
         break;
     }
     case eng::Library::NotifyType::FOLDER_COUNTED:

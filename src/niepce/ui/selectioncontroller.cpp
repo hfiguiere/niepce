@@ -36,14 +36,14 @@ namespace ui {
 
 
 SelectionController::SelectionController()
-	: m_in_handler(false)
+    : m_in_handler(false)
 {
-	m_imageliststore = ImageListStore::create();
+    m_imageliststore = ImageListStore::create();
 }
 
 void SelectionController::_added()
 {
-	m_imageliststore->set_parent_controller(m_parent);
+    m_imageliststore->set_parent_controller(m_parent);
 }
 
 void SelectionController::add_selectable(const IImageSelectable::WeakPtr & selectableWeak)
@@ -196,13 +196,18 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
                                         fwk::PropertyIndex meta,
                                         int old_value, int new_value)
 {
-    std::shared_ptr<fwk::UndoTransaction> undo = fwk::Application::app()->begin_undo(undo_label);
+    std::shared_ptr<fwk::UndoTransaction> undo =
+        fwk::Application::app()->begin_undo(undo_label);
+
+    auto libclient = getLibraryClient();
+    auto file_id = file->id();
     undo->new_command<void>(
-        std::bind(&libraryclient::LibraryClient::setMetadata,
-                    getLibraryClient(), file->id(), meta, fwk::PropertyValue(new_value)),
-        std::bind(&libraryclient::LibraryClient::setMetadata,
-                    getLibraryClient(), file->id(), meta, fwk::PropertyValue(old_value))
-        );
+        [libclient, file_id, meta, new_value] () {
+            libclient->setMetadata(file_id, meta, fwk::PropertyValue(new_value));
+        },
+        [libclient, file_id, meta, old_value] () {
+            libclient->setMetadata(file_id, meta, fwk::PropertyValue(old_value));
+        });
     undo->execute();
     return true;
 }
@@ -225,13 +230,17 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
             }
         }
 
+        auto libclient = getLibraryClient();
+        auto file_id = file->id();
+        auto key = iter.first;
+        auto new_value = iter.second;
         undo->new_command<void>(
-            std::bind(&libraryclient::LibraryClient::setMetadata,
-                      getLibraryClient(), file->id(),
-                      iter.first, iter.second),
-            std::bind(&libraryclient::LibraryClient::setMetadata,
-                      getLibraryClient(), file->id(), iter.first, value)
-            );
+            [libclient, file_id, key, new_value] () {
+                libclient->setMetadata(file_id, key, new_value);
+            },
+            [libclient, file_id, key, value] () {
+                libclient->setMetadata(file_id, key, value);
+            });
     }
     undo->execute();
     return true;
@@ -318,12 +327,15 @@ void SelectionController::move_to_trash()
             eng::library_id_t from_folder = file->folderId();
             std::shared_ptr<fwk::UndoTransaction> undo =
                 fwk::Application::app()->begin_undo(_("Move to Trash"));
+
+            auto libclient = getLibraryClient();
             undo->new_command<void>(
-                std::bind(&libraryclient::LibraryClient::moveFileToFolder,
-                            getLibraryClient(), selection, from_folder, trash_folder),
-                std::bind(&libraryclient::LibraryClient::moveFileToFolder,
-                            getLibraryClient(), selection, trash_folder, from_folder )
-                );
+                [libclient, selection, from_folder, trash_folder] () {
+                    libclient->moveFileToFolder(selection, from_folder, trash_folder);
+                },
+                [libclient, selection, from_folder, trash_folder] () {
+                    libclient->moveFileToFolder(selection, trash_folder, from_folder);
+                });
             undo->execute();
         }
     }

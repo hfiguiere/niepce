@@ -112,25 +112,28 @@ void EditLabels::update_labels(int /*response*/)
                 undo = fwk::Application::app()->begin_undo(_("Change Labels"));
             }
 
+            auto libclient = m_lib_client;
             if(has_label) {
                 std::string current_name = m_labels[i]->label();
                 std::string current_colour = m_labels[i]->colour().to_string();
+                auto label_id = m_labels[i]->id();
 
                 undo->new_command<void>(
-                    std::bind(&libraryclient::LibraryClient::updateLabel,
-                                m_lib_client, m_labels[i]->id(), new_name,
-                                new_colour),
-                    std::bind(&libraryclient::LibraryClient::updateLabel,
-                                m_lib_client, m_labels[i]->id(), current_name,
-                                current_colour));
-            }
-            else {
-                using std::placeholders::_1;
+                    [libclient, new_name, new_colour, label_id] () {
+                        libclient->updateLabel(label_id, new_name, new_colour);
+                    },
+                    [libclient, current_name, current_colour, label_id] () {
+                        libclient->updateLabel(label_id, current_name,
+                                current_colour);
+                    });
+            } else {
                 undo->new_command<int>(
-                    std::bind(&libraryclient::LibraryClient::createLabel,
-                                m_lib_client, new_name, new_colour),
-                    std::bind(&libraryclient::LibraryClient::deleteLabel,
-                                m_lib_client, _1));
+                    [libclient, new_name, new_colour] () {
+                        return libclient->createLabel(new_name, new_colour);
+                    },
+                    [libclient] (int label) {
+                        libclient->deleteLabel(label);
+                    });
             }
         }
     }

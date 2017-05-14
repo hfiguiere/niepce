@@ -152,12 +152,12 @@ void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMe
         const fwk::PropertySet & propset = get_property_set();
         meta->to_properties(propset, properties);
     }
-    using std::placeholders::_1;
     std::for_each(m_widgets.begin(), m_widgets.end(),
-		  std::bind(&fwk::MetaDataWidget::set_data_source,
-			      _1, properties));
+                  [properties] (auto w) {
+                      w->set_data_source(properties);
+                  });
 }
-  
+
 }
 
 /*
