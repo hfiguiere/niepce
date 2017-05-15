@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/directoryimporter.cpp
  *
- * Copyright (C) 2014-2015 Hubert Figuière
+ * Copyright (C) 2014-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,35 +58,28 @@ std::string DirectoryImporter::name() const
   return _("Directory");
 }
 
-bool DirectoryImporter::listSourceContent(const std::string & source)
+bool DirectoryImporter::listSourceContent(const std::string & source,
+                                          const SourceContentReady& callback)
 {
-  auto content =
+  auto files =
     fwk::FileList::getFilesFromDirectory(source,
                                          &fwk::filter_xmp_out);
-  for(const auto & entry : *content)
+
+  std::list<ImportedFile::Ptr> content;
+  for(const auto & entry : *files)
   {
-    std::lock_guard<std::mutex> lock(m_content_lock);
-    m_content.push_back(ImportedFile::Ptr(new DirectoryImportedFile(entry)));
+    content.push_back(ImportedFile::Ptr(new DirectoryImportedFile(entry)));
   }
+  callback(std::move(content));
+
   return true;
 }
 
-std::list<ImportedFile::Ptr> DirectoryImporter::getSourceContent()
-{
-  std::list<ImportedFile::Ptr> content;
-  {
-    std::lock_guard<std::mutex> lock(m_content_lock);
-    content = std::move(m_content);
-    m_content.clear();
-  }
-  return content;
-}
-
-bool DirectoryImporter::doImport(const std::string & source,
-                                 const file_importer & importer)
+bool DirectoryImporter::doImport(const std::string& source,
+                                 const FileImporter& callback)
 {
   // pretty trivial, we have the source path.
-  importer(source, false);
+  callback(source, false);
 
   // XXX return a real error
   return true;

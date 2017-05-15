@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/importdialog.h
  *
- * Copyright (C) 2008-2015 Hubert Figuière
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <string>
 
 #include <glibmm/refptr.h>
+#include <glibmm/dispatcher.h>
 
 #include "engine/importer/importedfile.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
@@ -83,6 +84,7 @@ private:
     class ImportParam;
 
     void doSelectDirectories();
+    void append_files_to_import();
 
     std::shared_ptr<eng::IImporter> m_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
@@ -100,6 +102,10 @@ private:
     Gtk::IconView *m_gridview;
 
     MetaDataPaneController::Ptr m_metadata_pane;
+
+    Glib::Dispatcher m_received_files_to_import;
+    std::mutex m_files_to_import_lock;
+    std::list<eng::ImportedFile::Ptr> m_files_to_import;
 };
 
 }

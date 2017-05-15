@@ -1,7 +1,7 @@
 /*
- * niepce - niepce/ui/importdialog.cpp
+ * niepce - niepce/ui/dialogs/importdialog.cpp
  *
- * Copyright (C) 2008-2015 Hubert Figuière
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,8 @@ ImportDialog::ImportDialog()
     , m_attributesScrolled(nullptr)
     , m_images_list_scrolled(nullptr)
 {
+  m_received_files_to_import.connect(
+    sigc::mem_fun(this, &ImportDialog::append_files_to_import));
 }
 
 ImportDialog::~ImportDialog()
@@ -135,30 +137,41 @@ void ImportDialog::setToImport(const Glib::ustring & f)
         // FIXME this should be the right kind
         m_importer = std::make_shared<eng::DirectoryImporter>();
     }
+
+    eng::IImporter::SourceContentReady source_content_ready =
+      [this] (std::list<eng::ImportedFile::Ptr>&& list_to_import) {
+        {
+          std::lock_guard<std::mutex> lock(this->m_files_to_import_lock);
+          this->m_files_to_import = list_to_import;
+        }
+        this->m_received_files_to_import.emit();
+      };
+
+
+    m_images_list_model->clear();
+    m_files_to_import.clear();
+
     auto importer = m_importer;
     auto source_content =
       std::async(std::launch::async,
-                 [f, importer] () {
-                   return importer->listSourceContent(f);
+                 [f, importer, source_content_ready] () {
+                   return importer->listSourceContent(f, source_content_ready);
                  });
 
     m_folder_path_source = f;
     m_destinationFolder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
+}
 
-    m_images_list_model->clear();
-
-    // XXX this should be an event from the async result instead
-    if (source_content.get()) {
-        auto list_to_import = m_importer->getSourceContent();
-
-        for(const auto & _f : list_to_import) {
-            DBG_OUT("selected %s", _f->name().c_str());
-            Gtk::TreeIter iter = m_images_list_model->append();
-            iter->set_value(m_grid_columns.filename, Glib::ustring(_f->name()));
-            iter->set_value(m_grid_columns.file, std::move(_f));
-        }
-    }
+void ImportDialog::append_files_to_import()
+{
+  std::lock_guard<std::mutex> lock(this->m_files_to_import_lock);
+  for(const auto & f : m_files_to_import) {
+    DBG_OUT("selected %s", f->name().c_str());
+    Gtk::TreeIter iter = m_images_list_model->append();
+    iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
+    iter->set_value(m_grid_columns.file, std::move(f));
+  }
 }
 
 }

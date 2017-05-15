@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/iimporter.hpp
  *
- * Copyright (C) 2014-2015 Hubert Figuière
+ * Copyright (C) 2014-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,21 +31,22 @@ class IImporter {
 public:
   virtual ~IImporter() {}
 
-  /** file importer callback */
-  typedef std::function<void (const std::string&, bool)> file_importer;
 
   /** User visible importer name. */
   virtual std::string name() const = 0;
 
+  /** Source content is ready */
+  typedef std::function<void (std::list<ImportedFile::Ptr>&&)> SourceContentReady;
   /** list the source content and store it. */
-  virtual bool listSourceContent(const std::string & source) = 0;
+  virtual bool listSourceContent(const std::string & source,
+                                 const SourceContentReady& callback) = 0;
 
-  /** get the source content. */
-  virtual std::list<ImportedFile::Ptr> getSourceContent() = 0;
 
+  /** file importer callback */
+  typedef std::function<void (const std::string&, bool)> FileImporter;
   /** perform import from source */
   virtual bool doImport(const std::string & source,
-                        const file_importer & importer) = 0;
+                        const FileImporter & importer) = 0;
 
 };
 

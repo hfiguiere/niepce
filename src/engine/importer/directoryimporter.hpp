@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/directoryimporter.hpp
  *
- * Copyright (C) 2014-2015 Hubert Figuière
+ * Copyright (C) 2014-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,11 @@ public:
 
   std::string name() const override;
 
-  bool listSourceContent(const std::string & source) override;
-  std::list<ImportedFile::Ptr> getSourceContent() override;
+  bool listSourceContent(const std::string & source,
+                         const SourceContentReady& callback) override;
+
   bool doImport(const std::string & source,
-                const file_importer & importer) override;
-private:
-  std::mutex m_content_lock;
-  std::list<ImportedFile::Ptr> m_content;
+                const FileImporter & importer) override;
 };
 
 }
