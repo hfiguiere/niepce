@@ -11,9 +11,9 @@ m4_pattern_allow([^BOOST_])
 
 dnl all the library version.
 dnl if one is harcoded elsewhere, it is a bug
-LIBGIOMM_VERSION=2.16
+LIBGIOMM_VERSION=2.32
 LIBGLIBMM_VERSION=2.32
-LIBGTKMM_VERSION=3.16
+LIBGTKMM_VERSION=3.22
 EXEMPI_VERSION=2.2.0
 SQLITE_VERSION=3.0
 GEGL_VERSION=0.3.0
@@ -133,6 +133,7 @@ dnl   -Wredundant-decls \
    -Wpointer-bool-conversion \
    -Wshadow \
    -Wsign-compare \
+   -Wsuggest-override \
    -Wunreachable-code \
    -Wunused \
    -Wwrite-strings \
