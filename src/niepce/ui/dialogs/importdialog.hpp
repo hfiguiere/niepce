@@ -31,6 +31,7 @@
 #include "engine/importer/importedfile.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
 #include "fwk/toolkit/dialog.hpp"
+#include "fwk/toolkit/uiresult.hpp"
 #include "imageliststore.hpp"
 #include "metadatapanecontroller.hpp"
 
@@ -43,6 +44,7 @@ class TreeView;
 
 namespace fwk {
 class ImageGridView;
+class Thumbnail;
 }
 
 namespace eng {
@@ -85,6 +87,7 @@ private:
 
     void doSelectDirectories();
     void append_files_to_import();
+    void preview_received();
 
     std::shared_ptr<eng::IImporter> m_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
@@ -98,14 +101,14 @@ private:
     Gtk::ScrolledWindow *m_images_list_scrolled;
     PreviewGridModel m_grid_columns;
     Glib::RefPtr<Gtk::ListStore> m_images_list_model;
+    std::map<std::string, Gtk::TreeIter> m_images_list_map;
 
     Gtk::IconView *m_gridview;
 
     MetaDataPaneController::Ptr m_metadata_pane;
 
-    Glib::Dispatcher m_received_files_to_import;
-    std::mutex m_files_to_import_lock;
-    std::list<eng::ImportedFile::Ptr> m_files_to_import;
+    fwk::UIResultSingle<std::list<eng::ImportedFile::Ptr>> m_files_to_import;
+    fwk::UIResults<std::pair<std::string, fwk::Thumbnail>> m_previews_to_import;
 };
 
 }

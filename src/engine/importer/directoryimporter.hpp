@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <mutex>
+#include <string>
+#include <list>
 
 #include "fwk/utils/files.hpp"
 #include "engine/importer/iimporter.hpp"
@@ -38,9 +39,13 @@ public:
 
   bool listSourceContent(const std::string & source,
                          const SourceContentReady& callback) override;
+  bool get_previews_for(const std::string & source,
+                        const std::list<std::string>& paths,
+                        const PreviewReady& callback) override;
 
   bool doImport(const std::string & source,
                 const FileImporter & importer) override;
+
 };
 
 }

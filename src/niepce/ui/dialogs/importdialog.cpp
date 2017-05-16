@@ -55,8 +55,6 @@ ImportDialog::ImportDialog()
     , m_attributesScrolled(nullptr)
     , m_images_list_scrolled(nullptr)
 {
-  m_received_files_to_import.connect(
-    sigc::mem_fun(this, &ImportDialog::append_files_to_import));
 }
 
 ImportDialog::~ImportDialog()
@@ -99,35 +97,48 @@ void ImportDialog::setup_widget()
     m_gridview->set_text_column(m_grid_columns.filename);
     m_gridview->show();
     m_images_list_scrolled->add(*m_gridview);
+    m_images_list_scrolled->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+
+    m_previews_to_import.connect(
+      sigc::mem_fun(this, &ImportDialog::preview_received));
+    m_files_to_import.connect(
+      sigc::mem_fun(this, &ImportDialog::append_files_to_import));
+
     m_is_setup = true;
 }
 
 // XXX doesn't belong here
 void ImportDialog::doSelectDirectories()
 {
-    Configuration & cfg = Application::app()->config();
+  Configuration & cfg = Application::app()->config();
 
+  Glib::ustring filename;
+  {
     Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
                                   Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
     dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-    dialog.add_button(_("Import"), Gtk::RESPONSE_OK);
+    dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
     dialog.set_select_multiple(false);
 
     std::string last_import_location = cfg.getValue("last_import_location", "");
-    if(!last_import_location.empty()) {
-        dialog.set_filename(last_import_location);
+    if (!last_import_location.empty()) {
+      dialog.set_filename(last_import_location);
     }
 
     int result = dialog.run();
     switch(result)
     {
     case Gtk::RESPONSE_OK:
-        setToImport(dialog.get_filename());
-        break;
+      filename = dialog.get_filename();
+      break;
     default:
-        break;
+      break;
     }
+  }
+  if (!filename.empty()) {
+    setToImport(filename);
+  }
 }
 
 // XXX doesn't belong here. Or must be deeply modified to deal with the Importer
@@ -140,15 +151,12 @@ void ImportDialog::setToImport(const Glib::ustring & f)
 
     eng::IImporter::SourceContentReady source_content_ready =
       [this] (std::list<eng::ImportedFile::Ptr>&& list_to_import) {
-        {
-          std::lock_guard<std::mutex> lock(this->m_files_to_import_lock);
-          this->m_files_to_import = list_to_import;
-        }
-        this->m_received_files_to_import.emit();
+        this->m_files_to_import.send_data(std::move(list_to_import));
       };
 
 
     m_images_list_model->clear();
+    m_images_list_map.clear();
     m_files_to_import.clear();
 
     auto importer = m_importer;
@@ -165,14 +173,48 @@ void ImportDialog::setToImport(const Glib::ustring & f)
 
 void ImportDialog::append_files_to_import()
 {
-  std::lock_guard<std::mutex> lock(this->m_files_to_import_lock);
-  for(const auto & f : m_files_to_import) {
+  auto files_to_import = m_files_to_import.recv_data();
+
+  if (!m_images_list_model) {
+    ERR_OUT("No image list model");
+    return;
+  }
+  // request the previews to the importer.tn.pixmap.pixbuf()
+  std::list<std::string> paths;
+  for(const auto & f : files_to_import) {
     DBG_OUT("selected %s", f->name().c_str());
+    paths.push_back(f->name());
     Gtk::TreeIter iter = m_images_list_model->append();
+    m_images_list_map.insert(std::make_pair(f->name(), iter));
     iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
     iter->set_value(m_grid_columns.file, std::move(f));
   }
+
+  eng::IImporter::PreviewReady preview_ready = [this] (const std::string& path,
+                                                       const fwk::Thumbnail& thumbnail) {
+    this->m_previews_to_import.send_data(std::make_pair(path, thumbnail));
+  };
+
+  auto importer = m_importer;
+  auto source = m_folder_path_source.raw();
+  std::async(std::launch::async,
+             [importer, source, paths, preview_ready] () {
+               return importer->get_previews_for(source, paths, preview_ready);
+             });
 }
+
+void ImportDialog::preview_received()
+{
+  auto result = m_previews_to_import.recv_data();
+  if (!result.empty()) {
+    auto preview = result.unwrap();
+    auto iter = m_images_list_map.find(preview.first);
+    if (iter != m_images_list_map.end()) {
+      iter->second->set_value(m_grid_columns.pixbuf, preview.second.pixbuf());
+    }
+  }
+}
+
 
 }
 

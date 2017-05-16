@@ -22,16 +22,12 @@
 #include <boost/any.hpp>
 #include <boost/format.hpp>
 
-#include <gdkmm/pixbuf.h>
 #include <glibmm/miscutils.h>
-#include <libopenraw-gnome/gdkpixbuf.h>
 
 #include "niepce/notifications.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
-#include "fwk/toolkit/mimetype.hpp"
-#include "fwk/toolkit/gdkutils.hpp"
-#include "fwk/toolkit/movieutils.hpp"
+#include "fwk/toolkit/thumbnail.hpp"
 #include "thumbnailcache.hpp"
 #include "thumbnailnotification.hpp"
 
@@ -60,72 +56,28 @@ void ThumbnailCache::request(const LibFile::ListPtr & fl)
 
 namespace {
 
-// TODO see about 1. moving this out 2. abstracting the type away from Gdk::Pixbuf
-// Gdk does not belong to eng.
-Glib::RefPtr<Gdk::Pixbuf> getThumbnail(const LibFile::Ptr & f, int w, int h, const std::string & cached)
+fwk::Thumbnail getThumbnail(const LibFile::Ptr & f, int w, int h, const std::string & cached)
 {
+    const std::string & filename = f->path();
+
     if(ThumbnailCache::is_thumbnail_cached(f->path(), cached)) {
-        DBG_OUT("cached!");
+        DBG_OUT("thumbnail for %s is cached!", filename.c_str());
         return Gdk::Pixbuf::create_from_file(cached);
     }
-    const std::string & filename = f->path();
-    DBG_OUT("creating thumbnail for %s",filename.c_str());
 
-    fwk::MimeType mime_type(filename);
+    DBG_OUT("creating thumbnail for %s", filename.c_str());
+
     if(!fwk::ensure_path_for_file(cached)) {
         ERR_OUT("coudln't create directories for %s", cached.c_str());
     }
 
-    DBG_OUT("MIME type %s", mime_type.string().c_str());
-
-    Glib::RefPtr<Gdk::Pixbuf> pix;
-
-    if(mime_type.isUnknown()) {
-        DBG_OUT("unknown file type %s", filename.c_str());
-    }
-    else if(mime_type.isMovie()) {
-        try {
-            if(fwk::thumbnail_movie(filename, w, h, cached)) {
-                pix = Gdk::Pixbuf::create_from_file(cached, w, h, true);
-            }
-        }
-        catch(const Glib::Error & e) {
-            ERR_OUT("exception thumbnailing video %s", e.what().c_str());
-        }
-    }
-    else if(!mime_type.isImage()) {
-        DBG_OUT("not an image type");
-    }
-    else if(!mime_type.isDigicamRaw()) {
-        DBG_OUT("not a raw type, trying GdkPixbuf loaders");
-        try {
-            pix = Gdk::Pixbuf::create_from_file(filename, w, h, true);
-            if(pix) {
-                pix = fwk::gdkpixbuf_exif_rotate(pix, f->orientation());
-            }
-        }
-        catch(const Glib::Error & e) {
-            ERR_OUT("exception thumbnailing image %s", e.what().c_str());
-        }
-    }
-    else {
-        GdkPixbuf *pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(filename.c_str(),
-                                                                   std::min(w, h));
-        if(pixbuf) {
-            pix = Glib::wrap(pixbuf, true); // take ownership
-            if((w < pix->get_width()) || (h < pix->get_height())) {
-                pix = fwk::gdkpixbuf_scale_to_fit(pix, std::min(w,h));
-            }
-        }
-    }
-    if(pix)
-    {
-        pix->save(cached, "png");
-    }
-    else {
+    auto thumbnail = fwk::Thumbnail::thumbnail_file(filename, w, h, f->orientation());
+    if (thumbnail.ok()) {
+        thumbnail.save(cached, "png");
+    } else {
         DBG_OUT("couldn't get the thumbnail for %s", filename.c_str());
     }
-    return pix;
+    return thumbnail;
 }
 
 }
@@ -136,22 +88,19 @@ void ThumbnailCache::execute(const ptr_t & task)
     w = task->width();
     h = task->height();
 
-    Glib::RefPtr<Gdk::Pixbuf> pix;
-
     std::string dest = path_for_thumbnail(task->file()->path(), task->file()->id(), std::max(w,h));
     DBG_OUT("cached thumbnail %s", dest.c_str());
 
-    pix = getThumbnail(task->file(), w, h, dest);
-
-    if(pix) {
+    fwk::Thumbnail pix = getThumbnail(task->file(), w, h, dest);
+    if(pix.ok()) {
         fwk::NotificationCenter::Ptr nc(m_notif_center);
         if(nc) {
             // pass the notification
             fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
             ThumbnailNotification tn;
             tn.id = task->file()->id();
-            tn.width = pix->get_width();
-            tn.height = pix->get_height();
+            tn.width = pix.get_width();
+            tn.height = pix.get_height();
             tn.pixmap = pix;
             n->setData(boost::any(tn));
             DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);

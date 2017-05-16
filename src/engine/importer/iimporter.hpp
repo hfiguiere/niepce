@@ -20,6 +20,11 @@
 
 #pragma once
 
+#include <string>
+#include <list>
+#include <functional>
+
+#include "fwk/toolkit/thumbnail.hpp"
 #include "engine/importer/importedfile.hpp"
 
 namespace eng {
@@ -41,6 +46,11 @@ public:
   virtual bool listSourceContent(const std::string & source,
                                  const SourceContentReady& callback) = 0;
 
+  typedef std::function<void (const std::string& path,
+                              const fwk::Thumbnail&)> PreviewReady;
+  virtual bool get_previews_for(const std::string& source,
+                                const std::list<std::string>& paths,
+                                const PreviewReady& callback) = 0;
 
   /** file importer callback */
   typedef std::function<void (const std::string&, bool)> FileImporter;

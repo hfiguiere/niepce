@@ -1,7 +1,7 @@
 /*
- * niepce - library/thumbnailnotification.h
+ * niepce - engine/library/thumbnailnotification.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,19 +21,18 @@
 #ifndef _LIBRARY_THUMBNAILNOTIFICATION_H__
 #define _LIBRARY_THUMBNAILNOTIFICATION_H__
 
-#include <gdkmm/pixbuf.h>
-
+#include "fwk/toolkit/thumbnail.hpp"
 #include "engine/db/librarytypes.hpp"
 
 namespace eng {
 
-	struct ThumbnailNotification
-	{
-		eng::library_id_t  id;
-		int  width;
-		int  height;
-		Glib::RefPtr<Gdk::Pixbuf> pixmap; 
-	};
+struct ThumbnailNotification
+{
+  eng::library_id_t  id;
+  int  width;
+  int  height;
+  fwk::Thumbnail pixmap;
+};
 
 }
 

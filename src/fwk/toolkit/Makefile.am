@@ -5,6 +5,7 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@FRAMEWORK_CFLAGS@ \
+	@OPENRAW_CFLAGS@ \
 	$(NULL)
 
 noinst_LIBRARIES = libniepceframework.a
@@ -29,6 +30,8 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	frame.hpp frame.cpp \
 	controller.hpp controller.cpp \
 	uicontroller.hpp uicontroller.cpp \
+	uiresult.hpp \
+	thumbnail.hpp thumbnail.cpp \
 	mapcontroller.hpp mapcontroller.cpp \
 	notification.hpp \
 	mimetype.hpp mimetype.cpp \

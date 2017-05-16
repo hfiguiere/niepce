@@ -18,6 +18,7 @@
  */
 
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
@@ -72,6 +73,18 @@ bool DirectoryImporter::listSourceContent(const std::string & source,
   }
   callback(std::move(content));
 
+  return true;
+}
+
+bool DirectoryImporter::get_previews_for(const std::string& source,
+                                         const std::list<std::string>& paths,
+                                         const PreviewReady& callback)
+{
+  for (auto path : paths) {
+    auto full_path = Glib::build_filename(source, path);
+    auto thumbnail = fwk::Thumbnail::thumbnail_file(full_path, 160, 160, 0);
+    callback(path, thumbnail);
+  }
   return true;
 }
 

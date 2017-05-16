@@ -1,7 +1,6 @@
 
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/  @FRAMEWORK_CFLAGS@ \
-	@OPENRAW_CFLAGS@ \
 	$(NULL)
 
 TESTS = test_library test_filebundle test_opqueue

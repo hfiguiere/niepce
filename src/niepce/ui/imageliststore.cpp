@@ -160,9 +160,10 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
         = m_idmap.find( tn.id );
     if(iter != m_idmap.end()) {
         // found the icon view item
+        auto pixbuf = tn.pixmap.pixbuf();
         Gtk::TreeRow row = *(iter->second);
-        row[m_columns.m_pix] = tn.pixmap;
-        row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(tn.pixmap, 100);
+        row[m_columns.m_pix] = pixbuf;
+        row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(pixbuf, 100);
     }
     else {
         DBG_OUT("row %Ld not found", (long long)tn.id);
