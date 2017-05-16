@@ -259,19 +259,20 @@ void NiepceWindow::on_action_file_import()
     {
         // import
         // XXX change the API to provide more details.
-        Glib::ustring source = import_dialog->sourcePath();
-        if(!source.empty()) {
-            cfg.setValue("last_import_location", source);
+        Glib::ustring source = import_dialog->source_path();
+        if(source.empty()) {
+            return;
+        }
+        cfg.setValue("last_import_location", source);
 
-            auto importer = import_dialog->importer();
-            DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
-            if (importer) {
-                importer->doImport(
-                    source,
-                    [this] (const std::string & path, bool manage) {
-                        m_libClient->importFromDirectory(path, manage);
-                    });
-            }
+        auto importer = import_dialog->importer();
+        DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
+        if (importer) {
+            importer->do_import(
+                source,
+                [this] (const std::string & path, bool manage) {
+                    m_libClient->importFromDirectory(path, manage);
+                });
         }
         break;
     }

@@ -37,14 +37,14 @@ public:
 
   std::string name() const override;
 
-  bool listSourceContent(const std::string & source,
-                         const SourceContentReady& callback) override;
-  bool get_previews_for(const std::string & source,
+  bool list_source_content(const std::string & source,
+                           const SourceContentReady& callback) override;
+  bool get_previews_for(const std::string& source,
                         const std::list<std::string>& paths,
                         const PreviewReady& callback) override;
 
-  bool doImport(const std::string & source,
-                const FileImporter & importer) override;
+  bool do_import(const std::string & source,
+                 const FileImporter & importer) override;
 
 };
 

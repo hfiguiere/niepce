@@ -51,8 +51,8 @@ ImportDialog::ImportDialog()
     , m_ufraw_import_check(nullptr)
     , m_rawstudio_import_check(nullptr)
     , m_directory_name(nullptr)
-    , m_destinationFolder(nullptr)
-    , m_attributesScrolled(nullptr)
+    , m_destination_folder(nullptr)
+    , m_attributes_scrolled(nullptr)
     , m_images_list_scrolled(nullptr)
 {
 }
@@ -72,19 +72,19 @@ void ImportDialog::setup_widget()
 
     a_builder->get_widget("select_directories", select_directories);
     select_directories->signal_clicked().connect(
-        sigc::mem_fun(*this, &ImportDialog::doSelectDirectories));
+        sigc::mem_fun(*this, &ImportDialog::do_select_directories));
     a_builder->get_widget("date_tz_combo", m_date_tz_combo);
     a_builder->get_widget("ufraw_import_check", m_ufraw_import_check);
     a_builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
     a_builder->get_widget("directory_name", m_directory_name);
-    a_builder->get_widget("destinationFolder", m_destinationFolder);
+    a_builder->get_widget("destinationFolder", m_destination_folder);
 
     // Metadata pane.
-    a_builder->get_widget("attributes_scrolled", m_attributesScrolled);
+    a_builder->get_widget("attributes_scrolled", m_attributes_scrolled);
     m_metadata_pane = MetaDataPaneController::Ptr(new MetaDataPaneController);
     auto w = m_metadata_pane->buildWidget();
     add(m_metadata_pane);
-    m_attributesScrolled->add(*w);
+    m_attributes_scrolled->add(*w);
     w->show_all();
 
     // Gridview of previews.
@@ -108,7 +108,7 @@ void ImportDialog::setup_widget()
 }
 
 // XXX doesn't belong here
-void ImportDialog::doSelectDirectories()
+void ImportDialog::do_select_directories()
 {
   Configuration & cfg = Application::app()->config();
 
@@ -137,12 +137,12 @@ void ImportDialog::doSelectDirectories()
     }
   }
   if (!filename.empty()) {
-    setToImport(filename);
+    set_to_import(filename);
   }
 }
 
 // XXX doesn't belong here. Or must be deeply modified to deal with the Importer
-void ImportDialog::setToImport(const Glib::ustring & f)
+void ImportDialog::set_to_import(const Glib::ustring & f)
 {
     if (!m_importer) {
         // FIXME this should be the right kind
@@ -163,11 +163,11 @@ void ImportDialog::setToImport(const Glib::ustring & f)
     auto source_content =
       std::async(std::launch::async,
                  [f, importer, source_content_ready] () {
-                   return importer->listSourceContent(f, source_content_ready);
+                   return importer->list_source_content(f, source_content_ready);
                  });
 
     m_folder_path_source = f;
-    m_destinationFolder->set_text(fwk::path_basename(f));
+    m_destination_folder->set_text(fwk::path_basename(f));
     m_directory_name->set_text(f);
 }
 

@@ -43,8 +43,8 @@ public:
   /** Source content is ready */
   typedef std::function<void (std::list<ImportedFile::Ptr>&&)> SourceContentReady;
   /** list the source content and store it. */
-  virtual bool listSourceContent(const std::string & source,
-                                 const SourceContentReady& callback) = 0;
+  virtual bool list_source_content(const std::string& source,
+                                   const SourceContentReady& callback) = 0;
 
   typedef std::function<void (const std::string& path,
                               const fwk::Thumbnail&)> PreviewReady;
@@ -55,8 +55,8 @@ public:
   /** file importer callback */
   typedef std::function<void (const std::string&, bool)> FileImporter;
   /** perform import from source */
-  virtual bool doImport(const std::string & source,
-                        const FileImporter & importer) = 0;
+  virtual bool do_import(const std::string& source,
+                        const FileImporter& importer) = 0;
 
 };
 

@@ -77,15 +77,15 @@ public:
 
 //  const std::list<std::string> & to_import() const
 //      { return m_list_to_import; }
-    const Glib::ustring & sourcePath() const
+    const Glib::ustring & source_path() const
         { return m_folder_path_source; }
-    void setToImport(const Glib::ustring & f);
+    void set_to_import(const Glib::ustring & f);
     const std::shared_ptr<eng::IImporter>& importer() const
         { return m_importer; }
 private:
     class ImportParam;
 
-    void doSelectDirectories();
+    void do_select_directories();
     void append_files_to_import();
     void preview_received();
 
@@ -96,8 +96,8 @@ private:
     Gtk::CheckButton *m_ufraw_import_check;
     Gtk::CheckButton *m_rawstudio_import_check;
     Gtk::Label *m_directory_name;
-    Gtk::Entry *m_destinationFolder;
-    Gtk::ScrolledWindow *m_attributesScrolled;
+    Gtk::Entry *m_destination_folder;
+    Gtk::ScrolledWindow *m_attributes_scrolled;
     Gtk::ScrolledWindow *m_images_list_scrolled;
     PreviewGridModel m_grid_columns;
     Glib::RefPtr<Gtk::ListStore> m_images_list_model;

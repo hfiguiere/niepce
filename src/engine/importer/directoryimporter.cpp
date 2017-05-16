@@ -59,8 +59,8 @@ std::string DirectoryImporter::name() const
   return _("Directory");
 }
 
-bool DirectoryImporter::listSourceContent(const std::string & source,
-                                          const SourceContentReady& callback)
+bool DirectoryImporter::list_source_content(const std::string & source,
+                                            const SourceContentReady& callback)
 {
   auto files =
     fwk::FileList::getFilesFromDirectory(source,
@@ -88,8 +88,8 @@ bool DirectoryImporter::get_previews_for(const std::string& source,
   return true;
 }
 
-bool DirectoryImporter::doImport(const std::string& source,
-                                 const FileImporter& callback)
+bool DirectoryImporter::do_import(const std::string& source,
+                                  const FileImporter& callback)
 {
   // pretty trivial, we have the source path.
   callback(source, false);
