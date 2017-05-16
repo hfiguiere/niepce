@@ -18,8 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #pragma once
 
 #include <deque>
@@ -31,6 +29,7 @@
 
 namespace fwk {
 
+/** @brief Fetch a "result" asynchronously */
 class UIResult
 {
 public:
@@ -39,6 +38,8 @@ public:
   sigc::connection connect(sigc::slot<void>&& slot) {
     return m_notifier.connect(std::move(slot));
   }
+
+  void run(std::function<void ()>&& f);
 protected:
   Glib::Dispatcher m_notifier;
   std::mutex m_data_mutex;
@@ -70,6 +71,7 @@ private:
   T m_data;
 };
 
+/** @brief Fetch many "results" asynchronously */
 template<class T>
 class UIResults
   : public UIResult

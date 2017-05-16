@@ -149,22 +149,19 @@ void ImportDialog::set_to_import(const Glib::ustring & f)
         m_importer = std::make_shared<eng::DirectoryImporter>();
     }
 
-    eng::IImporter::SourceContentReady source_content_ready =
-      [this] (std::list<eng::ImportedFile::Ptr>&& list_to_import) {
-        this->m_files_to_import.send_data(std::move(list_to_import));
-      };
-
-
     m_images_list_model->clear();
     m_images_list_map.clear();
     m_files_to_import.clear();
 
     auto importer = m_importer;
-    auto source_content =
-      std::async(std::launch::async,
-                 [f, importer, source_content_ready] () {
-                   return importer->list_source_content(f, source_content_ready);
-                 });
+    m_files_to_import.run(
+      [this, f, importer] () {
+        return importer->list_source_content(
+          f,
+          [this] (std::list<eng::ImportedFile::Ptr>&& list_to_import) {
+            this->m_files_to_import.send_data(std::move(list_to_import));
+          });
+      });
 
     m_folder_path_source = f;
     m_destination_folder->set_text(fwk::path_basename(f));
@@ -179,7 +176,7 @@ void ImportDialog::append_files_to_import()
     ERR_OUT("No image list model");
     return;
   }
-  // request the previews to the importer.tn.pixmap.pixbuf()
+  // request the previews to the importer.
   std::list<std::string> paths;
   for(const auto & f : files_to_import) {
     DBG_OUT("selected %s", f->name().c_str());
@@ -190,17 +187,17 @@ void ImportDialog::append_files_to_import()
     iter->set_value(m_grid_columns.file, std::move(f));
   }
 
-  eng::IImporter::PreviewReady preview_ready = [this] (const std::string& path,
-                                                       const fwk::Thumbnail& thumbnail) {
-    this->m_previews_to_import.send_data(std::make_pair(path, thumbnail));
-  };
-
   auto importer = m_importer;
   auto source = m_folder_path_source.raw();
-  std::async(std::launch::async,
-             [importer, source, paths, preview_ready] () {
-               return importer->get_previews_for(source, paths, preview_ready);
-             });
+  m_previews_to_import.run(
+    [this, importer, source, paths] () {
+      return importer->get_previews_for(
+        source, paths,
+        [this] (const std::string& path, const fwk::Thumbnail& thumbnail) {
+          this->m_previews_to_import.send_data(
+            std::make_pair(path, thumbnail));
+        });
+    });
 }
 
 void ImportDialog::preview_received()
