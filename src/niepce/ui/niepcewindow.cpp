@@ -265,7 +265,7 @@ void NiepceWindow::on_action_file_import()
         }
         cfg.setValue("last_import_location", source);
 
-        auto importer = import_dialog->importer();
+        auto importer = import_dialog->get_importer();
         DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
         if (importer) {
             importer->do_import(

@@ -59,9 +59,9 @@ public:
             return std::static_pointer_cast<Frame>(shared_from_this());
         }
 
-    Gtk::Window & gtkWindow()
+    Gtk::Window & gtkWindow() const
         {
-            return *m_window; 
+            return *m_window;
         }
     Glib::RefPtr<Gtk::Builder> & builder()
         { return m_builder; }

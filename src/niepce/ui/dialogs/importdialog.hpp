@@ -34,6 +34,7 @@
 #include "fwk/toolkit/uiresult.hpp"
 #include "imageliststore.hpp"
 #include "metadatapanecontroller.hpp"
+#include "importers/iimporterui.hpp"
 
 namespace Gtk {
 class Dialog;
@@ -79,9 +80,11 @@ public:
 //      { return m_list_to_import; }
     const Glib::ustring & source_path() const
         { return m_folder_path_source; }
-    void set_to_import(const Glib::ustring & f);
-    const std::shared_ptr<eng::IImporter>& importer() const
+    void set_to_import(const std::string& f);
+    const std::shared_ptr<IImporterUI>& importer_ui() const
         { return m_importer; }
+    std::shared_ptr<eng::IImporter> get_importer() const
+        { return m_importer->get_importer(); }
 private:
     class ImportParam;
 
@@ -89,7 +92,7 @@ private:
     void append_files_to_import();
     void preview_received();
 
-    std::shared_ptr<eng::IImporter> m_importer; // as shared_ptr<> for lambda capture
+    std::shared_ptr<ui::IImporterUI> m_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
 
     Gtk::ComboBox *m_date_tz_combo;

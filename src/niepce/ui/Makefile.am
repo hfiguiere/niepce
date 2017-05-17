@@ -18,7 +18,7 @@ EXTRA_DIST = $(gladefiles)
 
 noinst_LIBRARIES = libniepceui.a
 
-PUBLICHEADERS = ilibrarymodule.hpp imoduleshell.hpp
+PUBLICHEADERS = ilibrarymodule.hpp imoduleshell.hpp dialogs/importers/iimporterui.hpp
 
 libniepceui_a_SOURCES = \
 	niepcewindow.hpp niepcewindow.cpp \
@@ -33,9 +33,11 @@ libniepceui_a_SOURCES = \
 	dialogs/editlabels.hpp dialogs/editlabels.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	dialogs/preferencesdialog.hpp dialogs/preferencesdialog.cpp \
+	dialogs/importdialog.hpp dialogs/importdialog.cpp \
+	dialogs/importers/directoryimporterui.hpp \
+	dialogs/importers/directoryimporterui.cpp \
 	selectioncontroller.hpp selectioncontroller.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
-	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.hpp \
 	thumbstripview.cpp thumbstripview.hpp \
 	$(PUBLICHEADERS) \

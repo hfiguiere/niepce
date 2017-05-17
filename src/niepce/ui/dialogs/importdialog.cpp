@@ -20,11 +20,9 @@
 
 #include <future>
 
-#include <glibmm/i18n.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
-#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/iconview.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
@@ -32,15 +30,11 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
-#include "fwk/toolkit/configuration.hpp"
-#include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "engine/importer/directoryimporter.hpp"
 #include "engine/importer/importedfile.hpp"
 #include "importdialog.hpp"
-
-using fwk::Configuration;
-using fwk::Application;
+#include "importers/directoryimporterui.hpp"
 
 namespace ui {
 
@@ -111,50 +105,23 @@ void ImportDialog::setup_widget()
 // XXX doesn't belong here
 void ImportDialog::do_select_directories()
 {
-  Configuration & cfg = Application::app()->config();
-
-  Glib::ustring filename;
-  {
-    Gtk::FileChooserDialog dialog(gtkWindow(), _("Import picture folder"),
-                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-    dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-    dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
-    dialog.set_select_multiple(false);
-
-    std::string last_import_location = cfg.getValue("last_import_location", "");
-    if (!last_import_location.empty()) {
-      dialog.set_filename(last_import_location);
-    }
-
-    int result = dialog.run();
-    switch(result)
-    {
-    case Gtk::RESPONSE_OK:
-      filename = dialog.get_filename();
-      break;
-    default:
-      break;
-    }
-  }
-  if (!filename.empty()) {
-    set_to_import(filename);
-  }
-}
-
-// XXX doesn't belong here. Or must be deeply modified to deal with the Importer
-void ImportDialog::set_to_import(const Glib::ustring & f)
-{
     if (!m_importer) {
         // FIXME this should be the right kind
-        m_importer = std::make_shared<eng::DirectoryImporter>();
+        m_importer = std::make_shared<DirectoryImporterUI>();
     }
+    auto source = m_importer->select_source(*this);
+    if (!source.empty()) {
+      set_to_import(source);
+    }
+}
 
+void ImportDialog::set_to_import(const std::string& f)
+{
     m_images_list_model->clear();
     m_images_list_map.clear();
     m_files_to_import.clear();
 
-    auto importer = m_importer;
+    auto importer = get_importer();
     m_files_to_import.run(
       [this, f, importer] () {
         return importer->list_source_content(
@@ -188,7 +155,7 @@ void ImportDialog::append_files_to_import()
     iter->set_value(m_grid_columns.file, std::move(f));
   }
 
-  auto importer = m_importer;
+  auto importer = get_importer();
   auto source = m_folder_path_source.raw();
   m_previews_to_import.run(
     [this, importer, source, paths] () {
