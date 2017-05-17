@@ -95,6 +95,7 @@ void ImportDialog::setup_widget()
             Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(m_images_list_model)));
     m_gridview->set_pixbuf_column(m_grid_columns.pixbuf);
     m_gridview->set_text_column(m_grid_columns.filename);
+    m_gridview->set_item_width(100);
     m_gridview->show();
     m_images_list_scrolled->add(*m_gridview);
     m_images_list_scrolled->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
