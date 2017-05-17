@@ -36,7 +36,7 @@ public:
     {
       m_name = fwk::path_basename(path);
     }
-  const std::string & name() override
+  const std::string & name() const override
     {
       return m_name;
     }

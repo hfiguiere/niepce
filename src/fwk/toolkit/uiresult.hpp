@@ -60,13 +60,13 @@ public:
       m_data = std::move(d);
     }
     m_notifier.emit();
-  };
+  }
   T recv_data() {
     {
       std::lock_guard<std::mutex> lock(m_data_mutex);
       return m_data;
     }
-  };
+  }
 private:
   T m_data;
 };
@@ -87,7 +87,7 @@ public:
       m_data.push_back(std::move(d));
     }
     m_notifier.emit();
-  };
+  }
   Option<T> recv_data() {
     std::lock_guard<std::mutex> lock(m_data_mutex);
     if (m_data.empty()) {
@@ -96,7 +96,7 @@ public:
     auto result = Option<T>(m_data.front());
     m_data.pop_front();
     return result;
-  };
+  }
 private:
   std::deque<T> m_data;
 };

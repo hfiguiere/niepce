@@ -29,10 +29,16 @@ class ImportedFile {
 public:
   typedef std::shared_ptr<ImportedFile> Ptr;
 
+  ImportedFile()
+    {}
+
+  ImportedFile(const ImportedFile&) = delete;
+  ImportedFile& operator=(const ImportedFile&) = delete;
+
   virtual ~ImportedFile()
     {}
 
-  virtual const std::string & name() = 0;
+  virtual const std::string & name() const = 0;
 private:
 };
 
