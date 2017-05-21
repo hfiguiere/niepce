@@ -19,6 +19,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/label.h>
 
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
@@ -27,44 +28,86 @@
 
 namespace ui {
 
-  DirectoryImporterUI::DirectoryImporterUI()
-    : m_importer(std::make_shared<eng::DirectoryImporter>())
-  {
+DirectoryImporterUI::DirectoryImporterUI()
+  : m_importer(std::make_shared<eng::DirectoryImporter>())
+  , m_name(_("Directory"))
+{
+}
+
+std::shared_ptr<eng::IImporter> DirectoryImporterUI::get_importer()
+{
+  return m_importer;
+}
+
+const std::string& DirectoryImporterUI::name() const
+{
+  return m_name;
+}
+
+const std::string& DirectoryImporterUI::id() const
+{
+  return m_importer->id();
+}
+
+Gtk::Widget* DirectoryImporterUI::setup_widget(const fwk::Frame::Ptr& frame)
+{
+  m_frame = frame;
+  Gtk::Button* select_directories = nullptr;
+  m_builder = Gtk::Builder::create_from_file(GLADEDIR"directoryimporterui.ui",
+                                             "main_widget");
+  Gtk::Box* main_widget = nullptr;
+  m_builder->get_widget("main_widget", main_widget);
+  m_builder->get_widget("select_directories", select_directories);
+  select_directories->signal_clicked().connect(
+    sigc::mem_fun(*this, &DirectoryImporterUI::do_select_directories));
+  m_builder->get_widget("directory_name", m_directory_name);
+  return main_widget;
+}
+
+void DirectoryImporterUI::set_source_selected_callback(const SourceSelected& cb)
+{
+  m_source_selected_cb = cb;
+}
+
+void DirectoryImporterUI::do_select_directories()
+{
+  auto source = select_source();
+  if (!source.empty() && m_source_selected_cb) {
+    m_source_selected_cb(source);
   }
+}
 
-  std::shared_ptr<eng::IImporter> DirectoryImporterUI::get_importer()
+std::string DirectoryImporterUI::select_source()
+{
+  fwk::Configuration & cfg = fwk::Application::app()->config();
+
+  Glib::ustring filename;
   {
-    return m_importer;
-  }
+    auto frame = m_frame.lock();
+    Gtk::FileChooserDialog dialog(frame->gtkWindow(), _("Import picture folder"),
+                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
-  std::string DirectoryImporterUI::select_source(const fwk::Frame& frame)
-  {
-    fwk::Configuration & cfg = fwk::Application::app()->config();
+    dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
+    dialog.set_select_multiple(false);
 
-    Glib::ustring filename;
-    {
-      Gtk::FileChooserDialog dialog(frame.gtkWindow(), _("Import picture folder"),
-                                    Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-      dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-      dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
-      dialog.set_select_multiple(false);
-
-      std::string last_import_location = cfg.getValue("last_import_location", "");
-      if (!last_import_location.empty()) {
-        dialog.set_filename(last_import_location);
-      }
-
-      int result = dialog.run();
-      switch(result)
-      {
-      case Gtk::RESPONSE_OK:
-        filename = dialog.get_filename();
-        break;
-      default:
-        break;
-      }
+    std::string last_import_location = cfg.getValue("last_import_location", "");
+    if (!last_import_location.empty()) {
+      dialog.set_filename(last_import_location);
     }
-    return filename.raw();
+
+    int result = dialog.run();
+    switch(result)
+    {
+    case Gtk::RESPONSE_OK:
+      filename = dialog.get_filename();
+      break;
+    default:
+      break;
+    }
   }
+  m_directory_name->set_text(filename);
+  return filename.raw();
+}
+
 }

@@ -36,9 +36,8 @@ class IImporter {
 public:
   virtual ~IImporter() {}
 
-
-  /** User visible importer name. */
-  virtual std::string name() const = 0;
+  /** Return the id string */
+  virtual const std::string& id() const = 0;
 
   /** Source content is ready */
   typedef std::function<void (std::list<ImportedFile::Ptr>&&)> SourceContentReady;

@@ -23,10 +23,12 @@
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/iconview.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/stack.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
@@ -39,20 +41,32 @@
 namespace ui {
 
 ImportDialog::ImportDialog()
-    : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog")
-    , m_importer(nullptr)
-    , m_date_tz_combo(nullptr)
-    , m_ufraw_import_check(nullptr)
-    , m_rawstudio_import_check(nullptr)
-    , m_directory_name(nullptr)
-    , m_destination_folder(nullptr)
-    , m_attributes_scrolled(nullptr)
-    , m_images_list_scrolled(nullptr)
+  : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog")
+  , m_current_importer(nullptr)
+  , m_importer_ui_stack(nullptr)
+  , m_date_tz_combo(nullptr)
+  , m_ufraw_import_check(nullptr)
+  , m_rawstudio_import_check(nullptr)
+  , m_destination_folder(nullptr)
+  , m_import_source_combo(nullptr)
+  , m_attributes_scrolled(nullptr)
+  , m_images_list_scrolled(nullptr)
 {
 }
 
 ImportDialog::~ImportDialog()
 {
+}
+
+void ImportDialog::add_importer_ui(IImporterUI& importer)
+{
+  m_import_source_combo->append(importer.id(), importer.name());
+  Gtk::Widget* importer_widget = importer.setup_widget(
+    std::static_pointer_cast<Frame>(shared_from_this()));
+  m_importer_ui_stack->add(*importer_widget, importer.name());
+  importer.set_source_selected_callback([this] (const std::string& source) {
+      this->set_to_import(source);
+    });
 }
 
 void ImportDialog::setup_widget()
@@ -62,16 +76,24 @@ void ImportDialog::setup_widget()
     }
 
     Glib::RefPtr<Gtk::Builder> a_builder = builder();
-    Gtk::Button *select_directories = nullptr;
-
-    a_builder->get_widget("select_directories", select_directories);
-    select_directories->signal_clicked().connect(
-        sigc::mem_fun(*this, &ImportDialog::do_select_directories));
     a_builder->get_widget("date_tz_combo", m_date_tz_combo);
     a_builder->get_widget("ufraw_import_check", m_ufraw_import_check);
     a_builder->get_widget("rawstudio_import_check", m_rawstudio_import_check);
-    a_builder->get_widget("directory_name", m_directory_name);
     a_builder->get_widget("destinationFolder", m_destination_folder);
+
+    // Sources
+    a_builder->get_widget("importer_ui_stack", m_importer_ui_stack);
+    a_builder->get_widget("import_source_combo", m_import_source_combo);
+    m_import_source_combo->signal_changed().connect([] {});
+
+    // Directory source, hardcoded.
+    // XXX fix it
+    m_importers[0] = std::make_shared<DirectoryImporterUI>();
+    add_importer_ui(*m_importers[0]);
+
+    // XXX restore from preferences.
+    m_current_importer = m_importers[0];
+    m_import_source_combo->set_active_id(m_current_importer->id());
 
     // Metadata pane.
     a_builder->get_widget("attributes_scrolled", m_attributes_scrolled);
@@ -102,19 +124,6 @@ void ImportDialog::setup_widget()
     m_is_setup = true;
 }
 
-// XXX doesn't belong here
-void ImportDialog::do_select_directories()
-{
-    if (!m_importer) {
-        // FIXME this should be the right kind
-        m_importer = std::make_shared<DirectoryImporterUI>();
-    }
-    auto source = m_importer->select_source(*this);
-    if (!source.empty()) {
-      set_to_import(source);
-    }
-}
-
 void ImportDialog::set_to_import(const std::string& f)
 {
     m_images_list_model->clear();
@@ -133,7 +142,6 @@ void ImportDialog::set_to_import(const std::string& f)
 
     m_folder_path_source = f;
     m_destination_folder->set_text(fwk::path_basename(f));
-    m_directory_name->set_text(f);
 }
 
 void ImportDialog::append_files_to_import()

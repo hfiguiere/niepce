@@ -3,6 +3,7 @@
 gladefiles = dialogs/preferences.ui \
 	dialogs/importdialog.ui \
 	dialogs/editlabels.ui \
+	dialogs/importers/directoryimporterui.ui \
 	$(NULL)
 
 gladedir = @datarootdir@/niepce/glade/

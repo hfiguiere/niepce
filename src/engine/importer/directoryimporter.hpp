@@ -35,8 +35,7 @@ public:
   DirectoryImporter();
   virtual ~DirectoryImporter();
 
-  std::string name() const override;
-
+  const std::string& id() const override;
   bool list_source_content(const std::string & source,
                            const SourceContentReady& callback) override;
   bool get_previews_for(const std::string& source,

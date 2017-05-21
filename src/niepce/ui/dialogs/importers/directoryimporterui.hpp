@@ -21,6 +21,10 @@
 
 #include "iimporterui.hpp"
 
+namespace fwk {
+class Frame;
+}
+
 namespace ui {
 
 class DirectoryImporterUI
@@ -30,10 +34,23 @@ public:
   DirectoryImporterUI();
 
   std::shared_ptr<eng::IImporter> get_importer() override;
-  std::string select_source(const fwk::Frame&) override;
+
+  const std::string& name() const override;
+  const std::string& id() const override;
+  Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
+  void set_source_selected_callback(const SourceSelected&) override;
 
 private:
+  std::string select_source();
+  void do_select_directories();
+
   std::shared_ptr<eng::DirectoryImporter> m_importer;
+  std::string m_name;
+  SourceSelected m_source_selected_cb;
+
+  std::weak_ptr<fwk::Frame> m_frame;
+  Glib::RefPtr<Gtk::Builder> m_builder;
+  Gtk::Label *m_directory_name;
 };
 
 }

@@ -39,8 +39,10 @@
 namespace Gtk {
 class Dialog;
 class ComboBox;
+class ComboBoxText;
 class CheckButton;
 class TreeView;
+class Stack;
 }
 
 namespace fwk {
@@ -82,24 +84,27 @@ public:
         { return m_folder_path_source; }
     void set_to_import(const std::string& f);
     const std::shared_ptr<IImporterUI>& importer_ui() const
-        { return m_importer; }
+        { return m_current_importer; }
     std::shared_ptr<eng::IImporter> get_importer() const
-        { return m_importer->get_importer(); }
+        { return m_current_importer->get_importer(); }
 private:
     class ImportParam;
 
     void do_select_directories();
     void append_files_to_import();
     void preview_received();
+    void add_importer_ui(IImporterUI& importer);
 
-    std::shared_ptr<ui::IImporterUI> m_importer; // as shared_ptr<> for lambda capture
+    std::array<std::shared_ptr<ui::IImporterUI>, 1> m_importers;
+    std::shared_ptr<ui::IImporterUI> m_current_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
 
+    Gtk::Stack *m_importer_ui_stack;
     Gtk::ComboBox *m_date_tz_combo;
     Gtk::CheckButton *m_ufraw_import_check;
     Gtk::CheckButton *m_rawstudio_import_check;
-    Gtk::Label *m_directory_name;
     Gtk::Entry *m_destination_folder;
+    Gtk::ComboBoxText *m_import_source_combo;
     Gtk::ScrolledWindow *m_attributes_scrolled;
     Gtk::ScrolledWindow *m_images_list_scrolled;
     PreviewGridModel m_grid_columns;

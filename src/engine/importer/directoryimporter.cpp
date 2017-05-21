@@ -54,9 +54,10 @@ DirectoryImporter::~DirectoryImporter()
 {
 }
 
-std::string DirectoryImporter::name() const
+const std::string& DirectoryImporter::id() const
 {
-  return _("Directory");
+  static std::string _id = "DirectoryImporter";
+  return _id;
 }
 
 bool DirectoryImporter::list_source_content(const std::string & source,
