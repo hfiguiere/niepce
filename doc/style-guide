@@ -38,13 +38,14 @@ Classes:
 -Camel case, starting with an uppercase
 
 Methods:
--Camel case, starting with a lowercase
+-snake lowercase
 
 Variables
--Lower case
+-lowercase
+Member variables are prefix with m_ to alleviate shadowing
 
 Constants
--Upper case
+-uppercase
 
 
 HEADERS
@@ -56,6 +57,10 @@ Use #pragma once for header guards.
 C++
 ---
 
-C++11
+The standard is C++11.
 
 Use of 'override' is mandatory. Anywhere it is missing is a bug.
+Use auto when possible.
+
+Avoid raw pointers. Use unique_ptr<> or shared_ptr<>. You can typedef
+the pointer type by suffixing Ptr to the class name.

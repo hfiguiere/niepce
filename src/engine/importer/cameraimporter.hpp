@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - engine/importer/cameraimporter.hpp
  *
@@ -17,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #pragma once
 
 #include <string>
@@ -28,23 +28,21 @@
 
 namespace eng {
 
-
 class CameraImporter
-  : public IImporter {
+    : public IImporter {
 public:
-  CameraImporter();
-  virtual ~CameraImporter();
+    CameraImporter();
+    virtual ~CameraImporter();
 
-  const std::string& id() const override;
-  bool list_source_content(const std::string & source,
-                           const SourceContentReady& callback) override;
-  bool get_previews_for(const std::string& source,
-                        const std::list<std::string>& paths,
-                        const PreviewReady& callback) override;
+    const std::string& id() const override;
+    bool list_source_content(const std::string & source,
+                             const SourceContentReady& callback) override;
+    bool get_previews_for(const std::string& source,
+                          const std::list<std::string>& paths,
+                          const PreviewReady& callback) override;
 
-  bool do_import(const std::string & source,
-                 const FileImporter & importer) override;
-
+    bool do_import(const std::string & source,
+                   const FileImporter & importer) override;
 };
 
 }

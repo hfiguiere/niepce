@@ -18,8 +18,6 @@
  */
 
 
-#include <future>
-
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
@@ -63,14 +61,14 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::add_importer_ui(IImporterUI& importer)
 {
-  m_import_source_combo->append(importer.id(), importer.name());
-  Gtk::Widget* importer_widget = importer.setup_widget(
-    std::static_pointer_cast<Frame>(shared_from_this()));
-  importer_widget->show_all();
-  m_importer_ui_stack->add(*importer_widget, importer.id());
-  importer.set_source_selected_callback([this] (const std::string& source) {
-      this->set_to_import(source);
-    });
+    m_import_source_combo->append(importer.id(), importer.name());
+    Gtk::Widget* importer_widget = importer.setup_widget(
+        std::static_pointer_cast<Frame>(shared_from_this()));
+    importer_widget->show_all();
+    m_importer_ui_stack->add(*importer_widget, importer.id());
+    importer.set_source_selected_callback([this] (const std::string& source) {
+            this->set_to_import(source);
+        });
 }
 
 void ImportDialog::setup_widget()
@@ -134,12 +132,12 @@ void ImportDialog::setup_widget()
 
 void ImportDialog::import_source_changed()
 {
-  auto id = m_import_source_combo->get_active_id();
-  m_current_importer = m_importers[id];
-  m_importer_ui_stack->set_visible_child(id);
+    auto id = m_import_source_combo->get_active_id();
+    m_current_importer = m_importers[id];
+    m_importer_ui_stack->set_visible_child(id);
 
-  fwk::Configuration & cfg = fwk::Application::app()->config();
-  cfg.setValue("last_importer", id);
+    fwk::Configuration & cfg = fwk::Application::app()->config();
+    cfg.setValue("last_importer", id);
 }
 
 void ImportDialog::set_to_import(const std::string& f)
@@ -150,13 +148,13 @@ void ImportDialog::set_to_import(const std::string& f)
 
     auto importer = get_importer();
     m_files_to_import.run(
-      [this, f, importer] () {
-        return importer->list_source_content(
-          f,
-          [this] (std::list<eng::ImportedFile::Ptr>&& list_to_import) {
-            this->m_files_to_import.send_data(std::move(list_to_import));
-          });
-      });
+        [this, f, importer] () {
+            return importer->list_source_content(
+                f,
+                [this] (std::list<eng::ImportedFilePtr>&& list_to_import) {
+                    this->m_files_to_import.send_data(std::move(list_to_import));
+                });
+        });
 
     m_folder_path_source = f;
     m_destination_folder->set_text(fwk::path_basename(f));
@@ -164,46 +162,46 @@ void ImportDialog::set_to_import(const std::string& f)
 
 void ImportDialog::append_files_to_import()
 {
-  auto files_to_import = m_files_to_import.recv_data();
+    auto files_to_import = m_files_to_import.recv_data();
 
-  if (!m_images_list_model) {
-    ERR_OUT("No image list model");
-    return;
-  }
-  // request the previews to the importer.
-  std::list<std::string> paths;
-  for(const auto & f : files_to_import) {
-    DBG_OUT("selected %s", f->name().c_str());
-    paths.push_back(f->name());
-    Gtk::TreeIter iter = m_images_list_model->append();
-    m_images_list_map.insert(std::make_pair(f->name(), iter));
-    iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
-    iter->set_value(m_grid_columns.file, std::move(f));
-  }
+    if (!m_images_list_model) {
+        ERR_OUT("No image list model");
+        return;
+    }
+    // request the previews to the importer.
+    std::list<std::string> paths;
+    for(const auto & f : files_to_import) {
+        DBG_OUT("selected %s", f->name().c_str());
+        paths.push_back(f->name());
+        Gtk::TreeIter iter = m_images_list_model->append();
+        m_images_list_map.insert(std::make_pair(f->name(), iter));
+        iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
+        iter->set_value(m_grid_columns.file, std::move(f));
+    }
 
-  auto importer = get_importer();
-  auto source = m_folder_path_source.raw();
-  m_previews_to_import.run(
-    [this, importer, source, paths] () {
-      return importer->get_previews_for(
-        source, paths,
-        [this] (const std::string& path, const fwk::Thumbnail& thumbnail) {
-          this->m_previews_to_import.send_data(
-            std::make_pair(path, thumbnail));
+    auto importer = get_importer();
+    auto source = m_folder_path_source.raw();
+    m_previews_to_import.run(
+        [this, importer, source, paths] () {
+            return importer->get_previews_for(
+                source, paths,
+                [this] (const std::string& path, const fwk::Thumbnail& thumbnail) {
+                    this->m_previews_to_import.send_data(
+                        std::make_pair(path, thumbnail));
+                });
         });
-    });
 }
 
 void ImportDialog::preview_received()
 {
-  auto result = m_previews_to_import.recv_data();
-  if (!result.empty()) {
-    auto preview = result.unwrap();
-    auto iter = m_images_list_map.find(preview.first);
-    if (iter != m_images_list_map.end()) {
-      iter->second->set_value(m_grid_columns.pixbuf, preview.second.pixbuf());
+    auto result = m_previews_to_import.recv_data();
+    if (!result.empty()) {
+        auto preview = result.unwrap();
+        auto iter = m_images_list_map.find(preview.first);
+        if (iter != m_images_list_map.end()) {
+            iter->second->set_value(m_grid_columns.pixbuf, preview.second.pixbuf());
+        }
     }
-  }
 }
 
 
@@ -214,9 +212,9 @@ void ImportDialog::preview_received()
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
-  c-basic-offset:2
+  c-basic-offset:4
   indent-tabs-mode:nil
-  tab-width:2
+  tab-width:4
   fill-column:99
   End:
 */

@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - engine/importer/directoryimporter.cpp
  *
@@ -31,18 +32,18 @@ class DirectoryImportedFile
   : public ImportedFile
 {
 public:
-  DirectoryImportedFile(const std::string & path)
-    : m_path(path)
-    {
-      m_name = fwk::path_basename(path);
-    }
-  const std::string & name() const override
-    {
-      return m_name;
-    }
+    DirectoryImportedFile(const std::string & path)
+        : m_path(path)
+        {
+            m_name = fwk::path_basename(path);
+        }
+    const std::string & name() const override
+        {
+            return m_name;
+        }
 private:
-  std::string m_name;
-  std::string m_path;
+    std::string m_name;
+    std::string m_path;
 };
 
 
@@ -56,47 +57,47 @@ DirectoryImporter::~DirectoryImporter()
 
 const std::string& DirectoryImporter::id() const
 {
-  static std::string _id = "DirectoryImporter";
-  return _id;
+    static std::string _id = "DirectoryImporter";
+    return _id;
 }
 
 bool DirectoryImporter::list_source_content(const std::string & source,
                                             const SourceContentReady& callback)
 {
-  auto files =
-    fwk::FileList::getFilesFromDirectory(source,
-                                         &fwk::filter_xmp_out);
+    auto files =
+        fwk::FileList::getFilesFromDirectory(source,
+                                             &fwk::filter_xmp_out);
 
-  std::list<ImportedFile::Ptr> content;
-  for(const auto & entry : *files)
-  {
-    content.push_back(ImportedFile::Ptr(new DirectoryImportedFile(entry)));
-  }
-  callback(std::move(content));
+    std::list<ImportedFilePtr> content;
+    for(const auto & entry : *files)
+    {
+        content.push_back(ImportedFilePtr(new DirectoryImportedFile(entry)));
+    }
+    callback(std::move(content));
 
-  return true;
+    return true;
 }
 
 bool DirectoryImporter::get_previews_for(const std::string& source,
                                          const std::list<std::string>& paths,
                                          const PreviewReady& callback)
 {
-  for (auto path : paths) {
-    auto full_path = Glib::build_filename(source, path);
-    auto thumbnail = fwk::Thumbnail::thumbnail_file(full_path, 160, 160, 0);
-    callback(path, thumbnail);
-  }
-  return true;
+    for (auto path : paths) {
+        auto full_path = Glib::build_filename(source, path);
+        auto thumbnail = fwk::Thumbnail::thumbnail_file(full_path, 160, 160, 0);
+        callback(path, thumbnail);
+    }
+    return true;
 }
 
 bool DirectoryImporter::do_import(const std::string& source,
                                   const FileImporter& callback)
 {
-  // pretty trivial, we have the source path.
-  callback(source, false);
+    // pretty trivial, we have the source path.
+    callback(source, false);
 
-  // XXX return a real error
-  return true;
+    // XXX return a real error
+    return true;
 }
 
 }

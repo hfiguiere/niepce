@@ -34,28 +34,28 @@ namespace eng {
  */
 class IImporter {
 public:
-  virtual ~IImporter() {}
+    virtual ~IImporter() {}
 
-  /** Return the id string */
-  virtual const std::string& id() const = 0;
+    /** Return the id string */
+    virtual const std::string& id() const = 0;
 
-  /** Source content is ready */
-  typedef std::function<void (std::list<ImportedFile::Ptr>&&)> SourceContentReady;
-  /** list the source content and store it. */
-  virtual bool list_source_content(const std::string& source,
-                                   const SourceContentReady& callback) = 0;
+    /** Source content is ready */
+    typedef std::function<void (std::list<ImportedFilePtr>&&)> SourceContentReady;
+    /** list the source content and store it. */
+    virtual bool list_source_content(const std::string& source,
+                                     const SourceContentReady& callback) = 0;
 
-  typedef std::function<void (const std::string& path,
-                              const fwk::Thumbnail&)> PreviewReady;
-  virtual bool get_previews_for(const std::string& source,
-                                const std::list<std::string>& paths,
-                                const PreviewReady& callback) = 0;
+    typedef std::function<void (const std::string& path,
+                                const fwk::Thumbnail&)> PreviewReady;
+    virtual bool get_previews_for(const std::string& source,
+                                  const std::list<std::string>& paths,
+                                  const PreviewReady& callback) = 0;
 
-  /** file importer callback */
-  typedef std::function<void (const std::string&, bool)> FileImporter;
-  /** perform import from source */
-  virtual bool do_import(const std::string& source,
-                        const FileImporter& importer) = 0;
+    /** file importer callback */
+    typedef std::function<void (const std::string&, bool)> FileImporter;
+    /** perform import from source */
+    virtual bool do_import(const std::string& source,
+                           const FileImporter& importer) = 0;
 
 };
 
@@ -65,9 +65,9 @@ public:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
-  c-basic-offset:2
+  c-basic-offset:4
   indent-tabs-mode:nil
-  tab-width:2
+  tab-width:4
   fill-column:99
   End:
 */

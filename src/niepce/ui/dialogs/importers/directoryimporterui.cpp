@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - ui/dialogs/importer/directoryimporterui.cpp
  *
@@ -29,65 +30,65 @@
 namespace ui {
 
 DirectoryImporterUI::DirectoryImporterUI()
-  : ImporterUI(std::make_shared<eng::DirectoryImporter>(), _("Directory"))
-  , m_directory_name(nullptr)
+    : ImporterUI(std::make_shared<eng::DirectoryImporter>(), _("Directory"))
+    , m_directory_name(nullptr)
 {
 }
 
 Gtk::Widget* DirectoryImporterUI::setup_widget(const fwk::Frame::Ptr& frame)
 {
-  m_frame = frame;
-  Gtk::Button* select_directories = nullptr;
-  m_builder = Gtk::Builder::create_from_file(GLADEDIR"directoryimporterui.ui",
-                                             "main_widget");
-  Gtk::Box* main_widget = nullptr;
-  m_builder->get_widget("main_widget", main_widget);
-  m_builder->get_widget("select_directories", select_directories);
-  select_directories->signal_clicked().connect(
-    sigc::mem_fun(*this, &DirectoryImporterUI::do_select_directories));
-  m_builder->get_widget("directory_name", m_directory_name);
-  return main_widget;
+    m_frame = frame;
+    Gtk::Button* select_directories = nullptr;
+    m_builder = Gtk::Builder::create_from_file(GLADEDIR"directoryimporterui.ui",
+                                               "main_widget");
+    Gtk::Box* main_widget = nullptr;
+    m_builder->get_widget("main_widget", main_widget);
+    m_builder->get_widget("select_directories", select_directories);
+    select_directories->signal_clicked().connect(
+        sigc::mem_fun(*this, &DirectoryImporterUI::do_select_directories));
+    m_builder->get_widget("directory_name", m_directory_name);
+    return main_widget;
 }
 
 void DirectoryImporterUI::do_select_directories()
 {
-  auto source = select_source();
-  if (!source.empty() && m_source_selected_cb) {
-    m_source_selected_cb(source);
-  }
+    auto source = select_source();
+    if (!source.empty() && m_source_selected_cb) {
+        m_source_selected_cb(source);
+    }
 }
 
 std::string DirectoryImporterUI::select_source()
 {
-  fwk::Configuration & cfg = fwk::Application::app()->config();
+    fwk::Configuration & cfg = fwk::Application::app()->config();
 
-  Glib::ustring filename;
-  {
-    auto frame = m_frame.lock();
-    Gtk::FileChooserDialog dialog(frame->gtkWindow(), _("Import picture folder"),
-                                  Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-    dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
-    dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
-    dialog.set_select_multiple(false);
-
-    std::string last_import_location = cfg.getValue("last_import_location", "");
-    if (!last_import_location.empty()) {
-      dialog.set_filename(last_import_location);
-    }
-
-    int result = dialog.run();
-    switch(result)
+    Glib::ustring filename;
     {
-    case Gtk::RESPONSE_OK:
-      filename = dialog.get_filename();
-      break;
-    default:
-      break;
+        auto frame = m_frame.lock();
+        Gtk::FileChooserDialog dialog(frame->gtkWindow(), _("Import picture folder"),
+                                      Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+        dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
+        dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
+        dialog.set_select_multiple(false);
+
+        std::string last_import_location = cfg.getValue("last_import_location", "");
+        if (!last_import_location.empty()) {
+            dialog.set_filename(last_import_location);
+        }
+
+        int result = dialog.run();
+        switch(result)
+        {
+        case Gtk::RESPONSE_OK:
+            filename = dialog.get_filename();
+            break;
+        default:
+            break;
+        }
     }
-  }
-  m_directory_name->set_text(filename);
-  return filename.raw();
+    m_directory_name->set_text(filename);
+    return filename.raw();
 }
 
 }

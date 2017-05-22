@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - ui/dialogs/importer/directoryimporterui.hpp
  *
@@ -35,15 +36,15 @@ class DirectoryImporterUI
   : public ImporterUI
 {
 public:
-  DirectoryImporterUI();
+    DirectoryImporterUI();
 
-  Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
+    Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
 
 private:
-  std::string select_source();
-  void do_select_directories();
+    std::string select_source();
+    void do_select_directories();
 
-  Gtk::Label *m_directory_name;
+    Gtk::Label *m_directory_name;
 };
 
 }

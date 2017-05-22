@@ -24,24 +24,21 @@
 
 namespace eng {
 
-// XXX make not copyable
 class ImportedFile {
 public:
-  typedef std::shared_ptr<ImportedFile> Ptr;
+    ImportedFile()
+        {}
 
-  ImportedFile()
-    {}
+    ImportedFile(const ImportedFile&) = delete;
+    ImportedFile& operator=(const ImportedFile&) = delete;
 
-  ImportedFile(const ImportedFile&) = delete;
-  ImportedFile& operator=(const ImportedFile&) = delete;
+    virtual ~ImportedFile()
+        {}
 
-  virtual ~ImportedFile()
-    {}
-
-  virtual const std::string & name() const = 0;
-private:
+    virtual const std::string & name() const = 0;
 };
 
+typedef std::shared_ptr<ImportedFile> ImportedFilePtr;
 
 }
 
@@ -50,9 +47,9 @@ private:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
-  c-basic-offset:2
+  c-basic-offset:4
   indent-tabs-mode:nil
-  tab-width:2
+  tab-width:4
   fill-column:99
   End:
 */

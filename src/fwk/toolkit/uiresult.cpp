@@ -1,4 +1,4 @@
-/* -*- mode: C++; tab-width: 2; c-basic-offset: 2; indent-tabs-mode:nil; -*- */
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - fwk/toolkit/uiresult.hpp
  *
@@ -24,9 +24,10 @@
 
 namespace fwk {
 
-void UIResult::run(std::function<void ()>&& f) {
-  std::thread t(f);
-  t.detach();
+void UIResult::run(std::function<void ()>&& f)
+{
+    std::thread t(f);
+    t.detach();
 }
 
 }

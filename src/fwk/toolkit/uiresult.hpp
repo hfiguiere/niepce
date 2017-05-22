@@ -1,4 +1,4 @@
-/* -*- mode: C++; tab-width: 2; c-basic-offset: 2; indent-tabs-mode:nil; -*- */
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - fwk/toolkit/uiresult.hpp
  *
@@ -33,40 +33,38 @@ namespace fwk {
 class UIResult
 {
 public:
-  virtual void clear() = 0;
+    virtual void clear() = 0;
 
-  sigc::connection connect(sigc::slot<void>&& slot) {
-    return m_notifier.connect(std::move(slot));
-  }
+    sigc::connection connect(sigc::slot<void>&& slot) {
+        return m_notifier.connect(std::move(slot));
+    }
 
-  void run(std::function<void ()>&& f);
+    void run(std::function<void ()>&& f);
 protected:
-  Glib::Dispatcher m_notifier;
-  std::mutex m_data_mutex;
+    Glib::Dispatcher m_notifier;
+    std::mutex m_data_mutex;
 };
 
 template<class T>
 class UIResultSingle
-  : public UIResult
+    : public UIResult
 {
 public:
-  void clear() override {
-    m_data = T();
-  }
+    void clear() override {
+        m_data = T();
+    }
 
-  void send_data(T&& d) {
-    {
-      std::lock_guard<std::mutex> lock(m_data_mutex);
-      m_data = std::move(d);
+    void send_data(T&& d) {
+        {
+            std::lock_guard<std::mutex> lock(m_data_mutex);
+            m_data = std::move(d);
+        }
+        m_notifier.emit();
     }
-    m_notifier.emit();
-  }
-  T recv_data() {
-    {
-      std::lock_guard<std::mutex> lock(m_data_mutex);
-      return m_data;
+    T recv_data() {
+        std::lock_guard<std::mutex> lock(m_data_mutex);
+        return m_data;
     }
-  }
 private:
   T m_data;
 };
@@ -74,31 +72,31 @@ private:
 /** @brief Fetch many "results" asynchronously */
 template<class T>
 class UIResults
-  : public UIResult
+    : public UIResult
 {
 public:
-  void clear() override {
-    m_data.clear();
-  }
+    void clear() override {
+        m_data.clear();
+    }
 
-  void send_data(T&& d) {
-    {
-      std::lock_guard<std::mutex> lock(m_data_mutex);
-      m_data.push_back(std::move(d));
+    void send_data(T&& d) {
+        {
+            std::lock_guard<std::mutex> lock(m_data_mutex);
+            m_data.push_back(std::move(d));
+        }
+        m_notifier.emit();
     }
-    m_notifier.emit();
-  }
-  Option<T> recv_data() {
-    std::lock_guard<std::mutex> lock(m_data_mutex);
-    if (m_data.empty()) {
-      return Option<T>();
+    Option<T> recv_data() {
+        std::lock_guard<std::mutex> lock(m_data_mutex);
+        if (m_data.empty()) {
+            return Option<T>();
+        }
+        auto result = Option<T>(m_data.front());
+        m_data.pop_front();
+        return result;
     }
-    auto result = Option<T>(m_data.front());
-    m_data.pop_front();
-    return result;
-  }
 private:
-  std::deque<T> m_data;
+    std::deque<T> m_data;
 };
 
 }

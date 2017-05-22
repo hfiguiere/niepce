@@ -68,7 +68,7 @@ public:
     public:
         Gtk::TreeModelColumn<Glib::ustring> filename;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
-        Gtk::TreeModelColumn<eng::ImportedFile::Ptr> file;
+        Gtk::TreeModelColumn<eng::ImportedFilePtr> file;
         PreviewGridModel()
             { add(filename); add(pixbuf); add(file); }
     };
@@ -116,7 +116,7 @@ private:
 
     MetaDataPaneController::Ptr m_metadata_pane;
 
-    fwk::UIResultSingle<std::list<eng::ImportedFile::Ptr>> m_files_to_import;
+    fwk::UIResultSingle<std::list<eng::ImportedFilePtr>> m_files_to_import;
     fwk::UIResults<std::pair<std::string, fwk::Thumbnail>> m_previews_to_import;
 };
 
