@@ -56,6 +56,7 @@ MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     m_table.set_row_homogeneous(false);
     m_table.insert_column(0);
     m_table.insert_column(0);
+    m_table.set_margin_start(8);
     add(m_table);
     set_sensitive(false);
 }
