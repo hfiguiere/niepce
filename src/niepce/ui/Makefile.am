@@ -35,8 +35,12 @@ libniepceui_a_SOURCES = \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
 	dialogs/preferencesdialog.hpp dialogs/preferencesdialog.cpp \
 	dialogs/importdialog.hpp dialogs/importdialog.cpp \
+	dialogs/importers/importerui.hpp \
+	dialogs/importers/importerui.cpp \
 	dialogs/importers/directoryimporterui.hpp \
 	dialogs/importers/directoryimporterui.cpp \
+	dialogs/importers/cameraimporterui.hpp \
+	dialogs/importers/cameraimporterui.cpp \
 	selectioncontroller.hpp selectioncontroller.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
 	thumb-view/eog-thumb-nav.cpp thumb-view/eog-thumb-nav.hpp \

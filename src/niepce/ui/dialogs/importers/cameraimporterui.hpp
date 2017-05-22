@@ -1,5 +1,5 @@
 /*
- * niepce - ui/dialogs/importer/directoryimporterui.hpp
+ * niepce - ui/dialogs/importer/cameraimporterui.hpp
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -19,31 +19,30 @@
 
 #pragma once
 
+#include <string>
 #include "importerui.hpp"
+
+namespace Gtk {
+class Widget;
+}
 
 namespace fwk {
 class Frame;
 }
 
-namespace eng {
-class DirectoryImporter;
-}
-
 namespace ui {
 
-class DirectoryImporterUI
+class CameraImporterUI
   : public ImporterUI
 {
 public:
-  DirectoryImporterUI();
+  CameraImporterUI();
 
   Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
 
 private:
   std::string select_source();
   void do_select_directories();
-
-  Gtk::Label *m_directory_name;
 };
 
 }

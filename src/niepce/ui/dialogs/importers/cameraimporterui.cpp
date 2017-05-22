@@ -1,5 +1,5 @@
 /*
- * niepce - ui/dialogs/importer/directoryimporterui.hpp
+ * niepce - ui/dialogs/importer/cameraimporterui.cpp
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -17,33 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <glibmm/i18n.h>
+#include <gtkmm/label.h>
 
-#include "importerui.hpp"
-
-namespace fwk {
-class Frame;
-}
-
-namespace eng {
-class DirectoryImporter;
-}
+#include "fwk/toolkit/frame.hpp"
+#include "engine/importer/cameraimporter.hpp"
+#include "cameraimporterui.hpp"
 
 namespace ui {
 
-class DirectoryImporterUI
-  : public ImporterUI
+CameraImporterUI::CameraImporterUI()
+  : ImporterUI(std::make_shared<eng::CameraImporter>(), _("Camera"))
 {
-public:
-  DirectoryImporterUI();
+}
 
-  Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
-
-private:
-  std::string select_source();
-  void do_select_directories();
-
-  Gtk::Label *m_directory_name;
-};
+Gtk::Widget* CameraImporterUI::setup_widget(const fwk::Frame::Ptr&)
+{
+  Gtk::Label* label = Gtk::manage(new Gtk::Label("camera! camera! camera!"));
+  return label;
+}
 
 }

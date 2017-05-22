@@ -1,5 +1,5 @@
 /*
- * niepce - ui/dialogs/importer/directoryimporterui.hpp
+ * niepce - ui/dialogs/importer/importerui.hpp
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -19,31 +19,34 @@
 
 #pragma once
 
-#include "importerui.hpp"
+#include "iimporterui.hpp"
 
 namespace fwk {
 class Frame;
 }
 
-namespace eng {
-class DirectoryImporter;
-}
-
 namespace ui {
 
-class DirectoryImporterUI
-  : public ImporterUI
+class ImporterUI
+  : public IImporterUI
 {
 public:
-  DirectoryImporterUI();
+  ImporterUI(std::shared_ptr<eng::IImporter>&& importer,
+             const std::string& name);
 
-  Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
+  std::shared_ptr<eng::IImporter> get_importer() override;
 
-private:
-  std::string select_source();
-  void do_select_directories();
+  const std::string& name() const override;
+  const std::string& id() const override;
 
-  Gtk::Label *m_directory_name;
+  void set_source_selected_callback(const SourceSelected&) override;
+
+protected:
+  std::shared_ptr<eng::IImporter> m_importer;
+  std::string m_name;
+  std::weak_ptr<fwk::Frame> m_frame;
+  Glib::RefPtr<Gtk::Builder> m_builder;
+  SourceSelected m_source_selected_cb;
 };
 
 }

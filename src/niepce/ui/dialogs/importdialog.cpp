@@ -32,11 +32,14 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
+#include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "engine/importer/directoryimporter.hpp"
 #include "engine/importer/importedfile.hpp"
 #include "importdialog.hpp"
 #include "importers/directoryimporterui.hpp"
+#include "importers/cameraimporterui.hpp"
 
 namespace ui {
 
@@ -63,7 +66,8 @@ void ImportDialog::add_importer_ui(IImporterUI& importer)
   m_import_source_combo->append(importer.id(), importer.name());
   Gtk::Widget* importer_widget = importer.setup_widget(
     std::static_pointer_cast<Frame>(shared_from_this()));
-  m_importer_ui_stack->add(*importer_widget, importer.name());
+  importer_widget->show_all();
+  m_importer_ui_stack->add(*importer_widget, importer.id());
   importer.set_source_selected_callback([this] (const std::string& source) {
       this->set_to_import(source);
     });
@@ -75,6 +79,8 @@ void ImportDialog::setup_widget()
         return;
     }
 
+    fwk::Configuration & cfg = fwk::Application::app()->config();
+
     Glib::RefPtr<Gtk::Builder> a_builder = builder();
     a_builder->get_widget("date_tz_combo", m_date_tz_combo);
     a_builder->get_widget("ufraw_import_check", m_ufraw_import_check);
@@ -84,16 +90,18 @@ void ImportDialog::setup_widget()
     // Sources
     a_builder->get_widget("importer_ui_stack", m_importer_ui_stack);
     a_builder->get_widget("import_source_combo", m_import_source_combo);
-    m_import_source_combo->signal_changed().connect([] {});
+    m_import_source_combo->signal_changed()
+      .connect(sigc::mem_fun(*this, &ImportDialog::import_source_changed));
 
-    // Directory source, hardcoded.
-    // XXX fix it
-    m_importers[0] = std::make_shared<DirectoryImporterUI>();
-    add_importer_ui(*m_importers[0]);
+    std::shared_ptr<IImporterUI> importer = std::make_shared<DirectoryImporterUI>();
+    m_importers[importer->id()] = importer;
+    add_importer_ui(*importer);
+    importer = std::make_shared<CameraImporterUI>();
+    m_importers[importer->id()] = importer;
+    add_importer_ui(*importer);
 
-    // XXX restore from preferences.
-    m_current_importer = m_importers[0];
-    m_import_source_combo->set_active_id(m_current_importer->id());
+    auto last_importer = cfg.getValue("last_importer", "DirectoryImporter");
+    m_import_source_combo->set_active_id(last_importer);
 
     // Metadata pane.
     a_builder->get_widget("attributes_scrolled", m_attributes_scrolled);
@@ -122,6 +130,16 @@ void ImportDialog::setup_widget()
       sigc::mem_fun(this, &ImportDialog::append_files_to_import));
 
     m_is_setup = true;
+}
+
+void ImportDialog::import_source_changed()
+{
+  auto id = m_import_source_combo->get_active_id();
+  m_current_importer = m_importers[id];
+  m_importer_ui_stack->set_visible_child(id);
+
+  fwk::Configuration & cfg = fwk::Application::app()->config();
+  cfg.setValue("last_importer", id);
 }
 
 void ImportDialog::set_to_import(const std::string& f)

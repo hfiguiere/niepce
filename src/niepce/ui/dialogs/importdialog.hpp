@@ -82,6 +82,7 @@ public:
 //      { return m_list_to_import; }
     const Glib::ustring & source_path() const
         { return m_folder_path_source; }
+    void import_source_changed();
     void set_to_import(const std::string& f);
     const std::shared_ptr<IImporterUI>& importer_ui() const
         { return m_current_importer; }
@@ -95,7 +96,7 @@ private:
     void preview_received();
     void add_importer_ui(IImporterUI& importer);
 
-    std::array<std::shared_ptr<ui::IImporterUI>, 1> m_importers;
+    std::map<std::string, std::shared_ptr<ui::IImporterUI>> m_importers;
     std::shared_ptr<ui::IImporterUI> m_current_importer; // as shared_ptr<> for lambda capture
     Glib::ustring m_folder_path_source;
 

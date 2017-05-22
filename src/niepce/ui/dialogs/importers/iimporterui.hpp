@@ -3,11 +3,14 @@
 #pragma once
 
 #include <memory>
-
-#include "engine/importer/iimporter.hpp"
+#include <string>
+#include <functional>
 
 namespace Gtk {
 class Widget;
+}
+namespace eng {
+class IImporter;
 }
 namespace fwk {
 class Frame;

@@ -30,11 +30,17 @@
 #include <giomm/menu.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/headerbar.h>
+#include <gtkmm/window.h>
 
 #include "fwk/toolkit/uicontroller.hpp"
 
+namespace Gio {
+class ActionMap;
+class SimpleAction;
+}
+
 namespace Gtk {
-	class Dialog;
+class Dialog;
 }
 
 namespace fwk {

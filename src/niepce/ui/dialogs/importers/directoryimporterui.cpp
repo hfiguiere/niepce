@@ -29,24 +29,9 @@
 namespace ui {
 
 DirectoryImporterUI::DirectoryImporterUI()
-  : m_importer(std::make_shared<eng::DirectoryImporter>())
-  , m_name(_("Directory"))
+  : ImporterUI(std::make_shared<eng::DirectoryImporter>(), _("Directory"))
+  , m_directory_name(nullptr)
 {
-}
-
-std::shared_ptr<eng::IImporter> DirectoryImporterUI::get_importer()
-{
-  return m_importer;
-}
-
-const std::string& DirectoryImporterUI::name() const
-{
-  return m_name;
-}
-
-const std::string& DirectoryImporterUI::id() const
-{
-  return m_importer->id();
 }
 
 Gtk::Widget* DirectoryImporterUI::setup_widget(const fwk::Frame::Ptr& frame)
@@ -62,11 +47,6 @@ Gtk::Widget* DirectoryImporterUI::setup_widget(const fwk::Frame::Ptr& frame)
     sigc::mem_fun(*this, &DirectoryImporterUI::do_select_directories));
   m_builder->get_widget("directory_name", m_directory_name);
   return main_widget;
-}
-
-void DirectoryImporterUI::set_source_selected_callback(const SourceSelected& cb)
-{
-  m_source_selected_cb = cb;
 }
 
 void DirectoryImporterUI::do_select_directories()
