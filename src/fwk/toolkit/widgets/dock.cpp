@@ -24,6 +24,7 @@ namespace fwk {
 
 
 Dock::Dock()
+  : m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
   set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
   add(m_vbox);

@@ -96,7 +96,7 @@ DockItem::gobj()
     return _gdl_dock_item;
 }
 
-Gtk::VBox *
+Gtk::Box *
 DockItem::get_vbox()
 {
     return &_dock_item_box;

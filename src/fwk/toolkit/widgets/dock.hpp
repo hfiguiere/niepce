@@ -33,10 +33,10 @@ class Dock
 public:
     Dock();
 
-    Gtk::VBox & vbox()
+    Gtk::Box & vbox()
         { return m_vbox; }
 private:
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
 };
 
 
