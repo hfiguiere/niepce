@@ -22,15 +22,14 @@
 #include <memory>
 #include <string>
 
+#include "fwk/base/util.hpp"
+
 namespace eng {
 
 class ImportedFile {
 public:
-    ImportedFile()
-        {}
-
-    ImportedFile(const ImportedFile&) = delete;
-    ImportedFile& operator=(const ImportedFile&) = delete;
+    NON_COPYABLE(ImportedFile);
+    ImportedFile() = default;
 
     virtual ~ImportedFile()
         {}

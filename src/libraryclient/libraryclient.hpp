@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "fwk/base/propertybag.hpp"
+#include "fwk/base/util.hpp"
 #include "engine/library/clienttypes.hpp"
 #include "engine/library/thumbnailcache.hpp"
 #include "engine/db/librarytypes.hpp"
@@ -44,7 +45,7 @@ class LibraryClient
     : public eng::Storage
 {
 public:
-
+    NON_COPYABLE(LibraryClient);
     LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
     virtual ~LibraryClient();
     // @return false in case of error.
@@ -117,9 +118,6 @@ private:
     eng::ThumbnailCache m_thumbnailCache;
     std::unique_ptr<UIDataProvider> m_uidataprovider;
     eng::library_id_t m_trash_id;
-
-    LibraryClient(const LibraryClient &) = delete;
-    LibraryClient & operator=(const LibraryClient &) = delete;
 };
 
 typedef std::shared_ptr<LibraryClient> LibraryClientPtr;
@@ -132,6 +130,8 @@ typedef std::shared_ptr<LibraryClient> LibraryClientPtr;
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset:4
+  tab-width:4
   indent-tabs-mode:nil
   fill-column:80
   End:
