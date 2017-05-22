@@ -14,6 +14,9 @@ src/niepce/ui/dialogs/editlabels.cpp
 src/niepce/ui/dialogs/editlabels.ui
 src/niepce/ui/dialogs/importdialog.cpp
 src/niepce/ui/dialogs/importdialog.ui
+src/niepce/ui/dialogs/importers/cameraimporterui.cpp
+src/niepce/ui/dialogs/importers/directoryimporterui.cpp
+src/niepce/ui/dialogs/importers/directoryimporterui.ui
 src/niepce/ui/dialogs/preferencesdialog.cpp
 src/niepce/ui/dialogs/preferences.ui
 src/niepce/ui/metadatapanecontroller.cpp
