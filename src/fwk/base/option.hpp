@@ -30,42 +30,44 @@ template<class T>
 class Option
 {
 public:
-  typedef T data_type;
+    typedef T data_type;
 
-  Option()
-    : m_none(true)
-  {
-  }
-  Option(T&& data)
-    : m_none(false)
-    , m_data(data)
-  {
-  }
-  Option(const T& data)
-    : m_none(false)
-    , m_data(data)
-  {
-  }
-  template<class... Args>
-  Option(Args&&... args)
-    : m_none(false)
-    , m_data(args...)
-  {
-  }
+    Option()
+        : m_none(true)
+        {
+        }
+    Option(T&& data)
+        : m_none(false)
+        , m_data(data)
+        {
+        }
+    Option(const T& data)
+        : m_none(false)
+        , m_data(data)
+        {
+        }
+    template<class... Args>
+    Option(Args&&... args)
+        : m_none(false)
+        , m_data(args...)
+        {
+        }
 
-  T&& unwrap()
-  {
-    if (m_none) {
-      throw std::runtime_error("none option value");
-    }
-    m_none = true;
-    return std::move(m_data);
-  }
-  bool empty() const
-  { return m_none; }
+    T&& unwrap()
+        {
+            if (m_none) {
+                throw std::runtime_error("none option value");
+            }
+            m_none = true;
+            return std::move(m_data);
+        }
+    bool ok() const
+        { return !empty(); }
+    bool empty() const
+        { return m_none; }
 private:
-  bool m_none;
-  T m_data;
+    bool m_none;
+    T m_data;
 };
 
 

@@ -22,6 +22,7 @@ niepce_LDADD = \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libview/libview.a \
 	@FRAMEWORK_LIBS@ \
+	@GPHOTO_LIBS@ \
 	@BABL_LIBS@ \
 	@GEGL_LIBS@ @OPENRAW_LIBS@
 

@@ -1,6 +1,7 @@
 
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/  @FRAMEWORK_CFLAGS@ \
+	@GPHOTO_CFLAGS@ \
 	$(NULL)
 
 TESTS = test_library test_filebundle test_opqueue

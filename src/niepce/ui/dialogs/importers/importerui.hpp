@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - ui/dialogs/importer/importerui.hpp
  *
@@ -28,25 +29,26 @@ class Frame;
 namespace ui {
 
 class ImporterUI
-  : public IImporterUI
+    : public IImporterUI
+    , public sigc::trackable
 {
 public:
-  ImporterUI(std::shared_ptr<eng::IImporter>&& importer,
-             const std::string& name);
+    ImporterUI(std::shared_ptr<eng::IImporter>&& importer,
+               const std::string& name);
 
-  std::shared_ptr<eng::IImporter> get_importer() override;
+    std::shared_ptr<eng::IImporter> get_importer() override;
 
-  const std::string& name() const override;
-  const std::string& id() const override;
+    const std::string& name() const override;
+    const std::string& id() const override;
 
-  void set_source_selected_callback(const SourceSelected&) override;
+    void set_source_selected_callback(const SourceSelected&) override;
 
 protected:
-  std::shared_ptr<eng::IImporter> m_importer;
-  std::string m_name;
-  std::weak_ptr<fwk::Frame> m_frame;
-  Glib::RefPtr<Gtk::Builder> m_builder;
-  SourceSelected m_source_selected_cb;
+    std::shared_ptr<eng::IImporter> m_importer;
+    std::string m_name;
+    std::weak_ptr<fwk::Frame> m_frame;
+    Glib::RefPtr<Gtk::Builder> m_builder;
+    SourceSelected m_source_selected_cb;
 };
 
 }

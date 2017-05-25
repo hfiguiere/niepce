@@ -1,3 +1,4 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - ui/dialogs/importer/cameraimporterui.hpp
  *
@@ -24,6 +25,7 @@
 
 namespace Gtk {
 class Widget;
+class ComboBoxText;
 }
 
 namespace fwk {
@@ -33,16 +35,17 @@ class Frame;
 namespace ui {
 
 class CameraImporterUI
-  : public ImporterUI
+    : public ImporterUI
 {
 public:
-  CameraImporterUI();
+    CameraImporterUI();
 
-  Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
-
+    Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) override;
+    void select_camera();
 private:
-  std::string select_source();
-  void do_select_directories();
+
+    Gtk::ComboBoxText* m_camera_list_combo;
+    Gtk::Button* m_select_camera_btn;
 };
 
 }

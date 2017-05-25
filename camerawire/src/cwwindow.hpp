@@ -56,7 +56,7 @@ private:
 
     Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_icon;
     Gtk::TreeModelColumn<std::string>        m_label;
-    Gtk::TreeModelColumn<fwk::GpDevice::Ptr> m_camera;
+    Gtk::TreeModelColumn<fwk::GpDevicePtr> m_camera;
     Gtk::TreeModelColumn<bool>               m_persistent;
   };
 

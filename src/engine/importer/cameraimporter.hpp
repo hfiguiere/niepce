@@ -24,6 +24,7 @@
 #include <list>
 
 #include "fwk/utils/files.hpp"
+#include "fwk/utils/gphoto.hpp"
 #include "engine/importer/iimporter.hpp"
 
 namespace eng {
@@ -43,6 +44,10 @@ public:
 
     bool do_import(const std::string & source,
                    const FileImporter & importer) override;
+private:
+    bool ensure_camera_open(const std::string&);
+    std::string m_camera_desc;
+    fwk::GpCameraPtr m_camera;
 };
 
 }

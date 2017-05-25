@@ -37,10 +37,10 @@ public:
         {
             m_name = fwk::path_basename(path);
         }
-    const std::string & name() const override
-        {
-            return m_name;
-        }
+    const std::string& name() const override
+        { return m_name; }
+    const std::string& path() const override
+        { return m_path; }
 private:
     std::string m_name;
     std::string m_path;
@@ -83,8 +83,8 @@ bool DirectoryImporter::get_previews_for(const std::string& source,
                                          const PreviewReady& callback)
 {
     for (auto path : paths) {
-        auto full_path = Glib::build_filename(source, path);
-        auto thumbnail = fwk::Thumbnail::thumbnail_file(full_path, 160, 160, 0);
+        DBG_OUT("path %s", path.c_str());
+        auto thumbnail = fwk::Thumbnail::thumbnail_file(path, 160, 160, 0);
         callback(path, thumbnail);
     }
     return true;

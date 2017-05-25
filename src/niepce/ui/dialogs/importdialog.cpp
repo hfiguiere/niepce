@@ -172,9 +172,9 @@ void ImportDialog::append_files_to_import()
     std::list<std::string> paths;
     for(const auto & f : files_to_import) {
         DBG_OUT("selected %s", f->name().c_str());
-        paths.push_back(f->name());
+        paths.push_back(f->path());
         Gtk::TreeIter iter = m_images_list_model->append();
-        m_images_list_map.insert(std::make_pair(f->name(), iter));
+        m_images_list_map.insert(std::make_pair(f->path(), iter));
         iter->set_value(m_grid_columns.filename, Glib::ustring(f->name()));
         iter->set_value(m_grid_columns.file, std::move(f));
     }

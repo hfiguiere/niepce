@@ -20,7 +20,34 @@
 
 #include "cameraimporter.hpp"
 
+#include "fwk/base/debug.hpp"
+
 namespace eng {
+
+
+class CameraImportedFile
+    : public ImportedFile
+{
+public:
+    CameraImportedFile(const std::pair<std::string, std::string>& desc)
+        : CameraImportedFile(desc.first, desc.second)
+        { }
+
+    CameraImportedFile(const std::string& folder, const std::string& filename)
+        : m_folder(folder)
+        , m_filename(filename)
+        , m_path(m_folder + "/" + m_filename)
+        { }
+    const std::string& name() const override
+        { return m_filename; }
+    const std::string& path() const override
+        { return m_path; }
+private:
+    std::string m_folder;
+    std::string m_filename;
+    std::string m_path;
+};
+
 
 CameraImporter::CameraImporter()
 {
@@ -28,6 +55,9 @@ CameraImporter::CameraImporter()
 
 CameraImporter::~CameraImporter()
 {
+    if (m_camera) {
+        m_camera->close();
+    }
 }
 
 const std::string& CameraImporter::id() const
@@ -36,20 +66,59 @@ const std::string& CameraImporter::id() const
     return _id;
 }
 
-bool CameraImporter::list_source_content(const std::string & source,
+bool CameraImporter::list_source_content(const std::string& source,
                                          const SourceContentReady& callback)
 {
+    if (ensure_camera_open(source)) {
+        auto content = m_camera->list_content();
+        std::list<ImportedFilePtr> file_list;
+        for (auto item : content) {
+            file_list.push_back(ImportedFilePtr(new CameraImportedFile(item)));
+        }
+
+        callback(std::move(file_list));
+        return true;
+    }
+    return false;
 }
 
 bool CameraImporter::get_previews_for(const std::string& source,
                                       const std::list<std::string>& paths,
                                       const PreviewReady& callback)
 {
+    if (ensure_camera_open(source)) {
+        for (auto path: paths) {
+            DBG_OUT("want thumbnail %s", path.c_str());
+            fwk::Thumbnail thumbnail = m_camera->get_preview(path);
+            callback(path, thumbnail);
+        }
+
+        return true;
+    }
+    return false;
 }
 
 bool CameraImporter::do_import(const std::string & source,
                                const FileImporter & importer)
 {
+    if (ensure_camera_open(source)) {
+
+    }
+    return false;
+}
+
+bool CameraImporter::ensure_camera_open(const std::string& source)
+{
+    if (!m_camera || m_camera->path() != source) {
+        auto result = fwk::GpDeviceList::obj().get_device(source);
+        if (result.ok()) {
+            m_camera.reset(new fwk::GpCamera(result.unwrap()));
+        }
+    }
+    if (m_camera) {
+        m_camera->open();
+    }
+    return !!m_camera;
 }
 
 }

@@ -34,7 +34,8 @@ public:
     virtual ~ImportedFile()
         {}
 
-    virtual const std::string & name() const = 0;
+    virtual const std::string& name() const = 0;
+    virtual const std::string& path() const = 0;
 };
 
 typedef std::shared_ptr<ImportedFile> ImportedFilePtr;
