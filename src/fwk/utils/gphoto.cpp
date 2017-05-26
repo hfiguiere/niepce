@@ -43,6 +43,24 @@ namespace fwk {
     DBG_OUT("%s failed with %d", #op, x); }
 
 
+namespace gp {
+
+CameraFilePtr file_new()
+{
+    CameraFile* file;
+    gp_file_new(&file);
+    return CameraFilePtr(file, &gp_file_unref);
+}
+
+CameraListPtr list_new()
+{
+    CameraList* list;
+    gp_list_new(&list);
+    return CameraListPtr(list, &gp_list_unref);
+}
+
+}
+
 GpDevice::GpDevice(const std::string& model, const std::string& path)
     : m_model(model)
     , m_path(path)
@@ -67,11 +85,11 @@ GpDeviceList::~GpDeviceList()
 void GpDeviceList::gp_cleanup()
 {
     if (m_abilities) {
-        ::gp_abilities_list_free(m_abilities);
+        gp_abilities_list_free(m_abilities);
         m_abilities = nullptr;
     }
     if (m_ports) {
-        ::gp_port_info_list_free(m_ports);
+        gp_port_info_list_free(m_ports);
         m_ports = nullptr;
     }
 }
@@ -81,13 +99,13 @@ void GpDeviceList::reload()
     gp_cleanup();
 
     int ret;
-    ret = ::gp_port_info_list_new(&m_ports);
+    ret = gp_port_info_list_new(&m_ports);
     GP_CHECK(ret, gp_port_info_list_new);
-    ret = ::gp_port_info_list_load(m_ports);
+    ret = gp_port_info_list_load(m_ports);
     GP_CHECK(ret, gp_port_list_load);
-	ret = ::gp_abilities_list_new(&m_abilities);
+	ret = gp_abilities_list_new(&m_abilities);
     GP_CHECK(ret, gp_abilities_list_new);
-    ret = ::gp_abilities_list_load(m_abilities, NULL);
+    ret = gp_abilities_list_load(m_abilities, NULL);
     GP_CHECK(ret, gp_abilities_list_load);
 }
 
@@ -97,23 +115,22 @@ void GpDeviceList::detect()
     if((!m_ports) || (!m_abilities)) {
         reload();
     }
-    ::CameraList *camera_list;
-    int ret;
 
-    ret = ::gp_list_new(&camera_list);
-    GP_CHECK(ret, gp_list_new);
-    ret = ::gp_abilities_list_detect(m_abilities, m_ports, camera_list, nullptr);
+    clear();
+
+    gp::CameraListPtr camera_list = gp::list_new();
+    int ret = gp_abilities_list_detect(m_abilities, m_ports, camera_list.get(), nullptr);
     GP_CHECK(ret, gp_abilities_list_detect);
 
-    int count = ::gp_list_count(camera_list);
+    int count = gp_list_count(camera_list.get());
     for (int i = 0; i < count; i++) {
         const char * name = nullptr;
         const char * value = nullptr;
 
-        ret = ::gp_list_get_name(camera_list, i, &name);
+        ret = gp_list_get_name(camera_list.get(), i, &name);
         GP_CHECK(ret, gp_list_get_name);
 
-        ret = ::gp_list_get_value(camera_list, i, &value);
+        ret = gp_list_get_value(camera_list.get(), i, &value);
         GP_CHECK(ret, gp_list_get_value);
 
         if ((count > 1) && (strcmp(value, "usb:") == 0)) {
@@ -122,7 +139,6 @@ void GpDeviceList::detect()
         DBG_OUT("found %s %s", name, value);
         push_back(GpDevicePtr(new GpDevice(name, value)));
     }
-    ::gp_list_free(camera_list);
 }
 
 fwk::Option<GpDevicePtr> GpDeviceList::get_device(const std::string& device)
@@ -139,15 +155,15 @@ class GpCamera::Priv {
 public:
     Priv()
         : camera(nullptr)
-        , context(::gp_context_new())
+        , context(gp_context_new())
         {
         }
     ~Priv()
         {
             if (camera) {
-                ::gp_camera_unref(camera);
+                gp_camera_unref(camera);
             }
-            ::gp_context_unref(context);
+            gp_context_unref(context);
         }
     ::Camera* camera;
     ::GPContext* context;
@@ -170,24 +186,24 @@ bool GpCamera::open()
     if (m_priv->camera) {
         close();
     }
-    ::gp_camera_new(&m_priv->camera);
+    gp_camera_new(&m_priv->camera);
 
     CameraAbilities abilities;
     auto al = fwk::GpDeviceList::obj().get_abilities_list();
-    int model_index = ::gp_abilities_list_lookup_model(al, m_device->get_model().c_str());
-	::gp_abilities_list_get_abilities(al, model_index, &abilities);
-    ::gp_camera_set_abilities(m_priv->camera, abilities);
+    int model_index = gp_abilities_list_lookup_model(al, m_device->get_model().c_str());
+	gp_abilities_list_get_abilities(al, model_index, &abilities);
+    gp_camera_set_abilities(m_priv->camera, abilities);
 
 	GPPortInfo info;
     auto info_list = ::fwk::GpDeviceList::obj().get_port_info_list();
     DBG_OUT("looking up port %s",  m_device->get_path().c_str());
-    int port_index = ::gp_port_info_list_lookup_path(info_list, m_device->get_path().c_str());
+    int port_index = gp_port_info_list_lookup_path(info_list, m_device->get_path().c_str());
     DBG_OUT("port index = %d", port_index);
     if (port_index >= 0) {
-        ::gp_port_info_list_get_info(info_list, port_index, &info);
-        ::gp_camera_set_port_info(m_priv->camera, info);
+        gp_port_info_list_get_info(info_list, port_index, &info);
+        gp_camera_set_port_info(m_priv->camera, info);
 
-        int result = ::gp_camera_init(m_priv->camera, m_priv->context);
+        int result = gp_camera_init(m_priv->camera, m_priv->context);
         DBG_OUT("camera init returned %d", result);
         switch (result) {
         case GP_OK:
@@ -206,7 +222,7 @@ bool GpCamera::open()
 
 bool GpCamera::close()
 {
-    ::gp_camera_unref(m_priv->camera);
+    gp_camera_unref(m_priv->camera);
     m_priv->camera = nullptr;
     return true;
 }
@@ -215,21 +231,19 @@ void GpCamera::process_folders(const std::vector<std::string>& folders,
                                std::list<std::pair<std::string, std::string>>& files) const
 {
     for (auto folder : folders) {
-        CameraList *flist;
-        ::gp_list_new(&flist);
-        int result = ::gp_camera_folder_list_files(m_priv->camera, folder.c_str(), flist,
+        gp::CameraListPtr flist = gp::list_new();
+        int result = gp_camera_folder_list_files(m_priv->camera, folder.c_str(), flist.get(),
                                                 m_priv->context);
         DBG_OUT("listed folder %d", result);
         if (result == GP_OK) {
-            int count = ::gp_list_count(flist);
+            int count = gp_list_count(flist.get());
             DBG_OUT("processing folder %s, count %d", folder.c_str(), count);
             for (int i = 0; i < count; i++) {
                 const char *name = nullptr;
-                ::gp_list_get_name(flist, i, &name);
+                gp_list_get_name(flist.get(), i, &name);
                 files.push_back(std::make_pair(folder, name));
             }
         }
-        gp_list_unref(flist);
     }
 }
 
@@ -238,72 +252,68 @@ std::list<std::pair<std::string, std::string>> GpCamera::list_content() const
     std::list<std::pair<std::string, std::string>> files;
 
     DBG_OUT("list content");
-    CameraList *list = nullptr;
 
     // XXX fixme this should not be hardcoded.
     std::string root_folder = "/store_00010001/DCIM";
-    ::gp_list_new(&list);
-    int result = gp_camera_folder_list_folders(m_priv->camera, root_folder.c_str(), list,
+    gp::CameraListPtr list = gp::list_new();
+    int result = gp_camera_folder_list_folders(m_priv->camera, root_folder.c_str(), list.get(),
                                                m_priv->context);
 
     DBG_OUT("initial folder list %d", result);
     if (result == GP_OK) {
         std::vector<std::string> folders;
-        int count = gp_list_count(list);
+        int count = gp_list_count(list.get());
         DBG_OUT("list count %d", count);
 
         for (int i = 0; i < count; i++) {
             const char* name = nullptr;
-            ::gp_list_get_name(list, i, &name);
+            gp_list_get_name(list.get(), i, &name);
             DBG_OUT("found folder %s", name);
             folders.push_back(root_folder + "/" + name);
         }
 
         process_folders(folders, files);
     }
-    ::gp_list_unref(list);
+
     return files;
 }
 
 fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
 {
     fwk::Thumbnail thumbnail;
-    CameraFile* file;
     std::string folder = fwk::path_dirname(path);
     std::string name = fwk::path_basename(path);
 
-    ::gp_file_new(&file);
-    int result = ::gp_camera_file_get (m_priv->camera, folder.c_str(), name.c_str(),
-                                       GP_FILE_TYPE_PREVIEW, file,
-                                       m_priv->context);
+    gp::CameraFilePtr file = gp::file_new();
+    int result = gp_camera_file_get (m_priv->camera, folder.c_str(), name.c_str(),
+                                     GP_FILE_TYPE_PREVIEW, file.get(),
+                                     m_priv->context);
     DBG_OUT("file_get %s %d", path.c_str(), result);
     if (result >= 0) {
         const char *fd;
         unsigned long fs;
-        ::gp_file_get_data_and_size(file, &fd, &fs);
+        gp_file_get_data_and_size(file.get(), &fd, &fs);
 
         Glib::RefPtr<Gdk::PixbufLoader> loader = Gdk::PixbufLoader::create();
         loader->write(reinterpret_cast<const guint8*>(fd), fs);
         loader->close();
         thumbnail = fwk::Thumbnail(loader->get_pixbuf());
     }
-    ::gp_file_unref(file);
+
     return thumbnail;
 }
 
 bool GpCamera::download_file(const std::string& folder, const std::string& file,
                              const std::string& dest)
 {
-    CameraFile *camerafile;
     DBG_OUT("importing into %s", dest.c_str());
-    gp_file_new(&camerafile);
+    gp::CameraFilePtr camerafile = gp::file_new();
     int result = gp_camera_file_get(m_priv->camera, folder.c_str(), file.c_str(),
-                                    GP_FILE_TYPE_NORMAL, camerafile,
+                                    GP_FILE_TYPE_NORMAL, camerafile.get(),
                                     m_priv->context);
     if (result == GP_OK) {
-        gp_file_save(camerafile, dest.c_str());
+        gp_file_save(camerafile.get(), dest.c_str());
     }
-    gp_file_unref(camerafile);
 
     return (result == GP_OK);
 }

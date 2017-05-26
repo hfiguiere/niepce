@@ -24,6 +24,7 @@
 #include <string>
 #include <memory>
 
+#include <gphoto2-camera.h>
 #include <gphoto2-port-info-list.h>
 #include <gphoto2-abilities-list.h>
 
@@ -35,6 +36,16 @@ namespace fwk {
 
 class Thumbnail;
 
+namespace gp {
+
+    typedef std::unique_ptr<CameraFile, decltype(&gp_file_unref)> CameraFilePtr;
+
+    CameraFilePtr file_new();
+
+    typedef std::unique_ptr<CameraList, decltype(&gp_list_unref)> CameraListPtr;
+
+    CameraListPtr list_new();
+}
 /** Describe a gphoto device: model + port (path)
  */
 class GpDevice
