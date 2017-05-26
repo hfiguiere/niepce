@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glibmm/miscutils.h>
 #include "cameraimporter.hpp"
 
 #include "fwk/base/debug.hpp"
@@ -42,6 +43,8 @@ public:
         { return m_filename; }
     const std::string& path() const override
         { return m_path; }
+    const std::string& folder() const
+        { return m_folder; }
 private:
     std::string m_folder;
     std::string m_filename;
@@ -101,10 +104,35 @@ bool CameraImporter::get_previews_for(const std::string& source,
 bool CameraImporter::do_import(const std::string & source,
                                const FileImporter & importer)
 {
-    if (ensure_camera_open(source)) {
+    // XXX we shouldn't have to do that.
+    list_source_content(source, [this, importer] (auto file_list) {
+            char* tmp_dir = g_dir_make_tmp("niepce-camera-import-XXXXXX", nullptr);
+            if (!tmp_dir) {
+                return false;
+            }
+            std::string tmp_dir_path = tmp_dir;
+            g_free(tmp_dir);
+            tmp_dir = nullptr;
 
-    }
-    return false;
+            for (auto file: file_list) {
+                auto imported_camera_file =
+                    std::dynamic_pointer_cast<CameraImportedFile>(file);
+                if (!imported_camera_file) {
+                    continue;
+                }
+
+                std::string output_path =
+                    Glib::build_filename(tmp_dir_path,
+                                         imported_camera_file->name());
+                if (this->m_camera->download_file(imported_camera_file->folder(),
+                                                  imported_camera_file->name(),
+                                                  output_path)) {
+                    importer(output_path, true, true);
+                }
+            }
+            return true;
+        });
+    return true;
 }
 
 bool CameraImporter::ensure_camera_open(const std::string& source)

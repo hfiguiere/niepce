@@ -78,7 +78,7 @@ bool DirectoryImporter::list_source_content(const std::string & source,
     return true;
 }
 
-bool DirectoryImporter::get_previews_for(const std::string& source,
+bool DirectoryImporter::get_previews_for(const std::string& /*source*/,
                                          const std::list<std::string>& paths,
                                          const PreviewReady& callback)
 {
@@ -94,7 +94,7 @@ bool DirectoryImporter::do_import(const std::string& source,
                                   const FileImporter& callback)
 {
     // pretty trivial, we have the source path.
-    callback(source, false);
+    callback(source, false, false);
 
     // XXX return a real error
     return true;

@@ -52,7 +52,7 @@ public:
                                   const PreviewReady& callback) = 0;
 
     /** file importer callback */
-    typedef std::function<void (const std::string&, bool)> FileImporter;
+    typedef std::function<void (const std::string&, bool, bool)> FileImporter;
     /** perform import from source */
     virtual bool do_import(const std::string& source,
                            const FileImporter& importer) = 0;

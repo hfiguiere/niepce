@@ -270,8 +270,12 @@ void NiepceWindow::on_action_file_import()
         if (importer) {
             importer->do_import(
                 source,
-                [this] (const std::string & path, bool manage) {
-                    m_libClient->importFromDirectory(path, manage);
+                [this] (const std::string & path, bool single, bool manage) {
+                    if (single) {
+                        m_libClient->importFile(path, manage);
+                    } else {
+                        m_libClient->importFromDirectory(path, manage);
+                    }
                 });
         }
         break;

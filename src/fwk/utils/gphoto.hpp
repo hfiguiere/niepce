@@ -101,7 +101,8 @@ public:
     bool close();
     std::list<std::pair<std::string, std::string>> list_content() const;
     fwk::Thumbnail get_preview(const std::string& path) const;
-
+    bool download_file(const std::string& folder, const std::string& file,
+                       const std::string& dest);
 private:
     void process_folders(const std::vector<std::string>& folders,
                          std::list<std::pair<std::string, std::string>>& files) const;

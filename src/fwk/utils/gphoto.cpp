@@ -291,4 +291,21 @@ fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
     return thumbnail;
 }
 
+bool GpCamera::download_file(const std::string& folder, const std::string& file,
+                             const std::string& dest)
+{
+    CameraFile *camerafile;
+    DBG_OUT("importing into %s", dest.c_str());
+    gp_file_new(&camerafile);
+    int result = gp_camera_file_get(m_priv->camera, folder.c_str(), file.c_str(),
+                                    GP_FILE_TYPE_NORMAL, camerafile,
+                                    m_priv->context);
+    if (result == GP_OK) {
+        gp_file_save(camerafile, dest.c_str());
+    }
+    gp_file_unref(camerafile);
+
+    return (result == GP_OK);
+}
+
 }
