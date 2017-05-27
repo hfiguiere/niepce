@@ -24,7 +24,7 @@
 #include <list>
 
 #include "fwk/utils/files.hpp"
-#include "fwk/utils/gphoto.hpp"
+#include "fwk/toolkit/gphoto.hpp"
 #include "engine/importer/iimporter.hpp"
 
 namespace eng {

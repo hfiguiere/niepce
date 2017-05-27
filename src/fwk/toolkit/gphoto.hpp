@@ -1,8 +1,8 @@
 /* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
- * niepce - fwk/utils/gphoto.hpp
+ * niepce - fwk/toolkit/gphoto.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

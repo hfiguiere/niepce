@@ -27,7 +27,7 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
-#include "fwk/utils/gphoto.hpp"
+#include "fwk/toolkit/gphoto.hpp"
 #include "fwk/toolkit/appframe.hpp"
 
 namespace cw {

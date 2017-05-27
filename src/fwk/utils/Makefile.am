@@ -2,7 +2,7 @@
 DIST_SUBDIRS = db
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/ \
-	@FRAMEWORK_CFLAGS@ @GPHOTO_CFLAGS@
+	@FRAMEWORK_CFLAGS@
 
 TESTS = testfiles testxmp \
 	testpathutils \
@@ -72,7 +72,6 @@ libniepceutils_a_SOURCES = \
 	buffer.hpp logstreamutils.hpp \
 	boost.hpp \
 	files.hpp files.cpp \
-	gphoto.hpp gphoto.cpp \
 	thread.hpp thread.cpp worker.hpp \
 	pathutils.hpp pathutils.cpp \
 	databinder.hpp databinder.cpp \

@@ -5,6 +5,7 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@FRAMEWORK_CFLAGS@ \
+	@GPHOTO_CFLAGS@ \
 	@OPENRAW_CFLAGS@ \
 	$(NULL)
 
@@ -41,6 +42,7 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	configdatabinder.hpp configdatabinder.cpp \
 	gdkutils.hpp gdkutils.cpp \
 	gtkutils.hpp gtkutils.cpp \
+	gphoto.hpp gphoto.cpp \
 	widgets/addinstreemodel.hpp widgets/addinstreemodel.cpp \
 	widgets/ratinglabel.hpp widgets/ratinglabel.cpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
