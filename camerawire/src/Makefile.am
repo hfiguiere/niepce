@@ -19,4 +19,5 @@ camerawire_LDADD = \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	@FRAMEWORK_LIBS@ \
 	@GPHOTO_LIBS@ \
+	@OPENRAW_LIBS@ \
 	$(NULL)
