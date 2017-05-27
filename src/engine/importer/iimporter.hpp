@@ -25,6 +25,7 @@
 #include <functional>
 
 #include "fwk/toolkit/thumbnail.hpp"
+#include "engine/db/library.hpp"
 #include "engine/importer/importedfile.hpp"
 
 namespace eng {
@@ -51,8 +52,12 @@ public:
                                   const std::list<std::string>& paths,
                                   const PreviewReady& callback) = 0;
 
+    enum class Import {
+        SINGLE,
+        DIRECTORY
+    };
     /** file importer callback */
-    typedef std::function<void (const std::string&, bool, bool)> FileImporter;
+    typedef std::function<void (const std::string&, Import, Library::Managed)> FileImporter;
     /** perform import from source */
     virtual bool do_import(const std::string& source,
                            const FileImporter& importer) = 0;

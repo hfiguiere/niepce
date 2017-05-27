@@ -136,12 +136,12 @@ eng::tid_t LibraryClient::processXmpUpdateQueue(bool write_xmp)
     return m_pImpl->processXmpUpdateQueue(write_xmp);
 }
 
-void LibraryClient::importFile(const std::string & path, bool manage)
+void LibraryClient::importFile(const std::string & path, eng::Library::Managed manage)
 {
     m_pImpl->importFile(path, manage);
 }
 
-void LibraryClient::importFromDirectory(const std::string & dir, bool manage)
+void LibraryClient::importFromDirectory(const std::string & dir, eng::Library::Managed manage)
 {
     m_pImpl->importFromDirectory(dir, manage);
 }

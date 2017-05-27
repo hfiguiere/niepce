@@ -269,10 +269,10 @@ std::string Library::getFsFile(library_id_t id)
 }
 
 
-library_id_t Library::addFile(library_id_t folder_id, const std::string & file, bool manage)
+library_id_t Library::addFile(library_id_t folder_id, const std::string & file, Managed manage)
 {
     library_id_t ret = -1;
-    DBG_ASSERT(!manage, "manage not supported");
+    DBG_ASSERT(manage == Managed::NO, "manage not supported");
     DBG_ASSERT(folder_id != -1, "invalid folder ID");
     try {
         int32_t rating, orientation, flag;
@@ -341,7 +341,7 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
 
 library_id_t Library::addFileAndFolder(const std::string & folder,
                                        const std::string & file,
-                                       bool manage)
+                                       Managed manage)
 {
     LibFolder::Ptr f;
     f = getFolder(folder);
@@ -353,7 +353,7 @@ library_id_t Library::addFileAndFolder(const std::string & folder,
 
 library_id_t Library::addBundle(library_id_t folder_id,
                                 const eng::FileBundle::Ptr & bundle,
-                                bool manage)
+                                Managed manage)
 {
     library_id_t file_id = 0;
     file_id = addFile(folder_id, bundle->main_file(), manage);

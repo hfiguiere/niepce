@@ -127,7 +127,7 @@ bool CameraImporter::do_import(const std::string & source,
                 if (this->m_camera->download_file(imported_camera_file->folder(),
                                                   imported_camera_file->name(),
                                                   output_path)) {
-                    importer(output_path, true, true);
+                    importer(output_path, IImporter::Import::SINGLE, Library::Managed::YES);
                 }
             }
             return true;

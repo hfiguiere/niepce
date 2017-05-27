@@ -57,7 +57,7 @@ int test_main(int, char *[])
     // now we have the Trash folder created at startup
     BOOST_CHECK( l->size() == 3 );
 
-    int file_id = lib.addFile(folder_added->id(), "foo/myfile", false);
+    int file_id = lib.addFile(folder_added->id(), "foo/myfile", eng::Library::Managed::NO);
     BOOST_CHECK(file_id > 0);
 
     BOOST_CHECK(lib.moveFileToFolder(file_id, 100) == false);

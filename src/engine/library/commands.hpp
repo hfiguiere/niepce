@@ -39,13 +39,13 @@ public:
 
 		static void cmdListAllFolders(const Library::Ptr & lib);
 		static void cmdListAllKeywords(const Library::Ptr & lib);
-		static void cmdImportFile(const Library::Ptr & lib,
-                               const std::string & path,
-                               bool manage);
-		static void cmdImportFiles(const Library::Ptr & lib, 
-                               const std::string & folder, 
-                               const fwk::FileList::Ptr & files, 
-                               bool manage);
+    static void cmdImportFile(const Library::Ptr & lib,
+                              const std::string & path,
+                              Library::Managed manage);
+    static void cmdImportFiles(const Library::Ptr & lib,
+                               const std::string & folder,
+                               const fwk::FileList::Ptr & files,
+                               Library::Managed manage);
 		static void cmdQueryFolderContent(const Library::Ptr & lib, 
                                       library_id_t folder_id);
 		static void cmdCountFolder(const Library::Ptr & lib, 
