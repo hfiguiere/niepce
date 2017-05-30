@@ -28,10 +28,15 @@
 #include <gphoto2-context.h>
 #include <gphoto2-port-result.h>
 
+#include <glibmm/miscutils.h>
+
 #include <gdkmm/pixbufloader.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/exempi.hpp"
+#include "fwk/utils/files.hpp"
 #include "fwk/utils/pathutils.hpp"
+#include "fwk/toolkit/gdkutils.hpp"
 #include "fwk/toolkit/thumbnail.hpp"
 #include "gphoto.hpp"
 
@@ -186,6 +191,11 @@ bool GpCamera::open()
     if (m_priv->camera) {
         close();
     }
+
+    if (m_temp_dir_path.empty()) {
+        m_temp_dir_path = fwk::make_tmp_dir("niepce-gphoto-XXXXXX");
+    }
+
     gp_camera_new(&m_priv->camera);
 
     CameraAbilities abilities;
@@ -285,10 +295,9 @@ fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
     std::string name = fwk::path_basename(path);
 
     gp::CameraFilePtr file = gp::file_new();
-    int result = gp_camera_file_get (m_priv->camera, folder.c_str(), name.c_str(),
+    int result = gp_camera_file_get(m_priv->camera, folder.c_str(), name.c_str(),
                                      GP_FILE_TYPE_PREVIEW, file.get(),
                                      m_priv->context);
-    DBG_OUT("file_get %s %d", path.c_str(), result);
     if (result >= 0) {
         const char *fd;
         unsigned long fs;
@@ -297,7 +306,36 @@ fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
         Glib::RefPtr<Gdk::PixbufLoader> loader = Gdk::PixbufLoader::create();
         loader->write(reinterpret_cast<const guint8*>(fd), fs);
         loader->close();
-        thumbnail = fwk::Thumbnail(loader->get_pixbuf());
+
+        auto pix = loader->get_pixbuf();
+#if 0
+        result = gp_camera_file_get(m_priv->camera, folder.c_str(), name.c_str(),
+                                    GP_FILE_TYPE_EXIF, file.get(),
+                                    m_priv->context);
+        if (result >= 0) {
+            const char *exifdata;
+            unsigned long exifsize;
+            int32_t orientation = 0;
+
+            gp_file_get_data_and_size(file.get(), &exifdata, &exifsize);
+            std::string exif_path = Glib::build_filename(m_temp_dir_path, name);
+            FILE* exif_file = fopen(exif_path.c_str(), "w");
+            fwrite(exifdata + 10, 1, exifsize - 10, exif_file);
+            fclose(exif_file);
+
+            DBG_OUT("exif block size %lu", exifsize);
+            fwk::XmpMeta xmp(exif_path, false);
+            DBG_OUT("xmp open exif %s", exif_path.c_str());
+            if (xmp.isOk()) {
+                orientation = xmp.orientation();
+            } else {
+                ERR_OUT("xmp is not ok");
+            }
+            pix = fwk::gdkpixbuf_exif_rotate(pix, orientation);
+            unlink(exif_path.c_str());
+        }
+#endif
+        thumbnail = fwk::Thumbnail(pix);
     }
 
     return thumbnail;

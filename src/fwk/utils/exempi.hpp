@@ -108,7 +108,7 @@ public:
     NON_COPYABLE(XmpMeta);
 
     XmpMeta();
-    XmpMeta(const std::string & for_file, bool sidecar_only);
+    XmpMeta(const std::string& for_file, bool sidecar_only);
     virtual ~XmpMeta();
 
     bool isOk() const

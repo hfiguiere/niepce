@@ -106,13 +106,8 @@ bool CameraImporter::do_import(const std::string & source,
 {
     // XXX we shouldn't have to do that.
     list_source_content(source, [this, importer] (auto file_list) {
-            char* tmp_dir = g_dir_make_tmp("niepce-camera-import-XXXXXX", nullptr);
-            if (!tmp_dir) {
-                return false;
-            }
-            std::string tmp_dir_path = tmp_dir;
-            g_free(tmp_dir);
-            tmp_dir = nullptr;
+            auto tmp_dir_path = fwk::make_tmp_dir("niepce-camera-import-XXXXXX");
+            // XXX check we don't return an empty string.
 
             for (auto file: file_list) {
                 auto imported_camera_file =

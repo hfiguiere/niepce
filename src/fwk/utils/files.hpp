@@ -1,7 +1,8 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - fwk/utils/files.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
 #ifndef __UTILS_FILES_H__
 #define __UTILS_FILES_H__
 
@@ -32,6 +30,9 @@
 #include <giomm/fileinfo.h>
 
 namespace fwk {
+
+/** wrapper around g_dir_make_tmp() */
+std::string make_tmp_dir(const std::string& base);
 
 	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
   bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,

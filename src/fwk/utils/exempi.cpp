@@ -78,7 +78,6 @@ XmpMeta::XmpMeta()
     m_xmp = xmp_new_empty();
 }
 
-
 /** @param file the path to the file to open
  * @param sidecar_only we only want the sidecar.
  * It will locate the XMP sidecar for the file.

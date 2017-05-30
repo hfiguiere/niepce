@@ -37,14 +37,13 @@ namespace fwk {
 class Thumbnail;
 
 namespace gp {
+typedef std::unique_ptr<CameraFile, decltype(&gp_file_unref)> CameraFilePtr;
 
-    typedef std::unique_ptr<CameraFile, decltype(&gp_file_unref)> CameraFilePtr;
+CameraFilePtr file_new();
 
-    CameraFilePtr file_new();
+typedef std::unique_ptr<CameraList, decltype(&gp_list_unref)> CameraListPtr;
 
-    typedef std::unique_ptr<CameraList, decltype(&gp_list_unref)> CameraListPtr;
-
-    CameraListPtr list_new();
+CameraListPtr list_new();
 }
 /** Describe a gphoto device: model + port (path)
  */
@@ -119,6 +118,7 @@ private:
                          std::list<std::pair<std::string, std::string>>& files) const;
     class Priv;
     GpDevicePtr m_device;
+    std::string m_temp_dir_path;
     Priv* m_priv;
 };
 

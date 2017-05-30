@@ -1,7 +1,8 @@
+/* -*- mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode:nil; -*- */
 /*
  * niepce - fwk/utils/files.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +29,22 @@
 
 
 namespace fwk {
+
+std::string make_tmp_dir(const std::string& base)
+{
+    GError *err = nullptr;
+    char* tmp_dir = g_dir_make_tmp(base.c_str(), &err);
+    if (!tmp_dir) {
+        if (err) {
+            ERR_OUT("g_dir_mak_tmp(%s) failed: %s", base.c_str(), err->message);
+            g_error_free(err);
+        }
+        return "";
+    }
+    std::string tmp_dir_path = tmp_dir;
+    g_free(tmp_dir);
+    return tmp_dir_path;
+}
 
 	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & )
 	{
