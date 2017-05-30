@@ -109,6 +109,7 @@ public:
         { return m_device->get_path(); }
     bool open();
     bool close();
+    bool try_unmount_camera();
     std::list<std::pair<std::string, std::string>> list_content() const;
     fwk::Thumbnail get_preview(const std::string& path) const;
     bool download_file(const std::string& folder, const std::string& file,

@@ -29,7 +29,7 @@
 #include <gphoto2-port-result.h>
 
 #include <glibmm/miscutils.h>
-
+#include <giomm/file.h>
 #include <gdkmm/pixbufloader.h>
 
 #include "fwk/base/debug.hpp"
@@ -220,6 +220,10 @@ bool GpCamera::open()
             DBG_OUT("camera open");
             success = true;
             break;
+        case GP_ERROR_IO_USB_CLAIM:
+            DBG_OUT("will try to unmount GVFS");
+            try_unmount_camera();
+            break;
         case GP_ERROR_CANCEL:
             break;
         default:
@@ -228,6 +232,26 @@ bool GpCamera::open()
     }
 
     return success;
+}
+
+/** A hackish attempt to unmount the camera */
+bool GpCamera::try_unmount_camera()
+{
+    std::string camera_mount = "gphoto2://[" + m_device->get_path() + "]/";
+
+    try {
+        auto file = Gio::File::create_for_uri(camera_mount);
+        auto mount = file->find_enclosing_mount();
+        if (!mount) {
+            return false;
+        }
+        auto mount_op = Gio::MountOperation::create();
+        mount->unmount(mount_op, Gio::MOUNT_UNMOUNT_NONE);
+    } catch(const Gio::Error& e) {
+        ERR_OUT("Gio::Error unmounting camera %d", e.code());
+        return false;
+    }
+    return true;
 }
 
 bool GpCamera::close()
