@@ -34,46 +34,46 @@ namespace fwk {
 /** wrapper around g_dir_make_tmp() */
 std::string make_tmp_dir(const std::string& base);
 
-	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
-  bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,
-		  const std::string & ext);
-	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
+bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
+bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,
+                const std::string & ext);
+bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
 
-	class FileList 
-		: private std::list< std::string >
-	{
-	public:
-		typedef std::shared_ptr< FileList > Ptr;
+class FileList
+	: private std::list<std::string>
+{
+public:
+    typedef std::shared_ptr< FileList > Ptr;
 
-		typedef std::list< std::string >    _impltype_t;
-		typedef _impltype_t::value_type       value_type;
-		typedef _impltype_t::iterator         iterator;
-		typedef _impltype_t::const_iterator   const_iterator;
-		typedef _impltype_t::size_type        size_type;
+    typedef std::list< std::string >    _impltype_t;
+    typedef _impltype_t::value_type       value_type;
+    typedef _impltype_t::iterator         iterator;
+    typedef _impltype_t::const_iterator   const_iterator;
+    typedef _impltype_t::size_type        size_type;
 
-		FileList( )
-			{}
-		FileList( const _impltype_t & );
+    FileList()
+        {}
+    FileList(const _impltype_t&);
 
-		static Ptr getFilesFromDirectory(const value_type & dir,
-						 std::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter);
+    static Ptr getFilesFromDirectory(const value_type& dir,
+                                     std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter);
 
-		const_iterator begin() const
-			{ return _impltype_t::cbegin(); }
-		const_iterator end() const
-			{ return _impltype_t::cend(); }
-		const_iterator cbegin() const
-			{ return _impltype_t::cbegin(); }
-		const_iterator cend() const
-			{ return _impltype_t::cend(); }
-		size_type size() const
-			{ return _impltype_t::size(); }
-		void sort()
-			{ _impltype_t::sort(); }
-		void push_back(const value_type & v)
-			{ _impltype_t::push_back(v); }
-	};
+    const_iterator begin() const
+        { return _impltype_t::cbegin(); }
+    const_iterator end() const
+        { return _impltype_t::cend(); }
+    const_iterator cbegin() const
+        { return _impltype_t::cbegin(); }
+    const_iterator cend() const
+        { return _impltype_t::cend(); }
+    size_type size() const
+        { return _impltype_t::size(); }
+    void sort()
+        { _impltype_t::sort(); }
+    void push_back(const value_type & v)
+        { _impltype_t::push_back(v); }
+};
+
 }
-
 
 #endif

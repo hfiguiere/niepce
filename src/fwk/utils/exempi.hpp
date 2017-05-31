@@ -48,7 +48,7 @@ void release(XmpFilePtr ptr)
     xmp_files_free(ptr);
 }
 
-inline 
+inline
 void release(XmpPtr ptr)
 {
     xmp_free(ptr);
@@ -59,7 +59,7 @@ void release(XmpPtr ptr)
  * @todo move to Exempi.
  */
 template <class T>
-class ScopedPtr 
+class ScopedPtr
 {
 public:
     NON_COPYABLE(ScopedPtr);
@@ -77,8 +77,8 @@ private:
 
 extern const char * NIEPCE_XMP_NAMESPACE;
 extern const char * NIEPCE_XMP_NS_PREFIX;
-extern const char * UFRAW_INTEROP_NAMESPACE;	
-extern const char * UFRAW_INTEROP_NS_PREFIX;	
+extern const char * UFRAW_INTEROP_NAMESPACE;
+extern const char * UFRAW_INTEROP_NS_PREFIX;
 
 }
 

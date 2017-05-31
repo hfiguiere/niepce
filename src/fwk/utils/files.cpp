@@ -27,7 +27,6 @@
 #include "files.hpp"
 #include "pathutils.hpp"
 
-
 namespace fwk {
 
 std::string make_tmp_dir(const std::string& base)
@@ -46,75 +45,69 @@ std::string make_tmp_dir(const std::string& base)
     return tmp_dir_path;
 }
 
-	bool filter_none(const Glib::RefPtr<Gio::FileInfo> & )
-	{
-		return true;
-	}
+bool filter_none(const Glib::RefPtr<Gio::FileInfo> & )
+{
+    return true;
+}
 
 
-  bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file, const std::string & ext)
-  {
+bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file, const std::string & ext)
+{
     std::string file_ext = fwk::path_extension(file->get_name());
     boost::to_lower(file_ext);
     if(file_ext == ext) {
-      return false;
+        return false;
     }
     return true;
-  }
+}
 
-	bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
-	{
-	  static const std::string ext(".xmp");
-	  return filter_ext(file, ext);
-	}
+bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
+{
+    static const std::string ext(".xmp");
+    return filter_ext(file, ext);
+}
 
 
-	FileList::FileList( const _impltype_t & v )
-		: _impltype_t( v )
-	{
-	}
+FileList::FileList( const _impltype_t & v )
+    : _impltype_t( v )
+{
+}
 
-	FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type & p, std::function<bool (const Glib::RefPtr<Gio::FileInfo> &)> filter)
-	{
+FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type& p, std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter)
+{
 //		if(!exists( p ) ) {
 //			DBG_OUT( "directory %s do not exist", p.c_str() );
 //			return Ptr();
 //		}
-		try
-		{
-			FileList::Ptr l( new FileList() );
-			
-      Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(p);
-      Glib::RefPtr<Gio::FileEnumerator> enumerator = dir->enumerate_children();
+    try {
+        FileList::Ptr l(new FileList());
 
-			for( Glib::RefPtr<Gio::FileInfo> itr = enumerator->next_file();
-            itr ; itr = enumerator->next_file() )
-			{
-        Gio::FileType ftype = itr->get_file_type();
-				if ((ftype == Gio::FILE_TYPE_REGULAR)  || (ftype == Gio::FILE_TYPE_SYMBOLIC_LINK))
-				{
-					if( filter(itr) ) {
-            std::string fullname = Glib::build_filename(dir->get_path(), itr->get_name());
-						l->push_back(fullname);
-						DBG_OUT( "found file %s", fullname.c_str() );
-					}
-				}
-			}
-      enumerator->close();
-			l->sort();
-			return l;
-		}
-    catch(const Glib::Error & e)
-    {
-			ERR_OUT( "Exception: %s", e.what().c_str() );
+        Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(p);
+        Glib::RefPtr<Gio::FileEnumerator> enumerator = dir->enumerate_children();
+
+        for (Glib::RefPtr<Gio::FileInfo> itr = enumerator->next_file();
+             itr ; itr = enumerator->next_file()) {
+            Gio::FileType ftype = itr->get_file_type();
+            if ((ftype == Gio::FILE_TYPE_REGULAR)  || (ftype == Gio::FILE_TYPE_SYMBOLIC_LINK)) {
+                if (filter(itr)) {
+                    std::string fullname =
+                        Glib::build_filename(dir->get_path(), itr->get_name());
+                    l->push_back(fullname);
+                    DBG_OUT("found file %s", fullname.c_str());
+                }
+            }
+        }
+        enumerator->close();
+        l->sort();
+        return l;
+    } catch(const Glib::Error & e) {
+        ERR_OUT("Exception: %s", e.what().c_str());
+    } catch(const std::exception & e) {
+        ERR_OUT("Exception: %s", e.what());
     }
-		catch(const std::exception & e )
-		{
-			ERR_OUT( "Exception: %s", e.what() );
-		}
 
-		return Ptr();
-	}
+    return Ptr();
+}
 
 
 }
