@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,11 +89,10 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
     switch(ln.type) {
-    case eng::Library::NotifyType::FOLDER_CONTENT_QUERIED:
-    case eng::Library::NotifyType::KEYWORD_CONTENT_QUERIED:
+    case eng::LibNotification::Type::FOLDER_CONTENT_QUERIED:
+    case eng::LibNotification::Type::KEYWORD_CONTENT_QUERIED:
     {
-        eng::LibFile::ListPtr l 
-            = boost::any_cast<eng::LibFile::ListPtr>(ln.param);
+        auto l = ln.get<eng::LibNotification::Type::FOLDER_CONTENT_QUERIED>().files;
         DBG_OUT("received folder content file # %lu", l->size());
         // clear the map before the list.
         m_idmap.clear();
@@ -114,9 +113,9 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         getLibraryClient()->thumbnailCache().request(l);
         break;
     }
-    case eng::Library::NotifyType::METADATA_CHANGED:
+    case eng::LibNotification::Type::METADATA_CHANGED:
     {
-        eng::metadata_desc_t m = boost::any_cast<eng::metadata_desc_t>(ln.param);
+        auto m = ln.get<eng::LibNotification::Type::METADATA_CHANGED>();
         fwk::PropertyIndex prop = m.meta;
         DBG_OUT("metadata changed %s", eng::_propertyName(prop));
         // only interested in a few props
@@ -132,7 +131,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::Library::NotifyType::XMP_NEEDS_UPDATE:
+    case eng::LibNotification::Type::XMP_NEEDS_UPDATE:
     {
         fwk::Configuration & cfg = fwk::Application::app()->config();
         int write_xmp = false;

@@ -104,7 +104,7 @@ void ThumbnailCache::execute(const ptr_t & task)
             tn.pixmap = pix;
             n->setData(boost::any(tn));
             DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
-            nc->post(n);
+            nc->post(std::move(n));
         }
     }
 }

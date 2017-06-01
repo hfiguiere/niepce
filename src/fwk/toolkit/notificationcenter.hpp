@@ -40,7 +40,7 @@ public:
     ~NotificationCenter();
 
     // called from out of thread
-    void post(const Notification::Ptr & n);
+    void post(Notification::Ptr && n);
 
     void subscribe(int type, const subscriber_t & );
     void unsubscribe(int type, const subscriber_t & );

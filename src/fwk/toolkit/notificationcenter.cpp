@@ -60,7 +60,7 @@ void NotificationCenter::unsubscribe(int /*type*/, const subscriber_t & /*s*/)
 //		m_subscribers.remove_if(std::bind(&boost::function_equal, _1, s));
 }
 
-void NotificationCenter::post(const Notification::Ptr & n)
+void NotificationCenter::post(Notification::Ptr&& n)
 {
     /* called out of thread */
     /* MUST be thread safe */
@@ -73,7 +73,6 @@ void NotificationCenter::_dispatch(void)
     /* this is not pop() like in STL. */
     Notification::Ptr notif( p->m_notificationQueue.pop() );
 
-    std::lock_guard<Notification::mutex_t> lock(notif->mutex());
     p->m_subscribers[notif->type()](notif);
 }
 

@@ -84,10 +84,9 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
     DBG_OUT("notification for workspace");
     switch(ln.type) {
-    case eng::Library::NotifyType::ADDED_FOLDERS:
+    case eng::LibNotification::Type::ADDED_FOLDERS:
     {
-        eng::LibFolder::ListPtr l
-            = boost::any_cast<eng::LibFolder::ListPtr>(ln.param);
+        auto l = ln.get<eng::LibNotification::Type::ADDED_FOLDERS>().folders;
         DBG_OUT("received added folders # %lu", l->size());
         for_each(l->cbegin(), l->cend(),
                  [this] (const eng::LibFolder::Ptr& f) {
@@ -95,18 +94,16 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
                  });
         break;
     }
-    case eng::Library::NotifyType::ADDED_KEYWORD:
+    case eng::LibNotification::Type::ADDED_KEYWORD:
     {
-        eng::Keyword::Ptr k
-            = boost::any_cast<eng::Keyword::Ptr>(ln.param);
+        auto k = ln.get<eng::LibNotification::Type::ADDED_KEYWORD>().keyword;
         DBG_ASSERT(static_cast<bool>(k), "keyword must not be NULL");
         add_keyword_item(k);
         break;
     }
-    case eng::Library::NotifyType::ADDED_KEYWORDS:
+    case eng::LibNotification::Type::ADDED_KEYWORDS:
     {
-        eng::Keyword::ListPtr l
-            = boost::any_cast<eng::Keyword::ListPtr>(ln.param);
+        auto l = ln.get<eng::LibNotification::Type::ADDED_KEYWORDS>().keywords;
         DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
         for_each(l->cbegin(), l->cend(),
                  [this] (const eng::Keyword::Ptr& k) {
@@ -114,41 +111,38 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
                  });
         break;
     }
-    case eng::Library::NotifyType::FOLDER_COUNTED:
+    case eng::LibNotification::Type::FOLDER_COUNTED:
     {
-        std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
-        DBG_OUT("count for folder %Ld is %d", (long long)count.first, count.second);
+        auto count = ln.get<eng::LibNotification::Type::FOLDER_COUNTED>();
+        DBG_OUT("count for folder %Ld is %d", (long long)count.folder, count.count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find( count.first );
+            = m_folderidmap.find(count.folder);
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
-            row[m_librarycolumns.m_count_n] = count.second;
-            row[m_librarycolumns.m_count] = std::to_string(count.second);
+            row[m_librarycolumns.m_count_n] = count.count;
+            row[m_librarycolumns.m_count] = std::to_string(count.count);
         }
 
         break;
     }
-    case eng::Library::NotifyType::FOLDER_COUNT_CHANGE:
+    case eng::LibNotification::Type::FOLDER_COUNT_CHANGE:
     {
-        std::pair<eng::library_id_t,int> count(boost::any_cast<std::pair<eng::library_id_t,int> >(ln.param));
-        DBG_OUT("count change for folder %Ld is %d", (long long)count.first, count.second);
+        auto count = ln.get<eng::LibNotification::Type::FOLDER_COUNT_CHANGE>();
+        DBG_OUT("count change for folder %Ld is %d", (long long)count.folder, count.count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find( count.first );
+            = m_folderidmap.find(count.folder);
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
-            int new_count = row[m_librarycolumns.m_count_n] + count.second;
+            int new_count = row[m_librarycolumns.m_count_n] + count.count;
             row[m_librarycolumns.m_count_n] = new_count;
             row[m_librarycolumns.m_count] = std::to_string(new_count);
         }
 
         break;
     }
-    case eng::Library::NotifyType::FILE_MOVED:
+    case eng::LibNotification::Type::FILE_MOVED:
     {
-        DBG_ASSERT(ln.param.type() == typeid(std::pair<eng::library_id_t,eng::library_id_t>),
-                   "incorrect data type for the notification");
-
-        std::pair<eng::library_id_t,eng::library_id_t> moved(boost::any_cast<std::pair<eng::library_id_t,eng::library_id_t> >(ln.param));
+        auto moved = ln.get<eng::LibNotification::Type::FILE_MOVED>();
 
         break;
     }

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2015 Hubert Figuière
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -334,27 +334,25 @@ void NiepceWindow::create_initial_labels()
 void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
 {
     switch(ln.type) {
-    case eng::Library::NotifyType::NEW_LIBRARY_CREATED:
+    case eng::LibNotification::Type::NEW_LIBRARY_CREATED:
         create_initial_labels();
         break;
-    case eng::Library::NotifyType::ADDED_LABELS:
+    case eng::LibNotification::Type::ADDED_LABELS:
     {
-        eng::Label::ListPtr l 
-            = boost::any_cast<eng::Label::ListPtr>(ln.param);
-        m_libClient->getDataProvider()->addLabels(l);
+        auto l = ln.get<eng::LibNotification::Type::ADDED_LABELS>();
+        m_libClient->getDataProvider()->addLabels(l.labels);
         break;
     }
-    case eng::Library::NotifyType::LABEL_CHANGED:
+    case eng::LibNotification::Type::LABEL_CHANGED:
     {
-        const eng::Label::Ptr & l 
-            = boost::any_cast<const eng::Label::Ptr &>(ln.param);
-        m_libClient->getDataProvider()->updateLabel(l);
+        auto l = ln.get<eng::LibNotification::Type::LABEL_CHANGED>();
+        m_libClient->getDataProvider()->updateLabel(l.label);
         break;
     }
-    case eng::Library::NotifyType::LABEL_DELETED:
+    case eng::LibNotification::Type::LABEL_DELETED:
     {
-        int id = boost::any_cast<int>(ln.param);
-        m_libClient->getDataProvider()->deleteLabel(id);
+        auto id = ln.get<eng::LibNotification::Type::LABEL_DELETED>();
+        m_libClient->getDataProvider()->deleteLabel(id.id);
         break;
     }
     default:

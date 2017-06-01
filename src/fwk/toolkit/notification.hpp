@@ -25,7 +25,6 @@
 #define __FWK_NOTIFICATION_H__
 
 #include <memory>
-#include <mutex>
 #include <boost/any.hpp>
 
 namespace fwk {
@@ -35,15 +34,12 @@ namespace fwk {
 	{
 	public:
 		typedef std::shared_ptr<Notification> Ptr;
-		typedef std::recursive_mutex mutex_t;
 
 		Notification(int _type)
 			: m_type(_type)
 			{}
 		~Notification()
-			{ std::lock_guard<mutex_t> lock(m_mutex); }
-		mutex_t & mutex() const
-			{ return m_mutex; }
+			{}
 		int type() const
 			{ return m_type; }
 		const boost::any & data() const
@@ -51,7 +47,6 @@ namespace fwk {
 		void setData(const boost::any & d)
 			{ m_data = d; }
 	private:
-		mutable mutex_t    m_mutex;
 		int        m_type;
 		boost::any m_data;
 	};

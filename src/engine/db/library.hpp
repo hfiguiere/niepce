@@ -37,6 +37,7 @@
 #include "engine/db/filebundle.hpp"
 #include "engine/db/keyword.hpp"
 #include "engine/db/label.hpp"
+#include "engine/library/notification.hpp"
 
 // The database schema version. Increase at each change.
 // Some will be persistent and have a conversion TBD.
@@ -52,26 +53,6 @@ class Library
 {
 public:
     typedef std::shared_ptr<Library> Ptr;
-
-    enum class NotifyType {
-        NONE = 0,
-        NEW_LIBRARY_CREATED,
-        ADDED_FOLDERS,
-        ADDED_FILES,
-        ADDED_KEYWORDS,
-        ADDED_KEYWORD,
-        ADDED_LABELS,
-        FOLDER_CONTENT_QUERIED,
-        KEYWORD_CONTENT_QUERIED,
-        METADATA_QUERIED,
-        METADATA_CHANGED,
-        LABEL_CHANGED,
-        LABEL_DELETED,
-        XMP_NEEDS_UPDATE,
-        FOLDER_COUNTED,
-        FOLDER_COUNT_CHANGE,
-        FILE_MOVED
-    };
 
     /** Whether to import managed. */
     enum class Managed {
@@ -94,7 +75,7 @@ public:
     const std::string & dbName() const
         { return m_dbname; }
 
-    void notify(NotifyType t, const boost::any & param);
+    void notify(LibNotification&& n);
 
     /** add a file to the library
      * @param folder the path of the containing folder
@@ -228,13 +209,6 @@ private:
     db::IConnectionDriver::Ptr        m_dbdrv;
     std::weak_ptr<fwk::NotificationCenter>  m_notif_center;
     bool                              m_inited;
-};
-
-
-struct LibNotification
-{
-    Library::NotifyType type;
-    boost::any          param;
 };
 
 }

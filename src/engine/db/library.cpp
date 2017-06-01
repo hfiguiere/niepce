@@ -62,11 +62,13 @@ Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
         m_dbdrv = m_dbmgr->connect_to_db(desc, "", "");
         m_inited = init();
 
-        m_dbdrv->create_function0("rewrite_xmp",
-                                  [this] () {
-                                      DBG_OUT("rewrite_xmp");
-                                      notify(NotifyType::XMP_NEEDS_UPDATE, boost::any());
-                                  });
+        m_dbdrv->create_function0(
+            "rewrite_xmp",
+            [this] () {
+                DBG_OUT("rewrite_xmp");
+                notify(
+                    LibNotification::make<LibNotification::Type::XMP_NEEDS_UPDATE>({}));
+            });
     }
     catch(const std::exception &e)
     {
@@ -78,19 +80,15 @@ Library::~Library()
 {
 }
 
-void Library::notify(NotifyType t, const boost::any & param)
+void Library::notify(LibNotification&& ln)
 {
     fwk::NotificationCenter::Ptr nc(m_notif_center.lock());
     if(nc) {
         DBG_OUT("notif");
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_LIB));
-        std::lock_guard<fwk::Notification::mutex_t> lock(n->mutex());
-        LibNotification ln;
-        ln.type = t;
-        ln.param = param;
         n->setData(boost::any(ln));
-        nc->post(n);
+        nc->post(std::move(n));
     }
     else {
         DBG_OUT("try to send a notification without notification center");
@@ -192,7 +190,8 @@ bool Library::_initDb()
 
     m_dbdrv->execute_statement(fileUpdateTrigger);
     m_dbdrv->execute_statement(xmpUpdateTrigger);
-    notify(NotifyType::NEW_LIBRARY_CREATED, boost::any());
+    notify(LibNotification::make<LibNotification::Type::NEW_LIBRARY_CREATED>(
+               LibNotification::None{}));
     return true;
 }
 
@@ -598,7 +597,7 @@ library_id_t Library::makeKeyword(const std::string & keyword)
             if(m_dbdrv->execute_statement(sql2)) {
                 keyword_id = m_dbdrv->last_row_id();
                 Keyword::Ptr kw(new Keyword(keyword_id, keyword));
-                notify(NotifyType::ADDED_KEYWORD, boost::any(kw));
+                notify(LibNotification::make<LibNotification::Type::ADDED_KEYWORD>({kw}));
             }
         }
         catch(fwk::Exception & e)

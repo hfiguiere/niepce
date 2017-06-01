@@ -70,11 +70,9 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
         return;
     }
     switch(ln.type) {
-    case eng::Library::NotifyType::METADATA_QUERIED:
+    case eng::LibNotification::Type::METADATA_QUERIED:
     {
-        DBG_ASSERT(ln.param.type() == typeid(eng::LibMetadata::Ptr),
-                   "incorrect data type for the notification");
-        auto lm = boost::any_cast<eng::LibMetadata::Ptr>(ln.param);
+        auto lm = ln.get<eng::LibNotification::Type::METADATA_QUERIED>().metadata;
         DBG_OUT("received metadata in MapModule");
 
         if (lm) {
