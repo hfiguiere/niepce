@@ -92,20 +92,17 @@ void ThumbnailCache::execute(const ptr_t & task)
     DBG_OUT("cached thumbnail %s", dest.c_str());
 
     fwk::Thumbnail pix = getThumbnail(task->file(), w, h, dest);
-    if(pix.ok()) {
-        fwk::NotificationCenter::Ptr nc(m_notif_center);
-        if(nc) {
-            // pass the notification
-            fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
-            ThumbnailNotification tn;
-            tn.id = task->file()->id();
-            tn.width = pix.get_width();
-            tn.height = pix.get_height();
-            tn.pixmap = pix;
-            n->setData(boost::any(tn));
-            DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
-            nc->post(std::move(n));
-        }
+    if(!pix.ok()) {
+        return;
+    }
+    fwk::NotificationCenter::Ptr nc(m_notif_center);
+    if(nc) {
+        // pass the notification
+        fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
+        ThumbnailNotification tn{task->file()->id(), pix.get_width(), get_height(), pix};
+        n->setData(boost::any(tn));
+        DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
+        nc->post(std::move(n));
     }
 }
 
