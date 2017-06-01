@@ -81,6 +81,8 @@ private:
     static bool is_property_interesting(fwk::PropertyIndex idx);
 
     const Columns           & m_columns;
+    eng::library_id_t m_current_folder;
+    eng::library_id_t m_current_keyword;
     std::map<eng::library_id_t, Gtk::TreeIter> m_idmap;
     fwk::Controller::WeakPtr m_controller;
 };

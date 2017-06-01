@@ -61,8 +61,10 @@ Glib::RefPtr<ImageListStore> ImageListStore::create()
 }
 
 ImageListStore::ImageListStore(const Columns& _columns)
-    : Gtk::ListStore(_columns),
-      m_columns(_columns)
+    : Gtk::ListStore(_columns)
+    , m_columns(_columns)
+    , m_current_folder(0)
+    , m_current_keyword(0)
 {
 }
 
@@ -88,11 +90,19 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch(ln.type) {
+    switch (ln.type) {
     case eng::LibNotification::Type::FOLDER_CONTENT_QUERIED:
     case eng::LibNotification::Type::KEYWORD_CONTENT_QUERIED:
     {
-        auto l = ln.get<eng::LibNotification::Type::FOLDER_CONTENT_QUERIED>().files;
+        auto param = ln.get<eng::LibNotification::Type::FOLDER_CONTENT_QUERIED>();
+        auto l = param.files;
+        if (ln.type == eng::LibNotification::Type::FOLDER_CONTENT_QUERIED) {
+            m_current_folder = param.container;
+            m_current_keyword = 0;
+        } else if (ln.type == eng::LibNotification::Type::KEYWORD_CONTENT_QUERIED) {
+            m_current_folder = 0;
+            m_current_keyword = param.container;
+        }
         DBG_OUT("received folder content file # %lu", l->size());
         // clear the map before the list.
         m_idmap.clear();
@@ -112,6 +122,24 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         // at that point clear the cache because the icon view is populated.
         getLibraryClient()->thumbnailCache().request(l);
         break;
+    }
+    case eng::LibNotification::Type::FILE_MOVED:
+    {
+        DBG_OUT("File moved. Current folder %ld", m_current_folder);
+        auto param = ln.get<eng::LibNotification::Type::FILE_MOVED>();
+        if (m_current_folder == 0) {
+            return;
+        }
+        if (param.from == m_current_folder) {
+            // remove from list
+            DBG_OUT("from this folder");
+            auto iter = get_iter_from_id(param.file);
+            if (iter) {
+                iter = erase(iter);
+            }
+        } else if (param.to == m_current_folder) {
+            // XXX add to list. but this isn't likely to happen atm.
+        }
     }
     case eng::LibNotification::Type::METADATA_CHANGED:
     {

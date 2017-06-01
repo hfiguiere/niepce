@@ -140,12 +140,6 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
         break;
     }
-    case eng::LibNotification::Type::FILE_MOVED:
-    {
-        auto moved = ln.get<eng::LibNotification::Type::FILE_MOVED>();
-
-        break;
-    }
     default:
         break;
     }
