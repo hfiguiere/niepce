@@ -99,7 +99,7 @@ void ThumbnailCache::execute(const ptr_t & task)
     if(nc) {
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
-        ThumbnailNotification tn{task->file()->id(), pix.get_width(), get_height(), pix};
+        ThumbnailNotification tn{task->file()->id(), pix.get_width(), pix.get_height(), pix};
         n->setData(boost::any(tn));
         DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
         nc->post(std::move(n));
