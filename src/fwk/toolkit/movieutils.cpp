@@ -30,9 +30,9 @@ namespace fwk {
   // TODO be smarter
 bool thumbnail_movie(const std::string &src, int w, int h, const std::string &dest)
 {
-  std::string command = str(boost::format("totem-video-thumbnailer -s %1% %2% %3%") 
-			    % std::max(w,h) % src % dest);
-  return system(command.c_str()) != -1;
+    std::string command = str(boost::format("totem-video-thumbnailer -s %1% \"%2%\" \"%3%\"")
+                              % std::max(w,h) % src % dest);
+    return system(command.c_str()) != -1;
 }
 
 }
@@ -42,6 +42,8 @@ bool thumbnail_movie(const std::string &src, int w, int h, const std::string &de
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil
+  tab-width:4
+  c-basic-offset:4
   fill-column:80
   End:
 */

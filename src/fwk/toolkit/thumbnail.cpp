@@ -58,6 +58,7 @@ Thumbnail Thumbnail::thumbnail_file(const std::string& filename,
             std::string cached = Glib::get_tmp_dir() + "/temp-1234";
             if(fwk::thumbnail_movie(filename, w, h, cached)) {
                 pix = Gdk::Pixbuf::create_from_file(cached, w, h, true);
+                unlink(cached.c_str());
             }
         }
         catch(const Glib::Error & e) {
