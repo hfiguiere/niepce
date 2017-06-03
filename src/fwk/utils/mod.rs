@@ -1,5 +1,5 @@
 /*
- * niepce - lib.rs
+ * niepce - fwk/utils/mod.rs
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -17,6 +17,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern crate exempi;
-
-pub mod fwk;
+pub mod exempi;
