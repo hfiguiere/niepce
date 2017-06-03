@@ -18,6 +18,7 @@
  */
 
 
+#include <glibmm/miscutils.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
@@ -53,6 +54,11 @@ ImportDialog::ImportDialog()
   , m_attributes_scrolled(nullptr)
   , m_images_list_scrolled(nullptr)
 {
+    fwk::Configuration & cfg = fwk::Application::app()->config();
+    m_base_dest_dir = cfg.getValue("base_import_dest_dir",
+                                   Glib::get_user_special_dir(
+                                       Glib::USER_DIRECTORY_PICTURES));
+    DBG_OUT("base_dest_dir set to %s", m_base_dest_dir.c_str());
 }
 
 ImportDialog::~ImportDialog()
@@ -66,8 +72,9 @@ void ImportDialog::add_importer_ui(IImporterUI& importer)
         std::static_pointer_cast<Frame>(shared_from_this()));
     importer_widget->show_all();
     m_importer_ui_stack->add(*importer_widget, importer.id());
-    importer.set_source_selected_callback([this] (const std::string& source) {
-            this->set_to_import(source);
+    importer.set_source_selected_callback(
+        [this] (const std::string& source, const std::string& dest_dir) {
+            this->set_source(source, dest_dir);
         });
 }
 
@@ -130,34 +137,53 @@ void ImportDialog::setup_widget()
     m_is_setup = true;
 }
 
+void ImportDialog::clear_import_list()
+{
+    if (m_images_list_model) {
+        m_images_list_model->clear();
+    }
+    m_images_list_map.clear();
+    m_files_to_import.clear();
+    if (m_destination_folder) {
+        m_destination_folder->set_text("");
+    }
+}
+
 void ImportDialog::import_source_changed()
 {
     auto id = m_import_source_combo->get_active_id();
     m_current_importer = m_importers[id];
     m_importer_ui_stack->set_visible_child(id);
+    m_source = "";
+
+    clear_import_list();
 
     fwk::Configuration & cfg = fwk::Application::app()->config();
     cfg.setValue("last_importer", id);
 }
 
-void ImportDialog::set_to_import(const std::string& f)
+void ImportDialog::set_source(const std::string& source, const std::string& dest_dir)
 {
-    m_images_list_model->clear();
-    m_images_list_map.clear();
-    m_files_to_import.clear();
+    clear_import_list();
 
     auto importer = get_importer();
     m_files_to_import.run(
-        [this, f, importer] () {
+        [this, source, importer] () {
             return importer->list_source_content(
-                f,
+                source,
                 [this] (std::list<eng::ImportedFilePtr>&& list_to_import) {
                     this->m_files_to_import.send_data(std::move(list_to_import));
                 });
         });
 
-    m_folder_path_source = f;
-    m_destination_folder->set_text(fwk::path_basename(f));
+    m_source = source;
+    m_dest_dir = Glib::build_filename(m_base_dest_dir, dest_dir);
+    m_destination_folder->set_text(dest_dir);
+}
+
+const std::string& ImportDialog::get_dest_dir() const
+{
+    return m_dest_dir;
 }
 
 void ImportDialog::append_files_to_import()
@@ -180,7 +206,7 @@ void ImportDialog::append_files_to_import()
     }
 
     auto importer = get_importer();
-    auto source = m_folder_path_source.raw();
+    auto source = m_source;
     m_previews_to_import.run(
         [this, importer, source, paths] () {
             return importer->get_previews_for(

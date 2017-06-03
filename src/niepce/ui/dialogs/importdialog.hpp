@@ -80,17 +80,19 @@ public:
 
 //  const std::list<std::string> & to_import() const
 //      { return m_list_to_import; }
-    const Glib::ustring & source_path() const
-        { return m_folder_path_source; }
+    const std::string& get_source() const
+        { return m_source; }
     void import_source_changed();
-    void set_to_import(const std::string& f);
+    void set_source(const std::string&, const std::string&);
     const std::shared_ptr<IImporterUI>& importer_ui() const
         { return m_current_importer; }
     std::shared_ptr<eng::IImporter> get_importer() const
         { return m_current_importer->get_importer(); }
+    const std::string& get_dest_dir() const;
 private:
     class ImportParam;
 
+    void clear_import_list();
     void do_select_directories();
     void append_files_to_import();
     void preview_received();
@@ -98,7 +100,9 @@ private:
 
     std::map<std::string, std::shared_ptr<ui::IImporterUI>> m_importers;
     std::shared_ptr<ui::IImporterUI> m_current_importer; // as shared_ptr<> for lambda capture
-    Glib::ustring m_folder_path_source;
+    std::string m_source; /// Abstract source. The importer knows what to do.
+    std::string m_base_dest_dir;
+    std::string m_dest_dir;
 
     Gtk::Stack *m_importer_ui_stack;
     Gtk::ComboBox *m_date_tz_combo;

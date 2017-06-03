@@ -48,7 +48,11 @@ public:
     virtual const std::string& id() const = 0;
     virtual Gtk::Widget* setup_widget(const fwk::Frame::Ptr&) = 0;
 
-    typedef std::function<void (const std::string&)> SourceSelected;
+    /** Source selected callback
+     * @param source identifier
+     * @param dest dir suggestion
+     */
+    typedef std::function<void (const std::string&, const std::string&)> SourceSelected;
     virtual void set_source_selected_callback(const SourceSelected&) = 0;
 };
 

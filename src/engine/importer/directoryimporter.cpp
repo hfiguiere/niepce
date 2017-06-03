@@ -90,7 +90,7 @@ bool DirectoryImporter::get_previews_for(const std::string& /*source*/,
     return true;
 }
 
-bool DirectoryImporter::do_import(const std::string& source,
+bool DirectoryImporter::do_import(const std::string& source, const std::string& /*dest_dir*/,
                                   const FileImporter& callback)
 {
     // pretty trivial, we have the source path.

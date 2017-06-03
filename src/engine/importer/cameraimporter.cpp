@@ -101,12 +101,20 @@ bool CameraImporter::get_previews_for(const std::string& source,
     return false;
 }
 
-bool CameraImporter::do_import(const std::string & source,
+bool CameraImporter::do_import(const std::string& source, const std::string& dest_dir,
                                const FileImporter & importer)
 {
     // XXX we shouldn't have to do that.
-    list_source_content(source, [this, importer] (auto file_list) {
-            auto tmp_dir_path = fwk::make_tmp_dir("niepce-camera-import-XXXXXX");
+    list_source_content(source, [this, dest_dir, importer] (auto file_list) {
+            auto tmp_dir_path = dest_dir.empty() ?
+                fwk::make_tmp_dir("niepce-camera-import-XXXXXX") :
+                dest_dir;
+            if (!dest_dir.empty()) {
+                auto dir = Gio::File::create_for_path(tmp_dir_path);
+                dir->make_directory_with_parents();
+                // XXX check for errors.
+            }
+            DBG_ASSERT(!tmp_dir_path.empty(), "Dest dir is empty");
             // XXX check we don't return an empty string.
 
             for (auto file: file_list) {
@@ -122,7 +130,8 @@ bool CameraImporter::do_import(const std::string & source,
                 if (this->m_camera->download_file(imported_camera_file->folder(),
                                                   imported_camera_file->name(),
                                                   output_path)) {
-                    importer(output_path, IImporter::Import::SINGLE, Library::Managed::YES);
+                    // XXX else report error.
+                    importer(output_path, IImporter::Import::SINGLE, Library::Managed::NO);
                 }
             }
             return true;

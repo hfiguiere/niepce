@@ -22,6 +22,7 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/label.h>
 
+#include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "engine/importer/directoryimporter.hpp"
@@ -54,7 +55,7 @@ void DirectoryImporterUI::do_select_directories()
 {
     auto source = select_source();
     if (!source.empty() && m_source_selected_cb) {
-        m_source_selected_cb(source);
+        m_source_selected_cb(source, fwk::path_basename(source));
     }
 }
 

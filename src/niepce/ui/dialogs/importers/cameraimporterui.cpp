@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/format.hpp>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/grid.h>
@@ -73,7 +75,10 @@ void CameraImporterUI::select_camera()
 {
     std::string source = m_camera_list_combo->get_active_id();
     if (!source.empty() && m_source_selected_cb) {
-        m_source_selected_cb(source);
+        auto datetime = Glib::DateTime::create_now_local();
+        std::string today = datetime.format("%F %H%M%S").raw();
+        std::string dest_dir = str(boost::format(_("Camera import %1%")) % today);
+        m_source_selected_cb(source, dest_dir);
     }
 }
 

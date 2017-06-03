@@ -41,7 +41,7 @@ public:
                           const std::list<std::string>& paths,
                           const PreviewReady& callback) override;
 
-    bool do_import(const std::string & source,
+    bool do_import(const std::string& source, const std::string& dest_dir,
                    const FileImporter & importer) override;
 
 };
