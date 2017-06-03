@@ -19,6 +19,7 @@ To build is you need the following:
 -----------------------------------
 
 A C++11 compiler
+A Rust compiler
 gtk+ 3.12
 cairo 1.1
 glibmm 2.32

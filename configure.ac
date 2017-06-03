@@ -147,6 +147,20 @@ AC_ARG_ENABLE(asan,[  --enable-asan    Turn on address sanitizer],[
 
 ])
 
+AC_CHECK_PROG(CARGO, [cargo], [yes], [no])
+AS_IF(test x$CARGO = xno,
+    AC_MSG_ERROR([cargo is required])
+)
+AC_CHECK_PROG(RUSTC, [rustc], [yes], [no])
+AS_IF(test x$RUSTC = xno,
+    AC_MSG_ERROR([rustc is required])
+)
+
+dnl Release build we do.
+CARGO_TARGET_SUBDIR=release
+AC_SUBST(CARGO_TARGET_SUBDIR)
+
+
 AC_CONFIG_FILES([
 Makefile
 art/Makefile
