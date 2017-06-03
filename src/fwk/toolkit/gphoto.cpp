@@ -374,7 +374,7 @@ bool GpCamera::download_file(const std::string& folder, const std::string& file,
                                     GP_FILE_TYPE_NORMAL, camerafile.get(),
                                     m_priv->context);
     if (result == GP_OK) {
-        gp_file_save(camerafile.get(), dest.c_str());
+        result = gp_file_save(camerafile.get(), dest.c_str());
     }
 
     return (result == GP_OK);
