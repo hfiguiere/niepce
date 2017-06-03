@@ -232,7 +232,7 @@ void NiepceWindow::init_actions()
     fwk::add_action(m_action_group,
                     "Delete",
                     sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
-                    section, _("Delete"), "win", nullptr);
+                    section, _("Delete"), "win", "Delete");
 
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Tools"), submenu);
