@@ -17,4 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-mod utils;
+pub mod utils;
+
+pub use self::utils::exempi::{
+    NsDef,
+    ExempiManager,
+    XmpMeta,
+    gps_coord_from_xmp
+};

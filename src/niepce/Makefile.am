@@ -21,10 +21,13 @@ niepce_LDADD = \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libview/libview.a \
+	$(top_builddir)/target/release/libniece_rust.a \
 	@FRAMEWORK_LIBS@ \
 	@GPHOTO_LIBS@ \
 	@BABL_LIBS@ \
-	@GEGL_LIBS@ @OPENRAW_LIBS@
+	@GEGL_LIBS@ @OPENRAW_LIBS@ \
+	-ldl \
+	$(NULL)
 
 
 niepce_SOURCES = \

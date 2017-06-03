@@ -18,5 +18,21 @@
  */
 
 extern crate exempi;
+extern crate libc;
 
 pub mod fwk;
+
+use std::f64;
+use std::ffi::CStr;
+use libc::c_char;
+
+#[no_mangle]
+pub extern fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
+    let value = unsafe { CStr::from_ptr(cvalue) };
+    if let Ok(svalue) = value.to_str() {
+        if let Some(coord) = fwk::gps_coord_from_xmp(svalue) {
+            return coord;
+        }
+    }
+    f64::NAN
+}

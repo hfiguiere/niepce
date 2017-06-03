@@ -133,8 +133,6 @@ public:
     std::string creation_date_str() const;
     const std::vector< std::string > & keywords() const;
 
-    static double gpsCoordFromXmp(const std::string & s);
-
 private:
 
     XmpPtr m_xmp;
@@ -142,7 +140,11 @@ private:
     mutable bool m_keyword_fetched;
     mutable std::vector< std::string > m_keywords;
 };
+
 }
+
+// implemented in Rust
+extern "C" double fwk_gps_coord_from_xmp(const char* value);
 
 /*
   Local Variables:
