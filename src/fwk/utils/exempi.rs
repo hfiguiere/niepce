@@ -76,9 +76,9 @@ impl XmpMeta {
         XmpMeta { xmp: exempi::Xmp::new() }
     }
 
-    pub fn new_from_file(file: &String, sidecar_only: bool) -> Option<XmpMeta> {
+    pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
         if !sidecar_only {
-            let xmpfile = exempi::XmpFile::open_new(file.as_str(), exempi::OPEN_READ);
+            let xmpfile = exempi::XmpFile::open_new(file, exempi::OPEN_READ);
             if xmpfile.is_some() {
                 let xmp = xmpfile.unwrap().get_new_xmp();
                 if xmp.is_some() {
@@ -86,7 +86,7 @@ impl XmpMeta {
                 }
             }
         }
-        let filepath = Path::new(file.as_str());
+        let filepath = Path::new(file);
         let sidecar = filepath.with_extension("xmp");
         let sidecaropen = File::open(sidecar);
         if let Some(mut sidecarfile) = sidecaropen.ok() {
@@ -236,6 +236,37 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn xmp_meta_works() {
+        use std::env;
+        use std::path::PathBuf;
+        use super::ExempiManager;
+        use super::XmpMeta;
+
+        let mut dir: PathBuf;
+        if let Ok(pdir) = env::var("CARGO_MANIFEST_DIR") {
+            dir = PathBuf::from(pdir);
+            dir.push("src");
+            dir.push("fwk");
+            dir.push("utils");
+        } else {
+            dir = PathBuf::from(".");
+        }
+        dir.push("test.xmp");
+        let xmpManager = ExempiManager::new(None);
+
+        if let Some(xmpfile) = dir.to_str() {
+            let meta = XmpMeta::new_from_file(xmpfile, true);
+
+            assert!(meta.is_some());
+            let meta = meta.unwrap();
+            assert_eq!(meta.orientation().unwrap_or(0), 1);
+            // test keywords()
+        } else {
+            assert!(false);
+        }
+    }
+
     #[test]
     fn gps_coord_from_works() {
         use super::gps_coord_from_xmp;
