@@ -7,10 +7,10 @@ AM_CPPFLAGS = -I$(top_srcdir)/src \
 noinst_LIBRARIES = libfwkbase.a
 
 
-TESTS = testmoniker testgeometry testfractions testdate testmap\
+TESTS = testmoniker testgeometry testdate testmap\
 	testoption testpropertybag
 
-check_PROGRAMS = testmoniker testgeometry testfractions testdate testmap\
+check_PROGRAMS = testmoniker testgeometry testdate testmap\
 	testoption testpropertybag
 
 testdate_SOURCES = t/testdate.cpp
@@ -23,10 +23,6 @@ testmoniker_LDADD = libfwkbase.a \
 
 testgeometry_SOURCES = t/testgeometry.cpp
 testgeometry_LDADD = libfwkbase.a \
-	@FRAMEWORK_LIBS@
-
-testfractions_SOURCES = t/testfractions.cpp
-testfractions_LDADD = libfwkbase.a \
 	@FRAMEWORK_LIBS@
 
 testmap_SOURCES = t/testmap.cpp
@@ -45,7 +41,7 @@ libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	autoflag.hpp \
 	date.hpp date.cpp \
 	debug.hpp debug.cpp \
-	fractions.hpp fractions.cpp \
+	fractions.hpp \
 	moniker.hpp moniker.cpp \
 	geometry.hpp geometry.cpp \
 	singleton.hpp \

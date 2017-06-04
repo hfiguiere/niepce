@@ -36,3 +36,14 @@ pub extern fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
     }
     f64::NAN
 }
+
+#[no_mangle]
+pub extern fn fwk_fraction_to_decimal(cvalue: *const c_char) -> f64 {
+    let value = unsafe { CStr::from_ptr(cvalue) };
+    if let Ok(svalue) = value.to_str() {
+        if let Some(dec) = fwk::fraction_to_decimal(svalue) {
+            return dec;
+        }
+    }
+    f64::NAN
+}

@@ -18,10 +18,15 @@
  */
 
 pub mod utils;
+pub mod base;
 
 pub use self::utils::exempi::{
     NsDef,
     ExempiManager,
     XmpMeta,
     gps_coord_from_xmp
+};
+
+pub use self::base::fractions::{
+    fraction_to_decimal
 };
