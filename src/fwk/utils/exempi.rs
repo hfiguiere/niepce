@@ -68,12 +68,18 @@ impl Drop for ExempiManager {
 
 pub struct XmpMeta {
     xmp: Xmp,
+    keywords: Vec<String>,
+    keywords_fetched: bool,
 }
 
 
 impl XmpMeta {
     pub fn new() -> XmpMeta {
-        XmpMeta { xmp: exempi::Xmp::new() }
+        XmpMeta {
+            xmp: exempi::Xmp::new(),
+            keywords: Vec::<String>::new(),
+            keywords_fetched: false,
+        }
     }
 
     pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
@@ -82,7 +88,11 @@ impl XmpMeta {
             if xmpfile.is_some() {
                 let xmp = xmpfile.unwrap().get_new_xmp();
                 if xmp.is_some() {
-                    return Some(XmpMeta { xmp: xmp.unwrap() });
+                    return Some(XmpMeta {
+                        xmp: xmp.unwrap(),
+                        keywords: Vec::<String>::new(),
+                        keywords_fetched: false
+                    });
                 }
             }
         }
@@ -95,7 +105,11 @@ impl XmpMeta {
             if result.ok().is_some() {
                 let mut xmp = exempi::Xmp::new();
                 if xmp.parse(sidecarcontent.into_bytes().as_slice()) {
-                    return Some(XmpMeta { xmp: xmp });
+                    return Some(XmpMeta {
+                        xmp: xmp,
+                        keywords: Vec::<String>::new(),
+                        keywords_fetched: false
+                    });
                 }
             }
         }
@@ -151,8 +165,7 @@ impl XmpMeta {
     // XXX need fwk::Date()
     // pub fn creation_date()
 
-    pub fn creation_date_str(&self) -> Option<String>
-    {
+    pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         if let Some(xmpstring) = self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags) {
             return Some(String::from(xmpstring.to_str()));
@@ -160,7 +173,23 @@ impl XmpMeta {
         None
     }
 
-    // pub fn keywords
+    pub fn keywords(&mut self) -> &Vec<String> {
+        if !self.keywords_fetched {
+            use exempi::XmpString;
+
+            let mut iter = exempi::XmpIterator::new(&mut self.xmp, NS_DC, "subject",
+                                                    exempi::ITER_JUST_LEAF_NODES);
+            let mut schema = XmpString::new();
+            let mut name = XmpString::new();
+            let mut value = XmpString::new();
+            let mut option = exempi::ITER_NONE;
+            while iter.next(&mut schema, &mut name, &mut value, &mut option) {
+                self.keywords.push(String::from(value.to_str()));
+            }
+            self.keywords_fetched = true;
+        }
+        &self.keywords
+    }
 }
 
 pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
@@ -253,15 +282,22 @@ mod tests {
             dir = PathBuf::from(".");
         }
         dir.push("test.xmp");
-        let xmpManager = ExempiManager::new(None);
+        let xmp_manager = ExempiManager::new(None);
 
         if let Some(xmpfile) = dir.to_str() {
             let meta = XmpMeta::new_from_file(xmpfile, true);
 
             assert!(meta.is_some());
-            let meta = meta.unwrap();
+            let mut meta = meta.unwrap();
             assert_eq!(meta.orientation().unwrap_or(0), 1);
             // test keywords()
+            let keywords = meta.keywords();
+            assert_eq!(keywords.len(), 5);
+            assert_eq!(keywords[0], "choir");
+            assert_eq!(keywords[1], "night");
+            assert_eq!(keywords[2], "ontario");
+            assert_eq!(keywords[3], "ottawa");
+            assert_eq!(keywords[4], "parliament of canada");
         } else {
             assert!(false);
         }
