@@ -61,11 +61,11 @@ public:
     };
 
     struct AddedKeyword {
-        Keyword::Ptr keyword;
+        KeywordPtr keyword;
     };
 
     struct AddedKeywords {
-        Keyword::ListPtr keywords;
+        KeywordListPtr keywords;
     };
 
     struct AddedLabels {

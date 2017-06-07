@@ -12,9 +12,12 @@ TEST_LIBS =  \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
+	$(top_builddir)/target/debug/libniece_rust.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@FRAMEWORK_LIBS@ \
-	@OPENRAW_LIBS@
+	@OPENRAW_LIBS@ \
+	-ldl \
+	$(NULL)
 
 test_worker_SOURCES = test_worker.cpp
 test_worker_LDADD = $(TEST_LIBS)

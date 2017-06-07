@@ -11,9 +11,11 @@ TEST_LIBS =  \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
+	$(top_builddir)/target/debug/libniece_rust.a \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@FRAMEWORK_LIBS@ \
 	@OPENRAW_LIBS@ \
+	-ldl \
 	$(NULL)
 
 
@@ -38,7 +40,7 @@ libniepceengine_a_SOURCES = \
 	db/label.hpp \
 	db/libmetadata.hpp db/libmetadata.cpp \
 	db/keyword.hpp db/keyword.cpp \
-	db/storage.hpp db/storage.cpp \
+	db/storage.hpp \
 	db/fsfile.hpp db/fsfile.cpp \
 	db/filebundle.hpp db/filebundle.cpp \
 	db/metadata.hpp \

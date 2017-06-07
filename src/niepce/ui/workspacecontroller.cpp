@@ -106,7 +106,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         auto l = ln.get<eng::LibNotification::Type::ADDED_KEYWORDS>().keywords;
         DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
         for_each(l->cbegin(), l->cend(),
-                 [this] (const eng::Keyword::Ptr& k) {
+                 [this] (const eng::KeywordPtr& k) {
                      this->add_keyword_item(k);
                  });
         break;
@@ -209,15 +209,16 @@ void WorkspaceController::on_row_collapsed(const Gtk::TreeIter& iter,
 }
 
 
-void WorkspaceController::add_keyword_item(const eng::Keyword::Ptr & k)
+void WorkspaceController::add_keyword_item(const eng::KeywordPtr & k)
 {
     auto children = m_keywordsNode->children();
     bool was_empty = children.empty();
     auto iter = add_item(m_treestore, children,
-                         m_icons[ICON_KEYWORD], k->keyword(), k->id(),
-                         KEYWORD_ITEM);
+                         m_icons[ICON_KEYWORD],
+                         engine_db_keyword_keyword(k.get()),
+                         engine_db_keyword_id(k.get()), KEYWORD_ITEM);
 //		getLibraryClient()->countKeyword(f->id());
-    m_keywordsidmap[k->id()] = iter;
+    m_keywordsidmap[engine_db_keyword_id(k.get())] = iter;
     if(was_empty) {
         expand_from_cfg("workspace_keywords_expanded", m_keywordsNode);
     }

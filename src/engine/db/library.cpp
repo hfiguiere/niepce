@@ -552,7 +552,7 @@ int Library::countFolder(library_id_t folder_id)
     return count;
 }
 
-void Library::getAllKeywords(const Keyword::ListPtr & l)
+void Library::getAllKeywords(const KeywordListPtr & l)
 {
     SQLStatement sql("SELECT id,keyword FROM keywords ORDER BY keyword");
     try {
@@ -562,7 +562,7 @@ void Library::getAllKeywords(const Keyword::ListPtr & l)
                 std::string name;
                 m_dbdrv->get_column_content(0, id);
                 m_dbdrv->get_column_content(1, name);
-                l->push_back(Keyword::Ptr(new Keyword(id, name)));
+                l->push_back(keyword_new(id, name.c_str()));
             }
         }
     }
@@ -596,7 +596,7 @@ library_id_t Library::makeKeyword(const std::string & keyword)
         try {
             if(m_dbdrv->execute_statement(sql2)) {
                 keyword_id = m_dbdrv->last_row_id();
-                Keyword::Ptr kw(new Keyword(keyword_id, keyword));
+                KeywordPtr kw(keyword_new(keyword_id, keyword.c_str()));
                 notify(LibNotification::make<LibNotification::Type::ADDED_KEYWORD>({kw}));
             }
         }

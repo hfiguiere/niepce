@@ -1,7 +1,7 @@
 /*
- * niepce - db/keyword.cpp
+ * niepce - engine/db/keyword.cpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,16 +18,16 @@
  */
 
 
-
 #include "keyword.hpp"
 
+extern "C" eng::Keyword* engine_db_keyword_new(eng::library_id_t id, const char* keyword);
+extern "C" void engine_db_keyword_delete(eng::Keyword*);
 
 namespace eng {
 
-	Keyword::Keyword(library_id_t _id, const std::string & _keyword)
-		: m_id(_id), m_keyword(_keyword)
-	{
-	}
-
+KeywordPtr keyword_new(eng::library_id_t id, const char* keyword) {
+  return KeywordPtr(
+    engine_db_keyword_new(id, keyword), &engine_db_keyword_delete);
+}
 
 }

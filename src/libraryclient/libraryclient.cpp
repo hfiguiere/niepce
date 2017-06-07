@@ -146,12 +146,14 @@ void LibraryClient::importFromDirectory(const std::string & dir, eng::Library::M
     m_pImpl->importFromDirectory(dir, manage);
 }
 
+#if 0
 bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
                                          eng::Keyword::IdList & /*keywords*/)
 {
     // TODO
     return false;
 }
+#endif
 
 }
 /*

@@ -28,7 +28,6 @@
 #include "fwk/base/propertybag.hpp"
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/keyword.hpp"
-#include "engine/db/storage.hpp"
 #include "engine/db/fsfile.hpp"
 
 namespace eng {
@@ -65,8 +64,6 @@ public:
         { return m_name; }
     const std::string & path() const
         { return m_main_file.path(); }
-
-//		Storage::Ptr storage() const;
 
     void setOrientation(int32_t v);
     int32_t orientation() const

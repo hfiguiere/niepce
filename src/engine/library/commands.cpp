@@ -39,7 +39,7 @@ namespace eng {
 
 void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 {
-    Keyword::ListPtr l(new Keyword::List);
+    KeywordListPtr l(new KeywordList);
     lib->getAllKeywords(l);
     /////
     // notify folder added l

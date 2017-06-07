@@ -89,7 +89,7 @@ int test_main(int, char *[])
     BOOST_CHECK(fl2->size() == 1);
     BOOST_CHECK(fl2->front()->id() == file_id);
 
-    eng::Keyword::ListPtr kl(new eng::Keyword::List);
+    eng::KeywordListPtr kl(new eng::KeywordList);
     lib.getAllKeywords(kl);
     BOOST_CHECK(kl->size() == 2);
 

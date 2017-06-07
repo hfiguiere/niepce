@@ -146,7 +146,7 @@ public:
      */
     void getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl);
     int countFolder(library_id_t folder_id);
-    void getAllKeywords(const Keyword::ListPtr & l);
+    void getAllKeywords(const KeywordListPtr & l);
     void getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl);
     /** get the metadata block (XMP) */
     void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );

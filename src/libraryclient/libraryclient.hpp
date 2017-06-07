@@ -29,7 +29,6 @@
 #include "engine/library/thumbnailcache.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/librarytypes.hpp"
-#include "engine/db/storage.hpp"
 
 namespace fwk {
 class Moniker;
@@ -43,7 +42,6 @@ class UIDataProvider;
 class ClientImpl;
 
 class LibraryClient
-    : public eng::Storage
 {
 public:
     NON_COPYABLE(LibraryClient);
@@ -99,8 +97,6 @@ public:
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }
 
-    /* sync call */
-    virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords) override;
     const std::unique_ptr<UIDataProvider>& getDataProvider() const
         { return m_uidataprovider; }
 

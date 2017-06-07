@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/storage.cpp
+ * niepce - engine/db/keyword.rs
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "storage.hpp"
+use super::LibraryId;
+use std::ffi::CString;
 
-namespace eng {
+pub struct Keyword {
+    id: LibraryId,
+    keyword: String,
+    pub cstr: CString,
+}
 
-	Storage::~Storage()
-	{
+impl Keyword {
+    pub fn new(id: LibraryId, keyword: &str) -> Keyword {
+        Keyword {
+            id: id, keyword: String::from(keyword),
+            cstr: CString::new("").unwrap()
+        }
+    }
 
-	}
+    pub fn id(&self) -> LibraryId {
+        self.id
+    }
 
+    pub fn keyword(&self) -> &String {
+        &self.keyword
+    }
 }
