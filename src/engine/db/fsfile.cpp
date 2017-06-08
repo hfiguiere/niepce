@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/fsfile.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,15 @@
 #include "fsfile.hpp"
 
 
+extern "C" eng::FsFile* engine_db_fsfile_new(eng::library_id_t id, const char* path);
+extern "C" void engine_db_fsfile_delete(eng::FsFile*);
+
 namespace eng {
 
-FsFile::FsFile(library_id_t _id, const std::string & _path)
-    : m_id(_id), m_path(_path)
+FsFilePtr fsfile_new(library_id_t id, const char* path)
 {
+    return FsFilePtr(engine_db_fsfile_new(id, path), &engine_db_fsfile_delete);
 }
-
 }
 
 /*

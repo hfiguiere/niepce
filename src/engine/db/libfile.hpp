@@ -62,8 +62,8 @@ public:
         { return m_folderId; }
     const std::string & name() const
         { return m_name; }
-    const std::string & path() const
-        { return m_main_file.path(); }
+    std::string path() const
+        { return engine_db_fsfile_path(m_main_file.get()); }
 
     void setOrientation(int32_t v);
     int32_t orientation() const
@@ -87,12 +87,12 @@ public:
     /** Getter for the filetype enumeration. */
     FileType fileType() const
         { return m_file_type; }
-    
+
     /** return an URI of the real path
      * because the Gtk stuff want that.
      */
     const std::string uri() const
-        { return std::string("file://") + m_main_file.path(); }
+        { return std::string("file://") + engine_db_fsfile_path(m_main_file.get()); }
     /** check is the library file is at uri
      * @return true of the uri match
      * @todo
@@ -103,7 +103,7 @@ private:
     library_id_t         m_id;           /**< file ID */
     library_id_t         m_folderId;     /**< parent folder */
     std::string m_name;         /**< name */
-    FsFile      m_main_file;
+    FsFilePtr      m_main_file;
 //    boost::filesystem::path  m_path;/**< path name relative to the folder */
 //		std::string m_type;
     int32_t     m_orientation;  /**< Exif orientatoin */

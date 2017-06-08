@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/fsfile.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NIEPCE_DB_FSFILE_H__
-#define __NIEPCE_DB_FSFILE_H__
+#pragma once
 
 #include <string>
 #include <memory>
 
-#include "engine/db/librarytypes.hpp"
+#include "librarytypes.hpp"
 
 namespace eng {
 
-/** @brief describe a file on file system */
-class FsFile
-{
-public:
-    typedef std::shared_ptr< FsFile > Ptr;
+class FsFile;
+typedef std::shared_ptr<FsFile> FsFilePtr;
 
-    FsFile(library_id_t id, const std::string & path);
-
-    library_id_t id()
-        { return m_id; }
-    const std::string & path() const
-        { return m_path; }
-private:
-    library_id_t m_id;
-    std::string m_path; /**< absolute path */
-};
-
+FsFilePtr fsfile_new(library_id_t id, const char* path);
 }
 
-#endif
+extern "C" const char* engine_db_fsfile_path(eng::FsFile*);
+
 /*
   Local Variables:
   mode:c++

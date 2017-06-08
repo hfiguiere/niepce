@@ -28,8 +28,8 @@ namespace eng {
 LibFile::LibFile(library_id_t _id, library_id_t _folderId, library_id_t _fsfileid, const std::string & p,
                  const std::string & _name )
 	: m_id(_id), m_folderId(_folderId),
-	  m_name(_name), 
-    m_main_file(_fsfileid, p),
+	  m_name(_name),
+          m_main_file(fsfile_new(_fsfileid, p.c_str())),
 	  m_orientation(0), m_rating(0), m_label(0),
     m_flag(0),
     m_file_type(FileType::UNKNOWN)
