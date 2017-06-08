@@ -19,14 +19,22 @@
 
 #include "libfolder.hpp"
 
+extern "C" eng::LibFolder* engine_db_libfolder_new(eng::library_id_t id, const char* name);
+extern "C" void engine_db_libfolder_delete(eng::LibFolder*);
+
 namespace eng {
 
-const char* LibFolder::read_db_columns()
+LibFolderPtr libfolder_new(eng::library_id_t id, const char* name) {
+  return LibFolderPtr(
+    engine_db_libfolder_new(id, name), &engine_db_libfolder_delete);
+}
+
+const char* libfolder_read_db_columns()
 {
     return "id,name,virtual,locked,expanded";
 }
 
-LibFolder::Ptr LibFolder::read_from(const db::IConnectionDriver::Ptr & db)
+LibFolderPtr libfolder_read_from(const db::IConnectionDriver::Ptr & db)
 {
     library_id_t id;
     std::string name;
@@ -36,10 +44,10 @@ LibFolder::Ptr LibFolder::read_from(const db::IConnectionDriver::Ptr & db)
     db->get_column_content(2, virt_type);
     db->get_column_content(3, locked);
     db->get_column_content(4, expanded);
-    LibFolder::Ptr f(new LibFolder(id, name));
-    f->set_virtual_type((VirtualType)virt_type);
-    f->set_is_locked((bool)locked);
-    f->set_expanded((bool)expanded);
+    LibFolderPtr f(libfolder_new(id, name.c_str()));
+    engine_db_libfolder_set_virtual_type(f.get(), virt_type);
+    engine_db_libfolder_set_locked(f.get(), (bool)locked);
+    engine_db_libfolder_set_expanded(f.get(), (bool)expanded);
     return f;
 }
 

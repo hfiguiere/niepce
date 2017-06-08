@@ -129,16 +129,16 @@ public:
      * @param folder the folder path to check
      * @return the folder, NULL if not found
      */
-    LibFolder::Ptr getFolder(const std::string & folder);
+    LibFolderPtr getFolder(const std::string & folder);
 
     /** Add a folder
      * @param folder the folder path
      */
-    LibFolder::Ptr addFolder(const std::string & folder);
+    LibFolderPtr addFolder(const std::string & folder);
     /** List all the folders.
      * @param l the list of LibFolder
      */
-    void getAllFolders(const LibFolder::ListPtr & l);
+    void getAllFolders(const LibFolderListPtr & l);
 
     /** List the folder content
      * @param folder_id id of the folder

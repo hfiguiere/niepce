@@ -48,7 +48,7 @@ void Commands::cmdListAllKeywords(const Library::Ptr & lib)
 
 void Commands::cmdListAllFolders(const Library::Ptr & lib)
 {
-    LibFolder::ListPtr l(new LibFolder::List);
+    LibFolderListPtr l(new LibFolderList);
     lib->getAllFolders(l);
     /////
     // notify folder added l
@@ -67,14 +67,14 @@ void Commands::cmdImportFile(const Library::Ptr & lib,
 
     std::string folder = fwk::path_dirname(file_path);
 
-    LibFolder::Ptr pf = lib->getFolder(folder);
+    LibFolderPtr pf = lib->getFolder(folder);
     if(!pf) {
         pf = lib->addFolder(folder);
-        LibFolder::ListPtr l(new LibFolder::List);
+        LibFolderListPtr l(new LibFolderList);
         l->push_back(pf);
         lib->notify(LibNotification::make<LibNotification::Type::ADDED_FOLDERS>({l}));
     }
-    lib->addBundle(pf->id(), bundle, manage);
+    lib->addBundle(engine_db_libfolder_id(pf.get()), bundle, manage);
     lib->notify(LibNotification::make<LibNotification::Type::ADDED_FILES>({}));
 }
 
@@ -87,16 +87,16 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 
     FileBundle::ListPtr bundles = FileBundle::filter_bundles(files);
 
-    LibFolder::Ptr pf = lib->getFolder(folder);
+    LibFolderPtr pf = lib->getFolder(folder);
     if(!pf) {
         pf = lib->addFolder(folder);
-        LibFolder::ListPtr l( new LibFolder::List );
+        LibFolderListPtr l( new LibFolderList );
         l->push_back(pf);
         lib->notify(LibNotification::make<LibNotification::Type::ADDED_FOLDERS>({l}));
     }
     std::for_each(bundles->begin(), bundles->end(),
                   [&lib, &pf, manage] (const auto& fb) {
-                      lib->addBundle(pf->id(), fb, manage);
+                      lib->addBundle(engine_db_libfolder_id(pf.get()), fb, manage);
                   });
     lib->notify(LibNotification::make<LibNotification::Type::ADDED_FILES>({}));
 }
@@ -105,7 +105,7 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
                                      library_id_t folder_id)
 {
-    LibFile::ListPtr fl(new LibFile::List());
+    LibFile::ListPtr fl(new LibFile::List);
     lib->getFolderContent(folder_id, fl);
     lib->notify(LibNotification::make<LibNotification::Type::FOLDER_CONTENT_QUERIED>(
                     {folder_id, fl}));

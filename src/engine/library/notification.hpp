@@ -57,7 +57,7 @@ public:
     };
 
     struct AddedFolders {
-        LibFolder::ListPtr folders;
+        LibFolderListPtr folders;
     };
 
     struct AddedKeyword {

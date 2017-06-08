@@ -137,7 +137,7 @@ bool Library::_initDb()
         boost::format("insert into folders (name, locked, virtual, parent_id) "
                       " values ('%1%', 1, %2%, 0)")
         % _("Trash")
-        % int(LibFolder::VirtualType::TRASH));
+        % int(LibFolderVirtualType::TRASH));
     SQLStatement fileTable("CREATE TABLE files (id INTEGER PRIMARY KEY,"
                            " main_file INTEGER, name TEXT, parent_id INTEGER,"
                            " orientation INTEGER, file_type INTEGER, "
@@ -342,12 +342,12 @@ library_id_t Library::addFileAndFolder(const std::string & folder,
                                        const std::string & file,
                                        Managed manage)
 {
-    LibFolder::Ptr f;
+    LibFolderPtr f;
     f = getFolder(folder);
     if(f == NULL) {
         ERR_OUT("Folder %s not found", folder.c_str());
     }
-    return addFile(f ? f->id() : -1, file, manage);
+    return addFile(f ? engine_db_libfolder_id(f.get()) : -1, file, manage);
 }
 
 library_id_t Library::addBundle(library_id_t folder_id,
@@ -412,17 +412,17 @@ bool Library::addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id)
 }
 
 
-LibFolder::Ptr Library::getFolder(const std::string & folder)
+LibFolderPtr Library::getFolder(const std::string & folder)
 {
-    LibFolder::Ptr f;
+    LibFolderPtr f;
     SQLStatement sql(boost::format("SELECT %1% "
                                    "FROM folders WHERE path='%2%'")
-                     % LibFolder::read_db_columns() % folder);
+                     % libfolder_read_db_columns() % folder);
 
     try {
         if(m_dbdrv->execute_statement(sql)) {
             if(m_dbdrv->read_next_row()) {
-                f = LibFolder::read_from(m_dbdrv);
+                f = libfolder_read_from(m_dbdrv);
             }
         }
     }
@@ -434,9 +434,9 @@ LibFolder::Ptr Library::getFolder(const std::string & folder)
 }
 
 
-LibFolder::Ptr Library::addFolder(const std::string & folder)
+LibFolderPtr Library::addFolder(const std::string & folder)
 {
-    LibFolder::Ptr f;
+    LibFolderPtr f;
     SQLStatement sql(boost::format("INSERT INTO folders "
                                    "(path,name,vault_id,parent_id) "
                                    "VALUES('%1%', '%2%', '0', '0')")
@@ -445,8 +445,7 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
         if(m_dbdrv->execute_statement(sql)) {
             library_id_t id = m_dbdrv->last_row_id();
             DBG_OUT("last row inserted %Ld", (long long)id);
-            f = LibFolder::Ptr(new LibFolder(id,
-                                             fwk::path_basename(folder)));
+            f = libfolder_new(id, fwk::path_basename(folder).c_str());
         }
     }
     catch(fwk::Exception & e)
@@ -457,14 +456,14 @@ LibFolder::Ptr Library::addFolder(const std::string & folder)
 }
 
 
-void Library::getAllFolders(const LibFolder::ListPtr & l)
+void Library::getAllFolders(const LibFolderListPtr & l)
 {
     SQLStatement sql(boost::format("SELECT %1% FROM folders")
-                     % LibFolder::read_db_columns());
+                     % libfolder_read_db_columns());
     try {
         if(m_dbdrv->execute_statement(sql)) {
             while(m_dbdrv->read_next_row()) {
-                LibFolder::Ptr f = LibFolder::read_from(m_dbdrv);
+                LibFolderPtr f = libfolder_read_from(m_dbdrv);
                 l->push_back(f);
             }
         }

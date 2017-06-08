@@ -1,0 +1,133 @@
+/*
+ * niepce - eng/db/libfolder.rs
+ *
+ * Copyright (C) 2017 Hubert Figuière
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+use libc::c_char;
+use std::ffi::CStr;
+use std::ffi::CString;
+
+use super::LibraryId;
+
+#[repr(i32)]
+#[derive(Clone)]
+pub enum VirtualType {
+    NONE = 0,
+    TRASH = 1
+}
+
+pub struct LibFolder {
+    id: LibraryId,
+    name: String,
+    locked: bool,
+    expanded: bool,
+    virt: VirtualType,
+    cstr: CString,
+}
+
+impl LibFolder {
+    pub fn new(id: LibraryId, name: &str) -> LibFolder {
+        LibFolder {
+            id: id, name: String::from(name), locked: false,
+            expanded: false, virt: VirtualType::NONE,
+            cstr: CString::new("").unwrap(),
+        }
+    }
+
+    pub fn id(&self) -> LibraryId {
+        self.id
+    }
+
+    pub fn name(&self) -> &String {
+        &self.name
+    }
+
+    pub fn locked(&self) -> bool {
+        self.locked
+    }
+
+    pub fn set_locked(&mut self, locked: bool) {
+        self.locked = locked;
+    }
+
+    pub fn expanded(&self) -> bool {
+        self.expanded
+    }
+
+    pub fn set_expanded(&mut self, expanded: bool) {
+        self.expanded = expanded;
+    }
+
+    pub fn virtual_type(&self) -> VirtualType {
+        self.virt.to_owned()
+    }
+
+    pub fn set_virtual_type(&mut self, virt: VirtualType) {
+        self.virt = virt;
+    }
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_new(id: i64, name: *const c_char) -> *mut LibFolder {
+    let lf = Box::new(LibFolder::new(id, &*unsafe { CStr::from_ptr(name) }.to_string_lossy()));
+    Box::into_raw(lf)
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_delete(lf: *mut LibFolder) {
+    unsafe { Box::from_raw(lf) };
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_id(this: &LibFolder) -> i64 {
+    this.id() as i64
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_name(this: &mut LibFolder) -> *const c_char {
+    this.cstr = CString::new(this.name().clone()).unwrap();
+    this.cstr.as_ptr()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_virtual_type(this: &LibFolder) -> i32 {
+    this.virtual_type() as i32
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_expanded(this: &LibFolder) -> bool {
+    this.expanded
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_set_locked(this: &mut LibFolder, locked: bool) {
+    this.set_locked(locked);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_set_expanded(this: &mut LibFolder, expanded: bool) {
+    this.set_expanded(expanded);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfolder_set_virtual_type(this: &mut LibFolder, t: i32) {
+    this.set_virtual_type(match t {
+        0 => VirtualType::NONE,
+        1 => VirtualType::TRASH,
+        _ => VirtualType::NONE,
+    });
+}

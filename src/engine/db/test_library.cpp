@@ -43,31 +43,32 @@ int test_main(int, char *[])
 
     db::IConnectionDriver::Ptr db(lib.dbDriver());
 
-    eng::LibFolder::Ptr folder_added(lib.addFolder("foo"));
+    eng::LibFolderPtr folder_added(lib.addFolder("foo"));
     BOOST_CHECK(folder_added);
-    BOOST_CHECK(folder_added->id() > 0);
-    eng::LibFolder::Ptr f(lib.getFolder("foo"));
+    BOOST_CHECK(engine_db_libfolder_id(folder_added.get()) > 0);
+    eng::LibFolderPtr f(lib.getFolder("foo"));
     BOOST_CHECK(f);
-    BOOST_CHECK(f->id() == folder_added->id());
+    BOOST_CHECK(engine_db_libfolder_id(f.get()) == engine_db_libfolder_id(folder_added.get()));
     lib.addFolder("bar");
     BOOST_CHECK(lib.getFolder("bar"));
 
-    eng::LibFolder::ListPtr l( new eng::LibFolder::List );
-    lib.getAllFolders( l );
+    eng::LibFolderListPtr l(new eng::LibFolderList);
+    lib.getAllFolders(l);
     // now we have the Trash folder created at startup
-    BOOST_CHECK( l->size() == 3 );
+    BOOST_CHECK(l->size() == 3);
 
-    int file_id = lib.addFile(folder_added->id(), "foo/myfile", eng::Library::Managed::NO);
+    int file_id = lib.addFile(engine_db_libfolder_id(folder_added.get()),
+                              "foo/myfile", eng::Library::Managed::NO);
     BOOST_CHECK(file_id > 0);
 
     BOOST_CHECK(lib.moveFileToFolder(file_id, 100) == false);
-    BOOST_CHECK(lib.moveFileToFolder(file_id, folder_added->id()));
+    BOOST_CHECK(lib.moveFileToFolder(file_id, engine_db_libfolder_id(folder_added.get())));
 
-    int count = lib.countFolder(folder_added->id());
+    int count = lib.countFolder(engine_db_libfolder_id(folder_added.get()));
     BOOST_CHECK(count == 1);
 
     const eng::LibFile::ListPtr fl(new eng::LibFile::List);
-    lib.getFolderContent(folder_added->id(), fl);
+    lib.getFolderContent(engine_db_libfolder_id(folder_added.get()), fl);
     BOOST_CHECK(fl->size() == (size_t)count);
     BOOST_CHECK(fl->front()->id() == file_id);
 

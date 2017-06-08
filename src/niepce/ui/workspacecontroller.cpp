@@ -89,7 +89,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         auto l = ln.get<eng::LibNotification::Type::ADDED_FOLDERS>().folders;
         DBG_OUT("received added folders # %lu", l->size());
         for_each(l->cbegin(), l->cend(),
-                 [this] (const eng::LibFolder::Ptr& f) {
+                 [this] (const eng::LibFolderPtr& f) {
                      this->add_folder_item(f);
                  });
         break;
@@ -224,23 +224,24 @@ void WorkspaceController::add_keyword_item(const eng::KeywordPtr & k)
     }
 }
 
-void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
+void WorkspaceController::add_folder_item(const eng::LibFolderPtr & f)
 {
     int icon_idx = ICON_ROLL;
-    if(f->virtual_type() == eng::LibFolder::VirtualType::TRASH) {
+    if(engine_db_libfolder_virtual_type(f.get()) == (int32_t)eng::LibFolderVirtualType::TRASH) {
         icon_idx = ICON_TRASH;
-        getLibraryClient()->set_trash_id(f->id());
+        getLibraryClient()->set_trash_id(engine_db_libfolder_id(f.get()));
     }
     auto children = m_folderNode->children();
     bool was_empty = children.empty();
     auto iter = add_item(m_treestore, children,
                          m_icons[icon_idx],
-                         f->name(), f->id(), FOLDER_ITEM);
-    if(f->is_expanded()) {
+                         engine_db_libfolder_name(f.get()),
+                         engine_db_libfolder_id(f.get()), FOLDER_ITEM);
+    if(engine_db_libfolder_expanded(f.get())) {
         m_librarytree.expand_row(m_treestore->get_path(iter), false);
     }
-    getLibraryClient()->countFolder(f->id());
-    m_folderidmap[f->id()] = iter;
+    getLibraryClient()->countFolder(engine_db_libfolder_id(f.get()));
+    m_folderidmap[engine_db_libfolder_id(f.get())] = iter;
     // expand if needed. Because Gtk is stupid and doesn't expand empty
     if(was_empty) {
         expand_from_cfg("workspace_folders_expanded", m_folderNode);
