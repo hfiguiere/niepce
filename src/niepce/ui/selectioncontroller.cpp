@@ -68,9 +68,9 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
     fwk::AutoFlag f(m_in_handler);
     auto iter = m_imageliststore->get_iter(path);
     if(iter) {
-        eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+        eng::LibFilePtr file = (*iter)[m_imageliststore->columns().m_libfile];
         if(file) {
-            eng::library_id_t selection = file->id();
+            eng::library_id_t selection = engine_db_libfile_id(file.get());
             DBG_OUT("item activated %Ld", (long long)selection);
             signal_activated(selection);
         }
@@ -121,13 +121,13 @@ eng::library_id_t SelectionController::get_selection() const
     return selectable->get_selected();
 }
 
-eng::LibFile::Ptr SelectionController::get_file(eng::library_id_t id) const
+eng::LibFilePtr SelectionController::get_file(eng::library_id_t id) const
 {
     auto iter = m_imageliststore->get_iter_from_id(id);
     if(iter) {
         return (*iter)[m_imageliststore->columns().m_libfile];
     }
-    return eng::LibFile::Ptr();
+    return eng::LibFilePtr();
 }
 
 void SelectionController::_selection_move(bool backwards)
@@ -148,9 +148,9 @@ void SelectionController::_selection_move(bool backwards)
     }
     if(iter) {
         // make sure the iterator is valid...
-        eng::LibFile::Ptr libfile
+        eng::LibFilePtr libfile
             = (*iter)[m_imageliststore->columns().m_libfile];
-        selection = libfile->id();
+        selection = engine_db_libfile_id(libfile.get());
 
         fwk::AutoFlag f(m_in_handler);
 
@@ -192,7 +192,7 @@ void SelectionController::rotate(int angle)
 
 
 bool SelectionController::_set_metadata(const std::string & undo_label,
-                                        const eng::LibFile::Ptr & file,
+                                        const eng::LibFilePtr & file,
                                         fwk::PropertyIndex meta,
                                         int old_value, int new_value)
 {
@@ -200,7 +200,7 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         fwk::Application::app()->begin_undo(undo_label);
 
     auto libclient = getLibraryClient();
-    auto file_id = file->id();
+    auto file_id = engine_db_libfile_id(file.get());
     undo->new_command<void>(
         [libclient, file_id, meta, new_value] () {
             libclient->setMetadata(file_id, meta, fwk::PropertyValue(new_value));
@@ -213,7 +213,7 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 }
 
 bool SelectionController::_set_metadata(const std::string & undo_label,
-                                        const eng::LibFile::Ptr & file,
+                                        const eng::LibFilePtr& file,
                                         const fwk::PropertyBag & props,
                                         const fwk::PropertyBag & old)
 {
@@ -231,7 +231,7 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         }
 
         auto libclient = getLibraryClient();
-        auto file_id = file->id();
+        auto file_id = engine_db_libfile_id(file.get());
         auto key = iter.first;
         auto new_value = iter.second;
         undo->new_command<void>(
@@ -269,9 +269,9 @@ void SelectionController::set_property(fwk::PropertyIndex idx, int value)
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            DBG_OUT("old property is %d", file->property(idx));
-            int old_value = file->property(idx);
+            eng::LibFilePtr file = (*iter)[m_imageliststore->columns().m_libfile];
+            DBG_OUT("old property is %d", engine_db_libfile_property(file.get(), idx));
+            int32_t old_value = engine_db_libfile_property(file.get(), idx);
             const char *action = nullptr;
             switch(idx) {
             case eng::NpNiepceFlagProp:
@@ -290,9 +290,9 @@ void SelectionController::set_property(fwk::PropertyIndex idx, int value)
             _set_metadata(action, file, idx, old_value, value);
             // we need to set the property here so that undo/redo works
             // consistently.
-            file->setProperty(idx, value);
+            engine_db_libfile_set_property(file.get(), idx, value);
         }
-    }    
+    }
 }
 
 void SelectionController::set_properties(const fwk::PropertyBag & props,
@@ -302,7 +302,7 @@ void SelectionController::set_properties(const fwk::PropertyBag & props,
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
+            eng::LibFilePtr file = (*iter)[m_imageliststore->columns().m_libfile];
             _set_metadata(_("Set Properties"), file, props, old);
         }
     }
@@ -323,8 +323,8 @@ void SelectionController::move_to_trash()
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
         if(iter) {
-            eng::LibFile::Ptr file = (*iter)[m_imageliststore->columns().m_libfile];
-            eng::library_id_t from_folder = file->folderId();
+            eng::LibFilePtr file = (*iter)[m_imageliststore->columns().m_libfile];
+            eng::library_id_t from_folder = engine_db_libfile_folderid(file.get());
             std::shared_ptr<fwk::UndoTransaction> undo =
                 fwk::Application::app()->begin_undo(_("Move to Trash"));
 

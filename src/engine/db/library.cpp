@@ -278,8 +278,8 @@ library_id_t Library::addFile(library_id_t folder_id, const std::string & file, 
         library_id_t label_id;
         std::string label;
         fwk::MimeType mime = fwk::MimeType(file);
-        eng::LibFile::FileType file_type = eng::LibFile::mimetype_to_filetype(mime);
-        fwk::XmpMeta meta(file, file_type == eng::LibFile::FileType::RAW);
+        eng::LibFileType file_type = eng::mimetype_to_filetype(mime);
+        fwk::XmpMeta meta(file, file_type == eng::LibFileType::RAW);
         label_id = 0;
         orientation = meta.orientation();
         rating = meta.rating();
@@ -400,7 +400,7 @@ bool Library::addJpegFileToBundle(library_id_t file_id, library_id_t fsfile_id)
                                    " file_type='%3%' "
                                    " WHERE id='%1%';")
                      % file_id % fsfile_id
-                     % static_cast<int>(LibFile::FileType::RAW_JPEG));
+                     % static_cast<int>(LibFileType::RAW_JPEG));
     try {
         return m_dbdrv->execute_statement(sql);
     }
@@ -474,7 +474,7 @@ void Library::getAllFolders(const LibFolderListPtr & l)
     }
 }
 
-static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
+static LibFilePtr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
 {
     library_id_t id;
     library_id_t fid;
@@ -488,27 +488,27 @@ static LibFile::Ptr getFileFromDbRow(const db::IConnectionDriver::Ptr & dbdrv)
     dbdrv->get_column_content(3, name);
     dbdrv->get_column_content(8, fsfid);
     DBG_OUT("found %s", pathname.c_str());
-    LibFile::Ptr f(new LibFile(id, fid, fsfid,
-                               pathname, name));
+    LibFilePtr f(libfile_new(id, fid, fsfid,
+                             pathname.c_str(), name.c_str()));
     int32_t val;
     dbdrv->get_column_content(4, val);
-    f->setOrientation(val);
+    engine_db_libfile_set_orientation(f.get(), val);
     dbdrv->get_column_content(5, val);
-    f->setRating(val);
+    engine_db_libfile_set_rating(f.get(), val);
     dbdrv->get_column_content(6, val);
-    f->setLabel(val);
+    engine_db_libfile_set_label(f.get(), val);
     dbdrv->get_column_content(9, val);
-    f->setFlag(val);
+    engine_db_libfile_set_flag(f.get(), val);
 
     /* Casting needed. Remember that a simple enum like this is just a couple
      * of #define for integers.
      */
     dbdrv->get_column_content(7, val);
-    f->setFileType((eng::LibFile::FileType)val);
+    engine_db_libfile_set_file_type(f.get(),(eng::LibFileType)val);
     return f;
 }
 
-void Library::getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl)
+void Library::getFolderContent(library_id_t folder_id, const LibFileListPtr & fl)
 {
     SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
                                    "name,"
@@ -521,7 +521,7 @@ void Library::getFolderContent(library_id_t folder_id, const LibFile::ListPtr & 
     try {
         if(m_dbdrv->execute_statement(sql)) {
             while(m_dbdrv->read_next_row()) {
-                LibFile::Ptr f(getFileFromDbRow(m_dbdrv));
+                LibFilePtr f(getFileFromDbRow(m_dbdrv));
                 fl->push_back(f);
             }
         }
@@ -645,7 +645,7 @@ bool Library::assignKeyword(library_id_t kw_id, library_id_t file_id)
 }
 
 
-void Library::getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl)
+void Library::getKeywordContent(library_id_t keyword_id, const LibFileListPtr & fl)
 {
     SQLStatement sql(boost::format("SELECT files.id,parent_id,fsfiles.path,"
                                    "name,orientation,rating,label,file_type,"
@@ -659,7 +659,7 @@ void Library::getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr 
     try {
         if(m_dbdrv->execute_statement(sql)) {
             while(m_dbdrv->read_next_row()) {
-                LibFile::Ptr f(getFileFromDbRow(m_dbdrv));
+                LibFilePtr f(getFileFromDbRow(m_dbdrv));
                 fl->push_back(f);
             }
         }

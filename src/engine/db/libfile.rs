@@ -1,0 +1,250 @@
+/*
+ * niepce - eng/db/libfile.rs
+ *
+ * Copyright (C) 2017 Hubert Figuière
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+use libc::c_char;
+use std::ffi::CStr;
+use std::ffi::CString;
+use std::mem::transmute;
+use std::path::{Path, PathBuf};
+
+use super::LibraryId;
+use super::fsfile::FsFile;
+use fwk::base::PropertyIndex;
+use root::eng::NiepceProperties as Np;
+
+#[repr(i32)]
+#[allow(non_camel_case_types)]
+#[derive(Clone)]
+pub enum FileType {
+    UNKNOWN = 0,
+    RAW = 1,
+    RAW_JPEG = 2,
+    IMAGE = 3,
+    VIDEO = 4
+}
+
+pub struct LibFile {
+    id: LibraryId,
+    folder_id: LibraryId,
+    name: String,
+    pub cstr: CString,
+    main_file: FsFile,
+    orientation: i32,
+    rating: i32,
+    label: i32,
+    flag: i32,
+    file_type: FileType,
+}
+
+impl LibFile {
+
+    pub fn new(id: LibraryId, folder_id: LibraryId, fs_file_id: LibraryId,
+               path: PathBuf, name: &str) -> LibFile {
+        let main_file = FsFile::new(fs_file_id, path);
+        LibFile {
+            id: id, folder_id: folder_id,
+            name: String::from(name),
+            cstr: CString::new("").unwrap(),
+            main_file: main_file, orientation: 0,
+            rating: 0, label: 0, flag: 0,
+            file_type: FileType::UNKNOWN,
+        }
+    }
+
+    pub fn id(&self) -> LibraryId {
+        self.id
+    }
+
+    pub fn folder_id(&self) -> LibraryId {
+        self.folder_id
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn path(&self) -> &Path {
+        self.main_file.path()
+    }
+
+    pub fn orientation(&self) -> i32 {
+        self.orientation
+    }
+    pub fn set_orientation(&mut self, o: i32) {
+        self.orientation = o;
+    }
+
+    pub fn rating(&self) -> i32 {
+        self.rating
+    }
+    pub fn set_rating(&mut self, r: i32) {
+        self.rating = r;
+    }
+
+    pub fn label(&self) -> i32 {
+        self.label
+    }
+    pub fn set_label(&mut self, l: i32) {
+        self.label = l;
+    }
+
+    pub fn flag(&self) -> i32 {
+        self.flag
+    }
+    pub fn set_flag(&mut self, f: i32) {
+        self.flag = f;
+    }
+
+    pub fn file_type(&self) -> FileType {
+        self.file_type.to_owned()
+    }
+    pub fn set_file_type(&mut self, ft: FileType) {
+        self.file_type = ft;
+    }
+
+    pub fn property(&self, idx: Np) -> i32 {
+        match idx {
+            Np::NpTiffOrientationProp =>
+                self.orientation(),
+            Np::NpXmpRatingProp =>
+                self.rating(),
+            Np::NpXmpLabelProp =>
+                self.label(),
+            Np::NpNiepceFlagProp =>
+                self.flag(),
+            _ =>
+                -1,
+        }
+    }
+
+    pub fn set_property(&mut self, idx: Np, value: i32) {
+        match idx {
+            Np::NpTiffOrientationProp =>
+                self.set_orientation(value),
+            Np::NpXmpRatingProp =>
+                self.set_rating(value),
+            Np::NpXmpLabelProp =>
+                self.set_label(value),
+            Np::NpNiepceFlagProp =>
+                self.set_flag(value),
+            _ =>
+                (),
+        };
+    }
+
+    /// return an URI of the real path as Glib want this, oftern
+    pub fn uri(&self) -> String {
+        let mut s = String::from("file://");
+        s.push_str(&*self.main_file.path().to_string_lossy());
+        s
+    }
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_new(id: LibraryId, folder_id: LibraryId,
+                                    fs_file_id: LibraryId, path: *const c_char,
+                                    name: *const c_char) -> *mut LibFile {
+    let lf = Box::new(
+        LibFile::new(id, folder_id, fs_file_id,
+                     PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy()),
+                     &*unsafe { CStr::from_ptr(name) }.to_string_lossy())
+            );
+    Box::into_raw(lf)
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_delete(lf: *mut LibFile) {
+    unsafe { Box::from_raw(lf) };
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_path(this: &mut LibFile) -> *const c_char {
+    this.cstr = CString::new(this.path().to_str().unwrap_or("")).unwrap();
+    this.cstr.as_ptr()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_id(this: &LibFile) -> LibraryId {
+    this.id()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_folderid(this: &LibFile) -> LibraryId {
+    this.folder_id()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_orientation(this: &LibFile) -> i32 {
+    this.orientation()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_rating(this: &LibFile) -> i32 {
+    this.rating()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_label(this: &LibFile) -> i32 {
+    this.label()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_flag(this: &LibFile) -> i32 {
+    this.flag()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_property(this: &LibFile, idx: PropertyIndex) -> i32 {
+    this.property(unsafe { transmute(idx) })
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_file_type(this: &LibFile) -> FileType {
+    this.file_type()
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_orientation(this: &mut LibFile, o: i32) {
+    this.set_orientation(o);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_rating(this: &mut LibFile, r: i32) {
+    this.set_rating(r);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_label(this: &mut LibFile, l: i32) {
+    this.set_label(l);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_flag(this: &mut LibFile, f: i32) {
+    this.set_flag(f);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_property(this: &mut LibFile, idx: PropertyIndex, v: i32) {
+    this.set_property(unsafe { transmute(idx) }, v);
+}
+
+#[no_mangle]
+pub extern fn engine_db_libfile_set_file_type(this: &mut LibFile, t: FileType) {
+    this.set_file_type(t);
+}

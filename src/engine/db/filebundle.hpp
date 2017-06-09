@@ -38,9 +38,9 @@ public:
     typedef std::shared_ptr<List> ListPtr;
 
     FileBundle()
-        : m_type(LibFile::FileType::UNKNOWN)
+        : m_type(LibFileType::UNKNOWN)
         { }
-    LibFile::FileType type() const
+    LibFileType type() const
         { return m_type; }
 
     /** add a file to a bundle. Will determine what type it is. 
@@ -56,7 +56,7 @@ public:
     
     static ListPtr filter_bundles(const fwk::FileList::Ptr & files);
 private:
-    LibFile::FileType m_type;
+    LibFileType m_type;
     std::string m_main;
     std::string m_xmp_sidecar;
     std::string m_jpeg;

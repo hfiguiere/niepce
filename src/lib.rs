@@ -23,3 +23,4 @@ extern crate libc;
 pub mod fwk;
 pub mod engine;
 
+include!(concat!(env!("OUT_DIR"), "/bindings.rs"));

@@ -46,15 +46,15 @@ void DarkroomModule::reload_image()
     if(!m_need_reload) {
         return;
     }
-    eng::LibFile::Ptr file = m_imagefile.lock();
+    eng::LibFilePtr file = m_imagefile.lock();
     if(file) {
         // currently we treat RAW + JPEG as RAW.
         // TODO: have a way to actually choose the JPEG.
-        bool isRaw = (file->fileType() == eng::LibFile::FileType::RAW)
-            || (file->fileType() == eng::LibFile::FileType::RAW_JPEG);
-        const std::string& path = file->path();
-        m_image->reload(path, isRaw,
-                        file->orientation());
+        auto file_type = engine_db_libfile_file_type(file.get());
+        bool isRaw = (file_type == eng::LibFileType::RAW)
+            || (file_type == eng::LibFileType::RAW_JPEG);
+        std::string path = engine_db_libfile_path(file.get());
+        m_image->reload(path, isRaw, engine_db_libfile_orientation(file.get()));
     }
     else {
         // reset
@@ -65,10 +65,10 @@ void DarkroomModule::reload_image()
     m_need_reload = false;
 }
 
-void DarkroomModule::set_image(const eng::LibFile::Ptr & file)
+void DarkroomModule::set_image(const eng::LibFilePtr & file)
 {
     if(m_imagefile.expired() || (file != m_imagefile.lock())) {
-        m_imagefile = eng::LibFile::WeakPtr(file);
+        m_imagefile = eng::LibFileWeakPtr(file);
         m_need_reload = true;
     }
     else if(!static_cast<bool>(file)) {

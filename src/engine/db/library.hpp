@@ -144,10 +144,10 @@ public:
      * @param folder_id id of the folder
      * @param fl the resulting file list
      */
-    void getFolderContent(library_id_t folder_id, const LibFile::ListPtr & fl);
+    void getFolderContent(library_id_t folder_id, const LibFileListPtr & fl);
     int countFolder(library_id_t folder_id);
     void getAllKeywords(const KeywordListPtr & l);
-    void getKeywordContent(library_id_t keyword_id, const LibFile::ListPtr & fl);
+    void getKeywordContent(library_id_t keyword_id, const LibFileListPtr & fl);
     /** get the metadata block (XMP) */
     void getMetaData(library_id_t file_id, const LibMetadata::Ptr & );
     /** set the metadata block (XMP) */

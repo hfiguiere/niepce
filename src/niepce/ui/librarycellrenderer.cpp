@@ -213,7 +213,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     r.x += xpad;
     r.y += ypad;
 
-    eng::LibFile::Ptr file = m_libfileproperty.get_value();
+    eng::LibFilePtr file = m_libfileproperty.get_value();
 
     Glib::RefPtr<Gtk::StyleContext> style_context = widget.get_style_context();
 
@@ -237,31 +237,31 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         double x, y;
         x = r.x + CELL_PADDING;
         y = r.y + r.height - CELL_PADDING;
-        fwk::RatingLabel::draw_rating(cr, file->rating(), 
-                                      fwk::RatingLabel::get_star(), 
+        fwk::RatingLabel::draw_rating(cr, engine_db_libfile_rating(file.get()),
+                                      fwk::RatingLabel::get_star(),
                                       fwk::RatingLabel::get_unstar(), x, y);
     }
     if(m_drawflag) {
         double x, y;
         x = r.x + r.width - CELL_PADDING;
         y = r.y + CELL_PADDING;
-        _drawFlag(cr, file->flag(), x, y);
+        _drawFlag(cr, engine_db_libfile_flag(file.get()), x, y);
     }
-    
+
     if(m_drawemblem) {
         Cairo::RefPtr<Cairo::ImageSurface> emblem;
-        
-        switch(file->fileType()) {
-        case eng::LibFile::FileType::RAW:
+
+        switch(engine_db_libfile_file_type(file.get())) {
+        case eng::LibFileType::RAW:
             emblem = m_raw_format_emblem;
             break;
-        case eng::LibFile::FileType::RAW_JPEG:
+        case eng::LibFileType::RAW_JPEG:
             emblem = m_rawjpeg_format_emblem;
             break;
-        case eng::LibFile::FileType::IMAGE:
+        case eng::LibFileType::IMAGE:
             emblem = m_img_format_emblem;
             break;
-        case eng::LibFile::FileType::VIDEO:
+        case eng::LibFileType::VIDEO:
             emblem = m_video_format_emblem;
             break;
         default:
@@ -271,7 +271,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 
         int left = drawFormatEmblem(cr, emblem, r);
         if(m_drawlabel) {
-            uint32_t label_id = file->label();
+            uint32_t label_id = engine_db_libfile_label(file.get());
             if(label_id != 0) {
                 auto result = m_shell.get_ui_data_provider()->colourForLabel(label_id);
                 DBG_ASSERT(!result.empty(), "colour not found");
@@ -322,24 +322,24 @@ LibraryCellRenderer::activate_vfunc(GdkEvent * /*event*/, Gtk::Widget & ,
         // hit test for the rating value
         int new_rating = fwk::RatingLabel::rating_value_from_hit_x(x - rect.x);
         DBG_OUT("new_rating %d", new_rating);
-        eng::LibFile::Ptr file = m_libfileproperty.get_value();
-        if(file->rating() != new_rating) {
+        eng::LibFilePtr file = m_libfileproperty.get_value();
+        if (engine_db_libfile_rating(file.get()) != new_rating) {
             // emit if changed
-            signal_rating_changed.emit(file->id(), new_rating);
+            signal_rating_changed.emit(engine_db_libfile_id(file.get()), new_rating);
         }
         return true;
     }
     return false;
 }
 
-Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr>
+Glib::PropertyProxy_ReadOnly<eng::LibFilePtr>
 LibraryCellRenderer::property_libfile() const
 {
-    return Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr>(this, "libfile");
+    return Glib::PropertyProxy_ReadOnly<eng::LibFilePtr>(this, "libfile");
 }
 
 
-Glib::PropertyProxy<eng::LibFile::Ptr>
+Glib::PropertyProxy<eng::LibFilePtr>
 LibraryCellRenderer::property_libfile()
 {
     return m_libfileproperty.get_proxy();

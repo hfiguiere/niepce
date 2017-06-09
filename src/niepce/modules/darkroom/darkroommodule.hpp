@@ -50,7 +50,7 @@ public:
 
     DarkroomModule(const ui::IModuleShell & shell);
 
-    void set_image(const eng::LibFile::Ptr & file);
+    void set_image(const eng::LibFilePtr & file);
 
     virtual void dispatch_action(const std::string & action_name) override;
 
@@ -75,7 +75,7 @@ private:
     Gtk::ScrolledWindow          m_canvas_scroll;
     ToolboxController::Ptr       m_toolbox_ctrl;
     Glib::RefPtr<Gio::ActionGroup> m_actionGroup;
-    eng::LibFile::WeakPtr        m_imagefile;
+    eng::LibFileWeakPtr        m_imagefile;
     ncr::Image::Ptr              m_image;
     fwk::Dock                   *m_dock;
 

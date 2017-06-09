@@ -44,7 +44,7 @@ ThumbnailCache::~ThumbnailCache()
 {
 }
 
-void ThumbnailCache::request(const LibFile::ListPtr & fl)
+void ThumbnailCache::request(const LibFileListPtr & fl)
 {
     clear();
     std::for_each(fl->begin(), fl->end(),
@@ -56,11 +56,11 @@ void ThumbnailCache::request(const LibFile::ListPtr & fl)
 
 namespace {
 
-fwk::Thumbnail getThumbnail(const LibFile::Ptr & f, int w, int h, const std::string & cached)
+fwk::Thumbnail getThumbnail(const LibFilePtr & f, int w, int h, const std::string & cached)
 {
-    const std::string & filename = f->path();
+    std::string filename = engine_db_libfile_path(f.get());
 
-    if(ThumbnailCache::is_thumbnail_cached(f->path(), cached)) {
+    if (ThumbnailCache::is_thumbnail_cached(filename, cached)) {
         DBG_OUT("thumbnail for %s is cached!", filename.c_str());
         return Gdk::Pixbuf::create_from_file(cached);
     }
@@ -71,7 +71,8 @@ fwk::Thumbnail getThumbnail(const LibFile::Ptr & f, int w, int h, const std::str
         ERR_OUT("coudln't create directories for %s", cached.c_str());
     }
 
-    auto thumbnail = fwk::Thumbnail::thumbnail_file(filename, w, h, f->orientation());
+    auto thumbnail = fwk::Thumbnail::thumbnail_file(filename, w, h,
+                                                    engine_db_libfile_orientation(f.get()));
     if (thumbnail.ok()) {
         thumbnail.save(cached, "png");
     } else {
@@ -88,7 +89,9 @@ void ThumbnailCache::execute(const ptr_t & task)
     w = task->width();
     h = task->height();
 
-    std::string dest = path_for_thumbnail(task->file()->path(), task->file()->id(), std::max(w,h));
+    std::string dest = path_for_thumbnail(
+        engine_db_libfile_path(task->file().get()),
+        engine_db_libfile_id(task->file().get()), std::max(w,h));
     DBG_OUT("cached thumbnail %s", dest.c_str());
 
     fwk::Thumbnail pix = getThumbnail(task->file(), w, h, dest);
@@ -99,7 +102,8 @@ void ThumbnailCache::execute(const ptr_t & task)
     if(nc) {
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
-        ThumbnailNotification tn{task->file()->id(), pix.get_width(), pix.get_height(), pix};
+        ThumbnailNotification tn{ engine_db_libfile_id(task->file().get()),
+                pix.get_width(), pix.get_height(), pix };
         n->setData(boost::any(tn));
         DBG_OUT("notify thumbnail for id=%Ld", (long long)tn.id);
         nc->post(std::move(n));

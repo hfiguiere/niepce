@@ -38,21 +38,21 @@ FileBundle::add(const std::string & path)
         if(mime_type.isDigicamRaw()) {
             if(!m_main.empty() && m_jpeg.empty()) {
                 m_jpeg = m_main;
-                m_type = LibFile::FileType::RAW_JPEG;
+                m_type = LibFileType::RAW_JPEG;
             }
             else {
-                m_type = LibFile::FileType::RAW;
+                m_type = LibFileType::RAW;
             }
             m_main = path;
         }
         else {
             if(!m_main.empty()) {
                 m_jpeg = path;
-                m_type = LibFile::FileType::RAW_JPEG;
+                m_type = LibFileType::RAW_JPEG;
             }
             else {
                 m_main = path;
-                m_type = LibFile::FileType::IMAGE;
+                m_type = LibFileType::IMAGE;
             }
         }
     }
@@ -61,7 +61,7 @@ FileBundle::add(const std::string & path)
     }
     else if(mime_type.isMovie()) {
         m_main = path;
-        m_type = LibFile::FileType::VIDEO;
+        m_type = LibFileType::VIDEO;
     }
     else {
         DBG_OUT("Unkown file %s of type %s\n", path.c_str(), 

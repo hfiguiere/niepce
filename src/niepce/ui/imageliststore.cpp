@@ -107,9 +107,9 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         // clear the map before the list.
         m_idmap.clear();
         clear();
-        eng::LibFile::List::const_iterator iter = l->begin();
+        eng::LibFileList::const_iterator iter = l->begin();
         for_each(l->begin(), l->end(),
-                 [this](const eng::LibFile::Ptr & f) {
+                 [this] (const eng::LibFilePtr & f) {
                      Gtk::TreeModel::iterator riter = append();
                      Gtk::TreeRow row = *riter;
                      Glib::RefPtr<Gdk::Pixbuf> icon = get_loading_icon();
@@ -117,7 +117,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
                      row[m_columns.m_libfile] = f;
                      row[m_columns.m_strip_thumb]
                          = fwk::gdkpixbuf_scale_to_fit(icon, 100);
-                     m_idmap[f->id()] = riter;
+                     m_idmap[engine_db_libfile_id(f.get())] = riter;
                  });
         // at that point clear the cache because the icon view is populated.
         getLibraryClient()->thumbnailCache().request(l);
@@ -152,8 +152,8 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             if(iter != m_idmap.end()) {
                 Gtk::TreeRow row = *(iter->second);
                 //
-                eng::LibFile::Ptr file = row[m_columns.m_libfile];
-                file->setProperty(prop, boost::get<int>(m.value));
+                eng::LibFilePtr file = row[m_columns.m_libfile];
+                engine_db_libfile_set_property(file.get(), prop, boost::get<int32_t>(m.value));
                 row[m_columns.m_libfile] = file;
             }
         }

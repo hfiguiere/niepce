@@ -105,7 +105,7 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
 void Commands::cmdQueryFolderContent(const Library::Ptr & lib,
                                      library_id_t folder_id)
 {
-    LibFile::ListPtr fl(new LibFile::List);
+    LibFileListPtr fl(new LibFileList);
     lib->getFolderContent(folder_id, fl);
     lib->notify(LibNotification::make<LibNotification::Type::FOLDER_CONTENT_QUERIED>(
                     {folder_id, fl}));
@@ -122,7 +122,7 @@ void Commands::cmdCountFolder(const Library::Ptr & lib,
 void Commands::cmdQueryKeywordContent(const Library::Ptr & lib,
                                       library_id_t keyword_id)
 {
-    LibFile::ListPtr fl(new LibFile::List());
+    LibFileListPtr fl(new LibFileList);
     lib->getKeywordContent(keyword_id, fl);
     lib->notify(LibNotification::make<LibNotification::Type::KEYWORD_CONTENT_QUERIED>(
                     {keyword_id, fl}));

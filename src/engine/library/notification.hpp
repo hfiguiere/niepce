@@ -80,7 +80,7 @@ public:
 
     struct QueriedContent {
         library_id_t container;
-        LibFile::ListPtr files;
+        LibFileListPtr files;
     };
 
     struct MetadataContent {

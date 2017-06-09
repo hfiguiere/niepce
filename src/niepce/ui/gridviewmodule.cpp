@@ -157,9 +157,9 @@ eng::library_id_t GridViewModule::get_selected()
         Gtk::TreeRow row = *(m_model->get_iter(path));
         if(row) {
             DBG_OUT("found row");
-            eng::LibFile::Ptr libfile = row[m_model->columns().m_libfile];
+            eng::LibFilePtr libfile = row[m_model->columns().m_libfile];
             if(libfile) {
-                id = libfile->id();
+                id = engine_db_libfile_id(libfile.get());
             }
         }
     }

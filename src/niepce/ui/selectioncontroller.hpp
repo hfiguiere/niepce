@@ -109,18 +109,18 @@ public:
      *  todo: change it to support multiple
      */
     eng::library_id_t get_selection() const;
-    eng::LibFile::Ptr get_file(eng::library_id_t id) const;
+    eng::LibFilePtr get_file(eng::library_id_t id) const;
 protected:
     virtual void _added() override;
 private:
     libraryclient::LibraryClientPtr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label,
-                       const eng::LibFile::Ptr & file,
+                       const eng::LibFilePtr& file,
                        fwk::PropertyIndex meta,
                        int old_value, int new_value);
     bool _set_metadata(const std::string & undo_label,
-                       const eng::LibFile::Ptr & file,
+                       const eng::LibFilePtr& file,
                        const fwk::PropertyBag & props,
                        const fwk::PropertyBag & old);
     /** move the selection and emit the signal

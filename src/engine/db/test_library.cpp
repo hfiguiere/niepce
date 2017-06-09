@@ -67,10 +67,10 @@ int test_main(int, char *[])
     int count = lib.countFolder(engine_db_libfolder_id(folder_added.get()));
     BOOST_CHECK(count == 1);
 
-    const eng::LibFile::ListPtr fl(new eng::LibFile::List);
+    const eng::LibFileListPtr fl(new eng::LibFileList);
     lib.getFolderContent(engine_db_libfolder_id(folder_added.get()), fl);
     BOOST_CHECK(fl->size() == (size_t)count);
-    BOOST_CHECK(fl->front()->id() == file_id);
+    BOOST_CHECK(engine_db_libfile_id(fl->front().get()) == file_id);
 
     int kwid1 = lib.makeKeyword("foo");
     BOOST_CHECK(kwid1 > 0);
@@ -85,10 +85,10 @@ int test_main(int, char *[])
     BOOST_CHECK(lib.assignKeyword(kwid1, file_id));
     BOOST_CHECK(lib.assignKeyword(kwid2, file_id));
 
-    eng::LibFile::ListPtr fl2(new eng::LibFile::List);
+    eng::LibFileListPtr fl2(new eng::LibFileList);
     lib.getKeywordContent(kwid1, fl2);
     BOOST_CHECK(fl2->size() == 1);
-    BOOST_CHECK(fl2->front()->id() == file_id);
+    BOOST_CHECK(engine_db_libfile_id(fl2->front().get()) == file_id);
 
     eng::KeywordListPtr kl(new eng::KeywordList);
     lib.getAllKeywords(kl);

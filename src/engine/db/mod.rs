@@ -19,6 +19,7 @@
 
 pub mod fsfile;
 pub mod keyword;
+pub mod libfile;
 pub mod libfolder;
 
 pub type LibraryId = i64;

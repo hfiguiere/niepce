@@ -41,7 +41,7 @@ libniepceengine_a_SOURCES = \
 	db/libmetadata.hpp db/libmetadata.cpp \
 	db/keyword.hpp db/keyword.cpp \
 	db/storage.hpp \
-	db/fsfile.hpp db/fsfile.cpp \
+	db/fsfile.hpp \
 	db/filebundle.hpp db/filebundle.cpp \
 	db/metadata.hpp \
 	db/properties.hpp db/properties.cpp \

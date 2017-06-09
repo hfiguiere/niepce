@@ -1,8 +1,22 @@
+/*
+ * niepce - engine/db/fsfile.rs
+ *
+ * Copyright (C) 2017 Hubert Figuière
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-
-use libc::c_char;
-use std::ffi::CStr;
-use std::ffi::CString;
 use std::path::{ Path, PathBuf };
 
 use super::LibraryId;
@@ -11,7 +25,6 @@ use super::LibraryId;
 pub struct FsFile {
     id: LibraryId,
     path: PathBuf,
-    pub cstr: CString,
 }
 
 impl FsFile {
@@ -19,7 +32,6 @@ impl FsFile {
     pub fn new(id: LibraryId, path: PathBuf) -> FsFile {
         FsFile {
             id: id, path: path,
-            cstr: CString::new("").unwrap(),
         }
     }
 
@@ -30,22 +42,4 @@ impl FsFile {
     pub fn path(&self) -> &Path {
         self.path.as_path()
     }
-}
-
-#[no_mangle]
-pub extern fn engine_db_fsfile_new(id: i64, name: *const c_char) -> *mut FsFile {
-    let path = PathBuf::from(&*unsafe { CStr::from_ptr(name) }.to_string_lossy());
-    let lf = Box::new(FsFile::new(id, path));
-    Box::into_raw(lf)
-}
-
-#[no_mangle]
-pub extern fn engine_db_fsfile_delete(lf: *mut FsFile) {
-    unsafe { Box::from_raw(lf) };
-}
-
-#[no_mangle]
-pub extern fn engine_db_fsfile_path(this: &mut FsFile) -> *const c_char {
-    this.cstr = CString::new(&*this.path().to_string_lossy()).unwrap();
-    this.cstr.as_ptr()
 }

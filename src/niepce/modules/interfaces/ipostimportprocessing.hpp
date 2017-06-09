@@ -17,7 +17,7 @@ class IPostImportProcessing
 public:
   static const char * IFACE_NAME;
 
-  virtual void post_process_image(const eng::LibFile::Ptr & file) = 0;
+  virtual void post_process_image(const eng::LibFilePtr & file) = 0;
 };
 
 }

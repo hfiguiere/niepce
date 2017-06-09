@@ -73,9 +73,9 @@ eng::library_id_t FilmStripController::get_selected()
     Gtk::TreeRow row = *(m_store->get_iter(path));
     if(row) {
         DBG_OUT("found row");
-        eng::LibFile::Ptr libfile = row[m_store->columns().m_libfile];
+        eng::LibFilePtr libfile = row[m_store->columns().m_libfile];
         if(libfile) {
-            id = libfile->id();
+            id = engine_db_libfile_id(libfile.get());
         }
     }
 

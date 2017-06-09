@@ -35,18 +35,18 @@ class ThumbnailTask
 public:
     typedef std::unique_ptr<ThumbnailTask> Ptr;
 
-    ThumbnailTask(const LibFile::Ptr & f, int w, int h)
+    ThumbnailTask(const LibFilePtr & f, int w, int h)
         : m_file(f), m_width(w), m_height(h)
         { }
 
-    const LibFile::Ptr & file()
+    const LibFilePtr & file()
         { return m_file; }
     int width() const
         { return m_width; }
     int height() const
         { return m_height; }
 private:
-    const LibFile::Ptr m_file;
+    const LibFilePtr m_file;
     int m_width;
     int m_height;
 };
@@ -60,7 +60,7 @@ public:
                    const fwk::NotificationCenter::Ptr & nc);
     ~ThumbnailCache();
 
-    void request(const LibFile::ListPtr & fl);
+    void request(const LibFileListPtr & fl);
 
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 

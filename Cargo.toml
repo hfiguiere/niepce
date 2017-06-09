@@ -9,6 +9,10 @@ sqlite = "0.23.4"
 exempi = "2.4.1"
 #gphoto = "0.1.1"
 
+[build-dependencies]
+# We need git master as currently it the crate version fail on shared_ptr<>
+bindgen = { git = "https://github.com/servo/rust-bindgen.git" }
+
 [lib]
 name = "niece_rust"
 crate-type = ["staticlib"]
