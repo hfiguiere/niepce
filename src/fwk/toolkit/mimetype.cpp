@@ -28,18 +28,23 @@
 
 namespace fwk {
 
+MimeType::MimeType(const char* filename)
+    : MimeType(std::string(filename))
+{
+}
+
 MimeType::MimeType(const std::string & filename)
     : m_name(filename)
 {
     try {
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
-        m_fileinfo = file->query_info();
-        m_type = m_fileinfo->get_content_type();
+        auto fileinfo = file->query_info();
+        m_type = fileinfo->get_content_type();
     }
     catch(const Glib::Exception &e) {
         gboolean uncertainty = false;
         gchar *content_type = g_content_type_guess(filename.c_str(),
-                                                         nullptr, 0, &uncertainty);
+                                                   nullptr, 0, &uncertainty);
         m_type = content_type;
 
         g_free(content_type);
@@ -49,14 +54,14 @@ MimeType::MimeType(const std::string & filename)
 MimeType::MimeType(const Glib::RefPtr<Gio::File> & file)
 {
     DBG_ASSERT(static_cast<bool>(file), "file can't be NULL");
-    m_fileinfo = file->query_info();
-    m_name = m_fileinfo->get_name();
-		m_type = m_fileinfo->get_content_type();
+    auto fileinfo = file->query_info();
+    m_name = fileinfo->get_name();
+    m_type = fileinfo->get_content_type();
 }
 
 bool MimeType::isDigicamRaw() const
 {
-		return Gio::content_type_is_a(m_type, "image/x-dcraw");
+    return Gio::content_type_is_a(m_type, "image/x-dcraw");
 }
 
 
@@ -68,7 +73,7 @@ bool MimeType::isImage() const
 bool MimeType::isMovie() const
 {
     return Gio::content_type_is_a(m_type, "video/*");
-}	
+}
 
 bool MimeType::isUnknown() const
 {
@@ -80,7 +85,12 @@ bool MimeType::isXmp() const
 {
     return fwk::path_extension(m_name) == ".xmp";
 }
-	
+
+const std::string & MimeType::string() const
+{
+    return m_type;
+}
+
 }
 
 /*

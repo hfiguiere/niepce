@@ -351,24 +351,24 @@ library_id_t Library::addFileAndFolder(const std::string & folder,
 }
 
 library_id_t Library::addBundle(library_id_t folder_id,
-                                const eng::FileBundle::Ptr & bundle,
+                                const eng::FileBundlePtr & bundle,
                                 Managed manage)
 {
     library_id_t file_id = 0;
-    file_id = addFile(folder_id, bundle->main_file(), manage);
+    file_id = addFile(folder_id, engine_db_filebundle_main(bundle.get()), manage);
     if(file_id > 0) {
         library_id_t fsfile_id;
         bool success;
         // addXmpSidecar
-        if(!bundle->sidecar().empty()) {
-            fsfile_id = addFsFile(bundle->sidecar());
+        if(engine_db_filebundle_sidecar(bundle.get())[0] == 0) {
+            fsfile_id = addFsFile(engine_db_filebundle_sidecar(bundle.get()));
             if(fsfile_id > 0) {
                 success = addSidecarFileToBundle(file_id, fsfile_id);
             }
         }
         // addJpeg
-        if(!bundle->jpeg().empty()) {
-            fsfile_id = addFsFile(bundle->jpeg());
+        if(engine_db_filebundle_jpeg(bundle.get())[0] == 0) {
+            fsfile_id = addFsFile(engine_db_filebundle_jpeg(bundle.get()));
             if(fsfile_id > 0) {
                 success = addJpegFileToBundle(file_id, fsfile_id);
             }

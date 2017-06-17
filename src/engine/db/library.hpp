@@ -110,7 +110,7 @@ public:
      * @param manage pass Managed::YES if the library *manage* the file. Currently unsupported.
      */
     library_id_t addBundle(library_id_t folder_id,
-                           const eng::FileBundle::Ptr & bundle,
+                           const eng::FileBundlePtr& bundle,
                            Managed manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle

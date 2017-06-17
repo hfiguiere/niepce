@@ -43,21 +43,23 @@ int test_main(int, char *[])
 
 //    thelist->push_back("/tmp/some/file");
 
-    eng::FileBundle::ListPtr bundles_list = 
-        eng::FileBundle::filter_bundles(thelist);
+    eng::FileBundleListPtr bundles_list =
+        eng::filebundle_filter_bundles(thelist);
 
+    std::cout << "list size " << bundles_list->size() << std::endl;
     BOOST_CHECK(bundles_list->size() == 2);
     auto iter = bundles_list->begin();
     auto b = *iter;
-    BOOST_CHECK(b->main_file() == "/foo/bar/dcs_0001.nef");
-    BOOST_CHECK(b->jpeg() == "/foo/bar/dcs_0001.jpg");
-    BOOST_CHECK(b->sidecar() == "/foo/bar/dcs_0001.xmp");
+    BOOST_CHECK(std::string(engine_db_filebundle_main(b.get())) == "/foo/bar/dcs_0001.nef");
+    printf("jpeg %s\n", engine_db_filebundle_jpeg(b.get()));
+    BOOST_CHECK(std::string(engine_db_filebundle_jpeg(b.get())) == "/foo/bar/dcs_0001.jpg");
+    BOOST_CHECK(std::string(engine_db_filebundle_sidecar(b.get())) == "/foo/bar/dcs_0001.xmp");
 
     ++iter;
     b = *iter;
-    BOOST_CHECK(b->main_file() == "/foo/bar/img_0001.cr2");
-    BOOST_CHECK(b->jpeg() == "/foo/bar/img_0001.jpg");
-    BOOST_CHECK(b->sidecar() == "/foo/bar/img_0001.xmp");
+    BOOST_CHECK(std::string(engine_db_filebundle_main(b.get())) == "/foo/bar/img_0001.cr2");
+    BOOST_CHECK(std::string(engine_db_filebundle_jpeg(b.get())) == "/foo/bar/img_0001.jpg");
+    BOOST_CHECK(std::string(engine_db_filebundle_sidecar(b.get())) == "/foo/bar/img_0001.xmp");
 
     return 0;
 }

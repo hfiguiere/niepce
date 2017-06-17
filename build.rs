@@ -1,10 +1,10 @@
 extern crate bindgen;
+extern crate pkg_config;
 
 use std::env;
 use std::path::PathBuf;
 
 fn main() {
-
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
@@ -18,8 +18,11 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .whitelisted_type("eng::NiepceProperties")
-        .header("src/engine/db/properties-enum.hpp")
+        .header("src/engine/db/bindings.hpp")
+        .clang_arg("--std=c++11")
+        .clang_arg("-DRUST_BINDGEN=1")
         .clang_arg("-I./src");
+
 
     // Finish the builder and generate the bindings.
     let bindings = builder.generate()

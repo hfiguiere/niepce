@@ -8,10 +8,10 @@ TESTS = test_library test_filebundle test_opqueue
 
 TEST_LIBS =  \
 	libniepceengine.a \
+	$(top_builddir)/target/debug/libniepce_rust.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
-	$(top_builddir)/target/debug/libniece_rust.a \
 	@BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@FRAMEWORK_LIBS@ \
 	@OPENRAW_LIBS@ \

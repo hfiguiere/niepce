@@ -7,12 +7,16 @@ authors = ["Hubert Figuière <hub@figuiere.net>"]
 libc = "0.2.23"
 sqlite = "0.23.4"
 exempi = "2.4.1"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gio-sys = { git = "https://github.com/gtk-rs/sys" }
+gio = { git = "https://github.com/gtk-rs/gio" }
 #gphoto = "0.1.1"
 
 [build-dependencies]
 # We need git master as currently it the crate version fail on shared_ptr<>
 bindgen = { git = "https://github.com/servo/rust-bindgen.git" }
+pkg-config = "0.3.9"
 
 [lib]
-name = "niece_rust"
+name = "niepce_rust"
 crate-type = ["staticlib"]

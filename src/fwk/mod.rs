@@ -19,6 +19,7 @@
 
 pub mod utils;
 pub mod base;
+pub mod toolkit;
 
 pub use self::utils::exempi::{
     NsDef,
@@ -31,6 +32,9 @@ pub use self::base::fractions::{
     fraction_to_decimal
 };
 
+pub use self::toolkit::mimetype::{
+    MimeType
+};
 
 use std::f64;
 use std::ffi::CStr;

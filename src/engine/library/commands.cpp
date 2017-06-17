@@ -62,8 +62,8 @@ void Commands::cmdImportFile(const Library::Ptr & lib,
     DBG_ASSERT(manage == Library::Managed::NO,
                "managing file is currently unsupported");
 
-    FileBundle::Ptr bundle(new FileBundle);
-    bundle->add(file_path);
+    FileBundlePtr bundle(filebundle_new());
+    engine_db_filebundle_add(bundle.get(), file_path.c_str());
 
     std::string folder = fwk::path_dirname(file_path);
 
@@ -85,12 +85,12 @@ void Commands::cmdImportFiles(const Library::Ptr & lib,
     DBG_ASSERT(manage == Library::Managed::NO,
                "managing file is currently unsupported");
 
-    FileBundle::ListPtr bundles = FileBundle::filter_bundles(files);
+    FileBundleListPtr bundles = filebundle_filter_bundles(files);
 
     LibFolderPtr pf = lib->getFolder(folder);
     if(!pf) {
         pf = lib->addFolder(folder);
-        LibFolderListPtr l( new LibFolderList );
+        LibFolderListPtr l(new LibFolderList);
         l->push_back(pf);
         lib->notify(LibNotification::make<LibNotification::Type::ADDED_FOLDERS>({l}));
     }

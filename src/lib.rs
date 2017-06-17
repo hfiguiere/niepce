@@ -19,6 +19,9 @@
 
 extern crate exempi;
 extern crate libc;
+extern crate glib_sys;
+extern crate gio_sys;
+extern crate gio;
 
 pub mod fwk;
 pub mod engine;
