@@ -157,7 +157,11 @@ AS_IF(test x$RUSTC = xno,
 )
 
 dnl Release build we do.
+if test x$debug = xtrue; then
+CARGO_TARGET_SUBDIR=debug
+else
 CARGO_TARGET_SUBDIR=release
+fi
 AC_SUBST(CARGO_TARGET_SUBDIR)
 
 
