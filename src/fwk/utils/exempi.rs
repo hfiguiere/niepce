@@ -282,7 +282,7 @@ mod tests {
             dir = PathBuf::from(".");
         }
         dir.push("test.xmp");
-        let xmp_manager = ExempiManager::new(None);
+        let _xmp_manager = ExempiManager::new(None);
 
         if let Some(xmpfile) = dir.to_str() {
             let meta = XmpMeta::new_from_file(xmpfile, true);
