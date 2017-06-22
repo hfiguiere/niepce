@@ -43,6 +43,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/engine/db/filebundle.rs \
 	@top_srcdir@/src/engine/db/mod.rs \
 	@top_srcdir@/src/engine/db/libfolder.rs \
+	@top_srcdir@/src/engine/db/library.rs \
 	@top_srcdir@/src/engine/mod.rs \
 	@top_srcdir@/src/fwk/utils/exempi.rs \
 	@top_srcdir@/src/fwk/utils/mod.rs \

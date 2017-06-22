@@ -22,21 +22,37 @@ use std::ffi::CStr;
 use std::ffi::CString;
 use std::mem::transmute;
 use std::path::{Path, PathBuf};
+use rusqlite;
 
+use super::FromDb;
 use super::LibraryId;
 use super::fsfile::FsFile;
 use fwk::base::PropertyIndex;
 use root::eng::NiepceProperties as Np;
+use fwk;
 
 #[repr(i32)]
 #[allow(non_camel_case_types)]
-#[derive(Clone)]
+#[derive(Clone,PartialEq)]
 pub enum FileType {
     UNKNOWN = 0,
     RAW = 1,
     RAW_JPEG = 2,
     IMAGE = 3,
     VIDEO = 4
+}
+
+impl From<i32> for FileType {
+    fn from(t: i32) -> Self {
+        match t {
+            0 => FileType::UNKNOWN,
+            1 => FileType::RAW,
+            2 => FileType::RAW_JPEG,
+            3 => FileType::IMAGE,
+            4 => FileType::VIDEO,
+            _ => FileType::UNKNOWN,
+        }
+    }
 }
 
 pub struct LibFile {
@@ -154,6 +170,53 @@ impl LibFile {
         s.push_str(&*self.main_file.path().to_string_lossy());
         s
     }
+}
+
+impl FromDb for LibFile {
+    fn read_db_columns() -> &'static str {
+        "files.id,parent_id,fsfiles.path,\
+         name,orientation,rating,label,file_type,fsfiles.id,flag"
+    }
+
+    fn read_db_tables() -> &'static str {
+        "files, fsfiles"
+    }
+
+    fn read_from(row: &rusqlite::Row) -> Self {
+        //DBG_ASSERT(dbdrv->get_number_of_columns() == 10, "wrong number of columns");
+        let id = row.get(0);
+        let fid = row.get(1);
+        let path: String = row.get(2);
+        let name: String = row.get(3);
+        let fsfid = row.get(8);
+        let mut file = LibFile::new(id, fid, fsfid, PathBuf::from(&path), &name);
+
+        file.set_orientation(row.get(4));
+        file.set_rating(row.get(5));
+        file.set_label(row.get(6));
+        file.set_flag(row.get(9));
+        let file_type: i32 = row.get(7);
+        file.set_file_type(FileType::from(file_type));
+
+        file
+    }
+}
+
+/**
+ * Converts a mimetype, which is expensive to calculate, into a FileType.
+ * @param mime The mimetype we want to know as a filetype
+ * @return the filetype
+ * @todo: add the JPEG+RAW file types.
+ */
+pub fn mimetype_to_filetype(mime: &fwk::MimeType) -> FileType {
+    if mime.is_digicam_raw() {
+        return FileType::RAW;
+    } else if mime.is_image() {
+        return FileType::IMAGE;
+    } else if mime.is_movie() {
+        return FileType::VIDEO;
+    }
+    FileType::UNKNOWN
 }
 
 #[no_mangle]

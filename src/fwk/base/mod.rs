@@ -18,5 +18,6 @@
  */
 
 pub mod fractions;
+pub mod date;
 
 pub type PropertyIndex = u32;

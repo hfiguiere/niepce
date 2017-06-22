@@ -87,7 +87,7 @@ std::string Date::to_string() const
 {
     char buffer[256];
 
-    snprintf(buffer, 256, "%u:%u:%d %u:%u:%u %c%u%u",
+    snprintf(buffer, 256, "%.4u:%.2u:%.2d %.2u:%.2u:%.2u %c%.2u%.2u",
              m_datetime.year, m_datetime.month,
              m_datetime.day, m_datetime.hour,
              m_datetime.minute, m_datetime.second,

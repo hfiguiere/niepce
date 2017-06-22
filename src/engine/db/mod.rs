@@ -22,6 +22,17 @@ pub mod fsfile;
 pub mod keyword;
 pub mod libfile;
 pub mod libfolder;
+pub mod library;
 
 pub type LibraryId = i64;
 
+use rusqlite;
+
+pub trait FromDb {
+    /// return the columns for reading from the DB.
+    fn read_db_columns() -> &'static str;
+    /// return the tables for reading from the DB.
+    fn read_db_tables() -> &'static str;
+    /// read a new object from the DB row.
+    fn read_from(row: &rusqlite::Row) -> Self;
+}

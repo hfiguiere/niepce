@@ -18,9 +18,11 @@
  */
 
 use super::LibraryId;
+use super::FromDb;
 use libc::c_char;
 use std::ffi::CStr;
 use std::ffi::CString;
+use rusqlite;
 
 pub struct Keyword {
     id: LibraryId,
@@ -42,6 +44,21 @@ impl Keyword {
 
     pub fn keyword(&self) -> &String {
         &self.keyword
+    }
+}
+
+impl FromDb for Keyword {
+    fn read_db_columns() -> &'static str {
+        "id,keyword"
+    }
+
+    fn read_db_tables() -> &'static str {
+        "keywords"
+    }
+
+    fn read_from(row: &rusqlite::Row) -> Self {
+        let kw : String = row.get(1);
+        Keyword::new(row.get(0), &kw)
     }
 }
 

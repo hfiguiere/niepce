@@ -22,6 +22,7 @@ extern crate libc;
 extern crate glib_sys;
 extern crate gio_sys;
 extern crate gio;
+extern crate rusqlite;
 
 pub mod fwk;
 pub mod engine;

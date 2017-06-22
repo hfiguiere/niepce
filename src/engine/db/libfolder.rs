@@ -20,7 +20,9 @@
 use libc::c_char;
 use std::ffi::CStr;
 use std::ffi::CString;
+use rusqlite;
 
+use super::FromDb;
 use super::LibraryId;
 
 #[repr(i32)]
@@ -28,6 +30,16 @@ use super::LibraryId;
 pub enum VirtualType {
     NONE = 0,
     TRASH = 1
+}
+
+impl From<i32> for VirtualType {
+    fn from(t: i32) -> Self {
+        match t {
+            0 => VirtualType::NONE,
+            1 => VirtualType::TRASH,
+            _ => VirtualType::NONE,
+        }
+    }
 }
 
 pub struct LibFolder {
@@ -79,6 +91,33 @@ impl LibFolder {
     pub fn set_virtual_type(&mut self, virt: VirtualType) {
         self.virt = virt;
     }
+
+}
+
+impl FromDb for LibFolder {
+
+    fn read_db_columns() -> &'static str {
+        "id,name,virtual,locked,expanded"
+    }
+
+    fn read_db_tables() -> &'static str {
+        "folders"
+    }
+
+    fn read_from(row: &rusqlite::Row) -> Self {
+        let id: LibraryId = row.get(0);
+        let name: String = row.get(1);
+        let virt_type: i32 = row.get(2);
+        let locked = row.get(3);
+        let expanded = row.get(4);
+
+        let mut libfolder = LibFolder::new(id, &name);
+        libfolder.set_virtual_type(VirtualType::from(virt_type));
+        libfolder.set_locked(locked);
+        libfolder.set_expanded(expanded);
+
+        libfolder
+    }
 }
 
 #[no_mangle]
@@ -125,9 +164,5 @@ pub extern fn engine_db_libfolder_set_expanded(this: &mut LibFolder, expanded: b
 
 #[no_mangle]
 pub extern fn engine_db_libfolder_set_virtual_type(this: &mut LibFolder, t: i32) {
-    this.set_virtual_type(match t {
-        0 => VirtualType::NONE,
-        1 => VirtualType::TRASH,
-        _ => VirtualType::NONE,
-    });
+    this.set_virtual_type(VirtualType::from(t));
 }

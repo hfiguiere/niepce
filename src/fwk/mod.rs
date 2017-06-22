@@ -32,6 +32,8 @@ pub use self::base::fractions::{
     fraction_to_decimal
 };
 
+pub use self::base::date::*;
+
 pub use self::toolkit::mimetype::{
     MimeType
 };

@@ -22,6 +22,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use exempi;
 use exempi::Xmp;
+use fwk::Date;
 
 
 static NIEPCE_XMP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/niepce/1.0";
@@ -162,8 +163,13 @@ impl XmpMeta {
         return self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags);
     }
 
-    // XXX need fwk::Date()
-    // pub fn creation_date()
+    pub fn creation_date(&self) -> Option<Date> {
+        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        if let Some(date) = self.xmp.get_property_date(NS_EXIF, "DateTimeOriginal", &mut flags) {
+            return Some(Date::new(date, None));
+        }
+        None
+    }
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
