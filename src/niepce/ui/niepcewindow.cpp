@@ -53,7 +53,7 @@ using libraryclient::LibraryClientPtr;
 using fwk::Application;
 using fwk::Configuration;
 using fwk::UndoHistory;
-using eng::Library;
+using eng::LibraryManaged;
 using eng::IImporter;
 
 namespace ui {
@@ -275,7 +275,7 @@ void NiepceWindow::on_action_file_import()
             auto dest_dir = import_dialog->get_dest_dir();
             importer->do_import(
                 source, dest_dir,
-                [this] (const std::string & path, IImporter::Import type, Library::Managed manage) {
+                [this] (const std::string & path, IImporter::Import type, LibraryManaged manage) {
                     if (type == IImporter::Import::SINGLE) {
                         m_libClient->importFile(path, manage);
                     } else {

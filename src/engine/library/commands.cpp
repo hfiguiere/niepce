@@ -57,9 +57,9 @@ void Commands::cmdListAllFolders(const Library::Ptr & lib)
 
 void Commands::cmdImportFile(const Library::Ptr & lib,
                              const std::string & file_path,
-                             Library::Managed manage)
+                             LibraryManaged manage)
 {
-    DBG_ASSERT(manage == Library::Managed::NO,
+    DBG_ASSERT(manage == LibraryManaged::NO,
                "managing file is currently unsupported");
 
     FileBundlePtr bundle(filebundle_new());
@@ -80,9 +80,9 @@ void Commands::cmdImportFile(const Library::Ptr & lib,
 
 void Commands::cmdImportFiles(const Library::Ptr & lib,
                               const std::string & folder,
-                              const FileList::Ptr & files, Library::Managed manage)
+                              const FileList::Ptr & files, LibraryManaged manage)
 {
-    DBG_ASSERT(manage == Library::Managed::NO,
+    DBG_ASSERT(manage == LibraryManaged::NO,
                "managing file is currently unsupported");
 
     FileBundleListPtr bundles = filebundle_filter_bundles(files);

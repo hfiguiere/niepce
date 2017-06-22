@@ -28,7 +28,7 @@
 using fwk::FileList;
 using eng::Op;
 using eng::Commands;
-using eng::Library;
+using eng::LibraryManaged;
 using eng::tid_t;
 
 namespace libraryclient {
@@ -174,14 +174,14 @@ tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
     });
 }
 
-tid_t ClientImpl::importFile(const std::string & path, Library::Managed manage)
+tid_t ClientImpl::importFile(const std::string & path, LibraryManaged manage)
 {
     return schedule_op([path, manage](const auto& lib) {
         Commands::cmdImportFile(lib, path, manage);
     });
 }
 
-tid_t ClientImpl::importFromDirectory(const std::string & dir, Library::Managed manage)
+tid_t ClientImpl::importFromDirectory(const std::string & dir, LibraryManaged manage)
 {
     FileList::Ptr files;
 

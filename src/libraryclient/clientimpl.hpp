@@ -64,8 +64,8 @@ public:
 
     eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
-    eng::tid_t importFile(const std::string & path, eng::Library::Managed manage);
-    eng::tid_t importFromDirectory(const std::string & dir, eng::Library::Managed manage);
+    eng::tid_t importFile(const std::string & path, eng::LibraryManaged manage);
+    eng::tid_t importFromDirectory(const std::string & dir, eng::LibraryManaged manage);
 
 protected:
     const fwk::Moniker m_moniker;

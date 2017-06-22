@@ -41,11 +41,11 @@ public:
 		static void cmdListAllKeywords(const Library::Ptr & lib);
     static void cmdImportFile(const Library::Ptr & lib,
                               const std::string & path,
-                              Library::Managed manage);
+                              LibraryManaged manage);
     static void cmdImportFiles(const Library::Ptr & lib,
                                const std::string & folder,
                                const fwk::FileList::Ptr & files,
-                               Library::Managed manage);
+                               LibraryManaged manage);
 		static void cmdQueryFolderContent(const Library::Ptr & lib, 
                                       library_id_t folder_id);
 		static void cmdCountFolder(const Library::Ptr & lib, 

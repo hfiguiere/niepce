@@ -49,16 +49,16 @@ class RgbColour;
 
 namespace eng {
 
+/** Whether to import managed. */
+enum class LibraryManaged {
+    NO = 0,
+    YES
+};
+
 class Library
 {
 public:
     typedef std::shared_ptr<Library> Ptr;
-
-    /** Whether to import managed. */
-    enum class Managed {
-        NO = 0,
-        YES
-    };
 
     Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
     virtual ~Library();
@@ -80,10 +80,11 @@ public:
     /** add a file to the library
      * @param folder the path of the containing folder
      * @param file the file path
-     * @param manage pass Managed::YES if the library *manage* the file. Currently unsupported.
+     * @param manage pass LibraryManaged::YES if the library *manage* the file.
+     * Currently unsupported.
      */
     library_id_t addFileAndFolder(const std::string & folder,
-                                  const std::string & file, Managed manage);
+                                  const std::string & file, LibraryManaged manage);
 
     /** add a fs file to the library
      * @param file the file path
@@ -100,18 +101,20 @@ public:
     /** add a file to the library
      * @param folder_id the id of the containing folder
      * @param file the file path
-     * @param manage pass Managed::YES if the library *manage* the file. Currently unsupported.
+     * @param manage pass LibraryManaged::YES if the library *manage* the file.
+     * Currently unsupported.
      */
-    library_id_t addFile(library_id_t folder_id, const std::string & file, Managed manage);
+    library_id_t addFile(library_id_t folder_id, const std::string & file, LibraryManaged manage);
 
     /** add a bundle of files to the library
      * @param folder_id the id of the containing folder
      * @param bundle the bundle
-     * @param manage pass Managed::YES if the library *manage* the file. Currently unsupported.
+     * @param manage pass LibraryManaged::YES if the library *manage* the file.
+     * Currently unsupported.
      */
     library_id_t addBundle(library_id_t folder_id,
                            const eng::FileBundlePtr& bundle,
-                           Managed manage);
+                           LibraryManaged manage);
     /** add a sidecar fsfile to a bundle (file)
      * @param file_id the id of the file bundle
      * @param fsfile_id the id of the fsfile
