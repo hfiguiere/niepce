@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/geometry.h
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,8 +49,7 @@ public:
      * @throw a std::bad_cast exception if there is not 4 element
      * or if one of them is not an int.
      */
-    Rect(const std::string & s)
-        throw(std::bad_cast);
+    Rect(const std::string & s) noexcept(false);
 
     int x() const
         { return _r[X]; }

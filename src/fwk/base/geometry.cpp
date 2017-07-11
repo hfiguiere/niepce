@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/geometry.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,7 @@ Rect::Rect(int _x, int _y, int _w, int _h)
 }
 
 
-Rect::Rect(const std::string & s)
-    throw(std::bad_cast)
+Rect::Rect(const std::string & s) noexcept(false)
 {
     std::vector< std::string > v;
     v.reserve(4);
