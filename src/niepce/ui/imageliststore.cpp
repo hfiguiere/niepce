@@ -107,8 +107,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         // clear the map before the list.
         m_idmap.clear();
         clear();
-        eng::LibFile::List::const_iterator iter = l->begin();
-        for_each(l->begin(), l->end(),
+        for_each(l->cbegin(), l->cend(),
                  [this](const eng::LibFile::Ptr & f) {
                      Gtk::TreeModel::iterator riter = append();
                      Gtk::TreeRow row = *riter;
