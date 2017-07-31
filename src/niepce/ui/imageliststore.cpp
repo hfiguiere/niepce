@@ -139,6 +139,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         } else if (param.to == m_current_folder) {
             // XXX add to list. but this isn't likely to happen atm.
         }
+        break;
     }
     case eng::LibNotification::Type::METADATA_CHANGED:
     {
