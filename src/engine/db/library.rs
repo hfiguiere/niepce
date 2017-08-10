@@ -21,6 +21,8 @@ use std::path::{
     Path,
     PathBuf
 };
+use std::fs::File;
+use std::io::Write;
 use rusqlite;
 use super::{
     FromDb,
@@ -183,6 +185,18 @@ impl Library {
         false
     }
 
+    pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(c) = conn.execute("UPDATE files SET xmp_file=:1 WHERE id=:2;",
+                                        &[&fsfile_id, &file_id]) {
+                if c == 1 {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
     fn leaf_name_for_pathname(pathname: &str) -> Option<String> {
         let path = Path::new(pathname);
         if let Some(ref name) = path.file_name() {
@@ -318,6 +332,20 @@ impl Library {
         }
 
         -1
+    }
+
+    fn get_fs_file(&self, id: LibraryId) -> Option<String> {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(mut stmt) = conn.prepare(
+                "SELECT path FROM fsfiles WHERE id=:1") {
+                let mut rows = stmt.query(&[&id]).unwrap();
+                if let Some(Ok(row)) = rows.next() {
+                    let path : String = row.get(0);
+                    return Some(path);
+                }
+            }
+        }
+        None
     }
 
     pub fn add_file(&self, folder_id: LibraryId, file: &str, _manage: Managed) -> LibraryId {
@@ -462,6 +490,97 @@ impl Library {
                 }
             }
         }
+        false
+    }
+
+    fn get_xmp_ids_in_queue(&self) -> Option<Vec<LibraryId>> {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(mut stmt) = conn.prepare("SELECT id FROM xmp_update_queue;") {
+                let mut ids = Vec::<LibraryId>::new();
+                let mut rows = stmt.query(&[]).unwrap();
+                while let Some(Ok(row)) = rows.next() {
+                    let id: i64 = row.get(0);
+                    ids.push(id);
+                }
+                return Some(ids);
+            }
+        }
+        None
+    }
+
+    fn rewrite_xmp_for_id(&self, id: LibraryId, write_xmp: bool) -> bool {
+        // XXX
+        // Rework this so that:
+        // 1. it returns a Err<>
+        // 2. it only delete if the xmp file has been updated properly
+        // 3. make sure the update happened correctly, possibly ensure we don't
+        // clobber the xmp.
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=:1;",
+                                        &[&id]) {
+                // we don't want to write the XMP so we don't need to list them.
+                if !write_xmp {
+                    return true;
+                }
+                if let Ok(mut stmt) = conn.prepare("SELECT xmp, main_file, xmp_file FROM files \
+                                                    WHERE id=:1;") {
+                    let mut rows = stmt.query(&[&id]).unwrap();
+                    while let Some(Ok(row)) = rows.next() {
+                        let xmp_buffer : String = row.get(0);
+                        let main_file_id : LibraryId = row.get(1);
+                        let xmp_file_id : LibraryId = row.get(2);
+                        let spath : PathBuf;
+                        if let Some(ref p) = self.get_fs_file(main_file_id) {
+                            spath = PathBuf::from(p);
+                        } else {
+                            // XXX we should report that error.
+                            // DBG_ASSERT(!spath.empty(), "couldn't find the main file");
+                            continue;
+                        }
+                        let mut p : Option<PathBuf> = None;
+                        if xmp_file_id > 0 {
+                            if let Some(p2) = self.get_fs_file(xmp_file_id) {
+                                p = Some(PathBuf::from(p2));
+                            }
+                            // DBG_ASSERT(!p.empty(), "couldn't find the xmp file path");
+                        }
+                        if p.is_none() {
+                            p = Some(spath.with_extension("xmp"));
+                            // DBG_ASSERT(p != spath, "path must have been changed");
+                        }
+                        let p = p.unwrap();
+                        if p.exists() {
+                            // DBG_OUT("%s already exist", p.c_str());
+                        }
+                        let mut xmppacket = fwk::XmpMeta::new();
+                        xmppacket.unserialize(&xmp_buffer);
+                        if let Ok(mut f) = File::create(p.clone()) {
+                            let sidecar = xmppacket.serialize();
+                            if f.write(sidecar.as_bytes()).is_ok() && (xmp_file_id <= 0) {
+                                let xmp_file_id = self.add_fs_file(p.to_string_lossy().as_ref());
+                                // DBG_ASSERT(xmp_file_id > 0, "couldn't add xmp_file");
+                                // XXX handle error
+                                /*let res =*/ self.add_sidecar_file_to_bundle(id, xmp_file_id);
+                                // DBG_ASSERT(res, "addSidecarFileToBundle failed");
+                            }
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn process_xmp_update_queue(&self, write_xmp: bool) -> bool {
+        if let Some(ids) = self.get_xmp_ids_in_queue() {
+            for id in ids {
+                self.rewrite_xmp_for_id(id, write_xmp);
+            }
+
+            return true;
+        }
+
         false
     }
 }
