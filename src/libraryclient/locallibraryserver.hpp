@@ -31,9 +31,9 @@ class LocalLibraryServer : public fwk::Worker<eng::Op> {
 public:
     /** create the local server for the library whose dir is specified */
     LocalLibraryServer(const std::string& dir,
-                       const fwk::NotificationCenter::Ptr& nc)
+                       uint64_t notif_id)
         : fwk::Worker<eng::Op>()
-        , m_library(eng::Library::Ptr(new eng::Library(dir, nc)))
+        , m_library(eng::Library::Ptr(new eng::Library(dir, notif_id)))
     {
     }
     bool ok() const { return m_library && m_library->ok(); }

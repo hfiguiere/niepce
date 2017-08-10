@@ -24,7 +24,6 @@
 #include <memory>
 
 #include "fwk/utils/worker.hpp"
-#include "fwk/toolkit/notificationcenter.hpp"
 #include "engine/db/libfile.hpp"
 
 namespace eng {
@@ -56,8 +55,7 @@ class ThumbnailCache
     : private fwk::Worker<ThumbnailTask>
 {
 public:
-    ThumbnailCache(const std::string & dir,
-                   const fwk::NotificationCenter::Ptr & nc);
+    ThumbnailCache(const std::string & dir, uint64_t notif_id);
     ~ThumbnailCache();
 
     void request(const LibFileListPtr & fl);
@@ -68,7 +66,7 @@ protected:
     virtual void execute(const ptr_t & task) override;
 private:
     std::string                                 m_cacheDir;
-    std::weak_ptr<fwk::NotificationCenter> m_notif_center;
+    uint64_t m_notif_id;
 
     std::string path_for_thumbnail(const std::string & filename, library_id_t id, int size) const;
     std::string dir_for_thumbnail(int size) const;

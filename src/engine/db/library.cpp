@@ -49,11 +49,11 @@ namespace eng {
 const char * s_databaseName = "niepcelibrary.db";
 
 
-Library::Library(const std::string & dir, const NotificationCenter::Ptr & nc)
+Library::Library(const std::string & dir, uint64_t notif_id)
     : m_maindir(dir),
       m_dbname(m_maindir + "/" + s_databaseName),
       m_dbmgr(new db::sqlite::SqliteCnxMgrDrv()),
-      m_notif_center(nc),
+      m_notif_id(notif_id),
       m_inited(false)
 {
     DBG_OUT("dir = %s", dir.c_str());
@@ -82,8 +82,9 @@ Library::~Library()
 
 void Library::notify(LibNotification&& ln)
 {
-    fwk::NotificationCenter::Ptr nc(m_notif_center.lock());
-    if(nc) {
+    auto wnc = fwk::NotificationCenter::get_nc(m_notif_id);
+    auto nc = wnc.lock();
+    if (nc) {
         DBG_OUT("notif");
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_LIB));
@@ -190,8 +191,7 @@ bool Library::_initDb()
 
     m_dbdrv->execute_statement(fileUpdateTrigger);
     m_dbdrv->execute_statement(xmpUpdateTrigger);
-    notify(LibNotification::make<LibNotification::Type::NEW_LIBRARY_CREATED>(
-               LibNotification::None{}));
+    notify(LibNotification::make<LibNotification::Type::NEW_LIBRARY_CREATED>({}));
     return true;
 }
 

@@ -160,7 +160,7 @@ NiepceWindow::buildWidget()
 
     init_actions();
 
-    m_notifcenter.reset(new niepce::NotificationCenter());
+    m_notifcenter = niepce::NotificationCenter::make(reinterpret_cast<uint64_t>(this));
 
     Glib::ustring name("camera-photo");
     set_icon_from_theme(name);
@@ -395,7 +395,7 @@ bool NiepceWindow::open_library(const std::string & libMoniker)
 {
     fwk::Moniker mon = fwk::Moniker(libMoniker);
     m_libClient = LibraryClientPtr(new LibraryClient(mon,
-                                                     m_notifcenter));
+                                                     m_notifcenter->id()));
     if(!m_libClient->ok()) {
         m_libClient = nullptr;
         return false;

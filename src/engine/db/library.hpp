@@ -60,7 +60,7 @@ class Library
 public:
     typedef std::shared_ptr<Library> Ptr;
 
-    Library(const std::string & dir, const fwk::NotificationCenter::Ptr & nc);
+    Library(const std::string & dir, uint64_t notif_id);
     virtual ~Library();
 
     bool ok() const
@@ -210,7 +210,7 @@ private:
     std::string                       m_dbname;
     db::IConnectionManagerDriver::Ptr m_dbmgr;
     db::IConnectionDriver::Ptr        m_dbdrv;
-    std::weak_ptr<fwk::NotificationCenter>  m_notif_center;
+    uint64_t m_notif_id;
     bool                              m_inited;
 };
 

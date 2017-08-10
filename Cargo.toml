@@ -5,7 +5,7 @@ authors = ["Hubert Figuière <hub@figuiere.net>"]
 
 [dependencies]
 libc = "0.2.23"
-rusqlite = "0.12.0"
+rusqlite = { version = "0.12.0", features = ["functions"] }
 exempi = "2.4.3"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gio-sys = { git = "https://github.com/gtk-rs/sys" }

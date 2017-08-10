@@ -22,6 +22,7 @@
 
 #include <glibmm/dispatcher.h>
 
+#include "fwk/base/singleton.hpp"
 #include "fwk/utils/mtqueue.hpp"
 #include "notificationcenter.hpp"
 
@@ -30,24 +31,46 @@ namespace fwk {
 class NotificationCenter::Priv
 {
 public:
+    uint64_t m_id;
     Glib::Dispatcher                     m_dispatcher;
     fwk::MtQueue< Notification::Ptr >    m_notificationQueue;
     std::map< int, subscription_t >      m_subscribers;
 };
 
+typedef fwk::Singleton<std::map<uint64_t, std::weak_ptr<NotificationCenter>>> NotificationCenterRegistry;
 
-NotificationCenter::NotificationCenter()
+std::weak_ptr<NotificationCenter> NotificationCenter::get_nc(uint64_t notif_id)
+{
+    auto iter = NotificationCenterRegistry::obj().find(notif_id);
+    if (iter == NotificationCenterRegistry::obj().end()) {
+        return NotificationCenter::Ptr();
+    }
+    return iter->second;
+}
+
+NotificationCenter::NotificationCenter(uint64_t notif_id)
     : p( new Priv )
 {
+    p->m_id = notif_id;
     p->m_dispatcher.connect(
         sigc::mem_fun(this, &NotificationCenter::_dispatch));
 }
 
 NotificationCenter::~NotificationCenter()
 {
+    NotificationCenterRegistry::obj().erase(p->m_id);
     delete p;
 }
 
+void NotificationCenter::attach()
+{
+    NotificationCenterRegistry::obj()[p->m_id] = shared_from_this();
+}
+
+uint64_t NotificationCenter::id() const
+{
+    return p->m_id;
+}
 
 void NotificationCenter::subscribe(int type, const subscriber_t & s)
 {

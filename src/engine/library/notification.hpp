@@ -23,6 +23,11 @@
 #include <boost/variant.hpp>
 
 #include "engine/library/clienttypes.hpp"
+#include "engine/db/libfolder.hpp"
+#include "engine/db/libfile.hpp"
+#include "engine/db/libmetadata.hpp"
+#include "engine/db/keyword.hpp"
+#include "engine/db/label.hpp"
 
 namespace eng {
 

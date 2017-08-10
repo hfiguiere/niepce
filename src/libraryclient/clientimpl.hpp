@@ -36,9 +36,9 @@ class ClientImpl
 {
 public:
     static std::unique_ptr<ClientImpl> makeClientImpl(const fwk::Moniker & moniker,
-                                                      const fwk::NotificationCenter::Ptr & nc);
+                                                      uint64_t notif_id);
 
-    ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+    ClientImpl(const fwk::Moniker & moniker, uint64_t notif_id);
     virtual ~ClientImpl();
     bool ok() const;
 

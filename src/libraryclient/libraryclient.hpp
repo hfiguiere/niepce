@@ -45,7 +45,7 @@ class LibraryClient
 {
 public:
     NON_COPYABLE(LibraryClient);
-    LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+    LibraryClient(const fwk::Moniker & moniker, uint64_t notif_id);
     virtual ~LibraryClient();
     // @return false in case of error.
     bool ok() const;

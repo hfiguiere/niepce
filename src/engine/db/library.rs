@@ -37,8 +37,6 @@ use fwk;
 const DB_SCHEMA_VERSION: i32 = 6;
 const DATABASENAME: &str = "niepcelibrary.db";
 
-enum NotificationCenter {}
-
 #[repr(i32)]
 pub enum Managed {
     NO = 0,
@@ -49,19 +47,28 @@ pub struct Library {
     maindir: PathBuf,
     dbpath: PathBuf,
     dbconn: Option<rusqlite::Connection>,
-    inited: bool
+    inited: bool,
+    notif_id: u64,
 }
+
+extern "C" {
+    pub fn lib_notification_notify_new_lib_created(notif_id: u64);
+    pub fn lib_notification_notify_xmp_needs_update(notif_id: u64);
+    pub fn lib_notification_notify_kw_added(notif_id: u64, keyword: *mut Keyword);
+}
+
 
 impl Library {
 
-    pub fn new(dir: &Path) -> Library {
+    pub fn new(dir: &Path, notif_id: u64) -> Library {
         let mut dbpath = PathBuf::from(dir);
         dbpath.push(DATABASENAME);
         let mut lib = Library {
             maindir: PathBuf::from(dir),
             dbpath: dbpath,
             dbconn: None,
-            inited: false
+            inited: false,
+            notif_id: notif_id
         };
 
         lib.inited = lib.init();
@@ -72,6 +79,10 @@ impl Library {
     fn init(&mut self) -> bool {
         let conn_attempt = rusqlite::Connection::open(self.dbpath.clone());
         if let Ok(conn) = conn_attempt {
+            conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
+                unsafe { lib_notification_notify_xmp_needs_update(self.notif_id); }
+                Ok(true)
+            });
             self.dbconn = Some(conn);
         } else {
             return false;
@@ -166,7 +177,7 @@ impl Library {
                           SELECT rewrite_xmp();\
                           END", &[]).unwrap();
 
-            //XXX            self.notify();
+            unsafe { lib_notification_notify_new_lib_created(self.notif_id); }
             return true;
         }
         false
@@ -408,8 +419,11 @@ impl Library {
                 if c != 1 {
                     return -1;
                 }
-                return conn.last_insert_rowid();
-                // XXX notification
+                let keyword_id = conn.last_insert_rowid();
+                unsafe { lib_notification_notify_kw_added(
+                    self.notif_id,
+                    Box::into_raw(Box::new(Keyword::new(keyword_id, keyword)))); }
+                return keyword_id;
             }
 
         }

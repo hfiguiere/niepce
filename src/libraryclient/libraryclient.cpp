@@ -32,9 +32,9 @@ namespace libraryclient {
 const char * s_thumbcacheDirname = "thumbcache";
 
 LibraryClient::LibraryClient(const fwk::Moniker & moniker,
-                             const fwk::NotificationCenter::Ptr & nc)
-    : m_pImpl(ClientImpl::makeClientImpl(moniker, nc))
-    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
+                             uint64_t notif_id)
+    : m_pImpl(ClientImpl::makeClientImpl(moniker, notif_id))
+    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, notif_id)
     , m_uidataprovider(new UIDataProvider())
     , m_trash_id(0)
 {

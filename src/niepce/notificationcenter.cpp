@@ -25,7 +25,8 @@
 
 namespace niepce {
 
-NotificationCenter::NotificationCenter()
+NotificationCenter::NotificationCenter(uint64_t notif_id)
+    : fwk::NotificationCenter(notif_id)
 {
   subscribe(NOTIFICATION_LIB,
             sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));

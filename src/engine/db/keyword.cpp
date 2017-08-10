@@ -26,8 +26,11 @@ extern "C" void engine_db_keyword_delete(eng::Keyword*);
 namespace eng {
 
 KeywordPtr keyword_new(eng::library_id_t id, const char* keyword) {
-  return KeywordPtr(
-    engine_db_keyword_new(id, keyword), &engine_db_keyword_delete);
+  return keyword_wrap(engine_db_keyword_new(id, keyword));
+}
+
+KeywordPtr keyword_wrap(eng::Keyword* kw) {
+  return KeywordPtr(kw, &engine_db_keyword_delete);
 }
 
 }

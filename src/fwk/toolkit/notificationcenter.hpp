@@ -31,19 +31,27 @@ namespace fwk {
 
 class NotificationCenter
     : public sigc::trackable
+    , public std::enable_shared_from_this<NotificationCenter>
 {
 public:
     typedef std::shared_ptr< NotificationCenter > Ptr;
     typedef sigc::slot<void, Notification::Ptr> subscriber_t;
 
-    NotificationCenter();
     ~NotificationCenter();
+
+    uint64_t id() const;
 
     // called from out of thread
     void post(Notification::Ptr && n);
 
     void subscribe(int type, const subscriber_t & );
     void unsubscribe(int type, const subscriber_t & );
+
+    static std::weak_ptr<NotificationCenter> get_nc(uint64_t notif_id);
+
+protected:
+    NotificationCenter(uint64_t notif_id);
+    void attach();
 
 private:
     typedef sigc::signal<void, Notification::Ptr> subscription_t;

@@ -37,10 +37,18 @@ class NotificationCenter
 {
 public:
   typedef std::shared_ptr<NotificationCenter> Ptr;
-  NotificationCenter();
+  static Ptr make(uint64_t notif_id)
+    {
+      Ptr nc = Ptr(new NotificationCenter(notif_id));
+      nc->attach();
+      return nc;
+    }
 
   sigc::signal<void, const eng::LibNotification &> signal_lib_notification;
   sigc::signal<void, const eng::ThumbnailNotification &> signal_thumbnail_notification;
+
+protected:
+  NotificationCenter(uint64_t notif_id);
 
 private:
   void dispatch_notification(const fwk::Notification::Ptr &n);
@@ -54,6 +62,8 @@ private:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset: 2
+  tab-width: 2
   indent-tabs-mode:nil
   fill-column:99
   End:

@@ -28,15 +28,15 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/thumbnail.hpp"
+#include "fwk/toolkit/notificationcenter.hpp"
 #include "thumbnailcache.hpp"
 #include "thumbnailnotification.hpp"
 
 namespace eng {
 
-ThumbnailCache::ThumbnailCache(const std::string & dir,
-                               const fwk::NotificationCenter::Ptr & nc)
+ThumbnailCache::ThumbnailCache(const std::string & dir, uint64_t notif_id)
     : m_cacheDir(dir),
-      m_notif_center(nc)
+      m_notif_id(notif_id)
 {
 }
 
@@ -98,8 +98,9 @@ void ThumbnailCache::execute(const ptr_t & task)
     if(!pix.ok()) {
         return;
     }
-    fwk::NotificationCenter::Ptr nc(m_notif_center);
-    if(nc) {
+    auto wnc = fwk::NotificationCenter::get_nc(m_notif_id);
+    auto nc = wnc.lock();
+    if (nc) {
         // pass the notification
         fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_THUMBNAIL));
         ThumbnailNotification tn{ engine_db_libfile_id(task->file().get()),
