@@ -7,9 +7,9 @@ authors = ["Hubert Figuière <hub@figuiere.net>"]
 libc = "0.2.23"
 rusqlite = { version = "0.12.0", features = ["functions"] }
 exempi = "2.4.3"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gio-sys = { git = "https://github.com/gtk-rs/sys" }
-gio = { git = "https://github.com/gtk-rs/gio" }
+glib-sys = "0.4.0"
+gio-sys = "0.4.0"
+gio = "0.2.0"
 #gphoto = "0.1.1"
 
 [build-dependencies]
