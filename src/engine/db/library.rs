@@ -609,7 +609,7 @@ mod test {
     fn library_works() {
         use super::Library;
 
-        let lib = Library::new(Path::new("."));
+        let lib = Library::new(Path::new("."), 0);
         let _autodelete = AutoDelete::new(lib.dbpath());
 
         assert!(lib.is_ok());
