@@ -25,6 +25,7 @@ pub enum MType {
     Xmp
 }
 
+#[derive(Debug)]
 pub struct MimeType {
 //    name: String,
     mtype: MType,

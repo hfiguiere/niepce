@@ -49,7 +49,7 @@ impl FileBundle {
     }
 
     pub fn add(&mut self, path: &str) -> bool {
-        println!("path {}", path);
+        dbg_out!("path {}", path);
         let mime_type = MimeType::new(path);
         let mut added = true;
 
@@ -83,10 +83,7 @@ impl FileBundle {
             self.main = String::from(path);
             self.file_type = FileType::VIDEO;
         } else {
-//            let cstr = &*unsafe { CStr::from_ptr(mime_type.c_str()) };
-            println!("Unknown file {} of type", path);//, cstr.to_string_lossy());
-            //DBG_OUT("Unkown file %s of type %s\n", path.c_str(),
-            //        mime_type.string().c_str());
+            dbg_out!("Unknown file {} of type {:?}", path, mime_type);
             added = false;
         }
         added

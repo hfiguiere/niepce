@@ -19,5 +19,7 @@
 
 pub mod fractions;
 pub mod date;
+#[macro_use]
+pub mod debug;
 
 pub type PropertyIndex = u32;

@@ -93,8 +93,10 @@ impl Library {
         let version = self.check_database_version();
         if version == -1 {
             // error
+            dbg_out!("version check -1");
         } else if version == 0 {
-            // version == 0
+            // let's create our DB
+            dbg_out!("version == 0");
             return self.init_db();
         } else if version != DB_SCHEMA_VERSION {
             // WAT?
@@ -240,7 +242,7 @@ impl Library {
                         return None;
                     }
                     let id = conn.last_insert_rowid();
-                    // DBG_OUT("last row inserted %Ld", (long long)id);
+                    dbg_out!("last row inserted {}", id);
                     return Some(LibFolder::new(id, &foldername));
                 }
             }
@@ -385,7 +387,7 @@ impl Library {
         let filename = Self::leaf_name_for_pathname(file).unwrap_or(String::from(""));
         let fs_file_id = self.add_fs_file(file);
         if fs_file_id <= 0 {
-            // ERR_OUT("add fsfile failed");
+            err_out!("add fsfile failed");
             return 0;
         }
 
@@ -550,7 +552,7 @@ impl Library {
                         }
                         let p = p.unwrap();
                         if p.exists() {
-                            // DBG_OUT("%s already exist", p.c_str());
+                            dbg_out!("{:?} already exist", p);
                         }
                         let mut xmppacket = fwk::XmpMeta::new();
                         xmppacket.unserialize(&xmp_buffer);

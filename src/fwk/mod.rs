@@ -18,6 +18,7 @@
  */
 
 pub mod utils;
+#[macro_use]
 pub mod base;
 pub mod toolkit;
 
