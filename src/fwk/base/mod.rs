@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-pub mod fractions;
 pub mod date;
 #[macro_use]
 pub mod debug;
+pub mod fractions;
+pub mod rgbcolour;
 
 pub type PropertyIndex = u32;

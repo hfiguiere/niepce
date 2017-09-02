@@ -20,6 +20,7 @@
 pub mod filebundle;
 pub mod fsfile;
 pub mod keyword;
+pub mod label;
 pub mod libfile;
 pub mod libfolder;
 pub mod library;
