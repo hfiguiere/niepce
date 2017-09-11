@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use libc::c_char;
+use std::ffi::CString;
 use std::str::FromStr;
 use rusqlite;
 
@@ -24,9 +26,11 @@ use super::LibraryId;
 use super::FromDb;
 use fwk::base::rgbcolour::RgbColour;
 
+#[derive(Clone)]
 pub struct Label {
     id: LibraryId,
     label: String,
+    pub cstr: CString,
     colour: RgbColour,
 }
 
@@ -37,6 +41,7 @@ impl Label {
         Label {
             id: id,
             label: String::from(label),
+            cstr: CString::new("").unwrap(),
             colour: colour
         }
     }
@@ -76,4 +81,36 @@ impl FromDb for Label {
         let colour : String = row.get(2);
         Label::new(row.get(0), &label, &colour)
     }
+}
+
+
+#[no_mangle]
+pub fn engine_db_label_delete(l: *mut Label) {
+    unsafe { Box::from_raw(l) };
+}
+
+#[no_mangle]
+pub fn engine_db_label_clone(l: &Label) -> *mut Label {
+    Box::into_raw(Box::new(l.clone()))
+}
+
+#[no_mangle]
+pub fn engine_db_label_id(l: &Label) -> LibraryId {
+    l.id()
+}
+
+#[no_mangle]
+pub fn engine_db_label_label(this: &mut Label) -> *const c_char {
+    let cstr;
+    {
+        let s = this.label();
+        cstr = CString::new(s).unwrap();
+    }
+    this.cstr = cstr;
+    this.cstr.as_ptr()
+}
+
+#[no_mangle]
+pub fn engine_db_label_colour(l: &Label) -> *const RgbColour {
+    l.colour()
 }

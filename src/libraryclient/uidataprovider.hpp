@@ -23,11 +23,8 @@
 #include <stdint.h>
 
 #include "fwk/base/option.hpp"
+#include "fwk/base/colour.hpp"
 #include "engine/db/label.hpp"
-
-namespace fwk {
-class RgbColour;
-}
 
 namespace libraryclient {
 
@@ -36,14 +33,14 @@ class UIDataProvider
 public:
     // label management
 
-    void updateLabel(const eng::Label::Ptr &);
-    void addLabels(const eng::Label::ListPtr & l);
+    void updateLabel(const eng::Label &);
+    void addLabel(const eng::Label & l);
     void deleteLabel(int id);
-    fwk::Option<fwk::RgbColour> colourForLabel(int id) const;
-    const eng::Label::List & getLabels() const
+    fwk::Option<fwk::RgbColourPtr> colourForLabel(int id) const;
+    const eng::LabelList & getLabels() const
         { return m_labels; }
 private:
-    eng::Label::List m_labels;
+    eng::LabelList m_labels;
 };
 
 }

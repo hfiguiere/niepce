@@ -276,7 +276,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                 auto result = m_shell.get_ui_data_provider()->colourForLabel(label_id);
                 DBG_ASSERT(!result.empty(), "colour not found");
                 if (!result.empty()) {
-                    drawLabel(cr, left, result.unwrap(), r);
+                    drawLabel(cr, left, *result.unwrap(), r);
                 }
             }
         }

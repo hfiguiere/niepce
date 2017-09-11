@@ -27,7 +27,7 @@ int test_main( int, char *[] )             // note the name!
 {
 	fwk::PropertyValue v;
 
-	BOOST_CHECK(v.type() == typeid(fwk::EmptyValue));
+	BOOST_CHECK(v.get_variant().type() == typeid(fwk::EmptyValue));
 
 	BOOST_CHECK(is_empty(v));
 	BOOST_CHECK(get_integer(v) == 0);

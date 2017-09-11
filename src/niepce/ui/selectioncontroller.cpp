@@ -224,8 +224,8 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 
         if (!result.empty()) {
             value = result.unwrap();
-            if(value.type() != typeid(fwk::EmptyValue)) {
-                DBG_ASSERT(value.type() == iter.second.type(),
+            if(value.get_variant().type() != typeid(fwk::EmptyValue)) {
+                DBG_ASSERT(value.get_variant().type() == iter.second.get_variant().type(),
                            "Value type mismatch");
             }
         }

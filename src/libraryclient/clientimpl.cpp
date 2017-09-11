@@ -25,9 +25,8 @@
 #include "clientimpl.hpp"
 #include "locallibraryserver.hpp"
 
-using fwk::FileList;
+using fwk::FileListPtr;
 using eng::Op;
-using eng::Commands;
 using eng::LibraryManaged;
 using eng::tid_t;
 
@@ -61,7 +60,7 @@ bool ClientImpl::ok() const
    @param func the function to schedule
    @return the tid
  */
-tid_t ClientImpl::schedule_op(const Op::function_t & func)
+tid_t ClientImpl::schedule_op(const Op::Function & func)
 {
     tid_t id = LibraryClient::newTid();
     Op::Ptr op(new Op(id, func));
@@ -71,44 +70,44 @@ tid_t ClientImpl::schedule_op(const Op::function_t & func)
 
 tid_t ClientImpl::getAllKeywords()
 {
-    return schedule_op(&Commands::cmdListAllKeywords);
+    return schedule_op(&cmd_list_all_keywords);
 }
 
 
 tid_t ClientImpl::getAllFolders()
 {
-    return schedule_op(&Commands::cmdListAllFolders);
+    return schedule_op(&cmd_list_all_folders);
 }
 
 tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 {
     return schedule_op([folder_id](const auto& lib) {
-        Commands::cmdQueryFolderContent(lib, folder_id);
-    });
+            return cmd_query_folder_content(lib, folder_id);
+        });
 }
 
 
 tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 {
     return schedule_op([folder_id](const auto& lib) {
-        Commands::cmdCountFolder(lib, folder_id);
-    });
+            return cmd_count_folder(lib, folder_id);
+        });
 }
 
 
 tid_t ClientImpl::queryKeywordContent(eng::library_id_t keyword_id)
 {
     return schedule_op([keyword_id](const auto& lib) {
-        Commands::cmdQueryKeywordContent(lib, keyword_id);
-    });
+            return cmd_query_keyword_content(lib, keyword_id);
+        });
 }
 
 
 tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 {
     return schedule_op([file_id](const auto& lib) {
-        Commands::cmdRequestMetadata(lib, file_id);
-    });
+           return cmd_request_metadata(lib, file_id);
+        });
 }
 
 
@@ -116,15 +115,15 @@ tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
                               const fwk::PropertyValue & value)
 {
     return schedule_op([file_id, meta, value](const auto& lib) {
-        Commands::cmdSetMetadata(lib, file_id, meta, value);
-    });
+            return cmd_set_metadata(lib, file_id, meta, &value);
+        });
 }
 
 tid_t ClientImpl::write_metadata(eng::library_id_t file_id)
 {
     return schedule_op([file_id](const auto& lib) {
-        Commands::cmdWriteMetadata(lib, file_id);
-    });
+            return cmd_write_metadata(lib, file_id);
+        });
 }
 
 tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
@@ -132,29 +131,29 @@ tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
                                    eng::library_id_t to_folder_id)
 {
     return schedule_op([file_id, from_folder_id, to_folder_id](const auto& lib) {
-        Commands::cmdMoveFileToFolder(lib, file_id, from_folder_id, to_folder_id);
-    });
+            return cmd_move_file_to_folder(lib, file_id, from_folder_id, to_folder_id);
+        });
 }
 
 
 tid_t ClientImpl::getAllLabels()
 {
-    return schedule_op(&Commands::cmdListAllLabels);
+    return schedule_op(&cmd_list_all_labels);
 }
 
 
 tid_t ClientImpl::createLabel(const std::string & s, const std::string & colour)
 {
     return schedule_op([s, colour](const auto& lib) {
-        Commands::cmdCreateLabel(lib, s, colour);
-    });
+            return cmd_create_label(lib, s.c_str(), colour.c_str());
+        });
 }
 
 tid_t ClientImpl::deleteLabel(int label_id)
 {
     return schedule_op([label_id](const auto& lib) {
-        Commands::cmdDeleteLabel(lib, label_id);
-    });
+            return cmd_delete_label(lib, label_id);
+        });
 }
 
 tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
@@ -162,34 +161,34 @@ tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
                               const std::string & new_colour)
 {
     return schedule_op([label_id, new_name, new_colour](const auto& lib) {
-        Commands::cmdUpdateLabel(lib, label_id, new_name, new_colour);
-    });
+            return cmd_update_label(lib, label_id, new_name.c_str(), new_colour.c_str());
+        });
 }
 
 
 tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
 {
     return schedule_op([write_xmp](const auto& lib) {
-        Commands::cmdProcessXmpUpdateQueue(lib, write_xmp);
-    });
+            return cmd_process_xmp_update_queue(lib, write_xmp);
+        });
 }
 
 tid_t ClientImpl::importFile(const std::string & path, LibraryManaged manage)
 {
     return schedule_op([path, manage](const auto& lib) {
-        Commands::cmdImportFile(lib, path, manage);
-    });
+            return cmd_import_file(lib, path.c_str(), manage);
+        });
 }
 
 tid_t ClientImpl::importFromDirectory(const std::string & dir, LibraryManaged manage)
 {
-    FileList::Ptr files;
+    FileListPtr files;
 
-    files = FileList::getFilesFromDirectory(dir, &fwk::filter_none);
+    files = fwk::FileList::getFilesFromDirectory(dir, &fwk::filter_none);
 
     return schedule_op([dir, files, manage](const auto& lib) {
-        Commands::cmdImportFiles(lib, dir, files, manage);
-    });
+            return cmd_import_files(lib, dir.c_str(), files.get(), manage);
+        });
 }
 
 }

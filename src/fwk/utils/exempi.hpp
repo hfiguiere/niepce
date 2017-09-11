@@ -87,64 +87,23 @@ namespace fwk {
 
 class Date;
 
-class ExempiManager
-{
-public:
-    NON_COPYABLE(ExempiManager);
+class XmpMeta;
+class ExempiManager;
+typedef std::shared_ptr<ExempiManager> ExempiManagerPtr;
 
-    struct ns_defs_t {
-        const char *ns;
-        const char *prefix;
-    };
-    /** construct with namespaces to initialize */
-    ExempiManager(const ns_defs_t * namespaces = 0);
-    ~ExempiManager();
-};
-
-/** a high-level wrapper for xmp */
-class XmpMeta
-{
-public:
-    NON_COPYABLE(XmpMeta);
-
-    XmpMeta();
-    XmpMeta(const std::string& for_file, bool sidecar_only);
-    virtual ~XmpMeta();
-
-    bool isOk() const
-        { return m_xmp != nullptr; }
-    XmpPtr xmp() const
-        { return m_xmp; }
-    /** serialize the XMP inline */
-    std::string serialize_inline() const;
-    /** serialize the XMP (for the sidecar) */
-    std::string serialize() const;
-    /** load the XMP from the unserialized buffer
-     * (NUL terminated)
-     */
-    void unserialize(const char *);
-
-    int32_t orientation() const;
-    std::string label() const;
-    /** return the rating, -1 is not found (not set) */
-    int32_t rating() const;
-    int32_t flag() const;
-    fwk::Date  creation_date() const;
-    std::string creation_date_str() const;
-    const std::vector< std::string > & keywords() const;
-
-private:
-
-    XmpPtr m_xmp;
-    // caches
-    mutable bool m_keyword_fetched;
-    mutable std::vector< std::string > m_keywords;
-};
+ExempiManagerPtr exempi_manager_new();
 
 }
 
-// implemented in Rust
-extern "C" double fwk_gps_coord_from_xmp(const char* value);
+
+extern "C" {
+    double fwk_gps_coord_from_xmp(const char* value);
+    int32_t fwk_xmp_meta_get_orientation(const fwk::XmpMeta*);
+    int32_t fwk_xmp_meta_get_rating(const fwk::XmpMeta*);
+    // the pointer must be released by calling rust_cstring_delete()
+    char* fwk_xmp_meta_get_label(const fwk::XmpMeta*);
+    fwk::Date* fwk_xmp_meta_get_creation_date(const fwk::XmpMeta*);
+}
 
 /*
   Local Variables:

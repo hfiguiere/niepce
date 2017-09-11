@@ -20,9 +20,12 @@
 use libc::c_char;
 use std::ffi::CStr;
 use std::ffi::CString;
+use std::ffi::OsString;
+use std::path::Path;
 
 use super::libfile::FileType;
 use fwk::MimeType;
+use root::fwk::FileList;
 
 pub struct FileBundle {
     file_type: FileType,
@@ -46,6 +49,37 @@ impl FileBundle {
             jpeg: String::from(""),
             jpeg_c: CString::new("").unwrap(),
         }
+    }
+
+    pub fn filter_bundles(files: &mut FileList) -> Vec<FileBundle> {
+        let mut bundles: Vec<FileBundle> = vec!();
+        unsafe { files.sort(); }
+        let len = unsafe { files.size() };
+        let mut current_base = OsString::new();
+        let mut current_bundle: Option<FileBundle> = None;
+
+        for i in 0..len {
+            let f = unsafe { files.at_cstr(i) };
+            let cstr = unsafe { CStr::from_ptr(f) }.to_string_lossy();
+            let path = Path::new(&*cstr);
+            if let Some(basename) = path.file_stem() {
+                if basename == current_base {
+                    current_bundle.as_mut().unwrap().add(&basename.to_string_lossy());
+                } else {
+                    if current_bundle.is_some() {
+                        bundles.push(current_bundle.unwrap());
+                    }
+                    let mut bundle = FileBundle::new();
+                    bundle.add(&cstr);
+                    current_base = basename.to_os_string();
+                    current_bundle = Some(bundle);
+                }
+            }
+        }
+        if current_bundle.is_some() {
+            bundles.push(current_bundle.unwrap());
+        }
+        bundles
     }
 
     pub fn add(&mut self, path: &str) -> bool {

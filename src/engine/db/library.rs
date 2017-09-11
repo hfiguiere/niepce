@@ -1,5 +1,5 @@
 /*
- * niepce - eng/db/library.rs
+ * niepce - engine/db/library.rs
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -17,33 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use libc::{
+    c_char,
+    c_void
+};
 use std::path::{
     Path,
     PathBuf
 };
+use std::ffi::CStr;
 use std::fs::File;
 use std::io::Write;
 use rusqlite;
+
 use super::{
     FromDb,
     LibraryId
 };
+use super::label::Label;
 use super::libfolder;
 use super::libfolder::LibFolder;
 use super::libfile;
 use super::libfile::LibFile;
+use super::libmetadata::LibMetadata;
+use super::filebundle::FileBundle;
 use super::keyword::Keyword;
-
+use engine::library::notification::Notification as LibNotification;
+use engine::library::notification::engine_library_notify;
 use fwk;
+use root::fwk::{
+    PropertyValue,
+    is_empty,
+    is_integer,
+    get_integer,
+    get_string_array,
+    string_array_len,
+    string_array_at_cstr
+};
+use root::eng::NiepceProperties as Np;
+pub use root::eng::LibraryManaged as Managed;
 
 const DB_SCHEMA_VERSION: i32 = 6;
 const DATABASENAME: &str = "niepcelibrary.db";
-
-#[repr(i32)]
-pub enum Managed {
-    NO = 0,
-    YES = 1
-}
 
 pub struct Library {
     maindir: PathBuf,
@@ -53,20 +68,13 @@ pub struct Library {
     notif_id: u64,
 }
 
-extern "C" {
-    pub fn lib_notification_notify_new_lib_created(notif_id: u64);
-    pub fn lib_notification_notify_xmp_needs_update(notif_id: u64);
-    pub fn lib_notification_notify_kw_added(notif_id: u64, keyword: *mut Keyword);
-}
-
-
 impl Library {
 
-    pub fn new(dir: &Path, notif_id: u64) -> Library {
-        let mut dbpath = PathBuf::from(dir);
+    pub fn new(dir: PathBuf, notif_id: u64) -> Library {
+        let mut dbpath = dir.clone();
         dbpath.push(DATABASENAME);
         let mut lib = Library {
-            maindir: PathBuf::from(dir),
+            maindir: dir,
             dbpath: dbpath,
             dbconn: None,
             inited: false,
@@ -82,7 +90,7 @@ impl Library {
         let conn_attempt = rusqlite::Connection::open(self.dbpath.clone());
         if let Ok(conn) = conn_attempt {
             conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
-                unsafe { lib_notification_notify_xmp_needs_update(self.notif_id); }
+                self.notify(Box::new(LibNotification::XmpNeedsUpdate));
                 Ok(true)
             });
             self.dbconn = Some(conn);
@@ -181,8 +189,26 @@ impl Library {
                           SELECT rewrite_xmp();\
                           END", &[]).unwrap();
 
-            unsafe { lib_notification_notify_new_lib_created(self.notif_id); }
+            self.notify(Box::new(LibNotification::LibCreated));
             return true;
+        }
+        false
+    }
+
+    pub fn notify(&self, notif: Box<LibNotification>) {
+        unsafe { engine_library_notify(self.notif_id, Box::into_raw(notif) as *mut c_void); }
+    }
+
+    pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            let filetype: i32 = libfile::FileType::RAW_JPEG.into();
+            if let Ok(c) = conn.execute("UPDATE files SET jpeg_file=:1 file_type=:3 WHERE id=:2;",
+                                        &[&fsfile_id, &file_id,
+                                          &filetype]) {
+                if c == 1 {
+                    return true;
+                }
+            }
         }
         false
     }
@@ -350,10 +376,30 @@ impl Library {
         None
     }
 
-    pub fn add_file(&self, folder_id: LibraryId, file: &str, _manage: Managed) -> LibraryId {
+    pub fn add_bundle(&self, folder_id: LibraryId, bundle: &FileBundle,
+                      manage: Managed) -> LibraryId {
+        let file_id = self.add_file(folder_id, bundle.main(), manage);
+        if file_id > 0 {
+            if !bundle.sidecar().is_empty() {
+                let fsfile_id = self.add_fs_file(bundle.sidecar());
+                if fsfile_id > 0 {
+                    self.add_sidecar_file_to_bundle(file_id, fsfile_id);
+                }
+            }
+            if !bundle.jpeg().is_empty() {
+                let fsfile_id = self.add_fs_file(bundle.jpeg());
+                if fsfile_id > 0 {
+                    self.add_jpeg_file_to_bundle(file_id, fsfile_id);
+                }
+            }
+        }
+        file_id
+    }
+
+    pub fn add_file(&self, folder_id: LibraryId, file: &str, manage: Managed) -> LibraryId {
         let mut ret: LibraryId = -1;
-        //DBG_ASSERT(manage == Managed::NO, "manage not supported");
-        //DBG_ASSERT(folder_id != -1, "invalid folder ID");
+        dbg_assert!(manage == Managed::NO, "manage not supported");
+        dbg_assert!(folder_id != -1, "invalid folder ID");
         let mime = fwk::MimeType::new(file);
         let file_type = libfile::mimetype_to_filetype(&mime);
         let label_id: LibraryId = 0;
@@ -450,9 +496,9 @@ impl Library {
                     return -1;
                 }
                 let keyword_id = conn.last_insert_rowid();
-                unsafe { lib_notification_notify_kw_added(
-                    self.notif_id,
-                    Box::into_raw(Box::new(Keyword::new(keyword_id, keyword)))); }
+                self.notify(
+                    Box::new(LibNotification::AddedKeyword(
+                        Keyword::new(keyword_id, keyword))));
                 return keyword_id;
             }
 
@@ -478,6 +524,120 @@ impl Library {
                                WHERE keyword_id=:1) ")
     }
 
+    pub fn get_metadata(&self, file_id: LibraryId) -> Option<LibMetadata> {
+        if let Some(ref conn) = self.dbconn {
+            let sql = format!("SELECT {} FROM {} WHERE id=:1",
+                              LibMetadata::read_db_columns(),
+                              LibMetadata::read_db_tables());
+            if let Ok(mut stmt) = conn.prepare(&sql) {
+                let mut rows = stmt.query(&[&file_id]).unwrap();
+                if let Some(Ok(row)) = rows.next() {
+                    let meta = LibMetadata::read_from(&row);
+                    return Some(meta);
+                }
+            }
+        }
+        None
+    }
+
+
+    fn unassign_all_keywords_for_file(&self, file_id: LibraryId) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("DELETE FROM keywording \
+                                         WHERE file_id=:1;",
+                                        &[&file_id]) {
+                // XXX check success.
+                return true;
+            }
+        }
+        false
+    }
+
+    fn set_internal_metadata(&self, file_id: LibraryId, column: &str, value: i32) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("UPDATE files SET :1=:2 \
+                                         WHERE id=:3;",
+                                        &[&column, &value, &file_id]) {
+                // XXX check success.
+                return true;
+            }
+        }
+        false
+    }
+
+    fn set_metadata_block(&self, file_id: LibraryId, metablock: &LibMetadata) -> bool {
+        let xmp = metablock.serialize_inline();
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("UPDATE files SET xmp=:1 \
+                                         WHERE id=:2;",
+                                        &[&xmp, &file_id]) {
+                // XXX check success.
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn set_metadata(&self, file_id: LibraryId, meta: Np,
+                        value: &PropertyValue) -> bool {
+        let mut retval = false;
+        match meta {
+            Np::NpXmpRatingProp |
+            Np::NpXmpLabelProp |
+            Np::NpTiffOrientationProp |
+            Np::NpNiepceFlagProp => {
+                if unsafe { is_empty(value) || is_integer(value) } {
+                    // internal
+                    // make the column mapping more generic.
+                    let column = match meta {
+                        Np::NpXmpRatingProp =>
+                            "rating",
+                        Np::NpXmpLabelProp =>
+                            "orientation",
+                        Np::NpTiffOrientationProp =>
+                            "label",
+                        Np::NpNiepceFlagProp =>
+                            "flag",
+                        _ =>
+                            unreachable!()
+                    };
+                    if !column.is_empty() {
+                        retval = self.set_internal_metadata(file_id, column,
+                                                            unsafe { get_integer(value) });
+                        if !retval {
+                            return false;
+                        }
+                    }
+                }
+            },
+            Np::NpIptcKeywordsProp => {
+                self.unassign_all_keywords_for_file(file_id);
+
+                let keywords = unsafe { get_string_array(value) };
+                let length = unsafe { string_array_len(keywords) };
+                for i in 0..length {
+                    let s = unsafe { string_array_at_cstr(keywords, i) };
+                    let cstr = unsafe { CStr::from_ptr(s) }.to_string_lossy();
+                    let id = self.make_keyword(&cstr);
+                    if id != -1 {
+                        self.assign_keyword(id, file_id);
+                    }
+                }
+            }
+            _ => {
+                // XXX TODO
+                dbg_out!("unhandled meta {}", meta as u32);
+            }
+        }
+        if let Some(mut metablock) = self.get_metadata(file_id) {
+            metablock.set_metadata(meta, value);
+            metablock.touch();
+            retval = self.set_metadata_block(file_id, &metablock);
+        }
+
+        retval
+    }
+
     pub fn move_file_to_folder(&self, file_id: LibraryId, folder_id: LibraryId) -> bool  {
         if let Some(ref conn) = self.dbconn {
             if let Ok(mut stmt) = conn.prepare("SELECT id FROM folders WHERE \
@@ -490,6 +650,65 @@ impl Library {
                         return true;
                     }
                 }
+            }
+        }
+        false
+    }
+
+    pub fn get_all_labels(&self) -> Vec<Label> {
+        if let Some(ref conn) = self.dbconn {
+            let sql = format!("SELECT {} FROM {} ORDER BY id;",
+                              Label::read_db_columns(),
+                              Label::read_db_tables());
+            if let Ok(mut stmt) = conn.prepare(&sql) {
+                let mut labels: Vec<Label> = vec!();
+                let mut rows = stmt.query(&[]).unwrap();
+                while let Some(Ok(row)) = rows.next() {
+                    let label = Label::read_from(&row);
+                    labels.push(label);
+                }
+                return labels;
+            }
+        }
+        vec!()
+    }
+
+    pub fn add_label(&self, name: &str, colour: &str) -> LibraryId {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(c) = conn.execute("INSERT INTO  labels (name,color) \
+                                         VALUES (:1, :2);",
+                                        &[&name, &colour]) {
+                if c != 1 {
+                    return -1;
+                }
+                let label_id = conn.last_insert_rowid();
+                dbg_out!("last row inserted {}", label_id);
+                return label_id;
+            }
+        }
+        -1
+    }
+
+    pub fn update_label(&self, label_id: LibraryId, name: &str,
+                        colour: &str) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("UPDATE labels SET name=:2, color=:3 \
+                                         FROM labels WHERE id=:1;",
+                                        &[&label_id, &name, &colour]) {
+                // XXX check success.
+                return true;
+            }
+        }
+        false
+
+    }
+
+    pub fn delete_label(&self, label_id: LibraryId) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(_) = conn.execute("DELETE FROM labels WHERE id=:1;",
+                                        &[&label_id]) {
+                // XXX check success.
+                return true;
             }
         }
         false
@@ -508,6 +727,10 @@ impl Library {
             }
         }
         None
+    }
+
+    pub fn write_metadata(&self, id: LibraryId) -> bool {
+        self.rewrite_xmp_for_id(id, true)
     }
 
     fn rewrite_xmp_for_id(&self, id: LibraryId, write_xmp: bool) -> bool {
@@ -587,6 +810,24 @@ impl Library {
     }
 }
 
+#[no_mangle]
+pub extern fn engine_db_library_new(path: *const c_char, notif_id: u64) -> *mut Library {
+    let l = Box::new(
+        Library::new(PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy()),
+                     notif_id));
+    Box::into_raw(l)
+}
+
+#[no_mangle]
+pub extern fn engine_db_library_delete(l: *mut Library) {
+    unsafe { Box::from_raw(l); }
+}
+
+#[no_mangle]
+pub extern fn engine_db_library_ok(l: &Library) -> bool {
+    l.is_ok()
+}
+
 #[cfg(test)]
 mod test {
     use std::path::Path;
@@ -611,7 +852,7 @@ mod test {
     fn library_works() {
         use super::Library;
 
-        let lib = Library::new(Path::new("."), 0);
+        let lib = Library::new(PathBuf::from("."), 0);
         let _autodelete = AutoDelete::new(lib.dbpath());
 
         assert!(lib.is_ok());

@@ -22,9 +22,34 @@
 
 #include "date.hpp"
 #include "debug.hpp"
+#include "rust.hpp"
+
+// rust glue
+extern "C" {
+void fwk_date_delete(fwk::Date*);
+char* fwk_date_to_string(const fwk::Date*);
+}
 
 namespace fwk {
 
+DatePtr date_wrap(fwk::Date* date)
+{
+    return DatePtr(date, fwk_date_delete);
+}
+
+std::string date_to_string(const Date* d)
+{
+    DBG_ASSERT(d, "d is nullptr");
+    if (!d) {
+        return "";
+    }
+    char* p = fwk_date_to_string(d);
+    std::string s(p);
+    rust_cstring_delete(p);
+    return s;
+}
+
+#if 0
 time_t make_time_value(const Date & d)
 {
     time_t date = 0;
@@ -46,6 +71,7 @@ time_t make_time_value(const Date & d)
 
     return date;
 }
+#endif
 
 bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt)
 {
@@ -71,6 +97,7 @@ bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt)
     return true;
 }
 
+#if 0
 Date::Date(const XmpDateTime& dt, const Timezone* tz)
     : m_datetime(dt)
     , m_tz(tz)
@@ -96,7 +123,7 @@ std::string Date::to_string() const
 
     return buffer;
 }
-
+#endif
 }
 
 /*

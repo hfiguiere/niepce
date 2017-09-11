@@ -20,8 +20,10 @@
 #include <gtkmm/box.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "engine/db/properties.hpp"
+#include "engine/db/libmetadata.hpp"
 #include "mapmodule.hpp"
 
 namespace mapm {
@@ -69,17 +71,17 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
     if (!m_active) {
         return;
     }
-    switch(ln.type) {
-    case eng::LibNotification::Type::METADATA_QUERIED:
+    switch(engine_library_notification_type(&ln)) {
+    case eng::LibNotificationType::METADATA_QUERIED:
     {
-        auto lm = ln.get<eng::LibNotification::Type::METADATA_QUERIED>().metadata;
+        auto lm = engine_library_notification_get_libmetadata(&ln);
         DBG_OUT("received metadata in MapModule");
 
         if (lm) {
             fwk::PropertyBag properties;
             const fwk::PropertySet propset = { eng::NpExifGpsLongProp,
                                                eng::NpExifGpsLatProp };
-            lm->to_properties(propset, properties);
+            eng::libmetadata_to_properties(lm, propset, properties);
             double latitude, longitude;
             latitude = longitude = NAN;
             auto result = properties.get_value_for_property(eng::NpExifGpsLongProp);

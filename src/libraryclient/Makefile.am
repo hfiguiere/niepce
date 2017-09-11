@@ -9,10 +9,11 @@ TESTS = test_worker
 TEST_LIBS =  \
 	liblibraryclient.a \
 	$(top_builddir)/src/engine/libniepceengine.a \
+	$(top_builddir)/target/debug/libniepce_rust.a \
+	$(top_builddir)/src/engine/libniepceengineglue.a \
         $(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
-	$(top_builddir)/target/debug/libniepce_rust.a \
         @BOOST_UNIT_TEST_FRAMEWORK_LIBS@ \
 	@FRAMEWORK_LIBS@ \
 	@OPENRAW_LIBS@ \

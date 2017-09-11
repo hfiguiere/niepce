@@ -34,20 +34,20 @@ class Op
 {
 public:
     typedef std::unique_ptr< Op > Ptr;
-    typedef std::function<void (const Library::Ptr &)> function_t;
+    typedef std::function<bool (Library*)> Function;
 
-    Op(tid_t id, const function_t & func);
+    Op(tid_t id, const Function & func);
 
     tid_t id() const
         { return m_id; }
 
-    void operator() (const Library::Ptr &);
-    const function_t & fn() const
+    void operator() (Library*);
+    const Function & fn() const
         { return m_function; }
 protected:
 private:
     tid_t   m_id;
-    function_t m_function;
+    Function m_function;
 };
 
 }

@@ -19,6 +19,8 @@
  */
 
 #include <glibmm/miscutils.h>
+#include <giomm/file.h>
+
 #include "cameraimporter.hpp"
 
 #include "fwk/base/debug.hpp"

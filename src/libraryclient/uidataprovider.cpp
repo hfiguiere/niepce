@@ -28,23 +28,20 @@
 
 namespace libraryclient {
 
-void UIDataProvider::updateLabel(const eng::Label::Ptr & l)
+void UIDataProvider::updateLabel(const eng::Label & l)
 {
     // TODO: will work as long as we have 5 labels or something.
-    for(auto iter : m_labels) {
-        if(iter->id() == l->id()) {
-            iter->set_label(l->label());
-            iter->set_colour(l->colour());
+    for (auto & label : m_labels) {
+        if (engine_db_label_id(label.get()) == engine_db_label_id(&l)) {
+            label = eng::label_clone(&l);
         }
     }
 }
 
 
-void UIDataProvider::addLabels(const eng::Label::ListPtr & l)
+void UIDataProvider::addLabel(const eng::Label & l)
 {
-    for(auto iter : *l) {
-        m_labels.push_back(eng::Label::Ptr(new eng::Label(*iter)));
-    }
+    m_labels.push_back(eng::label_clone(&l));
 }
 
 
@@ -54,7 +51,7 @@ void UIDataProvider::deleteLabel(int id)
     for(auto iter = m_labels.begin();
         iter != m_labels.end(); ++iter) {
 
-        if((*iter)->id() == id) {
+        if (engine_db_label_id(iter->get()) == id) {
             DBG_OUT("remove label %d", id);
             iter = m_labels.erase(iter);
             break;
@@ -62,14 +59,15 @@ void UIDataProvider::deleteLabel(int id)
     }
 }
 
-fwk::Option<fwk::RgbColour> UIDataProvider::colourForLabel(int id) const
+fwk::Option<fwk::RgbColourPtr> UIDataProvider::colourForLabel(int id) const
 {
-    for(auto iter : m_labels) {
-        if(iter->id() == id) {
-            return fwk::Option<fwk::RgbColour>(iter->colour());
+    for(auto label : m_labels) {
+        if (engine_db_label_id(label.get()) == id) {
+            return fwk::Option<fwk::RgbColourPtr>(
+                fwk::rgbcolour_clone(engine_db_label_colour(label.get())));
         }
     }
-    return fwk::Option<fwk::RgbColour>();
+    return fwk::Option<fwk::RgbColourPtr>();
 }
 
 

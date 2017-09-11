@@ -17,25 +17,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include "fwk/base/debug.hpp"
 #include "libfile.hpp"
+#include "engine/library/notification.hpp"
+#include "fwk/base/debug.hpp"
 #include "properties.hpp"
 
-
-extern "C" eng::LibFile* engine_db_libfile_new(eng::library_id_t id,
-                                               eng::library_id_t folder_id,
-                                               eng::library_id_t fs_file_id,
-                                               const char* path, const char* name);
-extern "C" void engine_db_libfile_delete(eng::LibFile*);
+extern "C" {
+eng::LibFile *engine_db_libfile_new(eng::library_id_t id,
+                                    eng::library_id_t folder_id,
+                                    eng::library_id_t fs_file_id,
+                                    const char *path, const char *name);
+void engine_db_libfile_delete(eng::LibFile *);
+}
 
 namespace eng {
 
-LibFilePtr libfile_new(library_id_t id, library_id_t folder_id, library_id_t fs_file_id,
-                       const char* path, const char* name) {
-    return LibFilePtr(
-        engine_db_libfile_new(id, folder_id, fs_file_id, path, name),
-        &engine_db_libfile_delete);
+// some glue for rust
+QueriedContent::QueriedContent(library_id_t _container)
+    : container(_container)
+    , files(new LibFileList)
+{
+}
+
+void QueriedContent::push(LibFile *f)
+{
+    files->push_back(eng::libfile_wrap(f));
+}
+}
+
+namespace eng {
+
+LibFilePtr libfile_new(library_id_t id, library_id_t folder_id,
+                       library_id_t fs_file_id, const char *path,
+                       const char *name)
+{
+    return libfile_wrap(
+        engine_db_libfile_new(id, folder_id, fs_file_id, path, name));
+}
+
+LibFilePtr libfile_wrap(LibFile *lf)
+{
+    return LibFilePtr(lf, &engine_db_libfile_delete);
 }
 
 /**
@@ -46,25 +68,16 @@ LibFilePtr libfile_new(library_id_t id, library_id_t folder_id, library_id_t fs_
  */
 LibFileType mimetype_to_filetype(fwk::MimeType mime)
 {
-    if(mime.isDigicamRaw())
-    {
+    if (mime.isDigicamRaw()) {
         return LibFileType::RAW;
-    }
-    else if(mime.isImage())
-    {
+    } else if (mime.isImage()) {
         return LibFileType::IMAGE;
-    }
-    else if(mime.isMovie())
-    {
+    } else if (mime.isMovie()) {
         return LibFileType::VIDEO;
-    }
-    else
-    {
+    } else {
         return LibFileType::UNKNOWN;
     }
 }
-
-
 }
 /*
   Local Variables:

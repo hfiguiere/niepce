@@ -58,7 +58,7 @@ public:
     ThumbnailCache(const std::string & dir, uint64_t notif_id);
     ~ThumbnailCache();
 
-    void request(const LibFileListPtr & fl);
+    void request(const LibFileList& fl);
 
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 

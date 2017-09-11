@@ -326,36 +326,48 @@ void NiepceWindow::on_open_library()
 void NiepceWindow::create_initial_labels()
 {
     // TODO make this parametric from resources
-    m_libClient->createLabel(_("Label 1"), fwk::RgbColour(55769, 9509, 4369).to_string()); /* 217, 37, 17 */
-    m_libClient->createLabel(_("Label 2"), fwk::RgbColour(24929, 55769, 4369).to_string()); /* 97, 217, 17 */
-    m_libClient->createLabel(_("Label 3"), fwk::RgbColour(4369, 50629, 55769).to_string()); /* 17, 197, 217 */
-    m_libClient->createLabel(_("Label 4"), fwk::RgbColour(35209, 4369, 55769).to_string()); /* 137, 17, 217 */
-    m_libClient->createLabel(_("Label 5"), fwk::RgbColour(55769, 35209, 4369).to_string()); /* 217, 137, 17 */
+    m_libClient->createLabel(_("Label 1"), fwk::rgbcolour_to_string(55769, 9509, 4369)); /* 217, 37, 17 */
+    m_libClient->createLabel(_("Label 2"), fwk::rgbcolour_to_string(24929, 55769, 4369)); /* 97, 217, 17 */
+    m_libClient->createLabel(_("Label 3"), fwk::rgbcolour_to_string(4369, 50629, 55769)); /* 17, 197, 217 */
+    m_libClient->createLabel(_("Label 4"), fwk::rgbcolour_to_string(35209, 4369, 55769)); /* 137, 17, 217 */
+    m_libClient->createLabel(_("Label 5"), fwk::rgbcolour_to_string(55769, 35209, 4369)); /* 217, 137, 17 */
 }
 
 
-void NiepceWindow::on_lib_notification(const eng::LibNotification & ln)
+void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
 {
-    switch(ln.type) {
-    case eng::LibNotification::Type::NEW_LIBRARY_CREATED:
+    switch(engine_library_notification_type(&ln)) {
+    case eng::LibNotificationType::NEW_LIBRARY_CREATED:
         create_initial_labels();
         break;
-    case eng::LibNotification::Type::ADDED_LABELS:
+    case eng::LibNotificationType::ADDED_LABEL:
     {
-        auto l = ln.get<eng::LibNotification::Type::ADDED_LABELS>();
-        m_libClient->getDataProvider()->addLabels(l.labels);
+        auto l = engine_library_notification_get_label(&ln);
+        if (l) {
+            m_libClient->getDataProvider()->addLabel(*l);
+        } else {
+            ERR_OUT("Invalid label (nullptr)");
+        }
         break;
     }
-    case eng::LibNotification::Type::LABEL_CHANGED:
+    case eng::LibNotificationType::LABEL_CHANGED:
     {
-        auto l = ln.get<eng::LibNotification::Type::LABEL_CHANGED>();
-        m_libClient->getDataProvider()->updateLabel(l.label);
+        auto l = engine_library_notification_get_label(&ln);
+        if (l) {
+            m_libClient->getDataProvider()->updateLabel(*l);
+        } else {
+            ERR_OUT("Invalid label (nullptr)");
+        }
         break;
     }
-    case eng::LibNotification::Type::LABEL_DELETED:
+    case eng::LibNotificationType::LABEL_DELETED:
     {
-        auto id = ln.get<eng::LibNotification::Type::LABEL_DELETED>();
-        m_libClient->getDataProvider()->deleteLabel(id.id);
+        auto id = engine_library_notification_get_id(&ln);
+        if (id) {
+            m_libClient->getDataProvider()->deleteLabel(id);
+        } else {
+            ERR_OUT("Invalid ID");
+        }
         break;
     }
     default:

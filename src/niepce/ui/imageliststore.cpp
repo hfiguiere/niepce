@@ -90,24 +90,23 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch (ln.type) {
-    case eng::LibNotification::Type::FOLDER_CONTENT_QUERIED:
-    case eng::LibNotification::Type::KEYWORD_CONTENT_QUERIED:
+    switch (engine_library_notification_type(&ln)) {
+    case eng::LibNotificationType::FOLDER_CONTENT_QUERIED:
+    case eng::LibNotificationType::KEYWORD_CONTENT_QUERIED:
     {
-        auto param = ln.get<eng::LibNotification::Type::FOLDER_CONTENT_QUERIED>();
-        auto l = param.files;
-        if (ln.type == eng::LibNotification::Type::FOLDER_CONTENT_QUERIED) {
-            m_current_folder = param.container;
+        auto param = engine_library_notification_get_content(&ln);
+        const auto& l = param->files;
+        if (engine_library_notification_type(&ln) == eng::LibNotificationType::FOLDER_CONTENT_QUERIED) {
+            m_current_folder = param->container;
             m_current_keyword = 0;
-        } else if (ln.type == eng::LibNotification::Type::KEYWORD_CONTENT_QUERIED) {
+        } else if (engine_library_notification_type(&ln) == eng::LibNotificationType::KEYWORD_CONTENT_QUERIED) {
             m_current_folder = 0;
-            m_current_keyword = param.container;
+            m_current_keyword = param->container;
         }
-        DBG_OUT("received folder content file # %lu", l->size());
+        DBG_OUT("received folder content file # %lu %p %p", l->size());
         // clear the map before the list.
         m_idmap.clear();
         clear();
-        eng::LibFileList::const_iterator iter = l->begin();
         for_each(l->begin(), l->end(),
                  [this] (const eng::LibFilePtr & f) {
                      Gtk::TreeModel::iterator riter = append();
@@ -120,46 +119,49 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
                      m_idmap[engine_db_libfile_id(f.get())] = riter;
                  });
         // at that point clear the cache because the icon view is populated.
-        getLibraryClient()->thumbnailCache().request(l);
+        getLibraryClient()->thumbnailCache().request(*l);
         break;
     }
-    case eng::LibNotification::Type::FILE_MOVED:
+    case eng::LibNotificationType::FILE_MOVED:
     {
         DBG_OUT("File moved. Current folder %ld", m_current_folder);
-        auto param = ln.get<eng::LibNotification::Type::FILE_MOVED>();
+        auto param = engine_library_notification_get_filemoved(&ln);
         if (m_current_folder == 0) {
             return;
         }
-        if (param.from == m_current_folder) {
+        if (param->from == m_current_folder) {
             // remove from list
             DBG_OUT("from this folder");
-            auto iter = get_iter_from_id(param.file);
+            auto iter = get_iter_from_id(param->file);
             if (iter) {
                 iter = erase(iter);
             }
-        } else if (param.to == m_current_folder) {
+        } else if (param->to == m_current_folder) {
             // XXX add to list. but this isn't likely to happen atm.
         }
+        break;
     }
-    case eng::LibNotification::Type::METADATA_CHANGED:
+    case eng::LibNotificationType::METADATA_CHANGED:
     {
-        auto m = ln.get<eng::LibNotification::Type::METADATA_CHANGED>();
-        fwk::PropertyIndex prop = m.meta;
+        auto m = engine_library_notification_get_metadatachange(&ln);
+        const fwk::PropertyIndex& prop = m->meta;
         DBG_OUT("metadata changed %s", eng::_propertyName(prop));
         // only interested in a few props
         if(is_property_interesting(prop)) {
-            std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter = m_idmap.find(m.id);
+            std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter =
+                m_idmap.find(m->id);
             if(iter != m_idmap.end()) {
                 Gtk::TreeRow row = *(iter->second);
                 //
                 eng::LibFilePtr file = row[m_columns.m_libfile];
-                engine_db_libfile_set_property(file.get(), prop, boost::get<int32_t>(m.value));
+                engine_db_libfile_set_property(
+                    file.get(), prop, boost::get<int32_t>(m->value.get_variant()));
                 row[m_columns.m_libfile] = file;
             }
         }
         break;
     }
-    case eng::LibNotification::Type::XMP_NEEDS_UPDATE:
+    case eng::LibNotificationType::XMP_NEEDS_UPDATE:
     {
         fwk::Configuration & cfg = fwk::Application::app()->config();
         int write_xmp = false;

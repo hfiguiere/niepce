@@ -17,15 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #pragma once
 
-#include <string>
 #include <list>
 #include <memory>
+#include <string>
 
 #include "engine/db/librarytypes.hpp"
-#include "fwk/utils/db/iconnectiondriver.hpp"
 
 namespace eng {
 class LibFolder;
@@ -40,21 +38,18 @@ enum class LibFolderVirtualType {
     _LAST
 };
 
-const char * libfolder_read_db_columns();
-LibFolderPtr libfolder_read_from(const db::IConnectionDriver::Ptr & db);
+LibFolderPtr libfolder_new(library_id_t id, const char *name);
 
-LibFolderPtr libfolder_new(library_id_t id, const char* name);
-
-extern "C" library_id_t engine_db_libfolder_id(const LibFolder*);
-extern "C" const char* engine_db_libfolder_name(const LibFolder*);
-extern "C" int32_t engine_db_libfolder_virtual_type(const LibFolder*);
-extern "C" bool engine_db_libfolder_expanded(const LibFolder*);
-extern "C" void engine_db_libfolder_set_locked(const LibFolder*, bool);
-extern "C" void engine_db_libfolder_set_expanded(const LibFolder*, bool);
-extern "C" void engine_db_libfolder_set_virtual_type(const LibFolder*, int32_t);
-
+extern "C" {
+library_id_t engine_db_libfolder_id(const LibFolder *);
+const char *engine_db_libfolder_name(const LibFolder *);
+int32_t engine_db_libfolder_virtual_type(const LibFolder *);
+bool engine_db_libfolder_expanded(const LibFolder *);
+void engine_db_libfolder_set_locked(const LibFolder *, bool);
+void engine_db_libfolder_set_expanded(const LibFolder *, bool);
+void engine_db_libfolder_set_virtual_type(const LibFolder *, int32_t);
 }
-
+}
 
 /*
   Local Variables:

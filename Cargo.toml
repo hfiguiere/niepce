@@ -13,8 +13,7 @@ gio = "0.2.0"
 #gphoto = "0.1.1"
 
 [build-dependencies]
-# We need git master as currently it the crate version fail on shared_ptr<>
-bindgen = { git = "https://github.com/servo/rust-bindgen.git" }
+bindgen = "0.30.0"
 pkg-config = "0.3.9"
 
 [lib]

@@ -38,7 +38,39 @@ typedef uint32_t PropertyIndex;
 typedef boost::blank EmptyValue;
 typedef std::vector<std::string> StringArray;
 /** EmptyValue will be the default type */
-typedef boost::variant<EmptyValue, int, std::string, StringArray, Date> PropertyValue;
+class PropertyValue
+    : private boost::variant<EmptyValue, int, std::string, StringArray, DatePtr>
+{
+public:
+#if !RUST_BINDGEN
+    typedef boost::variant<EmptyValue, int, std::string, StringArray, DatePtr> _inner;
+
+    PropertyValue()
+        : _inner()
+        {
+        }
+    template<class T>
+    PropertyValue(const T& data)
+        : _inner(data)
+        {
+        }
+
+    _inner& get_variant()
+        { return *this; }
+    const _inner& get_variant() const
+        { return *this; }
+#endif
+    friend bool is_empty(const PropertyValue & v);
+    friend bool is_integer(const PropertyValue & v);
+    friend bool is_string(const PropertyValue & v);
+    friend bool is_string_array(const PropertyValue & v);
+    friend bool is_date(const PropertyValue & v);
+    friend int get_integer(const PropertyValue & v);
+    friend const Date* get_date(const PropertyValue & v);
+    friend const std::string & get_string(const PropertyValue & v);
+    friend const char* get_string_cstr(const PropertyValue & v);
+    friend const fwk::StringArray & get_string_array(const PropertyValue & v);
+};
 
 typedef std::set<PropertyIndex> PropertySet;
 
@@ -47,10 +79,19 @@ bool is_empty(const PropertyValue & v);
 /** Return if it is an integer */
 bool is_integer(const PropertyValue & v);
 bool is_string(const PropertyValue & v);
+bool is_string_array(const PropertyValue & v);
+bool is_date(const PropertyValue & v);
+const Date* get_date(const PropertyValue & v);
 /** Return the integer value (or 0 if empty) */
 int get_integer(const PropertyValue & v);
 /** Return the string value */
 const std::string & get_string(const PropertyValue & v);
+const char* get_string_cstr(const PropertyValue & v);
+
+// Rust glue
+const fwk::StringArray & get_string_array(const PropertyValue & v);
+size_t string_array_len(const fwk::StringArray &);
+const char* string_array_at_cstr(const fwk::StringArray &, size_t);
 
 /** a property bag
  * It is important that the values for PropertyIndex be properly name spaced

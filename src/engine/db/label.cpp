@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/base/date.hpp
+ * niepce - engine/db/label.cpp
  *
- * Copyright (C) 2012-2017 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "label.hpp"
 
-#include <memory>
-#include <string>
-
-#include <exempi/xmp.h>
-
-namespace fwk {
-
-class Timezone;
-
-/**
- * Fill the XmpDateTime %xmp_dt from a %t
- * @return false if gmtime_r failed.
- */
-bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
-
-class Date;
-
-typedef std::shared_ptr<Date> DatePtr;
-DatePtr date_wrap(Date*);
-std::string date_to_string(const Date*);
+extern "C" {
+void engine_db_label_delete(eng::Label*);
+eng::Label* engine_db_label_clone(const eng::Label*);
 }
 
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
+namespace eng {
+
+LabelPtr label_wrap(Label* l)
+{
+    return LabelPtr(l, &engine_db_label_delete);
+}
+
+LabelPtr label_clone(const Label* l)
+{
+    return label_wrap(engine_db_label_clone(l));
+}
+}

@@ -23,6 +23,7 @@ pub mod keyword;
 pub mod label;
 pub mod libfile;
 pub mod libfolder;
+pub mod libmetadata;
 pub mod library;
 
 pub type LibraryId = i64;

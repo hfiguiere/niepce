@@ -1,7 +1,7 @@
 /*
  * niepce - db/libmetadata.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,156 +17,83 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-#include <time.h>
 #include <exempi/xmpconsts.h>
 #include <exempi/xmperrors.h>
+#include <string.h>
+#include <time.h>
 
+#include "fwk/base/date.hpp"
 #include "fwk/base/debug.hpp"
+#include "fwk/base/rust.hpp"
+#include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
 #include "libmetadata.hpp"
 #include "properties.hpp"
 
 namespace eng {
 
-typedef std::map<fwk::PropertyIndex, std::pair<const char*, const char *> > PropsToXmpMap;
+typedef std::map<fwk::PropertyIndex, std::pair<const char *, const char *>>
+    PropsToXmpMap;
 
 /** get the mapping of properties to XMP */
-const PropsToXmpMap & props_to_xmp_map();
+const PropsToXmpMap &props_to_xmp_map();
 
-
-const PropsToXmpMap & props_to_xmp_map()
+const PropsToXmpMap &props_to_xmp_map()
 {
     static PropsToXmpMap s_props_map;
-    if(s_props_map.empty()) {
+    if (s_props_map.empty()) {
 
-#define DEFINE_PROPERTY(a,b,c,d,e)                                       \
-        s_props_map.insert(std::make_pair(b, std::make_pair(c,d)));
+#define DEFINE_PROPERTY(a, b, c, d, e)                                         \
+    s_props_map.insert(std::make_pair(b, std::make_pair(c, d)));
 #include "engine/db/properties-def.hpp"
 #undef DEFINE_PROPERTY
-
     }
     return s_props_map;
 }
 
-bool
-LibMetadata::property_index_to_xmp(fwk::PropertyIndex index, 
-                                   const char * & ns, const char * & property)
+IndexToXmp property_index_to_xmp(fwk::PropertyIndex index)
 {
-    const PropsToXmpMap & propmap = props_to_xmp_map();
+    const PropsToXmpMap &propmap = props_to_xmp_map();
     PropsToXmpMap::const_iterator iter = propmap.find(index);
-    if(iter == propmap.end()) {
+    if (iter == propmap.end()) {
         // not found
-        return false;
+        return {ns : nullptr, property : nullptr};
     }
-    if(iter->second.first == NULL || iter->second.second == NULL) {
+    if (iter->second.first == NULL || iter->second.second == NULL) {
         // no XMP equivalent
-        return false;
+        return {ns : nullptr, property : nullptr};
     }
-    ns = iter->second.first;
-    property = iter->second.second;
-    return true;
+    return {ns : iter->second.first, property : iter->second.second};
 }
 
-
-
-LibMetadata::LibMetadata(library_id_t _id)
-	: XmpMeta(),
-      m_id(_id)
+bool get_meta_data(const LibMetadata *meta, fwk::PropertyIndex p,
+                   fwk::PropertyValue &value)
 {
-}
-
-
-bool LibMetadata::setMetaData(fwk::PropertyIndex meta, 
-                              const fwk::PropertyValue & value)
-{
-    const char * ns = NULL;
-    const char * property = NULL;
-    bool result = false;
-
-    result = property_index_to_xmp(meta, ns, property);
-    if(result) {
-
-        if(fwk::is_empty(value)) {
-            result = xmp_delete_property(xmp(), ns, property);
-        }
-        else if(fwk::is_integer(value)) {
-            result = xmp_set_property_int32(xmp(), ns, property,
-                                            fwk::get_integer(value), 0);
-        }
-        else if(value.type() == typeid(std::string)) {
-            std::string val = boost::get<std::string>(value);
-            if (val.empty()) {
-                result = xmp_delete_property(xmp(), ns, property);
-            }
-            else {
-                result = xmp_set_property(xmp(), ns, property, val.c_str(), 0);
-                // FIXME we should know in advance it is localized.
-                if(!result && (xmp_get_error() == XMPErr_BadXPath)) {
-                    result = xmp_set_localized_text(xmp(), ns, property,
-                                                    "", "x-default",
-                                                    val.c_str(), 0);
-                }
-            }
-        }
-        else if(value.type() == typeid(fwk::StringArray)) {
-            fwk::StringArray v = boost::get<fwk::StringArray>(value);
-            // TODO see if we can get that without deleting the whole property
-            result = xmp_delete_property(xmp(), ns, property);
-            std::for_each(v.begin(), v.end(),
-                          [this, ns, property] (const std::string & val) {
-                              /*result =*/
-                              xmp_append_array_item(this->xmp(),
-                                                    ns, property,
-                                                    XMP_PROP_VALUE_IS_ARRAY,
-                                                    val.c_str(), 0);
-                          });
-        }
-        else if(value.type() == typeid(fwk::Date)) {
-            fwk::Date d = boost::get<fwk::Date>(value);
-
-            result = xmp_set_property_date(xmp(), ns, property,
-                                           &d.xmp_date(), 0);
-
-        }
-        if(!result) {
-            ERR_OUT("error setting property %s:%s %d", ns, property, 
-                    xmp_get_error());
-        }
-    }
-    else {
-        ERR_OUT("unknown property");
-    }
-    return result;
-}
-
-
-bool LibMetadata::getMetaData(fwk::PropertyIndex p, 
-                              fwk::PropertyValue & value) const
-{
-    const PropsToXmpMap & propmap = props_to_xmp_map();
+    const PropsToXmpMap &propmap = props_to_xmp_map();
     PropsToXmpMap::const_iterator iter = propmap.find(p);
-    if(iter == propmap.end()) {
+    if (iter == propmap.end()) {
         // not found
         return false;
     }
-    if(iter->second.first == NULL || iter->second.second == NULL) {
+    if (iter->second.first == NULL || iter->second.second == NULL) {
         // no XMP equivalent
         return false;
     }
     xmp::ScopedPtr<XmpStringPtr> xmp_value(xmp_string_new());
     uint32_t prop_bits = 0;
-    const char * ns = iter->second.first;
-    const char * xmp_prop = iter->second.second;
-    bool found = xmp_get_property(xmp(), ns, xmp_prop, xmp_value, &prop_bits);
-    if(found && XMP_IS_ARRAY_ALTTEXT(prop_bits)) {
-        found = xmp_get_localized_text(xmp(), ns, xmp_prop, "", "x-default", 
-                                       NULL, xmp_value, NULL);
+    const char *ns = iter->second.first;
+    const char *xmp_prop = iter->second.second;
+    bool found = xmp_get_property(engine_libmetadata_get_xmp(meta), ns,
+                                  xmp_prop, xmp_value, &prop_bits);
+    if (found && XMP_IS_ARRAY_ALTTEXT(prop_bits)) {
+        found = xmp_get_localized_text(engine_libmetadata_get_xmp(meta), ns,
+                                       xmp_prop, "", "x-default", nullptr,
+                                       xmp_value, nullptr);
     }
-    if(found) {
-        const char * v = NULL;
+    if (found) {
+        const char *v = NULL;
         v = xmp_string_cstr(xmp_value);
-        if(v) {
+        if (v) {
             value = fwk::PropertyValue(v);
             return true;
         }
@@ -175,84 +102,69 @@ bool LibMetadata::getMetaData(fwk::PropertyIndex p,
     return false;
 }
 
-void LibMetadata::to_properties(const fwk::PropertySet & propset,
-                                fwk::PropertyBag & props)
+void libmetadata_to_properties(const LibMetadata *meta,
+                               const fwk::PropertySet &propset,
+                               fwk::PropertyBag &props)
 {
-    std::for_each(propset.begin(), propset.end(),
-                  [&props, this] (fwk::PropertySet::key_type prop_id) {
-                      switch(prop_id) {
-                      case NpXmpRatingProp:
-                          props.set_value_for_property(prop_id,
-                                                       fwk::PropertyValue(rating()));
-                          break;
-                      case NpXmpLabelProp:
-                          props.set_value_for_property(prop_id,
-                                                       fwk::PropertyValue(label()));
-                          break;
-                      case NpTiffOrientationProp:
-                          props.set_value_for_property(prop_id,
-                                                       fwk::PropertyValue(orientation()));
-                          break;
-                      case NpExifDateTimeOriginalProp:
-                          props.set_value_for_property(prop_id,
-                                                       fwk::PropertyValue(creation_date()));
-                          break;
-                      case NpIptcKeywordsProp:
-                      {
-                          xmp::ScopedPtr<XmpIteratorPtr>
-                              iter(xmp_iterator_new(xmp(), NS_DC,
-                                                    "subject", XMP_ITER_JUSTLEAFNODES));
-                          fwk::StringArray vec;
-                          xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-                          while(xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
-                              vec.push_back(xmp_string_cstr(value));
-                          }
-                          fwk::PropertyValue v(vec);
-                          //DBG_ASSERT(check_property_type(prop_id, v.type()), "wrong type");
-                          props.set_value_for_property(prop_id, v);
-                          break;
-                      }
-                      default:
-                      {
-                          fwk::PropertyValue propval;
-                          if(getMetaData(prop_id, propval)) {
-                              //DBG_ASSERT(check_property_type(prop_id, propval.type()), "wrong type");
-                              props.set_value_for_property(prop_id, propval);
-                          }
-                          else {
-                              DBG_OUT("missing prop %u", prop_id);
-                          }
-                          break;
-                      }
-                      }
-                  }
-        );
+    std::for_each(
+        propset.begin(), propset.end(),
+        [&props, meta](fwk::PropertySet::key_type prop_id) {
+            auto xmpmeta = engine_libmetadata_get_xmpmeta(meta);
+            switch (prop_id) {
+            case NpXmpRatingProp:
+                props.set_value_for_property(
+                    prop_id,
+                    fwk::PropertyValue(fwk_xmp_meta_get_rating(xmpmeta)));
+                break;
+            case NpXmpLabelProp: {
+                char *str = fwk_xmp_meta_get_label(xmpmeta);
+                if (str) {
+                    props.set_value_for_property(prop_id,
+                                                 fwk::PropertyValue(str));
+                    rust_cstring_delete(str);
+                }
+                break;
+            }
+            case NpTiffOrientationProp:
+                props.set_value_for_property(
+                    prop_id,
+                    fwk::PropertyValue(fwk_xmp_meta_get_orientation(xmpmeta)));
+                break;
+            case NpExifDateTimeOriginalProp: {
+                fwk::DatePtr date =
+                    fwk::date_wrap(fwk_xmp_meta_get_creation_date(xmpmeta));
+                props.set_value_for_property(prop_id, fwk::PropertyValue(date));
+                break;
+            }
+            case NpIptcKeywordsProp: {
+                xmp::ScopedPtr<XmpIteratorPtr> iter(
+                    xmp_iterator_new(engine_libmetadata_get_xmp(meta), NS_DC,
+                                     "subject", XMP_ITER_JUSTLEAFNODES));
+                fwk::StringArray vec;
+                xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
+                while (xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
+                    vec.push_back(xmp_string_cstr(value));
+                }
+                fwk::PropertyValue v(vec);
+                // DBG_ASSERT(check_property_type(prop_id, v.type()), "wrong
+                // type");
+                props.set_value_for_property(prop_id, v);
+                break;
+            }
+            default: {
+                fwk::PropertyValue propval;
+                if (get_meta_data(meta, prop_id, propval)) {
+                    // DBG_ASSERT(check_property_type(prop_id, propval.type()),
+                    // "wrong type");
+                    props.set_value_for_property(prop_id, propval);
+                } else {
+                    DBG_OUT("missing prop %u", prop_id);
+                }
+                break;
+            }
+            }
+        });
 }
-
-
-bool LibMetadata::touch()
-{
-    bool result = false;
-    XmpDateTime date;
-    struct tm dt, *dt2;
-    time_t currenttime = time(NULL);
-    dt2 = gmtime_r(&currenttime, &dt);
-    if(dt2 == &dt) {
-        memset(&date, 0, sizeof date);
-        date.second = dt.tm_sec;
-        date.minute = dt.tm_min;
-        date.hour = dt.tm_hour;
-        date.day = dt.tm_mday;
-        date.month = dt.tm_mon;
-        date.year = dt.tm_year + 1900;
-
-        result = xmp_set_property_date(xmp(), NS_XAP, "MetadataDate",
-                                       &date, 0);
-    }
-    return result;
-}
-
-
 }
 
 /*

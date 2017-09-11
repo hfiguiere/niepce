@@ -38,15 +38,51 @@ bool is_string(const PropertyValue & v)
     return v.type() == typeid(std::string);
 }
 
+bool is_string_array(const PropertyValue & v)
+{
+    return v.type() == typeid(StringArray);
+}
+
+bool is_date(const PropertyValue & v)
+{
+    return v.type() == typeid(DatePtr);
+}
+
 int get_integer(const PropertyValue & v)
 {
     return is_empty(v) ? 0 : boost::get<int>(v);
 }
 
+const Date* get_date(const PropertyValue & v)
+{
+    return boost::get<DatePtr>(v).get();
+}
 const std::string & get_string(const PropertyValue & v)
 {
     return boost::get<std::string>(v);
 }
+
+const char* get_string_cstr(const PropertyValue & v)
+{
+    return boost::get<std::string>(v).c_str();
+}
+
+// Rust glue
+const fwk::StringArray & get_string_array(const PropertyValue & v)
+{
+    return boost::get<fwk::StringArray>(v);
+}
+
+size_t string_array_len(const fwk::StringArray &v)
+{
+    return v.size();
+}
+
+const char* string_array_at_cstr(const fwk::StringArray &v, size_t i)
+{
+    return v[i].c_str();
+}
+// end
 
 bool PropertyBag::set_value_for_property(PropertyIndex idx, const PropertyValue & value)
 {

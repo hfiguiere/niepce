@@ -54,21 +54,25 @@ GridViewModule::~GridViewModule()
 void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch(ln.type) {
-    case eng::LibNotification::Type::METADATA_QUERIED:
+    switch(engine_library_notification_type(&ln)) {
+    case eng::LibNotificationType::METADATA_QUERIED:
     {
-        auto lm = ln.get<eng::LibNotification::Type::METADATA_QUERIED>();
+        auto lm = engine_library_notification_get_libmetadata(&ln);
         DBG_OUT("received metadata");
-        m_metapanecontroller->display(lm.file, lm.metadata);
+        if (lm) {
+            m_metapanecontroller->display(engine_libmetadata_get_id(lm), lm);
+        } else {
+            ERR_OUT("Invalid LibMetadata (nullptr)");
+        }
         break;
     }
-    case eng::LibNotification::Type::METADATA_CHANGED:
+    case eng::LibNotificationType::METADATA_CHANGED:
     {
         DBG_OUT("metadata changed");
-        auto m = ln.get<eng::LibNotification::Type::METADATA_CHANGED>();
-        if(m.id == m_metapanecontroller->displayed_file()) {
+        auto id = engine_library_notification_get_id(&ln);
+        if(id && id == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
-          m_shell.getLibraryClient()->requestMetadata(m.id);
+          m_shell.getLibraryClient()->requestMetadata(id);
         }
         break;
     }
@@ -80,7 +84,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 
 void GridViewModule::display_none()
 {
-    m_metapanecontroller->display(0, eng::LibMetadata::Ptr());
+    m_metapanecontroller->display(0, nullptr);
 }
 
 

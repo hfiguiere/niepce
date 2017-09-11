@@ -24,6 +24,7 @@ niepce_LDADD = \
 	$(top_builddir)/target/debug/libniepce_rust.a \
 	$(top_builddir)/src/engine/libniepceengine.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
+	$(top_builddir)/src/engine/libniepceengineglue.a \
 	@FRAMEWORK_LIBS@ \
 	@GPHOTO_LIBS@ \
 	@BABL_LIBS@ \

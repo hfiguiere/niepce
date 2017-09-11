@@ -29,18 +29,8 @@ use super::LibraryId;
 use super::fsfile::FsFile;
 use fwk::base::PropertyIndex;
 use root::eng::NiepceProperties as Np;
+pub use root::eng::LibFileType as FileType;
 use fwk;
-
-#[repr(i32)]
-#[allow(non_camel_case_types)]
-#[derive(Clone,PartialEq)]
-pub enum FileType {
-    UNKNOWN = 0,
-    RAW = 1,
-    RAW_JPEG = 2,
-    IMAGE = 3,
-    VIDEO = 4
-}
 
 impl From<i32> for FileType {
     fn from(t: i32) -> Self {
@@ -51,6 +41,18 @@ impl From<i32> for FileType {
             3 => FileType::IMAGE,
             4 => FileType::VIDEO,
             _ => FileType::UNKNOWN,
+        }
+    }
+}
+
+impl Into<i32> for FileType {
+    fn into(self) -> i32 {
+        match self {
+            FileType::UNKNOWN => 0,
+            FileType::RAW => 1,
+            FileType::RAW_JPEG => 2,
+            FileType::IMAGE => 3,
+            FileType::VIDEO => 4,
         }
     }
 }

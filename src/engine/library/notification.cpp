@@ -18,55 +18,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "fwk/base/debug.hpp"
-#include "niepce/notifications.hpp"
 #include "engine/library/notification.hpp"
 #include "engine/db/keyword.hpp"
+#include "fwk/base/debug.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
+#include "niepce/notifications.hpp"
 
 namespace {
 
-void notify(uint64_t notif_id, eng::LibNotification&& ln)
+/**
+ * Wrap a pointer (from Rust) into a shared_ptr<>
+ */
+eng::LibNotificationPtr
+engine_library_notification_wrap(eng::LibNotification* n)
 {
+    return eng::LibNotificationPtr(n, &engine_library_notification_delete);
+}
+}
+
+extern "C" void
+engine_library_notify(uint64_t notif_id,
+                      eng::LibNotification* notification)
+{
+    auto ln = engine_library_notification_wrap(notification);
     auto wnc = fwk::NotificationCenter::get_nc(notif_id);
     auto nc = wnc.lock();
     if (nc) {
         DBG_OUT("notif");
         // pass the notification
-        fwk::Notification::Ptr n(new fwk::Notification(niepce::NOTIFICATION_LIB));
+        fwk::Notification::Ptr n(
+            new fwk::Notification(niepce::NOTIFICATION_LIB));
         n->setData(boost::any(ln));
         nc->post(std::move(n));
     } else {
         DBG_OUT("try to send a notification without notification center");
     }
-}
-
-}
-
-// Rust glue
-extern "C" {
-
-void lib_notification_notify_new_lib_created(uint64_t notif_id)
-{
-    eng::LibNotification ln =
-        eng::LibNotification::make<eng::LibNotification::Type::NEW_LIBRARY_CREATED>({});
-    notify(notif_id, std::move(ln));
-}
-
-void lib_notification_notify_xmp_needs_update(uint64_t notif_id)
-{
-    eng::LibNotification ln =
-        eng::LibNotification::make<eng::LibNotification::Type::XMP_NEEDS_UPDATE>({});
-    notify(notif_id, std::move(ln));
-}
-
-void lib_notification_notify_kw_added(uint64_t notif_id, eng::Keyword* keyword)
-{
-    eng::KeywordPtr kw = eng::keyword_wrap(keyword);
-    eng::LibNotification ln =
-        eng::LibNotification::make<eng::LibNotification::Type::ADDED_KEYWORD>({kw});
-    notify(notif_id, std::move(ln));
-}
-
-
 }

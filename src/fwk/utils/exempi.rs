@@ -17,9 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use libc::c_char;
+use std::ffi::CString;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std::ptr;
 use exempi;
 use exempi::Xmp;
 use fwk::Date;
@@ -31,10 +34,10 @@ static UFRAW_INTEROP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/ufr
 static UFRAW_INTEROP_NS_PREFIX: &'static str = "ufrint";
 
 
-static NS_TIFF: &'static str = "http://ns.adobe.com/tiff/1.0/";
-static NS_XAP: &'static str = "http://ns.adobe.com/xap/1.0/";
-static NS_EXIF: &'static str = "http://ns.adobe.com/exif/1.0/";
-static NS_DC: &'static str = "http://purl.org/dc/elements/1.1/";
+pub static NS_TIFF: &'static str = "http://ns.adobe.com/tiff/1.0/";
+pub static NS_XAP: &'static str = "http://ns.adobe.com/xap/1.0/";
+pub static NS_EXIF: &'static str = "http://ns.adobe.com/exif/1.0/";
+pub static NS_DC: &'static str = "http://purl.org/dc/elements/1.1/";
 
 pub struct NsDef {
     ns: String,
@@ -68,7 +71,7 @@ impl Drop for ExempiManager {
 
 
 pub struct XmpMeta {
-    xmp: Xmp,
+    pub xmp: Xmp,
     keywords: Vec<String>,
     keywords_fetched: bool,
 }
@@ -146,7 +149,7 @@ impl XmpMeta {
     }
 
     pub fn label(&self) -> Option<String> {
-        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let mut flags: exempi::PropFlags = exempi::PROP_NONE;
         if let Some(xmpstring) = self.xmp.get_property(NS_XAP, "Label", &mut flags) {
             return Some(String::from(xmpstring.to_str()));
         }
@@ -154,7 +157,7 @@ impl XmpMeta {
     }
 
     pub fn rating(&self) -> Option<i32> {
-        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let mut flags: exempi::PropFlags = exempi::PROP_NONE;
         return self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags);
     }
 
@@ -268,6 +271,48 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     None
 }
 
+#[no_mangle]
+pub fn fwk_exempi_manager_new() -> *mut ExempiManager {
+    return Box::into_raw(Box::new(ExempiManager::new(None)))
+}
+
+#[no_mangle]
+pub fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
+    unsafe { Box::from_raw(em); }
+}
+
+#[no_mangle]
+pub fn fwk_xmp_meta_get_orientation(xmp: &XmpMeta) -> i32 {
+    if let Some(o) = xmp.orientation() {
+        return o;
+    }
+    0
+}
+
+#[no_mangle]
+pub fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
+    if let Some(r) = xmp.rating() {
+        return r;
+    }
+    0
+}
+
+
+#[no_mangle]
+pub fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {
+    if let Some(s) = xmp.label() {
+        return CString::new(s.as_bytes()).unwrap().into_raw()
+    }
+    ptr::null_mut()
+}
+
+#[no_mangle]
+pub fn fwk_xmp_meta_get_creation_date(xmp: &XmpMeta) -> *mut Date {
+    if let Some(d) = xmp.creation_date() {
+        return Box::into_raw(Box::new(d));
+    }
+    ptr::null_mut()
+}
 
 #[cfg(test)]
 mod tests {

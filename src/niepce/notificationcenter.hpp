@@ -26,6 +26,7 @@
 
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "engine/db/library.hpp"
+#include "engine/library/notification.hpp"
 #include "engine/library/thumbnailnotification.hpp"
 
 

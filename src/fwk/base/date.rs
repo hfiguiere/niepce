@@ -19,6 +19,7 @@
 
 use exempi;
 use libc;
+use std::ffi::CString;
 use std::ptr;
 use std::time::{
     SystemTime,
@@ -127,6 +128,16 @@ pub fn make_xmp_date_time(t: Time, xmp_dt: &mut exempi::DateTime) -> bool {
     xmp_dt.c.nano_second = 0;
 
     return true;
+}
+
+#[no_mangle]
+pub fn fwk_date_delete(date: *mut Date) {
+    unsafe { Box::from_raw(date); }
+}
+
+#[no_mangle]
+pub fn fwk_date_to_string(date: &Date) -> *mut libc::c_char {
+    CString::new(date.to_string().as_bytes()).unwrap().into_raw()
 }
 
 #[cfg(test)]

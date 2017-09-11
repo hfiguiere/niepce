@@ -72,7 +72,7 @@ protected:
     std::unique_ptr<LocalLibraryServer> m_localLibrary;
 private:
     /** do the dirty work of scheduling the op */
-    eng::tid_t schedule_op(const eng::Op::function_t & func);
+    eng::tid_t schedule_op(const eng::Op::Function & func);
 };
 
 }

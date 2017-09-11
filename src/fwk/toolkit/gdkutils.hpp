@@ -38,7 +38,7 @@ namespace fwk {
 													int exif_orientation);
 
   Gdk::RGBA rgbcolour_to_gdkcolor(const fwk::RgbColour & colour);
-  fwk::RgbColour gdkcolor_to_rgbcolour(const Gdk::RGBA & colour);
+  fwk::RgbColourPtr gdkcolor_to_rgbcolour(const Gdk::RGBA & colour);
 }
 
 #endif

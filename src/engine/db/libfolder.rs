@@ -42,6 +42,7 @@ impl From<i32> for VirtualType {
     }
 }
 
+#[derive(Clone)]
 pub struct LibFolder {
     id: LibraryId,
     name: String,

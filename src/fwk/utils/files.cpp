@@ -73,6 +73,22 @@ FileList::FileList( const _impltype_t & v )
 {
 }
 
+const FileList::value_type::value_type*
+FileList::at_cstr(size_type index) const
+{
+    return _impltype_t::at(index).c_str();
+}
+
+FileList::size_type FileList::size() const
+{
+    return _impltype_t::size();
+}
+
+void FileList::sort()
+{
+    std::sort(_impltype_t::begin(), _impltype_t::end());
+}
+
 FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type& p, std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter)
 {
 //		if(!exists( p ) ) {

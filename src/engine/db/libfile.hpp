@@ -19,14 +19,17 @@
 
 #pragma once
 
-#include <string>
 #include <list>
 #include <memory>
+#include <string>
 
+#if !RUST_BINDGEN
 #include "fwk/toolkit/mimetype.hpp"
-#include "fwk/base/propertybag.hpp"
-#include "engine/db/librarytypes.hpp"
+#endif
+
 #include "engine/db/keyword.hpp"
+#include "engine/db/librarytypes.hpp"
+#include "fwk/base/propertybag.hpp"
 
 namespace eng {
 
@@ -38,32 +41,39 @@ enum class LibFileType {
     VIDEO = 4
 };
 
+#if !RUST_BINDGEN
 LibFileType mimetype_to_filetype(fwk::MimeType mime);
+#endif
 
 class LibFile;
 typedef std::shared_ptr<LibFile> LibFilePtr;
-typedef std::weak_ptr< LibFile> LibFileWeakPtr;
+typedef std::weak_ptr<LibFile> LibFileWeakPtr;
 typedef std::list<LibFilePtr> LibFileList;
 typedef std::shared_ptr<LibFileList> LibFileListPtr;
 
-LibFilePtr libfile_new(library_id_t, library_id_t, library_id_t, const char*, const char*);
+LibFilePtr libfile_new(library_id_t, library_id_t, library_id_t, const char *,
+                       const char *);
+LibFilePtr libfile_wrap(LibFile *);
 }
 
-extern "C" const char* engine_db_libfile_path(const eng::LibFile*);
-extern "C" eng::library_id_t engine_db_libfile_id(const eng::LibFile*);
-extern "C" eng::library_id_t engine_db_libfile_folderid(const eng::LibFile*);
-extern "C" int32_t engine_db_libfile_orientation(const eng::LibFile*);
-extern "C" int32_t engine_db_libfile_rating(const eng::LibFile*);
-extern "C" int32_t engine_db_libfile_label(const eng::LibFile*);
-extern "C" int32_t engine_db_libfile_flag(const eng::LibFile*);
-extern "C" int32_t engine_db_libfile_property(const eng::LibFile*, fwk::PropertyIndex);
-extern "C" eng::LibFileType engine_db_libfile_file_type(const eng::LibFile*);
-extern "C" void engine_db_libfile_set_orientation(eng::LibFile*, int32_t);
-extern "C" void engine_db_libfile_set_rating(eng::LibFile*, int32_t);
-extern "C" void engine_db_libfile_set_label(eng::LibFile*, int32_t);
-extern "C" void engine_db_libfile_set_flag(eng::LibFile*, int32_t);
-extern "C" void engine_db_libfile_set_property(const eng::LibFile*, fwk::PropertyIndex, int32_t);
-extern "C" void engine_db_libfile_set_file_type(eng::LibFile*, eng::LibFileType);
+extern "C" {
+const char *engine_db_libfile_path(const eng::LibFile *);
+eng::library_id_t engine_db_libfile_id(const eng::LibFile *);
+eng::library_id_t engine_db_libfile_folderid(const eng::LibFile *);
+int32_t engine_db_libfile_orientation(const eng::LibFile *);
+int32_t engine_db_libfile_rating(const eng::LibFile *);
+int32_t engine_db_libfile_label(const eng::LibFile *);
+int32_t engine_db_libfile_flag(const eng::LibFile *);
+int32_t engine_db_libfile_property(const eng::LibFile *, fwk::PropertyIndex);
+eng::LibFileType engine_db_libfile_file_type(const eng::LibFile *);
+void engine_db_libfile_set_orientation(eng::LibFile *, int32_t);
+void engine_db_libfile_set_rating(eng::LibFile *, int32_t);
+void engine_db_libfile_set_label(eng::LibFile *, int32_t);
+void engine_db_libfile_set_flag(eng::LibFile *, int32_t);
+void engine_db_libfile_set_property(const eng::LibFile *, fwk::PropertyIndex,
+                                    int32_t);
+void engine_db_libfile_set_file_type(eng::LibFile *, eng::LibFileType);
+}
 
 /*
   Local Variables:

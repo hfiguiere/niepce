@@ -19,38 +19,17 @@
 
 #include "libfolder.hpp"
 
-extern "C" eng::LibFolder* engine_db_libfolder_new(eng::library_id_t id, const char* name);
-extern "C" void engine_db_libfolder_delete(eng::LibFolder*);
+extern "C" eng::LibFolder *engine_db_libfolder_new(eng::library_id_t id,
+                                                   const char *name);
+extern "C" void engine_db_libfolder_delete(eng::LibFolder *);
 
 namespace eng {
 
-LibFolderPtr libfolder_new(eng::library_id_t id, const char* name) {
-  return LibFolderPtr(
-    engine_db_libfolder_new(id, name), &engine_db_libfolder_delete);
-}
-
-const char* libfolder_read_db_columns()
+LibFolderPtr libfolder_new(eng::library_id_t id, const char *name)
 {
-    return "id,name,virtual,locked,expanded";
+    return LibFolderPtr(engine_db_libfolder_new(id, name),
+                        &engine_db_libfolder_delete);
 }
-
-LibFolderPtr libfolder_read_from(const db::IConnectionDriver::Ptr & db)
-{
-    library_id_t id;
-    std::string name;
-    int32_t virt_type, locked, expanded;
-    db->get_column_content(0, id);
-    db->get_column_content(1, name);
-    db->get_column_content(2, virt_type);
-    db->get_column_content(3, locked);
-    db->get_column_content(4, expanded);
-    LibFolderPtr f(libfolder_new(id, name.c_str()));
-    engine_db_libfolder_set_virtual_type(f.get(), virt_type);
-    engine_db_libfolder_set_locked(f.get(), (bool)locked);
-    engine_db_libfolder_set_expanded(f.get(), (bool)expanded);
-    return f;
-}
-
 }
 /*
   Local Variables:

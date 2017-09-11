@@ -180,8 +180,6 @@ src/ext/libview/Makefile
 src/fwk/Makefile
 src/fwk/base/Makefile
 src/fwk/utils/Makefile
-src/fwk/utils/db/Makefile
-src/fwk/utils/db/sqlite/Makefile
 src/fwk/toolkit/Makefile
 src/engine/Makefile
 src/libraryclient/Makefile
