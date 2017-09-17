@@ -564,11 +564,16 @@ impl Library {
 
     fn set_internal_metadata(&self, file_id: LibraryId, column: &str, value: i32) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("UPDATE files SET :1=:2 \
-                                         WHERE id=:3;",
-                                        &[&column, &value, &file_id]) {
-                // XXX check success.
-                return true;
+            match conn.execute(format!("UPDATE files SET {}=:1 \
+                                        WHERE id=:2;", column).as_ref(),
+                               &[&value, &file_id]) {
+                Ok(_) => {
+                    // XXX check success.
+                    return true;
+                },
+                Err(err) => {
+                    err_out!("error setting internal metadata {}", err);
+                },
             }
         }
         false
@@ -582,6 +587,8 @@ impl Library {
                                         &[&xmp, &file_id]) {
                 // XXX check success.
                 return true;
+            } else {
+                err_out!("error setting metadatablock");
             }
         }
         false
@@ -614,9 +621,12 @@ impl Library {
                         retval = self.set_internal_metadata(file_id, column,
                                                             unsafe { get_integer(value) });
                         if !retval {
+                            err_out!("set_internal_metadata() failed");
                             return false;
                         }
                     }
+                } else {
+                    err_out!("improper value type for {:?}", meta);
                 }
             },
             Np::NpIptcKeywordsProp => {
