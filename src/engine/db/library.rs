@@ -89,8 +89,9 @@ impl Library {
     fn init(&mut self) -> bool {
         let conn_attempt = rusqlite::Connection::open(self.dbpath.clone());
         if let Ok(conn) = conn_attempt {
+            let notif_id = self.notif_id;
             conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
-                self.notify(Box::new(LibNotification::XmpNeedsUpdate));
+                Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
                 Ok(true)
             });
             self.dbconn = Some(conn);
@@ -197,6 +198,10 @@ impl Library {
 
     pub fn notify(&self, notif: Box<LibNotification>) {
         unsafe { engine_library_notify(self.notif_id, Box::into_raw(notif) as *mut c_void); }
+    }
+
+    pub fn notify_by_id(id: u64,  notif: Box<LibNotification>) {
+        unsafe { engine_library_notify(id, Box::into_raw(notif) as *mut c_void); }
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
