@@ -122,6 +122,9 @@ void libmetadata_to_properties(const LibMetadata *meta,
                     props.set_value_for_property(prop_id,
                                                  fwk::PropertyValue(str));
                     rust_cstring_delete(str);
+                } else {
+                    props.set_value_for_property(prop_id,
+                                                 fwk::PropertyValue(""));
                 }
                 break;
             }
