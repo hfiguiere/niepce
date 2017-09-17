@@ -34,14 +34,14 @@ use super::{
     FromDb,
     LibraryId
 };
-use super::label::Label;
-use super::libfolder;
-use super::libfolder::LibFolder;
-use super::libfile;
-use super::libfile::LibFile;
-use super::libmetadata::LibMetadata;
-use super::filebundle::FileBundle;
-use super::keyword::Keyword;
+use engine::db::label::Label;
+use engine::db::libfolder;
+use engine::db::libfolder::LibFolder;
+use engine::db::libfile;
+use engine::db::libfile::LibFile;
+use engine::db::libmetadata::LibMetadata;
+use engine::db::filebundle::FileBundle;
+use engine::db::keyword::Keyword;
 use engine::library::notification::Notification as LibNotification;
 use engine::library::notification::engine_library_notify;
 use fwk;
@@ -61,7 +61,7 @@ const DB_SCHEMA_VERSION: i32 = 6;
 const DATABASENAME: &str = "niepcelibrary.db";
 
 pub struct Library {
-    maindir: PathBuf,
+//    maindir: PathBuf,
     dbpath: PathBuf,
     dbconn: Option<rusqlite::Connection>,
     inited: bool,
@@ -74,7 +74,7 @@ impl Library {
         let mut dbpath = dir.clone();
         dbpath.push(DATABASENAME);
         let mut lib = Library {
-            maindir: dir,
+//            maindir: dir,
             dbpath: dbpath,
             dbconn: None,
             inited: false,
@@ -90,11 +90,15 @@ impl Library {
         let conn_attempt = rusqlite::Connection::open(self.dbpath.clone());
         if let Ok(conn) = conn_attempt {
             let notif_id = self.notif_id;
-            conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
+            if let Ok(_) = conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
                 Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
                 Ok(true)
-            });
-            self.dbconn = Some(conn);
+            }) {
+                self.dbconn = Some(conn);
+            } else {
+                err_out!("failed to create scalar functin.");
+                return false;
+            }
         } else {
             return false;
         }

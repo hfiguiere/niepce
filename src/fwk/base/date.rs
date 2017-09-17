@@ -35,6 +35,7 @@ pub enum Timezone {}
 /**
  * Class to deal with ISO8601 string dates as used by XMP.
  * Bonus: with a timezone.
+ * XXX replace by chrono::DateTime<>
  */
 pub struct Date {
     datetime: exempi::DateTime,
@@ -52,6 +53,10 @@ impl Date {
         let mut dt = exempi::DateTime::new();
         make_xmp_date_time(t, &mut dt);
         Date { datetime: dt, tz: tz }
+    }
+
+    pub fn tz(&self) -> &Option<Timezone> {
+        &self.tz
     }
     pub fn xmp_date(&self) -> &exempi::DateTime {
         &self.datetime
@@ -75,7 +80,8 @@ impl Date {
             tm_zone: ptr::null_mut(),
         };
         let date = unsafe { libc::mktime(&mut dt) };
-        //DBG_ASSERT(date != -1, "date is -1");
+        // XXX can't seem to use the macro here.
+        //dbg_assert!(date != -1, "date is -1");
 
         date
     }

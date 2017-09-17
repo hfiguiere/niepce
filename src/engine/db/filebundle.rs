@@ -23,9 +23,9 @@ use std::ffi::CString;
 use std::ffi::OsString;
 use std::path::Path;
 
-use super::libfile::FileType;
+use engine::db::libfile::FileType;
 use fwk::MimeType;
-use root::fwk::FileList;
+use fwk::FileList;
 
 pub struct FileBundle {
     file_type: FileType,

@@ -33,5 +33,6 @@ mod tests {
     fn it_works() {
         dbg_out!("debug {}", 42);
         err_out!("error {}", 69);
+        dbg_assert!(false, "failed assert");
     }
 }
