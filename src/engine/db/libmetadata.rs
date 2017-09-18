@@ -118,9 +118,9 @@ impl LibMetadata {
                 for i in 0..count {
                     let cstr = unsafe { CStr::from_ptr(string_array_at_cstr(a, i)) };
                     self.xmp.xmp.append_array_item(&ix.ns, &ix.property,
-                                                   exempi::ARRAY_NONE,
+                                                   exempi::PROP_VALUE_IS_ARRAY,
                                                    &*cstr.to_string_lossy(),
-                                                   exempi::ITEM_NONE);
+                                                   exempi::PROP_NONE);
                 }
                 return true;
             } else if unsafe { is_date(value) } {
