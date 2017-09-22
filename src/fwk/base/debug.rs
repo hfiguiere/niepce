@@ -10,8 +10,10 @@ macro_rules! dbg_out {
 #[macro_export]
 macro_rules! err_out {
     ( $( $x:expr ),* ) => {
-        print!("ERROR: ");
-        println!( $($x),* );
+        {
+            print!("ERROR: ");
+            println!( $($x),* );
+        }
     };
 }
 

@@ -162,7 +162,7 @@ impl LibFile {
             Np::NpNiepceFlagProp =>
                 self.set_flag(value),
             _ =>
-                (),
+                err_out!("invalid property {:?} - noop", idx),
         };
     }
 
