@@ -17,55 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 
-#ifndef __NIEPCE_DB_LABEL_HPP__
-#define __NIEPCE_DB_LABEL_HPP__
-
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
-#include "fwk/base/colour.hpp"
 #include "engine/db/librarytypes.hpp"
+
+namespace fwk {
+class RgbColour;
+}
 
 namespace eng {
 
-/** represent a label assigned to a library object
- * There shouldn't be much instances of this.
- */
-class Label
-{
-public:
-    typedef std::shared_ptr<Label> Ptr;
-    typedef std::vector<Ptr> List;
-    typedef std::shared_ptr<List> ListPtr;
+class Label;
+typedef std::shared_ptr<Label> LabelPtr;
+typedef std::vector<LabelPtr> LabelList;
+typedef std::shared_ptr<LabelList> LabelListPtr;
 
-    Label(library_id_t _id, const std::string & _label, const std::string & _colourstring)
-        : m_id(_id), m_label(_label)
-        , m_colour(_colourstring)
-        {
-        }
-
-    library_id_t id() const
-        { return m_id; }
-    const std::string & label()
-        { return m_label; }
-    void set_label(const std::string & l)
-        { m_label = l; }
-    const fwk::RgbColour & colour() const
-        { return m_colour; }
-    void set_colour(const fwk::RgbColour & c)
-        { m_colour = c; }
-
-private:
-    library_id_t          m_id;
-    std::string      m_label;
-    fwk::RgbColour    m_colour;
-};
-
+LabelPtr label_wrap(Label*);
+LabelPtr label_clone(const Label*);
 }
 
-#endif
+extern "C" {
+eng::library_id_t engine_db_label_id(const eng::Label*);
+const fwk::RgbColour* engine_db_label_colour(const eng::Label*);
+const char* engine_db_label_label(const eng::Label*);
+}
+
 /*
   Local Variables:
   mode:c++

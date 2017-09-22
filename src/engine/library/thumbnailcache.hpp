@@ -24,7 +24,6 @@
 #include <memory>
 
 #include "fwk/utils/worker.hpp"
-#include "fwk/toolkit/notificationcenter.hpp"
 #include "engine/db/libfile.hpp"
 
 namespace eng {
@@ -35,18 +34,18 @@ class ThumbnailTask
 public:
     typedef std::unique_ptr<ThumbnailTask> Ptr;
 
-    ThumbnailTask(const LibFile::Ptr & f, int w, int h)
+    ThumbnailTask(const LibFilePtr & f, int w, int h)
         : m_file(f), m_width(w), m_height(h)
         { }
 
-    const LibFile::Ptr & file()
+    const LibFilePtr & file()
         { return m_file; }
     int width() const
         { return m_width; }
     int height() const
         { return m_height; }
 private:
-    const LibFile::Ptr m_file;
+    const LibFilePtr m_file;
     int m_width;
     int m_height;
 };
@@ -56,11 +55,10 @@ class ThumbnailCache
     : private fwk::Worker<ThumbnailTask>
 {
 public:
-    ThumbnailCache(const std::string & dir,
-                   const fwk::NotificationCenter::Ptr & nc);
+    ThumbnailCache(const std::string & dir, uint64_t notif_id);
     ~ThumbnailCache();
 
-    void request(const LibFile::ListPtr & fl);
+    void request(const LibFileList& fl);
 
     static bool is_thumbnail_cached(const std::string & file, const std::string & thumb);
 
@@ -68,7 +66,7 @@ protected:
     virtual void execute(const ptr_t & task) override;
 private:
     std::string                                 m_cacheDir;
-    std::weak_ptr<fwk::NotificationCenter> m_notif_center;
+    uint64_t m_notif_id;
 
     std::string path_for_thumbnail(const std::string & filename, library_id_t id, int size) const;
     std::string dir_for_thumbnail(int size) const;

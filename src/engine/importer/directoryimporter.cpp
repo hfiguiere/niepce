@@ -94,7 +94,7 @@ bool DirectoryImporter::do_import(const std::string& source, const std::string& 
                                   const FileImporter& callback)
 {
     // pretty trivial, we have the source path.
-    callback(source, IImporter::Import::DIRECTORY, Library::Managed::NO);
+    callback(source, IImporter::Import::DIRECTORY, LibraryManaged::NO);
 
     // XXX return a real error
     return true;

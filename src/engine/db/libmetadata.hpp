@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.hpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,57 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DB_LIBMETADATA_H_
-#define __DB_LIBMETADATA_H_
+#pragma once
 
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <boost/any.hpp>
 
-#include "fwk/base/propertybag.hpp"
-#include "fwk/utils/exempi.hpp"
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
+#include "fwk/base/propertybag.hpp"
+#include "fwk/utils/exempi.hpp"
 
 namespace eng {
 
-class LibMetadata
-    : public fwk::XmpMeta
-{
-public:
-    typedef std::shared_ptr<LibMetadata> Ptr;
+class LibMetadata;
 
-    LibMetadata(library_id_t _id);
+void libmetadata_to_properties(const LibMetadata *meta,
+                               const fwk::PropertySet &propset,
+                               fwk::PropertyBag &props);
 
-    library_id_t id() const
-        { return m_id; }
-    bool setMetaData(fwk::PropertyIndex meta, const fwk::PropertyValue & value);
-    bool getMetaData(fwk::PropertyIndex meta, fwk::PropertyValue & value) const;
-
-    /** convert XMP to a set of properties
-     * @param propset the property set requested
-     * @param props the output properties
-     */
-    void to_properties(const fwk::PropertySet & propset,
-                       fwk::PropertyBag & properties);
-    /** do like the unix "touch". Update the MetadataDate 
-     * to the current time, in UTC.
-     */
-    bool touch();
-private:
-    LibMetadata(const LibMetadata &);
-
-    static bool property_index_to_xmp(fwk::PropertyIndex index, 
-                                      const char * & ns, const char * & property);
-
-    library_id_t m_id;
+struct IndexToXmp {
+    const char *ns;
+    const char *property;
 };
-
+IndexToXmp property_index_to_xmp(fwk::PropertyIndex index);
 }
 
-#endif
+extern "C" {
+eng::library_id_t engine_libmetadata_get_id(const eng::LibMetadata *meta);
+XmpPtr engine_libmetadata_get_xmp(const eng::LibMetadata *meta);
+fwk::XmpMeta *engine_libmetadata_get_xmpmeta(const eng::LibMetadata *meta);
+}
 
 /*
   Local Variables:

@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/keyword.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,36 +18,24 @@
  */
 
 
-#ifndef __NIEPCE_DB_KEYWORD_H__
-#define __NIEPCE_DB_KEYWORD_H__
+#pragma once
 
-#include <string>
 #include <vector>
 #include <memory>
 
 #include "engine/db/librarytypes.hpp"
 
+// just a rust interface.
 namespace eng {
+class Keyword;
+typedef std::shared_ptr<Keyword> KeywordPtr;
+typedef std::vector<KeywordPtr> KeywordList;
+typedef std::shared_ptr<KeywordList> KeywordListPtr;
 
-	class Keyword
-	{
-	public:
-		typedef std::shared_ptr<Keyword> Ptr;
-		typedef std::vector<Ptr> List;
-		typedef std::shared_ptr<List> ListPtr;
-		typedef std::vector<int> IdList;
-
-		Keyword(library_id_t id, const std::string & keyword);
-
-		library_id_t id() const
-			{ return m_id; }
-		const std::string & keyword()
-			{ return m_keyword; }
-	private:
-		library_id_t m_id;
-		std::string m_keyword;
-	};
-
+KeywordPtr keyword_new(eng::library_id_t id, const char* keyword);
+KeywordPtr keyword_wrap(Keyword*);
 }
 
-#endif
+extern "C" eng::library_id_t engine_db_keyword_id(const eng::Keyword*);
+extern "C" const char* engine_db_keyword_keyword(const eng::Keyword*);
+

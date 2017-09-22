@@ -18,65 +18,34 @@
  */
 
 
+#pragma once
 
-#ifndef __LIBRARY_COMMANDS_H__
-#define __LIBRARY_COMMANDS_H__
-
-#include "op.hpp"
 #include "fwk/utils/files.hpp"
 #include "engine/db/library.hpp"
 
-namespace eng {
-
-/** Marshalling and demarshalling of commands ops */ 
-class Commands 
-{
-public:
-
-		// commands: execute an op
-//		static void cmdQueryFiles(const Library::Ptr & lib);
-//		static void cmdUpdateFiles(const Library::Ptr & lib);
-
-		static void cmdListAllFolders(const Library::Ptr & lib);
-		static void cmdListAllKeywords(const Library::Ptr & lib);
-    static void cmdImportFile(const Library::Ptr & lib,
-                              const std::string & path,
-                              Library::Managed manage);
-    static void cmdImportFiles(const Library::Ptr & lib,
-                               const std::string & folder,
-                               const fwk::FileList::Ptr & files,
-                               Library::Managed manage);
-		static void cmdQueryFolderContent(const Library::Ptr & lib, 
-                                      library_id_t folder_id);
-		static void cmdCountFolder(const Library::Ptr & lib, 
-								   library_id_t folder_id);
-		static void cmdQueryKeywordContent(const Library::Ptr & lib, 
-                                       library_id_t keyword_id);
-		static void cmdRequestMetadata(const Library::Ptr & lib,
-                                   library_id_t file_id);
-    static void cmdSetMetadata(const Library::Ptr & lib,
-                               library_id_t file_id, fwk::PropertyIndex meta, 
-                               const fwk::PropertyValue & value);
-    static void cmdWriteMetadata(const Library::Ptr & lib,
-                                 library_id_t file_id);
-    static void cmdMoveFileToFolder(const Library::Ptr & lib, 
-                                    library_id_t file_id, library_id_t from_folder_id,
-                                    library_id_t to_folder_id);
-    static void cmdListAllLabels(const Library::Ptr & lib);
-    static void cmdCreateLabel(const Library::Ptr & lib, const std::string & s, 
-                               const std::string & color);
-    static void cmdDeleteLabel(const Library::Ptr & lib,
-                               int label_id);
-    static void cmdUpdateLabel(const Library::Ptr & lib,
-                               eng::library_id_t label_id, const std::string & name,
-                               const std::string & color);
-    static void cmdProcessXmpUpdateQueue(const Library::Ptr & lib, bool write_xmp);
-};
-
+extern "C" {
+    bool cmd_list_all_keywords(eng::Library* lib);
+    bool cmd_list_all_folders(eng::Library* lib);
+    bool cmd_import_file(eng::Library* lib, const char* path, eng::LibraryManaged);
+    bool cmd_import_files(eng::Library* lib, const char* folder, fwk::FileList* files,
+                          eng::LibraryManaged);
+    bool cmd_request_metadata(eng::Library* lib, eng::library_id_t id);
+    bool cmd_query_folder_content(eng::Library* lib, eng::library_id_t folder_id);
+    bool cmd_count_folder(eng::Library* lib, eng::library_id_t folder_id);
+    bool cmd_query_keyword_content(eng::Library* lib, eng::library_id_t id);
+    bool cmd_write_metadata(eng::Library* lib, eng::library_id_t id);
+    bool cmd_move_file_to_folder(eng::Library* lib, eng::library_id_t id,
+                                 eng::library_id_t from, eng::library_id_t to);
+    bool cmd_set_metadata(eng::Library* lib, eng::library_id_t id, fwk::PropertyIndex meta,
+                          const fwk::PropertyValue* value);
+    bool cmd_list_all_labels(eng::Library* lib);
+    bool cmd_create_label(eng::Library* lib, const char* name, const char* colour);
+    bool cmd_delete_label(eng::Library* lib, eng::library_id_t id);
+    bool cmd_update_label(eng::Library* lib, eng::library_id_t id, const char* name,
+                          const char* colour);
+    bool cmd_process_xmp_update_queue(eng::Library* lib, bool write_xmp);
 }
 
-
-#endif
 /*
   Local Variables:
   mode:c++

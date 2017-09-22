@@ -26,11 +26,10 @@
 
 namespace fwk {
 
-
-/** convert a fraction string to a decimal */
-double fraction_to_decimal(const std::string & value);
-
 }
+
+// implemented in Rust
+extern "C" double fwk_fraction_to_decimal(const char* value);
 
 #endif
 /*

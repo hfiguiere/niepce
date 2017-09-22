@@ -27,6 +27,7 @@ namespace libraryclient {
 
 void LocalLibraryServer::execute(const Op::Ptr& _op)
 {
-    (*_op)(m_library);
+  (*_op)(m_library.get());
 }
+
 }

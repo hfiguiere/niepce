@@ -1,5 +1,5 @@
 /*
- * niepce - eng/db/libfile.h
+ * niepce - eng/db/libfile.hpp
  *
  * Copyright (C) 2007-2013 Hubert Figuiere
  *
@@ -17,110 +17,63 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NIEPCE_DB_LIBFILE_H__
-#define __NIEPCE_DB_LIBFILE_H__
+#pragma once
 
-#include <string>
 #include <list>
 #include <memory>
+#include <string>
 
+#if !RUST_BINDGEN
 #include "fwk/toolkit/mimetype.hpp"
-#include "fwk/base/propertybag.hpp"
-#include "engine/db/librarytypes.hpp"
+#endif
+
 #include "engine/db/keyword.hpp"
-#include "engine/db/storage.hpp"
-#include "engine/db/fsfile.hpp"
+#include "engine/db/librarytypes.hpp"
+#include "fwk/base/propertybag.hpp"
 
 namespace eng {
 
-
-class LibFile
-{
-public:
-    typedef std::shared_ptr< LibFile > Ptr;
-    typedef std::weak_ptr< LibFile> WeakPtr;
-    typedef std::list< Ptr > List;
-    typedef std::shared_ptr< List > ListPtr;
-
-    enum class FileType {
-        UNKNOWN = 0,
-        RAW = 1,
-        RAW_JPEG = 2,
-        IMAGE = 3,
-        VIDEO = 4
-    };
-
-    static FileType mimetype_to_filetype(fwk::MimeType mime);
-
-    LibFile(library_id_t id, library_id_t folderId, library_id_t fsfileid,
-            const std::string & p,
-            const std::string & name );
-    virtual ~LibFile();
-
-    library_id_t id() const
-        { return m_id; }
-    library_id_t folderId() const
-        { return m_folderId; }
-    const std::string & name() const
-        { return m_name; }
-    const std::string & path() const
-        { return m_main_file.path(); }
-
-//		Storage::Ptr storage() const;
-
-    void setOrientation(int32_t v);
-    int32_t orientation() const
-        { return m_orientation; }
-    void setRating(int32_t v);
-    int32_t rating() const
-        { return m_rating; }
-    void setLabel(int32_t v);
-    int32_t label() const
-        { return m_label; }
-    void setFlag(int32_t v);
-    int32_t flag() const
-        { return m_flag; }
-    void setProperty(fwk::PropertyIndex idx, int32_t v);
-    int32_t property(fwk::PropertyIndex idx) const;
-
-    /** Setter for the filetype.
-     * @param v the FILETYPE of the file
-     */
-    void setFileType(FileType v);
-    /** Getter for the filetype enumeration. */
-    FileType fileType() const
-        { return m_file_type; }
-    
-    /** return an URI of the real path
-     * because the Gtk stuff want that.
-     */
-    const std::string uri() const
-        { return std::string("file://") + m_main_file.path(); }
-    /** check is the library file is at uri
-     * @return true of the uri match
-     * @todo
-     */
-//		bool isUri(const char * _uri) const
-//			{ return uri() == _uri; }
-private:
-    library_id_t         m_id;           /**< file ID */
-    library_id_t         m_folderId;     /**< parent folder */
-    std::string m_name;         /**< name */
-    FsFile      m_main_file;
-//    boost::filesystem::path  m_path;/**< path name relative to the folder */
-//		std::string m_type;
-    int32_t     m_orientation;  /**< Exif orientatoin */
-    int32_t     m_rating;       /**< rating */
-    int32_t     m_label;        /**< Label ID */
-    int32_t     m_flag;         /**< Flag */
-    FileType    m_file_type;    /**< File type */
+enum class LibFileType {
+    UNKNOWN = 0,
+    RAW = 1,
+    RAW_JPEG = 2,
+    IMAGE = 3,
+    VIDEO = 4
 };
 
-}
-
-
+#if !RUST_BINDGEN
+LibFileType mimetype_to_filetype(fwk::MimeType mime);
 #endif
 
+class LibFile;
+typedef std::shared_ptr<LibFile> LibFilePtr;
+typedef std::weak_ptr<LibFile> LibFileWeakPtr;
+typedef std::list<LibFilePtr> LibFileList;
+typedef std::shared_ptr<LibFileList> LibFileListPtr;
+
+LibFilePtr libfile_new(library_id_t, library_id_t, library_id_t, const char *,
+                       const char *);
+LibFilePtr libfile_wrap(LibFile *);
+}
+
+extern "C" {
+const char *engine_db_libfile_path(const eng::LibFile *);
+eng::library_id_t engine_db_libfile_id(const eng::LibFile *);
+eng::library_id_t engine_db_libfile_folderid(const eng::LibFile *);
+int32_t engine_db_libfile_orientation(const eng::LibFile *);
+int32_t engine_db_libfile_rating(const eng::LibFile *);
+int32_t engine_db_libfile_label(const eng::LibFile *);
+int32_t engine_db_libfile_flag(const eng::LibFile *);
+int32_t engine_db_libfile_property(const eng::LibFile *, fwk::PropertyIndex);
+eng::LibFileType engine_db_libfile_file_type(const eng::LibFile *);
+void engine_db_libfile_set_orientation(eng::LibFile *, int32_t);
+void engine_db_libfile_set_rating(eng::LibFile *, int32_t);
+void engine_db_libfile_set_label(eng::LibFile *, int32_t);
+void engine_db_libfile_set_flag(eng::LibFile *, int32_t);
+void engine_db_libfile_set_property(const eng::LibFile *, fwk::PropertyIndex,
+                                    int32_t);
+void engine_db_libfile_set_file_type(eng::LibFile *, eng::LibFileType);
+}
 
 /*
   Local Variables:

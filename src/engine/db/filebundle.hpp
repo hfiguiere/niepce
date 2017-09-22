@@ -17,52 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DB_FILEBUNDLE_H_
-#define __DB_FILEBUNDLE_H_
+#pragma once
 
 #include <list>
-#include <string>
 #include <memory>
 
 #include "fwk/utils/files.hpp"
-#include "engine/db/libfile.hpp"
 
 namespace eng {
 
+class FileBundle;
+typedef std::shared_ptr<FileBundle> FileBundlePtr;
+typedef std::list<FileBundlePtr> FileBundleList;
+typedef std::shared_ptr<FileBundleList> FileBundleListPtr;
 
-class FileBundle
-{
-public:
-    typedef std::shared_ptr<FileBundle> Ptr;
-    typedef std::list<Ptr> List;
-    typedef std::shared_ptr<List> ListPtr;
+FileBundleListPtr filebundle_filter_bundles(const fwk::FileList::Ptr & files);
 
-    FileBundle()
-        : m_type(LibFile::FileType::UNKNOWN)
-        { }
-    LibFile::FileType type() const
-        { return m_type; }
+FileBundlePtr filebundle_new();
+}
 
-    /** add a file to a bundle. Will determine what type it is. 
-     * @return false if it does not know about the file
-     */
-    bool add(const std::string & path);
-    const std::string & main_file() const
-        { return m_main; }
-    const std::string & jpeg() const
-        { return m_jpeg; }
-    const std::string & sidecar() const
-        { return m_xmp_sidecar; }
-    
-    static ListPtr filter_bundles(const fwk::FileList::Ptr & files);
-private:
-    LibFile::FileType m_type;
-    std::string m_main;
-    std::string m_xmp_sidecar;
-    std::string m_jpeg;
-    std::string m_thumbnail;
-};
-
+extern "C" const char* engine_db_filebundle_sidecar(const eng::FileBundle*);
+extern "C" const char* engine_db_filebundle_main(const eng::FileBundle*);
+extern "C" const char* engine_db_filebundle_jpeg(const eng::FileBundle*);
+extern "C" bool engine_db_filebundle_add(eng::FileBundle*, const char*);
 
 /*
   Local Variables:
@@ -73,8 +50,3 @@ private:
   fill-column:99
   End:
 */
-
-}
-
-#endif
-

@@ -1,0 +1,85 @@
+/*
+ * niepce - engine/db/keyword.rs
+ *
+ * Copyright (C) 2017 Hubert Figuière
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+use super::LibraryId;
+use super::FromDb;
+use libc::c_char;
+use std::ffi::CStr;
+use std::ffi::CString;
+use rusqlite;
+
+pub struct Keyword {
+    id: LibraryId,
+    keyword: String,
+    pub cstr: CString,
+}
+
+impl Keyword {
+    pub fn new(id: LibraryId, keyword: &str) -> Keyword {
+        Keyword {
+            id: id, keyword: String::from(keyword),
+            cstr: CString::new("").unwrap()
+        }
+    }
+
+    pub fn id(&self) -> LibraryId {
+        self.id
+    }
+
+    pub fn keyword(&self) -> &String {
+        &self.keyword
+    }
+}
+
+impl FromDb for Keyword {
+    fn read_db_columns() -> &'static str {
+        "id,keyword"
+    }
+
+    fn read_db_tables() -> &'static str {
+        "keywords"
+    }
+
+    fn read_from(row: &rusqlite::Row) -> Self {
+        let kw : String = row.get(1);
+        Keyword::new(row.get(0), &kw)
+    }
+}
+
+#[no_mangle]
+pub extern fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
+    let kw = Box::new(Keyword::new(id, &*unsafe { CStr::from_ptr(keyword) }.to_string_lossy()));
+    Box::into_raw(kw)
+}
+
+#[no_mangle]
+pub extern fn engine_db_keyword_id(this: &Keyword) -> i64 {
+    this.id() as i64
+}
+
+#[no_mangle]
+pub extern fn engine_db_keyword_keyword(this: &mut Keyword) -> *const c_char {
+    this.cstr = CString::new(this.keyword().clone()).unwrap();
+    this.cstr.as_ptr()
+}
+
+#[no_mangle]
+pub extern fn engine_db_keyword_delete(kw: *mut Keyword) {
+    unsafe { Box::from_raw(kw) };
+}

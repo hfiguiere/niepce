@@ -83,15 +83,16 @@ namespace fwk {
   Gdk::RGBA rgbcolour_to_gdkcolor(const fwk::RgbColour & colour)
   {
     Gdk::RGBA gdkcolour;
-    gdkcolour.set_rgba_u(colour[0], colour[1], colour[2]);
+    gdkcolour.set_rgba_u(fwk_rgbcolour_component(&colour, 0),
+                         fwk_rgbcolour_component(&colour, 1),
+                         fwk_rgbcolour_component(&colour, 2));
     return gdkcolour;
   }
 
 
-  fwk::RgbColour gdkcolor_to_rgbcolour(const Gdk::RGBA & colour)
+  fwk::RgbColourPtr gdkcolor_to_rgbcolour(const Gdk::RGBA & colour)
   {
-    fwk::RgbColour rgbcolour(colour.get_red_u(), colour.get_green_u(), colour.get_blue_u());
-    return rgbcolour;
+    return fwk::rgbcolour_new(colour.get_red_u(), colour.get_green_u(), colour.get_blue_u());
   }
 
 

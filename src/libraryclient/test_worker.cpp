@@ -40,11 +40,11 @@ int test_main(int, char *[])
 	BOOST_CHECK(ptempl);
 	{
 		fwk::DirectoryDisposer d(ptempl);
-		LocalLibraryServer w(std::string("") + ptempl, fwk::NotificationCenter::Ptr());
+		LocalLibraryServer w(std::string("") + ptempl, 0);
 
 		BOOST_CHECK(w._tasks().empty());
 
-		Op::Ptr p(new Op(0, [](const Library::Ptr &){}));
+		Op::Ptr p(new Op(0, [](Library*){ return false; }));
 		w.schedule(p);
 	}
     return 0;

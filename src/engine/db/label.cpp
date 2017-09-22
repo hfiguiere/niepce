@@ -1,7 +1,7 @@
 /*
- * niepce - base/t/testfractions.cpp
+ * niepce - engine/db/label.cpp
  *
- * Copyright (C) 2012 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/** @brief unit test for fractions */
 
-#include <boost/test/minimal.hpp>
+#include "label.hpp"
 
-#include <stdlib.h>
-#include <vector>
-#include <boost/rational.hpp>
-#include "fwk/base/fractions.hpp"
-
-int test_main( int, char *[] )             // note the name!
-{
-	double f = fwk::fraction_to_decimal("1/4");
-	boost::rational<int> r(1,4);
-	BOOST_CHECK(f == boost::rational_cast<double>(r));
-	return 0;
+extern "C" {
+void engine_db_label_delete(eng::Label*);
+eng::Label* engine_db_label_clone(const eng::Label*);
 }
 
+namespace eng {
+
+LabelPtr label_wrap(Label* l)
+{
+    return LabelPtr(l, &engine_db_label_delete);
+}
+
+LabelPtr label_clone(const Label* l)
+{
+    return label_wrap(engine_db_label_clone(l));
+}
+}

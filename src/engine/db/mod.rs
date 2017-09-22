@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/fsfile.cpp
+ * niepce - eng/db/keyword.rs
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,26 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+pub mod filebundle;
+pub mod fsfile;
+pub mod keyword;
+pub mod label;
+pub mod libfile;
+pub mod libfolder;
+pub mod libmetadata;
+pub mod library;
 
+pub type LibraryId = i64;
 
-#include "fsfile.hpp"
+use rusqlite;
 
-
-namespace eng {
-
-FsFile::FsFile(library_id_t _id, const std::string & _path)
-    : m_id(_id), m_path(_path)
-{
+pub trait FromDb {
+    /// return the columns for reading from the DB.
+    fn read_db_columns() -> &'static str;
+    /// return the tables for reading from the DB.
+    fn read_db_tables() -> &'static str;
+    /// read a new object from the DB row.
+    fn read_from(row: &rusqlite::Row) -> Self;
 }
-
-}
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/

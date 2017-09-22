@@ -143,14 +143,14 @@ void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props,
 }
 
 
-void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMetadata::Ptr & meta)
+void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMetadata* meta)
 {
     m_fileid = file_id;
     DBG_OUT("displaying metadata");
     fwk::PropertyBag properties;
     if(meta) {
         const fwk::PropertySet & propset = get_property_set();
-        meta->to_properties(propset, properties);
+        libmetadata_to_properties(meta, propset, properties);
     }
     std::for_each(m_widgets.begin(), m_widgets.end(),
                   [properties] (auto w) {

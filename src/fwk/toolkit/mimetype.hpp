@@ -24,26 +24,26 @@
 #include <string>
 
 #include <giomm/file.h>
-#include <giomm/fileinfo.h>
 
 namespace fwk {
 
 class MimeType
 {
 public:
+    MimeType(const char* filename);
     MimeType(const std::string & filename);
     MimeType(const Glib::RefPtr<Gio::File> & file);
-    
+
+    ~MimeType() {}
+
     bool isDigicamRaw() const;
     bool isImage() const;
     bool isMovie() const;
     bool isUnknown() const;
     bool isXmp() const;
-    
-    const std::string & string() const
-        { return m_type; }
+
+    const std::string& string() const;
 private:
-    Glib::RefPtr<Gio::FileInfo> m_fileinfo;
     std::string m_name;
     std::string m_type;
 };

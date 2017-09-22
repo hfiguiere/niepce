@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/storage.hpp
+ * niepce - engine/db/fsfile.rs
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::path::{ Path, PathBuf };
 
-#ifndef __NIEPCE_LIBRARY_STORAGE_H__
-#define __NIEPCE_LIBRARY_STORAGE_H__
+use super::LibraryId;
 
-#include <memory>
-
-#include "engine/db/keyword.hpp"
-
-namespace eng {
-
-/** @brief the interface for a storage */
-class Storage
-{
-public:
-
-    virtual ~Storage();
-
-    virtual bool fetchKeywordsForFile(int file, Keyword::IdList &keywords) = 0;
-};
-
-typedef std::shared_ptr<Storage> StoragePtr;
-
+/// Describe a file on the file system
+pub struct FsFile {
+    id: LibraryId,
+    path: PathBuf,
 }
 
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
+impl FsFile {
 
-#endif
+    pub fn new(id: LibraryId, path: PathBuf) -> FsFile {
+        FsFile {
+            id: id, path: path,
+        }
+    }
+
+    pub fn id(&self) -> LibraryId {
+        self.id
+    }
+
+    pub fn path(&self) -> &Path {
+        self.path.as_path()
+    }
+}

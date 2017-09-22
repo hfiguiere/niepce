@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfolder.hpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,68 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 
-
-#ifndef __NIEPCE_DB_LIBFOLDER_H__
-#define __NIEPCE_DB_LIBFOLDER_H__
-
-#include <string>
 #include <list>
 #include <memory>
+#include <string>
 
 #include "engine/db/librarytypes.hpp"
-#include "fwk/utils/db/iconnectiondriver.hpp"
 
 namespace eng {
+class LibFolder;
+typedef std::shared_ptr<LibFolder> LibFolderPtr;
+typedef std::list<LibFolderPtr> LibFolderList;
+typedef std::shared_ptr<LibFolderList> LibFolderListPtr;
 
-class LibFolder
-{
-public:
-    typedef std::shared_ptr< LibFolder > Ptr;
-    typedef std::list< Ptr > List;
-    typedef std::shared_ptr< List > ListPtr;
-    enum class VirtualType {
-        NONE = 0,
-        TRASH = 1,
+enum class LibFolderVirtualType {
+    NONE = 0,
+    TRASH = 1,
 
-        _LAST
-    };
-
-    LibFolder(library_id_t _id, std::string _name)
-        : m_id(_id), m_name(_name)
-        , m_locked(false)
-        , m_virtual(VirtualType::NONE)
-        {
-        }
-    library_id_t id() const
-        { return m_id; }
-    const std::string & name() const
-        { return m_name; }
-
-    bool is_locked() const
-        { return m_locked; }
-    void set_is_locked(bool _locked)
-        { m_locked = _locked; }
-    bool is_expanded() const
-        { return m_expanded; }
-    void set_expanded(bool _exp)
-        { m_expanded = _exp; }
-    VirtualType virtual_type() const
-        { return m_virtual; }
-    void set_virtual_type(VirtualType _virtual)
-        { m_virtual = _virtual; }
-
-    /** database persistance */
-    static const char * read_db_columns();
-    static Ptr read_from(const db::IConnectionDriver::Ptr & db);
-private:
-    library_id_t         m_id;
-    std::string m_name;
-    bool m_locked;
-    bool m_expanded;
-    VirtualType m_virtual;
+    _LAST
 };
 
+LibFolderPtr libfolder_new(library_id_t id, const char *name);
+
+extern "C" {
+library_id_t engine_db_libfolder_id(const LibFolder *);
+const char *engine_db_libfolder_name(const LibFolder *);
+int32_t engine_db_libfolder_virtual_type(const LibFolder *);
+bool engine_db_libfolder_expanded(const LibFolder *);
+void engine_db_libfolder_set_locked(const LibFolder *, bool);
+void engine_db_libfolder_set_expanded(const LibFolder *, bool);
+void engine_db_libfolder_set_virtual_type(const LibFolder *, int32_t);
+}
 }
 
 /*
@@ -90,5 +60,3 @@ private:
   fill-column:80
   End:
 */
-
-#endif

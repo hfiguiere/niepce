@@ -36,9 +36,9 @@ class ClientImpl
 {
 public:
     static std::unique_ptr<ClientImpl> makeClientImpl(const fwk::Moniker & moniker,
-                                                      const fwk::NotificationCenter::Ptr & nc);
+                                                      uint64_t notif_id);
 
-    ClientImpl(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+    ClientImpl(const fwk::Moniker & moniker, uint64_t notif_id);
     virtual ~ClientImpl();
     bool ok() const;
 
@@ -64,15 +64,15 @@ public:
 
     eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
-    eng::tid_t importFile(const std::string & path, eng::Library::Managed manage);
-    eng::tid_t importFromDirectory(const std::string & dir, eng::Library::Managed manage);
+    eng::tid_t importFile(const std::string & path, eng::LibraryManaged manage);
+    eng::tid_t importFromDirectory(const std::string & dir, eng::LibraryManaged manage);
 
 protected:
     const fwk::Moniker m_moniker;
     std::unique_ptr<LocalLibraryServer> m_localLibrary;
 private:
     /** do the dirty work of scheduling the op */
-    eng::tid_t schedule_op(const eng::Op::function_t & func);
+    eng::tid_t schedule_op(const eng::Op::Function & func);
 };
 
 }

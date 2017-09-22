@@ -27,6 +27,7 @@
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
 #include "engine/db/librarytypes.hpp"
+#include "engine/library/notification.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
@@ -83,57 +84,43 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
     DBG_OUT("notification for workspace");
-    switch(ln.type) {
-    case eng::LibNotification::Type::ADDED_FOLDERS:
+    switch(engine_library_notification_type(&ln)) {
+    case eng::LibNotificationType::ADDED_FOLDER:
     {
-        auto l = ln.get<eng::LibNotification::Type::ADDED_FOLDERS>().folders;
-        DBG_OUT("received added folders # %lu", l->size());
-        for_each(l->cbegin(), l->cend(),
-                 [this] (const eng::LibFolder::Ptr& f) {
-                     this->add_folder_item(f);
-                 });
+        auto f = engine_library_notification_get_libfolder(&ln);
+        this->add_folder_item(f);
         break;
     }
-    case eng::LibNotification::Type::ADDED_KEYWORD:
+    case eng::LibNotificationType::ADDED_KEYWORD:
     {
-        auto k = ln.get<eng::LibNotification::Type::ADDED_KEYWORD>().keyword;
-        DBG_ASSERT(static_cast<bool>(k), "keyword must not be NULL");
+        auto k = engine_library_notification_get_keyword(&ln);
+        DBG_ASSERT(k, "keyword must not be NULL");
         add_keyword_item(k);
         break;
     }
-    case eng::LibNotification::Type::ADDED_KEYWORDS:
+    case eng::LibNotificationType::FOLDER_COUNTED:
     {
-        auto l = ln.get<eng::LibNotification::Type::ADDED_KEYWORDS>().keywords;
-        DBG_ASSERT(static_cast<bool>(l), "keyword list must not be NULL");
-        for_each(l->cbegin(), l->cend(),
-                 [this] (const eng::Keyword::Ptr& k) {
-                     this->add_keyword_item(k);
-                 });
-        break;
-    }
-    case eng::LibNotification::Type::FOLDER_COUNTED:
-    {
-        auto count = ln.get<eng::LibNotification::Type::FOLDER_COUNTED>();
-        DBG_OUT("count for folder %Ld is %d", (long long)count.folder, count.count);
+        auto count = engine_library_notification_get_folder_count(&ln);
+        DBG_OUT("count for folder %Ld is %d", (long long)count->folder, count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count.folder);
+            = m_folderidmap.find(count->folder);
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
-            row[m_librarycolumns.m_count_n] = count.count;
-            row[m_librarycolumns.m_count] = std::to_string(count.count);
+            row[m_librarycolumns.m_count_n] = count->count;
+            row[m_librarycolumns.m_count] = std::to_string(count->count);
         }
 
         break;
     }
-    case eng::LibNotification::Type::FOLDER_COUNT_CHANGE:
+    case eng::LibNotificationType::FOLDER_COUNT_CHANGE:
     {
-        auto count = ln.get<eng::LibNotification::Type::FOLDER_COUNT_CHANGE>();
-        DBG_OUT("count change for folder %Ld is %d", (long long)count.folder, count.count);
+        auto count = engine_library_notification_get_folder_count(&ln);
+        DBG_OUT("count change for folder %Ld is %d", (long long)count->folder, count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count.folder);
+            = m_folderidmap.find(count->folder);
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
-            int new_count = row[m_librarycolumns.m_count_n] + count.count;
+            int new_count = row[m_librarycolumns.m_count_n] + count->count;
             row[m_librarycolumns.m_count_n] = new_count;
             row[m_librarycolumns.m_count] = std::to_string(new_count);
         }
@@ -209,37 +196,39 @@ void WorkspaceController::on_row_collapsed(const Gtk::TreeIter& iter,
 }
 
 
-void WorkspaceController::add_keyword_item(const eng::Keyword::Ptr & k)
+void WorkspaceController::add_keyword_item(const eng::Keyword* k)
 {
     auto children = m_keywordsNode->children();
     bool was_empty = children.empty();
     auto iter = add_item(m_treestore, children,
-                         m_icons[ICON_KEYWORD], k->keyword(), k->id(),
-                         KEYWORD_ITEM);
+                         m_icons[ICON_KEYWORD],
+                         engine_db_keyword_keyword(k),
+                         engine_db_keyword_id(k), KEYWORD_ITEM);
 //		getLibraryClient()->countKeyword(f->id());
-    m_keywordsidmap[k->id()] = iter;
+    m_keywordsidmap[engine_db_keyword_id(k)] = iter;
     if(was_empty) {
         expand_from_cfg("workspace_keywords_expanded", m_keywordsNode);
     }
 }
 
-void WorkspaceController::add_folder_item(const eng::LibFolder::Ptr & f)
+void WorkspaceController::add_folder_item(const eng::LibFolder* f)
 {
     int icon_idx = ICON_ROLL;
-    if(f->virtual_type() == eng::LibFolder::VirtualType::TRASH) {
+    if(engine_db_libfolder_virtual_type(f) == (int32_t)eng::LibFolderVirtualType::TRASH) {
         icon_idx = ICON_TRASH;
-        getLibraryClient()->set_trash_id(f->id());
+        getLibraryClient()->set_trash_id(engine_db_libfolder_id(f));
     }
     auto children = m_folderNode->children();
     bool was_empty = children.empty();
     auto iter = add_item(m_treestore, children,
                          m_icons[icon_idx],
-                         f->name(), f->id(), FOLDER_ITEM);
-    if(f->is_expanded()) {
+                         engine_db_libfolder_name(f),
+                         engine_db_libfolder_id(f), FOLDER_ITEM);
+    if(engine_db_libfolder_expanded(f)) {
         m_librarytree.expand_row(m_treestore->get_path(iter), false);
     }
-    getLibraryClient()->countFolder(f->id());
-    m_folderidmap[f->id()] = iter;
+    getLibraryClient()->countFolder(engine_db_libfolder_id(f));
+    m_folderidmap[engine_db_libfolder_id(f)] = iter;
     // expand if needed. Because Gtk is stupid and doesn't expand empty
     if(was_empty) {
         expand_from_cfg("workspace_folders_expanded", m_folderNode);

@@ -18,29 +18,17 @@
  */
 
 
-#ifndef __ENG_PROPERTIES_HPP__
-#define __ENG_PROPERTIES_HPP__
+#pragma once
 
 #include <typeinfo>
 
 #include "fwk/base/propertybag.hpp"
 #include "engine/db/metadata.hpp"
 
+#include "engine/db/properties-enum.hpp"
+
 namespace eng {
 
-  // prefix Np is for Niepce Property
-
-#define DEFINE_PROPERTY(a,b,c,d,e)               \
-    a = b,
-
-enum {
-
-    #include "engine/db/properties-def.hpp"
-
-    _NpLastProp
-};
-
-#undef DEFINE_PROPERTY
 
 struct property_desc_t {
     fwk::PropertyIndex prop;
@@ -70,4 +58,3 @@ const char * _propertyName(fwk::PropertyIndex idx);
   fill-column:80
   End:
 */
-#endif

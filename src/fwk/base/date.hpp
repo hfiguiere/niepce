@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/date.hpp
  *
- * Copyright (C) 2012-2013 Hubert Figuiere
+ * Copyright (C) 2012-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FWK_BASE_DATE_HPP
-#define __FWK_BASE_DATE_HPP
+#pragma once
 
+#include <memory>
 #include <string>
 
 #include <exempi/xmp.h>
@@ -34,28 +34,11 @@ class Timezone;
  */
 bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
 
-/**
- * Class to deal with ISO8601 string dates as used by XMP.
- * Bonus: with a timezone.
- */
-class Date
-{
-public:
-    Date(const XmpDateTime& dt, const Timezone* tz = nullptr);
-    Date(const time_t dt, const Timezone* tz = nullptr);
+class Date;
 
-    std::string to_string() const;
-    const XmpDateTime& xmp_date() const
-        { return m_datetime; }
-
-private:
-    XmpDateTime m_datetime;
-    // weak pointer.
-    const Timezone* m_tz;
-};
-
-time_t make_time_value(const Date &);
-
+typedef std::shared_ptr<Date> DatePtr;
+DatePtr date_wrap(Date*);
+std::string date_to_string(const Date*);
 }
 
 /*
@@ -67,4 +50,3 @@ time_t make_time_value(const Date &);
   fill-column:99
   End:
 */
-#endif

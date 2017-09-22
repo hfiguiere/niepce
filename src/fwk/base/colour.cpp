@@ -17,53 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <vector>
-
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/format.hpp>
-#include <boost/lexical_cast.hpp>
-
 #include "fwk/base/colour.hpp"
+#include "fwk/base/rust.hpp"
+
+// Rust glue.
+
+extern "C" {
+
+fwk::RgbColour* fwk_rgbcolour_new(uint16_t r, uint16_t g, uint16_t b);
+fwk::RgbColour* fwk_rgbcolour_clone(const fwk::RgbColour*);
+void fwk_rgbcolour_delete(fwk::RgbColour*);
+}
 
 namespace fwk {
 
+RgbColourPtr rgbcolour_new(uint16_t r, uint16_t g, uint16_t b)
+{
+    return rgbcolour_wrap(fwk_rgbcolour_new(r, g, b));
+}
 
-  RgbColour::RgbColour(value_type r, value_type g, value_type b)
-  {
-    at(0) = r;
-    at(1) = g;
-    at(2) = b;
-  }
+RgbColourPtr rgbcolour_clone(const RgbColour* c)
+{
+    return rgbcolour_wrap(fwk_rgbcolour_clone(c));
+}
 
+RgbColourPtr rgbcolour_wrap(RgbColour* c)
+{
+    return RgbColourPtr(c, &fwk_rgbcolour_delete);
+}
 
-  RgbColour::RgbColour(const std::string & s)
-  {
-    std::vector<std::string> components;
-    boost::split(components, s, boost::is_any_of(" "));
-    if(components.size() >= 3) {
-      try {
-        for(int i = 0; i < 3; ++i) {
-          at(i) = boost::lexical_cast<value_type>(components[i]);
-        }
-        return;
-      }
-      catch(...) {
+std::string rgbcolour_to_string(uint16_t r, uint16_t g, uint16_t b)
+{
+    RgbColour* colour = fwk_rgbcolour_new(r, g, b);
+    std::string s = rgbcolour_to_string(colour);
+    fwk_rgbcolour_delete(colour);
+    return s;
+}
 
-      }
-    }
-    // fallback in case of failure
-    at(0) = 0;
-    at(1) = 0;
-    at(2) = 0;
-  }
-
-
-  std::string RgbColour::to_string() const
-  {
-    return str(boost::format("%1% %2% %3%") % at(0) % at(1) % at(2));
-  }
-
-
+std::string rgbcolour_to_string(const RgbColour* c)
+{
+    char* p = fwk_rgbcolour_to_string(c);
+    std::string s(p);
+    rust_cstring_delete(p);
+    return s;
+}
 }

@@ -20,12 +20,14 @@
 #include <boost/any.hpp>
 
 #include "fwk/base/debug.hpp"
+#include "engine/library/notification.hpp"
 #include "niepce/notifications.hpp"
 #include "niepce/notificationcenter.hpp"
 
 namespace niepce {
 
-NotificationCenter::NotificationCenter()
+NotificationCenter::NotificationCenter(uint64_t notif_id)
+    : fwk::NotificationCenter(notif_id)
 {
   subscribe(NOTIFICATION_LIB,
             sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
@@ -40,16 +42,15 @@ void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
         switch(n->type()) {
         case NOTIFICATION_LIB:
         {
-            eng::LibNotification ln
-                = boost::any_cast<eng::LibNotification>(n->data());
-            signal_lib_notification (ln);
+            auto ln = boost::any_cast<eng::LibNotificationPtr>(n->data());
+            signal_lib_notification(*ln);
             break;
         }
         case NOTIFICATION_THUMBNAIL:
         {
             eng::ThumbnailNotification tn
                 = boost::any_cast<eng::ThumbnailNotification>(n->data());
-            signal_thumbnail_notification (tn);
+            signal_thumbnail_notification(tn);
             break;
         }
         default:

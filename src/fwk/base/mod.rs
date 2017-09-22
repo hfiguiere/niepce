@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/storage.cpp
+ * niepce - fwk/base/mod.rs
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "storage.hpp"
+pub mod date;
+#[macro_use]
+pub mod debug;
+pub mod fractions;
+pub mod rgbcolour;
 
-namespace eng {
-
-	Storage::~Storage()
-	{
-
-	}
-
-}
+pub type PropertyIndex = u32;

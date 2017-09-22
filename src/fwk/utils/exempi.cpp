@@ -17,330 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <string.h>
 #include <time.h>
 
 #include <boost/lexical_cast.hpp>
 
-#include <glib.h>
 #include <giomm/file.h>
+#include <glib.h>
 
 #include <exempi/xmp.h>
 #include <exempi/xmpconsts.h>
 
-#include "fwk/base/debug.hpp"
-#include "fwk/base/date.hpp"
 #include "exempi.hpp"
+#include "fwk/base/date.hpp"
+#include "fwk/base/debug.hpp"
 #include "pathutils.hpp"
 
 namespace xmp {
 
-const char * NIEPCE_XMP_NAMESPACE = "http://xmlns.figuiere.net/ns/niepce/1.0";
-const char * NIEPCE_XMP_NS_PREFIX = "niepce";
+const char* NIEPCE_XMP_NAMESPACE = "http://xmlns.figuiere.net/ns/niepce/1.0";
+const char* NIEPCE_XMP_NS_PREFIX = "niepce";
 
-const char * UFRAW_INTEROP_NAMESPACE = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
-const char * UFRAW_INTEROP_NS_PREFIX = "ufrint";
+const char* UFRAW_INTEROP_NAMESPACE =
+    "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
+const char* UFRAW_INTEROP_NS_PREFIX = "ufrint";
+}
 
+extern "C" {
+
+fwk::ExempiManager* fwk_exempi_manager_new();
+void fwk_exempi_manager_delete(fwk::ExempiManager*);
 }
 
 namespace fwk {
 
-ExempiManager::ExempiManager(const ns_defs_t* namespaces)
+ExempiManagerPtr exempi_manager_new()
 {
-    if(xmp_init()) {
-        xmp_register_namespace(xmp::UFRAW_INTEROP_NAMESPACE,
-                               xmp::UFRAW_INTEROP_NS_PREFIX, nullptr);
-        xmp_register_namespace(xmp::NIEPCE_XMP_NAMESPACE,
-                               xmp::NIEPCE_XMP_NS_PREFIX, nullptr);
-
-        if(namespaces != nullptr) {
-            for(auto iter = namespaces; iter->ns != nullptr; iter++) {
-                // TODO check the return code
-                xmp_register_namespace(iter->ns,
-                                       iter->prefix, nullptr);
-            }
-        }
-    }
+    return ExempiManagerPtr(fwk_exempi_manager_new(),
+                            &fwk_exempi_manager_delete);
 }
-
-
-ExempiManager::~ExempiManager()
-{
-    xmp_terminate();
-}
-
-
-XmpMeta::XmpMeta()
-    : m_xmp(),
-      m_keyword_fetched(false)
-{
-    m_xmp = xmp_new_empty();
-}
-
-/** @param file the path to the file to open
- * @param sidecar_only we only want the sidecar.
- * It will locate the XMP sidecar for the file.
- */
-XmpMeta::XmpMeta(const std::string & file, bool sidecar_only)
-    : m_xmp(nullptr),
-      m_keyword_fetched(false)
-{
-    if(!sidecar_only) {
-        DBG_OUT("trying to load the XMP from the file");
-        xmp::ScopedPtr<XmpFilePtr>
-            xmpfile(xmp_files_open_new(file.c_str(), XMP_OPEN_READ));
-        if(xmpfile != nullptr) {
-            m_xmp = xmp_files_get_new_xmp(xmpfile);
-            if(xmpfile == nullptr) {
-                ERR_OUT("xmpfile is nullptr");
-            }
-        }
-    }
-
-    if(m_xmp == nullptr) {
-        gsize len = 0;
-        char * buffer = nullptr;
-        std::string sidecar = fwk::path_replace_extension(file, ".xmp");
-
-        try {
-            DBG_OUT("creating xmpmeta from %s", sidecar.c_str());
-            Glib::RefPtr<Gio::File> f = Gio::File::create_for_path(sidecar);
-            std::string etag_out;
-            f->load_contents(buffer, len, etag_out);
-        }
-        catch(const Glib::Exception & e) {
-            ERR_OUT("loading XMP failed: %s", e.what().c_str());
-        }
-        if(buffer) {
-            m_xmp = xmp_new_empty();
-            if(!xmp_parse(m_xmp, buffer, len)) {
-                xmp_free(m_xmp);
-                m_xmp = nullptr;
-            }
-            g_free(buffer);
-        }
-    }
-}
-
-XmpMeta::~XmpMeta()
-{
-    if(m_xmp) {
-        xmp_free(m_xmp);
-    }
-}
-
-std::string XmpMeta::serialize_inline() const
-{
-    std::string buf;
-    xmp::ScopedPtr<XmpStringPtr> output(xmp_string_new());
-    if(xmp_serialize_and_format(m_xmp, output,
-                                XMP_SERIAL_OMITPACKETWRAPPER | XMP_SERIAL_OMITALLFORMATTING,
-                                0, "", "", 0)) {
-        buf = xmp_string_cstr(output);
-    }
-    return buf;
-}
-
-std::string XmpMeta::serialize() const
-{
-    std::string buf;
-    xmp::ScopedPtr<XmpStringPtr> output(xmp_string_new());
-    if(xmp_serialize_and_format(m_xmp, output,
-                                XMP_SERIAL_OMITPACKETWRAPPER,
-                                0, "\n", " ", 0)) {
-        buf = xmp_string_cstr(output);
-    }
-    return buf;
-}
-
-void XmpMeta::unserialize(const char * buffer)
-{
-    if(!buffer)
-        return;
-    xmp_parse(m_xmp, buffer, strlen(buffer));
-}
-
-
-int32_t XmpMeta::orientation() const
-{
-    int32_t _orientation = 0;
-    int err = 0;
-    if(!xmp_get_property_int32(m_xmp, NS_TIFF, "Orientation",
-                               &_orientation, nullptr)
-       && ((err = xmp_get_error()) != 0)) {
-        ERR_OUT("get \"Orientation\" property failed: %d", xmp_get_error());
-    }
-    return _orientation;
-}
-
-
-std::string XmpMeta::label() const
-{
-    std::string _label;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    if(xmp_get_property(m_xmp, NS_XAP, "Label", value, nullptr)) {
-        _label = xmp_string_cstr(value);
-    }
-    return _label;
-}
-
-
-int32_t XmpMeta::rating() const
-{
-    int32_t _rating = -1;
-    int err = 0;
-    if(!xmp_get_property_int32(m_xmp, NS_XAP, "Rating", &_rating, nullptr)
-       && ((err = xmp_get_error()) != 0)) {
-        ERR_OUT("get \"Rating\" property failed: %d", err);
-    }
-    return _rating;
-}
-
-int32_t XmpMeta::flag() const
-{
-    int32_t _flag = 0;
-    int err = 0;
-    if(!xmp_get_property_int32(m_xmp, xmp::NIEPCE_XMP_NAMESPACE, "Flag",
-                               &_flag, nullptr)
-       && ((err = xmp_get_error()) != 0)) {
-        ERR_OUT("get \"Flag\" property failed: %d", err);
-    }
-    return _flag;
-}
-
-fwk::Date XmpMeta::creation_date() const
-{
-    XmpDateTime value;
-    int err = 0;
-    if(xmp_get_property_date(m_xmp, NS_EXIF, "DateTimeOriginal",
-                             &value, nullptr)) {
-        return fwk::Date(value);
-    }
-    else if((err = xmp_get_error()) != 0) {
-        ERR_OUT("get \"DateTimeOriginal\" property failed: %d", err);
-    }
-    return Date(0);
-}
-
-std::string XmpMeta::creation_date_str() const
-{
-    std::string s;
-    xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-    if(xmp_get_property(m_xmp, NS_EXIF, "DateTimeOriginal",
-                        value, nullptr)) {
-        s = xmp_string_cstr(value);
-    }
-    return s;
-}
-
-
-const std::vector< std::string > & XmpMeta::keywords() const
-{
-    if(!m_keyword_fetched) {
-        xmp::ScopedPtr<XmpIteratorPtr>
-            iter(xmp_iterator_new(m_xmp, NS_DC, "subject",
-                                  XMP_ITER_JUSTLEAFNODES));
-        xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
-        while(xmp_iterator_next(iter, nullptr, nullptr, value, nullptr)) {
-            m_keywords.push_back(xmp_string_cstr(value));
-        }
-        m_keyword_fetched = true;
-    }
-    return m_keywords;
-}
-
-double
-XmpMeta::gpsCoordFromXmp(const std::string & xmps)
-{
-    double coord = NAN;
-
-    const char* s = xmps.c_str();
-
-    // step 1 - degrees
-//    auto iter;
-    const char* current = strchr(s, ',');
-    if (current == nullptr) {
-        return NAN;
-    }
-
-    std::string degs = std::string(s, current - s);
-
-    current++;
-    if (!*current) {
-        return NAN;
-    }
-    // step 2 - minutes
-    size_t len = strlen(current);
-    if (len <= 1) {
-        // too short
-        return NAN;
-    }
-    const char *orientation = current + len - 1;
-    if (*orientation != 'N' &&
-        *orientation != 'S' &&
-        *orientation != 'E' &&
-        *orientation != 'W') {
-
-        return NAN;
-    }
-
-    // extract minutes. There are two formats
-    double fminutes = 0.;
-    const char *next = strchr(current, ',');
-    if (next) {
-        // DD,mm,ss format
-        next++;
-        if (!*next) {
-            return NAN;
-        }
-        len = strlen(next);
-        if (len <= 1) {
-            // too short
-            return NAN;
-        }
-        std::string seconds = std::string(next, len - 1);
-        double sseconds = 0.;
-        try {
-            sseconds = boost::lexical_cast<double>(seconds) / 60;
-            std::string minutes = std::string(current, next - current - 1);
-            fminutes = boost::lexical_cast<double>(minutes);
-            fminutes += sseconds;
-        }
-        catch(const std::exception & e) {
-            return NAN;
-        }
-    }
-    else {
-        // DD,mm.mm format
-        try {
-            std::string minutes = std::string(current, len - 1);
-            fminutes = boost::lexical_cast<double>(minutes);
-        }
-        catch(const std::exception & e) {
-            return NAN;
-        }
-    }
-
-    // degrees.
-    try {
-        coord = boost::lexical_cast<int>(degs);
-    }
-    catch(const std::exception & e) {
-        return NAN;
-    }
-    if (coord > 180) {
-        return NAN;
-    }
-    coord += fminutes / 60.f;
-
-    if (*orientation == 'S' || *orientation == 'W') {
-        coord = -coord;
-    }
-
-    return coord;
-}
-
 }
 
 /*

@@ -30,7 +30,7 @@ int test_main(int, char *[])
 {
 	OpQueue q;
 
-	Op::Ptr p(new Op(1, [](const Library::Ptr &){}));
+	Op::Ptr p(new Op(1, [](Library*){ return false; }));
 
 	BOOST_CHECK(q.empty());
 

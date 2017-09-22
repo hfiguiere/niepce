@@ -17,7 +17,9 @@ camerawire_LDADD = \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
+	$(top_builddir)/target/debug/libniepce_rust.a \
 	@FRAMEWORK_LIBS@ \
 	@GPHOTO_LIBS@ \
 	@OPENRAW_LIBS@ \
+	-ldl \
 	$(NULL)

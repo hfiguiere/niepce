@@ -73,8 +73,8 @@ public:
     void set_drawflag(bool val)
         { m_drawflag = val; }
 
-    Glib::PropertyProxy_ReadOnly<eng::LibFile::Ptr> property_libfile() const;
-    Glib::PropertyProxy<eng::LibFile::Ptr>          property_libfile();
+    Glib::PropertyProxy_ReadOnly<eng::LibFilePtr> property_libfile() const;
+    Glib::PropertyProxy<eng::LibFilePtr>          property_libfile();
     sigc::signal<void, int, int> signal_rating_changed;
 protected:
     /* drawing implementations */
@@ -92,7 +92,7 @@ private:
     bool                                m_drawrating;
     bool                                m_drawlabel;
     bool                                m_drawflag;
-    Glib::Property<eng::LibFile::Ptr>   m_libfileproperty;
+    Glib::Property<eng::LibFilePtr>   m_libfileproperty;
 
     Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;

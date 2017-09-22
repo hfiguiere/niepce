@@ -32,9 +32,9 @@ namespace libraryclient {
 const char * s_thumbcacheDirname = "thumbcache";
 
 LibraryClient::LibraryClient(const fwk::Moniker & moniker,
-                             const fwk::NotificationCenter::Ptr & nc)
-    : m_pImpl(ClientImpl::makeClientImpl(moniker, nc))
-    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, nc)
+                             uint64_t notif_id)
+    : m_pImpl(ClientImpl::makeClientImpl(moniker, notif_id))
+    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, notif_id)
     , m_uidataprovider(new UIDataProvider())
     , m_trash_id(0)
 {
@@ -136,22 +136,24 @@ eng::tid_t LibraryClient::processXmpUpdateQueue(bool write_xmp)
     return m_pImpl->processXmpUpdateQueue(write_xmp);
 }
 
-void LibraryClient::importFile(const std::string & path, eng::Library::Managed manage)
+void LibraryClient::importFile(const std::string & path, eng::LibraryManaged manage)
 {
     m_pImpl->importFile(path, manage);
 }
 
-void LibraryClient::importFromDirectory(const std::string & dir, eng::Library::Managed manage)
+void LibraryClient::importFromDirectory(const std::string & dir, eng::LibraryManaged manage)
 {
     m_pImpl->importFromDirectory(dir, manage);
 }
 
+#if 0
 bool LibraryClient::fetchKeywordsForFile(int /*file*/, 
                                          eng::Keyword::IdList & /*keywords*/)
 {
     // TODO
     return false;
 }
+#endif
 
 }
 /*

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/colour.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,32 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 
-
-#ifndef __FWK_BASE_COLOUR_HPP_
-#define __FWK_BASE_COLOUR_HPP_
-
-#include <stdint.h>
-
+#include <memory>
 #include <string>
-#include <array>
 
 namespace fwk {
 
-  /** A RgbColour tuple (3 components, 16bpp)
-   *  To be used only for UI.
-   */
-  class RgbColour
-    : public std::array<uint16_t, 3>
-  {
-  public:
-    RgbColour(value_type r = 0, value_type g = 0, value_type b = 0);
-    explicit RgbColour(const std::string & );
+class RgbColour;
+typedef std::shared_ptr<RgbColour> RgbColourPtr;
 
-    std::string to_string() const;
-  };
+RgbColourPtr rgbcolour_new(uint16_t r, uint16_t g, uint16_t b);
+RgbColourPtr rgbcolour_clone(const RgbColour*);
+RgbColourPtr rgbcolour_wrap(RgbColour*);
 
+std::string rgbcolour_to_string(uint16_t r, uint16_t g, uint16_t b);
+std::string rgbcolour_to_string(const RgbColour*);
 }
 
-
-#endif
+extern "C" {
+uint16_t fwk_rgbcolour_component(const fwk::RgbColour*, int32_t idx);
+char* fwk_rgbcolour_to_string(const fwk::RgbColour*);
+}

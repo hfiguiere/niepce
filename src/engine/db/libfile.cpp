@@ -17,94 +17,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include "fwk/base/debug.hpp"
 #include "libfile.hpp"
+#include "engine/library/notification.hpp"
+#include "fwk/base/debug.hpp"
 #include "properties.hpp"
 
+extern "C" {
+eng::LibFile *engine_db_libfile_new(eng::library_id_t id,
+                                    eng::library_id_t folder_id,
+                                    eng::library_id_t fs_file_id,
+                                    const char *path, const char *name);
+void engine_db_libfile_delete(eng::LibFile *);
+}
 
 namespace eng {
-	
-LibFile::LibFile(library_id_t _id, library_id_t _folderId, library_id_t _fsfileid, const std::string & p,
-                 const std::string & _name )
-	: m_id(_id), m_folderId(_folderId),
-	  m_name(_name), 
-    m_main_file(_fsfileid, p),
-	  m_orientation(0), m_rating(0), m_label(0),
-    m_flag(0),
-    m_file_type(FileType::UNKNOWN)
-{
-    
-}
 
-LibFile::~LibFile()
+// some glue for rust
+QueriedContent::QueriedContent(library_id_t _container)
+    : container(_container)
+    , files(new LibFileList)
 {
 }
 
-void LibFile::setOrientation(int32_t v)
+void QueriedContent::push(LibFile *f)
 {
-    m_orientation = v;
+    files->push_back(eng::libfile_wrap(f));
+}
 }
 
+namespace eng {
 
-void LibFile::setRating(int32_t v)
+LibFilePtr libfile_new(library_id_t id, library_id_t folder_id,
+                       library_id_t fs_file_id, const char *path,
+                       const char *name)
 {
-    m_rating = v;
+    return libfile_wrap(
+        engine_db_libfile_new(id, folder_id, fs_file_id, path, name));
 }
 
-
-void LibFile::setLabel(int32_t v)
+LibFilePtr libfile_wrap(LibFile *lf)
 {
-    m_label = v;
-}
-
-void LibFile::setFlag(int32_t v)
-{
-    m_flag = v;
-}
-
-void LibFile::setFileType(FileType v)
-{
-    m_file_type = v;
-}
-
-void LibFile::setProperty(fwk::PropertyIndex idx, int32_t v)
-{
-    switch(idx) {
-    case NpTiffOrientationProp:
-        setOrientation(v);
-        break;
-    case NpXmpRatingProp:
-        setRating(v);
-        break;
-    case NpXmpLabelProp:
-        setLabel(v);
-        break;
-    case NpNiepceFlagProp:
-        setFlag(v);
-        break;
-    default:
-        ERR_OUT("set property %u not handled", idx);
-        break;
-    }
-}
-
-int32_t LibFile::property(fwk::PropertyIndex idx) const
-{
-    switch(idx) {
-    case NpTiffOrientationProp:
-        return orientation();
-    case NpXmpRatingProp:
-        return rating();
-    case NpXmpLabelProp:
-        return label();
-    case NpNiepceFlagProp:
-        return flag();
-    default:
-        ERR_OUT("get property %u not handled", idx);
-        break;
-    }
-    return -1;
+    return LibFilePtr(lf, &engine_db_libfile_delete);
 }
 
 /**
@@ -113,27 +66,18 @@ int32_t LibFile::property(fwk::PropertyIndex idx) const
  * @return the filetype
  * @todo: add the JPEG+RAW file types.
  */
-LibFile::FileType LibFile::mimetype_to_filetype(fwk::MimeType mime)
+LibFileType mimetype_to_filetype(fwk::MimeType mime)
 {
-    if(mime.isDigicamRaw())
-    {
-        return FileType::RAW;
-    }
-    else if(mime.isImage())
-    {
-        return FileType::IMAGE;
-    }
-    else if(mime.isMovie())
-    {
-        return FileType::VIDEO;
-    }
-    else
-    {
-        return FileType::UNKNOWN;
+    if (mime.isDigicamRaw()) {
+        return LibFileType::RAW;
+    } else if (mime.isImage()) {
+        return LibFileType::IMAGE;
+    } else if (mime.isMovie()) {
+        return LibFileType::VIDEO;
+    } else {
+        return LibFileType::UNKNOWN;
     }
 }
-
-
 }
 /*
   Local Variables:

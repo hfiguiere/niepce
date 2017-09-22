@@ -83,10 +83,6 @@ src/fwk/base/testdate
 src/fwk/base/testmap
 src/fwk/base/testoption
 src/fwk/base/testpropertybag
-src/fwk/utils/test_db
-src/fwk/utils/test_db2
-src/fwk/utils/test_db3
-src/fwk/utils/test_db4
 src/fwk/utils/testfiles
 src/fwk/utils/testpathutils
 src/fwk/utils/teststringutils
@@ -112,3 +108,6 @@ po/en@quot.header
 po/insert-header.sin
 po/quot.sed
 po/remove-potcdate.s*
+target/
+**/*.rs.bk
+Cargo.lock

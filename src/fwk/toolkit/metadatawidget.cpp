@@ -269,7 +269,7 @@ bool MetaDataWidget::set_fraction_dec_data(Gtk::Widget* w,
         const std::string& str_value = get_string(value);
         DBG_OUT("set fraction dec %s", str_value.c_str());
         std::string frac = str(boost::format("%.1f")
-                               % fwk::fraction_to_decimal(str_value));
+                               % fwk_fraction_to_decimal(str_value.c_str()));
         AutoFlag flag(m_update);
         static_cast<Gtk::Label*>(w)->set_text(frac);
     }
@@ -325,7 +325,7 @@ bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue &
 {
     try {
         AutoFlag flag(m_update);
-        fwk::StringArray tokens = boost::get<fwk::StringArray>(value);
+        fwk::StringArray tokens = boost::get<fwk::StringArray>(value.get_variant());
 
         static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
     }
@@ -383,10 +383,10 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
 {
     try {
         AutoFlag flag(m_update);
-        fwk::Date date = boost::get<fwk::Date>(value);
-        static_cast<Gtk::Label*>(w)->set_text(date.to_string());
+        fwk::DatePtr date = boost::get<fwk::DatePtr>(value.get_variant());
+        static_cast<Gtk::Label*>(w)->set_text(fwk::date_to_string(date.get()));
 
-        DBG_OUT("setting date data %s", date.to_string().c_str());
+        DBG_OUT("setting date data %s", fwk::date_to_string(date.get()).c_str());
     }
     catch(...) {
         return false;
@@ -452,7 +452,7 @@ bool MetaDataWidget::on_text_changed(GdkEventFocus*,
     if(m_update) {
         return true;
     }
-    emit_metadata_changed(prop, 
+    emit_metadata_changed(prop,
                           fwk::PropertyValue(b->get_text()));
     return true;
 }

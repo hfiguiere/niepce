@@ -19,6 +19,8 @@
  */
 
 #include <glibmm/miscutils.h>
+#include <giomm/file.h>
+
 #include "cameraimporter.hpp"
 
 #include "fwk/base/debug.hpp"
@@ -131,7 +133,7 @@ bool CameraImporter::do_import(const std::string& source, const std::string& des
                                                   imported_camera_file->name(),
                                                   output_path)) {
                     // XXX else report error.
-                    importer(output_path, IImporter::Import::SINGLE, Library::Managed::NO);
+                    importer(output_path, IImporter::Import::SINGLE, LibraryManaged::NO);
                 }
             }
             return true;

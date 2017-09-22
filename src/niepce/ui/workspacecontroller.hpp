@@ -98,10 +98,10 @@ private:
     fwk::Configuration::Ptr getLibraryConfig() const;
 
     /** add a folder item to the treeview */
-    void add_folder_item(const eng::LibFolder::Ptr & f);
+    void add_folder_item(const eng::LibFolder* f);
     /** add a keyword item to the treeview */
-    void add_keyword_item(const eng::Keyword::Ptr & k);
-    /** add a tree item in the treeview 
+    void add_keyword_item(const eng::Keyword* k);
+    /** add a tree item in the treeview
      * @param treestore the treestore to add to
      * @param childrens the children subtree to add to
      * @param icon the icon for the item

@@ -23,13 +23,13 @@
 
 namespace eng {
 
-Op::Op(tid_t _id, const function_t & func)
+Op::Op(tid_t _id, const Function & func)
     : m_id(_id),
       m_function(func)
 {
 }
 
-void Op::operator() (const Library::Ptr &l)
+void Op::operator() (Library* l)
 {
     if(m_function) {
         m_function(l);

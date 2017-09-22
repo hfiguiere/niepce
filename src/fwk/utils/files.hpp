@@ -21,16 +21,20 @@
 #ifndef __UTILS_FILES_H__
 #define __UTILS_FILES_H__
 
-#include <list>
+#include <algorithm>
+#include <vector>
 #include <string>
 #include <memory>
 
 #include <functional>
 
+#if !RUST_BINDGEN
 #include <giomm/fileinfo.h>
+#endif
 
 namespace fwk {
 
+#if !RUST_BINDGEN
 /** wrapper around g_dir_make_tmp() */
 std::string make_tmp_dir(const std::string& base);
 
@@ -38,14 +42,18 @@ bool filter_none(const Glib::RefPtr<Gio::FileInfo> & file);
 bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,
                 const std::string & ext);
 bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
+#endif
+
+class FileList;
+typedef std::shared_ptr<FileList> FileListPtr;
 
 class FileList
-	: private std::list<std::string>
+	: private std::vector<std::string>
 {
 public:
-    typedef std::shared_ptr< FileList > Ptr;
+    typedef FileListPtr Ptr;
 
-    typedef std::list< std::string >    _impltype_t;
+    typedef std::vector<std::string>    _impltype_t;
     typedef _impltype_t::value_type       value_type;
     typedef _impltype_t::iterator         iterator;
     typedef _impltype_t::const_iterator   const_iterator;
@@ -55,9 +63,14 @@ public:
         {}
     FileList(const _impltype_t&);
 
+#if !RUST_BINDGEN
     static Ptr getFilesFromDirectory(const value_type& dir,
                                      std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter);
+#endif
 
+    value_type at(size_type index) const
+        { return _impltype_t::at(index); }
+    const value_type::value_type* at_cstr(size_type index) const;
     const_iterator begin() const
         { return _impltype_t::cbegin(); }
     const_iterator end() const
@@ -66,10 +79,8 @@ public:
         { return _impltype_t::cbegin(); }
     const_iterator cend() const
         { return _impltype_t::cend(); }
-    size_type size() const
-        { return _impltype_t::size(); }
-    void sort()
-        { _impltype_t::sort(); }
+    size_type size() const;
+    void sort();
     void push_back(const value_type & v)
         { _impltype_t::push_back(v); }
 };

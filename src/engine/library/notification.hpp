@@ -20,185 +20,95 @@
 
 #pragma once
 
-#include <boost/variant.hpp>
+#include <memory>
 
+#include "engine/db/libfile.hpp"
+#include "engine/db/librarytypes.hpp"
 #include "engine/library/clienttypes.hpp"
 
 namespace eng {
+class Label;
+class LibMetadata;
+class LibFolder;
+class Keyword;
 
-class LibNotification
-{
-public:
-    enum class Type {
-        NONE = 0,
-        NEW_LIBRARY_CREATED,
-        ADDED_FOLDERS,
-        ADDED_FILES,
-        ADDED_KEYWORDS,
-        ADDED_KEYWORD,
-        ADDED_LABELS,
-        FOLDER_CONTENT_QUERIED,
-        KEYWORD_CONTENT_QUERIED,
-        METADATA_QUERIED,
-        METADATA_CHANGED,
-        LABEL_CHANGED,
-        LABEL_DELETED,
-        XMP_NEEDS_UPDATE,
-        FOLDER_COUNTED,
-        FOLDER_COUNT_CHANGE,
-        FILE_MOVED
-    };
+class LibNotification;
+typedef std::shared_ptr<LibNotification> LibNotificationPtr;
 
-    struct None {
-    };
-
-    struct Id {
-        library_id_t id;
-    };
-
-    struct AddedFolders {
-        LibFolder::ListPtr folders;
-    };
-
-    struct AddedKeyword {
-        Keyword::Ptr keyword;
-    };
-
-    struct AddedKeywords {
-        Keyword::ListPtr keywords;
-    };
-
-    struct AddedLabels {
-        Label::ListPtr labels;
-    };
-
-    struct FileMoved {
-        library_id_t file;
-        library_id_t from;
-        library_id_t to;
-    };
-
-    struct QueriedContent {
-        library_id_t container;
-        LibFile::ListPtr files;
-    };
-
-    struct MetadataContent {
-        library_id_t file;
-        LibMetadata::Ptr metadata;
-    };
-
-    typedef metadata_desc_t MetadataChange;
-
-    struct FolderCount {
-        library_id_t folder;
-        int32_t count;
-    };
-
-    struct LabelChange {
-        eng::Label::Ptr label;
-    };
-
-    // specialise this class template to map the notification parameter type
-    // with the notification type.
-    // By default type is None.
-    template<Type t> struct ParamType {
-        typedef None Type;
-    };
-
-    typedef boost::variant<None, Id, AddedFolders,
-                           AddedLabels, AddedKeyword, AddedKeywords,
-                           QueriedContent,
-                           MetadataContent, MetadataChange,
-                           LabelChange,
-                           FileMoved, FolderCount> Param;
-
-    Type type;
-
-    // Instanciate a notification. Will use the ParamType template to enforce the
-    // parameter type.
-    template<LibNotification::Type t>
-    static LibNotification make(typename LibNotification::ParamType<t>::Type&& p)
-        {
-            return LibNotification(t, p);
-        }
-    // Extract the parameter.
-    template<LibNotification::Type t>
-    const typename LibNotification::ParamType<t>::Type& get() const
-        {
-            return boost::get<typename LibNotification::ParamType<t>::Type>(param);
-        }
-private:
-    Param param;
-
-    LibNotification(Type t, Param&& p)
-        : type(t), param(p) {}
+enum class LibNotificationType {
+    NONE = 0,
+    NEW_LIBRARY_CREATED,
+    ADDED_FOLDER,
+    ADDED_FILE,
+    ADDED_FILES,
+    ADDED_KEYWORD,
+    ADDED_LABEL,
+    FOLDER_CONTENT_QUERIED,
+    KEYWORD_CONTENT_QUERIED,
+    METADATA_QUERIED,
+    METADATA_CHANGED,
+    LABEL_CHANGED,
+    LABEL_DELETED,
+    XMP_NEEDS_UPDATE,
+    FOLDER_COUNTED,
+    FOLDER_COUNT_CHANGE,
+    FILE_MOVED
 };
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::ADDED_FOLDERS> {
-    typedef AddedFolders Type;
+struct LnFileMove {
+    library_id_t file;
+    library_id_t from;
+    library_id_t to;
 };
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::ADDED_KEYWORDS> {
-    typedef AddedKeywords Type;
+struct LnFolderCount {
+    library_id_t folder;
+    int64_t count;
 };
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::ADDED_KEYWORD> {
-    typedef AddedKeyword Type;
+struct QueriedContent {
+    library_id_t container;
+    LibFileListPtr files;
+
+    QueriedContent(library_id_t container);
+    void push(LibFile*);
 };
+}
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::ADDED_LABELS> {
-    typedef AddedLabels Type;
-};
+extern "C" {
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::FOLDER_CONTENT_QUERIED> {
-    typedef QueriedContent Type;
-};
+eng::LibNotificationType
+engine_library_notification_type(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::KEYWORD_CONTENT_QUERIED> {
-    typedef QueriedContent Type;
-};
+// if METADATA_CHANGE return the inner id. otherwise directly attached id.
+eng::library_id_t
+engine_library_notification_get_id(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::METADATA_QUERIED> {
-    typedef MetadataContent Type;
-};
+const eng::Label*
+engine_library_notification_get_label(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::METADATA_CHANGED> {
-    typedef MetadataChange Type;
-};
+const eng::LnFileMove*
+engine_library_notification_get_filemoved(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::LABEL_CHANGED> {
-    typedef LabelChange Type;
-};
+const eng::LibMetadata*
+engine_library_notification_get_libmetadata(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::LABEL_DELETED> {
-    typedef Id Type;
-};
+const eng::LnFolderCount*
+engine_library_notification_get_folder_count(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::FOLDER_COUNTED> {
-    typedef FolderCount Type;
-};
+const eng::metadata_desc_t*
+engine_library_notification_get_metadatachange(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::FOLDER_COUNT_CHANGE> {
-    typedef FolderCount Type;
-};
+const eng::LibFolder*
+engine_library_notification_get_libfolder(const eng::LibNotification* n);
 
-template<>
-struct LibNotification::ParamType<LibNotification::Type::FILE_MOVED> {
-    typedef FileMoved Type;
-};
+const eng::Keyword*
+engine_library_notification_get_keyword(const eng::LibNotification* n);
 
+const eng::QueriedContent*
+engine_library_notification_get_content(const eng::LibNotification* n);
 
+void engine_library_notification_delete(eng::LibNotification* n);
+
+void engine_library_notify(uint64_t notify_id, eng::LibNotification* n);
 }

@@ -19,30 +19,17 @@
 
 #include "libfolder.hpp"
 
+extern "C" eng::LibFolder *engine_db_libfolder_new(eng::library_id_t id,
+                                                   const char *name);
+extern "C" void engine_db_libfolder_delete(eng::LibFolder *);
+
 namespace eng {
 
-const char* LibFolder::read_db_columns()
+LibFolderPtr libfolder_new(eng::library_id_t id, const char *name)
 {
-    return "id,name,virtual,locked,expanded";
+    return LibFolderPtr(engine_db_libfolder_new(id, name),
+                        &engine_db_libfolder_delete);
 }
-
-LibFolder::Ptr LibFolder::read_from(const db::IConnectionDriver::Ptr & db)
-{
-    library_id_t id;
-    std::string name;
-    int32_t virt_type, locked, expanded;
-    db->get_column_content(0, id);
-    db->get_column_content(1, name);
-    db->get_column_content(2, virt_type);
-    db->get_column_content(3, locked);
-    db->get_column_content(4, expanded);
-    LibFolder::Ptr f(new LibFolder(id, name));
-    f->set_virtual_type((VirtualType)virt_type);
-    f->set_is_locked((bool)locked);
-    f->set_expanded((bool)expanded);
-    return f;
-}
-
 }
 /*
   Local Variables:

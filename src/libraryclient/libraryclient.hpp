@@ -29,7 +29,6 @@
 #include "engine/library/thumbnailcache.hpp"
 #include "engine/db/library.hpp"
 #include "engine/db/librarytypes.hpp"
-#include "engine/db/storage.hpp"
 
 namespace fwk {
 class Moniker;
@@ -43,11 +42,10 @@ class UIDataProvider;
 class ClientImpl;
 
 class LibraryClient
-    : public eng::Storage
 {
 public:
     NON_COPYABLE(LibraryClient);
-    LibraryClient(const fwk::Moniker & moniker, const fwk::NotificationCenter::Ptr & nc);
+    LibraryClient(const fwk::Moniker & moniker, uint64_t notif_id);
     virtual ~LibraryClient();
     // @return false in case of error.
     bool ok() const;
@@ -88,19 +86,17 @@ public:
      * @param path the file path
      * @param manage true if imported file have to be managed
      */
-    void importFile(const std::string & path, eng::Library::Managed manage);
+    void importFile(const std::string & path, eng::LibraryManaged manage);
 
     /** Import files from a directory
      * @param dir the directory
      * @param manage true if imports have to be managed
      */
-    void importFromDirectory(const std::string & dir, eng::Library::Managed manage);
+    void importFromDirectory(const std::string & dir, eng::LibraryManaged manage);
 
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }
 
-    /* sync call */
-    virtual bool fetchKeywordsForFile(int file, eng::Keyword::IdList &keywords) override;
     const std::unique_ptr<UIDataProvider>& getDataProvider() const
         { return m_uidataprovider; }
 

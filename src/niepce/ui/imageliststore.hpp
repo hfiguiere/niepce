@@ -29,6 +29,7 @@
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.hpp"
 #include "engine/db/library.hpp"
+#include "engine/library/notification.hpp"
 #include "engine/library/thumbnailnotification.hpp"
 #include "libraryclient/libraryclient.hpp"
 
@@ -55,7 +56,7 @@ public:
                 add(m_strip_thumb);
             }
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-        Gtk::TreeModelColumn<eng::LibFile::Ptr> m_libfile;
+        Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
     };
 
