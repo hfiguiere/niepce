@@ -28,7 +28,8 @@ pub use self::utils::exempi::{
     XmpMeta,
     gps_coord_from_xmp
 };
-
+pub use self::base::propertyvalue::PropertyValue;
+pub use self::base::propertybag::PropertyBag;
 pub use self::base::fractions::{
     fraction_to_decimal
 };

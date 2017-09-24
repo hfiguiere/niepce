@@ -32,7 +32,7 @@ namespace {
 eng::LibNotificationPtr
 engine_library_notification_wrap(eng::LibNotification* n)
 {
-    return eng::LibNotificationPtr(n, &engine_library_notification_delete);
+    return eng::LibNotificationPtr(n, &ffi::engine_library_notification_delete);
 }
 }
 

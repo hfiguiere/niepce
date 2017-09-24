@@ -25,8 +25,14 @@
 
 #include "engine/db/librarytypes.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace eng {
+
+#if RUST_BINDGEN
 class LibFolder;
+#endif
+
 typedef std::shared_ptr<LibFolder> LibFolderPtr;
 typedef std::list<LibFolderPtr> LibFolderList;
 typedef std::shared_ptr<LibFolderList> LibFolderListPtr;
@@ -42,9 +48,6 @@ LibFolderPtr libfolder_new(library_id_t id, const char *name);
 
 extern "C" {
 library_id_t engine_db_libfolder_id(const LibFolder *);
-const char *engine_db_libfolder_name(const LibFolder *);
-int32_t engine_db_libfolder_virtual_type(const LibFolder *);
-bool engine_db_libfolder_expanded(const LibFolder *);
 void engine_db_libfolder_set_locked(const LibFolder *, bool);
 void engine_db_libfolder_set_expanded(const LibFolder *, bool);
 void engine_db_libfolder_set_virtual_type(const LibFolder *, int32_t);

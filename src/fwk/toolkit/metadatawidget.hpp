@@ -71,9 +71,9 @@ public:
     void add_data(const MetaDataFormat * current,
                   const PropertyValue & value);
     void set_data_format(const MetaDataSectionFormat * fmt);
-    void set_data_source(const fwk::PropertyBag & properties);
+    void set_data_source(const fwk::PropertyBagPtr& properties);
 
-    sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
+    sigc::signal<void, const fwk::PropertyBagPtr &, const fwk::PropertyBagPtr &> signal_metadata_changed;
 protected:
     bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
     bool on_text_changed(GdkEventFocus*, Glib::RefPtr<Gtk::TextBuffer> b, fwk::PropertyIndex prop);
@@ -104,11 +104,11 @@ private:
                          const PropertyValue & value);
     bool set_date_data(Gtk::Widget* w, const PropertyValue & value);
 
-    void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValue & value);
+    void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValuePtr & value);
 
     Gtk::Grid    m_table;
     std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
-    fwk::PropertyBag m_current_data;
+    fwk::PropertyBagPtr m_current_data;
     const MetaDataSectionFormat * m_fmt;
     bool m_update;
 };

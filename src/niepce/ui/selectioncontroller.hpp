@@ -98,8 +98,8 @@ public:
 
     void set_property(fwk::PropertyIndex idx, int value);
 
-    void set_properties(const fwk::PropertyBag & props,
-                        const fwk::PropertyBag & old);
+    void set_properties(const fwk::PropertyBagPtr & props,
+                        const fwk::PropertyBagPtr & old);
 
     /** Write the file(s) metadata to disk. */
     void write_metadata();
@@ -121,8 +121,8 @@ private:
                        int old_value, int new_value);
     bool _set_metadata(const std::string & undo_label,
                        const eng::LibFilePtr& file,
-                       const fwk::PropertyBag & props,
-                       const fwk::PropertyBag & old);
+                       const fwk::PropertyBagPtr & props,
+                       const fwk::PropertyBagPtr & old);
     /** move the selection and emit the signal
      * @param backwards true if the move is backwards.
      */

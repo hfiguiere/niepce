@@ -78,7 +78,7 @@ protected:
 
 
 private:
-  void on_metadata_changed(const fwk::PropertyBag &, const fwk::PropertyBag & old);
+  void on_metadata_changed(const fwk::PropertyBagPtr&, const fwk::PropertyBagPtr& old);
   void on_rating_changed(int id, int rating);
   bool on_librarylistview_click(GdkEventButton *e);
 

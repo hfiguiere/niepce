@@ -23,6 +23,7 @@ use exempi;
 
 use fwk;
 use fwk::{
+    PropertyValue,
     XmpMeta,
     make_xmp_date_time
 };
@@ -32,20 +33,6 @@ use super::{
     LibraryId
 };
 use root::eng::NiepceProperties as Np;
-use root::fwk::{
-    is_empty,
-    is_integer,
-    is_string,
-    is_string_array,
-    is_date,
-    get_string_cstr,
-    get_string_array,
-    get_integer,
-    get_date,
-    string_array_len,
-    string_array_at_cstr,
-    PropertyValue
-};
 
 pub struct LibMetadata {
     xmp: XmpMeta,
@@ -92,44 +79,44 @@ impl LibMetadata {
 
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {
         if let Some(ix) = property_index_to_xmp(meta) {
-            if unsafe { is_empty(value) } {
-                return self.xmp.xmp.delete_property(&ix.ns, &ix.property);
-            } else if unsafe { is_integer(value) } {
-                return self.xmp.xmp.set_property_i32(
-                    &ix.ns, &ix.property, unsafe { get_integer(value) }, exempi::PROP_NONE);
-            } else if unsafe { is_string(value) } {
-                let cstr = unsafe { CStr::from_ptr(get_string_cstr(value)) };
-                if cstr.to_bytes().len() == 0 {
-                    return self.xmp.xmp.delete_property(&ix.ns, &ix.property);
-                } else if !self.xmp.xmp.set_property(
-                    &ix.ns, &ix.property, &*cstr.to_string_lossy(), exempi::PROP_NONE) {
-                    if exempi::get_error() == exempi::Error::BadXPath {
-                        return self.xmp.xmp.set_localized_text(
-                            &ix.ns, &ix.property, "", "x-default",
-                            &*cstr.to_string_lossy(), exempi::PROP_NONE);
+            match value {
+                &PropertyValue::Empty =>
+                    return self.xmp.xmp.delete_property(&ix.ns, &ix.property),
+                &PropertyValue::Int(i) =>
+                    return self.xmp.xmp.set_property_i32(
+                        &ix.ns, &ix.property, i, exempi::PROP_NONE),
+                &PropertyValue::String(ref s) => {
+                    if s.is_empty() {
+                        return self.xmp.xmp.delete_property(&ix.ns, &ix.property);
+                    } else if !self.xmp.xmp.set_property(
+                        &ix.ns, &ix.property, s, exempi::PROP_NONE) {
+                        if exempi::get_error() == exempi::Error::BadXPath {
+                            return self.xmp.xmp.set_localized_text(
+                                &ix.ns, &ix.property, "", "x-default",
+                                s, exempi::PROP_NONE);
+                        }
+                    } else {
+                        return true;
                     }
-                } else {
+                },
+                &PropertyValue::StringArray(ref sa) => {
+                    self.xmp.xmp.delete_property(&ix.ns, &ix.property);
+                    for i in 0..sa.len() {
+                        self.xmp.xmp.append_array_item(&ix.ns, &ix.property,
+                                                       exempi::PROP_VALUE_IS_ARRAY,
+                                                       &sa[i],
+                                                       exempi::PROP_NONE);
+                    }
                     return true;
+                },
+                &PropertyValue::Date(ref d) => {
+                    return self.xmp.xmp.set_property_date(
+                        &ix.ns, &ix.property, d.xmp_date(), exempi::PROP_NONE);
                 }
-            } else if unsafe { is_string_array(value) } {
-                self.xmp.xmp.delete_property(&ix.ns, &ix.property);
-                let a = unsafe { get_string_array(value) };
-                let count = unsafe { string_array_len(a) };
-                for i in 0..count {
-                    let cstr = unsafe { CStr::from_ptr(string_array_at_cstr(a, i)) };
-                    self.xmp.xmp.append_array_item(&ix.ns, &ix.property,
-                                                   exempi::PROP_VALUE_IS_ARRAY,
-                                                   &*cstr.to_string_lossy(),
-                                                   exempi::PROP_NONE);
-                }
-                return true;
-            } else if unsafe { is_date(value) } {
-                let d = unsafe { get_date(value) } as *const fwk::Date;
-                return self.xmp.xmp.set_property_date(
-                    &ix.ns, &ix.property, unsafe { &(*d) }.xmp_date(), exempi::PROP_NONE);
             }
             err_out!("error setting property {}:{} {}", ix.ns, ix.property,
                      exempi::get_error() as u32);
+            return false;
         }
         err_out!("Unknown property {:?}", meta);
         false

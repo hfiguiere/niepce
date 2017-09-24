@@ -30,13 +30,15 @@ use std::time::{
 // Like a UNIX time_t (also i64)
 pub type Time = i64;
 
+#[derive(Clone,Debug)]
 pub enum Timezone {}
 
-/**
- * Class to deal with ISO8601 string dates as used by XMP.
- * Bonus: with a timezone.
- * XXX replace by chrono::DateTime<>
- */
+///
+/// Class to deal with ISO8601 string dates as used by XMP.
+/// Bonus: with a timezone.
+/// XXX replace by chrono::DateTime<>
+///
+#[derive(Clone,Debug)]
 pub struct Date {
     datetime: exempi::DateTime,
     tz: Option<Timezone>,

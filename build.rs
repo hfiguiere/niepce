@@ -1,4 +1,5 @@
 extern crate bindgen;
+extern crate cbindgen;
 extern crate pkg_config;
 
 use std::env;
@@ -20,30 +21,10 @@ fn main() {
         // bindings for.
         .whitelisted_type("eng::NiepceProperties")
         .whitelisted_type("eng::LibFileType")
-        .whitelisted_type("eng::LibNotificationType")
-        .whitelisted_type("eng::LnFileMove")
-        .whitelisted_type("eng::LnFolderCount")
         .whitelisted_type("eng::QueriedContent")
         .opaque_type("eng::QueriedContent")
-        .whitelisted_type("eng::metadata_desc_t")
         .whitelisted_type("eng::LibraryManaged")
         .whitelisted_type("fwk::FileList")
-        // PropertyValue is complicated
-        .whitelisted_type("fwk::PropertyValue")
-        .opaque_type("fwk::PropertyValue")
-        .whitelisted_type("fwk::StringArray")
-        .opaque_type("fwk::StringArray")
-        .whitelisted_function("fwk::is_empty")
-        .whitelisted_function("fwk::is_integer")
-        .whitelisted_function("fwk::is_string")
-        .whitelisted_function("fwk::is_string_array")
-        .whitelisted_function("fwk::is_date")
-        .whitelisted_function("fwk::get_integer")
-        .whitelisted_function("fwk::get_date")
-        .whitelisted_function("fwk::get_string_cstr")
-        .whitelisted_function("fwk::get_string_array")
-        .whitelisted_function("fwk::string_array_len")
-        .whitelisted_function("fwk::string_array_at_cstr")
         .whitelisted_type("eng::IndexToXmp")
         .whitelisted_function("eng::property_index_to_xmp")
         .header("src/engine/db/bindings.hpp")
@@ -67,4 +48,10 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
+
+    // Use cbindgen to generate C bindings.
+    let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    cbindgen::generate(&crate_dir)
+        .unwrap()
+        .write_to_file("target/bindings.h");
 }

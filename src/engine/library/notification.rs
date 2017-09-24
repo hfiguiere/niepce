@@ -17,19 +17,72 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_void;
-use engine::db::LibraryId;
-use engine::db::label::Label;
-use engine::db::libfolder::LibFolder;
-use engine::db::libmetadata::LibMetadata;
-use engine::db::keyword::Keyword;
+use fwk::base::PropertyIndex;
+use fwk::PropertyValue;
+use engine::db::{
+    LibraryId,
+    Label, LibFolder, LibMetadata, Keyword
+};
 
-use root::eng::LibNotificationType as NotificationType;
-pub use root::eng::LnFileMove as FileMove;
-pub use root::eng::LnFolderCount as FolderCount;
-pub use root::eng::QueriedContent as Content;
-pub use root::eng::metadata_desc_t as MetadataChange;
+use root::eng::QueriedContent;
 
+pub type Content = QueriedContent;
+
+#[repr(C)]
+#[allow(non_camel_case_types)]
+pub enum NotificationType {
+    NONE = 0,
+    NEW_LIBRARY_CREATED = 1,
+    ADDED_FOLDER = 2,
+    ADDED_FILE = 3,
+    ADDED_FILES = 4,
+    ADDED_KEYWORD = 5,
+    ADDED_LABEL = 6,
+    FOLDER_CONTENT_QUERIED = 7,
+    KEYWORD_CONTENT_QUERIED = 8,
+    METADATA_QUERIED = 9,
+    METADATA_CHANGED = 10,
+    LABEL_CHANGED = 11,
+    LABEL_DELETED = 12,
+    XMP_NEEDS_UPDATE = 13,
+    FOLDER_COUNTED = 14,
+    FOLDER_COUNT_CHANGE = 15,
+    FILE_MOVED = 16,
+}
+
+#[repr(C)]
+pub struct FileMove {
+    pub file: LibraryId,
+    pub from: LibraryId,
+    pub to: LibraryId,
+}
+
+#[repr(C)]
+pub struct FolderCount {
+    pub folder: LibraryId,
+    pub count: i64,
+}
+
+#[repr(C)]
+pub struct MetadataChange {
+    id: LibraryId,
+    meta: PropertyIndex,
+    value: *mut PropertyValue,
+}
+
+impl MetadataChange {
+    pub fn new(id: LibraryId, meta: PropertyIndex, value: Box<PropertyValue>) -> Self {
+        MetadataChange {id: id, meta: meta, value: Box::into_raw(value)}
+    }
+}
+
+impl Drop for MetadataChange {
+    fn drop(&mut self) {
+        unsafe { Box::from_raw(self.value); }
+    }
+}
+
+#[repr(C)]
 pub enum Notification {
     AddedFile,
     AddedFiles,
@@ -52,148 +105,120 @@ pub enum Notification {
 #[cfg(not(test))]
 extern "C" {
     // actually a *mut Notification
-    pub fn engine_library_notify(notif_id: u64, n: *mut c_void);
+    pub fn engine_library_notify(notif_id: u64, n: *mut Notification);
 }
 
 #[cfg(test)]
 #[no_mangle]
-pub fn engine_library_notify(notif_id: u64, n: *mut c_void) {
+pub unsafe fn engine_library_notify(_: u64, _: *mut Notification) {
     // stub for tests
+    // unsafe since it non test function is extern
 }
 
+/// Delete the Notification object.
 #[no_mangle]
-pub fn engine_library_notification_delete(n: *mut Notification) {
+pub extern "C" fn engine_library_notification_delete(n: *mut Notification) {
     unsafe { Box::from_raw(n); }
 }
 
+#[no_mangle]
+pub extern "C" fn engine_library_notification_type(n: *const Notification) -> i32 {
+    let t = match unsafe { n.as_ref() } {
+        Some(&Notification::AddedFile) => NotificationType::ADDED_FILE,
+        Some(&Notification::AddedFiles) => NotificationType::ADDED_FILES,
+        Some(&Notification::AddedFolder(_)) => NotificationType::ADDED_FOLDER,
+        Some(&Notification::AddedKeyword(_)) => NotificationType::ADDED_KEYWORD,
+        Some(&Notification::AddedLabel(_)) => NotificationType::ADDED_LABEL,
+        Some(&Notification::FileMoved(_)) => NotificationType::FILE_MOVED,
+        Some(&Notification::FolderContentQueried(_)) => NotificationType::FOLDER_CONTENT_QUERIED,
+        Some(&Notification::FolderCounted(_)) => NotificationType::FOLDER_COUNTED,
+        Some(&Notification::FolderCountChanged(_)) => NotificationType::FOLDER_COUNT_CHANGE,
+        Some(&Notification::KeywordContentQueried(_)) =>
+            NotificationType::KEYWORD_CONTENT_QUERIED,
+        Some(&Notification::LabelChanged(_)) => NotificationType::LABEL_CHANGED,
+        Some(&Notification::LabelDeleted(_)) => NotificationType::LABEL_DELETED,
+        Some(&Notification::LibCreated) => NotificationType::NEW_LIBRARY_CREATED,
+        Some(&Notification::MetadataChanged(_)) => NotificationType::METADATA_CHANGED,
+        Some(&Notification::MetadataQueried(_)) => NotificationType::METADATA_QUERIED,
+        Some(&Notification::XmpNeedsUpdate) => NotificationType::XMP_NEEDS_UPDATE,
+        None => unreachable!(),
+    };
+    t as i32
+}
+
 
 #[no_mangle]
-pub fn engine_library_notification_type(n: &Notification) -> NotificationType {
-    match *n {
-        Notification::AddedFile => NotificationType::ADDED_FILE,
-        Notification::AddedFiles => NotificationType::ADDED_FILES,
-        Notification::AddedFolder(_) => NotificationType::ADDED_FOLDER,
-        Notification::AddedKeyword(_) => NotificationType::ADDED_KEYWORD,
-        Notification::AddedLabel(_) => NotificationType::ADDED_LABEL,
-        Notification::FileMoved(_) => NotificationType::FILE_MOVED,
-        Notification::FolderContentQueried(_) => NotificationType::FOLDER_CONTENT_QUERIED,
-        Notification::FolderCounted(_) => NotificationType::FOLDER_COUNTED,
-        Notification::FolderCountChanged(_) => NotificationType::FOLDER_COUNT_CHANGE,
-        Notification::KeywordContentQueried(_) => NotificationType::KEYWORD_CONTENT_QUERIED,
-        Notification::LabelChanged(_) => NotificationType::LABEL_CHANGED,
-        Notification::LabelDeleted(_) => NotificationType::LABEL_DELETED,
-        Notification::LibCreated => NotificationType::NEW_LIBRARY_CREATED,
-        Notification::MetadataChanged(_) => NotificationType::METADATA_CHANGED,
-        Notification::MetadataQueried(_) => NotificationType::METADATA_QUERIED,
-        Notification::XmpNeedsUpdate => NotificationType::XMP_NEEDS_UPDATE,
+pub extern "C" fn engine_library_notification_get_id(n: *const Notification) -> LibraryId {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::MetadataChanged(ref changed)) => changed.id,
+        Some(&Notification::LabelDeleted(id)) => id,
+        _ => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_id(n: &Notification) -> LibraryId {
-    match *n {
-        Notification::MetadataChanged(ref changed) => {
-            changed.id
-        },
-        Notification::LabelDeleted(id) => {
-            id
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_label(n: *const Notification) -> *const Label {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::AddedLabel(ref l)) => l,
+        _ => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_label(n: &Notification) -> *const Label {
-    match *n {
-        Notification::AddedLabel(ref l) => {
-            l
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_filemoved(n: *const Notification) -> *const FileMove {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::FileMoved(ref m)) => m,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_filemoved(n: &Notification) -> *const FileMove {
-    match *n {
-        Notification::FileMoved(ref m) => {
-            m
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_libmetadata(n: *const Notification) -> *const LibMetadata {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::MetadataQueried(ref m)) => m,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_libmetadata(n: &Notification) -> *const LibMetadata {
-    match *n {
-        Notification::MetadataQueried(ref m) => {
-            m
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_folder_count(n: *const Notification) -> *const FolderCount {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::FolderCountChanged(ref c)) |
+        Some(&Notification::FolderCounted(ref c)) =>
+            c,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_folder_count(n: &Notification) -> *const FolderCount {
-    match *n {
-        Notification::FolderCountChanged(ref c) |
-        Notification::FolderCounted(ref c) => {
-            c
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_metadatachange(n: *const Notification) -> *const MetadataChange {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::MetadataChanged(ref c)) => c,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_metadatachange(n: &Notification) -> *const MetadataChange {
-    match *n {
-        Notification::MetadataChanged(ref c) => {
-            c
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_libfolder(n: *const Notification) -> *const LibFolder {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::AddedFolder(ref f)) => f,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_libfolder(n: &Notification) -> *const LibFolder {
-    match *n {
-        Notification::AddedFolder(ref f) => {
-            f
-        },
-        _ => {
-            unreachable!()
-        }
+pub extern "C" fn engine_library_notification_get_keyword(n: *const Notification) -> *const Keyword {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::AddedKeyword(ref f)) => f,
+        _ => unreachable!()
     }
 }
 
 #[no_mangle]
-pub fn engine_library_notification_get_keyword(n: &Notification) -> *const Keyword {
-    match *n {
-        Notification::AddedKeyword(ref f) => {
-            f
-        },
-        _ => {
-            unreachable!()
-        }
-    }
-}
-
-#[no_mangle]
-pub fn engine_library_notification_get_content(n: &Notification) -> *const Content {
-    match *n {
-        Notification::FolderContentQueried(ref c) |
-        Notification::KeywordContentQueried(ref c) => {
+pub extern "C" fn engine_library_notification_get_content(n: *const Notification) -> *const Content {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::FolderContentQueried(ref c)) |
+        Some(&Notification::KeywordContentQueried(ref c)) => {
             c
         },
         _ => {

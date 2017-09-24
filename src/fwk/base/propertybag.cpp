@@ -23,93 +23,84 @@
 
 namespace fwk {
 
-bool is_empty(const PropertyValue & v)
+PropertyValuePtr property_value_wrap(PropertyValue* v)
 {
-    return v.type() == typeid(EmptyValue);
+    return PropertyValuePtr(v, &ffi::fwk_property_value_delete);
 }
 
-bool is_integer(const PropertyValue & v)
+PropertyValuePtr property_value_new(const std::string& v)
 {
-    return v.type() == typeid(int);
+    return property_value_wrap(ffi::fwk_property_value_new_str(v.c_str()));
 }
 
-bool is_string(const PropertyValue & v)
+PropertyValuePtr property_value_new(int v)
 {
-    return v.type() == typeid(std::string);
+    return property_value_wrap(ffi::fwk_property_value_new_int(v));
 }
 
-bool is_string_array(const PropertyValue & v)
+PropertyValuePtr property_value_new(const DatePtr& d)
 {
-    return v.type() == typeid(StringArray);
+    return property_value_wrap(ffi::fwk_property_value_new_date(d.get()));
 }
 
-bool is_date(const PropertyValue & v)
+PropertyValuePtr property_value_new(const std::vector<std::string>& sa)
 {
-    return v.type() == typeid(DatePtr);
-}
-
-int get_integer(const PropertyValue & v)
-{
-    return is_empty(v) ? 0 : boost::get<int>(v);
-}
-
-const Date* get_date(const PropertyValue & v)
-{
-    return boost::get<DatePtr>(v).get();
-}
-const std::string & get_string(const PropertyValue & v)
-{
-    return boost::get<std::string>(v);
-}
-
-const char* get_string_cstr(const PropertyValue & v)
-{
-    return boost::get<std::string>(v).c_str();
-}
-
-// Rust glue
-const fwk::StringArray & get_string_array(const PropertyValue & v)
-{
-    return boost::get<fwk::StringArray>(v);
-}
-
-size_t string_array_len(const fwk::StringArray &v)
-{
-    return v.size();
-}
-
-const char* string_array_at_cstr(const fwk::StringArray &v, size_t i)
-{
-    return v[i].c_str();
-}
-// end
-
-bool PropertyBag::set_value_for_property(PropertyIndex idx, const PropertyValue & value)
-{
-    bool removed = (m_bag.erase(idx) == 1);
-    m_bag.insert(std::make_pair(idx, value));
-    return removed;
-}
-
-/** return an option */
-fwk::Option<PropertyValue> PropertyBag::get_value_for_property(PropertyIndex idx) const
-{
-    _Map::const_iterator iter = m_bag.find(idx);
-    if(iter == m_bag.end()) {
-        return false;
+    PropertyValue* value = ffi::fwk_property_value_new_string_array();
+    for (auto s : sa) {
+        ffi::fwk_property_value_add_string(value, s.c_str());
     }
-    return fwk::Option<PropertyValue>(iter->second);
+    return property_value_wrap(value);
 }
 
-bool PropertyBag::has_value_for_property(PropertyIndex idx) const
+std::string property_value_get_string(const PropertyValue &value)
 {
-    return m_bag.find(idx) != m_bag.end();
+    auto s = ffi::fwk_property_value_get_string(&value);
+    std::string str(s);
+    ffi::rust_cstring_delete(s);
+    return str;
 }
 
-bool PropertyBag::remove_value_for_property(PropertyIndex idx)
+std::vector<std::string> property_value_get_string_array(const PropertyValue &value)
 {
-    _Map::size_type sz = m_bag.erase(idx);
-    return sz == 1;
+    std::vector<std::string> v;
+    auto len = ffi::fwk_property_value_count_string_array(&value);
+    for (size_t i = 0; i < len; i++) {
+        auto s = ffi::fwk_property_value_get_string_at(&value, i);
+        v.push_back(s);
+        ffi::rust_cstring_delete(s);
+    }
+    return v;
+}
+
+PropertyBagPtr property_bag_wrap(PropertyBag* bag)
+{
+    return PropertyBagPtr(bag, &ffi::fwk_property_bag_delete);
+}
+
+PropertyBagPtr property_bag_new()
+{
+    return property_bag_wrap(ffi::fwk_property_bag_new());
+}
+
+PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex idx)
+{
+    auto value = ffi::fwk_property_bag_value(bag.get(), idx);
+    return property_value_wrap(value);
+}
+
+bool set_value_for_property(PropertyBag& bag, PropertyIndex idx,
+                            const PropertyValue & value)
+{
+    return ffi::fwk_property_bag_set_value(&bag, idx, &value);
+}
+
+/* return an option */
+// XXX fix me
+fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag& bag,
+                                                     PropertyIndex idx)
+{
+    auto value = ffi::fwk_property_bag_value(&bag, idx);
+    return fwk::Option<PropertyValuePtr>(property_value_wrap(value));
 }
 
 }

@@ -21,6 +21,8 @@ pub mod date;
 #[macro_use]
 pub mod debug;
 pub mod fractions;
+pub mod propertybag;
+pub mod propertyvalue;
 pub mod rgbcolour;
 
 pub type PropertyIndex = u32;

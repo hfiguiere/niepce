@@ -28,6 +28,8 @@
 
 #include "fwk/base/util.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace xmp {
 
 inline
@@ -85,7 +87,9 @@ extern const char * UFRAW_INTEROP_NS_PREFIX;
 
 namespace fwk {
 
+#if RUST_BINDGEN
 class Date;
+#endif
 
 class XmpMeta;
 class ExempiManager;

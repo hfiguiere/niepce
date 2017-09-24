@@ -71,33 +71,35 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
     if (!m_active) {
         return;
     }
-    switch(engine_library_notification_type(&ln)) {
+    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
     case eng::LibNotificationType::METADATA_QUERIED:
     {
         auto lm = engine_library_notification_get_libmetadata(&ln);
         DBG_OUT("received metadata in MapModule");
 
         if (lm) {
-            fwk::PropertyBag properties;
+            fwk::PropertyBagPtr properties;
             const fwk::PropertySet propset = { eng::NpExifGpsLongProp,
                                                eng::NpExifGpsLatProp };
             eng::libmetadata_to_properties(lm, propset, properties);
             double latitude, longitude;
             latitude = longitude = NAN;
-            auto result = properties.get_value_for_property(eng::NpExifGpsLongProp);
+            auto result = fwk::get_value_for_property(*properties, eng::NpExifGpsLongProp);
             if (!result.empty()) {
-                fwk::PropertyValue val = result.unwrap();
+                fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string
-                if (is_string(val)) {
-                    longitude = fwk_gps_coord_from_xmp(fwk::get_string(val).c_str());
+                if (fwk_property_value_is_string(val.get())) {
+                    longitude = fwk_gps_coord_from_xmp(
+                        fwk::property_value_get_string(*val).c_str());
                 }
             }
-            result = properties.get_value_for_property(eng::NpExifGpsLatProp);
+            result = fwk::get_value_for_property(*properties, eng::NpExifGpsLatProp);
             if (!result.empty()) {
-                fwk::PropertyValue val = result.unwrap();
+                fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string
-                if (is_string(val)) {
-                    latitude = fwk_gps_coord_from_xmp(fwk::get_string(val).c_str());
+                if (fwk_property_value_is_string(val.get())) {
+                    latitude = fwk_gps_coord_from_xmp(
+                        fwk::property_value_get_string(*val).c_str());
                 }
             }
 

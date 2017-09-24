@@ -17,10 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <exempi/xmpconsts.h>
-#include <exempi/xmperrors.h>
 #include <string.h>
 #include <time.h>
+
+#include <algorithm>
+#include <map>
+
+#include <exempi/xmpconsts.h>
+#include <exempi/xmperrors.h>
 
 #include "fwk/base/date.hpp"
 #include "fwk/base/debug.hpp"
@@ -67,7 +71,7 @@ IndexToXmp property_index_to_xmp(fwk::PropertyIndex index)
 }
 
 bool get_meta_data(const LibMetadata *meta, fwk::PropertyIndex p,
-                   fwk::PropertyValue &value)
+                   fwk::PropertyValuePtr &value)
 {
     const PropsToXmpMap &propmap = props_to_xmp_map();
     PropsToXmpMap::const_iterator iter = propmap.find(p);
@@ -94,7 +98,7 @@ bool get_meta_data(const LibMetadata *meta, fwk::PropertyIndex p,
         const char *v = NULL;
         v = xmp_string_cstr(xmp_value);
         if (v) {
-            value = fwk::PropertyValue(v);
+            value = fwk::property_value_new(v);
             return true;
         }
     }
@@ -104,62 +108,67 @@ bool get_meta_data(const LibMetadata *meta, fwk::PropertyIndex p,
 
 void libmetadata_to_properties(const LibMetadata *meta,
                                const fwk::PropertySet &propset,
-                               fwk::PropertyBag &props)
+                               fwk::PropertyBagPtr &props)
 {
+    if (!props) {
+        props = fwk::property_bag_new();
+    }
     std::for_each(
         propset.begin(), propset.end(),
         [&props, meta](fwk::PropertySet::key_type prop_id) {
             auto xmpmeta = engine_libmetadata_get_xmpmeta(meta);
             switch (prop_id) {
             case NpXmpRatingProp:
-                props.set_value_for_property(
-                    prop_id,
-                    fwk::PropertyValue(fwk_xmp_meta_get_rating(xmpmeta)));
+                fwk::set_value_for_property(
+                    *props, prop_id,
+                    *fwk::property_value_new(fwk_xmp_meta_get_rating(xmpmeta)));
                 break;
             case NpXmpLabelProp: {
                 char *str = fwk_xmp_meta_get_label(xmpmeta);
                 if (str) {
-                    props.set_value_for_property(prop_id,
-                                                 fwk::PropertyValue(str));
+                    fwk::set_value_for_property(*props, prop_id,
+                                                *fwk::property_value_new(str));
                     rust_cstring_delete(str);
                 } else {
-                    props.set_value_for_property(prop_id,
-                                                 fwk::PropertyValue(""));
+                    fwk::set_value_for_property(*props, prop_id,
+                                                *fwk::property_value_new(""));
                 }
                 break;
             }
             case NpTiffOrientationProp:
-                props.set_value_for_property(
-                    prop_id,
-                    fwk::PropertyValue(fwk_xmp_meta_get_orientation(xmpmeta)));
+                fwk::set_value_for_property(
+                    *props, prop_id,
+                    *fwk::property_value_new(fwk_xmp_meta_get_orientation(xmpmeta)));
                 break;
             case NpExifDateTimeOriginalProp: {
                 fwk::DatePtr date =
                     fwk::date_wrap(fwk_xmp_meta_get_creation_date(xmpmeta));
-                props.set_value_for_property(prop_id, fwk::PropertyValue(date));
+                if (date) {
+                    fwk::set_value_for_property(*props, prop_id, *fwk::property_value_new(date));
+                }
                 break;
             }
             case NpIptcKeywordsProp: {
                 xmp::ScopedPtr<XmpIteratorPtr> iter(
                     xmp_iterator_new(engine_libmetadata_get_xmp(meta), NS_DC,
                                      "subject", XMP_ITER_JUSTLEAFNODES));
-                fwk::StringArray vec;
+                std::vector<std::string> vec;
                 xmp::ScopedPtr<XmpStringPtr> value(xmp_string_new());
                 while (xmp_iterator_next(iter, NULL, NULL, value, NULL)) {
                     vec.push_back(xmp_string_cstr(value));
                 }
-                fwk::PropertyValue v(vec);
+                fwk::PropertyValuePtr v = fwk::property_value_new(vec);
                 // DBG_ASSERT(check_property_type(prop_id, v.type()), "wrong
                 // type");
-                props.set_value_for_property(prop_id, v);
+                fwk::set_value_for_property(*props, prop_id, *v);
                 break;
             }
             default: {
-                fwk::PropertyValue propval;
+                fwk::PropertyValuePtr propval;
                 if (get_meta_data(meta, prop_id, propval)) {
                     // DBG_ASSERT(check_property_type(prop_id, propval.type()),
                     // "wrong type");
-                    props.set_value_for_property(prop_id, propval);
+                    fwk::set_value_for_property(*props, prop_id, *propval);
                 } else {
                     DBG_OUT("missing prop %u", prop_id);
                 }

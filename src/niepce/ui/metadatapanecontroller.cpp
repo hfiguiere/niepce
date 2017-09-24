@@ -24,6 +24,7 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/metadatawidget.hpp"
 #include "engine/db/properties.hpp"
+#include "engine/db/libmetadata.hpp"
 #include "metadatapanecontroller.hpp"
 
 namespace ui {
@@ -135,22 +136,21 @@ MetaDataPaneController::buildWidget()
 
     return m_widget;
 }
-  
-void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBag & props,
-                                                 const fwk::PropertyBag & old)
+
+void MetaDataPaneController::on_metadata_changed(const fwk::PropertyBagPtr& props,
+                                                 const fwk::PropertyBagPtr& old)
 {
     signal_metadata_changed.emit(props, old);
 }
-
 
 void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMetadata* meta)
 {
     m_fileid = file_id;
     DBG_OUT("displaying metadata");
-    fwk::PropertyBag properties;
+    fwk::PropertyBagPtr properties;
     if(meta) {
         const fwk::PropertySet & propset = get_property_set();
-        libmetadata_to_properties(meta, propset, properties);
+        eng::libmetadata_to_properties(meta, propset, properties);
     }
     std::for_each(m_widgets.begin(), m_widgets.end(),
                   [properties] (auto w) {

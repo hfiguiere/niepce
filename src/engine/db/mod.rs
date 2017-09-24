@@ -1,5 +1,5 @@
 /*
- * niepce - eng/db/keyword.rs
+ * niepce - engine/db/mod.rs
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -27,6 +27,13 @@ pub mod libmetadata;
 pub mod library;
 
 pub type LibraryId = i64;
+
+// flatten namespace a bit.
+pub use self::label::Label;
+pub use self::libmetadata::LibMetadata;
+pub use self::libfolder::LibFolder;
+pub use self::keyword::Keyword;
+
 
 use rusqlite;
 

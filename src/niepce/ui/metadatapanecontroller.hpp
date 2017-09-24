@@ -24,6 +24,7 @@
 
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/libmetadata.hpp"
+#include "fwk/base/propertybag.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/toolkit/dockable.hpp"
 
@@ -31,7 +32,6 @@ namespace fwk {
 struct MetaDataSectionFormat;
 class MetaDataWidget;
 class Dock;
-class PropertyBag;
 }
 
 namespace ui {
@@ -48,10 +48,10 @@ public:
     eng::library_id_t displayed_file() const
         { return m_fileid; }
 
-    sigc::signal<void, const fwk::PropertyBag &, const fwk::PropertyBag &> signal_metadata_changed;
+    sigc::signal<void, const fwk::PropertyBagPtr &, const fwk::PropertyBagPtr &> signal_metadata_changed;
 private:
-    void on_metadata_changed(const fwk::PropertyBag &,
-                             const fwk::PropertyBag & old);
+    void on_metadata_changed(const fwk::PropertyBagPtr &,
+                             const fwk::PropertyBagPtr & old);
 
     std::vector<fwk::MetaDataWidget *> m_widgets;
 

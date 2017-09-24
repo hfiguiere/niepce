@@ -66,7 +66,8 @@ public:
     eng::tid_t requestMetadata(eng::library_id_t id);
 
     /** set the metadata */
-    eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta, const fwk::PropertyValue & value);
+    eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta,
+                           const fwk::PropertyValuePtr & value);
     eng::tid_t moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
                                 eng::library_id_t to_folder);
     eng::tid_t write_metadata(eng::library_id_t file_id);

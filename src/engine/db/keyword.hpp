@@ -25,9 +25,15 @@
 
 #include "engine/db/librarytypes.hpp"
 
+#include "rust_bindings.hpp"
+
 // just a rust interface.
 namespace eng {
+
+#if RUST_BINDGEN
 class Keyword;
+#endif
+
 typedef std::shared_ptr<Keyword> KeywordPtr;
 typedef std::vector<KeywordPtr> KeywordList;
 typedef std::shared_ptr<KeywordList> KeywordListPtr;

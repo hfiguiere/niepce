@@ -49,7 +49,7 @@ public:
     eng::tid_t countFolder(eng::library_id_t id);
     eng::tid_t requestMetadata(eng::library_id_t id);
     eng::tid_t setMetadata(eng::library_id_t id, int meta,
-                           const fwk::PropertyValue & value);
+                           const fwk::PropertyValuePtr & value);
     eng::tid_t write_metadata(eng::library_id_t file_id);
 
     eng::tid_t moveFileToFolder(eng::library_id_t file_id,

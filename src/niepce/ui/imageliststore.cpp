@@ -29,6 +29,8 @@
 #include "niepce/notifications.hpp"
 #include "niepcewindow.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace ui {
 
 Glib::RefPtr<Gdk::Pixbuf> ImageListStore::get_loading_icon()
@@ -90,16 +92,17 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch (engine_library_notification_type(&ln)) {
+    auto type = static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln));
+    switch (type) {
     case eng::LibNotificationType::FOLDER_CONTENT_QUERIED:
     case eng::LibNotificationType::KEYWORD_CONTENT_QUERIED:
     {
         auto param = engine_library_notification_get_content(&ln);
         const auto& l = param->files;
-        if (engine_library_notification_type(&ln) == eng::LibNotificationType::FOLDER_CONTENT_QUERIED) {
+        if (type == eng::LibNotificationType::FOLDER_CONTENT_QUERIED) {
             m_current_folder = param->container;
             m_current_keyword = 0;
-        } else if (engine_library_notification_type(&ln) == eng::LibNotificationType::KEYWORD_CONTENT_QUERIED) {
+        } else if (type == eng::LibNotificationType::KEYWORD_CONTENT_QUERIED) {
             m_current_folder = 0;
             m_current_keyword = param->container;
         }
@@ -155,7 +158,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
                 //
                 eng::LibFilePtr file = row[m_columns.m_libfile];
                 engine_db_libfile_set_property(
-                    file.get(), prop, boost::get<int32_t>(m->value.get_variant()));
+                    file.get(), prop, fwk_property_value_get_integer(m->value));
                 row[m_columns.m_libfile] = file;
             }
         }

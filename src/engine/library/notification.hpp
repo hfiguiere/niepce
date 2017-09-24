@@ -26,14 +26,22 @@
 #include "engine/db/librarytypes.hpp"
 #include "engine/library/clienttypes.hpp"
 
-namespace eng {
-class Label;
-class LibMetadata;
-class LibFolder;
-class Keyword;
+#include "rust_bindings.hpp"
 
+namespace eng {
+
+#if RUST_BINDGEN
+class Keyword;
+class Label;
+class LibFolder;
+class LibMetadata;
 class LibNotification;
-typedef std::shared_ptr<LibNotification> LibNotificationPtr;
+#endif
+
+typedef std::shared_ptr<eng::LibNotification> LibNotificationPtr;
+class MetadataChange;
+class FolderCount;
+class FileMove;
 
 enum class LibNotificationType {
     NONE = 0,
@@ -55,17 +63,6 @@ enum class LibNotificationType {
     FILE_MOVED
 };
 
-struct LnFileMove {
-    library_id_t file;
-    library_id_t from;
-    library_id_t to;
-};
-
-struct LnFolderCount {
-    library_id_t folder;
-    int64_t count;
-};
-
 struct QueriedContent {
     library_id_t container;
     LibFileListPtr files;
@@ -73,42 +70,5 @@ struct QueriedContent {
     QueriedContent(library_id_t container);
     void push(LibFile*);
 };
-}
 
-extern "C" {
-
-eng::LibNotificationType
-engine_library_notification_type(const eng::LibNotification* n);
-
-// if METADATA_CHANGE return the inner id. otherwise directly attached id.
-eng::library_id_t
-engine_library_notification_get_id(const eng::LibNotification* n);
-
-const eng::Label*
-engine_library_notification_get_label(const eng::LibNotification* n);
-
-const eng::LnFileMove*
-engine_library_notification_get_filemoved(const eng::LibNotification* n);
-
-const eng::LibMetadata*
-engine_library_notification_get_libmetadata(const eng::LibNotification* n);
-
-const eng::LnFolderCount*
-engine_library_notification_get_folder_count(const eng::LibNotification* n);
-
-const eng::metadata_desc_t*
-engine_library_notification_get_metadatachange(const eng::LibNotification* n);
-
-const eng::LibFolder*
-engine_library_notification_get_libfolder(const eng::LibNotification* n);
-
-const eng::Keyword*
-engine_library_notification_get_keyword(const eng::LibNotification* n);
-
-const eng::QueriedContent*
-engine_library_notification_get_content(const eng::LibNotification* n);
-
-void engine_library_notification_delete(eng::LibNotification* n);
-
-void engine_library_notify(uint64_t notify_id, eng::LibNotification* n);
 }

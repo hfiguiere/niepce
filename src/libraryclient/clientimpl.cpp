@@ -112,10 +112,10 @@ tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 
 
 tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
-                              const fwk::PropertyValue & value)
+                              const fwk::PropertyValuePtr & value)
 {
     return schedule_op([file_id, meta, value](const auto& lib) {
-            return cmd_set_metadata(lib, file_id, meta, &value);
+            return cmd_set_metadata(lib, file_id, meta, value.get());
         });
 }
 

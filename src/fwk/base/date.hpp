@@ -24,6 +24,8 @@
 
 #include <exempi/xmp.h>
 
+#include "rust_bindings.hpp"
+
 namespace fwk {
 
 class Timezone;
@@ -34,9 +36,13 @@ class Timezone;
  */
 bool make_xmp_date_time(time_t t, XmpDateTime& xmp_dt);
 
+#if RUST_BINDGEN
 class Date;
+#endif
 
 typedef std::shared_ptr<Date> DatePtr;
+
+
 DatePtr date_wrap(Date*);
 std::string date_to_string(const Date*);
 }

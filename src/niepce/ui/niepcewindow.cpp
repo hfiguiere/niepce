@@ -336,7 +336,7 @@ void NiepceWindow::create_initial_labels()
 
 void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
 {
-    switch(engine_library_notification_type(&ln)) {
+    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
     case eng::LibNotificationType::NEW_LIBRARY_CREATED:
         create_initial_labels();
         break;

@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <map>
 #include <typeinfo>
 
 #include "fwk/base/propertybag.hpp"

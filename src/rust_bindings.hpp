@@ -1,7 +1,7 @@
 /*
- * niepce - library/clienttypes.h
+ * niepce - rust_bindings.hpp
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARY_CLIENTTYPES_H_
-#define _LIBRARY_CLIENTTYPES_H_
+#pragma once
 
-#include "fwk/base/propertybag.hpp"
-#include "engine/db/librarytypes.hpp"
+#if !RUST_BINDGEN
 
 namespace eng {
+class QueriedContent;
+}
 
-  typedef int tid_t; /**< transaction ID */
+using eng::QueriedContent;
+
+#include "target/bindings.h"
+
+namespace fwk {
+
+typedef ffi::PropertyValue PropertyValue;
+typedef ffi::PropertyBag PropertyBag;
+typedef ffi::Date Date;
 
 }
 
+namespace eng {
+
+typedef ffi::Keyword Keyword;
+typedef ffi::LibFolder LibFolder;
+typedef ffi::LibMetadata LibMetadata;
+typedef ffi::Label Label;
+typedef ffi::Notification LibNotification;
+
+}
 
 #endif

@@ -25,13 +25,18 @@
 
 #include "engine/db/librarytypes.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace fwk {
 class RgbColour;
 }
 
 namespace eng {
 
+
+#if RUST_BINDGEN
 class Label;
+#endif
 typedef std::shared_ptr<Label> LabelPtr;
 typedef std::vector<LabelPtr> LabelList;
 typedef std::shared_ptr<LabelList> LabelListPtr;

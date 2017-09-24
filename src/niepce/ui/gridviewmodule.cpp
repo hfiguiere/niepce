@@ -54,7 +54,7 @@ GridViewModule::~GridViewModule()
 void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch(engine_library_notification_type(&ln)) {
+    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
     case eng::LibNotificationType::METADATA_QUERIED:
     {
         auto lm = engine_library_notification_get_libmetadata(&ln);
@@ -185,7 +185,8 @@ void GridViewModule::select_image(eng::library_id_t id)
 }
 
 
-void GridViewModule::on_metadata_changed(const fwk::PropertyBag & props, const fwk::PropertyBag & old)
+void GridViewModule::on_metadata_changed(const fwk::PropertyBagPtr & props,
+                                         const fwk::PropertyBagPtr & old)
 {
     // TODO this MUST be more generic
     DBG_OUT("on_metadata_changed()");

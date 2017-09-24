@@ -21,6 +21,7 @@ use libc::c_char;
 use std::ffi::CStr;
 use std::path::Path;
 
+use fwk::PropertyValue;
 use engine::db::LibraryId;
 use engine::db::library::{
     Library,
@@ -38,10 +39,7 @@ use super::notification::{
 };
 use root::eng::LibFile as CLibFile;
 use root::eng::NiepceProperties as Np;
-use root::fwk::{
-    FileList,
-    PropertyValue
-};
+use root::fwk::FileList;
 
 #[no_mangle]
 pub fn cmd_list_all_keywords(lib: &Library) -> bool {
@@ -149,7 +147,7 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
                         value: &PropertyValue) -> bool {
     lib.set_metadata(id, meta, value);
     lib.notify(Box::new(LibNotification::MetadataChanged(
-        MetadataChange{id: id, meta: meta as u32, value: value.clone()})));
+        MetadataChange::new(id, meta as u32, Box::new(value.clone())))));
     true
 }
 

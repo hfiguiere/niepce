@@ -27,13 +27,6 @@ extern crate rusqlite;
 #[macro_use]
 pub mod fwk;
 pub mod engine;
+pub mod capi;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
-use libc::c_char;
-use std::ffi::CString;
-
-#[no_mangle]
-pub fn rust_cstring_delete(string: *mut c_char) {
-    unsafe { CString::from_raw(string); }
-}

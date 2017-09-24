@@ -23,20 +23,22 @@
 #include <string>
 #include <vector>
 
-#include <boost/any.hpp>
-
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
 #include "fwk/base/propertybag.hpp"
 #include "fwk/utils/exempi.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace eng {
 
+#if RUST_BINDGEN
 class LibMetadata;
+#endif
 
 void libmetadata_to_properties(const LibMetadata *meta,
                                const fwk::PropertySet &propset,
-                               fwk::PropertyBag &props);
+                               fwk::PropertyBagPtr &props);
 
 struct IndexToXmp {
     const char *ns;

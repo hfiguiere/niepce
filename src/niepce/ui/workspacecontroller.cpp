@@ -84,7 +84,7 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
     DBG_OUT("notification for workspace");
-    switch(engine_library_notification_type(&ln)) {
+    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
     case eng::LibNotificationType::ADDED_FOLDER:
     {
         auto f = engine_library_notification_get_libfolder(&ln);
@@ -222,7 +222,7 @@ void WorkspaceController::add_folder_item(const eng::LibFolder* f)
     bool was_empty = children.empty();
     auto iter = add_item(m_treestore, children,
                          m_icons[icon_idx],
-                         engine_db_libfolder_name(f),
+                         engine_db_libfolder_name(const_cast<eng::LibFolder*>(f)),
                          engine_db_libfolder_id(f), FOLDER_ITEM);
     if(engine_db_libfolder_expanded(f)) {
         m_librarytree.expand_row(m_treestore->get_path(iter), false);

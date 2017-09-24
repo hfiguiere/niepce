@@ -203,10 +203,10 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
     auto file_id = engine_db_libfile_id(file.get());
     undo->new_command<void>(
         [libclient, file_id, meta, new_value] () {
-            libclient->setMetadata(file_id, meta, fwk::PropertyValue(new_value));
+            libclient->setMetadata(file_id, meta, fwk::property_value_new(new_value));
         },
         [libclient, file_id, meta, old_value] () {
-            libclient->setMetadata(file_id, meta, fwk::PropertyValue(old_value));
+            libclient->setMetadata(file_id, meta, fwk::property_value_new(old_value));
         });
     undo->execute();
     return true;
@@ -214,26 +214,28 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 
 bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFilePtr& file,
-                                        const fwk::PropertyBag & props,
-                                        const fwk::PropertyBag & old)
+                                        const fwk::PropertyBagPtr & props,
+                                        const fwk::PropertyBagPtr & old)
 {
     auto undo = fwk::Application::app()->begin_undo(undo_label);
-    for(auto iter : props) {
-        fwk::PropertyValue value;
-        auto result = old.get_value_for_property(iter.first);
-
+    auto len = fwk_property_bag_len(props.get());
+    for (size_t i = 0; i < len; i++) {
+        auto key = fwk_property_bag_key_by_index(props.get(), i);
+        fwk::PropertyValuePtr value = fwk::property_bag_value(old, key);
+        /*
         if (!result.empty()) {
             value = result.unwrap();
-            if(value.get_variant().type() != typeid(fwk::EmptyValue)) {
-                DBG_ASSERT(value.get_variant().type() == iter.second.get_variant().type(),
-                           "Value type mismatch");
+            if (!fwk_property_value_is_empty(value.get())) {
+                // XXX
+                //DBG_ASSERT(value.get_variant().type() == iter.second.get_variant().type(),
+                //           "Value type mismatch");
             }
         }
+        */
 
         auto libclient = getLibraryClient();
         auto file_id = engine_db_libfile_id(file.get());
-        auto key = iter.first;
-        auto new_value = iter.second;
+        auto new_value = fwk::property_bag_value(props, key);
         undo->new_command<void>(
             [libclient, file_id, key, new_value] () {
                 libclient->setMetadata(file_id, key, new_value);
@@ -295,8 +297,8 @@ void SelectionController::set_property(fwk::PropertyIndex idx, int value)
     }
 }
 
-void SelectionController::set_properties(const fwk::PropertyBag & props,
-                                         const fwk::PropertyBag & old)
+void SelectionController::set_properties(const fwk::PropertyBagPtr & props,
+                                         const fwk::PropertyBagPtr & old)
 {
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {

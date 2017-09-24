@@ -1,7 +1,7 @@
 /*
- * niepce - library/clienttypes.h
+ * niepce - capi.rs
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARY_CLIENTTYPES_H_
-#define _LIBRARY_CLIENTTYPES_H_
+use libc::c_char;
+use std::ffi::CString;
 
-#include "fwk/base/propertybag.hpp"
-#include "engine/db/librarytypes.hpp"
-
-namespace eng {
-
-  typedef int tid_t; /**< transaction ID */
-
+/// Release the raw pointer from a CString.
+#[no_mangle]
+pub extern "C" fn rust_cstring_delete(string: *mut c_char) {
+    unsafe { CString::from_raw(string); }
 }
-
-
-#endif

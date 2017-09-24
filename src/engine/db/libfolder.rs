@@ -122,48 +122,48 @@ impl FromDb for LibFolder {
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_new(id: i64, name: *const c_char) -> *mut LibFolder {
+pub extern "C" fn engine_db_libfolder_new(id: i64, name: *const c_char) -> *mut LibFolder {
     let lf = Box::new(LibFolder::new(id, &*unsafe { CStr::from_ptr(name) }.to_string_lossy()));
     Box::into_raw(lf)
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_delete(lf: *mut LibFolder) {
+pub extern "C" fn engine_db_libfolder_delete(lf: *mut LibFolder) {
     unsafe { Box::from_raw(lf) };
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_id(this: &LibFolder) -> i64 {
-    this.id() as i64
+pub extern "C" fn engine_db_libfolder_id(obj: &LibFolder) -> i64 {
+    obj.id() as i64
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_name(this: &mut LibFolder) -> *const c_char {
-    this.cstr = CString::new(this.name().clone()).unwrap();
-    this.cstr.as_ptr()
+pub extern "C" fn engine_db_libfolder_name(obj: &mut LibFolder) -> *const c_char {
+    obj.cstr = CString::new(obj.name().clone()).unwrap();
+    obj.cstr.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_virtual_type(this: &LibFolder) -> i32 {
-    this.virtual_type() as i32
+pub extern "C" fn engine_db_libfolder_virtual_type(obj: &LibFolder) -> i32 {
+    obj.virtual_type() as i32
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_expanded(this: &LibFolder) -> bool {
-    this.expanded
+pub extern "C" fn engine_db_libfolder_expanded(obj: &LibFolder) -> bool {
+    obj.expanded
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_locked(this: &mut LibFolder, locked: bool) {
-    this.set_locked(locked);
+pub extern fn engine_db_libfolder_set_locked(obj: &mut LibFolder, locked: bool) {
+    obj.set_locked(locked);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_expanded(this: &mut LibFolder, expanded: bool) {
-    this.set_expanded(expanded);
+pub extern fn engine_db_libfolder_set_expanded(obj: &mut LibFolder, expanded: bool) {
+    obj.set_expanded(expanded);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_virtual_type(this: &mut LibFolder, t: i32) {
-    this.set_virtual_type(VirtualType::from(t));
+pub extern fn engine_db_libfolder_set_virtual_type(obj: &mut LibFolder, t: i32) {
+    obj.set_virtual_type(VirtualType::from(t));
 }

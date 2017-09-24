@@ -89,8 +89,8 @@ eng::tid_t LibraryClient::requestMetadata(eng::library_id_t id)
 }
 
 /** set the metadata */
-eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta, 
-                                      const fwk::PropertyValue & value)
+eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta,
+                                      const fwk::PropertyValuePtr & value)
 {
     return m_pImpl->setMetadata(id, meta, value);
 }

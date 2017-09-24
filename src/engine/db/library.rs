@@ -17,10 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::{
-    c_char,
-    c_void
-};
+use libc::c_char;
 use std::path::{
     Path,
     PathBuf
@@ -45,15 +42,7 @@ use engine::db::keyword::Keyword;
 use engine::library::notification::Notification as LibNotification;
 use engine::library::notification::engine_library_notify;
 use fwk;
-use root::fwk::{
-    PropertyValue,
-    is_empty,
-    is_integer,
-    get_integer,
-    get_string_array,
-    string_array_len,
-    string_array_at_cstr
-};
+use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
 pub use root::eng::LibraryManaged as Managed;
 
@@ -201,11 +190,11 @@ impl Library {
     }
 
     pub fn notify(&self, notif: Box<LibNotification>) {
-        unsafe { engine_library_notify(self.notif_id, Box::into_raw(notif) as *mut c_void); }
+        unsafe { engine_library_notify(self.notif_id, Box::into_raw(notif)); }
     }
 
     pub fn notify_by_id(id: u64,  notif: Box<LibNotification>) {
-        unsafe { engine_library_notify(id, Box::into_raw(notif) as *mut c_void); }
+        unsafe { engine_library_notify(id, Box::into_raw(notif)); }
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
@@ -602,51 +591,52 @@ impl Library {
             Np::NpXmpLabelProp |
             Np::NpTiffOrientationProp |
             Np::NpNiepceFlagProp => {
-                if unsafe { is_empty(value) || is_integer(value) } {
-                    // internal
-                    // make the column mapping more generic.
-                    let column = match meta {
-                        Np::NpXmpRatingProp =>
-                            "rating",
-                        Np::NpXmpLabelProp =>
-                            "orientation",
-                        Np::NpTiffOrientationProp =>
-                            "label",
-                        Np::NpNiepceFlagProp =>
-                            "flag",
-                        _ =>
-                            unreachable!()
-                    };
-                    if !column.is_empty() {
-                        retval = self.set_internal_metadata(file_id, column,
-                                                            unsafe { get_integer(value) });
-                        if !retval {
-                            err_out!("set_internal_metadata() failed");
-                            return false;
+                match *value {
+                    PropertyValue::Int(i) => {
+                        // internal
+                        // make the column mapping more generic.
+                        let column = match meta {
+                            Np::NpXmpRatingProp =>
+                                "rating",
+                            Np::NpXmpLabelProp =>
+                                "orientation",
+                            Np::NpTiffOrientationProp =>
+                                "label",
+                            Np::NpNiepceFlagProp =>
+                                "flag",
+                            _ =>
+                                unreachable!()
+                        };
+                        if !column.is_empty() {
+                            retval = self.set_internal_metadata(file_id, column, i);
+                            if !retval {
+                                err_out!("set_internal_metadata() failed");
+                                return false;
+                            }
                         }
-                    }
-                } else {
-                    err_out!("improper value type for {:?}", meta);
+                    },
+                    _ =>
+                        err_out!("improper value type for {:?}", meta),
                 }
             },
             Np::NpIptcKeywordsProp => {
                 self.unassign_all_keywords_for_file(file_id);
 
-                let keywords = unsafe { get_string_array(value) };
-                let length = unsafe { string_array_len(keywords) };
-                for i in 0..length {
-                    let s = unsafe { string_array_at_cstr(keywords, i) };
-                    let cstr = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-                    let id = self.make_keyword(&cstr);
-                    if id != -1 {
-                        self.assign_keyword(id, file_id);
-                    }
+                match value {
+                    &PropertyValue::StringArray(ref keywords) =>
+                        for kw in keywords {
+                            let id = self.make_keyword(&kw);
+                            if id != -1 {
+                                self.assign_keyword(id, file_id);
+                            }
+                        },
+                    _ =>
+                        err_out!("improper value_type for {:?} : {:?}", meta, value),
                 }
-            }
-            _ => {
+            },
+            _ =>
                 // XXX TODO
-                dbg_out!("unhandled meta {}", meta as u32);
-            }
+                err_out!("unhandled meta {:?}", meta),
         }
         if let Some(mut metablock) = self.get_metadata(file_id) {
             metablock.set_metadata(meta, value);
