@@ -18,16 +18,19 @@
  */
 
 use std::ffi::CStr;
+use std::mem::transmute;
 use rusqlite;
 use exempi;
 
 use fwk;
 use fwk::{
     PropertyValue,
+    PropertyBag,
+    PropertySet,
     XmpMeta,
     make_xmp_date_time
 };
-use fwk::utils::exempi::NS_XAP;
+use fwk::utils::exempi::{NS_XAP, NS_DC};
 use super::{
     FromDb,
     LibraryId
@@ -56,7 +59,6 @@ fn property_index_to_xmp(meta: Np) -> Option<IndexToXmp> {
     })
 }
 
-
 impl LibMetadata {
 
     pub fn new(id: LibraryId) -> LibMetadata {
@@ -75,6 +77,32 @@ impl LibMetadata {
 
     pub fn serialize_inline(&self) -> String {
         self.xmp.serialize_inline()
+    }
+
+    fn get_metadata(&self, meta: Np) -> Option<PropertyValue> {
+
+        let index_to_xmp = property_index_to_xmp(meta);
+        if index_to_xmp.is_none() {
+            return None;
+        }
+        let index_to_xmp = index_to_xmp.unwrap();
+
+        let mut prop_flags = exempi::PROP_NONE;
+        let mut xmp_result = self.xmp.xmp.get_property(&index_to_xmp.ns, &index_to_xmp.property,
+                                                       &mut prop_flags);
+        if xmp_result.is_some() && prop_flags.contains(exempi::ARRAY_IS_ALTTEXT) {
+            let mut value = exempi::XmpString::new();
+            let mut actual_lang = exempi::XmpString::new();
+            if self.xmp.xmp.get_localized_text(&index_to_xmp.ns, &index_to_xmp.property, "",
+                                               "x-default", &mut actual_lang,
+                                               &mut value, &mut prop_flags) {
+                xmp_result = Some(value);
+            }
+        }
+        if xmp_result.is_some() {
+            return Some(PropertyValue::String(String::from(xmp_result.unwrap().to_str())));
+        }
+        None
     }
 
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {
@@ -122,6 +150,53 @@ impl LibMetadata {
         false
     }
 
+    pub fn to_properties(&self, propset: &PropertySet) -> PropertyBag {
+        let mut props = PropertyBag::new();
+        for prop_id in propset {
+            let prop_id_np: Np = unsafe { transmute(*prop_id) };
+            match prop_id_np {
+                Np::NpXmpRatingProp =>
+                    if let Some(rating) = self.xmp.rating() {
+                        props.set_value(*prop_id, PropertyValue::Int(rating));
+                    },
+                Np::NpXmpLabelProp =>
+                    if let Some(label) = self.xmp.label() {
+                        props.set_value(*prop_id, PropertyValue::String(label));
+                    },
+                Np::NpTiffOrientationProp =>
+                    if let Some(orientation) = self.xmp.orientation() {
+                        props.set_value(*prop_id, PropertyValue::Int(orientation));
+                    },
+                Np::NpExifDateTimeOriginalProp =>
+                    if let Some(date) = self.xmp.creation_date() {
+                        props.set_value(*prop_id, PropertyValue::Date(date));
+                    },
+                Np::NpIptcKeywordsProp => {
+                    let mut iter = exempi::XmpIterator::new(&self.xmp.xmp, NS_DC,
+                                                            "subject",
+                                                            exempi::ITER_JUST_LEAF_NODES);
+                    let mut keywords: Vec<String> = vec!();
+                    let mut schema = exempi::XmpString::new();
+                    let mut name = exempi::XmpString::new();
+                    let mut value = exempi::XmpString::new();
+                    let mut flags = exempi::IterFlags::empty();
+                    while iter.next(&mut schema, &mut name, &mut value, &mut flags) {
+                        keywords.push(String::from(value.to_str()));
+                    }
+                    props.set_value(*prop_id, PropertyValue::StringArray(keywords));
+                },
+                _ => {
+                    if let Some(propval) = self.get_metadata(prop_id_np) {
+                        props.set_value(*prop_id, propval);
+                    } else {
+                        dbg_out!("missing prop {}", prop_id);
+                    }
+                }
+            }
+        }
+        props
+    }
+
     pub fn touch(&mut self) -> bool {
         let mut xmpdate = exempi::DateTime::new();
         if make_xmp_date_time(fwk::Date::now(), &mut xmpdate) {
@@ -154,16 +229,23 @@ impl FromDb for LibMetadata {
 }
 
 #[no_mangle]
-pub fn engine_libmetadata_get_id(meta: &LibMetadata) -> LibraryId {
-    return meta.id;
+pub extern "C" fn engine_libmetadata_get_id(meta: &LibMetadata) -> LibraryId {
+    meta.id
 }
 
 #[no_mangle]
-pub fn engine_libmetadata_get_xmp(meta: &LibMetadata) -> exempi::Xmp {
-    return meta.xmp.xmp.clone();
+pub extern "C" fn engine_libmetadata_get_xmp(meta: &LibMetadata) -> exempi::Xmp {
+    meta.xmp.xmp.clone()
 }
 
 #[no_mangle]
-pub fn engine_libmetadata_get_xmpmeta(meta: &LibMetadata) -> *const XmpMeta {
-    return &meta.xmp;
+pub extern "C" fn engine_libmetadata_get_xmpmeta(meta: &LibMetadata) -> *const XmpMeta {
+    &meta.xmp
+}
+
+#[no_mangle]
+pub extern "C" fn engine_libmetadata_to_properties(meta: &LibMetadata, propset: &PropertySet)
+                                        -> *mut PropertyBag {
+    let result = Box::new(meta.to_properties(propset));
+    Box::into_raw(result)
 }

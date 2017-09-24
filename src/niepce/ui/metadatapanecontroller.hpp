@@ -56,7 +56,7 @@ private:
     std::vector<fwk::MetaDataWidget *> m_widgets;
 
     static const fwk::MetaDataSectionFormat * get_format();
-    static const fwk::PropertySet & get_property_set();
+    static const fwk::PropertySet* get_property_set();
 
     eng::library_id_t m_fileid;
 };

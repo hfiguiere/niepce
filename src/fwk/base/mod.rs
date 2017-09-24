@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::collections::BTreeSet;
+
 pub mod date;
 #[macro_use]
 pub mod debug;
@@ -26,3 +28,19 @@ pub mod propertyvalue;
 pub mod rgbcolour;
 
 pub type PropertyIndex = u32;
+pub type PropertySet = BTreeSet<PropertyIndex>;
+
+#[no_mangle]
+pub extern "C" fn fwk_property_set_new() -> *mut PropertySet {
+    Box::into_raw(Box::new(PropertySet::new()))
+}
+
+#[no_mangle]
+pub extern "C" fn fwk_property_set_delete(set: *mut PropertySet) {
+    unsafe { Box::from_raw(set); }
+}
+
+#[no_mangle]
+pub extern "C" fn fwk_property_set_add(set: &mut PropertySet, v: PropertyIndex) {
+    set.insert(v);
+}

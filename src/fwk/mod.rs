@@ -30,6 +30,7 @@ pub use self::utils::exempi::{
 };
 pub use self::base::propertyvalue::PropertyValue;
 pub use self::base::propertybag::PropertyBag;
+pub use self::base::PropertySet;
 pub use self::base::fractions::{
     fraction_to_decimal
 };

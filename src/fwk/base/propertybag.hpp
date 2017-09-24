@@ -34,8 +34,6 @@ namespace fwk {
 
 typedef uint32_t PropertyIndex;
 
-typedef std::set<PropertyIndex> PropertySet;
-
 #if !RUST_BINDGEN
 typedef std::shared_ptr<PropertyValue> PropertyValuePtr;
 
@@ -50,7 +48,12 @@ std::vector<std::string> property_value_get_string_array(const PropertyValue &va
 
 #if RUST_BINDGEN
 class PropertyBag;
+class PropertySet;
 #endif
+
+typedef std::shared_ptr<PropertySet> PropertySetPtr;
+
+PropertySetPtr property_set_new();
 
 /** a property bag
  * It is important that the values for PropertyIndex be properly name spaced
@@ -60,6 +63,7 @@ typedef std::shared_ptr<PropertyBag> PropertyBagPtr;
 
 #if !RUST_BINDGEN
 PropertyBagPtr property_bag_new();
+PropertyBagPtr property_bag_wrap(PropertyBag*);
 
 PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex key);
 
@@ -69,10 +73,6 @@ std::string property_value_get_string(const PropertyValue& v);
 bool set_value_for_property(PropertyBag&, PropertyIndex idx, const PropertyValue & value);
 /** return property or an empty option */
 fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag&, PropertyIndex idx);
-/** return true if property exist */
-bool has_value_for_property(const PropertyBag&, PropertyIndex idx);
-/** return true if the property was removed */
-bool remove_value_for_property(PropertyBag&, PropertyIndex idx);
 #endif
 
 }

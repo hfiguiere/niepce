@@ -36,22 +36,18 @@ namespace eng {
 class LibMetadata;
 #endif
 
-void libmetadata_to_properties(const LibMetadata *meta,
-                               const fwk::PropertySet &propset,
-                               fwk::PropertyBagPtr &props);
-
 struct IndexToXmp {
     const char *ns;
     const char *property;
 };
 IndexToXmp property_index_to_xmp(fwk::PropertyIndex index);
+
+
+fwk::PropertyBagPtr libmetadata_to_properties(const LibMetadata *meta,
+                                              const fwk::PropertySet &propset);
+
 }
 
-extern "C" {
-eng::library_id_t engine_libmetadata_get_id(const eng::LibMetadata *meta);
-XmpPtr engine_libmetadata_get_xmp(const eng::LibMetadata *meta);
-fwk::XmpMeta *engine_libmetadata_get_xmpmeta(const eng::LibMetadata *meta);
-}
 
 /*
   Local Variables:

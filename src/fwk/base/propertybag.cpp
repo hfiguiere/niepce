@@ -23,6 +23,16 @@
 
 namespace fwk {
 
+PropertySetPtr property_set_wrap(PropertySet* s)
+{
+    return PropertySetPtr(s, &ffi::fwk_property_set_delete);
+}
+
+PropertySetPtr property_set_new()
+{
+    return property_set_wrap(ffi::fwk_property_set_new());
+}
+
 PropertyValuePtr property_value_wrap(PropertyValue* v)
 {
     return PropertyValuePtr(v, &ffi::fwk_property_value_delete);

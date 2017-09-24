@@ -79,17 +79,18 @@ MetaDataPaneController::get_format()
     return s_format;
 }
 
-const fwk::PropertySet & MetaDataPaneController::get_property_set()
+const fwk::PropertySet* MetaDataPaneController::get_property_set()
 {
-    static fwk::PropertySet propset;
-    if(propset.empty()) {
+    static fwk::PropertySet* propset = nullptr;
+    if(!propset) {
+        propset = ffi::fwk_property_set_new();
         const fwk::MetaDataSectionFormat * formats = get_format();
-        
+
         const fwk::MetaDataSectionFormat * current = formats;
         while(current->section) {
             const fwk::MetaDataFormat * format = current->formats;
             while(format && format->label) {
-                propset.insert(format->id);
+                ffi::fwk_property_set_add(propset, format->id);
                 format++;
             }
             current++;
@@ -98,9 +99,8 @@ const fwk::PropertySet & MetaDataPaneController::get_property_set()
     return propset;
 }
 
-  
 MetaDataPaneController::MetaDataPaneController()
-    : Dockable("Metadata", _("Image Properties"), 
+    : Dockable("Metadata", _("Image Properties"),
 	       "document-properties" /*, DockItem::DOCKED_STATE*/),
       m_fileid(0)
 {
@@ -149,8 +149,8 @@ void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMe
     DBG_OUT("displaying metadata");
     fwk::PropertyBagPtr properties;
     if(meta) {
-        const fwk::PropertySet & propset = get_property_set();
-        eng::libmetadata_to_properties(meta, propset, properties);
+        const fwk::PropertySet* propset = get_property_set();
+        properties = eng::libmetadata_to_properties(meta, *propset);
     }
     std::for_each(m_widgets.begin(), m_widgets.end(),
                   [properties] (auto w) {

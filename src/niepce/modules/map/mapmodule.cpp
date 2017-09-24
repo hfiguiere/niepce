@@ -78,10 +78,11 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
         DBG_OUT("received metadata in MapModule");
 
         if (lm) {
-            fwk::PropertyBagPtr properties;
-            const fwk::PropertySet propset = { eng::NpExifGpsLongProp,
-                                               eng::NpExifGpsLatProp };
-            eng::libmetadata_to_properties(lm, propset, properties);
+            fwk::PropertySetPtr propset = fwk::property_set_new();
+            ffi::fwk_property_set_add(propset.get(), eng::NpExifGpsLongProp);
+            ffi::fwk_property_set_add(propset.get(), eng::NpExifGpsLatProp);
+
+            fwk::PropertyBagPtr properties = eng::libmetadata_to_properties(lm, *propset);
             double latitude, longitude;
             latitude = longitude = NAN;
             auto result = fwk::get_value_for_property(*properties, eng::NpExifGpsLongProp);

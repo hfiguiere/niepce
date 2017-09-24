@@ -33,6 +33,7 @@ namespace fwk {
 
 typedef ffi::PropertyValue PropertyValue;
 typedef ffi::PropertyBag PropertyBag;
+typedef ffi::PropertySet PropertySet;
 typedef ffi::Date Date;
 
 }
