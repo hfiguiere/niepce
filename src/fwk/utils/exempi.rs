@@ -272,17 +272,17 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
 }
 
 #[no_mangle]
-pub fn fwk_exempi_manager_new() -> *mut ExempiManager {
+pub extern "C" fn fwk_exempi_manager_new() -> *mut ExempiManager {
     return Box::into_raw(Box::new(ExempiManager::new(None)))
 }
 
 #[no_mangle]
-pub fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
+pub extern "C" fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
     unsafe { Box::from_raw(em); }
 }
 
 #[no_mangle]
-pub fn fwk_xmp_meta_get_orientation(xmp: &XmpMeta) -> i32 {
+pub extern "C" fn fwk_xmp_meta_get_orientation(xmp: &XmpMeta) -> i32 {
     if let Some(o) = xmp.orientation() {
         return o;
     }
@@ -290,7 +290,7 @@ pub fn fwk_xmp_meta_get_orientation(xmp: &XmpMeta) -> i32 {
 }
 
 #[no_mangle]
-pub fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
+pub extern "C" fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
     if let Some(r) = xmp.rating() {
         return r;
     }
@@ -299,7 +299,7 @@ pub fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
 
 
 #[no_mangle]
-pub fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {
+pub extern "C" fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {
     if let Some(s) = xmp.label() {
         return CString::new(s.as_bytes()).unwrap().into_raw()
     }
@@ -307,7 +307,7 @@ pub fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {
 }
 
 #[no_mangle]
-pub fn fwk_xmp_meta_get_creation_date(xmp: &XmpMeta) -> *mut Date {
+pub extern "C" fn fwk_xmp_meta_get_creation_date(xmp: &XmpMeta) -> *mut Date {
     if let Some(d) = xmp.creation_date() {
         return Box::into_raw(Box::new(d));
     }

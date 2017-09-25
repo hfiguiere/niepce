@@ -2,13 +2,13 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src/ \
 	@FRAMEWORK_CFLAGS@
 
-TESTS = testfiles testxmp \
+TESTS = testfiles \
 	testpathutils \
 	teststringutils testufrawmeta
 
 EXTRA_DIST = test.xmp test2.ufraw MODULES_HOWTO
 
-check_PROGRAMS = testfiles testxmp \
+check_PROGRAMS = testfiles \
 	testpathutils \
 	teststringutils testufrawmeta
 
@@ -18,11 +18,6 @@ testfiles_LDADD = libniepceutils.a \
 	../base/libfwkbase.a \
 	@FRAMEWORK_LIBS@
 
-
-testxmp_SOURCES = testxmp.cpp
-testxmp_LDADD = libniepceutils.a \
-	../base/libfwkbase.a \
-	@FRAMEWORK_LIBS@
 
 testufrawmeta_SOURCES = testufrawmeta.cpp
 testufrawmeta_CXXFLAGS =  -g -O0

@@ -28,7 +28,6 @@
 
 #include "fwk/base/date.hpp"
 #include "fwk/base/debug.hpp"
-#include "fwk/base/rust.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
 #include "libmetadata.hpp"

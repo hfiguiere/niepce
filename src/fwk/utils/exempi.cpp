@@ -20,8 +20,6 @@
 #include <string.h>
 #include <time.h>
 
-#include <boost/lexical_cast.hpp>
-
 #include <giomm/file.h>
 #include <glib.h>
 
@@ -43,18 +41,12 @@ const char* UFRAW_INTEROP_NAMESPACE =
 const char* UFRAW_INTEROP_NS_PREFIX = "ufrint";
 }
 
-extern "C" {
-
-fwk::ExempiManager* fwk_exempi_manager_new();
-void fwk_exempi_manager_delete(fwk::ExempiManager*);
-}
-
 namespace fwk {
 
 ExempiManagerPtr exempi_manager_new()
 {
-    return ExempiManagerPtr(fwk_exempi_manager_new(),
-                            &fwk_exempi_manager_delete);
+    return ExempiManagerPtr(ffi::fwk_exempi_manager_new(),
+                            &ffi::fwk_exempi_manager_delete);
 }
 }
 

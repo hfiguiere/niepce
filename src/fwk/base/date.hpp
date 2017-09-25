@@ -42,7 +42,6 @@ class Date;
 
 typedef std::shared_ptr<Date> DatePtr;
 
-
 DatePtr date_wrap(Date*);
 std::string date_to_string(const Date*);
 }

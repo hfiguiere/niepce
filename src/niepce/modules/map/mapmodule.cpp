@@ -90,7 +90,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
                 fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string
                 if (fwk_property_value_is_string(val.get())) {
-                    longitude = fwk_gps_coord_from_xmp(
+                    longitude = ffi::fwk_gps_coord_from_xmp(
                         fwk::property_value_get_string(*val).c_str());
                 }
             }
@@ -99,7 +99,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
                 fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string
                 if (fwk_property_value_is_string(val.get())) {
-                    latitude = fwk_gps_coord_from_xmp(
+                    latitude = ffi::fwk_gps_coord_from_xmp(
                         fwk::property_value_get_string(*val).c_str());
                 }
             }

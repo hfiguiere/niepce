@@ -48,7 +48,7 @@ use std::ffi::CStr;
 use libc::c_char;
 
 #[no_mangle]
-pub extern fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
+pub extern "C" fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
     let value = unsafe { CStr::from_ptr(cvalue) };
     if let Ok(svalue) = value.to_str() {
         if let Some(coord) = gps_coord_from_xmp(svalue) {
@@ -59,7 +59,7 @@ pub extern fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
 }
 
 #[no_mangle]
-pub extern fn fwk_fraction_to_decimal(cvalue: *const c_char) -> f64 {
+pub extern "C" fn fwk_fraction_to_decimal(cvalue: *const c_char) -> f64 {
     let value = unsafe { CStr::from_ptr(cvalue) };
     if let Ok(svalue) = value.to_str() {
         if let Some(dec) = fraction_to_decimal(svalue) {

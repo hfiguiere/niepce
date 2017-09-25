@@ -31,10 +31,12 @@ using eng::QueriedContent;
 
 namespace fwk {
 
+typedef ffi::ExempiManager ExempiManager;
 typedef ffi::PropertyValue PropertyValue;
 typedef ffi::PropertyBag PropertyBag;
 typedef ffi::PropertySet PropertySet;
 typedef ffi::Date Date;
+typedef ffi::RgbColour RgbColour;
 
 }
 

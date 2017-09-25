@@ -234,16 +234,6 @@ pub extern "C" fn engine_libmetadata_get_id(meta: &LibMetadata) -> LibraryId {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_libmetadata_get_xmp(meta: &LibMetadata) -> exempi::Xmp {
-    meta.xmp.xmp.clone()
-}
-
-#[no_mangle]
-pub extern "C" fn engine_libmetadata_get_xmpmeta(meta: &LibMetadata) -> *const XmpMeta {
-    &meta.xmp
-}
-
-#[no_mangle]
 pub extern "C" fn engine_libmetadata_to_properties(meta: &LibMetadata, propset: &PropertySet)
                                         -> *mut PropertyBag {
     let result = Box::new(meta.to_properties(propset));

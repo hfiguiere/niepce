@@ -36,73 +36,73 @@ int test_main( int, char *[] )             // note the name!
   fwk::utils::init();
 
   std::string dir;
-	const char * pdir = getenv("srcdir");
-	if(pdir == NULL) {
-		dir = ".";
-	}
-	else {
-		dir = pdir;
-	}
-	fwk::ExempiManager xmpManager(NULL);
+  const char * pdir = getenv("srcdir");
+  if(pdir == NULL) {
+    dir = ".";
+  }
+  else {
+    dir = pdir;
+  }
+  fwk::ExempiManagerPtr exemmpi_manager_new();
 
   xmp::ScopedPtr<XmpPtr> xmp(xmp_new_empty());
 
-	fwk::UfrawMeta ufraw(dir + "/test2.ufraw");
+  fwk::UfrawMeta ufraw(dir + "/test2.ufraw");
 
-	BOOST_CHECK(ufraw.ufraw_to_xmp(xmp));
+  BOOST_CHECK(ufraw.ufraw_to_xmp(xmp));
 
   xmp::ScopedPtr<XmpStringPtr> property(xmp_string_new());
-	BOOST_CHECK(property != NULL);
-	BOOST_CHECK(xmp_get_property(xmp, NS_CAMERA_RAW_SETTINGS,
-								 "WhiteBalance", property, NULL));
-	BOOST_CHECK(strcmp("Auto", xmp_string_cstr(property)) == 0);
+  BOOST_CHECK(property != NULL);
+  BOOST_CHECK(xmp_get_property(xmp, NS_CAMERA_RAW_SETTINGS,
+                               "WhiteBalance", property, NULL));
+  BOOST_CHECK(strcmp("Auto", xmp_string_cstr(property)) == 0);
 
-	int32_t t = 0;
-	BOOST_CHECK(xmp_get_property_int32(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "Temperature", &t, NULL));
-	BOOST_CHECK(t == 3684);
-	double exposure = 0;
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "Exposure", &exposure, NULL));
-	BOOST_CHECK(exposure == 1.0);
-	
-	bool hasCrop = false;
-	BOOST_CHECK(xmp_get_property_bool(xmp, NS_CAMERA_RAW_SETTINGS,
-									  "HasCrop", &hasCrop, NULL));
-	BOOST_CHECK(hasCrop);
-	
-	
-	BOOST_CHECK(xmp_get_property_int32(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropUnits", &t, NULL));
-	BOOST_CHECK(t == 0);
+  int32_t t = 0;
+  BOOST_CHECK(xmp_get_property_int32(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "Temperature", &t, NULL));
+  BOOST_CHECK(t == 3684);
+  double exposure = 0;
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "Exposure", &exposure, NULL));
+  BOOST_CHECK(exposure == 1.0);
+
+  bool hasCrop = false;
+  BOOST_CHECK(xmp_get_property_bool(xmp, NS_CAMERA_RAW_SETTINGS,
+                                    "HasCrop", &hasCrop, NULL));
+  BOOST_CHECK(hasCrop);
 
 
-	double aDim = 0;
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropLeft", &aDim, NULL));
-	BOOST_CHECK(aDim == 0);
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropTop", &aDim, NULL));
-	BOOST_CHECK(aDim == 201);
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropBottom", &aDim, NULL));
-	BOOST_CHECK(aDim == 3522);
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropRight", &aDim, NULL));
-	BOOST_CHECK(aDim == 2213);
+  BOOST_CHECK(xmp_get_property_int32(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropUnits", &t, NULL));
+  BOOST_CHECK(t == 0);
 
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropWidth", &aDim, NULL));
-	BOOST_CHECK(aDim == 2213);
-	BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
-									   "CropHeight", &aDim, NULL));
-	BOOST_CHECK(aDim == 3321);
 
-	bool imported = false;
-	BOOST_CHECK(xmp_get_property_bool(xmp, xmp::UFRAW_INTEROP_NAMESPACE,
-									  "ImportedFromUFraw", &imported, NULL));
-	BOOST_CHECK(imported);
+  double aDim = 0;
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropLeft", &aDim, NULL));
+  BOOST_CHECK(aDim == 0);
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropTop", &aDim, NULL));
+  BOOST_CHECK(aDim == 201);
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropBottom", &aDim, NULL));
+  BOOST_CHECK(aDim == 3522);
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropRight", &aDim, NULL));
+  BOOST_CHECK(aDim == 2213);
 
-	return 0;
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropWidth", &aDim, NULL));
+  BOOST_CHECK(aDim == 2213);
+  BOOST_CHECK(xmp_get_property_float(xmp, NS_CAMERA_RAW_SETTINGS,
+                                     "CropHeight", &aDim, NULL));
+  BOOST_CHECK(aDim == 3321);
+
+  bool imported = false;
+  BOOST_CHECK(xmp_get_property_bool(xmp, xmp::UFRAW_INTEROP_NAMESPACE,
+                                    "ImportedFromUFraw", &imported, NULL));
+  BOOST_CHECK(imported);
+
+  return 0;
 }
 

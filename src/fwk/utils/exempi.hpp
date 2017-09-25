@@ -89,25 +89,16 @@ namespace fwk {
 
 #if RUST_BINDGEN
 class Date;
+class ExempiManager;
 #endif
 
 class XmpMeta;
-class ExempiManager;
 typedef std::shared_ptr<ExempiManager> ExempiManagerPtr;
 
 ExempiManagerPtr exempi_manager_new();
 
 }
 
-
-extern "C" {
-    double fwk_gps_coord_from_xmp(const char* value);
-    int32_t fwk_xmp_meta_get_orientation(const fwk::XmpMeta*);
-    int32_t fwk_xmp_meta_get_rating(const fwk::XmpMeta*);
-    // the pointer must be released by calling rust_cstring_delete()
-    char* fwk_xmp_meta_get_label(const fwk::XmpMeta*);
-    fwk::Date* fwk_xmp_meta_get_creation_date(const fwk::XmpMeta*);
-}
 
 /*
   Local Variables:

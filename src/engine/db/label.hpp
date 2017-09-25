@@ -27,10 +27,6 @@
 
 #include "rust_bindings.hpp"
 
-namespace fwk {
-class RgbColour;
-}
-
 namespace eng {
 
 

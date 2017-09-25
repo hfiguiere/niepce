@@ -76,17 +76,17 @@ impl ToString for RgbColour {
 }
 
 #[no_mangle]
-pub fn fwk_rgbcolour_to_string(c: &RgbColour) -> *mut c_char {
+pub extern "C" fn fwk_rgbcolour_to_string(c: &RgbColour) -> *mut c_char {
     CString::new(c.to_string().as_bytes()).unwrap().into_raw()
 }
 
 #[no_mangle]
-pub fn fwk_rgbcolour_delete(c: *mut RgbColour) {
+pub extern "C" fn fwk_rgbcolour_delete(c: *mut RgbColour) {
     unsafe { Box::from_raw(c); }
 }
 
 #[no_mangle]
-pub fn fwk_rgbcolour_component(c: &RgbColour, idx: i32) -> u16 {
+pub extern "C" fn fwk_rgbcolour_component(c: &RgbColour, idx: i32) -> u16 {
     match idx {
         0 => c.r,
         1 => c.g,
@@ -96,11 +96,11 @@ pub fn fwk_rgbcolour_component(c: &RgbColour, idx: i32) -> u16 {
 }
 
 #[no_mangle]
-pub fn fwk_rgbcolour_new(r: u16, g: u16, b: u16) -> *mut RgbColour {
+pub extern "C" fn fwk_rgbcolour_new(r: u16, g: u16, b: u16) -> *mut RgbColour {
     Box::into_raw(Box::new(RgbColour::new(r, g, b)))
 }
 
 #[no_mangle]
-pub fn fwk_rgbcolour_clone(c: &RgbColour) -> *mut RgbColour {
+pub extern "C" fn fwk_rgbcolour_clone(c: &RgbColour) -> *mut RgbColour {
     Box::into_raw(Box::new(c.clone()))
 }

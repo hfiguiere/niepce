@@ -7,15 +7,11 @@ AM_CPPFLAGS = -I$(top_srcdir)/src \
 noinst_LIBRARIES = libfwkbase.a
 
 
-TESTS = testmoniker testgeometry testdate testmap\
-	testoption testpropertybag
+TESTS = testmoniker testgeometry testmap\
+	testoption
 
-check_PROGRAMS = testmoniker testgeometry testdate testmap\
-	testoption testpropertybag
-
-testdate_SOURCES = t/testdate.cpp
-testdate_LDADD = libfwkbase.a \
-	@FRAMEWORK_LIBS@
+check_PROGRAMS = testmoniker testgeometry testmap\
+	testoption
 
 testmoniker_SOURCES = t/testmoniker.cpp
 testmoniker_LDADD = libfwkbase.a \
@@ -31,10 +27,6 @@ testmap_LDADD = libfwkbase.a \
 
 testoption_SOURCES = t/testoption.cpp
 testoption_LDADD = libfwkbase.a \
-	@FRAMEWORK_LIBS@
-
-testpropertybag_SOURCES = t/testpropertybag.cpp
-testpropertybag_LDADD = libfwkbase.a \
 	@FRAMEWORK_LIBS@
 
 libfwkbase_a_SOURCES = colour.hpp colour.cpp \

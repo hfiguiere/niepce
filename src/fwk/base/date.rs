@@ -139,12 +139,12 @@ pub fn make_xmp_date_time(t: Time, xmp_dt: &mut exempi::DateTime) -> bool {
 }
 
 #[no_mangle]
-pub fn fwk_date_delete(date: *mut Date) {
+pub extern "C" fn fwk_date_delete(date: *mut Date) {
     unsafe { Box::from_raw(date); }
 }
 
 #[no_mangle]
-pub fn fwk_date_to_string(date: &Date) -> *mut libc::c_char {
+pub extern "C" fn fwk_date_to_string(date: &Date) -> *mut libc::c_char {
     CString::new(date.to_string().as_bytes()).unwrap().into_raw()
 }
 

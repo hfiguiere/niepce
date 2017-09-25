@@ -18,47 +18,40 @@
  */
 
 #include "fwk/base/colour.hpp"
-#include "fwk/base/rust.hpp"
 
-// Rust glue.
-
-extern "C" {
-
-fwk::RgbColour* fwk_rgbcolour_new(uint16_t r, uint16_t g, uint16_t b);
-fwk::RgbColour* fwk_rgbcolour_clone(const fwk::RgbColour*);
-void fwk_rgbcolour_delete(fwk::RgbColour*);
-}
+#include "rust_bindings.hpp"
 
 namespace fwk {
 
 RgbColourPtr rgbcolour_new(uint16_t r, uint16_t g, uint16_t b)
 {
-    return rgbcolour_wrap(fwk_rgbcolour_new(r, g, b));
+  return rgbcolour_wrap(ffi::fwk_rgbcolour_new(r, g, b));
 }
 
 RgbColourPtr rgbcolour_clone(const RgbColour* c)
 {
-    return rgbcolour_wrap(fwk_rgbcolour_clone(c));
+  return rgbcolour_wrap(ffi::fwk_rgbcolour_clone(c));
 }
 
 RgbColourPtr rgbcolour_wrap(RgbColour* c)
 {
-    return RgbColourPtr(c, &fwk_rgbcolour_delete);
+  return RgbColourPtr(c, &ffi::fwk_rgbcolour_delete);
 }
 
 std::string rgbcolour_to_string(uint16_t r, uint16_t g, uint16_t b)
 {
-    RgbColour* colour = fwk_rgbcolour_new(r, g, b);
-    std::string s = rgbcolour_to_string(colour);
-    fwk_rgbcolour_delete(colour);
-    return s;
+  RgbColour* colour = ffi::fwk_rgbcolour_new(r, g, b);
+  std::string s = rgbcolour_to_string(colour);
+  ffi::fwk_rgbcolour_delete(colour);
+  return s;
 }
 
 std::string rgbcolour_to_string(const RgbColour* c)
 {
-    char* p = fwk_rgbcolour_to_string(c);
-    std::string s(p);
-    rust_cstring_delete(p);
-    return s;
+  char* p = ffi::fwk_rgbcolour_to_string(c);
+  std::string s(p);
+  ffi::rust_cstring_delete(p);
+  return s;
 }
+
 }

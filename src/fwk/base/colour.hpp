@@ -22,9 +22,14 @@
 #include <memory>
 #include <string>
 
+#include "rust_bindings.hpp"
+
 namespace fwk {
 
+#if RUST_BINDGEN
 class RgbColour;
+#endif
+
 typedef std::shared_ptr<RgbColour> RgbColourPtr;
 
 RgbColourPtr rgbcolour_new(uint16_t r, uint16_t g, uint16_t b);
@@ -33,9 +38,4 @@ RgbColourPtr rgbcolour_wrap(RgbColour*);
 
 std::string rgbcolour_to_string(uint16_t r, uint16_t g, uint16_t b);
 std::string rgbcolour_to_string(const RgbColour*);
-}
-
-extern "C" {
-uint16_t fwk_rgbcolour_component(const fwk::RgbColour*, int32_t idx);
-char* fwk_rgbcolour_to_string(const fwk::RgbColour*);
 }
