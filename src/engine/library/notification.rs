@@ -159,7 +159,8 @@ pub extern "C" fn engine_library_notification_get_id(n: *const Notification) -> 
 #[no_mangle]
 pub extern "C" fn engine_library_notification_get_label(n: *const Notification) -> *const Label {
     match unsafe { n.as_ref() } {
-        Some(&Notification::AddedLabel(ref l)) => l,
+        Some(&Notification::AddedLabel(ref l)) |
+        Some(&Notification::LabelChanged(ref l)) => l,
         _ => unreachable!(),
     }
 }
