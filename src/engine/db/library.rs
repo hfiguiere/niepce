@@ -154,7 +154,7 @@ impl Library {
                           virtual INTEGER DEFAULT 0, \
                           expanded INTEGER DEFAULT 0, \
                           parent_id INTEGER)", &[]).unwrap();
-            let trash_type = libfolder::VirtualType::TRASH as i32;
+            let trash_type = libfolder::FolderVirtualType::TRASH as i32;
             conn.execute("insert into folders (name, locked, virtual, parent_id) \
                           values (:1, 1, :2, 0)",
                          &[&"Trash", &trash_type]).unwrap();

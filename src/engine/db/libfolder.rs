@@ -27,17 +27,17 @@ use super::LibraryId;
 
 #[repr(i32)]
 #[derive(Clone)]
-pub enum VirtualType {
+pub enum FolderVirtualType {
     NONE = 0,
     TRASH = 1
 }
 
-impl From<i32> for VirtualType {
+impl From<i32> for FolderVirtualType {
     fn from(t: i32) -> Self {
         match t {
-            0 => VirtualType::NONE,
-            1 => VirtualType::TRASH,
-            _ => VirtualType::NONE,
+            0 => FolderVirtualType::NONE,
+            1 => FolderVirtualType::TRASH,
+            _ => FolderVirtualType::NONE,
         }
     }
 }
@@ -48,7 +48,7 @@ pub struct LibFolder {
     name: String,
     locked: bool,
     expanded: bool,
-    virt: VirtualType,
+    virt: FolderVirtualType,
     cstr: CString,
 }
 
@@ -56,7 +56,7 @@ impl LibFolder {
     pub fn new(id: LibraryId, name: &str) -> LibFolder {
         LibFolder {
             id: id, name: String::from(name), locked: false,
-            expanded: false, virt: VirtualType::NONE,
+            expanded: false, virt: FolderVirtualType::NONE,
             cstr: CString::new("").unwrap(),
         }
     }
@@ -85,11 +85,11 @@ impl LibFolder {
         self.expanded = expanded;
     }
 
-    pub fn virtual_type(&self) -> VirtualType {
+    pub fn virtual_type(&self) -> FolderVirtualType {
         self.virt.to_owned()
     }
 
-    pub fn set_virtual_type(&mut self, virt: VirtualType) {
+    pub fn set_virtual_type(&mut self, virt: FolderVirtualType) {
         self.virt = virt;
     }
 
@@ -113,7 +113,7 @@ impl FromDb for LibFolder {
         let expanded = row.get(4);
 
         let mut libfolder = LibFolder::new(id, &name);
-        libfolder.set_virtual_type(VirtualType::from(virt_type));
+        libfolder.set_virtual_type(FolderVirtualType::from(virt_type));
         libfolder.set_locked(locked);
         libfolder.set_expanded(expanded);
 
@@ -144,8 +144,8 @@ pub extern "C" fn engine_db_libfolder_name(obj: &mut LibFolder) -> *const c_char
 }
 
 #[no_mangle]
-pub extern "C" fn engine_db_libfolder_virtual_type(obj: &LibFolder) -> i32 {
-    obj.virtual_type() as i32
+pub extern "C" fn engine_db_libfolder_virtual_type(obj: &LibFolder) -> FolderVirtualType {
+    obj.virtual_type()
 }
 
 #[no_mangle]
@@ -164,6 +164,6 @@ pub extern fn engine_db_libfolder_set_expanded(obj: &mut LibFolder, expanded: bo
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_virtual_type(obj: &mut LibFolder, t: i32) {
-    obj.set_virtual_type(VirtualType::from(t));
+pub extern fn engine_db_libfolder_set_virtual_type(obj: &mut LibFolder, t: FolderVirtualType) {
+    obj.set_virtual_type(t);
 }

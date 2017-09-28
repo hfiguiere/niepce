@@ -37,13 +37,6 @@ typedef std::shared_ptr<LibFolder> LibFolderPtr;
 typedef std::list<LibFolderPtr> LibFolderList;
 typedef std::shared_ptr<LibFolderList> LibFolderListPtr;
 
-enum class LibFolderVirtualType {
-    NONE = 0,
-    TRASH = 1,
-
-    _LAST
-};
-
 LibFolderPtr libfolder_new(library_id_t id, const char *name);
 
 }

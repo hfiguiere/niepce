@@ -63,6 +63,7 @@ typedef ffi::Managed Managed;
 typedef ffi::Notification LibNotification;
 typedef ffi::NotificationType NotificationType;
 typedef ffi::Np Np;
+typedef ffi::FolderVirtualType FolderVirtualType;
 }
 
 #endif

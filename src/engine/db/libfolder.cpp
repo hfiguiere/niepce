@@ -19,16 +19,12 @@
 
 #include "libfolder.hpp"
 
-extern "C" eng::LibFolder *engine_db_libfolder_new(eng::library_id_t id,
-                                                   const char *name);
-extern "C" void engine_db_libfolder_delete(eng::LibFolder *);
-
 namespace eng {
 
 LibFolderPtr libfolder_new(eng::library_id_t id, const char *name)
 {
-    return LibFolderPtr(engine_db_libfolder_new(id, name),
-                        &engine_db_libfolder_delete);
+    return LibFolderPtr(ffi::engine_db_libfolder_new(id, name),
+                        &ffi::engine_db_libfolder_delete);
 }
 }
 /*

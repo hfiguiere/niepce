@@ -215,7 +215,7 @@ void WorkspaceController::add_keyword_item(const eng::Keyword* k)
 void WorkspaceController::add_folder_item(const eng::LibFolder* f)
 {
     int icon_idx = ICON_ROLL;
-    if(engine_db_libfolder_virtual_type(f) == (int32_t)eng::LibFolderVirtualType::TRASH) {
+    if(engine_db_libfolder_virtual_type(f) == eng::FolderVirtualType::TRASH) {
         icon_idx = ICON_TRASH;
         getLibraryClient()->set_trash_id(engine_db_libfolder_id(f));
     }
