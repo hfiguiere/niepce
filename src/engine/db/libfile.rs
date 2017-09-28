@@ -29,8 +29,18 @@ use super::LibraryId;
 use super::fsfile::FsFile;
 use fwk::base::PropertyIndex;
 use root::eng::NiepceProperties as Np;
-pub use root::eng::LibFileType as FileType;
 use fwk;
+
+#[repr(i32)]
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq)]
+pub enum FileType {
+    UNKNOWN = 0,
+    RAW = 1,
+    RAW_JPEG = 2,
+    IMAGE = 3,
+    VIDEO = 4,
+}
 
 impl From<i32> for FileType {
     fn from(t: i32) -> Self {
@@ -239,77 +249,77 @@ pub extern fn engine_db_libfile_delete(lf: *mut LibFile) {
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_path(this: &mut LibFile) -> *const c_char {
-    this.cstr = CString::new(this.path().to_str().unwrap_or("")).unwrap();
-    this.cstr.as_ptr()
+pub extern fn engine_db_libfile_path(obj: &mut LibFile) -> *const c_char {
+    obj.cstr = CString::new(obj.path().to_str().unwrap_or("")).unwrap();
+    obj.cstr.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_id(this: &LibFile) -> LibraryId {
-    this.id()
+pub extern fn engine_db_libfile_id(obj: &LibFile) -> LibraryId {
+    obj.id()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_folderid(this: &LibFile) -> LibraryId {
-    this.folder_id()
+pub extern fn engine_db_libfile_folderid(obj: &LibFile) -> LibraryId {
+    obj.folder_id()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_orientation(this: &LibFile) -> i32 {
-    this.orientation()
+pub extern fn engine_db_libfile_orientation(obj: &LibFile) -> i32 {
+    obj.orientation()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_rating(this: &LibFile) -> i32 {
-    this.rating()
+pub extern fn engine_db_libfile_rating(obj: &LibFile) -> i32 {
+    obj.rating()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_label(this: &LibFile) -> i32 {
-    this.label()
+pub extern fn engine_db_libfile_label(obj: &LibFile) -> i32 {
+    obj.label()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_flag(this: &LibFile) -> i32 {
-    this.flag()
+pub extern fn engine_db_libfile_flag(obj: &LibFile) -> i32 {
+    obj.flag()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_property(this: &LibFile, idx: PropertyIndex) -> i32 {
-    this.property(unsafe { transmute(idx) })
+pub extern fn engine_db_libfile_property(obj: &LibFile, idx: PropertyIndex) -> i32 {
+    obj.property(unsafe { transmute(idx) })
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_file_type(this: &LibFile) -> FileType {
-    this.file_type()
+pub extern fn engine_db_libfile_file_type(obj: &LibFile) -> FileType {
+    obj.file_type()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_orientation(this: &mut LibFile, o: i32) {
-    this.set_orientation(o);
+pub extern fn engine_db_libfile_set_orientation(obj: &mut LibFile, o: i32) {
+    obj.set_orientation(o);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_rating(this: &mut LibFile, r: i32) {
-    this.set_rating(r);
+pub extern fn engine_db_libfile_set_rating(obj: &mut LibFile, r: i32) {
+    obj.set_rating(r);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_label(this: &mut LibFile, l: i32) {
-    this.set_label(l);
+pub extern fn engine_db_libfile_set_label(obj: &mut LibFile, l: i32) {
+    obj.set_label(l);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_flag(this: &mut LibFile, f: i32) {
-    this.set_flag(f);
+pub extern fn engine_db_libfile_set_flag(obj: &mut LibFile, f: i32) {
+    obj.set_flag(f);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_property(this: &mut LibFile, idx: PropertyIndex, v: i32) {
-    this.set_property(unsafe { transmute(idx) }, v);
+pub extern fn engine_db_libfile_set_property(obj: &mut LibFile, idx: PropertyIndex, v: i32) {
+    obj.set_property(unsafe { transmute(idx) }, v);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_file_type(this: &mut LibFile, t: FileType) {
-    this.set_file_type(t);
+pub extern fn engine_db_libfile_set_file_type(obj: &mut LibFile, t: FileType) {
+    obj.set_file_type(t);
 }

@@ -84,21 +84,21 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
     DBG_OUT("notification for workspace");
-    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
-    case eng::LibNotificationType::ADDED_FOLDER:
+    switch (engine_library_notification_type(&ln)) {
+    case eng::NotificationType::ADDED_FOLDER:
     {
         auto f = engine_library_notification_get_libfolder(&ln);
         this->add_folder_item(f);
         break;
     }
-    case eng::LibNotificationType::ADDED_KEYWORD:
+    case eng::NotificationType::ADDED_KEYWORD:
     {
         auto k = engine_library_notification_get_keyword(&ln);
         DBG_ASSERT(k, "keyword must not be NULL");
         add_keyword_item(k);
         break;
     }
-    case eng::LibNotificationType::FOLDER_COUNTED:
+    case eng::NotificationType::FOLDER_COUNTED:
     {
         auto count = engine_library_notification_get_folder_count(&ln);
         DBG_OUT("count for folder %Ld is %d", (long long)count->folder, count->count);
@@ -112,7 +112,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
         break;
     }
-    case eng::LibNotificationType::FOLDER_COUNT_CHANGE:
+    case eng::NotificationType::FOLDER_COUNT_CHANGE:
     {
         auto count = engine_library_notification_get_folder_count(&ln);
         DBG_OUT("count change for folder %Ld is %d", (long long)count->folder, count->count);
@@ -200,10 +200,11 @@ void WorkspaceController::add_keyword_item(const eng::Keyword* k)
 {
     auto children = m_keywordsNode->children();
     bool was_empty = children.empty();
+    char* keyword = engine_db_keyword_keyword(k);
     auto iter = add_item(m_treestore, children,
-                         m_icons[ICON_KEYWORD],
-                         engine_db_keyword_keyword(k),
+                         m_icons[ICON_KEYWORD], keyword,
                          engine_db_keyword_id(k), KEYWORD_ITEM);
+    ffi::rust_cstring_delete(keyword);
 //		getLibraryClient()->countKeyword(f->id());
     m_keywordsidmap[engine_db_keyword_id(k)] = iter;
     if(was_empty) {

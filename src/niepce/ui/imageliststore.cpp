@@ -92,17 +92,17 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
-    auto type = static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln));
+    auto type = engine_library_notification_type(&ln);
     switch (type) {
-    case eng::LibNotificationType::FOLDER_CONTENT_QUERIED:
-    case eng::LibNotificationType::KEYWORD_CONTENT_QUERIED:
+    case eng::NotificationType::FOLDER_CONTENT_QUERIED:
+    case eng::NotificationType::KEYWORD_CONTENT_QUERIED:
     {
         auto param = engine_library_notification_get_content(&ln);
         const auto& l = param->files;
-        if (type == eng::LibNotificationType::FOLDER_CONTENT_QUERIED) {
+        if (type == eng::NotificationType::FOLDER_CONTENT_QUERIED) {
             m_current_folder = param->container;
             m_current_keyword = 0;
-        } else if (type == eng::LibNotificationType::KEYWORD_CONTENT_QUERIED) {
+        } else if (type == eng::NotificationType::KEYWORD_CONTENT_QUERIED) {
             m_current_folder = 0;
             m_current_keyword = param->container;
         }
@@ -125,7 +125,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         getLibraryClient()->thumbnailCache().request(*l);
         break;
     }
-    case eng::LibNotificationType::FILE_MOVED:
+    case eng::NotificationType::FILE_MOVED:
     {
         DBG_OUT("File moved. Current folder %ld", m_current_folder);
         auto param = engine_library_notification_get_filemoved(&ln);
@@ -144,7 +144,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::LibNotificationType::METADATA_CHANGED:
+    case eng::NotificationType::METADATA_CHANGED:
     {
         auto m = engine_library_notification_get_metadatachange(&ln);
         const fwk::PropertyIndex& prop = m->meta;
@@ -164,7 +164,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::LibNotificationType::XMP_NEEDS_UPDATE:
+    case eng::NotificationType::XMP_NEEDS_UPDATE:
     {
         fwk::Configuration & cfg = fwk::Application::app()->config();
         int write_xmp = false;

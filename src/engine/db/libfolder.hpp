@@ -46,12 +46,6 @@ enum class LibFolderVirtualType {
 
 LibFolderPtr libfolder_new(library_id_t id, const char *name);
 
-extern "C" {
-library_id_t engine_db_libfolder_id(const LibFolder *);
-void engine_db_libfolder_set_locked(const LibFolder *, bool);
-void engine_db_libfolder_set_expanded(const LibFolder *, bool);
-void engine_db_libfolder_set_virtual_type(const LibFolder *, int32_t);
-}
 }
 
 /*

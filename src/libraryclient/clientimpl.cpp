@@ -20,14 +20,15 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/files.hpp"
 #include "engine/library/op.hpp"
-#include "engine/library/commands.hpp"
 #include "libraryclient.hpp"
 #include "clientimpl.hpp"
 #include "locallibraryserver.hpp"
 
+#include "rust_bindings.hpp"
+
 using fwk::FileListPtr;
 using eng::Op;
-using eng::LibraryManaged;
+using eng::Managed;
 using eng::tid_t;
 
 namespace libraryclient {
@@ -70,19 +71,19 @@ tid_t ClientImpl::schedule_op(const Op::Function & func)
 
 tid_t ClientImpl::getAllKeywords()
 {
-    return schedule_op(&cmd_list_all_keywords);
+    return schedule_op(&ffi::cmd_list_all_keywords);
 }
 
 
 tid_t ClientImpl::getAllFolders()
 {
-    return schedule_op(&cmd_list_all_folders);
+    return schedule_op(&ffi::cmd_list_all_folders);
 }
 
 tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 {
     return schedule_op([folder_id](const auto& lib) {
-            return cmd_query_folder_content(lib, folder_id);
+            return ffi::cmd_query_folder_content(lib, folder_id);
         });
 }
 
@@ -90,7 +91,7 @@ tid_t ClientImpl::queryFolderContent(eng::library_id_t folder_id)
 tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 {
     return schedule_op([folder_id](const auto& lib) {
-            return cmd_count_folder(lib, folder_id);
+            return ffi::cmd_count_folder(lib, folder_id);
         });
 }
 
@@ -98,7 +99,7 @@ tid_t ClientImpl::countFolder(eng::library_id_t folder_id)
 tid_t ClientImpl::queryKeywordContent(eng::library_id_t keyword_id)
 {
     return schedule_op([keyword_id](const auto& lib) {
-            return cmd_query_keyword_content(lib, keyword_id);
+            return ffi::cmd_query_keyword_content(lib, keyword_id);
         });
 }
 
@@ -106,23 +107,23 @@ tid_t ClientImpl::queryKeywordContent(eng::library_id_t keyword_id)
 tid_t ClientImpl::requestMetadata(eng::library_id_t file_id)
 {
     return schedule_op([file_id](const auto& lib) {
-           return cmd_request_metadata(lib, file_id);
+            return ffi::cmd_request_metadata(lib, file_id);
         });
 }
 
 
-tid_t ClientImpl::setMetadata(eng::library_id_t file_id, int meta,
+tid_t ClientImpl::setMetadata(eng::library_id_t file_id, eng::Np meta,
                               const fwk::PropertyValuePtr & value)
 {
     return schedule_op([file_id, meta, value](const auto& lib) {
-            return cmd_set_metadata(lib, file_id, meta, value.get());
+            return ffi::cmd_set_metadata(lib, file_id, meta, value.get());
         });
 }
 
 tid_t ClientImpl::write_metadata(eng::library_id_t file_id)
 {
     return schedule_op([file_id](const auto& lib) {
-            return cmd_write_metadata(lib, file_id);
+            return ffi::cmd_write_metadata(lib, file_id);
         });
 }
 
@@ -131,28 +132,28 @@ tid_t ClientImpl::moveFileToFolder(eng::library_id_t file_id,
                                    eng::library_id_t to_folder_id)
 {
     return schedule_op([file_id, from_folder_id, to_folder_id](const auto& lib) {
-            return cmd_move_file_to_folder(lib, file_id, from_folder_id, to_folder_id);
+            return ffi::cmd_move_file_to_folder(lib, file_id, from_folder_id, to_folder_id);
         });
 }
 
 
 tid_t ClientImpl::getAllLabels()
 {
-    return schedule_op(&cmd_list_all_labels);
+    return schedule_op(&ffi::cmd_list_all_labels);
 }
 
 
 tid_t ClientImpl::createLabel(const std::string & s, const std::string & colour)
 {
     return schedule_op([s, colour](const auto& lib) {
-            return cmd_create_label(lib, s.c_str(), colour.c_str());
+            return ffi::cmd_create_label(lib, s.c_str(), colour.c_str());
         });
 }
 
 tid_t ClientImpl::deleteLabel(int label_id)
 {
     return schedule_op([label_id](const auto& lib) {
-            return cmd_delete_label(lib, label_id);
+            return ffi::cmd_delete_label(lib, label_id);
         });
 }
 
@@ -161,7 +162,7 @@ tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
                               const std::string & new_colour)
 {
     return schedule_op([label_id, new_name, new_colour](const auto& lib) {
-            return cmd_update_label(lib, label_id, new_name.c_str(), new_colour.c_str());
+            return ffi::cmd_update_label(lib, label_id, new_name.c_str(), new_colour.c_str());
         });
 }
 
@@ -169,25 +170,25 @@ tid_t ClientImpl::updateLabel(eng::library_id_t label_id,
 tid_t ClientImpl::processXmpUpdateQueue(bool write_xmp)
 {
     return schedule_op([write_xmp](const auto& lib) {
-            return cmd_process_xmp_update_queue(lib, write_xmp);
+            return ffi::cmd_process_xmp_update_queue(lib, write_xmp);
         });
 }
 
-tid_t ClientImpl::importFile(const std::string & path, LibraryManaged manage)
+tid_t ClientImpl::importFile(const std::string & path, Managed manage)
 {
     return schedule_op([path, manage](const auto& lib) {
-            return cmd_import_file(lib, path.c_str(), manage);
+            return ffi::cmd_import_file(lib, path.c_str(), manage);
         });
 }
 
-tid_t ClientImpl::importFromDirectory(const std::string & dir, LibraryManaged manage)
+tid_t ClientImpl::importFromDirectory(const std::string & dir, Managed manage)
 {
     FileListPtr files;
 
     files = fwk::FileList::getFilesFromDirectory(dir, &fwk::filter_none);
 
     return schedule_op([dir, files, manage](const auto& lib) {
-            return cmd_import_files(lib, dir.c_str(), files.get(), manage);
+            return ffi::cmd_import_files(lib, dir.c_str(), files.get(), manage);
         });
 }
 

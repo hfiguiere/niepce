@@ -54,8 +54,8 @@ GridViewModule::~GridViewModule()
 void
 GridViewModule::on_lib_notification(const eng::LibNotification &ln)
 {
-    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
-    case eng::LibNotificationType::METADATA_QUERIED:
+    switch (engine_library_notification_type(&ln)) {
+    case eng::NotificationType::METADATA_QUERIED:
     {
         auto lm = engine_library_notification_get_libmetadata(&ln);
         DBG_OUT("received metadata");
@@ -66,7 +66,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         }
         break;
     }
-    case eng::LibNotificationType::METADATA_CHANGED:
+    case eng::NotificationType::METADATA_CHANGED:
     {
         DBG_OUT("metadata changed");
         auto id = engine_library_notification_get_id(&ln);

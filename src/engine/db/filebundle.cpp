@@ -24,13 +24,10 @@
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/mimetype.hpp"
 
-extern "C" eng::FileBundle* engine_db_filebundle_new();
-extern "C" void engine_db_filebundle_delete(eng::FileBundle*);
-
 namespace eng {
 
 FileBundlePtr filebundle_new() {
-    return FileBundlePtr(engine_db_filebundle_new(), &engine_db_filebundle_delete);
+    return FileBundlePtr(ffi::engine_db_filebundle_new(), &ffi::engine_db_filebundle_delete);
 }
 
 FileBundleListPtr

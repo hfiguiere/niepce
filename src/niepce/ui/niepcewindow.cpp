@@ -48,12 +48,14 @@
 #include "dialogs/editlabels.hpp"
 #include "selectioncontroller.hpp"
 
+#include "rust_bindings.hpp"
+
 using libraryclient::LibraryClient;
 using libraryclient::LibraryClientPtr;
 using fwk::Application;
 using fwk::Configuration;
 using fwk::UndoHistory;
-using eng::LibraryManaged;
+using eng::Managed;
 using eng::IImporter;
 
 namespace ui {
@@ -275,7 +277,7 @@ void NiepceWindow::on_action_file_import()
             auto dest_dir = import_dialog->get_dest_dir();
             importer->do_import(
                 source, dest_dir,
-                [this] (const std::string & path, IImporter::Import type, LibraryManaged manage) {
+                [this] (const std::string & path, IImporter::Import type, Managed manage) {
                     if (type == IImporter::Import::SINGLE) {
                         m_libClient->importFile(path, manage);
                     } else {
@@ -336,11 +338,11 @@ void NiepceWindow::create_initial_labels()
 
 void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
 {
-    switch(static_cast<eng::LibNotificationType>(engine_library_notification_type(&ln))) {
-    case eng::LibNotificationType::NEW_LIBRARY_CREATED:
+    switch (engine_library_notification_type(&ln)) {
+    case eng::NotificationType::NEW_LIBRARY_CREATED:
         create_initial_labels();
         break;
-    case eng::LibNotificationType::ADDED_LABEL:
+    case eng::NotificationType::ADDED_LABEL:
     {
         auto l = engine_library_notification_get_label(&ln);
         if (l) {
@@ -350,7 +352,7 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
         }
         break;
     }
-    case eng::LibNotificationType::LABEL_CHANGED:
+    case eng::NotificationType::LABEL_CHANGED:
     {
         auto l = engine_library_notification_get_label(&ln);
         if (l) {
@@ -360,7 +362,7 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
         }
         break;
     }
-    case eng::LibNotificationType::LABEL_DELETED:
+    case eng::NotificationType::LABEL_DELETED:
     {
         auto id = engine_library_notification_get_id(&ln);
         if (id) {

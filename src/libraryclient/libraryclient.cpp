@@ -92,7 +92,7 @@ eng::tid_t LibraryClient::requestMetadata(eng::library_id_t id)
 eng::tid_t LibraryClient::setMetadata(library_id_t id, fwk::PropertyIndex meta,
                                       const fwk::PropertyValuePtr & value)
 {
-    return m_pImpl->setMetadata(id, meta, value);
+    return m_pImpl->setMetadata(id, static_cast<eng::Np>(meta), value);
 }
 
 eng::tid_t LibraryClient::write_metadata(eng::library_id_t id)
@@ -136,12 +136,12 @@ eng::tid_t LibraryClient::processXmpUpdateQueue(bool write_xmp)
     return m_pImpl->processXmpUpdateQueue(write_xmp);
 }
 
-void LibraryClient::importFile(const std::string & path, eng::LibraryManaged manage)
+void LibraryClient::importFile(const std::string & path, eng::Managed manage)
 {
     m_pImpl->importFile(path, manage);
 }
 
-void LibraryClient::importFromDirectory(const std::string & dir, eng::LibraryManaged manage)
+void LibraryClient::importFromDirectory(const std::string & dir, eng::Managed manage)
 {
     m_pImpl->importFromDirectory(dir, manage);
 }

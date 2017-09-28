@@ -22,14 +22,6 @@
 #include "fwk/base/debug.hpp"
 #include "properties.hpp"
 
-extern "C" {
-eng::LibFile *engine_db_libfile_new(eng::library_id_t id,
-                                    eng::library_id_t folder_id,
-                                    eng::library_id_t fs_file_id,
-                                    const char *path, const char *name);
-void engine_db_libfile_delete(eng::LibFile *);
-}
-
 namespace eng {
 
 // some glue for rust
@@ -39,25 +31,23 @@ QueriedContent::QueriedContent(library_id_t _container)
 {
 }
 
-void QueriedContent::push(LibFile *f)
+void QueriedContent::push(void* f)
 {
-    files->push_back(eng::libfile_wrap(f));
-}
+    files->push_back(eng::libfile_wrap(static_cast<LibFile*>(f)));
 }
 
-namespace eng {
+LibFilePtr libfile_wrap(eng::LibFile *lf)
+{
+    return LibFilePtr(lf, &ffi::engine_db_libfile_delete);
+}
+
 
 LibFilePtr libfile_new(library_id_t id, library_id_t folder_id,
                        library_id_t fs_file_id, const char *path,
                        const char *name)
 {
     return libfile_wrap(
-        engine_db_libfile_new(id, folder_id, fs_file_id, path, name));
-}
-
-LibFilePtr libfile_wrap(LibFile *lf)
-{
-    return LibFilePtr(lf, &engine_db_libfile_delete);
+        ffi::engine_db_libfile_new(id, folder_id, fs_file_id, path, name));
 }
 
 /**
@@ -66,16 +56,16 @@ LibFilePtr libfile_wrap(LibFile *lf)
  * @return the filetype
  * @todo: add the JPEG+RAW file types.
  */
-LibFileType mimetype_to_filetype(fwk::MimeType mime)
+FileType mimetype_to_filetype(fwk::MimeType mime)
 {
     if (mime.isDigicamRaw()) {
-        return LibFileType::RAW;
+        return FileType::RAW;
     } else if (mime.isImage()) {
-        return LibFileType::IMAGE;
+        return FileType::IMAGE;
     } else if (mime.isMovie()) {
-        return LibFileType::VIDEO;
+        return FileType::VIDEO;
     } else {
-        return LibFileType::UNKNOWN;
+        return FileType::UNKNOWN;
     }
 }
 }

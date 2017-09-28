@@ -21,11 +21,21 @@
 
 #if !RUST_BINDGEN
 
+#include "engine/db/properties-enum.hpp"
+
+namespace fwk {
+class FileList;
+}
 namespace eng {
 class QueriedContent;
 }
 
-using eng::QueriedContent;
+
+namespace ffi {
+typedef eng::QueriedContent QueriedContent;
+typedef eng::NiepceProperties Np;
+typedef fwk::FileList FileList;
+}
 
 #include "target/bindings.h"
 
@@ -41,13 +51,18 @@ typedef ffi::RgbColour RgbColour;
 }
 
 namespace eng {
-
+typedef ffi::FileType FileType;
+typedef ffi::Library Library;
+typedef ffi::FileBundle FileBundle;
 typedef ffi::Keyword Keyword;
+typedef ffi::LibFile LibFile;
 typedef ffi::LibFolder LibFolder;
 typedef ffi::LibMetadata LibMetadata;
 typedef ffi::Label Label;
+typedef ffi::Managed Managed;
 typedef ffi::Notification LibNotification;
-
+typedef ffi::NotificationType NotificationType;
+typedef ffi::Np Np;
 }
 
 #endif

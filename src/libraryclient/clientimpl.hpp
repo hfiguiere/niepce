@@ -48,7 +48,7 @@ public:
     eng::tid_t queryFolderContent(eng::library_id_t id);
     eng::tid_t countFolder(eng::library_id_t id);
     eng::tid_t requestMetadata(eng::library_id_t id);
-    eng::tid_t setMetadata(eng::library_id_t id, int meta,
+    eng::tid_t setMetadata(eng::library_id_t id, eng::Np meta,
                            const fwk::PropertyValuePtr & value);
     eng::tid_t write_metadata(eng::library_id_t file_id);
 
@@ -64,8 +64,8 @@ public:
 
     eng::tid_t processXmpUpdateQueue(bool write_xmp);
 
-    eng::tid_t importFile(const std::string & path, eng::LibraryManaged manage);
-    eng::tid_t importFromDirectory(const std::string & dir, eng::LibraryManaged manage);
+    eng::tid_t importFile(const std::string & path, eng::Managed manage);
+    eng::tid_t importFromDirectory(const std::string & dir, eng::Managed manage);
 
 protected:
     const fwk::Moniker m_moniker;

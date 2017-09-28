@@ -26,7 +26,6 @@
 #include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
 #include "fwk/base/propertybag.hpp"
-#include "fwk/utils/exempi.hpp"
 
 #include "rust_bindings.hpp"
 

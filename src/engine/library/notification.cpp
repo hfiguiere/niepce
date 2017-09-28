@@ -19,7 +19,6 @@
  */
 
 #include "engine/library/notification.hpp"
-#include "engine/db/keyword.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "niepce/notifications.hpp"

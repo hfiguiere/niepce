@@ -33,19 +33,13 @@
 
 namespace eng {
 
-enum class LibFileType {
-    UNKNOWN = 0,
-    RAW = 1,
-    RAW_JPEG = 2,
-    IMAGE = 3,
-    VIDEO = 4
-};
-
 #if !RUST_BINDGEN
-LibFileType mimetype_to_filetype(fwk::MimeType mime);
+ffi::FileType mimetype_to_filetype(fwk::MimeType mime);
 #endif
 
+#if RUST_BINDGEN
 class LibFile;
+#endif
 typedef std::shared_ptr<LibFile> LibFilePtr;
 typedef std::weak_ptr<LibFile> LibFileWeakPtr;
 typedef std::list<LibFilePtr> LibFileList;
@@ -54,25 +48,6 @@ typedef std::shared_ptr<LibFileList> LibFileListPtr;
 LibFilePtr libfile_new(library_id_t, library_id_t, library_id_t, const char *,
                        const char *);
 LibFilePtr libfile_wrap(LibFile *);
-}
-
-extern "C" {
-const char *engine_db_libfile_path(const eng::LibFile *);
-eng::library_id_t engine_db_libfile_id(const eng::LibFile *);
-eng::library_id_t engine_db_libfile_folderid(const eng::LibFile *);
-int32_t engine_db_libfile_orientation(const eng::LibFile *);
-int32_t engine_db_libfile_rating(const eng::LibFile *);
-int32_t engine_db_libfile_label(const eng::LibFile *);
-int32_t engine_db_libfile_flag(const eng::LibFile *);
-int32_t engine_db_libfile_property(const eng::LibFile *, fwk::PropertyIndex);
-eng::LibFileType engine_db_libfile_file_type(const eng::LibFile *);
-void engine_db_libfile_set_orientation(eng::LibFile *, int32_t);
-void engine_db_libfile_set_rating(eng::LibFile *, int32_t);
-void engine_db_libfile_set_label(eng::LibFile *, int32_t);
-void engine_db_libfile_set_flag(eng::LibFile *, int32_t);
-void engine_db_libfile_set_property(const eng::LibFile *, fwk::PropertyIndex,
-                                    int32_t);
-void engine_db_libfile_set_file_type(eng::LibFile *, eng::LibFileType);
 }
 
 /*

@@ -41,7 +41,3 @@ typedef std::shared_ptr<KeywordList> KeywordListPtr;
 KeywordPtr keyword_new(eng::library_id_t id, const char* keyword);
 KeywordPtr keyword_wrap(Keyword*);
 }
-
-extern "C" eng::library_id_t engine_db_keyword_id(const eng::Keyword*);
-extern "C" const char* engine_db_keyword_keyword(const eng::Keyword*);
-

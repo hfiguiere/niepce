@@ -133,7 +133,7 @@ bool CameraImporter::do_import(const std::string& source, const std::string& des
                                                   imported_camera_file->name(),
                                                   output_path)) {
                     // XXX else report error.
-                    importer(output_path, IImporter::Import::SINGLE, LibraryManaged::NO);
+                    importer(output_path, IImporter::Import::SINGLE, Managed::NO);
                 }
             }
             return true;

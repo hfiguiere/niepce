@@ -28,7 +28,7 @@ use root::eng::QueriedContent;
 
 pub type Content = QueriedContent;
 
-#[repr(C)]
+#[repr(i32)]
 #[allow(non_camel_case_types)]
 pub enum NotificationType {
     NONE = 0,
@@ -122,7 +122,7 @@ pub extern "C" fn engine_library_notification_delete(n: *mut Notification) {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_library_notification_type(n: *const Notification) -> i32 {
+pub extern "C" fn engine_library_notification_type(n: *const Notification) -> NotificationType {
     let t = match unsafe { n.as_ref() } {
         Some(&Notification::AddedFile) => NotificationType::ADDED_FILE,
         Some(&Notification::AddedFiles) => NotificationType::ADDED_FILES,
@@ -143,7 +143,7 @@ pub extern "C" fn engine_library_notification_type(n: *const Notification) -> i3
         Some(&Notification::XmpNeedsUpdate) => NotificationType::XMP_NEEDS_UPDATE,
         None => unreachable!(),
     };
-    t as i32
+    t
 }
 
 

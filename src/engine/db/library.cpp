@@ -19,16 +19,12 @@
 
 #include "library.hpp"
 
-extern "C" eng::Library *engine_db_library_new(const char *dir,
-                                               uint64_t notif_id);
-extern "C" void engine_db_library_delete(eng::Library *);
-
 namespace eng {
 
 LibraryPtr library_new(const char *dir, uint64_t notif_id)
 {
-    return LibraryPtr(engine_db_library_new(dir, notif_id),
-                      &engine_db_library_delete);
+    return LibraryPtr(ffi::engine_db_library_new(dir, notif_id),
+                      &ffi::engine_db_library_delete);
 }
 }
 /*

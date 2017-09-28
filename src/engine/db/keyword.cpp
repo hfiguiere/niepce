@@ -20,17 +20,14 @@
 
 #include "keyword.hpp"
 
-extern "C" eng::Keyword* engine_db_keyword_new(eng::library_id_t id, const char* keyword);
-extern "C" void engine_db_keyword_delete(eng::Keyword*);
-
 namespace eng {
 
 KeywordPtr keyword_new(eng::library_id_t id, const char* keyword) {
-  return keyword_wrap(engine_db_keyword_new(id, keyword));
+  return keyword_wrap(ffi::engine_db_keyword_new(id, keyword));
 }
 
 KeywordPtr keyword_wrap(eng::Keyword* kw) {
-  return KeywordPtr(kw, &engine_db_keyword_delete);
+  return KeywordPtr(kw, &ffi::engine_db_keyword_delete);
 }
 
 }

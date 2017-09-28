@@ -44,7 +44,13 @@ use engine::library::notification::engine_library_notify;
 use fwk;
 use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
-pub use root::eng::LibraryManaged as Managed;
+
+#[repr(i32)]
+#[derive(PartialEq,Clone)]
+pub enum Managed {
+    NO = 0,
+    YES = 1
+}
 
 const DB_SCHEMA_VERSION: i32 = 6;
 const DATABASENAME: &str = "niepcelibrary.db";
@@ -820,7 +826,7 @@ impl Library {
 }
 
 #[no_mangle]
-pub extern fn engine_db_library_new(path: *const c_char, notif_id: u64) -> *mut Library {
+pub extern "C" fn engine_db_library_new(path: *const c_char, notif_id: u64) -> *mut Library {
     let l = Box::new(
         Library::new(PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy()),
                      notif_id));
@@ -828,12 +834,12 @@ pub extern fn engine_db_library_new(path: *const c_char, notif_id: u64) -> *mut 
 }
 
 #[no_mangle]
-pub extern fn engine_db_library_delete(l: *mut Library) {
+pub extern "C" fn engine_db_library_delete(l: *mut Library) {
     unsafe { Box::from_raw(l); }
 }
 
 #[no_mangle]
-pub extern fn engine_db_library_ok(l: &Library) -> bool {
+pub extern "C" fn engine_db_library_ok(l: &Library) -> bool {
     l.is_ok()
 }
 

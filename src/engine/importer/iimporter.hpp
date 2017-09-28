@@ -28,6 +28,8 @@
 #include "engine/db/library.hpp"
 #include "engine/importer/importedfile.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace eng {
 
 /**
@@ -57,7 +59,7 @@ public:
         DIRECTORY
     };
     /** file importer callback */
-    typedef std::function<void (const std::string&, Import, LibraryManaged)> FileImporter;
+    typedef std::function<void (const std::string&, Import, Managed)> FileImporter;
     /** perform import from source
      * @param source the source identified by a string.
      * @param dest_dir the suggested destination directory is the importer needs to copy

@@ -27,14 +27,12 @@ use rusqlite;
 pub struct Keyword {
     id: LibraryId,
     keyword: String,
-    pub cstr: CString,
 }
 
 impl Keyword {
     pub fn new(id: LibraryId, keyword: &str) -> Keyword {
         Keyword {
             id: id, keyword: String::from(keyword),
-            cstr: CString::new("").unwrap()
         }
     }
 
@@ -69,14 +67,14 @@ pub extern fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Key
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_id(this: &Keyword) -> i64 {
-    this.id() as i64
+pub extern fn engine_db_keyword_id(obj: &Keyword) -> i64 {
+    obj.id() as i64
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_keyword(this: &mut Keyword) -> *const c_char {
-    this.cstr = CString::new(this.keyword().clone()).unwrap();
-    this.cstr.as_ptr()
+pub extern fn engine_db_keyword_keyword(obj: &Keyword) -> *mut c_char {
+    let cstr = CString::new(obj.keyword().clone()).unwrap();
+    cstr.into_raw()
 }
 
 #[no_mangle]

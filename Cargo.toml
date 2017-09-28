@@ -15,7 +15,7 @@ gio = "0.2.0"
 
 [build-dependencies]
 bindgen = "0.30.0"
-cbindgen = "0.1.23"
+cbindgen = { version = "0.1.23", git = "https://github.com/eqrion/cbindgen.git" }
 pkg-config = "0.3.9"
 
 [lib]

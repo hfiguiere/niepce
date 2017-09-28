@@ -148,24 +148,24 @@ pub extern fn engine_db_filebundle_delete(fb: *mut FileBundle) {
 }
 
 #[no_mangle]
-pub extern fn engine_db_filebundle_sidecar(this: &mut FileBundle) -> *const c_char {
-    this.xmp_sidecar_c = CString::new(this.sidecar()).unwrap();
-    this.xmp_sidecar_c.as_ptr()
+pub extern fn engine_db_filebundle_sidecar(obj: &mut FileBundle) -> *const c_char {
+    obj.xmp_sidecar_c = CString::new(obj.sidecar()).unwrap();
+    obj.xmp_sidecar_c.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_filebundle_main(this: &mut FileBundle) -> *const c_char {
-    this.main_c = CString::new(this.main()).unwrap();
-    this.main_c.as_ptr()
+pub extern fn engine_db_filebundle_main(obj: &mut FileBundle) -> *const c_char {
+    obj.main_c = CString::new(obj.main()).unwrap();
+    obj.main_c.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_filebundle_jpeg(this: &mut FileBundle) -> *const c_char {
-    this.jpeg_c = CString::new(this.jpeg()).unwrap();
-    this.jpeg_c.as_ptr()
+pub extern fn engine_db_filebundle_jpeg(obj: &mut FileBundle) -> *const c_char {
+    obj.jpeg_c = CString::new(obj.jpeg()).unwrap();
+    obj.jpeg_c.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_filebundle_add(this: &mut FileBundle, f: *const c_char) -> c_char {
-    this.add(&*unsafe { CStr::from_ptr(f) }.to_string_lossy()) as c_char
+pub extern fn engine_db_filebundle_add(obj: &mut FileBundle, f: *const c_char) -> c_char {
+    obj.add(&*unsafe { CStr::from_ptr(f) }.to_string_lossy()) as c_char
 }

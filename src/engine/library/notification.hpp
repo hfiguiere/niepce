@@ -28,47 +28,27 @@
 
 #include "rust_bindings.hpp"
 
+namespace ffi {
+#if RUST_BINDGEN
+class LibFile;
+#endif
+}
+
 namespace eng {
 
 #if RUST_BINDGEN
-class Keyword;
-class Label;
-class LibFolder;
-class LibMetadata;
 class LibNotification;
 #endif
 
 typedef std::shared_ptr<eng::LibNotification> LibNotificationPtr;
-class MetadataChange;
-class FolderCount;
-class FileMove;
-
-enum class LibNotificationType {
-    NONE = 0,
-    NEW_LIBRARY_CREATED,
-    ADDED_FOLDER,
-    ADDED_FILE,
-    ADDED_FILES,
-    ADDED_KEYWORD,
-    ADDED_LABEL,
-    FOLDER_CONTENT_QUERIED,
-    KEYWORD_CONTENT_QUERIED,
-    METADATA_QUERIED,
-    METADATA_CHANGED,
-    LABEL_CHANGED,
-    LABEL_DELETED,
-    XMP_NEEDS_UPDATE,
-    FOLDER_COUNTED,
-    FOLDER_COUNT_CHANGE,
-    FILE_MOVED
-};
 
 struct QueriedContent {
     library_id_t container;
     LibFileListPtr files;
 
     QueriedContent(library_id_t container);
-    void push(LibFile*);
+    // void instead of LibFile because bindgen fail to generate the proper type
+    void push(void*);
 };
 
 }

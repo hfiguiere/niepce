@@ -20,10 +20,8 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .whitelisted_type("eng::NiepceProperties")
-        .whitelisted_type("eng::LibFileType")
         .whitelisted_type("eng::QueriedContent")
         .opaque_type("eng::QueriedContent")
-        .whitelisted_type("eng::LibraryManaged")
         .whitelisted_type("fwk::FileList")
         .whitelisted_type("eng::IndexToXmp")
         .whitelisted_function("eng::property_index_to_xmp")

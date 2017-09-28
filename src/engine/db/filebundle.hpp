@@ -24,9 +24,14 @@
 
 #include "fwk/utils/files.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace eng {
 
+#if RUST_BINDGEN
 class FileBundle;
+#endif
+
 typedef std::shared_ptr<FileBundle> FileBundlePtr;
 typedef std::list<FileBundlePtr> FileBundleList;
 typedef std::shared_ptr<FileBundleList> FileBundleListPtr;
@@ -35,11 +40,6 @@ FileBundleListPtr filebundle_filter_bundles(const fwk::FileList::Ptr & files);
 
 FileBundlePtr filebundle_new();
 }
-
-extern "C" const char* engine_db_filebundle_sidecar(const eng::FileBundle*);
-extern "C" const char* engine_db_filebundle_main(const eng::FileBundle*);
-extern "C" const char* engine_db_filebundle_jpeg(const eng::FileBundle*);
-extern "C" bool engine_db_filebundle_add(eng::FileBundle*, const char*);
 
 /*
   Local Variables:

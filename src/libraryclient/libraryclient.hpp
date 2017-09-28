@@ -87,13 +87,13 @@ public:
      * @param path the file path
      * @param manage true if imported file have to be managed
      */
-    void importFile(const std::string & path, eng::LibraryManaged manage);
+    void importFile(const std::string & path, eng::Managed manage);
 
     /** Import files from a directory
      * @param dir the directory
      * @param manage true if imports have to be managed
      */
-    void importFromDirectory(const std::string & dir, eng::LibraryManaged manage);
+    void importFromDirectory(const std::string & dir, eng::Managed manage);
 
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }

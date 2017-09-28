@@ -21,15 +21,17 @@
 
 #include <memory>
 
+#include "rust_bindings.hpp"
+
 namespace eng {
 
+#if RUST_BINDGEN
 class Library;
+#endif
 typedef std::shared_ptr<Library> LibraryPtr;
 
 LibraryPtr library_new(const char *dir, uint64_t notif_id);
 
-/** Whether to import managed. */
-enum class LibraryManaged { NO = 0, YES };
 }
 
 extern "C" bool engine_db_library_ok(const eng::Library *library);
