@@ -31,7 +31,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/autoflag.hpp"
-#include "fwk/base/fractions.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
@@ -267,7 +266,7 @@ bool MetaDataWidget::set_fraction_dec_data(Gtk::Widget* w,
         const std::string str_value = fwk::property_value_get_string(value);
         DBG_OUT("set fraction dec %s", str_value.c_str());
         std::string frac = str(boost::format("%.1f")
-                               % fwk_fraction_to_decimal(str_value.c_str()));
+                               % ffi::fwk_fraction_to_decimal(str_value.c_str()));
         AutoFlag flag(m_update);
         static_cast<Gtk::Label*>(w)->set_text(frac);
     }
