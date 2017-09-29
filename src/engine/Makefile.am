@@ -46,7 +46,6 @@ libniepceengine_a_SOURCES = \
 	db/properties-def.hpp \
 	library/clienttypes.hpp \
 	library/op.hpp library/op.cpp  \
-	library/commands.hpp \
 	library/thumbnailcache.hpp library/thumbnailcache.cpp \
 	library/thumbnailnotification.hpp \
 	importer/iimporter.hpp \
