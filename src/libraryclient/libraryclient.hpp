@@ -27,7 +27,6 @@
 #include "fwk/base/util.hpp"
 #include "engine/library/clienttypes.hpp"
 #include "engine/library/thumbnailcache.hpp"
-#include "engine/db/library.hpp"
 #include "engine/db/librarytypes.hpp"
 
 namespace fwk {

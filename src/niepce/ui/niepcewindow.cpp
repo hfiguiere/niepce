@@ -38,7 +38,6 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/undo.hpp"
-#include "engine/db/library.hpp"
 #include "engine/importer/iimporter.hpp"
 #include "libraryclient/uidataprovider.hpp"
 

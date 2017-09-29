@@ -24,7 +24,6 @@
 #include <string>
 
 #include "fwk/base/moniker.hpp"
-#include "engine/db/library.hpp"
 #include "engine/library/clienttypes.hpp"
 #include "engine/library/op.hpp"
 

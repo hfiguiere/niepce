@@ -21,7 +21,6 @@
 #pragma once
 
 #include "fwk/utils/files.hpp"
-#include "engine/db/library.hpp"
 
 extern "C" {
     bool cmd_list_all_keywords(eng::Library* lib);

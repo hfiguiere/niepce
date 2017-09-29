@@ -29,7 +29,6 @@
 #include <gtkmm/treestore.h>
 
 #include "fwk/base/propertybag.hpp"
-#include "engine/db/library.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
 #include "niepce/ui/imoduleshell.hpp"

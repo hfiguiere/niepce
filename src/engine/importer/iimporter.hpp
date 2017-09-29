@@ -25,7 +25,6 @@
 #include <functional>
 
 #include "fwk/toolkit/thumbnail.hpp"
-#include "engine/db/library.hpp"
 #include "engine/importer/importedfile.hpp"
 
 #include "rust_bindings.hpp"

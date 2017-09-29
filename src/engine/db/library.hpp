@@ -34,8 +34,6 @@ LibraryPtr library_new(const char *dir, uint64_t notif_id);
 
 }
 
-extern "C" bool engine_db_library_ok(const eng::Library *library);
-
 /*
   Local Variables:
   mode:c++
