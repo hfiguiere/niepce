@@ -19,20 +19,17 @@
 
 #include "label.hpp"
 
-extern "C" {
-void engine_db_label_delete(eng::Label*);
-eng::Label* engine_db_label_clone(const eng::Label*);
-}
+#include "rust_bindings.hpp"
 
 namespace eng {
 
 LabelPtr label_wrap(Label* l)
 {
-    return LabelPtr(l, &engine_db_label_delete);
+  return LabelPtr(l, &ffi::engine_db_label_delete);
 }
 
 LabelPtr label_clone(const Label* l)
 {
-    return label_wrap(engine_db_label_clone(l));
+  return label_wrap(ffi::engine_db_label_clone(l));
 }
 }

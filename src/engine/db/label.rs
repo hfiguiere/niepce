@@ -85,32 +85,32 @@ impl FromDb for Label {
 
 
 #[no_mangle]
-pub fn engine_db_label_delete(l: *mut Label) {
+pub extern fn engine_db_label_delete(l: *mut Label) {
     unsafe { Box::from_raw(l) };
 }
 
 #[no_mangle]
-pub fn engine_db_label_clone(l: &Label) -> *mut Label {
+pub extern fn engine_db_label_clone(l: &Label) -> *mut Label {
     Box::into_raw(Box::new(l.clone()))
 }
 
 #[no_mangle]
-pub fn engine_db_label_id(l: &Label) -> LibraryId {
+pub extern fn engine_db_label_id(l: &Label) -> LibraryId {
     l.id()
 }
 
 #[no_mangle]
-pub fn engine_db_label_label(this: &mut Label) -> *const c_char {
+pub extern fn engine_db_label_label(obj: &mut Label) -> *const c_char {
     let cstr;
     {
-        let s = this.label();
+        let s = obj.label();
         cstr = CString::new(s).unwrap();
     }
-    this.cstr = cstr;
-    this.cstr.as_ptr()
+    obj.cstr = cstr;
+    obj.cstr.as_ptr()
 }
 
 #[no_mangle]
-pub fn engine_db_label_colour(l: &Label) -> *const RgbColour {
+pub extern fn engine_db_label_colour(l: &Label) -> *const RgbColour {
     l.colour()
 }

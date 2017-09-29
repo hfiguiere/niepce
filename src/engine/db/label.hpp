@@ -41,12 +41,6 @@ LabelPtr label_wrap(Label*);
 LabelPtr label_clone(const Label*);
 }
 
-extern "C" {
-eng::library_id_t engine_db_label_id(const eng::Label*);
-const fwk::RgbColour* engine_db_label_colour(const eng::Label*);
-const char* engine_db_label_label(const eng::Label*);
-}
-
 /*
   Local Variables:
   mode:c++
