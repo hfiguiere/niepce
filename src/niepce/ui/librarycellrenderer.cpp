@@ -23,7 +23,6 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/widgets/ratinglabel.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
-#include "engine/db/label.hpp"
 #include "libraryclient/uidataprovider.hpp"
 #include "librarycellrenderer.hpp"
 #include "imoduleshell.hpp"

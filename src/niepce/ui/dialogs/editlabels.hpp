@@ -27,7 +27,6 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 
-#include "engine/db/label.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/dialog.hpp"
 

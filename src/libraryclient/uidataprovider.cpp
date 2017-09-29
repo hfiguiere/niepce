@@ -22,7 +22,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/colour.hpp"
-#include "engine/db/label.hpp"
 #include "uidataprovider.hpp"
 
 

@@ -27,7 +27,6 @@
 #include <cairomm/surface.h>
 
 #include "engine/db/libfile.hpp"
-#include "engine/db/label.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 
 namespace ui {

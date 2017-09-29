@@ -31,7 +31,6 @@
 
 #include "fwk/toolkit/appframe.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
-#include "engine/db/label.hpp"
 #include "engine/library/notification.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "ui/moduleshell.hpp"
