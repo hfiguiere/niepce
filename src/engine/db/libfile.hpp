@@ -21,15 +21,12 @@
 
 #include <list>
 #include <memory>
-#include <string>
 
 #if !RUST_BINDGEN
 #include "fwk/toolkit/mimetype.hpp"
 #endif
 
-#include "engine/db/keyword.hpp"
-#include "engine/db/librarytypes.hpp"
-#include "fwk/base/propertybag.hpp"
+#include "rust_bindings.hpp"
 
 namespace eng {
 
@@ -39,6 +36,7 @@ ffi::FileType mimetype_to_filetype(fwk::MimeType mime);
 
 #if RUST_BINDGEN
 class LibFile;
+typedef int64_t library_id_t;
 #endif
 typedef std::shared_ptr<LibFile> LibFilePtr;
 typedef std::weak_ptr<LibFile> LibFileWeakPtr;

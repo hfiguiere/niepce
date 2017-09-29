@@ -26,7 +26,6 @@
 
 #include "fwk/base/debug.hpp"
 #include "niepce/notifications.hpp"
-#include "engine/db/librarytypes.hpp"
 #include "engine/library/notification.hpp"
 #include "libraryclient/libraryclient.hpp"
 #include "fwk/toolkit/application.hpp"

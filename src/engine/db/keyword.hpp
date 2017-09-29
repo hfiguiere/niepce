@@ -23,8 +23,6 @@
 #include <vector>
 #include <memory>
 
-#include "engine/db/librarytypes.hpp"
-
 #include "rust_bindings.hpp"
 
 // just a rust interface.

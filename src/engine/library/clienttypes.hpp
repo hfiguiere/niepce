@@ -1,7 +1,7 @@
 /*
  * niepce - library/clienttypes.h
  *
- * Copyright (C) 2007 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARY_CLIENTTYPES_H_
-#define _LIBRARY_CLIENTTYPES_H_
-
-#include "fwk/base/propertybag.hpp"
-#include "engine/db/librarytypes.hpp"
+#pragma once
 
 namespace eng {
 
-  typedef int tid_t; /**< transaction ID */
+typedef int32_t tid_t; /**< transaction ID */
 
 }
-
-
-#endif

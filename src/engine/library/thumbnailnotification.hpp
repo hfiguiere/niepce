@@ -18,11 +18,11 @@
  */
 
 
-#ifndef _LIBRARY_THUMBNAILNOTIFICATION_H__
-#define _LIBRARY_THUMBNAILNOTIFICATION_H__
+#pragma once
 
 #include "fwk/toolkit/thumbnail.hpp"
-#include "engine/db/librarytypes.hpp"
+
+#include "rust_bindings.hpp"
 
 namespace eng {
 
@@ -35,5 +35,3 @@ struct ThumbnailNotification
 };
 
 }
-
-#endif

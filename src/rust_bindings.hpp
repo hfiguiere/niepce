@@ -51,6 +51,7 @@ typedef ffi::RgbColour RgbColour;
 }
 
 namespace eng {
+typedef ffi::LibraryId library_id_t; // XXX change this to LibraryId
 typedef ffi::FileType FileType;
 typedef ffi::Library Library;
 typedef ffi::FileBundle FileBundle;

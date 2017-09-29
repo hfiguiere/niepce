@@ -23,7 +23,6 @@
 #include <string>
 #include <vector>
 
-#include "engine/db/librarytypes.hpp"
 #include "engine/db/metadata.hpp"
 #include "fwk/base/propertybag.hpp"
 

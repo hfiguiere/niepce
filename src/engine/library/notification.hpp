@@ -23,8 +23,6 @@
 #include <memory>
 
 #include "engine/db/libfile.hpp"
-#include "engine/db/librarytypes.hpp"
-#include "engine/library/clienttypes.hpp"
 
 #include "rust_bindings.hpp"
 

@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/op.h
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __NIEPCE_LIBRARY_OP_H__
-#define __NIEPCE_LIBRARY_OP_H__
+#pragma once
 
 #include <memory>
 #include <functional>
 
 #include "engine/library/clienttypes.hpp"
+
+#include "rust_bindings.hpp"
 
 namespace eng {
 
@@ -50,9 +50,6 @@ private:
 };
 
 }
-
-
-#endif
 /*
   Local Variables:
   mode:c++

@@ -23,8 +23,6 @@
 #include <memory>
 #include <string>
 
-#include "engine/db/librarytypes.hpp"
-
 #include "rust_bindings.hpp"
 
 namespace eng {
