@@ -54,7 +54,6 @@ namespace eng {
 typedef ffi::LibraryId library_id_t; // XXX change this to LibraryId
 typedef ffi::FileType FileType;
 typedef ffi::Library Library;
-typedef ffi::FileBundle FileBundle;
 typedef ffi::Keyword Keyword;
 typedef ffi::LibFile LibFile;
 typedef ffi::LibFolder LibFolder;

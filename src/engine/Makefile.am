@@ -4,7 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/  @FRAMEWORK_CFLAGS@ \
 	@GPHOTO_CFLAGS@ \
 	$(NULL)
 
-TESTS = test_filebundle test_opqueue
+TESTS = test_opqueue
 
 TEST_LIBS =  \
 	libniepceengine.a \
@@ -20,10 +20,7 @@ TEST_LIBS =  \
 	$(NULL)
 
 
-check_PROGRAMS = test_filebundle test_opqueue
-
-test_filebundle_SOURCES = db/test_filebundle.cpp
-test_filebundle_LDADD = $(TEST_LIBS)
+check_PROGRAMS = test_opqueue
 
 test_opqueue_SOURCES = library/test_opqueue.cpp library/opqueue.hpp
 test_opqueue_LDADD = $(TEST_LIBS)
@@ -39,7 +36,6 @@ libniepceengine_a_SOURCES = \
 	db/keyword.hpp db/keyword.cpp \
 	db/storage.hpp \
 	db/fsfile.hpp \
-	db/filebundle.hpp db/filebundle.cpp \
 	db/metadata.hpp \
 	db/properties.hpp db/properties.cpp \
 	db/properties-def.hpp \

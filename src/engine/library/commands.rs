@@ -92,10 +92,19 @@ pub extern "C" fn cmd_import_file(lib: &Library, file_path: *const c_char, manag
 }
 
 #[no_mangle]
-pub extern "C" fn cmd_import_files(lib: &Library, folder: *const c_char, files: &mut FileList,
+pub extern "C" fn cmd_import_files(lib: &Library, folder: *const c_char, cfiles: &mut FileList,
                         manage: Managed) -> bool {
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
+    let mut files: Vec<String> = vec!();
+    {
+        let len = unsafe { cfiles.size() };
+        for i in 0..len {
+            let f = unsafe { cfiles.at_cstr(i) };
+            let cstr = unsafe { CStr::from_ptr(f) }.to_string_lossy();
+            files.push(String::from(cstr));
+        }
+    }
     let bundles = FileBundle::filter_bundles(files);
     let libfolder: LibFolder;
     let folder = unsafe { CStr::from_ptr(folder) }.to_string_lossy();

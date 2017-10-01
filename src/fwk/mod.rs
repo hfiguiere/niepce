@@ -41,8 +41,6 @@ pub use self::toolkit::mimetype::{
     MimeType
 };
 
-pub use root::fwk::FileList;
-
 use std::f64;
 use std::ffi::CStr;
 use libc::c_char;
