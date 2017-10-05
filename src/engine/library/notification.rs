@@ -103,6 +103,7 @@ pub enum Notification {
 }
 
 #[cfg(not(test))]
+#[allow(improper_ctypes)]
 extern "C" {
     // actually a *mut Notification
     pub fn engine_library_notify(notif_id: u64, n: *mut Notification);
