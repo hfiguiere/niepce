@@ -1,7 +1,7 @@
 /*
- * niepce - engine/db/library.cpp
+ * niepce - engine/library/op.rs
  *
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "library.hpp"
+use std::sync::Arc;
 
-namespace eng {
+use engine::db::Library;
 
-LibraryPtr library_new(const char *dir, uint64_t notif_id)
-{
-    return LibraryPtr(ffi::engine_db_library_new(dir, notif_id),
-                      &ffi::engine_db_library_delete);
+
+pub struct Op {
+    op: Arc<Fn(&Library) -> bool + Send + Sync + 'static>
 }
+
+impl Op {
+    pub fn new<F>(f: F) -> Op
+        where F: Fn(&Library) -> bool + Send + Sync + 'static {
+        Op { op: Arc::new(f) }
+    }
+
+    pub fn execute(self, lib: &Library) -> bool {
+        (self.op)(lib)
+    }
 }
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/

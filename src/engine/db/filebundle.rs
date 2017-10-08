@@ -41,13 +41,16 @@ impl FileBundle {
         }
     }
 
-    pub fn filter_bundles(mut files: Vec<String>) -> Vec<FileBundle> {
+    pub fn filter_bundles(files: &Vec<String>) -> Vec<FileBundle> {
         let mut bundles: Vec<FileBundle> = vec!();
-        files.sort();
+        let mut sorted_files : Vec<&String> = files
+            .iter()
+            .collect();
+        sorted_files.sort();
         let mut current_base = OsString::new();
         let mut current_bundle: Option<FileBundle> = None;
 
-        for f in files {
+        for f in sorted_files {
             let path = Path::new(&f);
             if let Some(basename) = path.file_stem() {
                 if basename == current_base {
@@ -133,7 +136,7 @@ mod test {
         thelist.push(String::from("/foo/bar/dcs_0001.nef"));
         thelist.push(String::from("/foo/bar/dcs_0001.xmp"));
 
-        let bundles_list = FileBundle::filter_bundles(thelist);
+        let bundles_list = FileBundle::filter_bundles(&thelist);
 
         assert!(bundles_list.len() == 2);
         let mut iter = bundles_list.iter();

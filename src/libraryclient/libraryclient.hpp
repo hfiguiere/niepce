@@ -25,7 +25,6 @@
 
 #include "fwk/base/propertybag.hpp"
 #include "fwk/base/util.hpp"
-#include "engine/library/clienttypes.hpp"
 #include "engine/library/thumbnailcache.hpp"
 
 namespace fwk {
@@ -48,38 +47,35 @@ public:
     // @return false in case of error.
     bool ok() const;
 
-    static eng::tid_t newTid();
     /** get all the keywords
-     * @return transaction ID
      */
-    eng::tid_t getAllKeywords();
+    void getAllKeywords();
     /** get all the folder
-     * @return transaction ID
      */
-    eng::tid_t getAllFolders();
+    void getAllFolders();
 
-    eng::tid_t queryFolderContent(eng::library_id_t id);
-    eng::tid_t queryKeywordContent(eng::library_id_t id);
-    eng::tid_t countFolder(eng::library_id_t id);
-    eng::tid_t requestMetadata(eng::library_id_t id);
+    void queryFolderContent(eng::library_id_t id);
+    void queryKeywordContent(eng::library_id_t id);
+    void countFolder(eng::library_id_t id);
+    void requestMetadata(eng::library_id_t id);
 
     /** set the metadata */
-    eng::tid_t setMetadata(eng::library_id_t id, fwk::PropertyIndex meta,
+    void setMetadata(eng::library_id_t id, fwk::PropertyIndex meta,
                            const fwk::PropertyValuePtr & value);
-    eng::tid_t moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
+    void moveFileToFolder(eng::library_id_t file_id, eng::library_id_t from_folder,
                                 eng::library_id_t to_folder);
-    eng::tid_t write_metadata(eng::library_id_t file_id);
+    void write_metadata(eng::library_id_t file_id);
 
     /** get all the labels */
-    eng::tid_t getAllLabels();
-    eng::tid_t createLabel(const std::string & s, const std::string & color);
-    eng::tid_t deleteLabel(int id);
+    void getAllLabels();
+    void createLabel(const std::string & s, const std::string & color);
+    void deleteLabel(int id);
     /** update a label */
-    eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name,
+    void updateLabel(eng::library_id_t id, const std::string & new_name,
                            const std::string & new_color);
 
     /** tell to process the Xmp update Queue */
-    eng::tid_t processXmpUpdateQueue(bool write_xmp);
+    void processXmpUpdateQueue(bool write_xmp);
 
     /** Import file
      * @param path the file path

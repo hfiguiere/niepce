@@ -1,10 +1,7 @@
 
-
 AM_CPPFLAGS = -I$(top_srcdir)/src/  @FRAMEWORK_CFLAGS@ \
 	@GPHOTO_CFLAGS@ \
 	$(NULL)
-
-TESTS = test_opqueue
 
 TEST_LIBS =  \
 	libniepceengine.a \
@@ -19,16 +16,9 @@ TEST_LIBS =  \
 	-ldl \
 	$(NULL)
 
-
-check_PROGRAMS = test_opqueue
-
-test_opqueue_SOURCES = library/test_opqueue.cpp library/opqueue.hpp
-test_opqueue_LDADD = $(TEST_LIBS)
-
 noinst_LIBRARIES = libniepceengine.a libniepceengineglue.a
 
 libniepceengine_a_SOURCES = \
-	db/library.hpp db/library.cpp \
 	db/libfile.hpp db/libfile.cpp \
 	db/libfolder.hpp db/libfolder.cpp \
 	db/label.hpp db/label.cpp \
@@ -40,7 +30,6 @@ libniepceengine_a_SOURCES = \
 	db/properties.hpp db/properties.cpp \
 	db/properties-def.hpp \
 	library/clienttypes.hpp \
-	library/op.hpp library/op.cpp  \
 	library/thumbnailcache.hpp library/thumbnailcache.cpp \
 	library/thumbnailnotification.hpp \
 	importer/iimporter.hpp \

@@ -132,7 +132,10 @@ void EditLabels::update_labels(int /*response*/)
             } else {
                 undo->new_command<int>(
                     [libclient, new_name, new_colour] () {
-                        return libclient->createLabel(new_name, new_colour);
+                        libclient->createLabel(new_name, new_colour);
+                        return 0; // XXX this is wrong. This was wrong before/
+                        // We need to figure out how to get he new label id to be able
+                        // To cancel it.
                     },
                     [libclient] (int label) {
                         libclient->deleteLabel(label);

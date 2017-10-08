@@ -1,7 +1,7 @@
 /*
- * niepce - engine/library/op.cpp
+ * niepce - libraryclient/mod.rs
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +17,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "op.hpp"
-
-namespace eng {
-
-Op::Op(tid_t _id, const Function & func)
-    : m_id(_id),
-      m_function(func)
-{
-}
-
-void Op::operator() (Library* l)
-{
-    if(m_function) {
-        m_function(l);
-    }
-}
-
-}
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
+pub mod clientimpl;

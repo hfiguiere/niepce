@@ -4,8 +4,6 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @FRAMEWORK_CFLAGS@
 
 noinst_LIBRARIES = liblibraryclient.a
 
-check_PROGRAMS = test_worker
-TESTS = test_worker
 TEST_LIBS =  \
 	liblibraryclient.a \
 	$(top_builddir)/src/engine/libniepceengine.a \
@@ -20,11 +18,7 @@ TEST_LIBS =  \
 	-ldl \
 	$(NULL)
 
-test_worker_SOURCES = test_worker.cpp
-test_worker_LDADD = $(TEST_LIBS)
-
 liblibraryclient_a_SOURCES = libraryclient.hpp  libraryclient.cpp \
 	clientimpl.hpp clientimpl.cpp \
-	locallibraryserver.hpp locallibraryserver.cpp \
 	uidataprovider.hpp uidataprovider.cpp \
 	$(NULL)

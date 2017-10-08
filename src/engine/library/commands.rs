@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_char;
-use std::ffi::CStr;
 use std::os::raw::c_void;
 use std::path::Path;
 
@@ -39,10 +37,8 @@ use super::notification::{
     MetadataChange,
 };
 use root::eng::NiepceProperties as Np;
-use root::fwk::FileList;
 
-#[no_mangle]
-pub extern "C" fn cmd_list_all_keywords(lib: &Library) -> bool {
+pub fn cmd_list_all_keywords(lib: &Library) -> bool {
     let list = lib.get_all_keywords();
     // XXX change this to "LoadKeywords"
     for kw in list {
@@ -51,8 +47,7 @@ pub extern "C" fn cmd_list_all_keywords(lib: &Library) -> bool {
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_list_all_folders(lib: &Library) -> bool {
+pub fn cmd_list_all_folders(lib: &Library) -> bool {
     let list = lib.get_all_folders();
     // XXX change this to "LoadedFodlers"
     for folder in list {
@@ -61,16 +56,13 @@ pub extern "C" fn cmd_list_all_folders(lib: &Library) -> bool {
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_import_file(lib: &Library, file_path: *const c_char, manage: Managed) -> bool {
+pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
-    let path = String::from(unsafe { CStr::from_ptr(file_path) }.to_string_lossy());
-
     let mut bundle = FileBundle::new();
-    bundle.add(&path);
+    bundle.add(path);
 
-    let folder = Path::new(&path).parent().unwrap_or(Path::new(""));
+    let folder = Path::new(path).parent().unwrap_or(Path::new(""));
 
     let libfolder: LibFolder;
     match lib.get_folder(&*folder.to_string_lossy()) {
@@ -91,28 +83,17 @@ pub extern "C" fn cmd_import_file(lib: &Library, file_path: *const c_char, manag
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_import_files(lib: &Library, folder: *const c_char, cfiles: &mut FileList,
+pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
                         manage: Managed) -> bool {
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
-    let mut files: Vec<String> = vec!();
-    {
-        let len = unsafe { cfiles.size() };
-        for i in 0..len {
-            let f = unsafe { cfiles.at_cstr(i) };
-            let cstr = unsafe { CStr::from_ptr(f) }.to_string_lossy();
-            files.push(String::from(cstr));
-        }
-    }
     let bundles = FileBundle::filter_bundles(files);
     let libfolder: LibFolder;
-    let folder = unsafe { CStr::from_ptr(folder) }.to_string_lossy();
-    match lib.get_folder(&folder) {
+    match lib.get_folder(folder) {
         Some(lf) =>
             libfolder = lf,
         _ => {
-            if let Some(lf) = lib.add_folder(&folder) {
+            if let Some(lf) = lib.add_folder(folder) {
                 libfolder = lf.clone();
                 lib.notify(Box::new(LibNotification::AddedFolder(lf)));
             } else {
@@ -128,8 +109,7 @@ pub extern "C" fn cmd_import_files(lib: &Library, folder: *const c_char, cfiles:
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
+pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
     if let Some(lm) = lib.get_metadata(file_id) {
         lib.notify(Box::new(LibNotification::MetadataQueried(lm)));
         return true;
@@ -137,8 +117,7 @@ pub extern "C" fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> boo
     false
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
+pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
     let fl = lib.get_folder_content(folder_id);
     let mut value = Box::new(
         LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) }));
@@ -151,8 +130,7 @@ pub extern "C" fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) 
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
+pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
                         value: &PropertyValue) -> bool {
     lib.set_metadata(id, meta, value);
     lib.notify(Box::new(LibNotification::MetadataChanged(
@@ -160,16 +138,14 @@ pub extern "C" fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
+pub fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
     let count = lib.count_folder(folder_id);
     lib.notify(Box::new(LibNotification::FolderCounted(
         FolderCount{folder: folder_id, count: count})));
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
+pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
     let fl = lib.get_keyword_content(keyword_id);
     let mut content = unsafe { Content::new(keyword_id) };
     for f in fl {
@@ -179,13 +155,11 @@ pub extern "C" fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_write_metadata(lib: &Library, file_id: LibraryId) -> bool {
+pub fn cmd_write_metadata(lib: &Library, file_id: LibraryId) -> bool {
     lib.write_metadata(file_id)
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryId,
+pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryId,
                                to: LibraryId) -> bool {
 
     if lib.move_file_to_folder(file_id, to) {
@@ -200,8 +174,7 @@ pub extern "C" fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, fro
     false
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_list_all_labels(lib: &Library) -> bool {
+pub fn cmd_list_all_labels(lib: &Library) -> bool {
     let l = lib.get_all_labels();
     // XXX change this notification type
     for label in l {
@@ -210,37 +183,29 @@ pub extern "C" fn cmd_list_all_labels(lib: &Library) -> bool {
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_create_label(lib: &Library, name: *const c_char, colour: *const c_char) -> bool {
-    let name = unsafe { CStr::from_ptr(name) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(colour) }.to_string_lossy();
-    let id = lib.add_label(&name, &colour);
+pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> bool {
+    let id = lib.add_label(name, colour);
     if id != -1 {
-        let l = Label::new(id, &name, &colour);
+        let l = Label::new(id, name, colour);
         lib.notify(Box::new(LibNotification::AddedLabel(l)));
     }
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {
+pub fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {
     lib.delete_label(label_id);
     lib.notify(Box::new(LibNotification::LabelDeleted(label_id)));
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_update_label(lib: &Library, label_id: LibraryId, name: *const c_char,
-                        colour: *const c_char) -> bool {
-    let name = unsafe { CStr::from_ptr(name) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(colour) }.to_string_lossy();
-    lib.update_label(label_id, &name, &colour);
-    let label = Label::new(label_id, &name, &colour);
+pub fn cmd_update_label(lib: &Library, label_id: LibraryId, name: &str,
+                        colour: &str) -> bool {
+    lib.update_label(label_id, name, colour);
+    let label = Label::new(label_id, name, colour);
     lib.notify(Box::new(LibNotification::LabelChanged(label)));
     true
 }
 
-#[no_mangle]
-pub extern "C" fn cmd_process_xmp_update_queue(lib: &Library, write_xmp: bool) -> bool {
+pub fn cmd_process_xmp_update_queue(lib: &Library, write_xmp: bool) -> bool {
     lib.process_xmp_update_queue(write_xmp)
 }

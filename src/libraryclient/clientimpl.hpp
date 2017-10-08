@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.hpp
  *
- * Copyright (C) 2007-2015 Hubert Figuière
+ * Copyright (C) 2007-2017 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,10 @@
 #include <string>
 
 #include "fwk/base/moniker.hpp"
-#include "engine/library/clienttypes.hpp"
-#include "engine/library/op.hpp"
+
+#include "rust_bindings.hpp"
 
 namespace libraryclient {
-
-class LocalLibraryServer;
 
 class ClientImpl
 {
@@ -41,37 +39,34 @@ public:
     virtual ~ClientImpl();
     bool ok() const;
 
-    eng::tid_t getAllKeywords();
-    eng::tid_t queryKeywordContent(eng::library_id_t id);
-    eng::tid_t getAllFolders();
-    eng::tid_t queryFolderContent(eng::library_id_t id);
-    eng::tid_t countFolder(eng::library_id_t id);
-    eng::tid_t requestMetadata(eng::library_id_t id);
-    eng::tid_t setMetadata(eng::library_id_t id, eng::Np meta,
-                           const fwk::PropertyValuePtr & value);
-    eng::tid_t write_metadata(eng::library_id_t file_id);
+    void getAllKeywords();
+    void queryKeywordContent(eng::library_id_t id);
+    void getAllFolders();
+    void queryFolderContent(eng::library_id_t id);
+    void countFolder(eng::library_id_t id);
+    void requestMetadata(eng::library_id_t id);
+    void setMetadata(eng::library_id_t id, eng::Np meta,
+                     const fwk::PropertyValuePtr & value);
+    void write_metadata(eng::library_id_t file_id);
 
-    eng::tid_t moveFileToFolder(eng::library_id_t file_id,
-                                eng::library_id_t from_folder_id,
-                                eng::library_id_t to_folder_id);
+    void moveFileToFolder(eng::library_id_t file_id,
+                          eng::library_id_t from_folder_id,
+                          eng::library_id_t to_folder_id);
 
-    eng::tid_t getAllLabels();
-    eng::tid_t createLabel(const std::string & s, const std::string & color);
-    eng::tid_t deleteLabel(int id);
-    eng::tid_t updateLabel(eng::library_id_t id, const std::string & new_name,
-                           const std::string & new_color);
+    void getAllLabels();
+    void createLabel(const std::string & s, const std::string & color);
+    void deleteLabel(int id);
+    void updateLabel(eng::library_id_t id, const std::string & new_name,
+                     const std::string & new_color);
 
-    eng::tid_t processXmpUpdateQueue(bool write_xmp);
+    void processXmpUpdateQueue(bool write_xmp);
 
-    eng::tid_t importFile(const std::string & path, eng::Managed manage);
-    eng::tid_t importFromDirectory(const std::string & dir, eng::Managed manage);
+    void importFile(const std::string & path, eng::Managed manage);
+    void importFromDirectory(const std::string & dir, eng::Managed manage);
 
 protected:
     const fwk::Moniker m_moniker;
-    std::unique_ptr<LocalLibraryServer> m_localLibrary;
-private:
-    /** do the dirty work of scheduling the op */
-    eng::tid_t schedule_op(const eng::Op::Function & func);
+    ffi::ClientImpl* m_impl;
 };
 
 }

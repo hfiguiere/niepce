@@ -17,12 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_char;
 use std::path::{
     Path,
     PathBuf
 };
-use std::ffi::CStr;
 use std::fs::File;
 use std::io::Write;
 use rusqlite;
@@ -46,7 +44,7 @@ use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
 
 #[repr(i32)]
-#[derive(PartialEq,Clone)]
+#[derive(PartialEq,Clone,Copy)]
 pub enum Managed {
     NO = 0,
     YES = 1
@@ -823,24 +821,6 @@ impl Library {
 
         false
     }
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_library_new(path: *const c_char, notif_id: u64) -> *mut Library {
-    let l = Box::new(
-        Library::new(PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy()),
-                     notif_id));
-    Box::into_raw(l)
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_library_delete(l: *mut Library) {
-    unsafe { Box::from_raw(l); }
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_library_ok(l: &Library) -> bool {
-    l.is_ok()
 }
 
 #[cfg(test)]

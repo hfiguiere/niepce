@@ -33,6 +33,7 @@ pub use self::label::Label;
 pub use self::libmetadata::LibMetadata;
 pub use self::libfolder::LibFolder;
 pub use self::keyword::Keyword;
+pub use self::library::Library;
 
 
 use rusqlite;
