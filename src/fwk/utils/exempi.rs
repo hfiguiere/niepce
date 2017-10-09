@@ -81,20 +81,18 @@ impl XmpMeta {
     pub fn new() -> XmpMeta {
         XmpMeta {
             xmp: exempi::Xmp::new(),
-            keywords: Vec::<String>::new(),
+            keywords: Vec::new(),
             keywords_fetched: false,
         }
     }
 
     pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
         if !sidecar_only {
-            let xmpfile = exempi::XmpFile::open_new(file, exempi::OPEN_READ);
-            if xmpfile.is_some() {
-                let xmp = xmpfile.unwrap().get_new_xmp();
-                if xmp.is_some() {
+            if let Some(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
+                if let Some(xmp) = xmpfile.get_new_xmp() {
                     return Some(XmpMeta {
-                        xmp: xmp.unwrap(),
-                        keywords: Vec::<String>::new(),
+                        xmp: xmp,
+                        keywords: Vec::new(),
                         keywords_fetched: false
                     });
                 }
@@ -111,7 +109,7 @@ impl XmpMeta {
                 if xmp.parse(sidecarcontent.into_bytes().as_slice()) {
                     return Some(XmpMeta {
                         xmp: xmp,
-                        keywords: Vec::<String>::new(),
+                        keywords: Vec::new(),
                         keywords_fetched: false
                     });
                 }
@@ -296,7 +294,6 @@ pub extern "C" fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
     }
     0
 }
-
 
 #[no_mangle]
 pub extern "C" fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {

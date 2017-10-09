@@ -35,9 +35,9 @@ impl FileBundle {
     pub fn new() -> FileBundle {
         FileBundle {
             file_type: FileType::UNKNOWN,
-            main: String::from(""),
-            xmp_sidecar: String::from(""),
-            jpeg: String::from(""),
+            main: String::new(),
+            xmp_sidecar: String::new(),
+            jpeg: String::new(),
         }
     }
 
