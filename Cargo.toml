@@ -5,17 +5,18 @@ authors = ["Hubert Figuière <hub@figuiere.net>"]
 build = "build.rs"
 
 [dependencies]
-libc = "0.2.23"
-rusqlite = { version = "0.12.0", features = ["functions"] }
+chrono = "0.4.0"
 exempi = { version = "2.4.4", git = "https://github.com/hfiguiere/exempi-rs.git" }
 glib-sys = "0.4.0"
 gio-sys = "0.4.0"
 gio = "0.2.0"
+libc = "0.2.23"
+rusqlite = { version = "0.12.0", features = ["functions"] }
 #gphoto = "0.1.1"
 
 [build-dependencies]
 bindgen = "0.30.0"
-cbindgen = { version = "0.1.23", git = "https://github.com/eqrion/cbindgen.git" }
+cbindgen = { version = "0.1.25", git = "https://github.com/eqrion/cbindgen.git" }
 pkg-config = "0.3.9"
 
 [lib]

@@ -17,11 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+extern crate chrono;
 extern crate exempi;
-extern crate libc;
 extern crate glib_sys;
 extern crate gio_sys;
 extern crate gio;
+extern crate libc;
 extern crate rusqlite;
 
 #[macro_use]

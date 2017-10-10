@@ -23,6 +23,8 @@ use std::path::{
 };
 use std::fs::File;
 use std::io::Write;
+
+use chrono::Utc;
 use rusqlite;
 
 use super::{
@@ -418,7 +420,7 @@ impl Library {
             //label = meta.label().unwrap_or(String::from(""));
             flag = meta.flag().unwrap_or(0);
             if let Some(ref date) = meta.creation_date() {
-                creation_date = date.time_value();
+                creation_date = date.timestamp();
             } else {
                 creation_date = 0
             }
@@ -441,7 +443,7 @@ impl Library {
 
         if let Some(ref conn) = self.dbconn {
             let ifile_type = file_type as i32;
-            let time = fwk::Date::now();
+            let time = Utc::now().timestamp();
             ret = match conn.execute("INSERT INTO files (\
                                 main_file, name, parent_id, \
                                 import_date, mod_date, \
