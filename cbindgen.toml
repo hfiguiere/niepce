@@ -1,0 +1,11 @@
+# An optional name to use as an include guard
+include_guard = "niepce_rust_bindings_h"
+
+# An optional namespace to output around the generated bindings
+namespace = "ffi"
+
+language = "C++"
+
+[parse]
+parse_deps = true
+include = ["chrono"]

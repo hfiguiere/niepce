@@ -19,8 +19,8 @@
 
 use libc::c_char;
 use std::ffi::{CStr,CString};
-use fwk::base::date::Date;
 
+use chrono::{DateTime, Utc};
 
 #[derive(Clone,Debug)]
 #[repr(C)]
@@ -29,12 +29,12 @@ pub enum PropertyValue {
     Int(i32),
     String(String),
     StringArray(Vec<String>),
-    Date(Date)
+    Date(DateTime<Utc>)
 }
 
+type Date = DateTime<Utc>;
 
 impl PropertyValue {
-
 }
 
 #[no_mangle]

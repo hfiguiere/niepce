@@ -20,15 +20,15 @@
 use std::ffi::CStr;
 use std::mem::transmute;
 use rusqlite;
+use chrono::Utc;
 use exempi;
 
-use fwk;
 use fwk::{
     PropertyValue,
     PropertyBag,
     PropertySet,
     XmpMeta,
-    make_xmp_date_time
+    xmp_date_from
 };
 use fwk::utils::exempi::{NS_XAP, NS_DC};
 use super::{
@@ -138,8 +138,9 @@ impl LibMetadata {
                     return true;
                 },
                 &PropertyValue::Date(ref d) => {
+                    let xmp_date = xmp_date_from(d);
                     return self.xmp.xmp.set_property_date(
-                        &ix.ns, &ix.property, d.xmp_date(), exempi::PROP_NONE);
+                        &ix.ns, &ix.property, &xmp_date, exempi::PROP_NONE);
                 }
             }
             err_out!("error setting property {}:{} {}", ix.ns, ix.property,
@@ -198,12 +199,9 @@ impl LibMetadata {
     }
 
     pub fn touch(&mut self) -> bool {
-        let mut xmpdate = exempi::DateTime::new();
-        if make_xmp_date_time(fwk::Date::now(), &mut xmpdate) {
-            return self.xmp.xmp.set_property_date(NS_XAP, "MetadataDate",
-                                                  &xmpdate, exempi::PROP_NONE);
-        }
-        false
+        let xmpdate = xmp_date_from(&Utc::now());
+        return self.xmp.xmp.set_property_date(NS_XAP, "MetadataDate",
+                                              &xmpdate, exempi::PROP_NONE);
     }
 }
 

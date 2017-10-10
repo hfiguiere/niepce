@@ -23,10 +23,12 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use std::ptr;
+
+use chrono::{DateTime, Utc};
 use exempi;
 use exempi::Xmp;
-use fwk::Date;
 
+type Date = DateTime<Utc>;
 
 static NIEPCE_XMP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/niepce/1.0";
 static NIEPCE_XMP_NS_PREFIX: &'static str = "niepce";
@@ -164,10 +166,13 @@ impl XmpMeta {
         return self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags);
     }
 
-    pub fn creation_date(&self) -> Option<Date> {
+    pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        if let Some(date) = self.xmp.get_property_date(NS_EXIF, "DateTimeOriginal", &mut flags) {
-            return Some(Date::new(date, None));
+        if let Some(xmpstring) = self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags) {
+            if let Ok(date) = DateTime::parse_from_rfc3339(xmpstring.to_str()) {
+                let utc_date = date.with_timezone(&Utc);
+                return Some(utc_date);
+            }
         }
         None
     }
