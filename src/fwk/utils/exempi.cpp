@@ -17,19 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-#include <time.h>
-
-#include <giomm/file.h>
-#include <glib.h>
-
-#include <exempi/xmp.h>
-#include <exempi/xmpconsts.h>
-
 #include "exempi.hpp"
-#include "fwk/base/date.hpp"
-#include "fwk/base/debug.hpp"
-#include "pathutils.hpp"
 
 namespace xmp {
 

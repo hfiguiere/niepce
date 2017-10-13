@@ -17,18 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_char;
-use std::ffi::CString;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use std::ptr;
 
 use chrono::{DateTime, Utc};
 use exempi;
 use exempi::Xmp;
-
-type Date = DateTime<Utc>;
 
 static NIEPCE_XMP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/niepce/1.0";
 static NIEPCE_XMP_NS_PREFIX: &'static str = "niepce";
@@ -40,6 +35,7 @@ pub static NS_TIFF: &'static str = "http://ns.adobe.com/tiff/1.0/";
 pub static NS_XAP: &'static str = "http://ns.adobe.com/xap/1.0/";
 pub static NS_EXIF: &'static str = "http://ns.adobe.com/exif/1.0/";
 pub static NS_DC: &'static str = "http://purl.org/dc/elements/1.1/";
+pub static NS_AUX: &'static str = "http://ns.adobe.com/exif/1.0/aux/";
 
 pub struct NsDef {
     ns: String,
@@ -89,10 +85,11 @@ impl XmpMeta {
     }
 
     pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
+        let mut meta: Option<XmpMeta> = None;
         if !sidecar_only {
             if let Some(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
                 if let Some(xmp) = xmpfile.get_new_xmp() {
-                    return Some(XmpMeta {
+                    meta = Some(XmpMeta {
                         xmp: xmp,
                         keywords: Vec::new(),
                         keywords_fetched: false
@@ -100,6 +97,8 @@ impl XmpMeta {
                 }
             }
         }
+
+        let mut sidecar_meta: Option<XmpMeta> = None;
         let filepath = Path::new(file);
         let sidecar = filepath.with_extension("xmp");
         let sidecaropen = File::open(sidecar);
@@ -109,7 +108,7 @@ impl XmpMeta {
             if result.ok().is_some() {
                 let mut xmp = exempi::Xmp::new();
                 if xmp.parse(sidecarcontent.into_bytes().as_slice()) {
-                    return Some(XmpMeta {
+                    sidecar_meta = Some(XmpMeta {
                         xmp: xmp,
                         keywords: Vec::new(),
                         keywords_fetched: false
@@ -117,7 +116,70 @@ impl XmpMeta {
                 }
             }
         }
+        if meta.is_none() || sidecar_meta.is_none() {
+            if meta.is_some() {
+                return meta;
+            }
+            return sidecar_meta;
+
+        } else {
+            let mut final_meta = sidecar_meta.unwrap();
+            if !meta.as_ref().unwrap().merge_missing_into_xmp(&mut final_meta) {
+                err_out!("xmp merge failed");
+            } else {
+                return Some(final_meta);
+            }
+        }
+        // XXX maybe we should be more permissible. Returning the
+        // built-in meta if merge failed might not be the best option.
         None
+    }
+
+    ///
+    /// Merge missing properties from self (source) to destination
+    /// struct and array are considerd missing as a whole, not their content.
+    ///
+    pub fn merge_missing_into_xmp(&self, dest: &mut XmpMeta) -> bool {
+        // Merge XMP self into the dest that has more recent.
+        let source_date = self.get_date_property(NS_XAP, "MetadataDate");
+        let dest_date = dest.get_date_property(NS_XAP, "MetadataDate");
+
+        if source_date.is_none() || dest_date.is_none() {
+            dbg_out!("missing metadata date {} {}", source_date.is_some(),
+                     dest_date.is_some());
+            return false;
+        }
+        if source_date > dest_date {
+            dbg_out!("file meta is more recent than sidecar");
+            return false;
+        }
+
+        // in properties in source not in destination gets copied over.
+        let mut iter = exempi::XmpIterator::new(&self.xmp, "", "", exempi::ITER_PROPERTIES);
+        {
+            use exempi::XmpString;
+            let mut schema = XmpString::new();
+            let mut name = XmpString::new();
+            let mut value = XmpString::new();
+            let mut option = exempi::PROP_NONE;
+            while iter.next(&mut schema, &mut name, &mut value, &mut option) {
+                if name.to_str().is_empty() {
+                    continue;
+                }
+                if option.contains(exempi::PROP_VALUE_IS_ARRAY)
+                      || option.contains(exempi::PROP_VALUE_IS_STRUCT) {
+                    iter.skip(exempi::ITER_SKIP_SUBTREE);
+                    continue;
+                }
+
+                if !dest.xmp.has_property(schema.to_str(), name.to_str()) {
+                    dest.xmp.set_property(schema.to_str(), name.to_str(),
+                                          value.to_str(), exempi::PROP_NONE);
+                }
+            }
+        }
+
+        true
     }
 
     pub fn serialize_inline(&self) -> String {
@@ -185,6 +247,19 @@ impl XmpMeta {
         None
     }
 
+    /// Get the date property and return a DateTime<Utc> parsed
+    /// from the string value.
+    pub fn get_date_property(&self, ns: &str, property: &str) -> Option<DateTime<Utc>> {
+        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        if let Some(xmpstring) = self.xmp.get_property(ns, property, &mut flags) {
+            if let Ok(date) = DateTime::parse_from_rfc3339(xmpstring.to_str()) {
+                let utc_date = date.with_timezone(&Utc);
+                return Some(utc_date);
+            }
+        }
+        None
+    }
+
     pub fn keywords(&mut self) -> &Vec<String> {
         if !self.keywords_fetched {
             use exempi::XmpString;
@@ -194,7 +269,7 @@ impl XmpMeta {
             let mut schema = XmpString::new();
             let mut name = XmpString::new();
             let mut value = XmpString::new();
-            let mut option = exempi::ITER_NONE;
+            let mut option = exempi::PROP_NONE;
             while iter.next(&mut schema, &mut name, &mut value, &mut option) {
                 self.keywords.push(String::from(value.to_str()));
             }
@@ -284,46 +359,15 @@ pub extern "C" fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
     unsafe { Box::from_raw(em); }
 }
 
-#[no_mangle]
-pub extern "C" fn fwk_xmp_meta_get_orientation(xmp: &XmpMeta) -> i32 {
-    if let Some(o) = xmp.orientation() {
-        return o;
-    }
-    0
-}
-
-#[no_mangle]
-pub extern "C" fn fwk_xmp_meta_get_rating(xmp: &XmpMeta) -> i32 {
-    if let Some(r) = xmp.rating() {
-        return r;
-    }
-    0
-}
-
-#[no_mangle]
-pub extern "C" fn fwk_xmp_meta_get_label(xmp: &XmpMeta) -> *mut c_char {
-    if let Some(s) = xmp.label() {
-        return CString::new(s.as_bytes()).unwrap().into_raw()
-    }
-    ptr::null_mut()
-}
-
-#[no_mangle]
-pub extern "C" fn fwk_xmp_meta_get_creation_date(xmp: &XmpMeta) -> *mut Date {
-    if let Some(d) = xmp.creation_date() {
-        return Box::into_raw(Box::new(d));
-    }
-    ptr::null_mut()
-}
-
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn xmp_meta_works() {
+    use std::path::PathBuf;
+    use super::ExempiManager;
+    use super::XmpMeta;
+    use exempi;
+
+    fn get_xmp_sample_path() -> PathBuf {
         use std::env;
-        use std::path::PathBuf;
-        use super::ExempiManager;
-        use super::XmpMeta;
 
         let mut dir: PathBuf;
         if let Ok(pdir) = env::var("CARGO_MANIFEST_DIR") {
@@ -334,6 +378,13 @@ mod tests {
         } else {
             dir = PathBuf::from(".");
         }
+        dir
+    }
+
+    #[test]
+    fn xmp_meta_works() {
+
+        let mut dir = get_xmp_sample_path();
         dir.push("test.xmp");
         let _xmp_manager = ExempiManager::new(None);
 
@@ -351,6 +402,62 @@ mod tests {
             assert_eq!(keywords[2], "ontario");
             assert_eq!(keywords[3], "ottawa");
             assert_eq!(keywords[4], "parliament of canada");
+        } else {
+            assert!(false);
+        }
+    }
+
+    fn test_property_value(meta: &XmpMeta, ns: &str,
+                           property: &str, expected_value: &str) {
+        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let value = meta.xmp.get_property(ns, property, &mut flags);
+        assert!(value.is_some());
+        assert_eq!(value.unwrap().to_str(), expected_value);
+    }
+
+    fn test_property_array_value(meta: &XmpMeta, ns: &str,
+                                 property: &str, idx: i32, expected_value: &str) {
+        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let value = meta.xmp.get_array_item(ns, property, idx, &mut flags);
+        assert!(value.is_some());
+        assert_eq!(value.unwrap().to_str(), expected_value);
+    }
+
+    #[test]
+    fn test_merge_missing_into_xmp() {
+        let dir = get_xmp_sample_path();
+
+        let mut source = dir.clone();
+        source.push("test.xmp");
+
+        let mut dest = dir.clone();
+        dest.push("test2.xmp");
+        let _xmp_manager = ExempiManager::new(None);
+
+        if let Some(xmpfile) = source.to_str() {
+            let meta = XmpMeta::new_from_file(xmpfile, true);
+            assert!(meta.is_some());
+            let meta = meta.unwrap();
+
+            if let Some(xmpfile) = dest.to_str() {
+                let dstmeta = XmpMeta::new_from_file(xmpfile, true);
+                assert!(dstmeta.is_some());
+                let mut dstmeta = dstmeta.unwrap();
+
+                let result = meta.merge_missing_into_xmp(&mut dstmeta);
+                assert!(result);
+                // properties that were missing
+                test_property_value(&dstmeta, super::NS_TIFF, "Model", "Canon EOS 20D");
+                test_property_value(&dstmeta, super::NS_AUX, "Lens", "24.0-85.0 mm");
+
+                // Array property that contain less in destination
+                // Shouldn't have changed.
+                test_property_array_value(&dstmeta, super::NS_DC, "subject", 1, "night");
+                test_property_array_value(&dstmeta, super::NS_DC, "subject", 2, "ontario");
+                test_property_array_value(&dstmeta, super::NS_DC, "subject", 3, "ottawa");
+                test_property_array_value(&dstmeta, super::NS_DC, "subject", 4, "parliament of canada");
+                assert!(!dstmeta.xmp.has_property(super::NS_DC, "dc:subject[5]"));
+            }
         } else {
             assert!(false);
         }

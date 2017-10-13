@@ -1,6 +1,3 @@
-#ifndef __UTILS_EXEMPI_H__
-#define __UTILS_EXEMPI_H__
-
 /*
  * niepce - utils/exempi.h
  *
@@ -20,7 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -109,5 +108,3 @@ ExempiManagerPtr exempi_manager_new();
   fill-column:99
   End:
 */
-
-#endif

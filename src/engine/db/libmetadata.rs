@@ -180,7 +180,7 @@ impl LibMetadata {
                     let mut schema = exempi::XmpString::new();
                     let mut name = exempi::XmpString::new();
                     let mut value = exempi::XmpString::new();
-                    let mut flags = exempi::IterFlags::empty();
+                    let mut flags = exempi::PropFlags::empty();
                     while iter.next(&mut schema, &mut name, &mut value, &mut flags) {
                         keywords.push(String::from(value.to_str()));
                     }

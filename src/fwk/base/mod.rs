@@ -19,9 +19,10 @@
 
 use std::collections::BTreeSet;
 
-pub mod date;
 #[macro_use]
 pub mod debug;
+
+pub mod date;
 pub mod fractions;
 pub mod propertybag;
 pub mod propertyvalue;

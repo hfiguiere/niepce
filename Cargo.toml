@@ -6,7 +6,7 @@ build = "build.rs"
 
 [dependencies]
 chrono = "0.4.0"
-exempi = { version = "2.4.4", git = "https://github.com/hfiguiere/exempi-rs.git" }
+exempi = { version = "2.5.0", git = "https://github.com/hfiguiere/exempi-rs.git" }
 glib-sys = "0.4.0"
 gio-sys = "0.4.0"
 gio = "0.2.0"

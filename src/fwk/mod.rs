@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-pub mod utils;
 #[macro_use]
 pub mod base;
+pub mod utils;
 pub mod toolkit;
 
 pub use self::utils::exempi::{
