@@ -23,7 +23,6 @@ libniepceengine_a_SOURCES = \
 	db/libfolder.hpp db/libfolder.cpp \
 	db/label.hpp db/label.cpp \
 	db/libmetadata.hpp db/libmetadata.cpp \
-	db/keyword.hpp db/keyword.cpp \
 	db/storage.hpp \
 	db/fsfile.hpp \
 	db/metadata.hpp \
