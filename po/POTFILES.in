@@ -3,16 +3,12 @@
 camerawire/src/cwwindow.cpp
 data/niepce.appdata.xml.in
 data/niepce.desktop.in
-src/engine/db/library.cpp
-src/engine/importer/directoryimporter.cpp
 src/fwk/toolkit/application.cpp
 src/fwk/toolkit/frame.cpp
-src/fwk/toolkit/metadatawidget.cpp
 src/fwk/toolkit/widgets/addinstreemodel.cpp
 src/niepce/modules/darkroom/toolboxcontroller.cpp
 src/niepce/ui/dialogs/editlabels.cpp
 src/niepce/ui/dialogs/editlabels.ui
-src/niepce/ui/dialogs/importdialog.cpp
 src/niepce/ui/dialogs/importdialog.ui
 src/niepce/ui/dialogs/importers/cameraimporterui.cpp
 src/niepce/ui/dialogs/importers/cameraimporterui.ui
@@ -25,5 +21,4 @@ src/niepce/ui/moduleshell.cpp
 src/niepce/ui/niepceapplication.cpp
 src/niepce/ui/niepcewindow.cpp
 src/niepce/ui/selectioncontroller.cpp
-src/niepce/ui/thumbstripview.cpp
 src/niepce/ui/workspacecontroller.cpp
