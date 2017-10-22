@@ -19,6 +19,5 @@ TEST_LIBS =  \
 	$(NULL)
 
 liblibraryclient_a_SOURCES = libraryclient.hpp  libraryclient.cpp \
-	clientimpl.hpp clientimpl.cpp \
 	uidataprovider.hpp uidataprovider.cpp \
 	$(NULL)

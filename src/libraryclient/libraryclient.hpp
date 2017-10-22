@@ -105,7 +105,7 @@ public:
 	    m_trash_id = id;
         }
 private:
-    std::unique_ptr<ClientImpl> m_pImpl;
+    ffi::ClientImpl* m_impl;
 
     eng::ThumbnailCache m_thumbnailCache;
     std::unique_ptr<UIDataProvider> m_uidataprovider;
