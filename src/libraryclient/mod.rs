@@ -18,3 +18,4 @@
  */
 
 pub mod clientimpl;
+pub mod clientinterface;

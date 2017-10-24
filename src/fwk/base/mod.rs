@@ -31,6 +31,8 @@ pub mod rgbcolour;
 pub type PropertyIndex = u32;
 pub type PropertySet = BTreeSet<PropertyIndex>;
 
+pub use self::propertyvalue::PropertyValue;
+
 #[no_mangle]
 pub extern "C" fn fwk_property_set_new() -> *mut PropertySet {
     Box::into_raw(Box::new(PropertySet::new()))

@@ -25,11 +25,12 @@ use std::sync;
 use std::sync::atomic;
 use std::thread;
 
-use fwk::base::propertyvalue::PropertyValue;
+use fwk::base::PropertyValue;
 use engine::db::{Library, LibraryId};
 use engine::db::library::Managed;
 use engine::library::op::Op;
 use engine::library::commands;
+use super::clientinterface::ClientInterface;
 use root::fwk::FileList;
 use root::eng::NiepceProperties as Np;
 
@@ -112,6 +113,110 @@ impl ClientImpl {
 
 }
 
+impl ClientInterface for ClientImpl {
+    /// get all the keywords
+    fn get_all_keywords(&mut self) {
+        self.schedule_op(move |lib| {
+            commands::cmd_list_all_keywords(&lib)
+        });
+    }
+    fn query_keyword_content(&mut self, keyword_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_query_keyword_content(&lib, keyword_id)
+        });
+    }
+
+    /// get all the folder
+    fn get_all_folders(&mut self) {
+        self.schedule_op(move |lib| {
+            commands::cmd_list_all_folders(&lib)
+        });
+    }
+    fn query_folder_content(&mut self, folder_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_query_folder_content(&lib, folder_id)
+        });
+    }
+    fn count_folder(&mut self, folder_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_count_folder(&lib, folder_id)
+        });
+    }
+
+    fn request_metadata(&mut self, file_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_request_metadata(&lib, file_id)
+        });
+    }
+
+    /// set the metadata
+    fn set_metadata(&mut self, file_id: LibraryId, meta: Np, value: &PropertyValue) {
+        let value2 = value.clone();
+        self.schedule_op(move |lib| {
+            commands::cmd_set_metadata(&lib, file_id, meta, &value2)
+        });
+    }
+    fn write_metadata(&mut self, file_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_write_metadata(&lib, file_id)
+        });
+    }
+
+    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId,
+                           to: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_move_file_to_folder(&lib, file_id, from, to)
+        });
+    }
+
+    /// get all the labels
+    fn get_all_labels(&mut self) {
+        self.schedule_op(move |lib| {
+            commands::cmd_list_all_labels(&lib)
+        });
+    }
+    fn create_label(&mut self, name: String, colour: String) {
+        self.schedule_op(move |lib| {
+            commands::cmd_create_label(&lib, &name, &colour)
+        });
+    }
+    fn delete_label(&mut self, label_id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_delete_label(&lib, label_id)
+        });
+    }
+    /// update a label
+    fn update_label(&mut self, label_id: LibraryId, new_name: String, new_colour: String) {
+        self.schedule_op(move |lib| {
+            commands::cmd_update_label(&lib, label_id, &new_name, &new_colour)
+        });
+    }
+
+    /// tell to process the Xmp update Queue
+    fn process_xmp_update_queue(&mut self, write_xmp: bool) {
+        self.schedule_op(move |lib| {
+            commands::cmd_process_xmp_update_queue(&lib, write_xmp)
+        });
+    }
+
+    /// Import file
+    /// @param path the file path
+    /// @param manage true if imported file have to be managed
+    fn import_file(&mut self, path: String, manage: Managed) {
+        self.schedule_op(move |lib| {
+            commands::cmd_import_file(&lib, &path, manage)
+        });
+    }
+    /// Import files from a directory
+    /// @param dir the directory
+    /// @param manage true if imports have to be managed
+    fn import_from_directory(&mut self, dir: String, files: Vec<String>, manage: Managed) {
+        self.schedule_op(move |lib| {
+            commands::cmd_import_files(&lib, &dir, &files, manage)
+        });
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_new(path: *const c_char, notif_id: u64) -> *mut ClientImpl {
     let dir = PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy());
@@ -125,66 +230,49 @@ pub extern "C" fn libraryclient_clientimpl_delete(obj: *mut ClientImpl) {
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_get_all_keywords(client: &mut ClientImpl) {
-    client.schedule_op(move |lib| {
-        commands::cmd_list_all_keywords(&lib)
-    });
+    client.get_all_keywords();
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_get_all_folders(client: &mut ClientImpl) {
-    client.schedule_op(move |lib| {
-        commands::cmd_list_all_folders(&lib)
-    });
+    client.get_all_folders();
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_query_folder_content(client: &mut ClientImpl,
                                                                 folder_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_query_folder_content(&lib, folder_id)
-    });
+    client.query_folder_content(folder_id);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_count_folder(client: &mut ClientImpl,
                                                         folder_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_count_folder(&lib, folder_id)
-    });
+    client.count_folder(folder_id)
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_query_keyword_content(client: &mut ClientImpl,
                                                                  keyword_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_query_keyword_content(&lib, keyword_id)
-    });
+    client.query_keyword_content(keyword_id);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_request_metadata(client: &mut ClientImpl,
                                                             file_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_request_metadata(&lib, file_id)
-    });
+    client.request_metadata(file_id);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_set_metadata(client: &mut ClientImpl,
                                                         file_id: LibraryId,
                                                         meta: Np, value: &PropertyValue) {
-    let value2 = value.clone();
-    client.schedule_op(move |lib| {
-        commands::cmd_set_metadata(&lib, file_id, meta, &value2)
-    });
+    client.set_metadata(file_id, meta, value);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_write_metadata(client: &mut ClientImpl,
                                                           file_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_write_metadata(&lib, file_id)
-    });
+    client.write_metadata(file_id);
 }
 
 #[no_mangle]
@@ -192,16 +280,12 @@ pub extern "C" fn libraryclient_clientimpl_move_file_to_folder(client: &mut Clie
                                                                file_id: LibraryId,
                                                                from: LibraryId,
                                                                to: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_move_file_to_folder(&lib, file_id, from, to)
-    });
+    client.move_file_to_folder(file_id, from, to);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_get_all_labels(client: &mut ClientImpl) {
-    client.schedule_op(move |lib| {
-        commands::cmd_list_all_labels(&lib)
-    });
+    client.get_all_labels();
 }
 
 #[no_mangle]
@@ -209,17 +293,13 @@ pub extern "C" fn libraryclient_clientimpl_create_label(client: &mut ClientImpl,
                                                         s: *const c_char, c: *const c_char) {
     let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
     let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
-    client.schedule_op(move |lib| {
-        commands::cmd_create_label(&lib, &name, &colour)
-    });
+    client.create_label(String::from(name), String::from(colour));
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_delete_label(client: &mut ClientImpl,
                                                         label_id: LibraryId) {
-    client.schedule_op(move |lib| {
-        commands::cmd_delete_label(&lib, label_id)
-    });
+    client.delete_label(label_id);
 }
 
 #[no_mangle]
@@ -228,17 +308,13 @@ pub extern "C" fn libraryclient_clientimpl_update_label(client: &mut ClientImpl,
                                                         s: *const c_char, c: *const c_char) {
     let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
     let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
-    client.schedule_op(move |lib| {
-        commands::cmd_update_label(&lib, label_id, &name, &colour)
-    });
+    client.update_label(label_id, String::from(name), String::from(colour));
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_clientimpl_process_xmp_update_queue(client: &mut ClientImpl,
                                                                     write_xmp: bool) {
-    client.schedule_op(move |lib| {
-        commands::cmd_process_xmp_update_queue(&lib, write_xmp)
-    });
+    client.process_xmp_update_queue(write_xmp);
 }
 
 #[no_mangle]
@@ -246,9 +322,7 @@ pub extern "C" fn libraryclient_clientimpl_import_file(client: &mut ClientImpl,
                                                        file_path: *const c_char,
                                                        manage: Managed) {
     let path = String::from(unsafe { CStr::from_ptr(file_path) }.to_string_lossy());
-    client.schedule_op(move |lib| {
-        commands::cmd_import_file(&lib, &path, manage)
-    });
+    client.import_file(path, manage);
 }
 
 #[no_mangle]
@@ -265,7 +339,5 @@ pub extern "C" fn libraryclient_clientimpl_import_files(client: &mut ClientImpl,
             files.push(String::from(cstr));
         }
     }
-    client.schedule_op(move |lib| {
-        commands::cmd_import_files(&lib, &folder, &files, manage)
-    });
+    client.import_from_directory(String::from(folder), files, manage);
 }
