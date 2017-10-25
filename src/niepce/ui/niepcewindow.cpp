@@ -278,7 +278,7 @@ void NiepceWindow::on_action_file_import()
                 source, dest_dir,
                 [this] (const std::string & path, IImporter::Import type, Managed manage) {
                     if (type == IImporter::Import::SINGLE) {
-                        m_libClient->importFile(path, manage);
+                        ffi::libraryclient_import_file(m_libClient->client(), path.c_str(), manage);
                     } else {
                         m_libClient->importFromDirectory(path, manage);
                     }
@@ -327,11 +327,11 @@ void NiepceWindow::on_open_library()
 void NiepceWindow::create_initial_labels()
 {
     // TODO make this parametric from resources
-    m_libClient->createLabel(_("Label 1"), fwk::rgbcolour_to_string(55769, 9509, 4369)); /* 217, 37, 17 */
-    m_libClient->createLabel(_("Label 2"), fwk::rgbcolour_to_string(24929, 55769, 4369)); /* 97, 217, 17 */
-    m_libClient->createLabel(_("Label 3"), fwk::rgbcolour_to_string(4369, 50629, 55769)); /* 17, 197, 217 */
-    m_libClient->createLabel(_("Label 4"), fwk::rgbcolour_to_string(35209, 4369, 55769)); /* 137, 17, 217 */
-    m_libClient->createLabel(_("Label 5"), fwk::rgbcolour_to_string(55769, 35209, 4369)); /* 217, 137, 17 */
+    ffi::libraryclient_create_label(m_libClient->client(), _("Label 1"), fwk::rgbcolour_to_string(55769, 9509, 4369).c_str()); /* 217, 37, 17 */
+    ffi::libraryclient_create_label(m_libClient->client(), _("Label 2"), fwk::rgbcolour_to_string(24929, 55769, 4369).c_str()); /* 97, 217, 17 */
+    ffi::libraryclient_create_label(m_libClient->client(), _("Label 3"), fwk::rgbcolour_to_string(4369, 50629, 55769).c_str()); /* 17, 197, 217 */
+    ffi::libraryclient_create_label(m_libClient->client(), _("Label 4"), fwk::rgbcolour_to_string(35209, 4369, 55769).c_str()); /* 137, 17, 217 */
+    ffi::libraryclient_create_label(m_libClient->client(), _("Label 5"), fwk::rgbcolour_to_string(55769, 35209, 4369).c_str()); /* 217, 137, 17 */
 }
 
 
@@ -409,16 +409,13 @@ bool NiepceWindow::open_library(const std::string & libMoniker)
     fwk::Moniker mon = fwk::Moniker(libMoniker);
     m_libClient = LibraryClientPtr(new LibraryClient(mon,
                                                      m_notifcenter->id()));
-    if(!m_libClient->ok()) {
-        m_libClient = nullptr;
-        return false;
-    }
+    // XXX ensure the library is open.
     set_title(libMoniker);
     m_library_cfg
         = fwk::Configuration::Ptr(
             new fwk::Configuration(
                 Glib::build_filename(mon.path(), "config.ini")));
-    m_libClient->getAllLabels();
+    ffi::libraryclient_get_all_labels(m_libClient->client());
     if(!m_moduleshell) {
         _createModuleShell();
     }

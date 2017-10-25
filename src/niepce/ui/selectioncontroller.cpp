@@ -193,7 +193,7 @@ void SelectionController::rotate(int angle)
 
 bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const eng::LibFilePtr & file,
-                                        fwk::PropertyIndex meta,
+                                        ffi::Np meta,
                                         int old_value, int new_value)
 {
     std::shared_ptr<fwk::UndoTransaction> undo =
@@ -203,10 +203,12 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
     auto file_id = engine_db_libfile_id(file.get());
     undo->new_command<void>(
         [libclient, file_id, meta, new_value] () {
-            libclient->setMetadata(file_id, meta, fwk::property_value_new(new_value));
+            ffi::libraryclient_set_metadata(
+                libclient->client(), file_id, meta, fwk::property_value_new(new_value).get());
         },
         [libclient, file_id, meta, old_value] () {
-            libclient->setMetadata(file_id, meta, fwk::property_value_new(old_value));
+            ffi::libraryclient_set_metadata(
+                libclient->client(), file_id, meta, fwk::property_value_new(old_value).get());
         });
     undo->execute();
     return true;
@@ -238,10 +240,12 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         auto new_value = fwk::property_bag_value(props, key);
         undo->new_command<void>(
             [libclient, file_id, key, new_value] () {
-                libclient->setMetadata(file_id, key, new_value);
+                ffi::libraryclient_set_metadata(
+                    libclient->client(), file_id, static_cast<ffi::Np>(key), new_value.get());
             },
             [libclient, file_id, key, value] () {
-                libclient->setMetadata(file_id, key, value);
+                ffi::libraryclient_set_metadata(
+                    libclient->client(), file_id, static_cast<ffi::Np>(key), value.get());
             });
     }
     undo->execute();
@@ -264,7 +268,7 @@ void SelectionController::set_flag(int flag)
     set_property(eng::NpNiepceFlagProp, flag);
 }
 
-void SelectionController::set_property(fwk::PropertyIndex idx, int value)
+void SelectionController::set_property(ffi::Np idx, int value)
 {
     DBG_OUT("property %u = %d", idx, value);
     eng::library_id_t selection = get_selection();
@@ -314,13 +318,14 @@ void SelectionController::write_metadata()
 {
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
-         getLibraryClient()->write_metadata(selection);
+        ffi::libraryclient_write_metadata(getLibraryClient()->client(), selection);
     }
 }
 
 void SelectionController::move_to_trash()
 {
-    eng::library_id_t trash_folder = getLibraryClient()->trash_id();
+    eng::library_id_t trash_folder =
+        ffi::libraryclient_get_trash_id(getLibraryClient()->client());
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         Gtk::TreeIter iter = m_imageliststore->get_iter_from_id(selection);
@@ -333,10 +338,12 @@ void SelectionController::move_to_trash()
             auto libclient = getLibraryClient();
             undo->new_command<void>(
                 [libclient, selection, from_folder, trash_folder] () {
-                    libclient->moveFileToFolder(selection, from_folder, trash_folder);
+                    ffi::libraryclient_move_file_to_folder(
+                        libclient->client(), selection, from_folder, trash_folder);
                 },
                 [libclient, selection, from_folder, trash_folder] () {
-                    libclient->moveFileToFolder(selection, trash_folder, from_folder);
+                    ffi::libraryclient_move_file_to_folder(
+                        libclient->client(), selection, trash_folder, from_folder);
                 });
             undo->execute();
         }

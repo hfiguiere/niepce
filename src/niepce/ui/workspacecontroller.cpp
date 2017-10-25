@@ -147,11 +147,11 @@ void WorkspaceController::on_libtree_selection()
     switch(type) {
 
     case FOLDER_ITEM:
-        getLibraryClient()->queryFolderContent(id);
+        ffi::libraryclient_query_folder_content(getLibraryClient()->client(), id);
         break;
 
     case KEYWORD_ITEM:
-        getLibraryClient()->queryKeywordContent(id);
+        ffi::libraryclient_query_keyword_content(getLibraryClient()->client(), id);
         break;
 
     default:
@@ -216,7 +216,7 @@ void WorkspaceController::add_folder_item(const eng::LibFolder* f)
     int icon_idx = ICON_ROLL;
     if(engine_db_libfolder_virtual_type(f) == eng::FolderVirtualType::TRASH) {
         icon_idx = ICON_TRASH;
-        getLibraryClient()->set_trash_id(engine_db_libfolder_id(f));
+        ffi::libraryclient_set_trash_id(getLibraryClient()->client(), engine_db_libfolder_id(f));
     }
     auto children = m_folderNode->children();
     bool was_empty = children.empty();
@@ -227,10 +227,10 @@ void WorkspaceController::add_folder_item(const eng::LibFolder* f)
     if(engine_db_libfolder_expanded(f)) {
         m_librarytree.expand_row(m_treestore->get_path(iter), false);
     }
-    getLibraryClient()->countFolder(engine_db_libfolder_id(f));
+    ffi::libraryclient_count_folder(getLibraryClient()->client(), engine_db_libfolder_id(f));
     m_folderidmap[engine_db_libfolder_id(f)] = iter;
-    // expand if needed. Because Gtk is stupid and doesn't expand empty
-    if(was_empty) {
+    // expand if needed. Because Gtk doesn't expand empty
+    if (was_empty) {
         expand_from_cfg("workspace_folders_expanded", m_folderNode);
     }
 }
@@ -325,8 +325,8 @@ void WorkspaceController::on_ready()
 {
     libraryclient::LibraryClientPtr libraryClient = getLibraryClient();
     if (libraryClient) {
-        libraryClient->getAllFolders();
-        libraryClient->getAllKeywords();
+        ffi::libraryclient_get_all_folders(libraryClient->client());
+        ffi::libraryclient_get_all_keywords(libraryClient->client());
     }
 }
 

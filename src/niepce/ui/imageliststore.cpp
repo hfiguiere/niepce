@@ -178,7 +178,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             ERR_OUT("couldn't cast %s: %s", xmp_pref.c_str(),
                     e.what());
         }
-        getLibraryClient()->processXmpUpdateQueue(write_xmp);
+        ffi::libraryclient_process_xmp_update_queue(getLibraryClient()->client(), write_xmp);
         break;
     }
     default:

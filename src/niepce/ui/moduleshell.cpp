@@ -246,7 +246,7 @@ void ModuleShell::on_selected(eng::library_id_t id)
 {
     DBG_OUT("selected callback %Ld", (long long)id);
     if(id > 0) {
-        m_libraryclient->requestMetadata(id);
+        ffi::libraryclient_request_metadata(m_libraryclient->client(), id);
     }
     else  {
         m_gridview->display_none();

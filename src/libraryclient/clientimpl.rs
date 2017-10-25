@@ -17,9 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_char;
 use std::collections::VecDeque;
-use std::ffi::CStr;
 use std::path::PathBuf;
 use std::sync;
 use std::sync::atomic;
@@ -31,9 +29,7 @@ use engine::db::library::Managed;
 use engine::library::op::Op;
 use engine::library::commands;
 use super::clientinterface::ClientInterface;
-use root::fwk::FileList;
 use root::eng::NiepceProperties as Np;
-
 
 pub struct ClientImpl {
     terminate: sync::Arc<atomic::AtomicBool>,
@@ -215,129 +211,4 @@ impl ClientInterface for ClientImpl {
             commands::cmd_import_files(&lib, &dir, &files, manage)
         });
     }
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_new(path: *const c_char, notif_id: u64) -> *mut ClientImpl {
-    let dir = PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy());
-    Box::into_raw(Box::new(ClientImpl::new(dir, notif_id)))
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_delete(obj: *mut ClientImpl) {
-    unsafe { Box::from_raw(obj); }
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_get_all_keywords(client: &mut ClientImpl) {
-    client.get_all_keywords();
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_get_all_folders(client: &mut ClientImpl) {
-    client.get_all_folders();
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_query_folder_content(client: &mut ClientImpl,
-                                                                folder_id: LibraryId) {
-    client.query_folder_content(folder_id);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_count_folder(client: &mut ClientImpl,
-                                                        folder_id: LibraryId) {
-    client.count_folder(folder_id)
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_query_keyword_content(client: &mut ClientImpl,
-                                                                 keyword_id: LibraryId) {
-    client.query_keyword_content(keyword_id);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_request_metadata(client: &mut ClientImpl,
-                                                            file_id: LibraryId) {
-    client.request_metadata(file_id);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_set_metadata(client: &mut ClientImpl,
-                                                        file_id: LibraryId,
-                                                        meta: Np, value: &PropertyValue) {
-    client.set_metadata(file_id, meta, value);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_write_metadata(client: &mut ClientImpl,
-                                                          file_id: LibraryId) {
-    client.write_metadata(file_id);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_move_file_to_folder(client: &mut ClientImpl,
-                                                               file_id: LibraryId,
-                                                               from: LibraryId,
-                                                               to: LibraryId) {
-    client.move_file_to_folder(file_id, from, to);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_get_all_labels(client: &mut ClientImpl) {
-    client.get_all_labels();
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_create_label(client: &mut ClientImpl,
-                                                        s: *const c_char, c: *const c_char) {
-    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
-    client.create_label(String::from(name), String::from(colour));
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_delete_label(client: &mut ClientImpl,
-                                                        label_id: LibraryId) {
-    client.delete_label(label_id);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_update_label(client: &mut ClientImpl,
-                                                        label_id: LibraryId,
-                                                        s: *const c_char, c: *const c_char) {
-    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
-    client.update_label(label_id, String::from(name), String::from(colour));
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_process_xmp_update_queue(client: &mut ClientImpl,
-                                                                    write_xmp: bool) {
-    client.process_xmp_update_queue(write_xmp);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_import_file(client: &mut ClientImpl,
-                                                       file_path: *const c_char,
-                                                       manage: Managed) {
-    let path = String::from(unsafe { CStr::from_ptr(file_path) }.to_string_lossy());
-    client.import_file(path, manage);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_clientimpl_import_files(client: &mut ClientImpl,
-                                                        dir: *const c_char, cfiles: &mut FileList,
-                                                        manage: Managed) {
-    let folder = unsafe { CStr::from_ptr(dir) }.to_string_lossy();
-    let mut files: Vec<String> = vec!();
-    {
-        let len = unsafe { cfiles.size() };
-        for i in 0..len {
-            let f = unsafe { cfiles.at_cstr(i) };
-            let cstr = unsafe { CStr::from_ptr(f) }.to_string_lossy();
-            files.push(String::from(cstr));
-        }
-    }
-    client.import_from_directory(String::from(folder), files, manage);
 }

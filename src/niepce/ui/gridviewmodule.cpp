@@ -72,7 +72,7 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
         auto id = engine_library_notification_get_id(&ln);
         if(id && id == m_metapanecontroller->displayed_file()) {
             // FIXME: actually just update the metadata
-          m_shell.getLibraryClient()->requestMetadata(id);
+            ffi::libraryclient_request_metadata(m_shell.getLibraryClient()->client(), id);
         }
         break;
     }

@@ -123,22 +123,25 @@ void EditLabels::update_labels(int /*response*/)
 
                 undo->new_command<void>(
                     [libclient, new_name, new_colour, label_id] () {
-                        libclient->updateLabel(label_id, new_name, new_colour);
+                        ffi::libraryclient_update_label(
+                            libclient->client(), label_id, new_name.c_str(), new_colour.c_str());
                     },
                     [libclient, current_name, current_colour, label_id] () {
-                        libclient->updateLabel(label_id, current_name,
-                                current_colour);
+                        ffi::libraryclient_update_label(
+                            libclient->client(), label_id, current_name.c_str(),
+                            current_colour.c_str());
                     });
             } else {
                 undo->new_command<int>(
                     [libclient, new_name, new_colour] () {
-                        libclient->createLabel(new_name, new_colour);
+                        ffi::libraryclient_create_label(
+                            libclient->client(), new_name.c_str(), new_colour.c_str());
                         return 0; // XXX this is wrong. This was wrong before/
                         // We need to figure out how to get he new label id to be able
                         // To cancel it.
                     },
                     [libclient] (int label) {
-                        libclient->deleteLabel(label);
+                        ffi::libraryclient_delete_label(libclient->client(), label);
                     });
             }
         }

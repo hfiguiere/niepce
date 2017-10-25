@@ -19,3 +19,4 @@
 
 pub mod clientimpl;
 pub mod clientinterface;
+pub mod libraryclient;
