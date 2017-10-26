@@ -12,6 +12,8 @@ gio-sys = "0.4.0"
 gio = "0.2.0"
 libc = "0.2.23"
 rusqlite = { version = "0.12.0", features = ["functions"] }
+aplib-extractor = { version = "0.1.0", git = "https://github.com/hfiguiere/aplib-extractor" }
+lrcat-extractor = { version = "0.1.0", git = "https://github.com/hfiguiere/lrcat-extractor" }
 #gphoto = "0.1.1"
 
 [build-dependencies]

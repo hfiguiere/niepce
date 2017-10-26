@@ -19,3 +19,4 @@
 
 pub mod db;
 pub mod library;
+pub mod importer;

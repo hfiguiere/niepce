@@ -1,5 +1,5 @@
 /*
- * niepce - lib.rs
+ * niepce - engine/importer/mod.rs
  *
  * Copyright (C) 2017 Hubert Figuière
  *
@@ -17,19 +17,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern crate chrono;
-extern crate exempi;
-extern crate glib_sys;
-extern crate gio_sys;
-extern crate gio;
-extern crate libc;
-extern crate rusqlite;
-extern crate lrcat;
-
-#[macro_use]
-pub mod fwk;
-pub mod engine;
-pub mod libraryclient;
-pub mod capi;
-
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+pub mod libraryimporter;
