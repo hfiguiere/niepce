@@ -20,7 +20,6 @@ noinst_LIBRARIES = libniepceengine.a libniepceengineglue.a
 
 libniepceengine_a_SOURCES = \
 	db/libfile.hpp db/libfile.cpp \
-	db/libfolder.hpp db/libfolder.cpp \
 	db/label.hpp db/label.cpp \
 	db/libmetadata.hpp db/libmetadata.cpp \
 	db/storage.hpp \

@@ -30,7 +30,6 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treestore.h>
 
-#include "engine/db/libfolder.hpp"
 #include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notification.hpp"
 #include "niepce/ui/niepcewindow.hpp"
