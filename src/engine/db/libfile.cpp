@@ -29,6 +29,10 @@ QueriedContent::QueriedContent(library_id_t _container)
 {
 }
 
+QueriedContent::~QueriedContent()
+{
+}
+
 void QueriedContent::push(void* f)
 {
     files->push_back(eng::libfile_wrap(static_cast<LibFile*>(f)));

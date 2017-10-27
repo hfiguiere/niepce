@@ -45,6 +45,7 @@ struct QueriedContent {
     LibFileListPtr files;
 
     QueriedContent(library_id_t container);
+    ~QueriedContent();
     // void instead of LibFile because bindgen fail to generate the proper type
     void push(void*);
 };

@@ -102,6 +102,18 @@ pub enum Notification {
     XmpNeedsUpdate,
 }
 
+impl Drop for Notification {
+    fn drop(&mut self) {
+        match *self {
+            Notification::FolderContentQueried(mut c) |
+            Notification::KeywordContentQueried(mut c) => {
+                unsafe { c.destruct(); }
+            },
+            _ => (),
+        }
+    }
+}
+
 #[cfg(not(test))]
 #[allow(improper_ctypes)]
 extern "C" {
