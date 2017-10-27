@@ -263,17 +263,25 @@ impl Library {
     }
 
     pub fn add_folder(&self, folder: &str) -> Option<LibFolder> {
+        self.add_folder_into(folder, 0)
+    }
+
+    /// Add folder into parent whose id is `into`.
+    /// A value of 0 means root.
+    pub fn add_folder_into(&self, folder: &str, into: LibraryId) -> Option<LibFolder> {
         if let Some(foldername) = Self::leaf_name_for_pathname(folder) {
             if let Some(ref conn) = self.dbconn {
                 if let Ok(c) = conn.execute(
-                    "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', '0')",
-                    &[&folder, &foldername]) {
+                    "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
+                    &[&folder, &foldername, &into]) {
                     if c != 1 {
                         return None;
                     }
                     let id = conn.last_insert_rowid();
                     dbg_out!("last row inserted {}", id);
-                    return Some(LibFolder::new(id, &foldername, &folder));
+                    let mut lf = LibFolder::new(id, &foldername, &folder);
+                    lf.set_parent(into);
+                    return Some(lf);
                 }
             }
         }
@@ -865,8 +873,12 @@ mod test {
         let f = f.unwrap();
         assert_eq!(folder_added.id(), f.id());
 
-        lib.add_folder("bar");
-        assert!(lib.get_folder("bar").is_some());
+        let id = f.id();
+        lib.add_folder_into("bar", id);
+        let f = lib.get_folder("bar");
+        assert!(f.is_some());
+        let f = f.unwrap();
+        assert_eq!(f.parent(), id);
 
         let folders = lib.get_all_folders();
         assert_eq!(folders.len(), 3);

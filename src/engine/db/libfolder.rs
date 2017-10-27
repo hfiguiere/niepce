@@ -49,6 +49,7 @@ pub struct LibFolder {
     locked: bool,
     expanded: bool,
     virt: FolderVirtualType,
+    parent: LibraryId,
     cstr: CString,
 }
 
@@ -59,6 +60,7 @@ impl LibFolder {
             path: String::from(path),
             locked: false,
             expanded: false, virt: FolderVirtualType::NONE,
+            parent: 0,
             cstr: CString::new("").unwrap(),
         }
     }
@@ -95,12 +97,19 @@ impl LibFolder {
         self.virt = virt;
     }
 
+    pub fn parent(&self) -> LibraryId {
+        self.parent
+    }
+
+    pub fn set_parent(&mut self, parent: LibraryId) {
+        self.parent = parent;
+    }
 }
 
 impl FromDb for LibFolder {
 
     fn read_db_columns() -> &'static str {
-        "id,name,virtual,locked,expanded,path"
+        "id,name,virtual,locked,expanded,path,parent_id"
     }
 
     fn read_db_tables() -> &'static str {
@@ -114,8 +123,10 @@ impl FromDb for LibFolder {
         let locked = row.get(3);
         let expanded = row.get(4);
         let path: String = row.get_checked(5).unwrap_or(String::from(""));
+        let parent = row.get(6);
 
         let mut libfolder = LibFolder::new(id, &name, &path);
+        libfolder.set_parent(parent);
         libfolder.set_virtual_type(FolderVirtualType::from(virt_type));
         libfolder.set_locked(locked);
         libfolder.set_expanded(expanded);
