@@ -19,12 +19,12 @@ fn main() {
         .generate_inline_functions(true)
         // The input header we would like to generate
         // bindings for.
-        .whitelisted_type("eng::NiepceProperties")
-        .whitelisted_type("eng::QueriedContent")
+        .whitelist_type("eng::NiepceProperties")
+        .whitelist_type("eng::QueriedContent")
         .opaque_type("eng::QueriedContent")
-        .whitelisted_type("fwk::FileList")
-        .whitelisted_type("eng::IndexToXmp")
-        .whitelisted_function("eng::property_index_to_xmp")
+        .whitelist_type("fwk::FileList")
+        .whitelist_type("eng::IndexToXmp")
+        .whitelist_function("eng::property_index_to_xmp")
         .header("src/engine/db/bindings.hpp")
         .clang_arg("--std=c++11")
         .clang_arg("-DRUST_BINDGEN=1")
