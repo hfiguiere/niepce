@@ -55,8 +55,10 @@ public:
 
     typedef std::vector<std::string>    _impltype_t;
     typedef _impltype_t::value_type       value_type;
+#if !RUST_BINDGEN
     typedef _impltype_t::iterator         iterator;
     typedef _impltype_t::const_iterator   const_iterator;
+#endif
     typedef _impltype_t::size_type        size_type;
 
     FileList();
@@ -69,10 +71,12 @@ public:
 
     value_type at(size_type index) const;
     const value_type::value_type* at_cstr(size_type index) const;
+#if !RUST_BINDGEN
     const_iterator begin() const;
     const_iterator end() const;
     const_iterator cbegin() const;
     const_iterator cend() const;
+#endif
     size_type size() const;
     void sort();
     void push_back(const value_type & v);

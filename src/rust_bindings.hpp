@@ -54,7 +54,6 @@ typedef ffi::PropertyBag PropertyBag;
 typedef ffi::PropertySet PropertySet;
 typedef ffi::Date Date;
 typedef ffi::RgbColour RgbColour;
-
 }
 
 namespace eng {
@@ -69,7 +68,6 @@ typedef ffi::Label Label;
 typedef ffi::Managed Managed;
 typedef ffi::Notification LibNotification;
 typedef ffi::NotificationType NotificationType;
-typedef ffi::Np Np;
 typedef ffi::FolderVirtualType FolderVirtualType;
 }
 

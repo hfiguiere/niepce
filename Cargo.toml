@@ -14,13 +14,13 @@ gio-sys = "0.4.0"
 gio = "0.2.0"
 gtk-sys = { version = "0.4.0", features = ["v3_16"] }
 gtk = "0.2.0"
-libc = "0.2.23"
+libc = "0.2.39"
 rusqlite = { version = "0.12.0", features = ["functions"] }
 try_opt = "0.1.1"
 #gphoto = "0.1.1"
 
 [build-dependencies]
-bindgen = "0.30.0"
+bindgen = "0.37.0"
 cbindgen = { version = "0.5.2" }
 pkg-config = "0.3.9"
 

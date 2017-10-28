@@ -19,13 +19,14 @@ fn main() {
         .generate_inline_functions(true)
         // The input header we would like to generate
         // bindings for.
-        .whitelisted_type("eng::NiepceProperties")
-        .whitelisted_type("eng::QueriedContent")
+        .whitelist_type("eng::NiepceProperties")
+        .rustified_enum("eng::NiepceProperties")
+        .whitelist_type("eng::QueriedContent")
         .opaque_type("eng::QueriedContent")
         .opaque_type("std::.*")
-        .whitelisted_type("fwk::FileList")
-        .whitelisted_type("eng::IndexToXmp")
-        .whitelisted_function("eng::property_index_to_xmp")
+        .whitelist_type("fwk::FileList")
+        .whitelist_type("eng::IndexToXmp")
+        .whitelist_function("eng::property_index_to_xmp")
         .header("src/engine/db/bindings.hpp")
         .clang_arg("--std=c++11")
         .clang_arg("-DRUST_BINDGEN=1")
@@ -39,8 +40,11 @@ fn main() {
         builder = builder.clang_arg(include);
     }
 
+    builder.dump_preprocessed_input().expect("Unable to dump preprocessed input");
     // Finish the builder and generate the bindings.
-    let bindings = builder.generate()
+    let bindings = builder
+        .rustfmt_bindings(true)
+        .generate()
     // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
