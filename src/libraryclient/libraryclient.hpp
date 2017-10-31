@@ -56,11 +56,11 @@ public:
     const std::unique_ptr<UIDataProvider>& getDataProvider() const
         { return m_uidataprovider; }
 
-    ffi::LibraryClient* client() const {
+    ffi::LibraryClientWrapper* client() const {
         return m_client.get();
     }
 private:
-    std::shared_ptr<ffi::LibraryClient> m_client;
+    std::shared_ptr<ffi::LibraryClientWrapper> m_client;
 
     eng::ThumbnailCache m_thumbnailCache;
     std::unique_ptr<UIDataProvider> m_uidataprovider;
