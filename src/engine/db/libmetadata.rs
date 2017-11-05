@@ -81,11 +81,7 @@ impl LibMetadata {
 
     fn get_metadata(&self, meta: Np) -> Option<PropertyValue> {
 
-        let index_to_xmp = property_index_to_xmp(meta);
-        if index_to_xmp.is_none() {
-            return None;
-        }
-        let index_to_xmp = index_to_xmp.unwrap();
+        let index_to_xmp = try_opt!(property_index_to_xmp(meta));
 
         let mut prop_flags = exempi::PROP_NONE;
         let mut xmp_result = self.xmp.xmp.get_property(&index_to_xmp.ns, &index_to_xmp.property,
@@ -99,10 +95,7 @@ impl LibMetadata {
                 xmp_result = Some(value);
             }
         }
-        if xmp_result.is_some() {
-            return Some(PropertyValue::String(String::from(xmp_result.unwrap().to_str())));
-        }
-        None
+        Some(PropertyValue::String(String::from(try_opt!(xmp_result).to_str())))
     }
 
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {

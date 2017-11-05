@@ -212,10 +212,8 @@ impl XmpMeta {
 
     pub fn label(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PROP_NONE;
-        if let Some(xmpstring) = self.xmp.get_property(NS_XAP, "Label", &mut flags) {
-            return Some(String::from(xmpstring.to_str()));
-        }
-        None
+        let xmpstring = try_opt!(self.xmp.get_property(NS_XAP, "Label", &mut flags));
+        Some(String::from(xmpstring.to_str()))
     }
 
     pub fn rating(&self) -> Option<i32> {
@@ -230,34 +228,25 @@ impl XmpMeta {
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        if let Some(xmpstring) = self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags) {
-            if let Ok(date) = DateTime::parse_from_rfc3339(xmpstring.to_str()) {
-                let utc_date = date.with_timezone(&Utc);
-                return Some(utc_date);
-            }
-        }
-        None
+        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags));
+        let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
+
+        return Some(date.with_timezone(&Utc));
     }
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        if let Some(xmpstring) = self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags) {
-            return Some(String::from(xmpstring.to_str()));
-        }
-        None
+        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags));
+        Some(String::from(xmpstring.to_str()))
     }
 
     /// Get the date property and return a DateTime<Utc> parsed
     /// from the string value.
     pub fn get_date_property(&self, ns: &str, property: &str) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        if let Some(xmpstring) = self.xmp.get_property(ns, property, &mut flags) {
-            if let Ok(date) = DateTime::parse_from_rfc3339(xmpstring.to_str()) {
-                let utc_date = date.with_timezone(&Utc);
-                return Some(utc_date);
-            }
-        }
-        None
+        let xmpstring = try_opt!(self.xmp.get_property(ns, property, &mut flags));
+        let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
+        return Some(date.with_timezone(&Utc));
     }
 
     pub fn keywords(&mut self) -> &Vec<String> {
@@ -284,13 +273,11 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     let degs: &str;
 
     // step 1 - degrees
-    if let Some(sep) = current.find(',') {
-        let (d, remainder) = current.split_at(sep);
-        current = remainder;
-        degs = d;
-    } else {
-        return None;
-    }
+    let sep = try_opt!(current.find(','));
+    let (d, remainder) = current.split_at(sep);
+    current = remainder;
+    degs = d;
+
     // step 2 - minutes
     if current.len() < 1 {
         return None;
@@ -318,35 +305,24 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
         let (minutes, seconds) = current.split_at(sep);
         let (_, seconds) = seconds.split_at(1);
         let (seconds, _) = seconds.split_at(seconds.len() - 1);
-        if let Ok(m) = minutes.parse::<f64>() {
-            if let Ok(s) = seconds.parse::<f64>() {
-                fminutes = m + (s / 60f64);
-            } else {
-                return None;
-            }
-        } else {
-            return None;
-        }
+        let m = try_opt!(minutes.parse::<f64>().ok());
+        let s = try_opt!(seconds.parse::<f64>().ok());
+        fminutes = m + (s / 60f64);
     } else {
         // DD,mm.mm format
         let (minutes, _) = current.split_at(current.len() - 1);
-        if let Ok(m) = minutes.parse::<f64>() {
-            fminutes = m;
-        } else {
-            return None;
-        }
+        let m = try_opt!(minutes.parse::<f64>().ok());
+        fminutes = m;
     }
 
-    if let Ok(mut deg) = degs.parse::<f64>() {
-        if deg > 180.0 {
-            return None;
-        }
-        deg += fminutes / 60.0;
-        deg *= orientation;
-
-        return Some(deg);
+    let mut deg = try_opt!(degs.parse::<f64>().ok());
+    if deg > 180.0 {
+        return None;
     }
-    None
+    deg += fminutes / 60.0;
+    deg *= orientation;
+
+    return Some(deg);
 }
 
 #[no_mangle]

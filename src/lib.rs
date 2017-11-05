@@ -24,6 +24,8 @@ extern crate gio_sys;
 extern crate gio;
 extern crate libc;
 extern crate rusqlite;
+#[macro_use]
+extern crate try_opt;
 
 #[macro_use]
 pub mod fwk;

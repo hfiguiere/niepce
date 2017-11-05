@@ -83,18 +83,18 @@ impl Library {
 
     fn init(&mut self) -> bool {
         let conn_attempt = rusqlite::Connection::open(self.dbpath.clone());
-        if let Ok(conn) = conn_attempt {
-            let notif_id = self.notif_id;
-            if let Ok(_) = conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
-                Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
-                Ok(true)
-            }) {
-                self.dbconn = Some(conn);
-            } else {
-                err_out!("failed to create scalar functin.");
-                return false;
-            }
+        if !conn_attempt.is_ok() {
+            return false;
+        }
+        let conn = conn_attempt.unwrap();
+        let notif_id = self.notif_id;
+        if let Ok(_) = conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
+            Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
+            Ok(true)
+        }) {
+            self.dbconn = Some(conn);
         } else {
+            err_out!("failed to create scalar functin.");
             return false;
         }
 
@@ -230,13 +230,8 @@ impl Library {
     }
 
     fn leaf_name_for_pathname(pathname: &str) -> Option<String> {
-        let path = Path::new(pathname);
-        if let Some(ref name) = path.file_name() {
-            if let Some(s) = name.to_str() {
-                return Some(String::from(s));
-            }
-        }
-        None
+        let name = try_opt!(Path::new(pathname).file_name());
+        Some(String::from(try_opt!(name.to_str())))
     }
 
     fn get_content(&self, id: LibraryId, sql_where: &str) -> Vec<LibFile> {
@@ -269,41 +264,31 @@ impl Library {
     /// Add folder into parent whose id is `into`.
     /// A value of 0 means root.
     pub fn add_folder_into(&self, folder: &str, into: LibraryId) -> Option<LibFolder> {
-        if let Some(foldername) = Self::leaf_name_for_pathname(folder) {
-            if let Some(ref conn) = self.dbconn {
-                if let Ok(c) = conn.execute(
-                    "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
-                    &[&folder, &foldername, &into]) {
-                    if c != 1 {
-                        return None;
-                    }
-                    let id = conn.last_insert_rowid();
-                    dbg_out!("last row inserted {}", id);
-                    let mut lf = LibFolder::new(id, &foldername, &folder);
-                    lf.set_parent(into);
-                    return Some(lf);
-                }
-            }
+        let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
+        let conn = try_opt!(self.dbconn.as_ref());
+        let c = try_opt!(conn.execute(
+            "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
+            &[&folder, &foldername, &into]).ok());
+        if c != 1 {
+            return None;
         }
-        None
+        let id = conn.last_insert_rowid();
+        dbg_out!("last row inserted {}", id);
+        let mut lf = LibFolder::new(id, &foldername, &folder);
+        lf.set_parent(into);
+        return Some(lf);
     }
 
     pub fn get_folder(&self, folder: &str) -> Option<LibFolder> {
-        if let Some(foldername) = Self::leaf_name_for_pathname(folder) {
-            if let Some(ref conn) = self.dbconn {
-                let sql = format!("SELECT {} FROM {} WHERE path=:1",
-                                  LibFolder::read_db_columns(),
-                                  LibFolder::read_db_tables());
-                if let Ok(mut stmt) = conn.prepare(&sql) {
-                    let mut rows = stmt.query(&[&foldername]).unwrap();
-                    if let Some(Ok(row)) = rows.next() {
-                        let libfolder = LibFolder::read_from(&row);
-                        return Some(libfolder);
-                    }
-                }
-            }
-        }
-        None
+        let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {} WHERE path=:1",
+                          LibFolder::read_db_columns(),
+                          LibFolder::read_db_tables());
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[&foldername]).ok());
+        let row = try_opt!(try_opt!(rows.next()).ok());
+        return Some(LibFolder::read_from(&row));
     }
 
     pub fn get_all_folders(&self) -> Vec<LibFolder> {
@@ -375,17 +360,13 @@ impl Library {
     }
 
     fn get_fs_file(&self, id: LibraryId) -> Option<String> {
-        if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare(
-                "SELECT path FROM fsfiles WHERE id=:1") {
-                let mut rows = stmt.query(&[&id]).unwrap();
-                if let Some(Ok(row)) = rows.next() {
-                    let path : String = row.get(0);
-                    return Some(path);
-                }
-            }
-        }
-        None
+        let conn = try_opt!(self.dbconn.as_ref());
+        let mut stmt = try_opt!(conn.prepare(
+            "SELECT path FROM fsfiles WHERE id=:1").ok());
+        let mut rows = try_opt!(stmt.query(&[&id]).ok());
+        let row = try_opt!(try_opt!(rows.next()).ok());
+        let path : String = row.get(0);
+        return Some(path);
     }
 
     pub fn add_bundle(&self, folder_id: LibraryId, bundle: &FileBundle,
@@ -537,19 +518,14 @@ impl Library {
     }
 
     pub fn get_metadata(&self, file_id: LibraryId) -> Option<LibMetadata> {
-        if let Some(ref conn) = self.dbconn {
-            let sql = format!("SELECT {} FROM {} WHERE id=:1",
-                              LibMetadata::read_db_columns(),
-                              LibMetadata::read_db_tables());
-            if let Ok(mut stmt) = conn.prepare(&sql) {
-                let mut rows = stmt.query(&[&file_id]).unwrap();
-                if let Some(Ok(row)) = rows.next() {
-                    let meta = LibMetadata::read_from(&row);
-                    return Some(meta);
-                }
-            }
-        }
-        None
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {} WHERE id=:1",
+                          LibMetadata::read_db_columns(),
+                          LibMetadata::read_db_tables());
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[&file_id]).ok());
+        let row = try_opt!(try_opt!(rows.next()).ok());
+        return Some(LibMetadata::read_from(&row));
     }
 
 
@@ -738,18 +714,15 @@ impl Library {
     }
 
     fn get_xmp_ids_in_queue(&self) -> Option<Vec<LibraryId>> {
-        if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare("SELECT id FROM xmp_update_queue;") {
-                let mut ids = Vec::<LibraryId>::new();
-                let mut rows = stmt.query(&[]).unwrap();
-                while let Some(Ok(row)) = rows.next() {
-                    let id: i64 = row.get(0);
-                    ids.push(id);
-                }
-                return Some(ids);
-            }
+        let conn = try_opt!(self.dbconn.as_ref());
+        let mut stmt = try_opt!(conn.prepare("SELECT id FROM xmp_update_queue;").ok());
+        let mut ids = Vec::<LibraryId>::new();
+        let mut rows = try_opt!(stmt.query(&[]).ok());
+        while let Some(Ok(row)) = rows.next() {
+            let id: i64 = row.get(0);
+            ids.push(id);
         }
-        None
+        return Some(ids);
     }
 
     pub fn write_metadata(&self, id: LibraryId) -> bool {
