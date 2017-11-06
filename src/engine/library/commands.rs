@@ -39,21 +39,25 @@ use super::notification::{
 use root::eng::NiepceProperties as Np;
 
 pub fn cmd_list_all_keywords(lib: &Library) -> bool {
-    let list = lib.get_all_keywords();
-    // XXX change this to "LoadKeywords"
-    for kw in list {
-        lib.notify(Box::new(LibNotification::AddedKeyword(kw)));
+    if let Some(list) = lib.get_all_keywords() {
+        // XXX change this to "LoadKeywords"
+        for kw in list {
+            lib.notify(Box::new(LibNotification::AddedKeyword(kw)));
+        }
+        return true;
     }
-    true
+    false
 }
 
 pub fn cmd_list_all_folders(lib: &Library) -> bool {
-    let list = lib.get_all_folders();
-    // XXX change this to "LoadedFodlers"
-    for folder in list {
-        lib.notify(Box::new(LibNotification::AddedFolder(folder)));
+    if let Some(list) = lib.get_all_folders() {
+        // XXX change this to "LoadedFodlers"
+        for folder in list {
+            lib.notify(Box::new(LibNotification::AddedFolder(folder)));
+        }
+        return true;
     }
-    true
+    false
 }
 
 pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
@@ -118,16 +122,18 @@ pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
 }
 
 pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
-    let fl = lib.get_folder_content(folder_id);
-    let mut value = Box::new(
-        LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) }));
-    if let LibNotification::FolderContentQueried(ref mut content) = *value {
-        for f in fl {
-            unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
+    if let Some(fl) = lib.get_folder_content(folder_id) {
+        let mut value = Box::new(
+            LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) }));
+        if let LibNotification::FolderContentQueried(ref mut content) = *value {
+            for f in fl {
+                unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
+            }
         }
+        lib.notify(value);
+        return true;
     }
-    lib.notify(value);
-    true
+    false
 }
 
 pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
@@ -146,13 +152,15 @@ pub fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
 }
 
 pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
-    let fl = lib.get_keyword_content(keyword_id);
-    let mut content = unsafe { Content::new(keyword_id) };
-    for f in fl {
-        unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
+    if let Some(fl) = lib.get_keyword_content(keyword_id) {
+        let mut content = unsafe { Content::new(keyword_id) };
+        for f in fl {
+            unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
+        }
+        lib.notify(Box::new(LibNotification::KeywordContentQueried(content)));
+        return true;
     }
-    lib.notify(Box::new(LibNotification::KeywordContentQueried(content)));
-    true
+    false
 }
 
 pub fn cmd_write_metadata(lib: &Library, file_id: LibraryId) -> bool {
@@ -175,12 +183,14 @@ pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryI
 }
 
 pub fn cmd_list_all_labels(lib: &Library) -> bool {
-    let l = lib.get_all_labels();
-    // XXX change this notification type
-    for label in l {
-        lib.notify(Box::new(LibNotification::AddedLabel(label)));
+    if let Some(l) = lib.get_all_labels() {
+        // XXX change this notification type
+        for label in l {
+            lib.notify(Box::new(LibNotification::AddedLabel(label)));
+        }
+        return true;
     }
-    true
+    false
 }
 
 pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> bool {

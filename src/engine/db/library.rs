@@ -234,27 +234,21 @@ impl Library {
         Some(String::from(try_opt!(name.to_str())))
     }
 
-    fn get_content(&self, id: LibraryId, sql_where: &str) -> Vec<LibFile> {
-        if let Some(ref conn) = self.dbconn {
-            let sql = format!("SELECT {} FROM {} \
-                               WHERE {} \
-                               AND files.main_file=fsfiles.id",
-                              LibFile::read_db_columns(),
-                              LibFile::read_db_tables(),
-                              sql_where);
-            if let Ok(mut stmt) = conn.prepare(&sql) {
-                let mut files: Vec<LibFile> = vec!();
-                let mut rows = stmt.query(&[&id]).unwrap();
-                while  let Some(Ok(row)) = rows.next() {
-                    let libfile = LibFile::read_from(&row);
-                    files.push(libfile);
-                }
-                return files;
-            }
+    fn get_content(&self, id: LibraryId, sql_where: &str) -> Option<Vec<LibFile>> {
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {} \
+                           WHERE {} \
+                           AND files.main_file=fsfiles.id",
+                          LibFile::read_db_columns(),
+                          LibFile::read_db_tables(),
+                          sql_where);
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[&id]).ok());
+        let mut files: Vec<LibFile> = vec!();
+        while let Some(Ok(row)) = rows.next() {
+            files.push(LibFile::read_from(&row));
         }
-
-        vec!()
-
+        Some(files)
     }
 
     pub fn add_folder(&self, folder: &str) -> Option<LibFolder> {
@@ -291,25 +285,21 @@ impl Library {
         return Some(LibFolder::read_from(&row));
     }
 
-    pub fn get_all_folders(&self) -> Vec<LibFolder> {
-        if let Some(ref conn) = self.dbconn {
-            let sql = format!("SELECT {} FROM {}",
-                              LibFolder::read_db_columns(),
-                              LibFolder::read_db_tables());
-            if let Ok(mut stmt) = conn.prepare(&sql) {
-                let mut folders: Vec<LibFolder> = vec!();
-                let mut rows = stmt.query(&[]).unwrap();
-                while  let Some(Ok(row)) = rows.next() {
-                    let libfolder = LibFolder::read_from(&row);
-                    folders.push(libfolder);
-                }
-                return folders;
-            }
+    pub fn get_all_folders(&self) -> Option<Vec<LibFolder>> {
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {}",
+                          LibFolder::read_db_columns(),
+                          LibFolder::read_db_tables());
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[]).ok());
+        let mut folders: Vec<LibFolder> = vec!();
+        while  let Some(Ok(row)) = rows.next() {
+            folders.push(LibFolder::read_from(&row));
         }
-        vec!()
+        Some(folders)
     }
 
-    pub fn get_folder_content(&self, folder_id: LibraryId) -> Vec<LibFile> {
+    pub fn get_folder_content(&self, folder_id: LibraryId) -> Option<Vec<LibFile>> {
         self.get_content(folder_id, "parent_id = :1")
     }
 
@@ -326,22 +316,18 @@ impl Library {
         -1
     }
 
-    pub fn get_all_keywords(&self) -> Vec<Keyword> {
-        if let Some(ref conn) = self.dbconn {
-            let sql = format!("SELECT {} FROM {}",
-                              Keyword::read_db_columns(),
-                              Keyword::read_db_tables());
-            if let Ok(mut stmt) = conn.prepare(&sql) {
-                let mut keywords: Vec<Keyword> = vec!();
-                let mut rows = stmt.query(&[]).unwrap();
-                while let Some(Ok(row)) = rows.next() {
-                    let keyword = Keyword::read_from(&row);
-                    keywords.push(keyword);
-                }
-                return keywords;
-            }
+    pub fn get_all_keywords(&self) -> Option<Vec<Keyword>> {
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {}",
+                          Keyword::read_db_columns(),
+                          Keyword::read_db_tables());
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[]).ok());
+        let mut keywords: Vec<Keyword> = vec!();
+        while let Some(Ok(row)) = rows.next() {
+            keywords.push(Keyword::read_from(&row));
         }
-        vec!()
+        Some(keywords)
     }
 
     pub fn add_fs_file(&self, file: &str) -> LibraryId {
@@ -511,7 +497,7 @@ impl Library {
         false
     }
 
-    pub fn get_keyword_content(&self, keyword_id: LibraryId) -> Vec<LibFile> {
+    pub fn get_keyword_content(&self, keyword_id: LibraryId) -> Option<Vec<LibFile>> {
         self.get_content(keyword_id, "files.id IN \
                                (SELECT file_id FROM keywording \
                                WHERE keyword_id=:1) ")
@@ -654,22 +640,18 @@ impl Library {
         false
     }
 
-    pub fn get_all_labels(&self) -> Vec<Label> {
-        if let Some(ref conn) = self.dbconn {
-            let sql = format!("SELECT {} FROM {} ORDER BY id;",
-                              Label::read_db_columns(),
-                              Label::read_db_tables());
-            if let Ok(mut stmt) = conn.prepare(&sql) {
-                let mut labels: Vec<Label> = vec!();
-                let mut rows = stmt.query(&[]).unwrap();
-                while let Some(Ok(row)) = rows.next() {
-                    let label = Label::read_from(&row);
-                    labels.push(label);
-                }
-                return labels;
-            }
+    pub fn get_all_labels(&self) -> Option<Vec<Label>> {
+        let conn = try_opt!(self.dbconn.as_ref());
+        let sql = format!("SELECT {} FROM {} ORDER BY id;",
+                          Label::read_db_columns(),
+                          Label::read_db_tables());
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[]).ok());
+        let mut labels: Vec<Label> = vec!();
+        while let Some(Ok(row)) = rows.next() {
+            labels.push(Label::read_from(&row));
         }
-        vec!()
+        Some(labels)
     }
 
     pub fn add_label(&self, name: &str, colour: &str) -> LibraryId {
@@ -854,6 +836,8 @@ mod test {
         assert_eq!(f.parent(), id);
 
         let folders = lib.get_all_folders();
+        assert!(folders.is_some());
+        let folders = folders.unwrap();
         assert_eq!(folders.len(), 3);
 
         let file_id = lib.add_file(folder_added.id(), "foo/myfile", super::Managed::NO);
@@ -865,6 +849,8 @@ mod test {
         assert_eq!(count, 1);
 
         let fl = lib.get_folder_content(folder_added.id());
+        assert!(fl.is_some());
+        let fl = fl.unwrap();
         assert_eq!(fl.len(), count as usize);
         assert_eq!(fl[0].id(), file_id);
 
@@ -882,10 +868,14 @@ mod test {
         assert!(lib.assign_keyword(kwid2, file_id));
 
         let fl2 = lib.get_keyword_content(kwid1);
+        assert!(fl2.is_some());
+        let fl2 = fl2.unwrap();
         assert_eq!(fl2.len(), 1);
         assert_eq!(fl2[0].id(), file_id);
 
         let kl = lib.get_all_keywords();
+        assert!(kl.is_some());
+        let kl = kl.unwrap();
         assert_eq!(kl.len(), 2);
     }
 }
