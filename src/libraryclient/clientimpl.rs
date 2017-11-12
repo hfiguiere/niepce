@@ -20,6 +20,7 @@
 use std::collections::VecDeque;
 use std::path::PathBuf;
 use std::sync;
+use std::sync::mpsc;
 use std::sync::atomic;
 use std::thread;
 
@@ -28,7 +29,7 @@ use engine::db::{Library, LibraryId};
 use engine::db::library::Managed;
 use engine::library::op::Op;
 use engine::library::commands;
-use super::clientinterface::ClientInterface;
+use super::clientinterface::{ClientInterface,ClientInterfaceSync};
 use root::eng::NiepceProperties as Np;
 
 pub struct ClientImpl {
@@ -173,7 +174,7 @@ impl ClientInterface for ClientImpl {
     }
     fn create_label(&mut self, name: String, colour: String) {
         self.schedule_op(move |lib| {
-            commands::cmd_create_label(&lib, &name, &colour)
+            commands::cmd_create_label(&lib, &name, &colour) != 0
         });
     }
     fn delete_label(&mut self, label_id: LibraryId) {
@@ -210,5 +211,33 @@ impl ClientInterface for ClientImpl {
         self.schedule_op(move |lib| {
             commands::cmd_import_files(&lib, &dir, &files, manage)
         });
+    }
+}
+
+
+impl ClientInterfaceSync for ClientImpl {
+
+    fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId {
+        // can't use futures::sync::oneshot
+        let (tx, rx) = mpsc::sync_channel::<LibraryId>(1);
+
+        self.schedule_op(move |lib| {
+            tx.send(commands::cmd_create_label(&lib, &name, &colour)).unwrap();
+            true
+        });
+
+        rx.recv().unwrap()
+    }
+
+    fn create_keyword_sync(&mut self, keyword: String) -> LibraryId {
+        // can't use futures::sync::oneshot
+        let (tx, rx) = mpsc::sync_channel::<LibraryId>(1);
+
+        self.schedule_op(move |lib| {
+            tx.send(commands::cmd_add_keyword(&lib, &keyword)).unwrap();
+            true
+        });
+
+        rx.recv().unwrap()
     }
 }

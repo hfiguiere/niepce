@@ -24,7 +24,7 @@ use std::sync::Arc;
 
 use fwk::base::PropertyValue;
 use super::clientimpl::ClientImpl;
-use super::clientinterface::ClientInterface;
+use super::clientinterface::{ClientInterface,ClientInterfaceSync};
 use engine::db::LibraryId;
 use engine::db::library::Managed;
 use root::fwk::FileList;
@@ -139,6 +139,16 @@ impl ClientInterface for LibraryClient {
 
 }
 
+impl ClientInterfaceSync for LibraryClient {
+    fn create_keyword_sync(&mut self, keyword: String) -> LibraryId {
+        self.pimpl.create_keyword_sync(keyword)
+    }
+
+    fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId {
+        self.pimpl.create_label_sync(name, colour)
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn libraryclient_new(path: *const c_char, notif_id: u64) -> *mut LibraryClientWrapper {
     let dir = PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy());
@@ -226,6 +236,14 @@ pub extern "C" fn libraryclient_create_label(client: &mut LibraryClientWrapper,
     let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
     let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
     client.unwrap_mut().create_label(String::from(name), String::from(colour));
+}
+
+#[no_mangle]
+pub extern "C" fn libraryclient_create_label_sync(
+    client: &mut LibraryClientWrapper, s: *const c_char, c: *const c_char) -> LibraryId {
+    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
+    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
+    client.unwrap_mut().create_label_sync(String::from(name), String::from(colour))
 }
 
 #[no_mangle]

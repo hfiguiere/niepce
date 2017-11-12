@@ -27,6 +27,7 @@ use engine::db::library::{
     Managed
 };
 use engine::db::filebundle::FileBundle;
+use engine::db::keyword::Keyword;
 use engine::db::label::Label;
 use engine::db::libfolder::LibFolder;
 use super::notification::Notification as LibNotification;
@@ -151,6 +152,12 @@ pub fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
     true
 }
 
+pub fn cmd_add_keyword(lib: &Library, keyword: &str) -> LibraryId {
+    let id = lib.make_keyword(keyword);
+    lib.notify(Box::new(LibNotification::AddedKeyword(Keyword::new(id, keyword))));
+    id
+}
+
 pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
     if let Some(fl) = lib.get_keyword_content(keyword_id) {
         let mut content = unsafe { Content::new(keyword_id) };
@@ -193,13 +200,13 @@ pub fn cmd_list_all_labels(lib: &Library) -> bool {
     false
 }
 
-pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> bool {
+pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> LibraryId {
     let id = lib.add_label(name, colour);
     if id != -1 {
         let l = Label::new(id, name, colour);
         lib.notify(Box::new(LibNotification::AddedLabel(l)));
     }
-    true
+    id
 }
 
 pub fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {

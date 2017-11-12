@@ -60,3 +60,14 @@ pub trait ClientInterface {
     /// @param manage true if imports have to be managed
     fn import_from_directory(&mut self, dir: String, files: Vec<String>, manage: Managed);
 }
+
+/// Sync client interface
+pub trait ClientInterfaceSync {
+
+    /// Create a keyword. Return the id for the keyword.
+    /// If the keyword already exists, return its `LibraryId`.
+    fn create_keyword_sync(&mut self, keyword: String) -> LibraryId;
+
+    /// Create a label. Return the id of the newly created labal.
+    fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId;
+}
