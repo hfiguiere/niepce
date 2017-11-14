@@ -737,7 +737,7 @@ impl Library {
                             spath = PathBuf::from(p);
                         } else {
                             // XXX we should report that error.
-                            // DBG_ASSERT(!spath.empty(), "couldn't find the main file");
+                            dbg_assert!(false, "couldn't find the main file");
                             continue;
                         }
                         let mut p : Option<PathBuf> = None;
@@ -745,11 +745,12 @@ impl Library {
                             if let Some(p2) = self.get_fs_file(xmp_file_id) {
                                 p = Some(PathBuf::from(p2));
                             }
-                            // DBG_ASSERT(!p.empty(), "couldn't find the xmp file path");
+                            dbg_assert!(!p.is_none(), "couldn't find the xmp file path");
                         }
                         if p.is_none() {
                             p = Some(spath.with_extension("xmp"));
-                            // DBG_ASSERT(p != spath, "path must have been changed");
+                            dbg_assert!(*p.as_ref().unwrap() != spath,
+                                        "path must have been changed");
                         }
                         let p = p.unwrap();
                         if p.exists() {
@@ -761,10 +762,10 @@ impl Library {
                             let sidecar = xmppacket.serialize();
                             if f.write(sidecar.as_bytes()).is_ok() && (xmp_file_id <= 0) {
                                 let xmp_file_id = self.add_fs_file(p.to_string_lossy().as_ref());
-                                // DBG_ASSERT(xmp_file_id > 0, "couldn't add xmp_file");
+                                dbg_assert!(xmp_file_id > 0, "couldn't add xmp_file");
                                 // XXX handle error
-                                /*let res =*/ self.add_sidecar_file_to_bundle(id, xmp_file_id);
-                                // DBG_ASSERT(res, "addSidecarFileToBundle failed");
+                                let res = self.add_sidecar_file_to_bundle(id, xmp_file_id);
+                                dbg_assert!(res, "addSidecarFileToBundle failed");
                             }
                         }
                     }
