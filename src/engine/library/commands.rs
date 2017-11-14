@@ -114,6 +114,15 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
     true
 }
 
+pub fn cmd_create_folder(lib: &Library, path: &String) -> LibraryId {
+    if let Some(lf) = lib.add_folder(path) {
+        let id = lf.id();
+        lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+        return id;
+    }
+    0
+}
+
 pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
     if let Some(lm) = lib.get_metadata(file_id) {
         lib.notify(Box::new(LibNotification::MetadataQueried(lm)));

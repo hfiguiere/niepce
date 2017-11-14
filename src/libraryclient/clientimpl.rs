@@ -240,4 +240,16 @@ impl ClientInterfaceSync for ClientImpl {
 
         rx.recv().unwrap()
     }
+
+    fn create_folder_sync(&mut self, path: String) -> LibraryId {
+        // can't use futures::sync::oneshot
+        let (tx, rx) = mpsc::sync_channel::<LibraryId>(1);
+
+        self.schedule_op(move |lib| {
+            tx.send(commands::cmd_create_folder(&lib, &path)).unwrap();
+            true
+        });
+
+        rx.recv().unwrap()
+    }
 }

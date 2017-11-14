@@ -30,6 +30,8 @@ use engine::db::library::Managed;
 use root::fwk::FileList;
 use root::eng::NiepceProperties as Np;
 
+/// Wrap the libclient Arc so that it can be passed around
+/// Used in the ffi for example.
 pub struct LibraryClientWrapper {
     client: Arc<LibraryClient>
 }
@@ -39,6 +41,9 @@ impl LibraryClientWrapper {
         LibraryClientWrapper { client: Arc::new(LibraryClient::new(dir, notif_id)) }
     }
 
+    /// unwrap the mutable client Arc
+    /// XXX we need to unsure this is thread safe.
+    /// Don't hold this reference more than you need.
     pub fn unwrap_mut(&mut self) -> &mut LibraryClient {
         Arc::get_mut(&mut self.client).unwrap()
     }
@@ -146,6 +151,10 @@ impl ClientInterfaceSync for LibraryClient {
 
     fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId {
         self.pimpl.create_label_sync(name, colour)
+    }
+
+    fn create_folder_sync(&mut self, path: String) -> LibraryId {
+        self.pimpl.create_folder_sync(path)
     }
 }
 
