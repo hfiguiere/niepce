@@ -25,10 +25,11 @@
 #include <gtkmm/box.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "niepce/notifications.hpp"
 #include "engine/library/notification.hpp"
 #include "libraryclient/libraryclient.hpp"
-#include "fwk/toolkit/application.hpp"
 #include "niepcewindow.hpp"
 #include "workspacecontroller.hpp"
 
@@ -38,8 +39,9 @@ using fwk::Application;
 namespace ui {
 
 
-WorkspaceController::WorkspaceController()
+WorkspaceController::WorkspaceController(const Glib::RefPtr<Gio::SimpleActionGroup>& action_group)
     : fwk::UiController()
+    , m_action_group(action_group)
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     static struct _Icons {
@@ -78,6 +80,13 @@ libraryclient::LibraryClientPtr WorkspaceController::getLibraryClient() const
 fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 {
     return std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->getLibraryConfig();
+}
+
+void WorkspaceController::action_new_folder()
+{
+    // XXX get a unique name
+    auto id = ffi::libraryclient_create_folder_sync(getLibraryClient()->client(), "foobar");
+    // select folder in tree
 }
 
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
@@ -287,16 +296,33 @@ Gtk::Widget * WorkspaceController::buildWidget()
     col = m_librarytree.get_column(num - 1);
     col->set_alignment(1.0f);
 
+    Gtk::Box* header = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    header->set_spacing(4);
     // TODO make it a mnemonic
     m_label.set_text_with_mnemonic(Glib::ustring(_("_Workspace")));
     m_label.set_mnemonic_widget(m_librarytree);
-    m_vbox.pack_start(m_label, Gtk::PACK_SHRINK);
+    header->pack_start(m_label, Gtk::PACK_SHRINK);
+    Gtk::MenuButton* add_btn = Gtk::manage(new Gtk::MenuButton);
+    add_btn->set_direction(Gtk::ARROW_NONE);
+
+    auto menu = Gio::Menu::create();
+
+    auto section = Gio::Menu::create();
+    menu->append_section(section);
+    fwk::add_action(m_action_group, "NewFolder",
+                    sigc::mem_fun(*this,
+                                  &WorkspaceController::action_new_folder),
+                    section, _("New Folder..."), "workspace");
+    add_btn->set_menu_model(menu);
+
+    header->pack_end(*add_btn, Gtk::PACK_SHRINK);
+    m_vbox.pack_start(*header, Gtk::PACK_SHRINK);
     Gtk::ScrolledWindow* scrolled = Gtk::manage(new Gtk::ScrolledWindow);
     m_vbox.pack_start(*scrolled);
     scrolled->add(m_librarytree);
 
     m_librarytree.get_selection()->signal_changed().connect (
-        sigc::mem_fun(this, 
+        sigc::mem_fun(this,
                       &WorkspaceController::on_libtree_selection));
     m_librarytree.signal_row_expanded().connect(
         sigc::mem_fun(this,

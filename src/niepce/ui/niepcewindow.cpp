@@ -111,7 +111,9 @@ NiepceWindow::_createModuleShell()
 
 
     // workspace treeview
-    m_workspacectrl = WorkspaceController::Ptr( new WorkspaceController() );
+    auto workspace_actions = Gio::SimpleActionGroup::create();
+    gtkWindow().insert_action_group("workspace", workspace_actions);
+    m_workspacectrl = WorkspaceController::Ptr(new WorkspaceController(workspace_actions));
 
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(*m_workspacectrl,
@@ -191,7 +193,6 @@ void NiepceWindow::init_actions()
     // move to the workspace
     section = Gio::Menu::create();
     submenu->append_section(section);
-    section->append(_("New Folder..."), "action");
     section->append(_("New Project..."), "action");
     fwk::add_action(m_action_group, "Import",
                     sigc::mem_fun(*this,

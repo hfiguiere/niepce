@@ -196,6 +196,13 @@ pub extern "C" fn libraryclient_query_folder_content(client: &mut LibraryClientW
 }
 
 #[no_mangle]
+pub extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWrapper,
+                                                   p: *const c_char) -> LibraryId {
+    let path = unsafe { CStr::from_ptr(p) }.to_string_lossy();
+    client.unwrap_mut().create_folder_sync(String::from(path))
+}
+
+#[no_mangle]
 pub extern "C" fn libraryclient_count_folder(client: &mut LibraryClientWrapper,
                                              folder_id: LibraryId) {
     client.unwrap_mut().count_folder(folder_id)

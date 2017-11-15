@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef __UI_WORKSPACECONTROLLER_H__
 #define __UI_WORKSPACECONTROLLER_H__
 
@@ -45,7 +43,7 @@ class WorkspaceController
 {
 public:
     typedef std::shared_ptr<WorkspaceController> Ptr;
-    
+
     enum {
         FOLDERS_ITEM,
         PROJECTS_ITEM,
@@ -54,18 +52,18 @@ public:
         PROJECT_ITEM,
         KEYWORD_ITEM
     };
-    
-    WorkspaceController();
-    class WorkspaceTreeColumns 
+
+    WorkspaceController(const Glib::RefPtr<Gio::SimpleActionGroup>& action_group);
+    class WorkspaceTreeColumns
         : public Gtk::TreeModelColumnRecord
     {
     public:
-        
+
         WorkspaceTreeColumns()
-            { 
+            {
                 add(m_icon);
                 add(m_id);
-                add(m_label);  
+                add(m_label);
                 add(m_type);
                 add(m_count);
                 add(m_count_n);
@@ -86,6 +84,10 @@ public:
     
     virtual Gtk::Widget * buildWidget() override;
 private:
+
+    /** action to create a new folder */
+    void action_new_folder();
+
     void on_row_expanded_collapsed(const Gtk::TreeIter& iter,
                                    const Gtk::TreePath& path, bool expanded);
     void on_row_expanded(const Gtk::TreeIter& iter,
@@ -124,6 +126,9 @@ private:
         ICON_KEYWORD,
         _ICON_SIZE
     };
+
+    Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
+
     std::array< Glib::RefPtr<Gdk::Pixbuf>, _ICON_SIZE > m_icons;
     WorkspaceTreeColumns           m_librarycolumns;
     Gtk::Box                       m_vbox;
