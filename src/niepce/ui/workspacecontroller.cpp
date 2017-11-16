@@ -85,7 +85,7 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 void WorkspaceController::action_new_folder()
 {
     // XXX get a unique name
-    auto id = ffi::libraryclient_create_folder_sync(getLibraryClient()->client(), "foobar");
+    auto id = ffi::libraryclient_create_folder_sync(getLibraryClient()->client(), "foobar", nullptr);
     // select folder in tree
 }
 

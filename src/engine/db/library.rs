@@ -229,7 +229,7 @@ impl Library {
         false
     }
 
-    fn leaf_name_for_pathname(pathname: &str) -> Option<String> {
+    pub fn leaf_name_for_pathname(pathname: &str) -> Option<String> {
         let name = try_opt!(Path::new(pathname).file_name());
         Some(String::from(try_opt!(name.to_str())))
     }
@@ -251,24 +251,25 @@ impl Library {
         Some(files)
     }
 
-    pub fn add_folder(&self, folder: &str) -> Option<LibFolder> {
-        self.add_folder_into(folder, 0)
+    /// Add a folder at the root.
+    pub fn add_folder(&self, name: &str, path: Option<String>) -> Option<LibFolder> {
+        self.add_folder_into(name, path, 0)
     }
 
-    /// Add folder into parent whose id is `into`.
+    /// Add folder with name into parent whose id is `into`.
     /// A value of 0 means root.
-    pub fn add_folder_into(&self, folder: &str, into: LibraryId) -> Option<LibFolder> {
-        let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
+    pub fn add_folder_into(&self, name: &str, path: Option<String>,
+                           into: LibraryId) -> Option<LibFolder> {
         let conn = try_opt!(self.dbconn.as_ref());
         let c = try_opt!(conn.execute(
             "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
-            &[&folder, &foldername, &into]).ok());
+            &[&path, &name, &into]).ok());
         if c != 1 {
             return None;
         }
         let id = conn.last_insert_rowid();
         dbg_out!("last row inserted {}", id);
-        let mut lf = LibFolder::new(id, &foldername, &folder);
+        let mut lf = LibFolder::new(id, &name, path);
         lf.set_parent(into);
         return Some(lf);
     }
@@ -819,7 +820,7 @@ mod test {
         assert!(lib.is_ok());
         assert!(lib.check_database_version() == super::DB_SCHEMA_VERSION);
 
-        let folder_added = lib.add_folder("foo");
+        let folder_added = lib.add_folder("foo", Some(String::from("foo")));
         assert!(folder_added.is_some());
         let folder_added = folder_added.unwrap();
         assert!(folder_added.id() > 0);
@@ -830,7 +831,7 @@ mod test {
         assert_eq!(folder_added.id(), f.id());
 
         let id = f.id();
-        lib.add_folder_into("bar", id);
+        lib.add_folder_into("bar", Some(String::from("bar")), id);
         let f = lib.get_folder("bar");
         assert!(f.is_some());
         let f = f.unwrap();

@@ -153,8 +153,8 @@ impl ClientInterfaceSync for LibraryClient {
         self.pimpl.create_label_sync(name, colour)
     }
 
-    fn create_folder_sync(&mut self, path: String) -> LibraryId {
-        self.pimpl.create_folder_sync(path)
+    fn create_folder_sync(&mut self, name: String, path: Option<String>) -> LibraryId {
+        self.pimpl.create_folder_sync(name, path)
     }
 }
 
@@ -197,9 +197,15 @@ pub extern "C" fn libraryclient_query_folder_content(client: &mut LibraryClientW
 
 #[no_mangle]
 pub extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWrapper,
+                                                   n: *const c_char,
                                                    p: *const c_char) -> LibraryId {
-    let path = unsafe { CStr::from_ptr(p) }.to_string_lossy();
-    client.unwrap_mut().create_folder_sync(String::from(path))
+    let name = String::from(unsafe { CStr::from_ptr(n) }.to_string_lossy());
+    let path = if p.is_null() {
+        None
+    } else {
+        Some(String::from(unsafe { CStr::from_ptr(p) }.to_string_lossy()))
+    };
+    client.unwrap_mut().create_folder_sync(name, path)
 }
 
 #[no_mangle]

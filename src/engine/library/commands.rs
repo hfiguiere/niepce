@@ -74,9 +74,14 @@ pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
         Some(lf) =>
             libfolder = lf,
         _ => {
-            if let Some(lf) = lib.add_folder(&*folder.to_string_lossy()) {
-                libfolder = lf.clone();
-                lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+            let folder = &*folder.to_string_lossy();
+            if let Some(name) = Library::leaf_name_for_pathname(folder) {
+                if let Some(lf) = lib.add_folder(&name, Some(String::from(folder))) {
+                    libfolder = lf.clone();
+                    lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -98,9 +103,13 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
         Some(lf) =>
             libfolder = lf,
         _ => {
-            if let Some(lf) = lib.add_folder(folder) {
-                libfolder = lf.clone();
-                lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+            if let Some(name) = Library::leaf_name_for_pathname(folder) {
+                if let Some(lf) = lib.add_folder(&name, Some(String::from(folder))) {
+                    libfolder = lf.clone();
+                    lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -114,8 +123,8 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
     true
 }
 
-pub fn cmd_create_folder(lib: &Library, path: &String) -> LibraryId {
-    if let Some(lf) = lib.add_folder(path) {
+pub fn cmd_create_folder(lib: &Library, name: &String, path: Option<String>) -> LibraryId {
+    if let Some(lf) = lib.add_folder(name, path) {
         let id = lf.id();
         lib.notify(Box::new(LibNotification::AddedFolder(lf)));
         return id;

@@ -44,8 +44,10 @@ impl From<i32> for FolderVirtualType {
 #[derive(Clone)]
 pub struct LibFolder {
     id: LibraryId,
+    /// Name of the folder
     name: String,
-    path: String,
+    /// Path of the folder.
+    path: Option<String>,
     locked: bool,
     expanded: bool,
     virt: FolderVirtualType,
@@ -54,10 +56,10 @@ pub struct LibFolder {
 }
 
 impl LibFolder {
-    pub fn new(id: LibraryId, name: &str, path: &str) -> LibFolder {
+    pub fn new(id: LibraryId, name: &str, path: Option<String>) -> LibFolder {
         LibFolder {
             id: id, name: String::from(name),
-            path: String::from(path),
+            path: path,
             locked: false,
             expanded: false, virt: FolderVirtualType::NONE,
             parent: 0,
@@ -122,10 +124,10 @@ impl FromDb for LibFolder {
         let virt_type: i32 = row.get(2);
         let locked = row.get(3);
         let expanded = row.get(4);
-        let path: String = row.get_checked(5).unwrap_or(String::from(""));
+        let path: Option<String> = row.get_checked(5).ok();
         let parent = row.get(6);
 
-        let mut libfolder = LibFolder::new(id, &name, &path);
+        let mut libfolder = LibFolder::new(id, &name, path);
         libfolder.set_parent(parent);
         libfolder.set_virtual_type(FolderVirtualType::from(virt_type));
         libfolder.set_locked(locked);

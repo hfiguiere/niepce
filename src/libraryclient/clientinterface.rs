@@ -72,5 +72,5 @@ pub trait ClientInterfaceSync {
     fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId;
 
     /// Create a folder. Return the id of the newly created folder.
-    fn create_folder_sync(&mut self, path: String) -> LibraryId;
+    fn create_folder_sync(&mut self, name: String, path: Option<String>) -> LibraryId;
 }
