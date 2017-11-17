@@ -121,6 +121,7 @@ NiepceWindow::_createModuleShell()
     add(m_workspacectrl);
 
     m_hbox.set_border_width(4);
+    m_hbox.set_wide_handle(true);
     m_hbox.pack1(*(m_workspacectrl->buildWidget()), Gtk::EXPAND);
     m_hbox.pack2(*(m_moduleshell->buildWidget()), Gtk::EXPAND);
     m_databinders.add_binder(new fwk::ConfigDataBinder<int>(m_hbox.property_position(),

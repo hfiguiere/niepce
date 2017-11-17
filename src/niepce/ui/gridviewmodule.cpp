@@ -118,6 +118,7 @@ Gtk::Widget * GridViewModule::buildWidget()
 
   m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+  m_lib_splitview.set_wide_handle(true);
   m_lib_splitview.pack1(m_scrollview);
   m_dock = new fwk::Dock();
   m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController);
