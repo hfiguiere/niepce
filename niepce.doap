@@ -11,8 +11,8 @@
   -->
   <shortdesc xml:lang="en">A digital photo management application</shortdesc>
   <homepage rdf:resource="https://wiki.gnome.org/Apps/Niepce" />
-  <mailing-list rdf:resource="https://mail.gna.org/listinfo/niepce-devel/" />
-
+  <programming-language>C++</programming-language>
+  <programming-language>Rust</programming-language>
   <maintainer>
     <foaf:Person>
       <foaf:name>Hubert Figuiere</foaf:name>
