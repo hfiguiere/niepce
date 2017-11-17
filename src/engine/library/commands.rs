@@ -33,8 +33,8 @@ use engine::db::libfolder::LibFolder;
 use super::notification::Notification as LibNotification;
 use super::notification::{
     Content,
+    Count,
     FileMove,
-    FolderCount,
     MetadataChange,
 };
 use root::eng::NiepceProperties as Np;
@@ -174,7 +174,7 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
 pub fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
     let count = lib.count_folder(folder_id);
     lib.notify(Box::new(LibNotification::FolderCounted(
-        FolderCount{folder: folder_id, count: count})));
+        Count{id: folder_id, count: count})));
     true
 }
 
@@ -196,6 +196,13 @@ pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
     false
 }
 
+pub fn cmd_count_keyword(lib: &Library, id: LibraryId) -> bool {
+    let count = lib.count_keyword(id);
+    lib.notify(Box::new(LibNotification::KeywordCounted(
+        Count{id: id, count: count})));
+    true
+}
+
 pub fn cmd_write_metadata(lib: &Library, file_id: LibraryId) -> bool {
     lib.write_metadata(file_id)
 }
@@ -207,9 +214,9 @@ pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryI
         lib.notify(Box::new(LibNotification::FileMoved(
             FileMove{file: file_id, from: from, to: to})));
         lib.notify(Box::new(LibNotification::FolderCountChanged(
-            FolderCount{folder: from, count: -1})));
+            Count{id: from, count: -1})));
         lib.notify(Box::new(LibNotification::FolderCountChanged(
-            FolderCount{folder: to, count: 1})));
+            Count{id: to, count: 1})));
         return true;
     }
     false

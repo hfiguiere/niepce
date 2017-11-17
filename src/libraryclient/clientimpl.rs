@@ -117,9 +117,16 @@ impl ClientInterface for ClientImpl {
             commands::cmd_list_all_keywords(&lib)
         });
     }
+
     fn query_keyword_content(&mut self, keyword_id: LibraryId) {
         self.schedule_op(move |lib| {
             commands::cmd_query_keyword_content(&lib, keyword_id)
+        });
+    }
+
+    fn count_keyword(&mut self, id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_count_keyword(&lib, id)
         });
     }
 
@@ -129,11 +136,13 @@ impl ClientInterface for ClientImpl {
             commands::cmd_list_all_folders(&lib)
         });
     }
+
     fn query_folder_content(&mut self, folder_id: LibraryId) {
         self.schedule_op(move |lib| {
             commands::cmd_query_folder_content(&lib, folder_id)
         });
     }
+
     fn count_folder(&mut self, folder_id: LibraryId) {
         self.schedule_op(move |lib| {
             commands::cmd_count_folder(&lib, folder_id)

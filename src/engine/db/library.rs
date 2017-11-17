@@ -342,6 +342,19 @@ impl Library {
         Some(keywords)
     }
 
+    pub fn count_keyword(&self, id: LibraryId) -> i64 {
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(mut stmt) = conn.prepare("SELECT COUNT(keyword_id) FROM keywording \
+                                                WHERE keyword_id=:1;") {
+                let mut rows = stmt.query(&[&id]).unwrap();
+                if let Some(Ok(row)) = rows.next() {
+                    return row.get(0);
+                }
+            }
+        }
+        -1
+    }
+
     pub fn add_fs_file(&self, file: &str) -> LibraryId {
         if let Some(ref conn) = self.dbconn {
             if let Ok(c) = conn.execute(

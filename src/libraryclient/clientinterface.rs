@@ -28,6 +28,7 @@ pub trait ClientInterface {
     /// get all the keywords
     fn get_all_keywords(&mut self);
     fn query_keyword_content(&mut self, id: LibraryId);
+    fn count_keyword(&mut self, id: LibraryId);
 
     /// get all the folder
     fn get_all_folders(&mut self);

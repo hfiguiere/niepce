@@ -180,11 +180,25 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::NotificationType::FOLDER_COUNTED:
     {
-        auto count = engine_library_notification_get_folder_count(&ln);
-        DBG_OUT("count for folder %Ld is %d", (long long)count->folder, count->count);
+        auto count = engine_library_notification_get_count(&ln);
+        DBG_OUT("count for folder %Ld is %d", (long long)count->id, count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count->folder);
+            = m_folderidmap.find(count->id);
         if(iter != m_folderidmap.cend()) {
+            Gtk::TreeRow row = *(iter->second);
+            row[m_librarycolumns.m_count_n] = count->count;
+            row[m_librarycolumns.m_count] = std::to_string(count->count);
+        }
+
+        break;
+    }
+    case eng::NotificationType::KEYWORD_COUNTED:
+    {
+        auto count = engine_library_notification_get_count(&ln);
+        DBG_OUT("count for folder %Ld is %d", (long long)count->id, count->count);
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
+            = m_keywordsidmap.find(count->id);
+        if(iter != m_keywordsidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             row[m_librarycolumns.m_count_n] = count->count;
             row[m_librarycolumns.m_count] = std::to_string(count->count);
@@ -194,10 +208,10 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     }
     case eng::NotificationType::FOLDER_COUNT_CHANGE:
     {
-        auto count = engine_library_notification_get_folder_count(&ln);
-        DBG_OUT("count change for folder %Ld is %d", (long long)count->folder, count->count);
+        auto count = engine_library_notification_get_count(&ln);
+        DBG_OUT("count change for folder %Ld is %d", (long long)count->id, count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count->folder);
+            = m_folderidmap.find(count->id);
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             int new_count = row[m_librarycolumns.m_count_n] + count->count;
@@ -302,7 +316,7 @@ void WorkspaceController::add_keyword_item(const eng::Keyword* k)
                          m_icons[ICON_KEYWORD], keyword,
                          engine_db_keyword_id(k), KEYWORD_ITEM);
     ffi::rust_cstring_delete(keyword);
-//		getLibraryClient()->countKeyword(f->id());
+    ffi::libraryclient_count_keyword(getLibraryClient()->client(), engine_db_keyword_id(k));
     m_keywordsidmap[engine_db_keyword_id(k)] = iter;
     if(was_empty) {
         expand_from_cfg("workspace_keywords_expanded", m_keywordsNode);

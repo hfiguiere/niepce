@@ -82,6 +82,9 @@ impl ClientInterface for LibraryClient {
     fn query_keyword_content(&mut self, id: LibraryId) {
         self.pimpl.query_keyword_content(id);
     }
+    fn count_keyword(&mut self, id: LibraryId) {
+        self.pimpl.count_keyword(id);
+    }
 
     /// get all the folder
     fn get_all_folders(&mut self) {
@@ -225,13 +228,19 @@ pub extern "C" fn libraryclient_delete_folder(client: &mut LibraryClientWrapper,
 #[no_mangle]
 pub extern "C" fn libraryclient_count_folder(client: &mut LibraryClientWrapper,
                                              folder_id: LibraryId) {
-    client.unwrap_mut().count_folder(folder_id)
+    client.unwrap_mut().count_folder(folder_id);
 }
 
 #[no_mangle]
 pub extern "C" fn libraryclient_query_keyword_content(client: &mut LibraryClientWrapper,
                                                       keyword_id: LibraryId) {
     client.unwrap_mut().query_keyword_content(keyword_id);
+}
+
+#[no_mangle]
+pub extern "C" fn libraryclient_count_keyword(client: &mut LibraryClientWrapper,
+                                             id: LibraryId) {
+    client.unwrap_mut().count_keyword(id);
 }
 
 #[no_mangle]

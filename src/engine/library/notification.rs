@@ -40,14 +40,16 @@ pub enum NotificationType {
     ADDED_LABEL,
     FOLDER_CONTENT_QUERIED,
     FOLDER_DELETED,
+    FOLDER_COUNTED,
+    FOLDER_COUNT_CHANGE,
     KEYWORD_CONTENT_QUERIED,
+    KEYWORD_COUNTED,
+    KEYWORD_COUNT_CHANGE,
     METADATA_QUERIED,
     METADATA_CHANGED,
     LABEL_CHANGED,
     LABEL_DELETED,
     XMP_NEEDS_UPDATE,
-    FOLDER_COUNTED,
-    FOLDER_COUNT_CHANGE ,
     FILE_MOVED,
 }
 
@@ -59,8 +61,8 @@ pub struct FileMove {
 }
 
 #[repr(C)]
-pub struct FolderCount {
-    pub folder: LibraryId,
+pub struct Count {
+    pub id: LibraryId,
     pub count: i64,
 }
 
@@ -92,10 +94,12 @@ pub enum Notification {
     AddedLabel(Label),
     FileMoved(FileMove),
     FolderContentQueried(Content),
-    FolderCounted(FolderCount),
-    FolderCountChanged(FolderCount),
+    FolderCounted(Count),
+    FolderCountChanged(Count),
     FolderDeleted(LibraryId),
     KeywordContentQueried(Content),
+    KeywordCounted(Count),
+    KeywordCountChanged(Count),
     LabelChanged(Label),
     LabelDeleted(LibraryId),
     LibCreated,
@@ -151,6 +155,8 @@ pub extern "C" fn engine_library_notification_type(n: *const Notification) -> No
         Some(&Notification::FolderDeleted(_)) => NotificationType::FOLDER_DELETED,
         Some(&Notification::KeywordContentQueried(_)) =>
             NotificationType::KEYWORD_CONTENT_QUERIED,
+        Some(&Notification::KeywordCounted(_)) => NotificationType::KEYWORD_COUNTED,
+        Some(&Notification::KeywordCountChanged(_)) => NotificationType::KEYWORD_COUNT_CHANGE,
         Some(&Notification::LabelChanged(_)) => NotificationType::LABEL_CHANGED,
         Some(&Notification::LabelDeleted(_)) => NotificationType::LABEL_DELETED,
         Some(&Notification::LibCreated) => NotificationType::NEW_LIBRARY_CREATED,
@@ -199,10 +205,12 @@ pub extern "C" fn engine_library_notification_get_libmetadata(n: *const Notifica
 }
 
 #[no_mangle]
-pub extern "C" fn engine_library_notification_get_folder_count(n: *const Notification) -> *const FolderCount {
+pub extern "C" fn engine_library_notification_get_count(n: *const Notification) -> *const Count {
     match unsafe { n.as_ref() } {
         Some(&Notification::FolderCountChanged(ref c)) |
-        Some(&Notification::FolderCounted(ref c)) =>
+        Some(&Notification::FolderCounted(ref c)) |
+        Some(&Notification::KeywordCountChanged(ref c)) |
+        Some(&Notification::KeywordCounted(ref c)) =>
             c,
         _ => unreachable!()
     }
