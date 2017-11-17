@@ -24,6 +24,8 @@
 
 #include "init.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace fwk {
 namespace utils {
 
@@ -31,6 +33,8 @@ namespace utils {
 void init()
 {
   Gio::init();
+
+  ffi::niepce_init();
 }
 
 

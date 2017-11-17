@@ -21,6 +21,8 @@
 
 #if !RUST_BINDGEN
 
+#include <gtk/gtk.h>
+
 #include "engine/db/properties-enum.hpp"
 
 namespace fwk {
@@ -63,6 +65,10 @@ typedef ffi::Notification LibNotification;
 typedef ffi::NotificationType NotificationType;
 typedef ffi::Np Np;
 typedef ffi::FolderVirtualType FolderVirtualType;
+}
+
+namespace ui {
+  using ffi::dialog_request_new_folder;
 }
 
 #endif

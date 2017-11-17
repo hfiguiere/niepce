@@ -33,6 +33,7 @@
 #include "niepcewindow.hpp"
 #include "workspacecontroller.hpp"
 
+#include "rust_bindings.hpp"
 
 using fwk::Application;
 
@@ -84,8 +85,9 @@ fwk::Configuration::Ptr WorkspaceController::getLibraryConfig() const
 
 void WorkspaceController::action_new_folder()
 {
+    auto& window = std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->gtkWindow();
+    ui::dialog_request_new_folder(getLibraryClient()->client(), window.gobj());
     // XXX get a unique name
-    auto id = ffi::libraryclient_create_folder_sync(getLibraryClient()->client(), "foobar", nullptr);
     // select folder in tree
 }
 

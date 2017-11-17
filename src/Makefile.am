@@ -39,6 +39,10 @@ RUST_SOURCES = \
 	@top_srcdir@/src/libraryclient/clientinterface.rs \
 	@top_srcdir@/src/libraryclient/libraryclient.rs \
 	@top_srcdir@/src/libraryclient/mod.rs \
+	@top_srcdir@/src/niepce/mod.rs \
+	@top_srcdir@/src/niepce/ui/mod.rs \
+	@top_srcdir@/src/niepce/ui/dialogs/mod.rs \
+	@top_srcdir@/src/niepce/ui/dialogs/requestnewfolder.rs \
 	$(NULL)
 
 EXTRA_DIST = \
