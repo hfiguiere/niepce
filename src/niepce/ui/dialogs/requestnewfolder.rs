@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use gettextrs::gettext;
 use glib::translate::*;
 use gtk::prelude::*;
 use gtk;
@@ -35,11 +36,13 @@ pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
     let parent = unsafe { gtk::Window::from_glib_none(parent) };
     let dialog = Dialog::new_with_buttons(Some("New folder"), Some(&parent),
                                           gtk::DIALOG_MODAL,
-                                          &[("OK", 0), ("Cancel", 1)]);
-    let label = Label::new("Folder name:");
+                                          &[(&gettext("OK"), 0),
+                                            (&gettext("Cancel"), 1)]);
+    let label = Label::new_with_mnemonic(gettext("Folder _name:").as_str());
     dialog.get_content_area().pack_start(&label, true, false, 4);
     let entry = Entry::new();
     entry.set_text("foobar");
+    entry.add_mnemonic_label(&label);
     dialog.get_content_area().pack_end(&entry, true, false, 4);
 
     dialog.get_content_area().show_all();

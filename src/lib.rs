@@ -19,6 +19,7 @@
 
 extern crate chrono;
 extern crate exempi;
+extern crate gettextrs;
 extern crate glib_sys;
 extern crate glib;
 extern crate gio_sys;
