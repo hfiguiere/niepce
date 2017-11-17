@@ -69,6 +69,7 @@ typedef ffi::FolderVirtualType FolderVirtualType;
 
 namespace ui {
   using ffi::dialog_request_new_folder;
+  using ffi::dialog_confirm;
 }
 
 #endif

@@ -94,6 +94,14 @@ impl ClientInterface for LibraryClient {
         self.pimpl.count_folder(id);
     }
 
+    fn create_folder(&mut self, name: String, path: Option<String>) {
+        self.pimpl.create_folder(name, path);
+    }
+
+    fn delete_folder(&mut self, id: LibraryId) {
+        self.pimpl.delete_folder(id);
+    }
+
     fn request_metadata(&mut self, id: LibraryId) {
         self.pimpl.request_metadata(id);
     }
@@ -206,6 +214,12 @@ pub extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWra
         Some(String::from(unsafe { CStr::from_ptr(p) }.to_string_lossy()))
     };
     client.unwrap_mut().create_folder_sync(name, path)
+}
+
+#[no_mangle]
+pub extern "C" fn libraryclient_delete_folder(client: &mut LibraryClientWrapper,
+                                             id: LibraryId) {
+    client.unwrap_mut().delete_folder(id);
 }
 
 #[no_mangle]

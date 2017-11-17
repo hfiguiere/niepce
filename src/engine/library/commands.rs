@@ -132,6 +132,14 @@ pub fn cmd_create_folder(lib: &Library, name: &String, path: Option<String>) -> 
     0
 }
 
+pub fn cmd_delete_folder(lib: &Library, id: LibraryId) -> bool {
+    if lib.delete_folder(id) {
+        lib.notify(Box::new(LibNotification::FolderDeleted(id)));
+        return true;
+    }
+    false
+}
+
 pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
     if let Some(lm) = lib.get_metadata(file_id) {
         lib.notify(Box::new(LibNotification::MetadataQueried(lm)));

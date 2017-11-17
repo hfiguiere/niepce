@@ -42,6 +42,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/niepce/mod.rs \
 	@top_srcdir@/src/niepce/ui/mod.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/mod.rs \
+	@top_srcdir@/src/niepce/ui/dialogs/confirm.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/requestnewfolder.rs \
 	$(NULL)
 

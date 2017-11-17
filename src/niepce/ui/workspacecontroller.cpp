@@ -96,6 +96,17 @@ void WorkspaceController::action_new_folder()
     ui::dialog_request_new_folder(getLibraryClient()->client(), window.gobj());
 }
 
+void WorkspaceController::action_delete_folder()
+{
+    auto id = get_selected_folder_id();
+    if (id) {
+        auto& window = std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->gtkWindow();
+        if (ui::dialog_confirm(_("Delete selected folder?"), window.gobj())) {
+            ffi::libraryclient_delete_folder(getLibraryClient()->client(), id);
+        }
+    }
+}
+
 void WorkspaceController::action_file_import()
 {
     int result;
@@ -154,6 +165,12 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         this->add_folder_item(f);
         break;
     }
+    case eng::NotificationType::FOLDER_DELETED:
+    {
+        auto id = engine_library_notification_get_id(&ln);
+        remove_folder_item(id);
+        break;
+    }
     case eng::NotificationType::ADDED_KEYWORD:
     {
         auto k = engine_library_notification_get_keyword(&ln);
@@ -200,6 +217,20 @@ void WorkspaceController::on_count_notification(int)
     DBG_OUT("received NOTIFICATION_COUNT");
 }
 
+eng::library_id_t WorkspaceController::get_selected_folder_id()
+{
+    auto selection = m_librarytree.get_selection();
+    auto selected = selection->get_selected();
+    if (selected == m_librarytree.get_model()->children().end()) {
+        return 0;
+    }
+    int type = (*selected)[m_librarycolumns.m_type];
+    eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
+    if (type != FOLDER_ITEM) {
+        return 0;
+    }
+    return id;
+}
 
 void WorkspaceController::on_libtree_selection()
 {
@@ -221,6 +252,9 @@ void WorkspaceController::on_libtree_selection()
     default:
         DBG_OUT("selected something not a folder");
     }
+
+    Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(
+        m_action_group->lookup_action("DeleteFolder"))->set_enabled(type == FOLDER_ITEM);
 }
 
 void WorkspaceController::on_row_expanded_collapsed(const Gtk::TreeIter& iter,
@@ -273,6 +307,16 @@ void WorkspaceController::add_keyword_item(const eng::Keyword* k)
     if(was_empty) {
         expand_from_cfg("workspace_keywords_expanded", m_keywordsNode);
     }
+}
+
+void WorkspaceController::remove_folder_item(eng::library_id_t id)
+{
+    auto iter = m_folderidmap.find(id);
+    if (iter == m_folderidmap.end()) {
+        return;
+    }
+    m_treestore->erase(iter->second);
+    m_folderidmap.erase(iter);
 }
 
 void WorkspaceController::add_folder_item(const eng::LibFolder* f)
@@ -368,6 +412,15 @@ Gtk::Widget * WorkspaceController::buildWidget()
                     sigc::mem_fun(*this,
                                   &WorkspaceController::action_new_folder),
                     section, _("New Folder..."), "workspace");
+    auto action = fwk::add_action(m_action_group, "DeleteFolder",
+                                  sigc::mem_fun(*this,
+                                                &WorkspaceController::action_delete_folder),
+                                  section, _("Delete Folder"), "workspace");
+    action->set_enabled(false);
+
+    section = Gio::Menu::create();
+    menu->append_section(section);
+
     fwk::add_action(m_action_group, "Import",
                     sigc::mem_fun(*this,
                                   &WorkspaceController::action_file_import),

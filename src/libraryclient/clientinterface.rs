@@ -33,6 +33,8 @@ pub trait ClientInterface {
     fn get_all_folders(&mut self);
     fn query_folder_content(&mut self, id: LibraryId);
     fn count_folder(&mut self, id: LibraryId);
+    fn create_folder(&mut self, name: String, path: Option<String>);
+    fn delete_folder(&mut self, id: LibraryId);
 
     fn request_metadata(&mut self, id: LibraryId);
     /// set the metadata

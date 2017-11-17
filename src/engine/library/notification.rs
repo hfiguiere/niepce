@@ -31,23 +31,24 @@ pub type Content = QueriedContent;
 #[repr(i32)]
 #[allow(non_camel_case_types)]
 pub enum NotificationType {
-    NONE = 0,
-    NEW_LIBRARY_CREATED = 1,
-    ADDED_FOLDER = 2,
-    ADDED_FILE = 3,
-    ADDED_FILES = 4,
-    ADDED_KEYWORD = 5,
-    ADDED_LABEL = 6,
-    FOLDER_CONTENT_QUERIED = 7,
-    KEYWORD_CONTENT_QUERIED = 8,
-    METADATA_QUERIED = 9,
-    METADATA_CHANGED = 10,
-    LABEL_CHANGED = 11,
-    LABEL_DELETED = 12,
-    XMP_NEEDS_UPDATE = 13,
-    FOLDER_COUNTED = 14,
-    FOLDER_COUNT_CHANGE = 15,
-    FILE_MOVED = 16,
+    NONE,
+    NEW_LIBRARY_CREATED,
+    ADDED_FOLDER,
+    ADDED_FILE,
+    ADDED_FILES,
+    ADDED_KEYWORD,
+    ADDED_LABEL,
+    FOLDER_CONTENT_QUERIED,
+    FOLDER_DELETED,
+    KEYWORD_CONTENT_QUERIED,
+    METADATA_QUERIED,
+    METADATA_CHANGED,
+    LABEL_CHANGED,
+    LABEL_DELETED,
+    XMP_NEEDS_UPDATE,
+    FOLDER_COUNTED,
+    FOLDER_COUNT_CHANGE ,
+    FILE_MOVED,
 }
 
 #[repr(C)]
@@ -93,6 +94,7 @@ pub enum Notification {
     FolderContentQueried(Content),
     FolderCounted(FolderCount),
     FolderCountChanged(FolderCount),
+    FolderDeleted(LibraryId),
     KeywordContentQueried(Content),
     LabelChanged(Label),
     LabelDeleted(LibraryId),
@@ -146,6 +148,7 @@ pub extern "C" fn engine_library_notification_type(n: *const Notification) -> No
         Some(&Notification::FolderContentQueried(_)) => NotificationType::FOLDER_CONTENT_QUERIED,
         Some(&Notification::FolderCounted(_)) => NotificationType::FOLDER_COUNTED,
         Some(&Notification::FolderCountChanged(_)) => NotificationType::FOLDER_COUNT_CHANGE,
+        Some(&Notification::FolderDeleted(_)) => NotificationType::FOLDER_DELETED,
         Some(&Notification::KeywordContentQueried(_)) =>
             NotificationType::KEYWORD_CONTENT_QUERIED,
         Some(&Notification::LabelChanged(_)) => NotificationType::LABEL_CHANGED,
@@ -164,6 +167,7 @@ pub extern "C" fn engine_library_notification_type(n: *const Notification) -> No
 pub extern "C" fn engine_library_notification_get_id(n: *const Notification) -> LibraryId {
     match unsafe { n.as_ref() } {
         Some(&Notification::MetadataChanged(ref changed)) => changed.id,
+        Some(&Notification::FolderDeleted(id)) => id,
         Some(&Notification::LabelDeleted(id)) => id,
         _ => unreachable!(),
     }

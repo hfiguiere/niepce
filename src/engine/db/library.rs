@@ -274,6 +274,17 @@ impl Library {
         return Some(lf);
     }
 
+    pub fn delete_folder(&self, id: LibraryId) -> bool {
+        if let Some(ref conn) = self.dbconn {
+            if let Some(c) = conn.execute("DELETE FROM folders WHERE id=:1", &[&id]).ok() {
+                if c == 1 {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
     pub fn get_folder(&self, folder: &str) -> Option<LibFolder> {
         let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
         let conn = try_opt!(self.dbconn.as_ref());

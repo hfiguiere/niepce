@@ -140,6 +140,18 @@ impl ClientInterface for ClientImpl {
         });
     }
 
+    fn create_folder(&mut self, name: String, path: Option<String>) {
+        self.schedule_op(move |lib| {
+            commands::cmd_create_folder(&lib, &name, path.clone()) != 0
+        });
+    }
+
+    fn delete_folder(&mut self, id: LibraryId) {
+        self.schedule_op(move |lib| {
+            commands::cmd_delete_folder(&lib, id)
+        });
+    }
+
     fn request_metadata(&mut self, file_id: LibraryId) {
         self.schedule_op(move |lib| {
             commands::cmd_request_metadata(&lib, file_id)

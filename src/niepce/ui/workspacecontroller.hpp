@@ -84,9 +84,12 @@ public:
     
     virtual Gtk::Widget * buildWidget() override;
 private:
+    /** Return the selected folder id. 0 if not a folder or no selection*/
+    eng::library_id_t get_selected_folder_id();
 
     /** action to create a new folder */
     void action_new_folder();
+    void action_delete_folder();
     /** action to import images */
     void action_file_import();
 
@@ -102,6 +105,8 @@ private:
 
     /** add a folder item to the treeview */
     void add_folder_item(const eng::LibFolder* f);
+    /** Remove a folder from the treeview */
+    void remove_folder_item(eng::library_id_t id);
     /** add a keyword item to the treeview */
     void add_keyword_item(const eng::Keyword* k);
     /** add a tree item in the treeview
