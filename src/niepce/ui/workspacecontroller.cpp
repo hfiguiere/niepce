@@ -23,19 +23,26 @@
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/box.h>
+#include <gtkmm/iconview.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
+#include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
 #include "niepce/notifications.hpp"
+#include "engine/importer/iimporter.hpp"
 #include "engine/library/notification.hpp"
 #include "libraryclient/libraryclient.hpp"
+#include "dialogs/importdialog.hpp"
 #include "niepcewindow.hpp"
 #include "workspacecontroller.hpp"
 
 #include "rust_bindings.hpp"
 
 using fwk::Application;
+using fwk::Configuration;
+using eng::Managed;
+using eng::IImporter;
 
 namespace ui {
 
@@ -87,9 +94,55 @@ void WorkspaceController::action_new_folder()
 {
     auto& window = std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock())->gtkWindow();
     ui::dialog_request_new_folder(getLibraryClient()->client(), window.gobj());
-    // XXX get a unique name
-    // select folder in tree
 }
+
+void WorkspaceController::action_file_import()
+{
+    int result;
+    auto& cfg = Application::app()->config(); // XXX change to getLibraryConfig()
+    // as the last import should be part of the library not the application.
+
+    ImportDialog::Ptr import_dialog(new ImportDialog());
+
+    result = import_dialog->run_modal(std::dynamic_pointer_cast<NiepceWindow>(m_parent.lock()));
+    switch(result) {
+    case 0:
+    {
+        // import
+        // XXX change the API to provide more details.
+        std::string source = import_dialog->get_source();
+        if(source.empty()) {
+            return;
+        }
+        // XXX this should be a different config key
+        // specific to the importer.
+        cfg.setValue("last_import_location", source);
+
+        auto importer = import_dialog->get_importer();
+        DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
+        if (importer) {
+            auto dest_dir = import_dialog->get_dest_dir();
+            importer->do_import(
+                source, dest_dir,
+                [this] (const std::string & path, IImporter::Import type, Managed manage) {
+                    if (type == IImporter::Import::SINGLE) {
+                        ffi::libraryclient_import_file(getLibraryClient()->client(),
+                                                       path.c_str(), manage);
+                    } else {
+                        getLibraryClient()->importFromDirectory(path, manage);
+                    }
+                });
+        }
+        break;
+    }
+    case 1:
+        // cancel
+        break;
+    default:
+        break;
+    }
+}
+
 
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
@@ -315,6 +368,11 @@ Gtk::Widget * WorkspaceController::buildWidget()
                     sigc::mem_fun(*this,
                                   &WorkspaceController::action_new_folder),
                     section, _("New Folder..."), "workspace");
+    fwk::add_action(m_action_group, "Import",
+                    sigc::mem_fun(*this,
+                                  &WorkspaceController::action_file_import),
+                    section, _("_Import..."), "workspace");
+
     add_btn->set_menu_model(menu);
 
     header->pack_end(*add_btn, Gtk::PACK_SHRINK);

@@ -87,6 +87,8 @@ private:
 
     /** action to create a new folder */
     void action_new_folder();
+    /** action to import images */
+    void action_file_import();
 
     void on_row_expanded_collapsed(const Gtk::TreeIter& iter,
                                    const Gtk::TreePath& path, bool expanded);

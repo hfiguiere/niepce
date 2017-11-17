@@ -59,8 +59,6 @@ public:
 protected:
     virtual Gtk::Widget * buildWidget() override;
 private:
-    void on_action_file_import();
-
     void on_open_library();
     void on_action_edit_labels();
     void on_action_edit_delete();

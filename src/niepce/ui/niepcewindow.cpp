@@ -38,12 +38,11 @@
 #include "fwk/toolkit/notificationcenter.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/undo.hpp"
-#include "engine/importer/iimporter.hpp"
+#include "fwk/toolkit/gtkutils.hpp"
 #include "libraryclient/uidataprovider.hpp"
 
 #include "thumbstripview.hpp"
 #include "niepcewindow.hpp"
-#include "dialogs/importdialog.hpp"
 #include "dialogs/editlabels.hpp"
 #include "selectioncontroller.hpp"
 
@@ -54,8 +53,6 @@ using libraryclient::LibraryClientPtr;
 using fwk::Application;
 using fwk::Configuration;
 using fwk::UndoHistory;
-using eng::Managed;
-using eng::IImporter;
 
 namespace ui {
 
@@ -195,10 +192,6 @@ void NiepceWindow::init_actions()
     section = Gio::Menu::create();
     submenu->append_section(section);
     section->append(_("New Project..."), "action");
-    fwk::add_action(m_action_group, "Import",
-                    sigc::mem_fun(*this,
-                                  &NiepceWindow::on_action_file_import),
-                    section, _("_Import..."), "win");
 
     section = Gio::Menu::create();
     submenu->append_section(section);
@@ -248,52 +241,6 @@ void NiepceWindow::init_actions()
                           sigc::mem_fun(*this, &Frame::toggle_tools_visible),
                           submenu, _("Hide tools"), "win",
                           nullptr);
-}
-
-
-void NiepceWindow::on_action_file_import()
-{
-    int result;
-    Configuration & cfg = Application::app()->config();
-
-    ImportDialog::Ptr import_dialog(new ImportDialog());
-
-    result = import_dialog->run_modal(shared_frame_ptr());
-    switch(result) {
-    case 0:
-    {
-        // import
-        // XXX change the API to provide more details.
-        std::string source = import_dialog->get_source();
-        if(source.empty()) {
-            return;
-        }
-        // XXX this should be a different config key
-        // specific to the importer.
-        cfg.setValue("last_import_location", source);
-
-        auto importer = import_dialog->get_importer();
-        DBG_ASSERT(!!importer, "Import can't be null if we clicked import");
-        if (importer) {
-            auto dest_dir = import_dialog->get_dest_dir();
-            importer->do_import(
-                source, dest_dir,
-                [this] (const std::string & path, IImporter::Import type, Managed manage) {
-                    if (type == IImporter::Import::SINGLE) {
-                        ffi::libraryclient_import_file(m_libClient->client(), path.c_str(), manage);
-                    } else {
-                        m_libClient->importFromDirectory(path, manage);
-                    }
-                });
-        }
-        break;
-    }
-    case 1:
-        // cancel
-        break;
-    default:
-        break;
-    }
 }
 
 void NiepceWindow::on_open_library()
