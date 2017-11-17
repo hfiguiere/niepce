@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2017 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,6 @@ using eng::Managed;
 using eng::IImporter;
 
 namespace ui {
-
 
 WorkspaceController::WorkspaceController(const Glib::RefPtr<Gio::SimpleActionGroup>& action_group)
     : fwk::UiController()
@@ -158,7 +157,8 @@ void WorkspaceController::action_file_import()
 void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 {
     DBG_OUT("notification for workspace");
-    switch (engine_library_notification_type(&ln)) {
+    auto type = engine_library_notification_type(&ln);
+    switch (type) {
     case eng::NotificationType::ADDED_FOLDER:
     {
         auto f = engine_library_notification_get_libfolder(&ln);
@@ -179,11 +179,22 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
         break;
     }
     case eng::NotificationType::FOLDER_COUNTED:
+    case eng::NotificationType::KEYWORD_COUNTED:
     {
         auto count = engine_library_notification_get_count(&ln);
-        DBG_OUT("count for folder %Ld is %d", (long long)count->id, count->count);
-        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count->id);
+        DBG_OUT("count for container %Ld is %d", (long long)count->id, count->count);
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter;
+        switch (type) {
+        case eng::NotificationType::FOLDER_COUNTED:
+            iter = m_folderidmap.find(count->id);
+            break;
+        case eng::NotificationType::KEYWORD_COUNTED:
+            iter = m_keywordsidmap.find(count->id);
+            break;
+        default:
+            DBG_ASSERT(false, "should never happen");
+            break;
+        }
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             row[m_librarycolumns.m_count_n] = count->count;
@@ -192,26 +203,23 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
 
         break;
     }
-    case eng::NotificationType::KEYWORD_COUNTED:
-    {
-        auto count = engine_library_notification_get_count(&ln);
-        DBG_OUT("count for folder %Ld is %d", (long long)count->id, count->count);
-        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_keywordsidmap.find(count->id);
-        if(iter != m_keywordsidmap.cend()) {
-            Gtk::TreeRow row = *(iter->second);
-            row[m_librarycolumns.m_count_n] = count->count;
-            row[m_librarycolumns.m_count] = std::to_string(count->count);
-        }
-
-        break;
-    }
     case eng::NotificationType::FOLDER_COUNT_CHANGE:
+    case eng::NotificationType::KEYWORD_COUNT_CHANGE:
     {
         auto count = engine_library_notification_get_count(&ln);
-        DBG_OUT("count change for folder %Ld is %d", (long long)count->id, count->count);
-        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter
-            = m_folderidmap.find(count->id);
+        DBG_OUT("count change for container %Ld is %d", (long long)count->id, count->count);
+        std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter;
+        switch (type) {
+        case eng::NotificationType::FOLDER_COUNT_CHANGE:
+            iter = m_folderidmap.find(count->id);
+            break;
+        case eng::NotificationType::KEYWORD_COUNT_CHANGE:
+            iter = m_keywordsidmap.find(count->id);
+            break;
+        default:
+            DBG_ASSERT(false, "should never happen");
+            break;
+        }
         if(iter != m_folderidmap.cend()) {
             Gtk::TreeRow row = *(iter->second);
             int new_count = row[m_librarycolumns.m_count_n] + count->count;
@@ -306,7 +314,6 @@ void WorkspaceController::on_row_collapsed(const Gtk::TreeIter& iter,
     on_row_expanded_collapsed(iter, path, false);
 }
 
-
 void WorkspaceController::add_keyword_item(const eng::Keyword* k)
 {
     auto children = m_keywordsNode->children();
@@ -375,7 +382,6 @@ WorkspaceController::add_item(const Glib::RefPtr<Gtk::TreeStore> &treestore,
     row[m_librarycolumns.m_count] = "--";
     return iter;
 }
-
 
 Gtk::Widget * WorkspaceController::buildWidget()
 {
