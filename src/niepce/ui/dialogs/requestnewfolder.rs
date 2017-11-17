@@ -28,16 +28,17 @@ use gtk::{
     Label,
 };
 
-use libraryclient::{ClientInterfaceSync,LibraryClientWrapper};
+use libraryclient::{ClientInterface,LibraryClientWrapper};
 
 #[no_mangle]
 pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
                                             parent: *mut gtk_sys::GtkWindow) {
     let parent = unsafe { gtk::Window::from_glib_none(parent) };
-    let dialog = Dialog::new_with_buttons(Some("New folder"), Some(&parent),
-                                          gtk::DIALOG_MODAL,
-                                          &[(&gettext("OK"), 0),
-                                            (&gettext("Cancel"), 1)]);
+    let dialog = Dialog::new_with_buttons(
+        Some("New folder"), Some(&parent),
+        gtk::DIALOG_MODAL,
+        &[(&gettext("OK"), gtk::ResponseType::Ok.into()),
+          (&gettext("Cancel"), gtk::ResponseType::Cancel.into())]);
     let label = Label::new_with_mnemonic(gettext("Folder _name:").as_str());
     dialog.get_content_area().pack_start(&label, true, false, 4);
     let entry = Entry::new();
@@ -46,14 +47,11 @@ pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
     dialog.get_content_area().pack_end(&entry, true, false, 4);
 
     dialog.get_content_area().show_all();
-    let cancel = match dialog.run() {
-        0 => false,
-        _ => true,
-    };
+    let cancel = dialog.run() != gtk::ResponseType::Ok.into();
     let folder_name = entry.get_text();
     dialog.destroy();
     if !cancel {
-        /*let id =*/ client.unwrap_mut().create_folder_sync(folder_name.unwrap(), None);
+        client.unwrap_mut().create_folder(folder_name.unwrap(), None);
     }
 }
 

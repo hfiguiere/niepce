@@ -21,5 +21,5 @@ pub mod clientimpl;
 pub mod clientinterface;
 pub mod libraryclient;
 
-pub use self::clientinterface::ClientInterfaceSync;
+pub use self::clientinterface::{ClientInterface,ClientInterfaceSync};
 pub use self::libraryclient::LibraryClientWrapper;
