@@ -41,26 +41,14 @@ libgphoto2
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
 
-
-Working on Debian
-~~~~~~~~~~~~~~~~~
-In order to get Niepce working on Debian you should have to install:
-aptitude install \
-> libexempi-dev libopenraw-dev libopenrawgnome-dev libgtkmm-3-dev
-
-Working on SUSE
-~~~~~~~~~~~~~~~
-
-[ there used to be stuff in the openSUSE build service ]
-
 Getting the code
 ----------------
 
 Obviously you have it.
 
-The most recent code is hosted on GNOME's git server. See:
+The most recent code is hosted on GNOME's gitlab server. See:
 
-http://git.gnome.org/browse/niepce/
+https://gitlab.gnome.org/GNOME/niepce
 
 Website
 -------
