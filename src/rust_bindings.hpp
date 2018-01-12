@@ -34,6 +34,8 @@ class QueriedContent;
 
 
 namespace ffi {
+class rust_str;
+typedef rust_str str;
 typedef eng::QueriedContent QueriedContent;
 typedef eng::NiepceProperties Np;
 typedef fwk::FileList FileList;
