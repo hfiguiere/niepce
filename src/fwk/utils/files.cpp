@@ -2,7 +2,7 @@
 /*
  * niepce - fwk/utils/files.cpp
  *
- * Copyright (C) 2007-2017 Hubert Figuiere
+ * Copyright (C) 2007-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,15 +68,44 @@ bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
 }
 
 
+FileList::FileList()
+{
+}
+
 FileList::FileList( const _impltype_t & v )
     : _impltype_t( v )
 {
+}
+
+FileList::value_type FileList::at(size_type index) const
+{
+    return _impltype_t::at(index);
 }
 
 const FileList::value_type::value_type*
 FileList::at_cstr(size_type index) const
 {
     return _impltype_t::at(index).c_str();
+}
+
+FileList::const_iterator FileList::begin() const
+{
+    return _impltype_t::cbegin();
+}
+
+FileList::const_iterator FileList::end() const
+{
+    return _impltype_t::cend();
+}
+
+FileList::const_iterator FileList::cbegin() const
+{
+    return _impltype_t::cbegin();
+}
+
+FileList::const_iterator FileList::cend() const
+{
+    return _impltype_t::cend();
 }
 
 FileList::size_type FileList::size() const
@@ -87,6 +116,11 @@ FileList::size_type FileList::size() const
 void FileList::sort()
 {
     std::sort(_impltype_t::begin(), _impltype_t::end());
+}
+
+void FileList::push_back(const value_type & v)
+{
+    _impltype_t::push_back(v);
 }
 
 FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type& p, std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter)
