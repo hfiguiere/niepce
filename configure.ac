@@ -41,38 +41,8 @@ AC_ARG_ENABLE(debug,[  --enable-debug    Turn on debugging],[
 ])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
-NP_APPS=""
-
-AC_ARG_ENABLE(niepce,[  --enable-niepce   Enable building Niepce (default)],[
-    NP_APP_NIEPCE=yes
-    if test ! -z "$NP_APPS" ; then
-        NP_APPS="$NP_APPS,"
-    fi
-    NP_APPS="$NP_APPSniepce"
-],[
-    NP_APP_NIEPCE=no
-])
-AC_ARG_ENABLE(camerawire,[  --enable-camerawire   Enable building Camerawire],[
-    NP_APP_CAMERAWIRE=yes
-    if test ! -z "$NP_APPS" ; then
-        NP_APPS="$NP_APPS,"
-    fi
-    NP_APPS="$NP_APPScamerawire"
-],[
-    NP_APP_CAMERAWIRE=no
-])
-AC_ARG_ENABLE(allapps, [  --enable-allapps   Enable all apps],[
-    NP_APP_NIEPCE=yes
-    NP_APP_CAMERAWIRE=yes
-    NP_APPS="niepce,camerawire"
-],[
-
-])
-
-if test -z "$NP_APPS" ; then
-    NP_APPS="niepce"
-    NP_APP_NIEPCE=yes
-fi
+NP_APPS="niepce"
+NP_APP_NIEPCE=yes
 
 CPPFLAGS="$CPPFLAGS $DEBUG_CFLAGS -Wall -Wcast-align -Wcast-qual -Wpointer-arith -Wreturn-type"
 CFLAGS="$CFLAGS $DEBUG_CFLAGS $OPTIMIZE_CFLAGS"
@@ -219,39 +189,6 @@ src/niepce/modules/darkroom/Makefile
 src/niepce/modules/interfaces/Makefile
 src/niepce/modules/map/Makefile
 src/niepce/Makefile
-])
-
-fi
-
-dnl ================
-dnl camerawire
-dnl ================
-
-AM_CONDITIONAL(CW_BUILD, test "$NP_APP_CAMERAWIRE" = "yes")
-if test "$NP_APP_CAMERAWIRE" = "yes" ; then
-
-MAJOR_VERSION=0
-MINOR_VERSION=0
-MICRO_VERSION=1
-
-CAMERAWIRE_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION"
-AC_SUBST(CAMERAWIRE_VERSION)
-
-CW_GETTEXT_PACKAGE=camerawire
-AC_SUBST(CW_GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED([CW_GETTEXT_PACKAGE], ["$CW_GETTEXT_PACKAGE"],
-                   [The domain to use with gettext])
-AM_GNU_GETTEXT
-
-CW_LOCALEDIR=[${datadir}/locale]
-AC_SUBST(CW_LOCALEDIR)
-
-AC_DEFINE_UNQUOTED([CW_BUILD_CONFIG], ["$CW_BUILD_CONFIG"], [The string used to hardcode the build config.])
-
-AC_CONFIG_FILES([
-camerawire/Makefile
-camerawire/src/Makefile
-camerawire/po/Makefile.in
 ])
 
 fi
