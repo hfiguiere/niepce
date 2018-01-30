@@ -5,7 +5,7 @@ This software is licensed under GPL version 3. See file
 COPYING for details.
 Some files may be under GPL version 2 or later.
 
-(c) 2006-2017 Hubert Figuière
+(c) 2006-2018 Hubert Figuière
 Some portions are written by other people.
 
 What is this?
@@ -40,6 +40,8 @@ libgphoto2
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
+
+If you want to build using flatpak-build, use flatpak/org.gnome.Niepce.json.
 
 Getting the code
 ----------------
