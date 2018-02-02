@@ -18,7 +18,7 @@
  */
 
 
-
+#include "debug.hpp"
 #include "propertybag.hpp"
 
 namespace fwk {
@@ -101,15 +101,18 @@ PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex idx
 bool set_value_for_property(PropertyBag& bag, PropertyIndex idx,
                             const PropertyValue & value)
 {
+    DBG_ASSERT(&bag, "bag is NULL");
+    DBG_ASSERT(&value, "value is NULL");
     return ffi::fwk_property_bag_set_value(&bag, idx, &value);
 }
 
-/* return an option */
-// XXX fix me
 fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag& bag,
                                                      PropertyIndex idx)
 {
     auto value = ffi::fwk_property_bag_value(&bag, idx);
+    if (!value) {
+        return fwk::Option<PropertyValuePtr>();
+    }
     return fwk::Option<PropertyValuePtr>(property_value_wrap(value));
 }
 

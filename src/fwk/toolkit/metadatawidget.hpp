@@ -69,7 +69,7 @@ public:
     MetaDataWidget(const Glib::ustring & title);
 
     void add_data(const MetaDataFormat * current,
-                  const PropertyValue & value);
+                  fwk::Option<PropertyValuePtr>&& value);
     void set_data_format(const MetaDataSectionFormat * fmt);
     void set_data_source(const fwk::PropertyBagPtr& properties);
 
@@ -93,16 +93,16 @@ private:
 
     // set data
     // Fraction as a decimal
-    bool set_fraction_dec_data(Gtk::Widget* w, const PropertyValue & value);
+    bool set_fraction_dec_data(Gtk::Widget* w, const PropertyValuePtr& value);
     // Fraction as fraction
-    bool set_fraction_data(Gtk::Widget* w, const PropertyValue & value);
-    bool set_star_rating_data(Gtk::Widget* w, const PropertyValue & value);
-    bool set_string_array_data(Gtk::Widget* w, const PropertyValue & value);
-    bool set_text_data(Gtk::Widget* w, bool readonly, 
-                       const PropertyValue & value);
+    bool set_fraction_data(Gtk::Widget* w, const PropertyValuePtr& value);
+    bool set_star_rating_data(Gtk::Widget* w, const PropertyValuePtr& value);
+    bool set_string_array_data(Gtk::Widget* w, const PropertyValuePtr& value);
+    bool set_text_data(Gtk::Widget* w, bool readonly,
+                       const PropertyValuePtr& value);
     bool set_string_data(Gtk::Widget* w, bool readonly,
-                         const PropertyValue & value);
-    bool set_date_data(Gtk::Widget* w, const PropertyValue & value);
+                         const PropertyValuePtr& value);
+    bool set_date_data(Gtk::Widget* w, const PropertyValuePtr& value);
 
     void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValuePtr & value);
 

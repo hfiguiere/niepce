@@ -244,8 +244,8 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
     const MetaDataFormat * current = m_fmt->formats;
     while(current && current->label) {
         auto result = get_value_for_property(*properties, current->id);
-        if(!result.empty() || !current->readonly) {
-            add_data(current, *result.unwrap());
+        if (!result.empty() || !current->readonly) {
+            add_data(current, std::move(result));
         }
         else {
             DBG_OUT("get_property failed id = %d, label = %s",
@@ -256,14 +256,14 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
 }
 
 bool MetaDataWidget::set_fraction_dec_data(Gtk::Widget* w,
-                                           const PropertyValue & value)
+                                           const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_string(&value)) {
+    if (!fwk_property_value_is_string(value.get())) {
         ERR_OUT("Data not string(fraction)");
         return false;
     }
     try {
-        const std::string str_value = fwk::property_value_get_string(value);
+        const std::string str_value = fwk::property_value_get_string(*value);
         DBG_OUT("set fraction dec %s", str_value.c_str());
         std::string frac = str(boost::format("%.1f")
                                % ffi::fwk_fraction_to_decimal(str_value.c_str()));
@@ -277,14 +277,14 @@ bool MetaDataWidget::set_fraction_dec_data(Gtk::Widget* w,
 }
 
 bool MetaDataWidget::set_fraction_data(Gtk::Widget* w,
-                                       const PropertyValue & value)
+                                       const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_string(&value)) {
+    if (!fwk_property_value_is_string(value.get())) {
         ERR_OUT("Data not string(fraction)");
         return false;
     }
     try {
-        const std::string str_value = fwk::property_value_get_string(value);
+        const std::string str_value = fwk::property_value_get_string(*value);
         DBG_OUT("set fraction %s", str_value.c_str());
         boost::rational<int> r
             = boost::lexical_cast<boost::rational<int>>(str_value);
@@ -301,14 +301,14 @@ bool MetaDataWidget::set_fraction_data(Gtk::Widget* w,
 }
 
 bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w,
-                                          const PropertyValue & value)
+                                          const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_integer(&value)) {
+    if (!fwk_property_value_is_integer(value.get())) {
         ERR_OUT("Data not integer");
         return false;
     }
     try {
-        int rating = fwk_property_value_get_integer(&value);
+        int rating = fwk_property_value_get_integer(value.get());
         AutoFlag flag(m_update);
         static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
     }
@@ -318,11 +318,11 @@ bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w,
     return true;
 }
 
-bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue & value)
+bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValuePtr& value)
 {
     try {
         AutoFlag flag(m_update);
-        std::vector<std::string> tokens = fwk::property_value_get_string_array(value);
+        std::vector<std::string> tokens = fwk::property_value_get_string_array(*value);
 
         static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
     }
@@ -333,9 +333,9 @@ bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValue &
 }
 
 bool MetaDataWidget::set_text_data(Gtk::Widget* w, bool readonly,
-                                   const PropertyValue & value)
+                                   const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_string(&value)) {
+    if (!fwk_property_value_is_string(value.get())) {
         ERR_OUT("Data not string.");
         return false;
     }
@@ -343,10 +343,10 @@ bool MetaDataWidget::set_text_data(Gtk::Widget* w, bool readonly,
         AutoFlag flag(m_update);
         if(readonly) {
             static_cast<Gtk::Label*>(w)->set_text(
-                fwk::property_value_get_string(value));
+                fwk::property_value_get_string(*value));
         } else {
             static_cast<Gtk::TextView*>(w)->get_buffer()->set_text(
-                fwk::property_value_get_string(value));
+                fwk::property_value_get_string(*value));
         }
     }
     catch(...) {
@@ -356,9 +356,9 @@ bool MetaDataWidget::set_text_data(Gtk::Widget* w, bool readonly,
 }
 
 bool MetaDataWidget::set_string_data(Gtk::Widget* w, bool readonly,
-                                     const PropertyValue & value)
+                                     const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_string(&value)) {
+    if (!fwk_property_value_is_string(value.get())) {
         ERR_OUT("Data not string.");
         return false;
     }
@@ -366,10 +366,10 @@ bool MetaDataWidget::set_string_data(Gtk::Widget* w, bool readonly,
         AutoFlag flag(m_update);
         if(readonly) {
             static_cast<Gtk::Label*>(w)->set_text(
-                fwk::property_value_get_string(value));
+                fwk::property_value_get_string(*value));
         } else {
             static_cast<Gtk::Entry*>(w)->set_text(
-                fwk::property_value_get_string(value));
+                fwk::property_value_get_string(*value));
         }
     }
     catch(...) {
@@ -378,14 +378,14 @@ bool MetaDataWidget::set_string_data(Gtk::Widget* w, bool readonly,
     return true;
 }
 
-bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
+bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValuePtr& value)
 {
-    if (!fwk_property_value_is_date(&value)) {
+    if (!fwk_property_value_is_date(value.get())) {
         return false;
     }
     try {
         AutoFlag flag(m_update);
-        const fwk::Date* date = fwk_property_value_get_date(&value);
+        const fwk::Date* date = fwk_property_value_get_date(value.get());
         if (date) {
             static_cast<Gtk::Label*>(w)->set_text(fwk::date_to_string(date));
 
@@ -401,9 +401,13 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValue & value)
 }
 
 void MetaDataWidget::add_data(const MetaDataFormat * current,
-                              const PropertyValue & value)
+                              fwk::Option<PropertyValuePtr>&& optional_value)
 {
-    if (fwk_property_value_is_empty(&value)) {
+    if (optional_value.empty()) {
+        return;
+    }
+    auto value = optional_value.unwrap();
+    if (fwk_property_value_is_empty(value.get())) {
         return;
     }
 
@@ -495,7 +499,7 @@ void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop,
     fwk::set_value_for_property(*props, prop, *value);
     auto result = fwk::get_value_for_property(*m_current_data, prop);
     if (!result.empty()) {
-        set_value_for_property(*old_props, prop, *result.unwrap());
+        fwk::set_value_for_property(*old_props, prop, *result.unwrap());
     }
     signal_metadata_changed.emit(props, old_props);
 }
