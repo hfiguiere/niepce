@@ -1,236 +1,275 @@
 {
-  "app-id": "org.gnome.Niepce",
-  "branch": "master",
-  "runtime": "org.gnome.Sdk",
-  "runtime-version": "3.26",
-  "sdk": "org.gnome.Sdk",
-  "sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
-  "command": "niepce",
-  "tags": ["master"],
-  "finish-args": [
-    /* Allow access to developer tools */
-    "--allow=devel",
-    "--talk-name=org.freedesktop.Flatpak",
-    /* X11 + XShm access */
-    "--share=ipc", "--socket=x11",
-    /* Wayland access */
-    "--socket=wayland",
-    /* We want full fs access */
-    "--filesystem=host",
-    /* Needs to talk to the network: */
-    "--share=network",
-    "--talk-name=org.gtk.vfs.*"
-  ],
-  "build-options" : {
-    "cflags": "-O2 -g",
-    "cxxflags": "-O2 -g",
-    "env": {
-      "V": "1"
-    }
-  },
-  "cleanup": ["*.la", "*.a"],
-  "modules": [
-    {
-      "name": "boost",
-      "config-opts": [ "--with-toolset=gcc", "--with-icu" ],
-      "cleanup": [ "/lib/libboost_*.a" ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2",
-          "sha256": "686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b"
-        },
-        {
-          "type": "file",
-          "path": "boost-configure",
-          "dest-filename": "configure"
+    "app-id" : "org.gnome.Niepce",
+    "branch" : "master",
+    "runtime" : "org.gnome.Sdk",
+    "runtime-version" : "3.26",
+    "sdk" : "org.gnome.Sdk",
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.rust-stable"
+    ],
+    "command" : "niepce",
+    "tags" : [
+        "master"
+    ],
+    "finish-args" : [
+        "--allow=devel",
+        "--talk-name=org.freedesktop.Flatpak",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=host",
+        "--share=network",
+        "--talk-name=org.gtk.vfs.*"
+    ],
+    "build-options" : {
+        "cflags" : "-O2 -g",
+        "cxxflags" : "-O2 -g",
+        "env" : {
+            "V" : "1"
         }
-      ]
     },
-    {
-      "name": "exempi",
-      "sources": [
+    "cleanup" : [
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
         {
-          "type": "archive",
-          "url": "https://libopenraw.freedesktop.org/download/exempi-2.4.3.tar.bz2",
-          "sha256": "bfd1d8ebffe07918a5bfc7a5130ff82486d35575827cae8d131b9fa1c0c29c6e"
-        }
-      ]
-    },
-    {
-      "name": "libopenraw",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://libopenraw.freedesktop.org/download/libopenraw-0.1.2.tar.bz2",
-          "sha256": "d15e86141add6a652f316ab8884895d8399d37c17510b34f61e266f906a99683"
-        },
-        {
-          "type": "patch",
-          "path": "libopenraw-pixbuf-disable.diff"
-        },
-        {
-          "type": "shell",
-          "commands": [ "autoreconf -si" ]
-        }
-      ]
-    },
-    {
-      "name": "babl",
-      "build-options" : {
-        "arch" : {
-          "i386" : {
+            "name" : "boost",
             "config-opts" : [
-              "--build=i586-unknown-linux-gnu"
+                "--with-toolset=gcc",
+                "--with-icu"
+            ],
+            "cleanup" : [
+                "/lib/libboost_*.a"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2",
+                    "sha256" : "686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b"
+                },
+                {
+                    "type" : "file",
+                    "path" : "boost-configure",
+                    "dest-filename" : "configure"
+                }
             ]
-          },
-	  "arm" : {
+        },
+        {
+            "name" : "exempi",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://libopenraw.freedesktop.org/download/exempi-2.4.3.tar.bz2",
+                    "sha256" : "bfd1d8ebffe07918a5bfc7a5130ff82486d35575827cae8d131b9fa1c0c29c6e"
+                }
+            ]
+        },
+        {
+            "name" : "libopenraw",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://libopenraw.freedesktop.org/download/libopenraw-0.1.2.tar.bz2",
+                    "sha256" : "d15e86141add6a652f316ab8884895d8399d37c17510b34f61e266f906a99683"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "libopenraw-pixbuf-disable.diff"
+                },
+                {
+                    "type" : "shell",
+                    "commands" : [
+                        "autoreconf -si"
+                    ]
+                }
+            ]
+        },
+        {
+            "name" : "babl",
+            "build-options" : {
+                "arch" : {
+                    "i386" : {
+                        "config-opts" : [
+                            "--build=i586-unknown-linux-gnu"
+                        ]
+                    },
+                    "arm" : {
+                        "config-opts" : [
+                            "--build=arm-unknown-linux-gnueabi"
+                        ]
+                    }
+                }
+            },
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gimp.org/pub/babl/0.1/babl-0.1.42.tar.bz2",
+                    "sha256" : "6859aff3d7210d1f0173297796da4581323ef61e6f0c1e1c8f0ebb95a47787f1"
+                }
+            ]
+        },
+        {
+            "name" : "gegl",
+            "cleanup" : [
+                "/bin"
+            ],
             "config-opts" : [
-              "--build=arm-unknown-linux-gnueabi"
-	    ]
-	  }
-        }
-      },
-      "sources": [
+                "--disable-docs",
+                "--disable-introspection"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gimp.org/pub/gegl/0.3/gegl-0.3.28.tar.bz2",
+                    "sha256" : "152f87604a5a191775329dfb63764efa1d5c32403d1438da68e242f96b7d23ff"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "https://download.gimp.org/pub/babl/0.1/babl-0.1.42.tar.bz2",
-          "sha256": "6859aff3d7210d1f0173297796da4581323ef61e6f0c1e1c8f0ebb95a47787f1"
-        }
-      ]
-    },
-    {
-      "name": "gegl",
-      "cleanup": [ "/bin" ],
-      "config-opts": [ "--disable-docs", "--disable-introspection" ],
-      "sources": [
+            "name" : "mm-common",
+            "cleanup" : [
+                "/"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/mm-common/0.9/mm-common-0.9.10.tar.xz",
+                    "sha256" : "16c0e2bc196b67fbc145edaecb5dbe5818386504fe5703de27002d77140fa217"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "https://download.gimp.org/pub/gegl/0.3/gegl-0.3.28.tar.bz2",
-          "sha256": "152f87604a5a191775329dfb63764efa1d5c32403d1438da68e242f96b7d23ff"
-        }
-      ]
-    },
-    {
-      "name": "mm-common",
-      "cleanup": [ "/" ],
-      "sources": [
+            "name" : "sigc++",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.9/libsigc++-2.9.3.tar.xz",
+                    "sha256" : "0bf9b301ad6198c550986c51150a646df198e8d1d235270c16486b0dda30097f"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/mm-common/0.9/mm-common-0.9.10.tar.xz",
-          "sha256": "16c0e2bc196b67fbc145edaecb5dbe5818386504fe5703de27002d77140fa217"
-        }
-      ]
-    },
-    {
-      "name": "sigc++",
-      "config-opts": [ "--disable-documentation" ],
-      "sources": [
+            "name" : "glibmm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.50/glibmm-2.50.1.tar.xz",
+                    "sha256" : "1fd85051da9cb402cc8348cec72dfe4d79f9345df4a1dbf68703a4ded45846a4"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.9/libsigc++-2.9.3.tar.xz",
-          "sha256": "0bf9b301ad6198c550986c51150a646df198e8d1d235270c16486b0dda30097f"
-        }
-      ]
-    },
-    {
-      "name": "glibmm",
-      "config-opts": [ "--disable-documentation" ],
-      "sources": [
+            "name" : "cairomm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://cairographics.org/releases/cairomm-1.12.0.tar.gz",
+                    "sha256" : "50435aec6fdd976934b791e808993160113ad19ca53a5634a9b64ccbe55874cc"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.50/glibmm-2.50.1.tar.xz",
-          "sha256": "1fd85051da9cb402cc8348cec72dfe4d79f9345df4a1dbf68703a4ded45846a4"
-        }
-      ]
-    },
-    {
-      "name": "cairomm",
-      "config-opts": [ "--disable-documentation" ],
-      "sources": [
+            "name" : "pangomm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/pangomm/2.40/pangomm-2.40.1.tar.xz",
+                    "sha256" : "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://cairographics.org/releases/cairomm-1.12.0.tar.gz",
-          "sha256": "50435aec6fdd976934b791e808993160113ad19ca53a5634a9b64ccbe55874cc"
-        }
-      ]
-    },
-    {
-      "name": "pangomm",
-      "config-opts": [ "--disable-documentation" ],
-      "sources": [
+            "name" : "atkmm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/atkmm/2.24/atkmm-2.24.2.tar.xz",
+                    "sha256" : "ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/pangomm/2.40/pangomm-2.40.1.tar.xz",
-          "sha256": "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af"
-        }
-      ]
-    },
-    {
-      "name": "atkmm",
-      "config-opts": [ "--disable-documentation" ],
-      "sources": [
+            "name" : "gtkmm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "build-options" : {
+                "cxxflags" : "-O2 -g -std=c++11"
+            },
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.2.tar.xz",
+                    "sha256" : "91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/atkmm/2.24/atkmm-2.24.2.tar.xz",
-          "sha256": "ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd"
-        }
-      ]
-    },
-    {
-      "name": "gtkmm",
-      "config-opts": [ "--disable-documentation" ],
-      "build-options" : { "cxxflags": "-O2 -g -std=c++11" },
-      "sources": [
+            "name" : "libchamplain",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "build-options" : {
+                "cxxflags" : "-O2 -g -std=c++11"
+            },
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/libchamplain/0.12/libchamplain-0.12.14.tar.xz",
+                    "sha256" : "f1621ddec1ffe64ca01c3216db8663f60ae0bb107521195fc6856119d4b4568f"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.2.tar.xz",
-          "sha256": "91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090"
-        }
-      ]
-    },
-    {
-      "name": "libchamplain",
-      "config-opts": [ "--disable-documentation" ],
-      "build-options" : { "cxxflags": "-O2 -g -std=c++11" },
-      "sources": [
+            "name" : "cluttermm",
+            "config-opts" : [
+                "--disable-documentation"
+            ],
+            "build-options" : {
+                "cxxflags" : "-O2 -g -std=c++11"
+            },
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://ftp.gnome.org/pub/GNOME/sources/cluttermm/1.17/cluttermm-1.17.3.tar.xz",
+                    "sha256" : "c8c83d5ece5768e58ca277b2e38af340503c0e53a1a5408c138b33605b7dc8cb"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/libchamplain/0.12/libchamplain-0.12.14.tar.xz",
-          "sha256": "f1621ddec1ffe64ca01c3216db8663f60ae0bb107521195fc6856119d4b4568f"
-        }
-      ]
-    },
-    {
-      "name": "cluttermm",
-      "config-opts": [ "--disable-documentation" ],
-      "build-options" : { "cxxflags": "-O2 -g -std=c++11" },
-      "sources": [
+            "name" : "libgphoto2",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://cytranet.dl.sourceforge.net/project/gphoto/libgphoto/2.5.16/libgphoto2-2.5.16.tar.bz2",
+                    "sha256" : "e757416d1623e01a9d0d294b2e790162e434c0964f50d3b7ff1a3424b62a2906"
+                }
+            ]
+        },
         {
-          "type": "archive",
-          "url": "http://ftp.gnome.org/pub/GNOME/sources/cluttermm/1.17/cluttermm-1.17.3.tar.xz",
-          "sha256": "c8c83d5ece5768e58ca277b2e38af340503c0e53a1a5408c138b33605b7dc8cb"
+            "name" : "niepce",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/niepce.git"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "name": "libgphoto2",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://cytranet.dl.sourceforge.net/project/gphoto/libgphoto/2.5.16/libgphoto2-2.5.16.tar.bz2",
-          "sha256": "e757416d1623e01a9d0d294b2e790162e434c0964f50d3b7ff1a3424b62a2906"
-        }
-      ]
-    },
-    {
-      "name": "niepce",
-      "sources": [
-        {
-          "type": "git",
-          "url": "git://git.gnome.org/gnome-builder"
-        }
-      ]
-    }
-  ]
+    ]
 }

@@ -30,7 +30,7 @@ cluttermm 1.0
 champlain-gtk 0.12
 sqlite3
 libxml2 > 2.5.0
-boost 1.34
+boost 1.60
  -boost test (for the unit test)
 exempi >= 2.2.0
 libopenraw >= 0.1.0
