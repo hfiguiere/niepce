@@ -25,8 +25,10 @@
         "cflags" : "-O2 -g",
         "cxxflags" : "-O2 -g",
         "env" : {
+            "CARGO_HOME" : "/run/build/niepce/cargo",
             "V" : "1"
-        }
+        },
+        "append-path" : "/usr/lib/sdk/rust-stable/bin"
     },
     "cleanup" : [
         "*.la",
@@ -34,54 +36,12 @@
     ],
     "modules" : [
         {
-            "name" : "boost",
-            "config-opts" : [
-                "--with-toolset=gcc",
-                "--with-icu"
-            ],
-            "cleanup" : [
-                "/lib/libboost_*.a"
-            ],
+            "name" : "libgphoto2",
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2",
-                    "sha256" : "686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b"
-                },
-                {
-                    "type" : "file",
-                    "path" : "boost-configure",
-                    "dest-filename" : "configure"
-                }
-            ]
-        },
-        {
-            "name" : "exempi",
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://libopenraw.freedesktop.org/download/exempi-2.4.3.tar.bz2",
-                    "sha256" : "bfd1d8ebffe07918a5bfc7a5130ff82486d35575827cae8d131b9fa1c0c29c6e"
-                }
-            ]
-        },
-        {
-            "name" : "libopenraw",
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://libopenraw.freedesktop.org/download/libopenraw-0.1.2.tar.bz2",
-                    "sha256" : "d15e86141add6a652f316ab8884895d8399d37c17510b34f61e266f906a99683"
-                },
-                {
-                    "type" : "patch",
-                    "path" : "libopenraw-pixbuf-disable.diff"
-                },
-                {
-                    "type" : "shell",
-                    "commands" : [
-                        "autoreconf -si"
-                    ]
+                    "url" : "https://cytranet.dl.sourceforge.net/project/gphoto/libgphoto/2.5.16/libgphoto2-2.5.16.tar.bz2",
+                    "sha256" : "e757416d1623e01a9d0d294b2e790162e434c0964f50d3b7ff1a3424b62a2906"
                 }
             ]
         },
@@ -253,12 +213,54 @@
             ]
         },
         {
-            "name" : "libgphoto2",
+            "name" : "boost",
+            "config-opts" : [
+                "--with-toolset=gcc",
+                "--with-icu"
+            ],
+            "cleanup" : [
+                "/lib/libboost_*.a"
+            ],
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://cytranet.dl.sourceforge.net/project/gphoto/libgphoto/2.5.16/libgphoto2-2.5.16.tar.bz2",
-                    "sha256" : "e757416d1623e01a9d0d294b2e790162e434c0964f50d3b7ff1a3424b62a2906"
+                    "url" : "https://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2",
+                    "sha256" : "686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b"
+                },
+                {
+                    "type" : "file",
+                    "path" : "boost-configure",
+                    "dest-filename" : "configure"
+                }
+            ]
+        },
+        {
+            "name" : "exempi",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://libopenraw.freedesktop.org/download/exempi-2.4.3.tar.bz2",
+                    "sha256" : "bfd1d8ebffe07918a5bfc7a5130ff82486d35575827cae8d131b9fa1c0c29c6e"
+                }
+            ]
+        },
+        {
+            "name" : "libopenraw",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://libopenraw.freedesktop.org/download/libopenraw-0.1.2.tar.bz2",
+                    "sha256" : "d15e86141add6a652f316ab8884895d8399d37c17510b34f61e266f906a99683"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "libopenraw-pixbuf-disable.diff"
+                },
+                {
+                    "type" : "shell",
+                    "commands" : [
+                        "autoreconf -si"
+                    ]
                 }
             ]
         },

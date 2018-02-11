@@ -50,12 +50,6 @@ EXTRA_DIST = \
 	$(RUST_SOURCES) \
 	$(NULL)
 
-@top_builddir@/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a: @top_builddir@/target/bindings.h
-
-@top_builddir@/target/bindings.h: $(RUST_SOURCES)
-	cd $(top_srcdir) &&\
-	CARGO_TARGET_DIR=@abs_top_builddir@/target cargo build $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
-
 CARGO_VERBOSE = $(cargo_verbose_$(V))
 cargo_verbose_ = $(cargo_verbose_$(AM_DEFAULT_VERBOSITY))
 cargo_verbose_0 =
@@ -67,10 +61,21 @@ else
 CARGO_RELEASE_ARGS=--release
 endif
 
-all-local: @top_builddir@/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a
+CARGO_TARGET_DIR=@abs_top_builddir@/target
+
+all-local: $(CARGO_TARGET_DIR)/@CARGO_TARGET_SUBDIR@/libniepce_rust.a
+
+@abs_top_builddir@/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a: $(CARGO_TARGET_DIR)/bindings.h
+
+@abs_top_builddir@/target/bindings.h: $(RUST_SOURCES)
+	cd $(top_srcdir) && \
+	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo build $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
+
 
 clean-local:
-	-(cd $(top_srcdir) ; CARGO_TARGET_DIR=@abs_top_builddir@/target cargo clean $(CARGO_RELEASE_ARGS))
+	cd $(top_srcdir) && \
+	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo clean $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
 
 check-local:
-	(cd $(top_srcdir) ; CARGO_TARGET_DIR=@abs_top_builddir@/target cargo test $(CARGO_RELEASE_ARGS))
+	cd $(top_srcdir) &&
+	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo test $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
