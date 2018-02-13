@@ -19,7 +19,12 @@
         "--socket=wayland",
         "--filesystem=host",
         "--share=network",
-        "--talk-name=org.gtk.vfs.*"
+        "--talk-name=org.gtk.vfs.*",
+        /* Needed for dconf to work (+ host or homedir read access from above) */
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
     "build-options" : {
         "cflags" : "-O2 -g",
