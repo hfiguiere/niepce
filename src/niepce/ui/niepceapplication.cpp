@@ -35,7 +35,7 @@ using fwk::Application;
 namespace ui {
 
 NiepceApplication::NiepceApplication(int & argc, char** & argv)
-    : Application(argc, argv, "net.figuiere.Niepce", PACKAGE)
+    : Application(argc, argv, "org.gnome.Niepce", PACKAGE)
 {
     fwk::ModuleManager * modmgr = module_manager();
     DBG_ASSERT(modmgr != NULL, "module manager is NULL.");
