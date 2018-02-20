@@ -62,7 +62,7 @@ void Controller::terminate()
 {
     DBG_OUT("terminating controller");
     std::for_each(m_subs.cbegin(), m_subs.cend(),
-                  [] (const auto& ctrl) {
+                  [] (const Ptr& ctrl) {
                     ctrl->terminate();
                   });
     clearParent();
@@ -76,7 +76,7 @@ void Controller::_added()
 void Controller::_ready()
 {
     std::for_each(m_subs.cbegin(), m_subs.cend(),
-                  [] (const auto& ctrl) {
+                  [] (const Ptr& ctrl) {
                     ctrl->_ready();
                   });
     on_ready();

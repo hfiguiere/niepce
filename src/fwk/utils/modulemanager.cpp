@@ -65,7 +65,7 @@ namespace fwk {
         iter != m_dirs.cend(); ++iter) {
 
       fwk::FileList::Ptr l;
-      l = FileList::getFilesFromDirectory(*iter, [ext] (const auto& f) {
+      l = FileList::getFilesFromDirectory(*iter, [ext] (const Glib::RefPtr<Gio::FileInfo>& f) {
           return fwk::filter_ext(f, ext);
       });
 

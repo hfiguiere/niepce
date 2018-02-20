@@ -48,7 +48,7 @@ void ThumbnailCache::request(const LibFileList& fl)
 {
     clear();
     std::for_each(fl.begin(), fl.end(),
-                  [this] (const auto& f) {
+                  [this] (const LibFilePtr& f) {
                       ThumbnailTask::Ptr task(new ThumbnailTask(f, 160, 160));
                       this->schedule(task);
                   });

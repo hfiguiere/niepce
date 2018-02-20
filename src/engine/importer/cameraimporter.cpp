@@ -107,7 +107,7 @@ bool CameraImporter::do_import(const std::string& source, const std::string& des
                                const FileImporter & importer)
 {
     // XXX we shouldn't have to do that.
-    list_source_content(source, [this, dest_dir, importer] (auto file_list) {
+    list_source_content(source, [this, dest_dir, importer] (std::list<ImportedFilePtr>&& file_list) {
             auto tmp_dir_path = dest_dir.empty() ?
                 fwk::make_tmp_dir("niepce-camera-import-XXXXXX") :
                 dest_dir;

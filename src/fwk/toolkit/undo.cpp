@@ -47,7 +47,7 @@ void UndoTransaction::undo()
 {
     DBG_OUT("undo transaction %lu cmd", (unsigned long)m_operations.size());
     std::for_each(m_operations.rbegin(), m_operations.rend(),
-                  [] (auto cmd) {
+                  [] (const std::shared_ptr<Command>& cmd) {
                       cmd->undo();
                   });
 }
@@ -56,7 +56,7 @@ void UndoTransaction::redo()
 {
     DBG_OUT("redo transaction %lu cmd", (unsigned long)m_operations.size());
     std::for_each(m_operations.begin(), m_operations.end(),
-                  [] (auto cmd) {
+                  [] (const std::shared_ptr<Command>& cmd) {
                       cmd->redo();
                   });
 }

@@ -227,7 +227,7 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
     m_current_data = properties;
     if(!m_data_map.empty()) {
         std::for_each(m_data_map.cbegin(), m_data_map.cend(),
-                      [this] (const auto& p) {
+                      [this] (const decltype(m_data_map)::value_type& p) {
                           this->clear_widget(p);
                       });
     }

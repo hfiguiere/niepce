@@ -153,7 +153,7 @@ void MetaDataPaneController::display(eng::library_id_t file_id, const eng::LibMe
         properties = eng::libmetadata_to_properties(meta, *propset);
     }
     std::for_each(m_widgets.begin(), m_widgets.end(),
-                  [properties] (auto w) {
+                  [properties] (decltype(m_widgets)::value_type w) {
                       w->set_data_source(properties);
                   });
 }
