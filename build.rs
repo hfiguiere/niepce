@@ -52,7 +52,14 @@ fn main() {
     let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or(String::from("./target"));
     let mut target_file = PathBuf::from(target_dir);
     target_file.push("bindings.h");
-    cbindgen::generate(&crate_dir)
-        .unwrap()
-        .write_to_file(&*target_file.to_string_lossy());
+    let cbuilder = cbindgen::Builder::new()
+        .with_include_guard("niepce_rust_bindings_h")
+        .with_namespace("ffi")
+        .with_language(cbindgen::Language::Cxx)
+        .with_parse_deps(true)
+        .with_parse_exclude(&["exempi", "chrono"])
+        .exclude_item("GtkWindow")
+        .with_crate(&crate_dir);
+
+    cbuilder.generate().unwrap().write_to_file(&*target_file.to_string_lossy());
 }

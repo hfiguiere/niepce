@@ -85,7 +85,6 @@ impl Drop for MetadataChange {
     }
 }
 
-#[repr(C)]
 pub enum Notification {
     AddedFile,
     AddedFiles,

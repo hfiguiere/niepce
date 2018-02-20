@@ -20,19 +20,16 @@
 use libc::c_char;
 use std::ffi::{CStr,CString};
 
-use chrono::{DateTime, Utc};
+use super::date::Date;
 
 #[derive(Clone,Debug)]
-#[repr(C)]
 pub enum PropertyValue {
     Empty,
     Int(i32),
     String(String),
     StringArray(Vec<String>),
-    Date(DateTime<Utc>)
+    Date(Date)
 }
-
-type Date = DateTime<Utc>;
 
 impl PropertyValue {
 }
