@@ -60,13 +60,13 @@ IndexToXmp property_index_to_xmp(fwk::PropertyIndex index)
     PropsToXmpMap::const_iterator iter = propmap.find(index);
     if (iter == propmap.end()) {
         // not found
-        return {ns: nullptr, property: nullptr};
+        return {nullptr, nullptr};
     }
     if (iter->second.first == NULL || iter->second.second == NULL) {
         // no XMP equivalent
-        return {ns: nullptr, property: nullptr};
+        return {nullptr, nullptr};
     }
-    return {ns: iter->second.first, property: iter->second.second};
+    return {iter->second.first, iter->second.second};
 }
 
 fwk::PropertyBagPtr libmetadata_to_properties(const LibMetadata* meta,

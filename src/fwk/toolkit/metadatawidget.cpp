@@ -441,7 +441,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         break;
     default:
         if (!set_string_data(w, current->readonly, value)) {
-            ERR_OUT("failed to set value for %ld", current->id);
+            ERR_OUT("failed to set value for %u", current->id);
         }
         break;
     }
