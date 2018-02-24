@@ -65,12 +65,11 @@ CARGO_TARGET_DIR=@abs_top_builddir@/target
 
 all-local: $(CARGO_TARGET_DIR)/@CARGO_TARGET_SUBDIR@/libniepce_rust.a
 
-@abs_top_builddir@/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a: $(CARGO_TARGET_DIR)/bindings.h
+@abs_top_builddir@/target/bindings.h: $(CARGO_TARGET_DIR)/@CARGO_TARGET_SUBDIR@/libniepce_rust.a
 
-@abs_top_builddir@/target/bindings.h: $(RUST_SOURCES)
+@abs_top_builddir@/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a: $(RUST_SOURCES)
 	cd $(top_srcdir) && \
 	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo build $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
-
 
 clean-local:
 	cd $(top_srcdir) && \
