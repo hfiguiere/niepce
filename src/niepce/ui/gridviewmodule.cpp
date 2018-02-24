@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.cpp
  *
- * Copyright (C) 2009-2017 Hubert Figuiere
+ * Copyright (C) 2009-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,6 +115,8 @@ Gtk::Widget * GridViewModule::buildWidget()
                                   m_model->columns().m_pix.index());
   cell_area->add_attribute(*libcell, "libfile",
                                   m_model->columns().m_libfile.index());
+  cell_area->add_attribute(*libcell, "status",
+                                  m_model->columns().m_file_status.index());
 
   m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);

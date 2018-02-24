@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/notification.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@ use fwk::PropertyValue;
 use engine::db::{
     LibraryId,
     Label, LibFolder, LibMetadata, Keyword
+};
+use engine::db::libfile::{
+    FileStatus,
 };
 
 use root::eng::QueriedContent;
@@ -51,6 +54,7 @@ pub enum NotificationType {
     LABEL_DELETED,
     XMP_NEEDS_UPDATE,
     FILE_MOVED,
+    FILE_STATUS_CHANGED,
 }
 
 #[repr(C)]
@@ -58,6 +62,12 @@ pub struct FileMove {
     pub file: LibraryId,
     pub from: LibraryId,
     pub to: LibraryId,
+}
+
+#[repr(C)]
+pub struct FileStatusChange {
+    pub id: LibraryId,
+    pub status: FileStatus,
 }
 
 #[repr(C)]
@@ -92,6 +102,7 @@ pub enum Notification {
     AddedKeyword(Keyword),
     AddedLabel(Label),
     FileMoved(FileMove),
+    FileStatusChanged(FileStatusChange),
     FolderContentQueried(Content),
     FolderCounted(Count),
     FolderCountChanged(Count),
@@ -148,6 +159,7 @@ pub extern "C" fn engine_library_notification_type(n: *const Notification) -> No
         Some(&Notification::AddedKeyword(_)) => NotificationType::ADDED_KEYWORD,
         Some(&Notification::AddedLabel(_)) => NotificationType::ADDED_LABEL,
         Some(&Notification::FileMoved(_)) => NotificationType::FILE_MOVED,
+        Some(&Notification::FileStatusChanged(_)) => NotificationType::FILE_STATUS_CHANGED,
         Some(&Notification::FolderContentQueried(_)) => NotificationType::FOLDER_CONTENT_QUERIED,
         Some(&Notification::FolderCounted(_)) => NotificationType::FOLDER_COUNTED,
         Some(&Notification::FolderCountChanged(_)) => NotificationType::FOLDER_COUNT_CHANGE,
@@ -174,6 +186,7 @@ pub extern "C" fn engine_library_notification_get_id(n: *const Notification) -> 
         Some(&Notification::MetadataChanged(ref changed)) => changed.id,
         Some(&Notification::FolderDeleted(id)) => id,
         Some(&Notification::LabelDeleted(id)) => id,
+        Some(&Notification::FileStatusChanged(ref changed)) => changed.id,
         _ => unreachable!(),
     }
 }
@@ -191,6 +204,14 @@ pub extern "C" fn engine_library_notification_get_label(n: *const Notification) 
 pub extern "C" fn engine_library_notification_get_filemoved(n: *const Notification) -> *const FileMove {
     match unsafe { n.as_ref() } {
         Some(&Notification::FileMoved(ref m)) => m,
+        _ => unreachable!()
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn engine_library_notification_get_filestatus(n: *const Notification) -> FileStatus {
+    match unsafe { n.as_ref() } {
+        Some(&Notification::FileStatusChanged(ref s)) => s.status,
         _ => unreachable!()
     }
 }

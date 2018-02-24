@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail View
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * C++-ization: Hubert Figuiere <hub@figuiere.net>
  * Original Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
@@ -95,6 +95,8 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
                   ui::ImageListStore::Columns::STRIP_THUMB_INDEX);
     add_attribute(*m_renderer, "libfile",
                   ui::ImageListStore::Columns::FILE_INDEX);
+    add_attribute(*m_renderer, "status",
+                  ui::ImageListStore::Columns::FILE_STATUS_INDEX);
     set_selection_mode(Gtk::SELECTION_MULTIPLE);
     set_column_spacing(THUMB_STRIP_VIEW_SPACING);
 

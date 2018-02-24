@@ -89,6 +89,18 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
     return Gtk::TreePath();
 }
 
+void ImageListStore::add_libfile(const eng::LibFilePtr & f)
+{
+    Gtk::TreeModel::iterator riter = append();
+    Gtk::TreeRow row = *riter;
+    Glib::RefPtr<Gdk::Pixbuf> icon = get_loading_icon();
+    row[m_columns.m_pix] = icon;
+    row[m_columns.m_libfile] = f;
+    row[m_columns.m_strip_thumb]
+        = fwk::gdkpixbuf_scale_to_fit(icon, 100);
+    row[m_columns.m_file_status] = eng::FileStatus::Ok;
+    m_idmap[engine_db_libfile_id(f.get())] = riter;
+}
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
@@ -110,17 +122,9 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         // clear the map before the list.
         m_idmap.clear();
         clear();
-        for_each(l->cbegin(), l->cend(),
-                 [this] (const eng::LibFilePtr & f) {
-                     Gtk::TreeModel::iterator riter = append();
-                     Gtk::TreeRow row = *riter;
-                     Glib::RefPtr<Gdk::Pixbuf> icon = get_loading_icon();
-                     row[m_columns.m_pix] = icon;
-                     row[m_columns.m_libfile] = f;
-                     row[m_columns.m_strip_thumb]
-                         = fwk::gdkpixbuf_scale_to_fit(icon, 100);
-                     m_idmap[engine_db_libfile_id(f.get())] = riter;
-                 });
+        for_each(l->cbegin(), l->cend(), [this] (const eng::LibFilePtr & f) {
+                this->add_libfile(f);
+            });
         // at that point clear the cache because the icon view is populated.
         getLibraryClient()->thumbnailCache().request(*l);
         break;
@@ -141,6 +145,17 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             }
         } else if (param->to == m_current_folder) {
             // XXX add to list. but this isn't likely to happen atm.
+        }
+        break;
+    }
+    case eng::NotificationType::FILE_STATUS_CHANGED:
+    {
+        auto status = engine_library_notification_get_filestatus(&ln);
+        auto id = engine_library_notification_get_id(&ln);
+        auto iter = m_idmap.find(id);
+        if (iter != m_idmap.end()) {
+            Gtk::TreeRow row = *(iter->second);
+            row[m_columns.m_file_status] = status;
         }
         break;
     }

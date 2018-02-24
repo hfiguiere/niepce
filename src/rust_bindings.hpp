@@ -1,7 +1,7 @@
 /*
  * niepce - rust_bindings.hpp
  *
- * Copyright (C) 2017 Hubert Figuiere
+ * Copyright (C) 2017-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ typedef ffi::RgbColour RgbColour;
 namespace eng {
 typedef ffi::LibraryId library_id_t; // XXX change this to LibraryId
 typedef ffi::FileType FileType;
+typedef ffi::FileStatus FileStatus;
 typedef ffi::Keyword Keyword;
 typedef ffi::LibFile LibFile;
 typedef ffi::LibFolder LibFolder;

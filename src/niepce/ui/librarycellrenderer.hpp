@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.h
  *
- * Copyright (C) 2008,2011 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#ifndef __UI_LIBRARY_CELL_RENDERER_H__
-#define __UI_LIBRARY_CELL_RENDERER_H__
+#pragma once
 
 #include <glibmm/property.h>
 #include <gtkmm/cellrendererpixbuf.h>
@@ -77,11 +74,14 @@ public:
     sigc::signal<void, int, int> signal_rating_changed;
 protected:
     /* drawing implementations */
-    void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
+    void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr,
                         Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
                         const GdkRectangle & r);
-    void _drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
+    void _drawFlag(const Cairo::RefPtr<Cairo::Context> & cr,
                    int flag_value, double x, double y);
+    void draw_status(const Cairo::RefPtr<Cairo::Context> & cr,
+                     eng::FileStatus status, double x, double y) const;
+
 private:
     const IModuleShell& m_shell;
     int                                 m_size;
@@ -91,13 +91,17 @@ private:
     bool                                m_drawrating;
     bool                                m_drawlabel;
     bool                                m_drawflag;
+    bool m_drawstatus;
     Glib::Property<eng::LibFilePtr>   m_libfileproperty;
+    Glib::Property<eng::FileStatus> m_statusproperty;
 
     Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
     Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
+
+    Cairo::RefPtr<Cairo::ImageSurface>  m_status_missing;
 
     Cairo::RefPtr<Cairo::ImageSurface>  m_flag_reject;
     Cairo::RefPtr<Cairo::ImageSurface>  m_flag_pick;
@@ -115,5 +119,3 @@ private:
   fill-column:80
   End:
 */
-
-#endif

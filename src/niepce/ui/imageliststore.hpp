@@ -36,28 +36,31 @@
 namespace ui {
 
 /** @brief the general list store */
-class ImageListStore 
+class ImageListStore
     : public Gtk::ListStore
 {
 public:
-    class Columns 
+    class Columns
         : public Gtk::TreeModelColumnRecord
     {
     public:
         enum {
             THUMB_INDEX = 0,
             FILE_INDEX = 1,
-            STRIP_THUMB_INDEX = 2
+            STRIP_THUMB_INDEX = 2,
+            FILE_STATUS_INDEX = 3
         };
         Columns()
-            { 
+            {
                 add(m_pix);
                 add(m_libfile);
                 add(m_strip_thumb);
+                add(m_file_status);
             }
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
         Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
+        Gtk::TreeModelColumn<eng::FileStatus> m_file_status;
     };
 
     const Columns & columns() const
@@ -77,6 +80,9 @@ public:
 protected:
     ImageListStore(const Columns& columns);
 private:
+    /// Add the LibFile to the model
+    void add_libfile(const eng::LibFilePtr & f);
+
     static Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
     libraryclient::LibraryClientPtr getLibraryClient();
     static bool is_property_interesting(fwk::PropertyIndex idx);

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.cpp
  *
- * Copyright (C) 2008-2017 Hubert Figuière
+ * Copyright (C) 2008-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,27 +47,31 @@ LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
       m_drawemblem(true),
       m_drawrating(true),
       m_drawlabel(true),
-      m_drawflag(true),
-      m_libfileproperty(*this, "libfile")
+      m_drawflag(true), m_drawstatus(true),
+      m_libfileproperty(*this, "libfile"),
+      m_statusproperty(*this, "status")
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
     try {
-        m_raw_format_emblem 
+        m_raw_format_emblem
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-raw-fmt.png"));
-        m_rawjpeg_format_emblem 
+        m_rawjpeg_format_emblem
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-rawjpeg-fmt.png"));
-        m_img_format_emblem 
+        m_img_format_emblem
             = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-img-fmt.png"));     
-        m_video_format_emblem 
+                std::string(DATADIR"/niepce/pixmaps/niepce-img-fmt.png"));
+        m_video_format_emblem
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-video-fmt.png"));
-        m_unknown_format_emblem 
+        m_unknown_format_emblem
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-unknown-fmt.png"));
 
+        m_status_missing
+            = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-missing.png"));
         m_flag_reject
             = Cairo::ImageSurface::create_from_png(
                 std::string(DATADIR"/niepce/pixmaps/niepce-flag-reject.png"));
@@ -115,6 +119,17 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
     cr->paint();
 }
 
+
+void LibraryCellRenderer::draw_status(const Cairo::RefPtr<Cairo::Context> & cr,
+                                      eng::FileStatus status, double x, double y) const
+{
+    if (status == eng::FileStatus::Ok) {
+        return;
+    }
+
+    cr->set_source(m_status_missing, x, y);
+    cr->paint();
+}
 
 void LibraryCellRenderer::_drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
                    int flag_value, double x, double y)
@@ -245,6 +260,13 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         x = r.x + r.width - CELL_PADDING;
         y = r.y + CELL_PADDING;
         _drawFlag(cr, engine_db_libfile_flag(file.get()), x, y);
+    }
+
+    auto status = m_statusproperty.get_value();
+    if (m_drawstatus && status != eng::FileStatus::Ok) {
+        double x = r.x + CELL_PADDING;
+        double y = r.y + CELL_PADDING;
+        draw_status(cr, status, x, y);
     }
 
     if(m_drawemblem) {

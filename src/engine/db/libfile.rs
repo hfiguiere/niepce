@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfile.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,14 @@ pub enum FileType {
     RAW_JPEG = 2,
     IMAGE = 3,
     VIDEO = 4,
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, PartialEq)]
+/// FileStatus indicate the transient status of the file on the storage.
+pub enum FileStatus {
+    Ok = 0, /// Foo
+    Missing = 1,
 }
 
 impl From<i32> for FileType {
