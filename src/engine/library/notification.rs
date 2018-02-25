@@ -144,6 +144,16 @@ pub unsafe fn engine_library_notify(_: u64, _: *mut Notification) {
     // unsafe since it non test function is extern
 }
 
+/// Send a notification for the file status change.
+#[no_mangle]
+pub extern "C" fn engine_library_notify_filestatus_changed(notif_id: u64,
+                                                           id: LibraryId,
+                                                           status: FileStatus) {
+    let notif = Box::new(Notification::FileStatusChanged(
+        FileStatusChange{id, status}));
+    unsafe { engine_library_notify(notif_id, Box::into_raw(notif)) }
+}
+
 /// Delete the Notification object.
 #[no_mangle]
 pub extern "C" fn engine_library_notification_delete(n: *mut Notification) {

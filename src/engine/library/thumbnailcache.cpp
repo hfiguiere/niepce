@@ -89,12 +89,19 @@ void ThumbnailCache::execute(const ptr_t & task)
     w = task->width();
     h = task->height();
 
-    std::string dest = path_for_thumbnail(
-        engine_db_libfile_path(task->file().get()),
-        engine_db_libfile_id(task->file().get()), std::max(w,h));
+    auto libfile = task->file();
+    std::string path = engine_db_libfile_path(libfile.get());
+    auto id = engine_db_libfile_id(libfile.get());
+    std::string dest = path_for_thumbnail(path, id, std::max(w,h));
     DBG_OUT("cached thumbnail %s", dest.c_str());
 
-    fwk::Thumbnail pix = getThumbnail(task->file(), w, h, dest);
+    fwk::Thumbnail pix = getThumbnail(libfile, w, h, dest);
+    if (!fwk::path_exists(path)) {
+        DBG_OUT("file doesn't exist");
+        ffi::engine_library_notify_filestatus_changed(m_notif_id, id,
+                                                      FileStatus::Missing);
+    }
+
     if(!pix.ok()) {
         return;
     }
