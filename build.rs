@@ -61,5 +61,9 @@ fn main() {
         .exclude_item("GtkWindow")
         .with_crate(&crate_dir);
 
-    cbuilder.generate().unwrap().write_to_file(&*target_file.to_string_lossy());
+    if let Ok(bindings) = cbuilder.generate() {
+        bindings.write_to_file(&*target_file.to_string_lossy());
+    } else {
+        println!("Couldn't generate bindings");
+    }
 }
