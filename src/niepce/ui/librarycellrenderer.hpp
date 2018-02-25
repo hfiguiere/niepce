@@ -31,32 +31,32 @@ namespace ui {
 class IModuleShell;
 
 class LibraryCellRenderer
-	: public Gtk::CellRendererPixbuf
-        , public fwk::ClickableCellRenderer
+    : public Gtk::CellRendererPixbuf
+    , public fwk::ClickableCellRenderer
 {
 public:
     LibraryCellRenderer(const IModuleShell& shell);
-    
+
     virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const override;
     virtual void get_preferred_height_vfunc(Gtk::Widget& widget, int& minimum_height, int& natural_height) const override;
 
     virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
-                               Gtk::Widget& widget, 
-                               const Gdk::Rectangle& background_area, 
-                               const Gdk::Rectangle& cell_area, 
+                               Gtk::Widget& widget,
+                               const Gdk::Rectangle& background_area,
+                               const Gdk::Rectangle& cell_area,
                                Gtk::CellRendererState flags) override;
     /** call when the cell is clicked */
     virtual bool activate_vfunc(GdkEvent* event, Gtk::Widget& widget,const Glib::ustring & path,
-                                const Gdk::Rectangle& background_area, 
+                                const Gdk::Rectangle& background_area,
                                 const Gdk::Rectangle& cell_area, Gtk::CellRendererState flags) override;
     void set_size(int _size)
         { m_size = _size; }
     int size() const
         { return m_size; }
-    
+
     void set_pad(int _pad)
         { m_pad = _pad; }
-    int pad() const 
+    int pad() const
         { return m_pad; }
     void set_drawborder(bool val)
         { m_drawborder = val; }
@@ -74,13 +74,13 @@ public:
     sigc::signal<void, int, int> signal_rating_changed;
 protected:
     /* drawing implementations */
-    void _drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr,
-                        Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-                        const GdkRectangle & r);
-    void _drawFlag(const Cairo::RefPtr<Cairo::Context> & cr,
-                   int flag_value, double x, double y);
-    void draw_status(const Cairo::RefPtr<Cairo::Context> & cr,
-                     eng::FileStatus status, double x, double y) const;
+    void draw_thumbnail(const Cairo::RefPtr<Cairo::Context>& cr,
+                        Glib::RefPtr<Gdk::Pixbuf>& pixbuf,
+                        const GdkRectangle& r) const;
+    void draw_flag(const Cairo::RefPtr<Cairo::Context>& cr,
+                   int flag_value, const GdkRectangle& r) const;
+    void draw_status(const Cairo::RefPtr<Cairo::Context>& cr,
+                     eng::FileStatus status, const GdkRectangle& r) const;
 
 private:
     const IModuleShell& m_shell;
@@ -107,9 +107,7 @@ private:
     Cairo::RefPtr<Cairo::ImageSurface>  m_flag_pick;
 };
 
-
 }
-
 /*
   Local Variables:
   mode:c++

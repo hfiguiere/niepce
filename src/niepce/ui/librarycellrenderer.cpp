@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <stdint.h>
 
 #include "fwk/base/debug.hpp"
@@ -38,18 +37,19 @@
 namespace ui {
 
 LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
-    : Glib::ObjectBase(typeid(LibraryCellRenderer)),
-      Gtk::CellRendererPixbuf(),
-      m_shell(shell),
-      m_size(160),
-      m_pad(16),
-      m_drawborder(true),
-      m_drawemblem(true),
-      m_drawrating(true),
-      m_drawlabel(true),
-      m_drawflag(true), m_drawstatus(true),
-      m_libfileproperty(*this, "libfile"),
-      m_statusproperty(*this, "status")
+    : Glib::ObjectBase(typeid(LibraryCellRenderer))
+    , Gtk::CellRendererPixbuf()
+    , m_shell(shell)
+    , m_size(160)
+    , m_pad(16)
+    , m_drawborder(true)
+    , m_drawemblem(true)
+    , m_drawrating(true)
+    , m_drawlabel(true)
+    , m_drawflag(true)
+    , m_drawstatus(true)
+    , m_libfileproperty(*this, "libfile")
+    , m_statusproperty(*this, "status")
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
     try {
@@ -88,12 +88,12 @@ LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
     }
 }
 
-
-void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & cr, 
-                                         Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
-                                         const GdkRectangle & r)
+void
+LibraryCellRenderer::draw_thumbnail(const Cairo::RefPtr<Cairo::Context> & cr,
+                                    Glib::RefPtr<Gdk::Pixbuf> & pixbuf,
+                                    const GdkRectangle& r) const
 {
-    if(!pixbuf) {
+    if (!pixbuf) {
         ERR_OUT("NULL pixbuf");
         return;
     }
@@ -104,7 +104,7 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
     double x, y;
     x = r.x + pad() + offset_x;
     y = r.y + pad() + offset_y;
-	
+
 // draw the shadow...
 //		cr->set_source_rgb(0.0, 0.0, 0.0);
 //		cr->rectangle(x + 3, y + 3, w, h);
@@ -114,57 +114,57 @@ void LibraryCellRenderer::_drawThumbnail(const Cairo::RefPtr<Cairo::Context> & c
     cr->set_source_rgb(1.0, 1.0, 1.0);
     cr->rectangle(x, y, w, h);
     cr->stroke();
-		
+
     Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
     cr->paint();
 }
 
-
-void LibraryCellRenderer::draw_status(const Cairo::RefPtr<Cairo::Context> & cr,
-                                      eng::FileStatus status, double x, double y) const
+void
+LibraryCellRenderer::draw_status(const Cairo::RefPtr<Cairo::Context>& cr,
+                                 eng::FileStatus status, const GdkRectangle& r) const
 {
     if (status == eng::FileStatus::Ok) {
         return;
     }
+    double x = r.x + CELL_PADDING;
+    double y = r.y + CELL_PADDING;
 
     cr->set_source(m_status_missing, x, y);
     cr->paint();
 }
 
-void LibraryCellRenderer::_drawFlag(const Cairo::RefPtr<Cairo::Context> & cr, 
-                   int flag_value, double x, double y)
+void
+LibraryCellRenderer::draw_flag(const Cairo::RefPtr<Cairo::Context>& cr,
+                               int flag_value, const GdkRectangle& r) const
 {
-    if(flag_value == 0) {
+    if (flag_value == 0) {
         return;
     }
 
     Cairo::RefPtr<Cairo::ImageSurface> pixbuf;
-    if(flag_value == -1) {
+    if (flag_value == -1) {
         pixbuf = m_flag_reject;
-    }
-    else if(flag_value == 1) {
+    } else if(flag_value == 1) {
         pixbuf = m_flag_pick;
-    }
-    else {
+    } else {
         ERR_OUT("wrong flag value %d", flag_value);
         return ;
     }
     int w = pixbuf->get_width();
-
-    cr->set_source(pixbuf, x - w, y);
+    double x = r.x + r.width - CELL_PADDING - w;
+    double y = r.y + CELL_PADDING;
+    cr->set_source(pixbuf, x, y);
     cr->paint();
 }
 
-
-
 namespace {
 
-int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr, 
-                      const Cairo::RefPtr<Cairo::ImageSurface> & emblem,
-                      const GdkRectangle & r)		
-{	
+int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context>& cr,
+                      const Cairo::RefPtr<Cairo::ImageSurface>& emblem,
+                      const GdkRectangle& r)
+{
     int left = 0;
-    if(emblem) {
+    if (emblem) {
         int w, h;
         w = emblem->get_width();
         h = emblem->get_height();
@@ -178,9 +178,9 @@ int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context> & cr,
     return left;
 }
 
-void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr, 
-               int right, const fwk::RgbColour & colour,
-               const GdkRectangle & r)
+void drawLabel(const Cairo::RefPtr<Cairo::Context>& cr,
+               int right, const fwk::RgbColour& colour,
+               const GdkRectangle& r)
 {
     const int label_size = 15;
     double x, y;
@@ -197,27 +197,29 @@ void drawLabel(const Cairo::RefPtr<Cairo::Context> & cr,
 
 }
 
-void 
-LibraryCellRenderer::get_preferred_width_vfunc(Gtk::Widget& /*widget*/, int& minimum_width, int& natural_width) const
+void
+LibraryCellRenderer::get_preferred_width_vfunc(Gtk::Widget& /*widget*/,
+                                               int& minimum_width, int& natural_width) const
 {
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
     int maxdim = m_size + pad() * 2;
     minimum_width = natural_width = maxdim;
 }
 
-void 
-LibraryCellRenderer::get_preferred_height_vfunc(Gtk::Widget& /*widget*/, int& minimum_height, int& natural_height) const
+void
+LibraryCellRenderer::get_preferred_height_vfunc(Gtk::Widget& /*widget*/,
+                                                int& minimum_height, int& natural_height) const
 {
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
     int maxdim = m_size + pad() * 2;
     minimum_height = natural_height = maxdim;
 }
 
-void 
-LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr, 
-                                  Gtk::Widget& widget, 
-                                  const Gdk::Rectangle& /*background_area*/, 
-                                  const Gdk::Rectangle& cell_area, 
+void
+LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
+                                  Gtk::Widget& widget,
+                                  const Gdk::Rectangle& /*background_area*/,
+                                  const Gdk::Rectangle& cell_area,
                                   Gtk::CellRendererState flags)
 {
     unsigned int xpad = Gtk::CellRenderer::property_xpad();
@@ -232,7 +234,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     Glib::RefPtr<Gtk::StyleContext> style_context = widget.get_style_context();
 
     style_context->context_save();
-    if(flags & Gtk::CELL_RENDERER_SELECTED) {
+    if (flags & Gtk::CELL_RENDERER_SELECTED) {
         style_context->set_state(Gtk::STATE_FLAG_SELECTED);
     }
     else {
@@ -240,14 +242,14 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     }
     style_context->render_background(cr, r.x, r.y, r.width, r.height);
 
-    if(m_drawborder) {
+    if (m_drawborder) {
         style_context->render_frame(cr, r.x, r.y, r.width, r.height);
     }
     style_context->context_restore();
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
-    _drawThumbnail(cr, pixbuf, r);
-    if(m_drawrating) {
+    draw_thumbnail(cr, pixbuf, r);
+    if (m_drawrating) {
         double x, y;
         x = r.x + CELL_PADDING;
         y = r.y + r.height - CELL_PADDING;
@@ -255,21 +257,16 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                       fwk::RatingLabel::get_star(),
                                       fwk::RatingLabel::get_unstar(), x, y);
     }
-    if(m_drawflag) {
-        double x, y;
-        x = r.x + r.width - CELL_PADDING;
-        y = r.y + CELL_PADDING;
-        _drawFlag(cr, engine_db_libfile_flag(file.get()), x, y);
+    if (m_drawflag) {
+        draw_flag(cr, engine_db_libfile_flag(file.get()), r);
     }
 
     auto status = m_statusproperty.get_value();
     if (m_drawstatus && status != eng::FileStatus::Ok) {
-        double x = r.x + CELL_PADDING;
-        double y = r.y + CELL_PADDING;
-        draw_status(cr, status, x, y);
+        draw_status(cr, status, r);
     }
 
-    if(m_drawemblem) {
+    if (m_drawemblem) {
         Cairo::RefPtr<Cairo::ImageSurface> emblem;
 
         switch(engine_db_libfile_file_type(file.get())) {
@@ -291,9 +288,9 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         }
 
         int left = drawFormatEmblem(cr, emblem, r);
-        if(m_drawlabel) {
+        if (m_drawlabel) {
             uint32_t label_id = engine_db_libfile_label(file.get());
-            if(label_id != 0) {
+            if (label_id != 0) {
                 auto result = m_shell.get_ui_data_provider()->colourForLabel(label_id);
                 DBG_ASSERT(!result.empty(), "colour not found");
                 if (!result.empty()) {
@@ -304,14 +301,13 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     }
 }
 
-
 bool
-LibraryCellRenderer::activate_vfunc(GdkEvent * /*event*/, Gtk::Widget & ,
-                                    const Glib::ustring &, const Gdk::Rectangle& /*bg*/,
-                                    const Gdk::Rectangle & cell_area, Gtk::CellRendererState)
+LibraryCellRenderer::activate_vfunc(GdkEvent * /*event*/, Gtk::Widget& ,
+                                    const Glib::ustring&, const Gdk::Rectangle& /*bg*/,
+                                    const Gdk::Rectangle& cell_area, Gtk::CellRendererState)
 {
     DBG_OUT("activate event");
-    if(this->ClickableCellRenderer::is_hit()) {
+    if (this->ClickableCellRenderer::is_hit()) {
 
         this->ClickableCellRenderer::reset_hit();
 
@@ -336,7 +332,7 @@ LibraryCellRenderer::activate_vfunc(GdkEvent * /*event*/, Gtk::Widget & ,
                 rect.width, rect.height, x, y);
         bool hit = (rect.x <= x) && (rect.x + rect.width >= x)
             && (rect.y <= y) && (rect.y + rect.height >= y);
-        if(!hit) {
+        if (!hit) {
             DBG_OUT("not a hit");
             return false;
         }
@@ -359,13 +355,11 @@ LibraryCellRenderer::property_libfile() const
     return Glib::PropertyProxy_ReadOnly<eng::LibFilePtr>(this, "libfile");
 }
 
-
 Glib::PropertyProxy<eng::LibFilePtr>
 LibraryCellRenderer::property_libfile()
 {
     return m_libfileproperty.get_proxy();
 }
-
 
 }
 /*
