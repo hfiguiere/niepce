@@ -46,7 +46,9 @@ pub enum FileType {
 #[derive(Debug, Clone, Copy, PartialEq)]
 /// FileStatus indicate the transient status of the file on the storage.
 pub enum FileStatus {
-    Ok = 0, /// Foo
+    /// File is OK
+    Ok = 0,
+    /// File is missing
     Missing = 1,
 }
 
