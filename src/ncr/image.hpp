@@ -34,11 +34,12 @@ class Image
 {
 public:
     typedef std::shared_ptr<Image> Ptr;
-    enum class status_t {
-        UNSET,
+    enum class Status {
+        UNSET = 0,
         LOADING,
         LOADED,
         ERROR,
+        NOT_FOUND,
         _LAST
     };
 
@@ -49,7 +50,8 @@ public:
     Cairo::RefPtr<Cairo::ImageSurface> cairo_surface_for_display();
 
     /** The status of the image. */
-    status_t get_status() const;
+    Status get_status() const;
+    void set_status(Status s);
 
     /* the dimensions of the original image */
     int get_original_width() const;

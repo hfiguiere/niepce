@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.cpp
  *
- * Copyright (C) 2008-2017 Hubert Figuière
+ * Copyright (C) 2008-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,6 +110,20 @@ Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_error_placeholder()
     return s;
 }
 
+Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_missing_placeholder()
+{
+    Cairo::RefPtr<Cairo::ImageSurface> s;
+    try {
+        s = Cairo::ImageSurface::create_from_png(
+                std::string(DATADIR"/niepce/pixmaps/niepce-image-missing.png"));
+    }
+    catch(...) {
+    }
+
+    return s;
+}
+
+
 void ImageCanvas::on_size_allocate(Gtk::Allocation &	allocation)
 {
     m_resized = true;
@@ -133,7 +147,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         img_w = img_h = 0;
         double scale = 1.0;
 
-        if(m_image->get_status() != ncr::Image::status_t::ERROR) {
+        if (m_image->get_status() < ncr::Image::Status::ERROR) {
 
             // calculate the image scale
             img_w = m_image->get_original_width();
@@ -149,7 +163,12 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
         }
         if(!img_s) {
             DBG_OUT("no image loaded");
-            img_s = _get_error_placeholder();
+            if (m_image->get_status() == ncr::Image::Status::NOT_FOUND) {
+                img_s = _get_missing_placeholder();
+            } else {
+                img_s = _get_error_placeholder();
+            }
+            DBG_ASSERT(img_s, "img_s not loaded");
             img_w = img_s->get_width();
             img_h = img_s->get_height();
         }
@@ -207,8 +226,8 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 
 void ImageCanvas::_redisplay()
 {
-    if (m_image->get_status() == ncr::Image::status_t::ERROR) {
-        ERR_OUT("Image is in error");
+    if (m_image->get_status() != ncr::Image::Status::LOADED) {
+        ERR_OUT("Image is in not loaded - status %d", m_image->get_status());
         return;
     }
     int img_w, img_h;

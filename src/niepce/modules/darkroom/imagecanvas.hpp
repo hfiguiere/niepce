@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.hpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ private:
     /** cause to "recalulate" the content. */
     void _redisplay();
     Cairo::RefPtr<Cairo::ImageSurface> _get_error_placeholder();
+    Cairo::RefPtr<Cairo::ImageSurface> _get_missing_placeholder();
 
     bool                           m_need_redisplay;
     bool                           m_resized;

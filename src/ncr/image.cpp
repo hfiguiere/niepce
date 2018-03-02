@@ -1,7 +1,7 @@
 /*
  * niepce - ncr/image.cpp
  *
- * Copyright (C) 2008-2015 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@ extern "C" {
 #include <libopenraw/libopenraw.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/utils/pathutils.hpp"
 #include "ncr.hpp"
 #include "image.hpp"
 
@@ -36,7 +37,7 @@ namespace ncr {
 struct Image::Private {
     Private(Image& self)
         : m_self(self)
-        , m_status(Image::status_t::UNSET)
+        , m_status(Image::Status::UNSET)
         , m_width(0)
         , m_height(0)
         , m_orientation(0), m_vertical(false)
@@ -67,7 +68,7 @@ struct Image::Private {
     void reload_node(GeglNode* node, int orientation);
 
     Image& m_self;
-    Image::status_t m_status;
+    Image::Status m_status;
     int m_width, m_height; /**< the native dimension, with orientation */
     int m_orientation;     /**< EXIF orientation in degrees */
     bool m_vertical;
@@ -216,7 +217,7 @@ GeglNode* Image::Private::_scale_node()
 
 void Image::Private::prepare_reload()
 {
-    m_status = status_t::LOADING;
+    m_status = Status::LOADING;
     m_pixbuf_cache.reset();
 
     if(m_graph) {
@@ -242,16 +243,17 @@ void Image::reload(const std::string & p, bool is_raw,
 {
     priv->prepare_reload();
 
-    GeglNode* load_file;
+    GeglNode* load_file = nullptr;
 
     DBG_OUT("loading file %s", p.c_str());
 
-    if(!is_raw) {
+    if (!fwk::path_exists(p)) {
+        set_status(Status::NOT_FOUND);
+    } else if (!is_raw) {
         load_file = gegl_node_new_child(priv->m_graph,
                                         "operation", "gegl:load",
                                         "path", p.c_str(), nullptr);
-    }
-    else {
+    } else {
         load_file = priv->_load_dcraw(p);
     }
     priv->reload_node(load_file, orientation);
@@ -259,46 +261,50 @@ void Image::reload(const std::string & p, bool is_raw,
 
 void Image::Private::reload_node(GeglNode* node, int orientation)
 {
-    DBG_ASSERT(m_status == status_t::LOADING,
-               "prepare_reload() might not have been called");
+    int width, height;
+    width = height = 0;
 
-    m_rotate_n = _rotate_node(orientation);
-    m_scale = _scale_node();
-    m_sink = gegl_node_create_child (m_graph, "gegl:display");
+    if (node) {
+        DBG_ASSERT(m_status == Status::LOADING,
+                   "prepare_reload() might not have been called");
 
-//        gegl_node_new_child(m_graph,
-//                            "operation", "gegl:buffer-sink",
-//                            "format", babl_format("RGB u8"),
-//                            "buffer", &(m_sink_buffer), nullptr);
+        m_rotate_n = _rotate_node(orientation);
+        m_scale = _scale_node();
+        m_sink = gegl_node_create_child (m_graph, "gegl:display");
 
-    gegl_node_link_many(node, m_rotate_n,
-                        m_scale, m_sink, nullptr);
+//      gegl_node_new_child(m_graph,
+//                          "operation", "gegl:buffer-sink",
+//                          "format", babl_format("RGB u8"),
+//                          "buffer", &(m_sink_buffer), nullptr);
 
-//    gegl_node_process(m_sink);
-    // DEBUG
+        gegl_node_link_many(node, m_rotate_n,
+                            m_scale, m_sink, nullptr);
+
+//      gegl_node_process(m_sink);
+        // DEBUG
 #if 0
-    GeglNode* debugsink;
-    GeglNode* graph =
-        gegl_graph (debugsink=gegl_node ("gegl:save",
-                                         "path", "/tmp/gegl.png", nullptr,
+        GeglNode* debugsink;
+        GeglNode* graph =
+            gegl_graph (debugsink=gegl_node ("gegl:save",
+                                             "path", "/tmp/gegl.png", nullptr,
                                          gegl_node ("gegl:buffer-source",
                                                     "buffer",
                                                     m_sink_buffer,
                                                     nullptr)
-                        )
-            );
-    gegl_node_process (debugsink);
-    g_object_unref (graph);
+                            )
+                );
+        gegl_node_process (debugsink);
+        g_object_unref (graph);
 #endif
-    // END DEBUG
+        // END DEBUG
 
-    int width, height;
-    GeglRectangle rect = gegl_node_get_bounding_box(node);
-    width = rect.width;
-    height = rect.height;
-    DBG_OUT("width %d height %d", width, height);
-    if(!width || !height) {
-        m_status = status_t::ERROR;
+        GeglRectangle rect = gegl_node_get_bounding_box(node);
+        width = rect.width;
+        height = rect.height;
+    }
+    DBG_OUT("width %d height %d - status %d", width, height, m_status);
+    if (m_status < Status::ERROR && (!width || !height)) {
+        m_status = Status::ERROR;
     }
     if(m_vertical) {
         m_width = height;
@@ -376,7 +382,7 @@ void Image::rotate_by(int degree)
 
 Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
 {
-    if(priv->m_status == status_t::ERROR) {
+    if(get_status() == Status::ERROR) {
         // return the error
         DBG_OUT("error");
         return Cairo::RefPtr<Cairo::ImageSurface>();
@@ -385,7 +391,7 @@ Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
         DBG_OUT("nothing loaded");
         return Cairo::RefPtr<Cairo::ImageSurface>();
     }
-    DBG_ASSERT(priv->m_status == status_t::LOADING, "wrong status for image");
+    DBG_ASSERT(get_status() == Status::LOADING, "wrong status for image");
     DBG_OUT("processing");
     gegl_node_process(priv->m_scale);
     GeglRectangle roi = gegl_node_get_bounding_box(priv->m_scale);
@@ -406,13 +412,18 @@ Cairo::RefPtr<Cairo::ImageSurface> Image::cairo_surface_for_display()
     // If you don't do that, it will never paint().
     // Thanks to mitch for the tip in #gegl
     surface->mark_dirty();
-    priv->m_status = status_t::LOADED;
+    set_status(Status::LOADED);
     return surface;
 }
 
-Image::status_t Image::get_status() const
+Image::Status Image::get_status() const
 {
     return priv->m_status;
+}
+
+void Image::set_status(Image::Status status)
+{
+    priv->m_status = status;
 }
 
 int Image::get_original_width() const
