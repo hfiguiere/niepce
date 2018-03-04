@@ -47,23 +47,25 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
-    // Use cbindgen to generate C bindings.
-    let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or(String::from("./target"));
-    let mut target_file = PathBuf::from(target_dir);
-    target_file.push("bindings.h");
-    let cbuilder = cbindgen::Builder::new()
-        .with_include_guard("niepce_rust_bindings_h")
-        .with_namespace("ffi")
-        .with_language(cbindgen::Language::Cxx)
-        .with_parse_deps(true)
-        .with_parse_exclude(&["exempi", "chrono"])
-        .exclude_item("GtkWindow")
-        .with_crate(&crate_dir);
+    if env::var("SKIP_CBINDINGS").is_err() {
+        // Use cbindgen to generate C bindings.
+        let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+        let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or(String::from("./target"));
+        let mut target_file = PathBuf::from(target_dir);
+        target_file.push("bindings.h");
+        let cbuilder = cbindgen::Builder::new()
+            .with_include_guard("niepce_rust_bindings_h")
+            .with_namespace("ffi")
+            .with_language(cbindgen::Language::Cxx)
+            .with_parse_deps(true)
+            .with_parse_exclude(&["exempi", "chrono"])
+            .exclude_item("GtkWindow")
+            .with_crate(&crate_dir);
 
-    if let Ok(bindings) = cbuilder.generate() {
-        bindings.write_to_file(&*target_file.to_string_lossy());
-    } else {
-        println!("Couldn't generate bindings");
+        if let Ok(bindings) = cbuilder.generate() {
+            bindings.write_to_file(&*target_file.to_string_lossy());
+        } else {
+            println!("Couldn't generate bindings");
+        }
     }
 }
