@@ -384,8 +384,8 @@ impl Library {
                       manage: Managed) -> LibraryId {
         let file_id = self.add_file(folder_id, bundle.main(), manage);
         if file_id > 0 {
-            if !bundle.sidecar().is_empty() {
-                let fsfile_id = self.add_fs_file(bundle.sidecar());
+            if !bundle.xmp_sidecar().is_empty() {
+                let fsfile_id = self.add_fs_file(bundle.xmp_sidecar());
                 if fsfile_id > 0 {
                     self.add_sidecar_file_to_bundle(file_id, fsfile_id);
                 }

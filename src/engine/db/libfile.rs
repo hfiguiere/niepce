@@ -33,7 +33,7 @@ use fwk;
 
 #[repr(i32)]
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum FileType {
     UNKNOWN = 0,
     RAW = 1,
