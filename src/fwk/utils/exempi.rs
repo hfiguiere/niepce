@@ -61,13 +61,6 @@ impl ExempiManager {
     }
 }
 
-impl Drop for ExempiManager {
-    fn drop(&mut self) {
-        exempi::terminate();
-    }
-}
-
-
 pub struct XmpMeta {
     pub xmp: Xmp,
     keywords: Vec<String>,
