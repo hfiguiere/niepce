@@ -76,5 +76,5 @@ clean-local:
 	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo clean $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
 
 check-local:
-	cd $(top_srcdir) &&
+	cd $(top_srcdir) && \
 	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo test $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
