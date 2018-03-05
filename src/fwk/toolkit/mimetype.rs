@@ -1,3 +1,21 @@
+/*
+ * niepce - fwk/toolkit/mimetype.rs
+ *
+ * Copyright (C) 2017-2018 Hubert Figuière
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 use gio;
 use glib_sys;
@@ -11,23 +29,24 @@ use std::ffi::CString;
 use std::ptr;
 use std::path::Path;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Copy, Clone, Debug)]
 pub enum IsRaw {
     No,
-    Yes
+    Yes,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Copy, Clone, Debug)]
 pub enum MType {
     None,
     Image(IsRaw),
     Movie,
-    Xmp
+    Xmp,
+    /// Thumbnail file (like Canon THM).
+    Thumbnail,
 }
 
 #[derive(Debug)]
 pub struct MimeType {
-//    name: String,
     mtype: MType,
 }
 
@@ -55,42 +74,45 @@ fn guess_type_for_file(filename: &str) -> MType {
         }
     }
     if let Some(ext) = path.extension() {
-        if let Some(sext) = ext.to_str() {
-            if sext == "xmp" {
-                return MType::Xmp;
-            }
+        match ext.to_str() {
+            Some("xmp") => return MType::Xmp,
+            Some("thm") => return MType::Thumbnail,
+            _ => {}
         }
     }
     // alternative
     let mut uncertainty: gboolean = 0;
     let content_type = unsafe {
-        gio_sys::g_content_type_guess(CString::new(filename).unwrap().as_ptr(),
-                                      ptr::null_mut(), 0, &mut uncertainty)
+        gio_sys::g_content_type_guess(
+            CString::new(filename).unwrap().as_ptr(),
+            ptr::null_mut(),
+            0,
+            &mut uncertainty,
+        )
     };
     let content_type_real = unsafe { CStr::from_ptr(content_type) };
     let t = guess_type(&*content_type_real.to_string_lossy());
-    unsafe {
-        glib_sys::g_free(content_type as *mut c_void)
-    };
+    unsafe { glib_sys::g_free(content_type as *mut c_void) };
 
     t
 }
 
 impl MimeType {
-
     pub fn new(filename: &str) -> MimeType {
         MimeType {
-//            name: String::from(filename),
             mtype: guess_type_for_file(filename),
         }
     }
 
+    pub fn mime_type(&self) -> MType {
+        self.mtype
+    }
+
     pub fn is_image(&self) -> bool {
         if let MType::Image(_) = self.mtype {
-            true
-        } else {
-            false
+            return true;
         }
+        false
     }
 
     pub fn is_digicam_raw(&self) -> bool {
@@ -109,13 +131,14 @@ impl MimeType {
     }
 }
 
-
 #[cfg(test)]
 #[test]
 fn mime_type_works() {
-
     let mimetype = MimeType::new("/foo/bar/img_0001.cr2");
-    assert_eq!(guess_type_for_file("/foo/bar/img_0001.cr2"), MType::Image(IsRaw::Yes));
+    assert_eq!(
+        guess_type_for_file("/foo/bar/img_0001.cr2"),
+        MType::Image(IsRaw::Yes)
+    );
     assert!(mimetype.is_image());
     assert!(mimetype.is_digicam_raw());
 }

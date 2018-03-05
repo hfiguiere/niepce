@@ -22,12 +22,15 @@ use std::path::Path;
 
 use engine::db::libfile::FileType;
 use fwk::MimeType;
+use fwk::toolkit::mimetype::{IsRaw, MType};
 
 /// Sidecar.
 #[derive(Debug, PartialEq)]
 pub enum Sidecar {
     /// Sidecar for Live image (MOV file form iPhone)
     Live(String),
+    /// Thumbnail file (THM from Canon)
+    Thumbnail(String),
 }
 
 /// FileBundle is a set of physical files group as one item.
@@ -90,28 +93,29 @@ impl FileBundle {
         let mime_type = MimeType::new(path);
         let mut added = true;
 
-        if mime_type.is_image() {
-            if mime_type.is_digicam_raw() {
-                if !self.main.is_empty() && self.jpeg.is_empty() {
-                    self.jpeg = self.main.clone();
-                    self.bundle_type = FileType::RAW_JPEG;
-                } else {
-                    self.bundle_type = FileType::RAW;
-                }
-                self.main = String::from(path);
-            } else {
-                if !self.main.is_empty() {
-                    self.jpeg = String::from(path);
-                    self.bundle_type = FileType::RAW_JPEG;
-                } else {
+        match mime_type.mime_type() {
+            MType::Image(is_raw) => match is_raw {
+                IsRaw::Yes => {
+                    if !self.main.is_empty() && self.jpeg.is_empty() {
+                        self.jpeg = self.main.clone();
+                        self.bundle_type = FileType::RAW_JPEG;
+                    } else {
+                        self.bundle_type = FileType::RAW;
+                    }
                     self.main = String::from(path);
-                    self.bundle_type = FileType::IMAGE;
                 }
-            }
-        } else if mime_type.is_xmp() {
-            self.xmp_sidecar = String::from(path);
-        } else if mime_type.is_movie() {
-            match self.bundle_type {
+                IsRaw::No => {
+                    if !self.main.is_empty() {
+                        self.jpeg = String::from(path);
+                        self.bundle_type = FileType::RAW_JPEG;
+                    } else {
+                        self.main = String::from(path);
+                        self.bundle_type = FileType::IMAGE;
+                    }
+                }
+            },
+            MType::Xmp => self.xmp_sidecar = String::from(path),
+            MType::Movie => match self.bundle_type {
                 FileType::UNKNOWN => {
                     self.main = String::from(path);
                     self.bundle_type = FileType::VIDEO;
@@ -123,10 +127,12 @@ impl FileBundle {
                     dbg_out!("Ignoring movie file {}", path);
                     added = false;
                 }
+            },
+            MType::Thumbnail => self.sidecars.push(Sidecar::Thumbnail(String::from(path))),
+            _ => {
+                dbg_out!("Unknown file {} of type {:?}", path, mime_type);
+                added = false;
             }
-        } else {
-            dbg_out!("Unknown file {} of type {:?}", path, mime_type);
-            added = false;
         }
         added
     }
@@ -175,9 +181,15 @@ mod test {
         thelist.push(String::from("/foo/bar/img_0143.mov"));
         thelist.push(String::from("/foo/bar/img_0143.jpg"));
 
+        thelist.push(String::from("/foo/bar/img_0144.crw"));
+        thelist.push(String::from("/foo/bar/img_0144.thm"));
+
+        thelist.push(String::from("/foo/bar/mvi_0145.mov"));
+        thelist.push(String::from("/foo/bar/mvi_0145.thm"));
+
         let bundles_list = FileBundle::filter_bundles(&thelist);
 
-        assert_eq!(bundles_list.len(), 4);
+        assert_eq!(bundles_list.len(), 6);
 
         let mut iter = bundles_list.iter();
         if let Some(b) = iter.next() {
@@ -221,6 +233,34 @@ mod test {
             assert_eq!(
                 b.sidecars[0],
                 Sidecar::Live(String::from("/foo/bar/img_0143.mov"))
+            );
+        } else {
+            assert!(false);
+        }
+
+        if let Some(b) = iter.next() {
+            assert_eq!(b.bundle_type(), FileType::RAW);
+            assert_eq!(b.main(), "/foo/bar/img_0144.crw");
+            assert!(b.jpeg().is_empty());
+            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.sidecars.len(), 1);
+            assert_eq!(
+                b.sidecars[0],
+                Sidecar::Thumbnail(String::from("/foo/bar/img_0144.thm"))
+            );
+        } else {
+            assert!(false);
+        }
+
+        if let Some(b) = iter.next() {
+            assert_eq!(b.bundle_type(), FileType::VIDEO);
+            assert_eq!(b.main(), "/foo/bar/mvi_0145.mov");
+            assert!(b.jpeg().is_empty());
+            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.sidecars.len(), 1);
+            assert_eq!(
+                b.sidecars[0],
+                Sidecar::Thumbnail(String::from("/foo/bar/mvi_0145.thm"))
             );
         } else {
             assert!(false);
