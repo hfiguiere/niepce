@@ -30,9 +30,11 @@ fn main() {
         .clang_arg("-DRUST_BINDGEN=1")
         .clang_arg("-I./src");
 
-    for include in exempi.include_paths.into_iter().map(|path| {
-        format!("-I{}", path.to_str().unwrap_or("."))
-    }) {
+    for include in exempi
+        .include_paths
+        .into_iter()
+        .map(|path| format!("-I{}", path.to_str().unwrap_or(".")))
+    {
         builder = builder.clang_arg(include);
     }
 

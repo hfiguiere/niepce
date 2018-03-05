@@ -20,12 +20,12 @@
 extern crate chrono;
 extern crate exempi;
 extern crate gettextrs;
-extern crate glib_sys;
-extern crate glib;
-extern crate gio_sys;
 extern crate gio;
-extern crate gtk_sys;
+extern crate gio_sys;
+extern crate glib;
+extern crate glib_sys;
 extern crate gtk;
+extern crate gtk_sys;
 extern crate libc;
 extern crate rusqlite;
 #[macro_use]
@@ -39,7 +39,6 @@ pub mod capi;
 pub mod niepce;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
 
 /// Call this to initialize the gtk-rs bindings
 #[no_mangle]
