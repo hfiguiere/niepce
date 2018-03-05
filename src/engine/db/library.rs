@@ -17,20 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::path::{
-    Path,
-    PathBuf
-};
+use std::path::{Path, PathBuf};
 use std::fs::File;
 use std::io::Write;
 
 use chrono::Utc;
 use rusqlite;
 
-use super::{
-    FromDb,
-    LibraryId
-};
+use super::{FromDb, LibraryId};
 use engine::db::label::Label;
 use engine::db::libfolder;
 use engine::db::libfolder::LibFolder;
@@ -46,17 +40,17 @@ use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
 
 #[repr(i32)]
-#[derive(PartialEq,Clone,Copy)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum Managed {
     NO = 0,
-    YES = 1
+    YES = 1,
 }
 
 const DB_SCHEMA_VERSION: i32 = 6;
 const DATABASENAME: &str = "niepcelibrary.db";
 
 pub struct Library {
-//    maindir: PathBuf,
+    // maindir: PathBuf,
     dbpath: PathBuf,
     dbconn: Option<rusqlite::Connection>,
     inited: bool,
@@ -64,16 +58,15 @@ pub struct Library {
 }
 
 impl Library {
-
     pub fn new(dir: PathBuf, notif_id: u64) -> Library {
         let mut dbpath = dir.clone();
         dbpath.push(DATABASENAME);
         let mut lib = Library {
-//            maindir: dir,
+            // maindir: dir,
             dbpath: dbpath,
             dbconn: None,
             inited: false,
-            notif_id: notif_id
+            notif_id: notif_id,
         };
 
         lib.inited = lib.init();
@@ -143,51 +136,82 @@ impl Library {
 
     fn init_db(&mut self) -> bool {
         if let Some(ref conn) = self.dbconn {
-            conn.execute("CREATE TABLE admin (key TEXT NOT NULL, value TEXT)", &[]).unwrap();
-            conn.execute("INSERT INTO admin (key, value) \
-                          VALUES ('version', ?1)", &[&DB_SCHEMA_VERSION]).unwrap();
-            conn.execute("CREATE TABLE vaults (id INTEGER PRIMARY KEY, path TEXT)", &[]).unwrap();
-            conn.execute("CREATE TABLE folders (id INTEGER PRIMARY KEY,\
-                          path TEXT, name TEXT, \
-                          vault_id INTEGER DEFAULT 0, \
-                          locked INTEGER DEFAULT 0, \
-                          virtual INTEGER DEFAULT 0, \
-                          expanded INTEGER DEFAULT 0, \
-                          parent_id INTEGER)", &[]).unwrap();
+            conn.execute("CREATE TABLE admin (key TEXT NOT NULL, value TEXT)", &[])
+                .unwrap();
+            conn.execute(
+                "INSERT INTO admin (key, value) \
+                 VALUES ('version', ?1)",
+                &[&DB_SCHEMA_VERSION],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE vaults (id INTEGER PRIMARY KEY, path TEXT)",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE folders (id INTEGER PRIMARY KEY,\
+                 path TEXT, name TEXT, \
+                 vault_id INTEGER DEFAULT 0, \
+                 locked INTEGER DEFAULT 0, \
+                 virtual INTEGER DEFAULT 0, \
+                 expanded INTEGER DEFAULT 0, \
+                 parent_id INTEGER)",
+                &[],
+            ).unwrap();
             let trash_type = libfolder::FolderVirtualType::TRASH as i32;
-            conn.execute("insert into folders (name, locked, virtual, parent_id, path) \
-                          values (:1, 1, :2, 0, '')",
-                         &[&"Trash", &trash_type]).unwrap();
+            conn.execute(
+                "insert into folders (name, locked, virtual, parent_id, path) \
+                 values (:1, 1, :2, 0, '')",
+                &[&"Trash", &trash_type],
+            ).unwrap();
 
-            conn.execute("CREATE TABLE files (id INTEGER PRIMARY KEY,\
-                          main_file INTEGER, name TEXT, parent_id INTEGER,\
-                          orientation INTEGER, file_type INTEGER,\
-                          file_date INTEGER, rating INTEGER DEFAULT 0, \
-                          label INTEGER, flag INTEGER DEFAULT 0, \
-                          import_date INTEGER, mod_date INTEGER, \
-                          xmp TEXT, xmp_date INTEGER, xmp_file INTEGER,\
-                          jpeg_file INTEGER)", &[]).unwrap();
-            conn.execute("CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,\
-                          path TEXT)", &[]).unwrap();
-            conn.execute("CREATE TABLE keywords (id INTEGER PRIMARY KEY,\
-                          keyword TEXT, parent_id INTEGER DEFAULT 0)",
-                         &[]).unwrap();
-            conn.execute("CREATE TABLE keywording (file_id INTEGER,\
-                          keyword_id INTEGER, UNIQUE(file_id, keyword_id))",
-                         &[]).unwrap();
-            conn.execute("CREATE TABLE labels (id INTEGER PRIMARY KEY,\
-                          name TEXT, color TEXT)", &[]).unwrap();
-            conn.execute("CREATE TABLE xmp_update_queue (id INTEGER UNIQUE)",
-                         &[]).unwrap();
-            conn.execute("CREATE TRIGGER file_update_trigger UPDATE ON files \
-                          BEGIN \
-                          UPDATE files SET mod_date = strftime('%s','now');\
-                          END", &[]).unwrap();
-            conn.execute("CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files \
-                          BEGIN \
-                          INSERT OR IGNORE INTO xmp_update_queue (id) VALUES(new.id);\
-                          SELECT rewrite_xmp();\
-                          END", &[]).unwrap();
+            conn.execute(
+                "CREATE TABLE files (id INTEGER PRIMARY KEY,\
+                 main_file INTEGER, name TEXT, parent_id INTEGER,\
+                 orientation INTEGER, file_type INTEGER,\
+                 file_date INTEGER, rating INTEGER DEFAULT 0, \
+                 label INTEGER, flag INTEGER DEFAULT 0, \
+                 import_date INTEGER, mod_date INTEGER, \
+                 xmp TEXT, xmp_date INTEGER, xmp_file INTEGER,\
+                 jpeg_file INTEGER)",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,\
+                 path TEXT)",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE keywords (id INTEGER PRIMARY KEY,\
+                 keyword TEXT, parent_id INTEGER DEFAULT 0)",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE keywording (file_id INTEGER,\
+                 keyword_id INTEGER, UNIQUE(file_id, keyword_id))",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TABLE labels (id INTEGER PRIMARY KEY,\
+                 name TEXT, color TEXT)",
+                &[],
+            ).unwrap();
+            conn.execute("CREATE TABLE xmp_update_queue (id INTEGER UNIQUE)", &[])
+                .unwrap();
+            conn.execute(
+                "CREATE TRIGGER file_update_trigger UPDATE ON files \
+                 BEGIN \
+                 UPDATE files SET mod_date = strftime('%s','now');\
+                 END",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files \
+                 BEGIN \
+                 INSERT OR IGNORE INTO xmp_update_queue (id) VALUES(new.id);\
+                 SELECT rewrite_xmp();\
+                 END",
+                &[],
+            ).unwrap();
 
             self.notify(Box::new(LibNotification::LibCreated));
             return true;
@@ -196,19 +220,24 @@ impl Library {
     }
 
     pub fn notify(&self, notif: Box<LibNotification>) {
-        unsafe { engine_library_notify(self.notif_id, Box::into_raw(notif)); }
+        unsafe {
+            engine_library_notify(self.notif_id, Box::into_raw(notif));
+        }
     }
 
-    pub fn notify_by_id(id: u64,  notif: Box<LibNotification>) {
-        unsafe { engine_library_notify(id, Box::into_raw(notif)); }
+    pub fn notify_by_id(id: u64, notif: Box<LibNotification>) {
+        unsafe {
+            engine_library_notify(id, Box::into_raw(notif));
+        }
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
             let filetype: i32 = libfile::FileType::RAW_JPEG.into();
-            if let Ok(c) = conn.execute("UPDATE files SET jpeg_file=:1 file_type=:3 WHERE id=:2;",
-                                        &[&fsfile_id, &file_id,
-                                          &filetype]) {
+            if let Ok(c) = conn.execute(
+                "UPDATE files SET jpeg_file=:1 file_type=:3 WHERE id=:2;",
+                &[&fsfile_id, &file_id, &filetype],
+            ) {
                 if c == 1 {
                     return true;
                 }
@@ -219,8 +248,10 @@ impl Library {
 
     pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(c) = conn.execute("UPDATE files SET xmp_file=:1 WHERE id=:2;",
-                                        &[&fsfile_id, &file_id]) {
+            if let Ok(c) = conn.execute(
+                "UPDATE files SET xmp_file=:1 WHERE id=:2;",
+                &[&fsfile_id, &file_id],
+            ) {
                 if c == 1 {
                     return true;
                 }
@@ -236,15 +267,17 @@ impl Library {
 
     fn get_content(&self, id: LibraryId, sql_where: &str) -> Option<Vec<LibFile>> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {} \
-                           WHERE {} \
-                           AND files.main_file=fsfiles.id",
-                          LibFile::read_db_columns(),
-                          LibFile::read_db_tables(),
-                          sql_where);
+        let sql = format!(
+            "SELECT {} FROM {} \
+             WHERE {} \
+             AND files.main_file=fsfiles.id",
+            LibFile::read_db_columns(),
+            LibFile::read_db_tables(),
+            sql_where
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&id]).ok());
-        let mut files: Vec<LibFile> = vec!();
+        let mut files: Vec<LibFile> = vec![];
         while let Some(Ok(row)) = rows.next() {
             files.push(LibFile::read_from(&row));
         }
@@ -258,12 +291,17 @@ impl Library {
 
     /// Add folder with name into parent whose id is `into`.
     /// A value of 0 means root.
-    pub fn add_folder_into(&self, name: &str, path: Option<String>,
-                           into: LibraryId) -> Option<LibFolder> {
+    pub fn add_folder_into(
+        &self,
+        name: &str,
+        path: Option<String>,
+        into: LibraryId,
+    ) -> Option<LibFolder> {
         let conn = try_opt!(self.dbconn.as_ref());
         let c = try_opt!(conn.execute(
             "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
-            &[&path, &name, &into]).ok());
+            &[&path, &name, &into]
+        ).ok());
         if c != 1 {
             return None;
         }
@@ -288,9 +326,11 @@ impl Library {
     pub fn get_folder(&self, folder: &str) -> Option<LibFolder> {
         let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {} WHERE path=:1",
-                          LibFolder::read_db_columns(),
-                          LibFolder::read_db_tables());
+        let sql = format!(
+            "SELECT {} FROM {} WHERE path=:1",
+            LibFolder::read_db_columns(),
+            LibFolder::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&foldername]).ok());
         let row = try_opt!(try_opt!(rows.next()).ok());
@@ -299,13 +339,15 @@ impl Library {
 
     pub fn get_all_folders(&self) -> Option<Vec<LibFolder>> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {}",
-                          LibFolder::read_db_columns(),
-                          LibFolder::read_db_tables());
+        let sql = format!(
+            "SELECT {} FROM {}",
+            LibFolder::read_db_columns(),
+            LibFolder::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[]).ok());
-        let mut folders: Vec<LibFolder> = vec!();
-        while  let Some(Ok(row)) = rows.next() {
+        let mut folders: Vec<LibFolder> = vec![];
+        while let Some(Ok(row)) = rows.next() {
             folders.push(LibFolder::read_from(&row));
         }
         Some(folders)
@@ -317,8 +359,10 @@ impl Library {
 
     pub fn count_folder(&self, folder_id: LibraryId) -> i64 {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare("SELECT COUNT(id) FROM files \
-                                                WHERE parent_id=:1;") {
+            if let Ok(mut stmt) = conn.prepare(
+                "SELECT COUNT(id) FROM files \
+                 WHERE parent_id=:1;",
+            ) {
                 let mut rows = stmt.query(&[&folder_id]).unwrap();
                 if let Some(Ok(row)) = rows.next() {
                     return row.get(0);
@@ -330,12 +374,14 @@ impl Library {
 
     pub fn get_all_keywords(&self) -> Option<Vec<Keyword>> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {}",
-                          Keyword::read_db_columns(),
-                          Keyword::read_db_tables());
+        let sql = format!(
+            "SELECT {} FROM {}",
+            Keyword::read_db_columns(),
+            Keyword::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[]).ok());
-        let mut keywords: Vec<Keyword> = vec!();
+        let mut keywords: Vec<Keyword> = vec![];
         while let Some(Ok(row)) = rows.next() {
             keywords.push(Keyword::read_from(&row));
         }
@@ -344,8 +390,10 @@ impl Library {
 
     pub fn count_keyword(&self, id: LibraryId) -> i64 {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare("SELECT COUNT(keyword_id) FROM keywording \
-                                                WHERE keyword_id=:1;") {
+            if let Ok(mut stmt) = conn.prepare(
+                "SELECT COUNT(keyword_id) FROM keywording \
+                 WHERE keyword_id=:1;",
+            ) {
                 let mut rows = stmt.query(&[&id]).unwrap();
                 if let Some(Ok(row)) = rows.next() {
                     return row.get(0);
@@ -357,9 +405,7 @@ impl Library {
 
     pub fn add_fs_file(&self, file: &str) -> LibraryId {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(c) = conn.execute(
-                "INSERT INTO fsfiles (path) VALUES(:1)",
-                &[&file]) {
+            if let Ok(c) = conn.execute("INSERT INTO fsfiles (path) VALUES(:1)", &[&file]) {
                 if c != 1 {
                     return -1;
                 }
@@ -372,16 +418,19 @@ impl Library {
 
     fn get_fs_file(&self, id: LibraryId) -> Option<String> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let mut stmt = try_opt!(conn.prepare(
-            "SELECT path FROM fsfiles WHERE id=:1").ok());
+        let mut stmt = try_opt!(conn.prepare("SELECT path FROM fsfiles WHERE id=:1").ok());
         let mut rows = try_opt!(stmt.query(&[&id]).ok());
         let row = try_opt!(try_opt!(rows.next()).ok());
-        let path : String = row.get(0);
+        let path: String = row.get(0);
         return Some(path);
     }
 
-    pub fn add_bundle(&self, folder_id: LibraryId, bundle: &FileBundle,
-                      manage: Managed) -> LibraryId {
+    pub fn add_bundle(
+        &self,
+        folder_id: LibraryId,
+        bundle: &FileBundle,
+        manage: Managed,
+    ) -> LibraryId {
         let file_id = self.add_file(folder_id, bundle.main(), manage);
         if file_id > 0 {
             if !bundle.xmp_sidecar().is_empty() {
@@ -444,17 +493,29 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let ifile_type = file_type as i32;
             let time = Utc::now().timestamp();
-            ret = match conn.execute("INSERT INTO files (\
-                                main_file, name, parent_id, \
-                                import_date, mod_date, \
-                                orientation, file_date, rating, label, \
-                                file_type, flag, xmp) \
-                                VALUES (\
-                                :1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12)",
-                               &[&fs_file_id, &filename, &folder_id,
-                                 &time, &time,
-                                 &orientation, &creation_date, &rating, &label_id,
-                                 &ifile_type, &flag, &xmp]) {
+            ret = match conn.execute(
+                "INSERT INTO files (\
+                 main_file, name, parent_id, \
+                 import_date, mod_date, \
+                 orientation, file_date, rating, label, \
+                 file_type, flag, xmp) \
+                 VALUES (\
+                 :1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12)",
+                &[
+                    &fs_file_id,
+                    &filename,
+                    &folder_id,
+                    &time,
+                    &time,
+                    &orientation,
+                    &creation_date,
+                    &rating,
+                    &label_id,
+                    &ifile_type,
+                    &flag,
+                    &xmp,
+                ],
+            ) {
                 Ok(c) => {
                     let mut id = -1;
                     if c == 1 {
@@ -470,9 +531,8 @@ impl Library {
                         }
                     }
                     id
-                },
-                Err(_) =>
-                    -1,
+                }
+                Err(_) => -1,
             }
         }
 
@@ -480,10 +540,11 @@ impl Library {
     }
 
     pub fn make_keyword(&self, keyword: &str) -> LibraryId {
-
         if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare("SELECT id FROM keywords WHERE \
-                                                keyword=:1;") {
+            if let Ok(mut stmt) = conn.prepare(
+                "SELECT id FROM keywords WHERE \
+                 keyword=:1;",
+            ) {
                 let mut rows = stmt.query(&[&keyword]).unwrap();
                 if let Some(Ok(row)) = rows.next() {
                     let keyword_id = row.get(0);
@@ -495,27 +556,30 @@ impl Library {
 
             if let Ok(c) = conn.execute(
                 "INSERT INTO keywords (keyword, parent_id) VALUES(:1, 0);",
-                &[&keyword]) {
+                &[&keyword],
+            ) {
                 if c != 1 {
                     return -1;
                 }
                 let keyword_id = conn.last_insert_rowid();
-                self.notify(
-                    Box::new(LibNotification::AddedKeyword(
-                        Keyword::new(keyword_id, keyword))));
+                self.notify(Box::new(LibNotification::AddedKeyword(Keyword::new(
+                    keyword_id,
+                    keyword,
+                ))));
                 return keyword_id;
             }
-
         }
         -1
     }
 
     pub fn assign_keyword(&self, kw_id: LibraryId, file_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("INSERT OR IGNORE INTO keywording\
-                                         (file_id, keyword_id) \
-                                         VALUES(:1, :2)",
-                                        &[&kw_id, &file_id]) {
+            if let Ok(_) = conn.execute(
+                "INSERT OR IGNORE INTO keywording\
+                 (file_id, keyword_id) \
+                 VALUES(:1, :2)",
+                &[&kw_id, &file_id],
+            ) {
                 return true;
             }
         }
@@ -523,28 +587,34 @@ impl Library {
     }
 
     pub fn get_keyword_content(&self, keyword_id: LibraryId) -> Option<Vec<LibFile>> {
-        self.get_content(keyword_id, "files.id IN \
-                               (SELECT file_id FROM keywording \
-                               WHERE keyword_id=:1) ")
+        self.get_content(
+            keyword_id,
+            "files.id IN \
+             (SELECT file_id FROM keywording \
+             WHERE keyword_id=:1) ",
+        )
     }
 
     pub fn get_metadata(&self, file_id: LibraryId) -> Option<LibMetadata> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {} WHERE id=:1",
-                          LibMetadata::read_db_columns(),
-                          LibMetadata::read_db_tables());
+        let sql = format!(
+            "SELECT {} FROM {} WHERE id=:1",
+            LibMetadata::read_db_columns(),
+            LibMetadata::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&file_id]).ok());
         let row = try_opt!(try_opt!(rows.next()).ok());
         return Some(LibMetadata::read_from(&row));
     }
 
-
     fn unassign_all_keywords_for_file(&self, file_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("DELETE FROM keywording \
-                                         WHERE file_id=:1;",
-                                        &[&file_id]) {
+            if let Ok(_) = conn.execute(
+                "DELETE FROM keywording \
+                 WHERE file_id=:1;",
+                &[&file_id],
+            ) {
                 // XXX check success.
                 return true;
             }
@@ -554,16 +624,21 @@ impl Library {
 
     fn set_internal_metadata(&self, file_id: LibraryId, column: &str, value: i32) -> bool {
         if let Some(ref conn) = self.dbconn {
-            match conn.execute(format!("UPDATE files SET {}=:1 \
-                                        WHERE id=:2;", column).as_ref(),
-                               &[&value, &file_id]) {
+            match conn.execute(
+                format!(
+                    "UPDATE files SET {}=:1 \
+                     WHERE id=:2;",
+                    column
+                ).as_ref(),
+                &[&value, &file_id],
+            ) {
                 Ok(_) => {
                     // XXX check success.
                     return true;
-                },
+                }
                 Err(err) => {
                     err_out!("error setting internal metadata {}", err);
-                },
+                }
             }
         }
         false
@@ -572,9 +647,11 @@ impl Library {
     fn set_metadata_block(&self, file_id: LibraryId, metablock: &LibMetadata) -> bool {
         let xmp = metablock.serialize_inline();
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("UPDATE files SET xmp=:1 \
-                                         WHERE id=:2;",
-                                        &[&xmp, &file_id]) {
+            if let Ok(_) = conn.execute(
+                "UPDATE files SET xmp=:1 \
+                 WHERE id=:2;",
+                &[&xmp, &file_id],
+            ) {
                 // XXX check success.
                 return true;
             } else {
@@ -584,8 +661,7 @@ impl Library {
         false
     }
 
-    pub fn set_metadata(&self, file_id: LibraryId, meta: Np,
-                        value: &PropertyValue) -> bool {
+    pub fn set_metadata(&self, file_id: LibraryId, meta: Np, value: &PropertyValue) -> bool {
         let mut retval = false;
         match meta {
             Np::NpXmpRatingProp |
@@ -648,15 +724,19 @@ impl Library {
         retval
     }
 
-    pub fn move_file_to_folder(&self, file_id: LibraryId, folder_id: LibraryId) -> bool  {
+    pub fn move_file_to_folder(&self, file_id: LibraryId, folder_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(mut stmt) = conn.prepare("SELECT id FROM folders WHERE \
-                                                id=:1;") {
+            if let Ok(mut stmt) = conn.prepare(
+                "SELECT id FROM folders WHERE \
+                 id=:1;",
+            ) {
                 let mut rows = stmt.query(&[&folder_id]).unwrap();
                 if let Some(Ok(_)) = rows.next() {
-                    if let Ok(_) = conn.execute("UPDATE files SET parent_id = :1 \
-                                                     WHERE id = :2;",
-                                                    &[&folder_id, &file_id]) {
+                    if let Ok(_) = conn.execute(
+                        "UPDATE files SET parent_id = :1 \
+                         WHERE id = :2;",
+                        &[&folder_id, &file_id],
+                    ) {
                         return true;
                     }
                 }
@@ -667,12 +747,14 @@ impl Library {
 
     pub fn get_all_labels(&self) -> Option<Vec<Label>> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {} ORDER BY id;",
-                          Label::read_db_columns(),
-                          Label::read_db_tables());
+        let sql = format!(
+            "SELECT {} FROM {} ORDER BY id;",
+            Label::read_db_columns(),
+            Label::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[]).ok());
-        let mut labels: Vec<Label> = vec!();
+        let mut labels: Vec<Label> = vec![];
         while let Some(Ok(row)) = rows.next() {
             labels.push(Label::read_from(&row));
         }
@@ -681,9 +763,11 @@ impl Library {
 
     pub fn add_label(&self, name: &str, colour: &str) -> LibraryId {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(c) = conn.execute("INSERT INTO  labels (name,color) \
-                                         VALUES (:1, :2);",
-                                        &[&name, &colour]) {
+            if let Ok(c) = conn.execute(
+                "INSERT INTO  labels (name,color) \
+                 VALUES (:1, :2);",
+                &[&name, &colour],
+            ) {
                 if c != 1 {
                     return -1;
                 }
@@ -695,24 +779,23 @@ impl Library {
         -1
     }
 
-    pub fn update_label(&self, label_id: LibraryId, name: &str,
-                        colour: &str) -> bool {
+    pub fn update_label(&self, label_id: LibraryId, name: &str, colour: &str) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("UPDATE labels SET name=:2, color=:3 \
-                                         FROM labels WHERE id=:1;",
-                                        &[&label_id, &name, &colour]) {
+            if let Ok(_) = conn.execute(
+                "UPDATE labels SET name=:2, color=:3 \
+                 FROM labels WHERE id=:1;",
+                &[&label_id, &name, &colour],
+            ) {
                 // XXX check success.
                 return true;
             }
         }
         false
-
     }
 
     pub fn delete_label(&self, label_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("DELETE FROM labels WHERE id=:1;",
-                                        &[&label_id]) {
+            if let Ok(_) = conn.execute("DELETE FROM labels WHERE id=:1;", &[&label_id]) {
                 // XXX check success.
                 return true;
             }
@@ -744,20 +827,21 @@ impl Library {
         // 3. make sure the update happened correctly, possibly ensure we don't
         // clobber the xmp.
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=:1;",
-                                        &[&id]) {
+            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=:1;", &[&id]) {
                 // we don't want to write the XMP so we don't need to list them.
                 if !write_xmp {
                     return true;
                 }
-                if let Ok(mut stmt) = conn.prepare("SELECT xmp, main_file, xmp_file FROM files \
-                                                    WHERE id=:1;") {
+                if let Ok(mut stmt) = conn.prepare(
+                    "SELECT xmp, main_file, xmp_file FROM files \
+                     WHERE id=:1;",
+                ) {
                     let mut rows = stmt.query(&[&id]).unwrap();
                     while let Some(Ok(row)) = rows.next() {
-                        let xmp_buffer : String = row.get(0);
-                        let main_file_id : LibraryId = row.get(1);
-                        let xmp_file_id : LibraryId = row.get(2);
-                        let spath : PathBuf;
+                        let xmp_buffer: String = row.get(0);
+                        let main_file_id: LibraryId = row.get(1);
+                        let xmp_file_id: LibraryId = row.get(2);
+                        let spath: PathBuf;
                         if let Some(ref p) = self.get_fs_file(main_file_id) {
                             spath = PathBuf::from(p);
                         } else {
@@ -765,7 +849,7 @@ impl Library {
                             dbg_assert!(false, "couldn't find the main file");
                             continue;
                         }
-                        let mut p : Option<PathBuf> = None;
+                        let mut p: Option<PathBuf> = None;
                         if xmp_file_id > 0 {
                             if let Some(p2) = self.get_fs_file(xmp_file_id) {
                                 p = Some(PathBuf::from(p2));
@@ -774,8 +858,10 @@ impl Library {
                         }
                         if p.is_none() {
                             p = Some(spath.with_extension("xmp"));
-                            dbg_assert!(*p.as_ref().unwrap() != spath,
-                                        "path must have been changed");
+                            dbg_assert!(
+                                *p.as_ref().unwrap() != spath,
+                                "path must have been changed"
+                            );
                         }
                         let p = p.unwrap();
                         if p.exists() {
@@ -821,11 +907,13 @@ mod test {
     use std::fs;
 
     struct AutoDelete {
-        path: PathBuf
+        path: PathBuf,
     }
     impl AutoDelete {
         pub fn new(path: &Path) -> AutoDelete {
-            AutoDelete { path: PathBuf::from(path) }
+            AutoDelete {
+                path: PathBuf::from(path),
+            }
         }
     }
     impl Drop for AutoDelete {
