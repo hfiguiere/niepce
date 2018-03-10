@@ -1,8 +1,8 @@
 # Danish translation for niepce.
-# Copyright (C) 2011 niepce's COPYRIGHT HOLDER.
+# Copyright (C) 2011-2018 niepce's COPYRIGHT HOLDER.
 # This file is distributed under the same license as the niepce package.
 # Joe Hansen (joedalton2@yahoo.dk), 2010, 2011.
-# Alan Mortensen <alanmortensen.am@gmail.com>, 2017.
+# Alan Mortensen <alanmortensen.am@gmail.com>, 2017, 2018.
 #
 # item -> element
 #
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 12:05+0000\n"
-"PO-Revision-Date: 2017-11-09 01:43+0100\n"
+"POT-Creation-Date: 2017-11-17 18:26+0000\n"
+"PO-Revision-Date: 2018-03-08 17:22+0100\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -30,31 +30,31 @@ msgstr "Kamera"
 msgid "File"
 msgstr "Fil"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/niepcewindow.cpp:199
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:427
 msgid "_Import..."
 msgstr "_Importér …"
 
-#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:206
+#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:201
 msgid "Close"
 msgstr "Luk"
 
-#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:209
+#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:204
 msgid "Edit"
 msgstr "Redigér"
 
-#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:224
+#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:219
 msgid "Cut"
 msgstr "Klip"
 
-#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:228
+#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:223
 msgid "Copy"
 msgstr "Kopiér"
 
-#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:232
+#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:227
 msgid "Paste"
 msgstr "Indsæt"
 
-#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:239
+#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:234
 msgid "Tools"
 msgstr "Værktøjer"
 
@@ -62,7 +62,7 @@ msgstr "Værktøjer"
 msgid "Refresh"
 msgstr "Opdatér"
 
-#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:247
+#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:242
 msgid "Hide tools"
 msgstr "Skjul værktøjer"
 
@@ -114,7 +114,7 @@ msgstr "niepce"
 msgid "New"
 msgstr "Ny(t)"
 
-#: src/fwk/toolkit/application.cpp:133 src/niepce/ui/niepcewindow.cpp:385
+#: src/fwk/toolkit/application.cpp:133 src/niepce/ui/niepcewindow.cpp:334
 msgid "Open"
 msgstr "Åbn"
 
@@ -331,7 +331,8 @@ msgid "Import picture folder"
 msgstr "Importér billedmappe"
 
 #: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
-#: src/niepce/ui/niepcewindow.cpp:384
+#: src/niepce/ui/dialogs/requestnewfolder.rs:40
+#: src/niepce/ui/niepcewindow.cpp:333
 msgid "Cancel"
 msgstr "Annullér"
 
@@ -367,6 +368,14 @@ msgstr "Brug mørk grænseflade"
 #: src/niepce/ui/dialogs/preferences.ui:138
 msgid "_User Interface"
 msgstr "_Brugerflade"
+
+#: src/niepce/ui/dialogs/requestnewfolder.rs:39
+msgid "OK"
+msgstr "OK"
+
+#: src/niepce/ui/dialogs/requestnewfolder.rs:41
+msgid "Folder _name:"
+msgstr "Mappe_navn:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:36
 msgid "Make:"
@@ -568,51 +577,47 @@ msgid "Ready"
 msgstr "Klar"
 
 #: src/niepce/ui/niepcewindow.cpp:194
-msgid "New Folder..."
-msgstr "Ny mappe …"
-
-#: src/niepce/ui/niepcewindow.cpp:195
 msgid "New Project..."
 msgstr "Nyt projekt …"
 
-#: src/niepce/ui/niepcewindow.cpp:236
+#: src/niepce/ui/niepcewindow.cpp:231
 msgid "Delete"
 msgstr "Slet"
 
-#: src/niepce/ui/niepcewindow.cpp:242
+#: src/niepce/ui/niepcewindow.cpp:237
 msgid "Edit Labels..."
 msgstr "Redigér etiketter …"
 
 #. TODO make this parametric from resources
-#: src/niepce/ui/niepcewindow.cpp:330
+#: src/niepce/ui/niepcewindow.cpp:279
 msgid "Label 1"
 msgstr "Etiket 1"
 
 #. 217, 37, 17
-#: src/niepce/ui/niepcewindow.cpp:331
+#: src/niepce/ui/niepcewindow.cpp:280
 msgid "Label 2"
 msgstr "Etiket 2"
 
 #. 97, 217, 17
-#: src/niepce/ui/niepcewindow.cpp:332
+#: src/niepce/ui/niepcewindow.cpp:281
 msgid "Label 3"
 msgstr "Etiket 3"
 
 #. 17, 197, 217
-#: src/niepce/ui/niepcewindow.cpp:333
+#: src/niepce/ui/niepcewindow.cpp:282
 msgid "Label 4"
 msgstr "Etiket 4"
 
 #. 137, 17, 217
-#: src/niepce/ui/niepcewindow.cpp:334
+#: src/niepce/ui/niepcewindow.cpp:283
 msgid "Label 5"
 msgstr "Etiket 5"
 
-#: src/niepce/ui/niepcewindow.cpp:382
+#: src/niepce/ui/niepcewindow.cpp:331
 msgid "Open library"
 msgstr "Åbn bibliotek"
 
-#: src/niepce/ui/niepcewindow.cpp:441
+#: src/niepce/ui/niepcewindow.cpp:390
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -628,22 +633,34 @@ msgstr "Angiv egenskaber"
 msgid "Move to Trash"
 msgstr "Flyt til papirkurven"
 
-#: src/niepce/ui/workspacecontroller.cpp:271
+#: src/niepce/ui/workspacecontroller.cpp:104
+msgid "Delete selected folder?"
+msgstr "Slet den valgte mappe?"
+
+#: src/niepce/ui/workspacecontroller.cpp:379
 msgid "Pictures"
 msgstr "Billeder"
 
-#: src/niepce/ui/workspacecontroller.cpp:275
+#: src/niepce/ui/workspacecontroller.cpp:383
 msgid "Projects"
 msgstr "Projekter"
 
-#: src/niepce/ui/workspacecontroller.cpp:279
+#: src/niepce/ui/workspacecontroller.cpp:387
 msgid "Keywords"
 msgstr "Nøgleord"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:291
+#: src/niepce/ui/workspacecontroller.cpp:401
 msgid "_Workspace"
 msgstr "_Arbejdsområde"
+
+#: src/niepce/ui/workspacecontroller.cpp:414
+msgid "New Folder..."
+msgstr "Ny mappe …"
+
+#: src/niepce/ui/workspacecontroller.cpp:418
+msgid "Delete Folder"
+msgstr "Slet mappe"
 
 #~ msgid "Trash"
 #~ msgstr "Papirkurv"
