@@ -8,7 +8,7 @@ AM_CPPFLAGS = -DDATADIR=\"$(datadir)\" \
 
 bin_PROGRAMS = niepce
 
-niepce_LDFLAGS =
+niepce_LDFLAGS = -Wl,--start-group
 niepce_LDADD = \
 	$(top_builddir)/src/niepce/ui/libniepceui.a \
 	$(top_builddir)/src/libraryclient/liblibraryclient.a \
@@ -17,14 +17,12 @@ niepce_LDADD = \
 	$(top_builddir)/src/niepce/modules/map/libmodulemap.a \
 	$(top_builddir)/src/niepce/modules/interfaces/libinterfaces.a \
 	$(top_builddir)/src/fwk/toolkit/libniepceframework.a \
-	$(top_builddir)/src/fwk/utils/libniepceutils.a \
 	$(top_builddir)/src/fwk/base/libfwkbase.a \
 	$(top_builddir)/src/ncr/libncr.a \
 	$(top_builddir)/src/ext/libview/libview.a \
 	$(top_builddir)/target/@CARGO_TARGET_SUBDIR@/libniepce_rust.a \
 	$(top_builddir)/src/engine/libniepceengine.a \
 	$(top_builddir)/src/fwk/utils/libniepceutils.a \
-	$(top_builddir)/src/engine/libniepceengineglue.a \
 	@FRAMEWORK_LIBS@ \
 	@GPHOTO_LIBS@ \
 	@BABL_LIBS@ \

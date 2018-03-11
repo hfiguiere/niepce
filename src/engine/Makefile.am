@@ -16,7 +16,7 @@ TEST_LIBS =  \
 	-ldl \
 	$(NULL)
 
-noinst_LIBRARIES = libniepceengine.a libniepceengineglue.a
+noinst_LIBRARIES = libniepceengine.a
 
 libniepceengine_a_SOURCES = \
 	db/libfile.hpp db/libfile.cpp \
@@ -28,6 +28,7 @@ libniepceengine_a_SOURCES = \
 	db/properties.hpp db/properties.cpp \
 	db/properties-def.hpp \
 	library/clienttypes.hpp \
+	library/notification.hpp library/notification.cpp \
 	library/thumbnailcache.hpp library/thumbnailcache.cpp \
 	library/thumbnailnotification.hpp \
 	importer/iimporter.hpp \
@@ -37,9 +38,4 @@ libniepceengine_a_SOURCES = \
 	importer/cameraimporter.cpp \
 	importer/importedfile.hpp \
 	importer/importedfile.cpp \
-	$(NULL)
-
-# glue code called from Rust. Library order issue.
-libniepceengineglue_a_SOURCES = \
-	library/notification.hpp library/notification.cpp \
 	$(NULL)
