@@ -27,10 +27,21 @@ use fwk::toolkit::mimetype::{IsRaw, MType};
 /// Sidecar.
 #[derive(Debug, PartialEq)]
 pub enum Sidecar {
+    Invalid,
     /// Sidecar for Live image (MOV file form iPhone)
     Live(String),
     /// Thumbnail file (THM from Canon)
     Thumbnail(String),
+}
+
+impl From<(i32, String)> for Sidecar {
+    fn from(t: (i32, String)) -> Self {
+        match t.0 {
+            1 => Sidecar::Live(t.1),
+            2 => Sidecar::Thumbnail(t.1),
+            _ => Sidecar::Invalid,
+        }
+    }
 }
 
 /// FileBundle is a set of physical files group as one item.

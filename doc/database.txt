@@ -1,14 +1,15 @@
 Database description
 Hubert Figuiere <hub@figuiere.net>
 
+Unless mentionned, this is starting in version 6.
 
-Adminstration table. Contain various parameters.
+Administration table. Contain various parameters.
 
 admin	        key            Key
                 value	       Value
 
 The known keys are:
-version :       The version of the database. Current = 6.
+version :       The version of the database. Current = 7.
 
 
 Files in the library
@@ -20,7 +21,7 @@ files           id             Unique ID in the database
 		orientation    The Exif orientation of the file
 		file_type      The file type. See db::LibFile::FileType for
                                possible values.
-		file_date      The file date, likely shooting date from 
+		file_date      The file date, likely shooting date from
                                Exif (time_t)
 		rating         The file rating (0-5)
 		label          The label (labels.id)
@@ -30,13 +31,21 @@ files           id             Unique ID in the database
 		xmp            The XMP blob
 		xmp_data       The date the XMP is rewritten on disk (time_t)
 		xmp_file       The id of the fsfile that represent the XMP (int)
-		jpeg_file      The id of the JPEG for RAW+JPEG. Implies 
+		jpeg_file      The id of the JPEG for RAW+JPEG. Implies
                                file_type is LibFile::FILE_TYPE_RAW_JPEG (int)
 
 Filesystem files in the library
 
 fsfiles         id             Unique ID in the database
                 path           The absolute path
+
+Sidecars are fsfiles attached to a file (excepted XMP and JPEG alternate).
+[ version = 7 ]
+
+sidecars        file_id        ID of the file.
+                fsfile_id      ID of the fsfile sidecar.
+                type           Sidecar type. 1 = Live, 2 = Thumbnail.
+                               (See the Sidecar enum)
 
 Folders for the library "storage"
 
@@ -45,8 +54,8 @@ folders         id             Unique ID in the database
 		name 	       The display name
 		vault_id       The vault ID (unused) 0 = no vault (= vaults.id)
 		locked         Can't be deleted if non 0. For special folders.
-		virtual        Type of virtual item. 0 = regular. 
-                               See libfolder.hpp
+		virtual        Type of virtual item. 0 = regular.
+                               See libfolder.rs
 		parent_id      The ID of the parent (= folders.id). 0 = top level
 		expanded       1 if expanded, 0 if not. Default = 0. Unused for now.
 

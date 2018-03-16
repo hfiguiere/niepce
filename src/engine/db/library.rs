@@ -31,7 +31,7 @@ use engine::db::libfolder::LibFolder;
 use engine::db::libfile;
 use engine::db::libfile::LibFile;
 use engine::db::libmetadata::LibMetadata;
-use engine::db::filebundle::FileBundle;
+use engine::db::filebundle::{FileBundle, Sidecar};
 use engine::db::keyword::Keyword;
 use engine::library::notification::Notification as LibNotification;
 use engine::library::notification::engine_library_notify;
@@ -46,7 +46,7 @@ pub enum Managed {
     YES = 1,
 }
 
-const DB_SCHEMA_VERSION: i32 = 6;
+const DB_SCHEMA_VERSION: i32 = 7;
 const DATABASENAME: &str = "niepcelibrary.db";
 
 pub struct Library {
@@ -180,6 +180,20 @@ impl Library {
                  path TEXT)",
                 &[],
             ).unwrap();
+            // version = 7
+            conn.execute(
+                "CREATE TABLE sidecars (file_id INTEGER,\
+                 fsfile_id INTEGER, type INTEGER, UNIQUE(file_id, fsfile_id))",
+                &[],
+            ).unwrap();
+            conn.execute(
+                "CREATE TRIGGER file_delete_trigger AFTER DELETE ON files \
+                 BEGIN \
+                 DELETE FROM sidecars WHERE file_id = old.id; \
+                 END",
+                &[],
+            ).unwrap();
+            //
             conn.execute(
                 "CREATE TABLE keywords (id INTEGER PRIMARY KEY,\
                  keyword TEXT, parent_id INTEGER DEFAULT 0)",
@@ -246,11 +260,34 @@ impl Library {
         false
     }
 
-    pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
+    pub fn add_xmp_sidecar_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> bool {
         if let Some(ref conn) = self.dbconn {
             if let Ok(c) = conn.execute(
                 "UPDATE files SET xmp_file=:1 WHERE id=:2;",
                 &[&fsfile_id, &file_id],
+            ) {
+                if c == 1 {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, sidecar: &Sidecar) -> bool {
+        let sidecar_t: (i32, &String) = match sidecar {
+            &Sidecar::Live(ref p) => (1, p),
+            &Sidecar::Thumbnail(ref p) => (2, p),
+            _ => return false,
+        };
+        let fsfile_id = self.add_fs_file(&sidecar_t.1);
+        if fsfile_id == -1 {
+            return false;
+        }
+        if let Some(ref conn) = self.dbconn {
+            if let Ok(c) = conn.execute(
+                "INSERT INTO sidecars (file_id, fsfile_id, type) VALUES(:1, :2, :3)",
+                &[&file_id, &fsfile_id, &sidecar_t.0],
             ) {
                 if c == 1 {
                     return true;
@@ -436,7 +473,7 @@ impl Library {
             if !bundle.xmp_sidecar().is_empty() {
                 let fsfile_id = self.add_fs_file(bundle.xmp_sidecar());
                 if fsfile_id > 0 {
-                    self.add_sidecar_file_to_bundle(file_id, fsfile_id);
+                    self.add_xmp_sidecar_to_bundle(file_id, fsfile_id);
                 }
             }
             if !bundle.jpeg().is_empty() {
@@ -875,7 +912,7 @@ impl Library {
                                 let xmp_file_id = self.add_fs_file(p.to_string_lossy().as_ref());
                                 dbg_assert!(xmp_file_id > 0, "couldn't add xmp_file");
                                 // XXX handle error
-                                let res = self.add_sidecar_file_to_bundle(id, xmp_file_id);
+                                let res = self.add_xmp_sidecar_to_bundle(id, xmp_file_id);
                                 dbg_assert!(res, "addSidecarFileToBundle failed");
                             }
                         }
@@ -905,6 +942,7 @@ mod test {
     use std::path::Path;
     use std::path::PathBuf;
     use std::fs;
+    use engine::db::filebundle::FileBundle;
 
     struct AutoDelete {
         path: PathBuf,
@@ -924,7 +962,7 @@ mod test {
 
     #[test]
     fn library_works() {
-        use super::Library;
+        use super::{Library, Managed};
 
         let lib = Library::new(PathBuf::from("."), 0);
         let _autodelete = AutoDelete::new(lib.dbpath());
@@ -991,5 +1029,15 @@ mod test {
         assert!(kl.is_some());
         let kl = kl.unwrap();
         assert_eq!(kl.len(), 2);
+
+        // Testing bundles
+        let mut bundle = FileBundle::new();
+        assert!(bundle.add("img_0123.crw"));
+        assert!(bundle.add("img_0123.jpg"));
+        assert!(bundle.add("img_0123.thm"));
+        assert!(bundle.add("img_0123.xmp"));
+
+        let bundle_id = lib.add_bundle(folder_added.id(), &bundle, Managed::NO);
+        assert!(bundle_id > 0);
     }
 }
