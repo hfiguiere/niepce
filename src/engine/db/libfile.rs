@@ -204,6 +204,10 @@ impl FromDb for LibFile {
         "files, fsfiles"
     }
 
+    fn read_db_where_id() -> &'static str {
+        "id"
+    }
+
     fn read_from(row: &rusqlite::Row) -> Self {
         //DBG_ASSERT(dbdrv->get_number_of_columns() == 10, "wrong number of columns");
         let id = row.get(0);

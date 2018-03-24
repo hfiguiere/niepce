@@ -76,6 +76,10 @@ impl FromDb for Label {
         "labels"
     }
 
+    fn read_db_where_id() -> &'static str {
+        "id"
+    }
+
     fn read_from(row: &rusqlite::Row) -> Self {
         let label : String = row.get(1);
         let colour : String = row.get(2);

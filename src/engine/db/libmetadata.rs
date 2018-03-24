@@ -240,6 +240,10 @@ impl FromDb for LibMetadata {
         "files LEFT JOIN folders ON folders.id = files.parent_id"
     }
 
+    fn read_db_where_id() -> &'static str {
+        "files.id"
+    }
+
     fn read_from(row: &rusqlite::Row) -> Self {
         let id: LibraryId = row.get(0);
         let xmp: String = row.get(1);

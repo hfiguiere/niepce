@@ -665,9 +665,10 @@ impl Library {
     pub fn get_metadata(&self, file_id: LibraryId) -> Option<LibMetadata> {
         let conn = try_opt!(self.dbconn.as_ref());
         let sql = format!(
-            "SELECT {} FROM {} WHERE files.id=:1",
+            "SELECT {} FROM {} WHERE {}=:1",
             LibMetadata::read_db_columns(),
-            LibMetadata::read_db_tables()
+            LibMetadata::read_db_tables(),
+            LibMetadata::read_db_where_id()
         );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&file_id]).ok());

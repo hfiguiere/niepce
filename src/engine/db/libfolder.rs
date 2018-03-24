@@ -118,6 +118,10 @@ impl FromDb for LibFolder {
         "folders"
     }
 
+    fn read_db_where_id() -> &'static str {
+        "id"
+    }
+
     fn read_from(row: &rusqlite::Row) -> Self {
         let id: LibraryId = row.get(0);
         let name: String = row.get(1);

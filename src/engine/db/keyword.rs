@@ -54,6 +54,10 @@ impl FromDb for Keyword {
         "keywords"
     }
 
+    fn read_db_where_id() -> &'static str {
+        "id"
+    }
+
     fn read_from(row: &rusqlite::Row) -> Self {
         let kw : String = row.get(1);
         Keyword::new(row.get(0), &kw)

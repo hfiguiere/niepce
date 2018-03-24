@@ -43,6 +43,8 @@ pub trait FromDb {
     fn read_db_columns() -> &'static str;
     /// return the tables for reading from the DB.
     fn read_db_tables() -> &'static str;
+    /// return the column for the where clause on the id for the DB.
+    fn read_db_where_id() -> &'static str;
     /// read a new object from the DB row.
     fn read_from(row: &rusqlite::Row) -> Self;
 }
