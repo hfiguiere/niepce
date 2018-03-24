@@ -1,7 +1,7 @@
 /*
- * niepce - eng/db/proeprties-def.hpp
+ * niepce - eng/db/properties-def.hpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,18 @@
 #error DEFINE_PROPERTY must be defined
 #endif
 
-// format is 
+// format is
 // - const
 // - the value of the id
 // - XMP NS - NULL if none
 // - XMP property - NULL if none
 // - type
+
+DEFINE_PROPERTY(NpFileNameProp, MAKE_METADATA_IDX(META_NS_INTERNAL, META_INTERNAL_FILENAME), nullptr, nullptr, std::string)
+DEFINE_PROPERTY(NpFileTypeProp, MAKE_METADATA_IDX(META_NS_INTERNAL, META_INTERNAL_FILETYPE), nullptr, nullptr, std::string)
+DEFINE_PROPERTY(NpFileSizeProp, MAKE_METADATA_IDX(META_NS_INTERNAL, META_INTERNAL_FILESIZE), nullptr, nullptr, off_t)
+DEFINE_PROPERTY(NpFolderProp, MAKE_METADATA_IDX(META_NS_INTERNAL, META_INTERNAL_FOLDER), nullptr, nullptr, std::string)
+DEFINE_PROPERTY(NpSidecarsProp, MAKE_METADATA_IDX(META_NS_INTERNAL, META_INTERNAL_SIDECARS), nullptr, nullptr, std::vector<std::string>)
 
 DEFINE_PROPERTY(NpXmpRatingProp, MAKE_METADATA_IDX(META_NS_XMPCORE, META_XMPCORE_RATING), NS_XAP, "Rating", int32_t )
 DEFINE_PROPERTY(NpXmpLabelProp,  MAKE_METADATA_IDX(META_NS_XMPCORE, META_XMPCORE_LABEL), NS_XAP, "Label", int32_t )

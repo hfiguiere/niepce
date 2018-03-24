@@ -29,7 +29,9 @@ enum {
     META_NS_TIFF,
     META_NS_EXIF,
     META_NS_IPTC,
-    META_NS_NIEPCE
+    META_NS_NIEPCE,
+
+    META_NS_INTERNAL = 0x0f00,
 };
 
 /** Metadata for xmpcore. Combine with %META_NS_XMPCORE */
@@ -79,6 +81,16 @@ enum {
 /** Metadata for Niepce. Combine with %META_NS_NIEPCE */
 enum {
     META_NIEPCE_FLAG = 0
+};
+
+
+/** Internal metadata */
+enum {
+    META_INTERNAL_FILENAME = 0,
+    META_INTERNAL_FILETYPE,
+    META_INTERNAL_FILESIZE,
+    META_INTERNAL_FOLDER,
+    META_INTERNAL_SIDECARS,
 };
 
 /** make a metadata index with a namespace and a value */

@@ -32,6 +32,22 @@ pub enum Sidecar {
     Live(String),
     /// Thumbnail file (THM from Canon)
     Thumbnail(String),
+    /// XMP Sidecar
+    Xmp(String),
+    /// JPEG Sidecar (RAW + JPEG)
+    Jpeg(String),
+}
+
+impl Sidecar {
+    pub fn to_int(&self) -> i32 {
+        match self {
+            &Sidecar::Live(_) => 1,
+            &Sidecar::Thumbnail(_) => 2,
+            &Sidecar::Xmp(_) => 3,
+            &Sidecar::Jpeg(_) => 4,
+            &Sidecar::Invalid => 0,
+        }
+    }
 }
 
 impl From<(i32, String)> for Sidecar {
@@ -39,6 +55,8 @@ impl From<(i32, String)> for Sidecar {
         match t.0 {
             1 => Sidecar::Live(t.1),
             2 => Sidecar::Thumbnail(t.1),
+            3 => Sidecar::Xmp(t.1),
+            4 => Sidecar::Jpeg(t.1),
             _ => Sidecar::Invalid,
         }
     }

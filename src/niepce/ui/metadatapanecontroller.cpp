@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/metadatapanecontroller.cpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,14 @@ namespace ui {
 const fwk::MetaDataSectionFormat *
 MetaDataPaneController::get_format()
 {
+    static const fwk::MetaDataFormat s_fileinfo_format[] = {
+        { _("File Name:"), eng::NpFileNameProp, fwk::MetaDT::STRING, true },
+        { _("Folder:"), eng::NpFolderProp, fwk::MetaDT::STRING, true },
+        { _("File Type:"), eng::NpFileTypeProp, fwk::MetaDT::STRING, true },
+        { _("File Size:"), eng::NpFileSizeProp, fwk::MetaDT::SIZE, true },
+        { _("Sidecar Files:"), eng::NpSidecarsProp, fwk::MetaDT::STRING_ARRAY, true },
+        { nullptr, 0, fwk::MetaDT::NONE, true }
+    };
     static const fwk::MetaDataFormat s_camerainfo_format[] = {
         { _("Make:"), eng::NpTiffMakeProp, fwk::MetaDT::STRING, true },
         { _("Model:"), eng::NpTiffModelProp, fwk::MetaDT::STRING, true },
@@ -61,6 +69,9 @@ MetaDataPaneController::get_format()
         { nullptr, 0, fwk::MetaDT::NONE, true }
     };
     static const fwk::MetaDataSectionFormat s_format[] = {
+        { _("File Information"),
+          s_fileinfo_format
+        },
         { _("Camera Information"),
           s_camerainfo_format
         },

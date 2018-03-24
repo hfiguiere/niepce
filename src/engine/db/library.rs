@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ pub enum Managed {
     YES = 1,
 }
 
-const DB_SCHEMA_VERSION: i32 = 7;
+const DB_SCHEMA_VERSION: i32 = 8;
 const DATABASENAME: &str = "niepcelibrary.db";
 
 pub struct Library {
@@ -183,7 +183,8 @@ impl Library {
             // version = 7
             conn.execute(
                 "CREATE TABLE sidecars (file_id INTEGER,\
-                 fsfile_id INTEGER, type INTEGER, UNIQUE(file_id, fsfile_id))",
+                 fsfile_id INTEGER, type INTEGER, ext TEXT NOT NULL,\
+                 UNIQUE(file_id, fsfile_id))",
                 &[],
             ).unwrap();
             conn.execute(
@@ -276,18 +277,35 @@ impl Library {
 
     pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, sidecar: &Sidecar) -> bool {
         let sidecar_t: (i32, &String) = match sidecar {
-            &Sidecar::Live(ref p) => (1, p),
-            &Sidecar::Thumbnail(ref p) => (2, p),
+            &Sidecar::Live(ref p)
+            | &Sidecar::Thumbnail(ref p)
+            | &Sidecar::Xmp(ref p)
+            | &Sidecar::Jpeg(ref p) => (sidecar.to_int(), p),
+            _ => return false,
+        };
+        let p = Path::new(sidecar_t.1);
+        let ext = match p.extension() {
+            Some(ext2) => ext2.to_string_lossy(),
             _ => return false,
         };
         let fsfile_id = self.add_fs_file(&sidecar_t.1);
         if fsfile_id == -1 {
             return false;
         }
+        self.add_sidecar_fsfile_to_bundle(file_id, fsfile_id, sidecar_t.0, &*ext)
+    }
+
+    fn add_sidecar_fsfile_to_bundle(
+        &self,
+        file_id: LibraryId,
+        fsfile_id: LibraryId,
+        sidecar_type: i32,
+        ext: &str,
+    ) -> bool {
         if let Some(ref conn) = self.dbconn {
             if let Ok(c) = conn.execute(
-                "INSERT INTO sidecars (file_id, fsfile_id, type) VALUES(:1, :2, :3)",
-                &[&file_id, &fsfile_id, &sidecar_t.0],
+                "INSERT INTO sidecars (file_id, fsfile_id, type, ext) VALUES(:1, :2, :3, :4)",
+                &[&file_id, &fsfile_id, &sidecar_type, &ext],
             ) {
                 if c == 1 {
                     return true;
@@ -474,12 +492,24 @@ impl Library {
                 let fsfile_id = self.add_fs_file(bundle.xmp_sidecar());
                 if fsfile_id > 0 {
                     self.add_xmp_sidecar_to_bundle(file_id, fsfile_id);
+                    self.add_sidecar_fsfile_to_bundle(
+                        file_id,
+                        fsfile_id,
+                        Sidecar::Xmp(String::new()).to_int(),
+                        "xmp",
+                    );
                 }
             }
             if !bundle.jpeg().is_empty() {
                 let fsfile_id = self.add_fs_file(bundle.jpeg());
                 if fsfile_id > 0 {
                     self.add_jpeg_file_to_bundle(file_id, fsfile_id);
+                    self.add_sidecar_fsfile_to_bundle(
+                        file_id,
+                        fsfile_id,
+                        Sidecar::Jpeg(String::new()).to_int(),
+                        "jpg",
+                    );
                 }
             }
         }
@@ -635,14 +665,22 @@ impl Library {
     pub fn get_metadata(&self, file_id: LibraryId) -> Option<LibMetadata> {
         let conn = try_opt!(self.dbconn.as_ref());
         let sql = format!(
-            "SELECT {} FROM {} WHERE id=:1",
+            "SELECT {} FROM {} WHERE files.id=:1",
             LibMetadata::read_db_columns(),
             LibMetadata::read_db_tables()
         );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&file_id]).ok());
         let row = try_opt!(try_opt!(rows.next()).ok());
-        return Some(LibMetadata::read_from(&row));
+        let mut metadata = LibMetadata::read_from(&row);
+
+        let sql = "SELECT ext FROM sidecars WHERE file_id=:1";
+        let mut stmt = try_opt!(conn.prepare(&sql).ok());
+        let mut rows = try_opt!(stmt.query(&[&file_id]).ok());
+        while let Some(Ok(row)) = rows.next() {
+            metadata.sidecars.push(row.get(0));
+        }
+        return Some(metadata);
     }
 
     fn unassign_all_keywords_for_file(&self, file_id: LibraryId) -> bool {

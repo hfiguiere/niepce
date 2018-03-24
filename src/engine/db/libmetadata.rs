@@ -36,10 +36,15 @@ use super::{
     LibraryId
 };
 use root::eng::NiepceProperties as Np;
+use engine::db::libfile::FileType;
 
 pub struct LibMetadata {
     xmp: XmpMeta,
-    id: LibraryId
+    id: LibraryId,
+    pub sidecars: Vec<String>,
+    pub file_type: FileType,
+    pub name: String,
+    pub folder: String,
 }
 
 struct IndexToXmp {
@@ -60,18 +65,24 @@ fn property_index_to_xmp(meta: Np) -> Option<IndexToXmp> {
 }
 
 impl LibMetadata {
-
     pub fn new(id: LibraryId) -> LibMetadata {
-        LibMetadata{
+        LibMetadata {
             xmp: XmpMeta::new(),
-            id: id
+            id: id,
+            sidecars: vec![], file_type: FileType::UNKNOWN,
+            name: String::new(),
+            folder: String::new()
         }
     }
 
     pub fn new_with_xmp(id: LibraryId, xmp: XmpMeta) -> LibMetadata {
-        LibMetadata{
+        LibMetadata {
             xmp: xmp,
-            id: id
+            id: id,
+            sidecars: vec![],
+            file_type: FileType::UNKNOWN,
+            name: String::new(),
+            folder: String::new()
         }
     }
 
@@ -178,7 +189,28 @@ impl LibMetadata {
                         keywords.push(String::from(value.to_str()));
                     }
                     props.set_value(*prop_id, PropertyValue::StringArray(keywords));
-                },
+                }
+                Np::NpFileNameProp => {
+                    props.set_value(*prop_id, PropertyValue::String(self.name.clone()));
+                }
+                Np::NpFileTypeProp => {
+                    // XXX this to string convert should be elsewhere
+                    let file_type = match self.file_type {
+                        FileType::UNKNOWN => "Unknown",
+                        FileType::RAW => "RAW",
+                        FileType::RAW_JPEG => "RAW + JPEG",
+                        FileType::IMAGE => "Image",
+                        FileType::VIDEO => "Video",
+                    };
+                    props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
+                }
+                Np::NpFileSizeProp => {}
+                Np::NpFolderProp => {
+                    props.set_value(*prop_id, PropertyValue::String(self.folder.clone()));
+                }
+                Np::NpSidecarsProp => {
+                    props.set_value(*prop_id, PropertyValue::StringArray(self.sidecars.clone()));
+                }
                 _ => {
                     if let Some(propval) = self.get_metadata(prop_id_np) {
                         props.set_value(*prop_id, propval);
@@ -193,19 +225,19 @@ impl LibMetadata {
 
     pub fn touch(&mut self) -> bool {
         let xmpdate = xmp_date_from(&Utc::now());
-        return self.xmp.xmp.set_property_date(NS_XAP, "MetadataDate",
-                                              &xmpdate, exempi::PROP_NONE);
+        return self.xmp
+            .xmp
+            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE);
     }
 }
 
 impl FromDb for LibMetadata {
-
     fn read_db_columns() -> &'static str {
-        "id,xmp"
+        "files.id,xmp,file_type,files.name,folders.name"
     }
 
     fn read_db_tables() -> &'static str {
-        "files"
+        "files LEFT JOIN folders ON folders.id = files.parent_id"
     }
 
     fn read_from(row: &rusqlite::Row) -> Self {
@@ -214,9 +246,13 @@ impl FromDb for LibMetadata {
 
         let mut xmpmeta = XmpMeta::new();
         xmpmeta.unserialize(&xmp);
-        LibMetadata::new_with_xmp(id, xmpmeta)
+        let mut libmeta = LibMetadata::new_with_xmp(id, xmpmeta);
+        let col: i32 = row.get(2);
+        libmeta.file_type = FileType::from(col);
+        libmeta.name = row.get(3);
+        libmeta.folder = row.get(4);
+        libmeta
     }
-
 }
 
 #[no_mangle]

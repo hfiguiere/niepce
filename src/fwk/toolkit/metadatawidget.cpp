@@ -318,13 +318,15 @@ bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w,
     return true;
 }
 
-bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, const PropertyValuePtr& value)
+bool MetaDataWidget::set_string_array_data(Gtk::Widget* w, bool readonly,
+                                           const PropertyValuePtr& value)
 {
     try {
         AutoFlag flag(m_update);
         std::vector<std::string> tokens = fwk::property_value_get_string_array(*value);
 
         static_cast<fwk::TokenTextView*>(w)->set_tokens(tokens);
+        static_cast<fwk::TokenTextView*>(w)->set_editable(!readonly);
     }
     catch(...) {
         return false;
@@ -431,7 +433,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         set_star_rating_data(w, value);
         break;
     case MetaDT::STRING_ARRAY:
-        set_string_array_data(w, value);
+        set_string_array_data(w, current->readonly, value);
         break;
     case MetaDT::TEXT:
         set_text_data(w, current->readonly, value);

@@ -44,7 +44,8 @@ enum class MetaDT {
     DATE,
     FRAC,
     FRAC_DEC, // Fraction as decimal
-    STAR_RATING
+    STAR_RATING,
+    SIZE,     // Size in bytes
 };
 
 struct MetaDataFormat {
@@ -97,7 +98,7 @@ private:
     // Fraction as fraction
     bool set_fraction_data(Gtk::Widget* w, const PropertyValuePtr& value);
     bool set_star_rating_data(Gtk::Widget* w, const PropertyValuePtr& value);
-    bool set_string_array_data(Gtk::Widget* w, const PropertyValuePtr& value);
+    bool set_string_array_data(Gtk::Widget* w, bool readonly, const PropertyValuePtr& value);
     bool set_text_data(Gtk::Widget* w, bool readonly,
                        const PropertyValuePtr& value);
     bool set_string_data(Gtk::Widget* w, bool readonly,
