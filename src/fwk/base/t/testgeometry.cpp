@@ -46,7 +46,7 @@ int test_main( int, char *[] )             // note the name!
 			      try {
 				      Rect r3(value);
 			      }
-			      catch(std::bad_cast) {
+			      catch(const std::bad_cast&) {
 				      raised = true;
 			      }
 			      BOOST_CHECK(raised);
