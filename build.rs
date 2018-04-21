@@ -22,6 +22,7 @@ fn main() {
         .whitelisted_type("eng::NiepceProperties")
         .whitelisted_type("eng::QueriedContent")
         .opaque_type("eng::QueriedContent")
+        .opaque_type("std::.*")
         .whitelisted_type("fwk::FileList")
         .whitelisted_type("eng::IndexToXmp")
         .whitelisted_function("eng::property_index_to_xmp")
