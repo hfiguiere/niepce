@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.cpp
  *
- * Copyright (C) 2007-2017 Hubert Figuiere
+ * Copyright (C) 2007-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -182,7 +182,7 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     case eng::NotificationType::KEYWORD_COUNTED:
     {
         auto count = engine_library_notification_get_count(&ln);
-        DBG_OUT("count for container %Ld is %d", (long long)count->id, count->count);
+        DBG_OUT("count for container %Ld is %Ld", (long long)count->id, (long long)count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter;
         switch (type) {
         case eng::NotificationType::FOLDER_COUNTED:
@@ -207,7 +207,8 @@ void WorkspaceController::on_lib_notification(const eng::LibNotification &ln)
     case eng::NotificationType::KEYWORD_COUNT_CHANGE:
     {
         auto count = engine_library_notification_get_count(&ln);
-        DBG_OUT("count change for container %Ld is %d", (long long)count->id, count->count);
+        DBG_OUT("count change for container %Ld is %Ld", (long long)count->id,
+                (long long)count->count);
         std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter;
         switch (type) {
         case eng::NotificationType::FOLDER_COUNT_CHANGE:

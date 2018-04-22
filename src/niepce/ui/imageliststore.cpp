@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.cpp
  *
- * Copyright (C) 2008-2017 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             m_current_folder = 0;
             m_current_keyword = param->container;
         }
-        DBG_OUT("received folder content file # %lu %p %p", l->size());
+        DBG_OUT("received folder content file # %lu", l->size());
         // clear the map before the list.
         m_idmap.clear();
         clear();
