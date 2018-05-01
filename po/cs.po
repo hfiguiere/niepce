@@ -1,14 +1,14 @@
 # Czech translation for niepce.
 # Copyright (C) 2009 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
+# Marek Černocký <marek@manet.cz>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 18:26+0000\n"
-"PO-Revision-Date: 2017-11-19 20:33+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/niepce/issues\n"
+"POT-Creation-Date: 2018-04-22 00:07+0000\n"
+"PO-Revision-Date: 2018-05-01 17:26+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -27,7 +27,7 @@ msgstr "Fotoaparát"
 msgid "File"
 msgstr "Soubor"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:427
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:447
 msgid "_Import..."
 msgstr "_Import…"
 
@@ -290,7 +290,7 @@ msgid "You can still change this after importing the pictures."
 msgstr "Lze změnit i po provedení importu obrázků."
 
 #: src/niepce/ui/dialogs/importdialog.ui:406
-#: src/niepce/ui/metadatapanecontroller.cpp:51
+#: src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Date:"
 msgstr "Datum:"
 
@@ -328,7 +328,7 @@ msgid "Import picture folder"
 msgstr "Import složky s obrázky"
 
 #: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
-#: src/niepce/ui/dialogs/requestnewfolder.rs:40
+#: src/niepce/ui/dialogs/requestnewfolder.rs:41
 #: src/niepce/ui/niepcewindow.cpp:333
 msgid "Cancel"
 msgstr "Zrušit"
@@ -366,100 +366,124 @@ msgstr "Používat tmavé rozhraní"
 msgid "_User Interface"
 msgstr "_Uživatelské rozhraní"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:39
+#: src/niepce/ui/dialogs/requestnewfolder.rs:40
 msgid "OK"
 msgstr "Budiž"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:41
+#: src/niepce/ui/dialogs/requestnewfolder.rs:42
 msgid "Folder _name:"
 msgstr "Název _složky:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:36
+msgid "File Name:"
+msgstr "Název souboru:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:37
+msgid "Folder:"
+msgstr "Složka:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "File Type:"
+msgstr "Typ souboru:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "File Size:"
+msgstr "Velikost souboru:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:40
+msgid "Sidecar Files:"
+msgstr "Externí metadata:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Make:"
 msgstr "Výrobce:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:37
+#: src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Model:"
 msgstr "Model:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:38
+#: src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "Lens:"
 msgstr "Čočky:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:42
+#: src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Exposure Program:"
 msgstr "Expoziční režim:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:43
+#: src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Speed:"
 msgstr "Závěrka:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:44
+#: src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Aperture:"
 msgstr "Clona:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:45
+#: src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "ISO:"
 msgstr "ISO:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:46
+#: src/niepce/ui/metadatapanecontroller.cpp:54
 msgid "Exposure Bias:"
 msgstr "Korekce expozice:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:47
+#: src/niepce/ui/metadatapanecontroller.cpp:55
 msgid "Flash:"
 msgstr "Blesk:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:48
+#: src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Flash compensation:"
 msgstr "Kompenzace blesku:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:49
+#: src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Focal length:"
 msgstr "Ohnisková vzdálenost:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:50
+#: src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "White balance:"
 msgstr "Vyvážení bílé:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:55
+#: src/niepce/ui/metadatapanecontroller.cpp:63
 msgid "Headline:"
 msgstr "Titulek:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:56
+#: src/niepce/ui/metadatapanecontroller.cpp:64
 msgid "Caption:"
 msgstr "Legenda:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:57
+#: src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Rating:"
 msgstr "Hodnocení:"
 
 #. FIXME change this type to the right one when there is a widget
-#: src/niepce/ui/metadatapanecontroller.cpp:59
+#: src/niepce/ui/metadatapanecontroller.cpp:67
 msgid "Label:"
 msgstr "Popisek:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:60
+#: src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Keywords:"
 msgstr "Klíčová slova:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:64
+#: src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "File Information"
+msgstr "Informace o souboru"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:75
 msgid "Camera Information"
 msgstr "Informace o fotoaparátu"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:67
+#: src/niepce/ui/metadatapanecontroller.cpp:78
 msgid "Shooting Information"
 msgstr "Informace o pořízení"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:70
+#: src/niepce/ui/metadatapanecontroller.cpp:81
 msgid "IPTC"
 msgstr "Informace IPTC"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:73
+#: src/niepce/ui/metadatapanecontroller.cpp:84
 msgid "Rights"
 msgstr "Práva"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:103
+#: src/niepce/ui/metadatapanecontroller.cpp:114
 msgid "Image Properties"
 msgstr "Vlastnosti obrázku"
 
@@ -630,31 +654,31 @@ msgstr "Nastavit vlastnosti"
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: src/niepce/ui/workspacecontroller.cpp:104
+#: src/niepce/ui/workspacecontroller.cpp:103
 msgid "Delete selected folder?"
 msgstr "Smazat vybranou složku?"
 
-#: src/niepce/ui/workspacecontroller.cpp:379
+#: src/niepce/ui/workspacecontroller.cpp:399
 msgid "Pictures"
 msgstr "Obrázky"
 
-#: src/niepce/ui/workspacecontroller.cpp:383
+#: src/niepce/ui/workspacecontroller.cpp:403
 msgid "Projects"
 msgstr "Projekty"
 
-#: src/niepce/ui/workspacecontroller.cpp:387
+#: src/niepce/ui/workspacecontroller.cpp:407
 msgid "Keywords"
 msgstr "Klíčová slova"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:401
+#: src/niepce/ui/workspacecontroller.cpp:421
 msgid "_Workspace"
 msgstr "_Pracovní plocha"
 
-#: src/niepce/ui/workspacecontroller.cpp:414
+#: src/niepce/ui/workspacecontroller.cpp:434
 msgid "New Folder..."
 msgstr "Nová složka…"
 
-#: src/niepce/ui/workspacecontroller.cpp:418
+#: src/niepce/ui/workspacecontroller.cpp:438
 msgid "Delete Folder"
 msgstr "Smazat složku"
