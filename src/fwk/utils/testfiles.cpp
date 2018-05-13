@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testfiles.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@
 #include "init.hpp"
 
 using fwk::FileList;
+
+// stub to avoid linking the Rust library.
+extern "C"
+void niepce_init()
+{
+}
 
 int test_main( int, char *[] )             // note the name!
 {
