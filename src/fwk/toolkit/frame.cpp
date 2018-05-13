@@ -194,8 +194,7 @@ void Frame::frameRectFromConfig()
                 m_window->move(r.x(), r.y());
                 m_window->resize(r.w(), r.h());
             }
-            catch(std::bad_cast)
-            {
+            catch (const std::bad_cast&) {
                 ERR_OUT("wrong value in configuration: %s", val.c_str());
             }
         }
