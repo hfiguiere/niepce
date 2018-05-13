@@ -227,7 +227,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 void ImageCanvas::_redisplay()
 {
     if (m_image->get_status() != ncr::Image::Status::LOADED) {
-        ERR_OUT("Image is in not loaded - status %d", m_image->get_status());
+        ERR_OUT("Image is in not loaded - status %d", (int)m_image->get_status());
         return;
     }
     int img_w, img_h;

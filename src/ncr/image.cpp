@@ -302,7 +302,7 @@ void Image::Private::reload_node(GeglNode* node, int orientation)
         width = rect.width;
         height = rect.height;
     }
-    DBG_OUT("width %d height %d - status %d", width, height, m_status);
+    DBG_OUT("width %d height %d - status %d", width, height, (int)m_status);
     if (m_status < Status::ERROR && (!width || !height)) {
         m_status = Status::ERROR;
     }
