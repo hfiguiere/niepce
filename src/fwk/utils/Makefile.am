@@ -4,13 +4,13 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ \
 
 TESTS = testfiles \
 	testpathutils \
-	teststringutils testufrawmeta
+	teststringutils
 
 EXTRA_DIST = test.xmp test2.ufraw MODULES_HOWTO
 
 check_PROGRAMS = testfiles \
 	testpathutils \
-	teststringutils testufrawmeta
+	teststringutils
 
 
 testfiles_SOURCES = testfiles.cpp
@@ -40,7 +40,6 @@ libniepceutils_a_SOURCES = \
 	fsutils.cpp fsutils.hpp \
 	mtqueue.hpp stringutils.hpp \
 	exempi.hpp exempi.cpp \
-	ufrawmeta.hpp ufrawmeta.cpp \
 	buffer.hpp logstreamutils.hpp \
 	boost.hpp \
 	files.hpp files.cpp \
