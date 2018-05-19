@@ -35,8 +35,8 @@ MapController::buildWidget()
   auto embed = gtk_champlain_embed_new();
   m_widget = Gtk::manage(Glib::wrap(embed));
 
-  auto clutter_map = gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
-  m_clutter_map = Glib::wrap(CLUTTER_ACTOR(clutter_map), true);
+  m_clutter_map = gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
+  g_object_ref(G_OBJECT(m_clutter_map));
 
   // Default position. Somewhere over Montréal, QC
   setZoomLevel(10);
@@ -47,23 +47,22 @@ MapController::buildWidget()
 
 void MapController::centerOn(double lat, double longitude)
 {
-  champlain_view_center_on(CHAMPLAIN_VIEW(m_clutter_map->gobj()),
-                           lat, longitude);
+  champlain_view_center_on(m_clutter_map, lat, longitude);
 }
 
 void MapController::zoomIn()
 {
-  champlain_view_zoom_in(CHAMPLAIN_VIEW(m_clutter_map->gobj()));
+  champlain_view_zoom_in(m_clutter_map);
 }
 
 void MapController::zoomOut()
 {
-  champlain_view_zoom_out(CHAMPLAIN_VIEW(m_clutter_map->gobj()));
+  champlain_view_zoom_out(m_clutter_map);
 }
 
 void MapController::setZoomLevel(uint8_t level)
 {
-  champlain_view_set_zoom_level(CHAMPLAIN_VIEW(m_clutter_map->gobj()), level);
+  champlain_view_set_zoom_level(m_clutter_map, level);
 }
 
 }

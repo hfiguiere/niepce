@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <cluttermm/actor.h>
+#include <champlain-gtk/champlain-gtk.h>
 
 #include "fwk/toolkit/uicontroller.hpp"
 
@@ -31,6 +31,17 @@ class MapController
 public:
     typedef std::shared_ptr<MapController> Ptr;
 
+    MapController()
+        : UiController()
+        , m_clutter_map(nullptr)
+        {
+        }
+    ~MapController()
+        {
+            if (m_clutter_map) {
+                g_object_unref(G_OBJECT(m_clutter_map));
+            }
+        }
     virtual Gtk::Widget * buildWidget() override;
 
     void centerOn(double lat, double longitude);
@@ -40,7 +51,7 @@ public:
     void setZoomLevel(uint8_t level); // 1 to 20
 
 private:
-    Glib::RefPtr<Clutter::Actor> m_clutter_map;
+    ChamplainView* m_clutter_map;
 };
 
 

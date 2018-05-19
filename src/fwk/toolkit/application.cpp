@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2014 Hubert Figuiere
+ * Copyright (C) 2007-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/settings.h>
-#include <cluttermm/init.h>
 #include <clutter-gtk/clutter-gtk.h>
 
 #include "fwk/base/debug.hpp"
@@ -30,7 +29,6 @@
 #include "application.hpp"
 #include "uicontroller.hpp"
 #include "frame.hpp"
-
 
 namespace fwk {
 
@@ -46,9 +44,6 @@ Application::Application(int & argc, char** &argv, const char* app_id,
     if (error != CLUTTER_INIT_SUCCESS) {
         ERR_OUT("clutter init error: %d", (int)error);
     }
-    // We still need to call Clutter::init() for the wrappers
-    // But after gtk_clutter_init(). Safe to call clutter_init().
-    Clutter::init(argc, argv);
     m_gtkapp->signal_startup().connect(
         sigc::mem_fun(*this, &Application::on_startup));
 }
