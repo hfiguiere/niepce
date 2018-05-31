@@ -7,6 +7,7 @@ SUBDIRS = . ext fwk \
 RUST_SOURCES = \
 	@top_srcdir@/build.rs \
 	@top_srcdir@/Cargo.toml \
+	@top_srcdir@/Cargo.lock \
 	@top_srcdir@/src/capi.rs \
 	@top_srcdir@/src/engine/db/filebundle.rs \
 	@top_srcdir@/src/engine/db/fsfile.rs \
