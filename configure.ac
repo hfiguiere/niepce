@@ -87,6 +87,8 @@ AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option], [
 AX_APPEND_COMPILE_FLAGS([ \
    -Wchar-subscripts \
    -Wcast-align \
+dnl sigc++ 2.10.0 breaks with that warning.
+   -Wno-cast-function-type \
    -Wextra \
    -Wheader-guard \
    -Wformat \
@@ -96,6 +98,8 @@ AX_APPEND_COMPILE_FLAGS([ \
    -Wmisleading-indentation \
    -Wmissing-noreturn \
    -Woverloaded-virtual \
+dnl Gtk+ 3.22.30 breaks with that warning
+   -Wno-parentheses \
    -Wpointer-arith \
 dnl   -Wredundant-decls \
    -Wpointer-bool-conversion \
