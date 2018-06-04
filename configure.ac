@@ -74,7 +74,10 @@ AC_SUBST(GEGL_CFLAGS)
 AC_SUBST(GEGL_LIBS)
 
 AX_BOOST_BASE([$BOOST_VERSION])
-AX_BOOST_UNIT_TEST_FRAMEWORK
+
+dnl Relative googletest dir from top srcdir.
+GTEST_ROOT=third_party/googletest/googletest
+AC_SUBST(GTEST_ROOT)
 
 dnl ***************************************************************
 dnl Excessive warnings
@@ -146,6 +149,7 @@ doc/doxygen/Makefile
 data/Makefile
 data/icons/Makefile
 data/themes/Makefile
+third_party/Makefile
 src/Makefile
 src/ext/Makefile
 src/ext/libview/Makefile
