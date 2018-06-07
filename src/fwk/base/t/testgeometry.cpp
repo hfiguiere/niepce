@@ -1,7 +1,7 @@
 /*
  * niepce - utils/testgeometry.cpp
  *
- * Copyright (C) 2007-2013 Hubert Figuiere
+ * Copyright (C) 2007-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 /** @brief unit test for files */
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <stdlib.h>
 #include <vector>
@@ -26,17 +26,17 @@
 
 using fwk::Rect;
 
-int test_main( int, char *[] )             // note the name!
+TEST(TestGeometry, TestGeometrySanity)
 {
 	Rect r1(0,1,2,3);
-	BOOST_CHECK(std::to_string(r1) == "0 1 2 3");
+	ASSERT_EQ(std::to_string(r1), "0 1 2 3");
 
 	std::string s("100 100 250 250");
 	Rect r2(s);
-	BOOST_CHECK(r2.x() == 100);
-	BOOST_CHECK(r2.y() == 100);
-	BOOST_CHECK(r2.w() == 250);
-	BOOST_CHECK(r2.h() == 250);
+	ASSERT_EQ(r2.x(), 100);
+	ASSERT_EQ(r2.y(), 100);
+	ASSERT_EQ(r2.w(), 250);
+	ASSERT_EQ(r2.h(), 250);
 	std::vector<std::string> vtest;
 	vtest.push_back("a b c d");
 	vtest.push_back("100 100 150");
@@ -49,7 +49,7 @@ int test_main( int, char *[] )             // note the name!
 			      catch(const std::bad_cast&) {
 				      raised = true;
 			      }
-			      BOOST_CHECK(raised);
+			      ASSERT_TRUE(raised);
 		      }
 		);
 
@@ -65,33 +65,30 @@ int test_main( int, char *[] )             // note the name!
     // FIT
     result = source1.fit_into(dest1);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 640, 320));
+    ASSERT_EQ(result, Rect(0, 0, 640, 320));
     result = source1.fit_into(dest2);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result.w() == 480);
+    ASSERT_EQ(result.w(), 480);
 
     result = source2.fit_into(dest1);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result.h() == 480);
+    ASSERT_EQ(result.h(), 480);
     result = source2.fit_into(dest2);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 320, 640));
+    ASSERT_EQ(result, Rect(0, 0, 320, 640));
 
     // FILL
     result = source1.fill_into(dest1);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result.h() == 480);
+    ASSERT_EQ(result.h(), 480);
     result = source1.fill_into(dest2);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 1280, 640));
+    ASSERT_EQ(result, Rect(0, 0, 1280, 640));
 
     result = source2.fill_into(dest1);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result == Rect(0, 0, 640, 1280));
+    ASSERT_EQ(result, Rect(0, 0, 640, 1280));
     result = source2.fill_into(dest2);
     std::cout << std::to_string(result) << std::endl;
-    BOOST_CHECK(result.w() == 480);
-
-    return 0;
+    ASSERT_EQ(result.w(), 480);
 }
-

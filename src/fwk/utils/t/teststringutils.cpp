@@ -1,7 +1,7 @@
 /*
- * niepce - utils/teststringutils.cpp
+ * niepce - src/fwk/utils/t/teststringutils.cpp
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <vector>
 #include <string>
 
-
 #include "stringutils.hpp"
 
-int test_main( int, char *[] )             // note the name!
+TEST(testStringUtils, testStringUtilsSanity)
 {
-	std::vector<std::string> v;
-	v.push_back("a");
-	v.push_back("b");
-	v.push_back("c");
+  std::vector<std::string> v;
+  v.push_back("a");
+  v.push_back("b");
+  v.push_back("c");
 
-	std::string s = fwk::join(v, ", ");
+  std::string s = fwk::join(v, ", ");
 
-	BOOST_CHECK(s == "a, b, c");
-
-	return 0;
+  ASSERT_EQ(s, "a, b, c");
 }
 

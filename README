@@ -8,6 +8,11 @@ Some files may be under GPL version 2 or later.
 (c) 2006-2018 Hubert Figuière
 Some portions are written by other people.
 
+Google Test framework (for testing only)
+(c) 2008 Google Inc.
+Under a "3 clause BSD" license.
+see third_party/googletest/googletest/LICENSE
+
 What is this?
 -------------
 
@@ -30,7 +35,6 @@ champlain-gtk 0.12
 sqlite3
 libxml2 > 2.5.0
 boost 1.60
- -boost test (for the unit test)
 exempi >= 2.4.0
 libopenraw >= 0.1.0
 gegl >= 0.3.0

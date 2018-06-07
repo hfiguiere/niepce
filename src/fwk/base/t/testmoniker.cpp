@@ -19,19 +19,17 @@
 /** @brief Unit test for the Moniker class */
 
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include "fwk/base/moniker.hpp"
 
-
-int test_main( int, char *[] )             // note the name!
+TEST(testMoniker, testMonikerSanity)
 {
-	fwk::Moniker moniker("foo:/bar/test");
+  fwk::Moniker moniker("foo:/bar/test");
 
-	BOOST_CHECK(moniker.scheme() == "foo");
-	BOOST_CHECK(moniker.path() == "/bar/test");
+  ASSERT_EQ(moniker.scheme(), "foo");
+  ASSERT_EQ(moniker.path(), "/bar/test");
 
-	BOOST_CHECK(strcmp(moniker.c_str(), "foo:/bar/test") == 0);
-	return 0;
+  ASSERT_EQ(strcmp(moniker.c_str(), "foo:/bar/test"), 0);
 }
 

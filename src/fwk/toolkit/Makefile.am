@@ -1,13 +1,13 @@
 
 
-
-
-AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
+niepce_cppflags = -I$(top_srcdir)/src -I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@FRAMEWORK_CFLAGS@ \
 	@GPHOTO_CFLAGS@ \
 	@OPENRAW_CFLAGS@ \
 	$(NULL)
+
+AM_CPPFLAGS = $(niepce_cppflags)
 
 noinst_LIBRARIES = libniepceframework.a
 
@@ -18,12 +18,16 @@ TESTS = testconfigdatabinder
 
 check_PROGRAMS = testconfigdatabinder
 
-testconfigdatabinder_SOURCES = t/testconfigdatabinder.cpp
-testconfigdatabinder_LDADD = libniepceframework.a \
+testing_cppflags = -I@top_srcdir@/@GTEST_ROOT@/include $(niepce_cppflags)
+testing_ldadd = @top_builddir@/third_party/libgtest.a \
+	libniepceframework.a \
 	../base/libfwkbase.a \
 	../utils/libniepceutils.a \
         @FRAMEWORK_LIBS@
 
+testconfigdatabinder_SOURCES = t/testconfigdatabinder.cpp
+testconfigdatabinder_CPPFLAGS = $(testing_cppflags)
+testconfigdatabinder_LDADD = $(testing_ldadd)
 
 libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	application.hpp application.cpp \

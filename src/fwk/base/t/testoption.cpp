@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/t/testoption.cpp
  *
- * Copyright (C) 2017 Hubert Figuiere
+ * Copyright (C) 2017-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 /** @brief unit test for option */
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <stdlib.h>
 
@@ -26,42 +26,40 @@
 
 #include "fwk/base/option.hpp"
 
-int test_main( int, char *[] )             // note the name!
+TEST(testOption, testOptionSanity)
 {
   fwk::Option<std::string> result;
 
   // Default, option is empty
-  BOOST_CHECK(result.empty());
+  ASSERT_TRUE(result.empty());
   bool unwrapped = false;
   try {
     result.unwrap();
     unwrapped = true;
   } catch(std::runtime_error&) {
-    BOOST_CHECK(true);
+    ASSERT_TRUE(true);
   } catch(...) {
-    BOOST_CHECK(false);
+    ASSERT_TRUE(false);
   }
-  BOOST_CHECK(!unwrapped);
-  BOOST_CHECK(result.empty());
+  ASSERT_FALSE(unwrapped);
+  ASSERT_TRUE(result.empty());
 
   // Option with value
   result = fwk::Option<std::string>("hello world");
-  BOOST_CHECK(!result.empty());
-  BOOST_CHECK(result.unwrap() == "hello world");
-  BOOST_CHECK(result.empty());
+  ASSERT_FALSE(result.empty());
+  ASSERT_EQ(result.unwrap(), "hello world");
+  ASSERT_TRUE(result.empty());
   // try unwrapping again
   unwrapped = false;
   try {
     result.unwrap();
     unwrapped = true;
   } catch(std::runtime_error&) {
-    BOOST_CHECK(true);
+    ASSERT_TRUE(true);
   } catch(...) {
-    BOOST_CHECK(false);
+    ASSERT_FALSE(false);
   }
-  BOOST_CHECK(!unwrapped);
-  BOOST_CHECK(result.empty());
-
-  return 0;
+  ASSERT_FALSE(unwrapped);
+  ASSERT_TRUE(result.empty());
 }
 

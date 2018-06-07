@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/testdatabinder.cpp
  *
- * Copyright (C) 2013 Hubert Figuiere
+ * Copyright (C) 2013-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 /** @brief unit test for files */
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <glibmm/init.h>
 #include <glibmm/object.h>
@@ -28,80 +28,78 @@
 #include "fwk/toolkit/configdatabinder.hpp"
 
 class PropertyFixture
-	: Glib::Object
+  : Glib::Object
 {
 public:
-	PropertyFixture()
-		: Glib::ObjectBase(typeid(PropertyFixture))
-		, Glib::Object()
-		, str_property(*this, "string")
-		, int_property(*this, "int")
-		, bool_property(*this, "bool")
-		{
-		}
+  PropertyFixture()
+    : Glib::ObjectBase(typeid(PropertyFixture))
+    , Glib::Object()
+    , str_property(*this, "string")
+    , int_property(*this, "int")
+    , bool_property(*this, "bool")
+    {
+    }
 
-	Glib::Property<Glib::ustring> str_property;
-	Glib::Property<int> int_property;
-	Glib::Property<bool> bool_property;
+  Glib::Property<Glib::ustring> str_property;
+  Glib::Property<int> int_property;
+  Glib::Property<bool> bool_property;
 };
 
-int test_main( int, char *[] )             // note the name!
+TEST(testConfigDataBinder, testConfigDataBinderSanity)
 {
-	Glib::init();
+  Glib::init();
 
-	PropertyFixture fixture;
+  PropertyFixture fixture;
 
-	// get tmp file
-	Glib::ustring cfg_file("/tmp/tmp-cfg.ini");
-	Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(cfg_file);
+  // get tmp file
+  Glib::ustring cfg_file("/tmp/tmp-cfg.ini");
+  Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(cfg_file);
 
-	{
-		fwk::Configuration cfg(cfg_file);
+  {
+    fwk::Configuration cfg(cfg_file);
 
-		{
-			// the binder only write to the preference when
-			// it is destroyed.
-			fwk::ConfigDataBinder<int>
-				binder_int(fixture.int_property.get_proxy(),
-					   cfg, "int");
+    {
+      // the binder only write to the preference when
+      // it is destroyed.
+      fwk::ConfigDataBinder<int>
+        binder_int(fixture.int_property.get_proxy(),
+                   cfg, "int");
 
-			fixture.int_property = 1;
-		}
-		BOOST_CHECK(file->query_exists());
+      fixture.int_property = 1;
+    }
+    ASSERT_TRUE(file->query_exists());
 
-		BOOST_CHECK(cfg.hasKey("int"));
-		Glib::ustring val = cfg.getValue("int", "0");
-		BOOST_CHECK(val == "1");
+    ASSERT_TRUE(cfg.hasKey("int"));
+    Glib::ustring val = cfg.getValue("int", "0");
+    ASSERT_EQ(val, "1");
 
-		{
-			fwk::ConfigDataBinder<Glib::ustring>
-				binder_str(fixture.str_property.get_proxy(),
-					   cfg, "string");
-			fixture.str_property = "foo";
-		}
-		BOOST_CHECK(file->query_exists());
+    {
+      fwk::ConfigDataBinder<Glib::ustring>
+        binder_str(fixture.str_property.get_proxy(),
+                   cfg, "string");
+      fixture.str_property = "foo";
+    }
+    ASSERT_TRUE(file->query_exists());
 
-		BOOST_CHECK(cfg.hasKey("string"));
-		val = cfg.getValue("string", "");
-		BOOST_CHECK(val == "foo");
+    ASSERT_TRUE(cfg.hasKey("string"));
+    val = cfg.getValue("string", "");
+    ASSERT_EQ(val, "foo");
 
-		{
-			fwk::ConfigDataBinder<bool>
-				binder_bool(fixture.bool_property.get_proxy(),
-					   cfg, "bool");
-			fixture.bool_property = true;
-		}
-		BOOST_CHECK(file->query_exists());
+    {
+      fwk::ConfigDataBinder<bool>
+        binder_bool(fixture.bool_property.get_proxy(),
+                    cfg, "bool");
+      fixture.bool_property = true;
+    }
+    ASSERT_TRUE(file->query_exists());
 
-		BOOST_CHECK(cfg.hasKey("bool"));
-		val = cfg.getValue("bool", "");
-		BOOST_CHECK(val == "1");
-	}
+    ASSERT_TRUE(cfg.hasKey("bool"));
+    val = cfg.getValue("bool", "");
+    ASSERT_EQ(val, "1");
+  }
 
 
-	file->remove();
+  file->remove();
 
-	BOOST_CHECK(!file->query_exists());
-
-	return 0;
+  ASSERT_FALSE(file->query_exists());
 }

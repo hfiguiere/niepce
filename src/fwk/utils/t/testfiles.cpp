@@ -18,7 +18,7 @@
  */
 /** @brief unit test for files */
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <stdlib.h>
 
@@ -33,25 +33,24 @@ void niepce_init()
 {
 }
 
-int test_main( int, char *[] )             // note the name!
+TEST(testFiles, testFilesSanity)
 {
   fwk::utils::init();
 
-	system( "mkdir -p AAtest/sub" );
-	system( "touch AAtest/1" );
-	system( "touch AAtest/2" );
-	system( "touch AAtest/3" );
+  system("mkdir -p AAtest/sub");
+  system("touch AAtest/1");
+  system("touch AAtest/2");
+  system("touch AAtest/3");
 
-	FileList::Ptr files;
-	
-	files = FileList::getFilesFromDirectory("foo", fwk::filter_none);
-	BOOST_CHECK( !files );
+  FileList::Ptr files;
 
-	files = FileList::getFilesFromDirectory("AAtest", fwk::filter_none);
-	BOOST_CHECK( files );
-	BOOST_CHECK( files->size() == 3 );
-	
-	system( "rm -fr AAtest" );
-	return 0;
+  files = FileList::getFilesFromDirectory("foo", fwk::filter_none);
+  ASSERT_FALSE(files);
+
+  files = FileList::getFilesFromDirectory("AAtest", fwk::filter_none);
+  ASSERT_TRUE(files);
+  ASSERT_EQ(files->size(), 3U);
+
+  system("rm -fr AAtest");
 }
 

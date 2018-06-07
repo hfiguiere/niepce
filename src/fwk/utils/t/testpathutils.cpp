@@ -1,7 +1,7 @@
 /*
- * niepce - utils/testpathutils.cpp
+ * niepce - src/fwk/utils/t/testpathutils.cpp
  *
- * Copyright (C) 2009-2015 Hubert Figuière
+ * Copyright (C) 2009-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <string>
 
-
 #include "pathutils.hpp"
 
-int test_main( int, char *[] )             // note the name!
+TEST(testPathUtils, testPathUtilsSanity)
 {
-  BOOST_CHECK(fwk::path_basename("/foo/bar/baz.txt") == "baz.txt");
+  ASSERT_EQ(fwk::path_basename("/foo/bar/baz.txt"), "baz.txt");
 
-  BOOST_CHECK(fwk::path_stem("/foo/bar/baz.txt") == "/foo/bar/baz");
+  ASSERT_EQ(fwk::path_stem("/foo/bar/baz.txt"), "/foo/bar/baz");
 
-  BOOST_CHECK(fwk::path_dirname("/foo/bar/") == "/foo/bar");
-  BOOST_CHECK(fwk::path_dirname("/foo/bar/baz.txt") == "/foo/bar");
-  BOOST_CHECK(fwk::path_dirname("baz.txt") == ".");
+  ASSERT_EQ(fwk::path_dirname("/foo/bar/"), "/foo/bar");
+  ASSERT_EQ(fwk::path_dirname("/foo/bar/baz.txt"), "/foo/bar");
+  ASSERT_EQ(fwk::path_dirname("baz.txt"), ".");
 
-  BOOST_CHECK(fwk::path_extension("/foo/bar/baz.txt") == ".txt");
-  BOOST_CHECK(fwk::path_extension("img_2114.xmp") == ".xmp");
+  ASSERT_EQ(fwk::path_extension("/foo/bar/baz.txt"), ".txt");
+  ASSERT_EQ(fwk::path_extension("img_2114.xmp"), ".xmp");
 
-  BOOST_CHECK(fwk::path_replace_extension("/foo/bar/baz.txt", ".xmp") == "/foo/bar/baz.xmp");
-
-  return 0;
+  ASSERT_EQ(fwk::path_replace_extension("/foo/bar/baz.txt", ".xmp"), "/foo/bar/baz.xmp");
 }
 

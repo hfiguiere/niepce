@@ -1,7 +1,7 @@
 /*
  * niepce - base/t/testmap.cpp
  *
- * Copyright (C) 2013 Hubert Figuiere
+ * Copyright (C) 2013-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,29 +18,27 @@
  */
 /** @brief unit test for fractions */
 
-#include <boost/test/minimal.hpp>
+#include <gtest/gtest.h>
 
 #include <stdlib.h>
 #include <map>
 #include "fwk/base/map.hpp"
 
-int test_main( int, char *[] )             // note the name!
+TEST(testMap, testMapSanity)
 {
 
-	std::map<std::string, int> n { { "one", 1 }, { "two", 2 } };
+  std::map<std::string, int> n { { "one", 1 }, { "two", 2 } };
 
-	BOOST_CHECK(n.size() == 2);
+  ASSERT_EQ(n.size(), 2U);
 
-	std::vector<std::string> keys;
-	fwk::map_get_keys(n, keys);
-	BOOST_CHECK(n.size() == keys.size());
-	BOOST_CHECK(keys[0] == "one");
+  std::vector<std::string> keys;
+  fwk::map_get_keys(n, keys);
+  ASSERT_EQ(n.size(), keys.size());
+  ASSERT_EQ(keys[0], "one");
 
-	std::vector<int> values;
-	fwk::map_get_values(n, values);
-	BOOST_CHECK(n.size() == values.size());
-	BOOST_CHECK(values[0] == 1);
-
-	return 0;
+  std::vector<int> values;
+  fwk::map_get_values(n, values);
+  ASSERT_EQ(n.size(), values.size());
+  ASSERT_EQ(values[0], 1);
 }
 

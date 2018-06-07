@@ -1,6 +1,8 @@
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ \
+niepce_cppflags = -I$(top_srcdir)/src/ \
 	@FRAMEWORK_CFLAGS@
+
+AM_CPPFLAGS = $(niepce_cppflags)
 
 TESTS = testfiles \
 	testpathutils \
@@ -13,24 +15,23 @@ check_PROGRAMS = testfiles \
 	teststringutils
 
 
-testfiles_SOURCES = testfiles.cpp
-testfiles_LDADD = libniepceutils.a \
+testing_cppflags = -I@top_srcdir@/@GTEST_ROOT@/include $(niepce_cppflags)
+testing_ldadd = @top_builddir@/third_party/libgtest.a \
+	libniepceutils.a \
 	../base/libfwkbase.a \
 	@FRAMEWORK_LIBS@
 
+testfiles_SOURCES = t/testfiles.cpp
+testfiles_CPPFLAGS = $(testing_cppflags)
+testfiles_LDADD = $(testing_ldadd)
 
-testufrawmeta_SOURCES = testufrawmeta.cpp
-testufrawmeta_CXXFLAGS =  -g -O0
-testufrawmeta_LDADD = libniepceutils.a \
-	../base/libfwkbase.a \
-	@FRAMEWORK_LIBS@
-
-teststringutils_SOURCES = teststringutils.cpp
-teststringutils_LDADD =
+teststringutils_SOURCES = t/teststringutils.cpp
+teststringutils_CPPFLAGS = $(testing_cppflags)
+teststringutils_LDADD = $(testing_ldadd)
 
 testpathutils_SOURCES = t/testpathutils.cpp
-testpathutils_LDADD = libniepceutils.a \
-	@FRAMEWORK_LIBS@
+testpathutils_CPPFLAGS = $(testing_cppflags)
+testpathutils_LDADD = $(testing_ldadd)
 
 noinst_LIBRARIES = libniepceutils.a
 
