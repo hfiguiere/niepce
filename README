@@ -20,13 +20,12 @@ To build is you need the following:
 
 A C++11 compiler
 A Rust compiler
-gtk+ 3.12
+gtk+ 3.16
 cairo 1.1
 glibmm 2.32
 gtkmm 3.16
 giomm
 cairomm
-cluttermm 1.0
 champlain-gtk 0.12
 sqlite3
 libxml2 > 2.5.0
