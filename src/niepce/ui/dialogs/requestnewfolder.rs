@@ -36,7 +36,7 @@ pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
     let parent = unsafe { gtk::Window::from_glib_none(parent) };
     let dialog = Dialog::new_with_buttons(
         Some("New folder"), Some(&parent),
-        gtk::DIALOG_MODAL,
+        gtk::DialogFlags::MODAL,
         &[(&gettext("OK"), gtk::ResponseType::Ok.into()),
           (&gettext("Cancel"), gtk::ResponseType::Cancel.into())]);
     let label = Label::new_with_mnemonic(gettext("Folder _name:").as_str());
@@ -54,4 +54,3 @@ pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
         client.unwrap_mut().create_folder(folder_name.unwrap(), None);
     }
 }
-

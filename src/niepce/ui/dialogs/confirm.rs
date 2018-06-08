@@ -35,7 +35,7 @@ pub extern "C" fn dialog_confirm(message: *const c_char,
     let mut result: bool = false;
     let msg = unsafe { CStr::from_ptr(message) }.to_string_lossy();
     let parent = unsafe { gtk::Window::from_glib_none(parent) };
-    let dialog = MessageDialog::new(Some(&parent), gtk::DIALOG_MODAL,
+    let dialog = MessageDialog::new(Some(&parent), gtk::DialogFlags::MODAL,
                                     gtk::MessageType::Question, gtk::ButtonsType::YesNo,
                                     &*msg);
 
