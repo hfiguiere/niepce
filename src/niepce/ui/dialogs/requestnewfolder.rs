@@ -50,7 +50,7 @@ pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
     let cancel = dialog.run() != gtk::ResponseType::Ok.into();
     let folder_name = entry.get_text();
     dialog.destroy();
-    if !cancel {
+    if !cancel && folder_name.is_some() {
         client.unwrap_mut().create_folder(folder_name.unwrap(), None);
     }
 }
