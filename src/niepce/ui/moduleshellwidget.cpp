@@ -39,12 +39,13 @@ ModuleShellWidget::ModuleShellWidget()
     pack_start(m_mainbox, Gtk::PACK_SHRINK);
 
     m_mainbox.pack_start(m_switcher);
+    m_stack.property_visible_child().signal_changed().connect(
+        sigc::mem_fun(*this, &ModuleShellWidget::stack_changed));
     pack_start(m_stack);
 
     m_switcher.set_stack(m_stack);
+    m_current_module = m_stack.get_visible_child_name();
 }
-
-
 
 void
 ModuleShellWidget::appendPage(Gtk::Widget & w, const Glib::ustring & name,
@@ -53,14 +54,19 @@ ModuleShellWidget::appendPage(Gtk::Widget & w, const Glib::ustring & name,
     m_stack.add(w, name, label);
 }
 
+/// Callback when the module stack has changed.
+/// This allow activation / deactivation as need
+void ModuleShellWidget::stack_changed()
+{
+    signal_deactivated(m_current_module);
+    m_current_module = m_stack.get_visible_child_name();
+    signal_activated(m_current_module);
+}
+
 void ModuleShellWidget::activatePage(const std::string & name)
 {
-    Glib::ustring current_name
-        = m_stack.get_visible_child_name();
-    if(current_name != name) {
-        signal_deactivated(current_name);
+    if (m_current_module != name) {
         m_stack.set_visible_child(name);
-        signal_activated(name);
     }
 }
 

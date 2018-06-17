@@ -61,6 +61,9 @@ private:
     Gtk::MenuButton         m_menubutton;
     Gtk::Stack              m_stack;
     Gtk::StackSwitcher      m_switcher;
+    std::string             m_current_module;
+
+    void stack_changed();
 };
 
 }
