@@ -1,14 +1,14 @@
 # German translation for niepce.
 # Copyright (C) 2009 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2011, 2016-2017.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2011, 2016-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 18:26+0000\n"
-"PO-Revision-Date: 2017-11-18 21:52+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/niepce/issues\n"
+"POT-Creation-Date: 2018-04-22 00:07+0000\n"
+"PO-Revision-Date: 2018-06-23 13:38+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.7\n"
 
 #: camerawire/src/cwwindow.cpp:62
 #: src/niepce/ui/dialogs/importers/cameraimporterui.cpp:36
@@ -27,7 +27,7 @@ msgstr "Kamera"
 msgid "File"
 msgstr "Datei"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:427
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:447
 msgid "_Import..."
 msgstr "_Importieren …"
 
@@ -290,7 +290,7 @@ msgid "You can still change this after importing the pictures."
 msgstr "Sie können dies nach dem Importieren der Bilder noch ändern."
 
 #: src/niepce/ui/dialogs/importdialog.ui:406
-#: src/niepce/ui/metadatapanecontroller.cpp:51
+#: src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Date:"
 msgstr "Datum:"
 
@@ -328,7 +328,7 @@ msgid "Import picture folder"
 msgstr "Bilderordner importieren"
 
 #: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
-#: src/niepce/ui/dialogs/requestnewfolder.rs:40
+#: src/niepce/ui/dialogs/requestnewfolder.rs:41
 #: src/niepce/ui/niepcewindow.cpp:333
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -366,100 +366,125 @@ msgstr "Dunkle Benutzeroberfläche"
 msgid "_User Interface"
 msgstr "Ben_utzeroberfläche"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:39
+#: src/niepce/ui/dialogs/requestnewfolder.rs:40
 msgid "OK"
 msgstr "OK"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:41
+#: src/niepce/ui/dialogs/requestnewfolder.rs:42
 msgid "Folder _name:"
 msgstr "Ordner_name:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:36
+msgid "File Name:"
+msgstr "Dateiname:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:37
+msgid "Folder:"
+msgstr "Ordner:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "File Type:"
+msgstr "Dateityp:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "File Size:"
+msgstr "Dateigröße:"
+
+# https://de.wikipedia.org/wiki/Filialdatei
+#: src/niepce/ui/metadatapanecontroller.cpp:40
+msgid "Sidecar Files:"
+msgstr "Filialdateien:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Make:"
 msgstr "Hersteller:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:37
+#: src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Model:"
 msgstr "Modell:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:38
+#: src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "Lens:"
 msgstr "Objektiv:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:42
+#: src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Exposure Program:"
 msgstr "Belichtungsprogramm:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:43
+#: src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Speed:"
 msgstr "Geschwindigkeit:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:44
+#: src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Aperture:"
 msgstr "Blende:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:45
+#: src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "ISO:"
 msgstr "ISO:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:46
+#: src/niepce/ui/metadatapanecontroller.cpp:54
 msgid "Exposure Bias:"
 msgstr "Belichtungs-BIAS:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:47
+#: src/niepce/ui/metadatapanecontroller.cpp:55
 msgid "Flash:"
 msgstr "Blitz:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:48
+#: src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Flash compensation:"
 msgstr "Blitzausgleich:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:49
+#: src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Focal length:"
 msgstr "Brennweite:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:50
+#: src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "White balance:"
 msgstr "Weißabgleich:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:55
+#: src/niepce/ui/metadatapanecontroller.cpp:63
 msgid "Headline:"
 msgstr "Überschrift:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:56
+#: src/niepce/ui/metadatapanecontroller.cpp:64
 msgid "Caption:"
 msgstr "Beschriftung:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:57
+#: src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Rating:"
 msgstr "Bewertung:"
 
 #. FIXME change this type to the right one when there is a widget
-#: src/niepce/ui/metadatapanecontroller.cpp:59
+#: src/niepce/ui/metadatapanecontroller.cpp:67
 msgid "Label:"
 msgstr "Bezeichnung:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:60
+#: src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Keywords:"
 msgstr "Schlüsselwörter:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:64
+#: src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "File Information"
+msgstr "Dateiinformationen"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:75
 msgid "Camera Information"
 msgstr "Informationen zur Kamera"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:67
+#: src/niepce/ui/metadatapanecontroller.cpp:78
 msgid "Shooting Information"
 msgstr "Informationen zur Aufnahme"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:70
+#: src/niepce/ui/metadatapanecontroller.cpp:81
 msgid "IPTC"
 msgstr "IPTC"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:73
+#: src/niepce/ui/metadatapanecontroller.cpp:84
 msgid "Rights"
 msgstr "Rechte"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:103
+#: src/niepce/ui/metadatapanecontroller.cpp:114
 msgid "Image Properties"
 msgstr "Bildeigenschaften"
 
@@ -630,31 +655,31 @@ msgstr "Eigenschaften festlegen"
 msgid "Move to Trash"
 msgstr "In den Papierkorb verschieben"
 
-#: src/niepce/ui/workspacecontroller.cpp:104
+#: src/niepce/ui/workspacecontroller.cpp:103
 msgid "Delete selected folder?"
 msgstr "Ausgewählten Ordner löschen?"
 
-#: src/niepce/ui/workspacecontroller.cpp:379
+#: src/niepce/ui/workspacecontroller.cpp:399
 msgid "Pictures"
 msgstr "Bilder"
 
-#: src/niepce/ui/workspacecontroller.cpp:383
+#: src/niepce/ui/workspacecontroller.cpp:403
 msgid "Projects"
 msgstr "Projekte"
 
-#: src/niepce/ui/workspacecontroller.cpp:387
+#: src/niepce/ui/workspacecontroller.cpp:407
 msgid "Keywords"
 msgstr "Schlüsselwörter"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:401
+#: src/niepce/ui/workspacecontroller.cpp:421
 msgid "_Workspace"
 msgstr "_Arbeitsfläche"
 
-#: src/niepce/ui/workspacecontroller.cpp:414
+#: src/niepce/ui/workspacecontroller.cpp:434
 msgid "New Folder..."
 msgstr "Neuer Ordner …"
 
-#: src/niepce/ui/workspacecontroller.cpp:418
+#: src/niepce/ui/workspacecontroller.cpp:438
 msgid "Delete Folder"
 msgstr "Ordner löschen"
