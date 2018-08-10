@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepcewindow.cpp
  *
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,13 @@ NiepceWindow::NiepceWindow()
     Gtk::HeaderBar *header = Gtk::manage(new Gtk::HeaderBar);
     header->set_show_close_button(true);
     header->set_has_subtitle(true);
+
+    Gtk::MenuButton* menu_btn = Gtk::manage(new Gtk::MenuButton);
+    menu_btn->set_direction(Gtk::ARROW_NONE);
+    m_main_menu = Gio::Menu::create();
+    menu_btn->set_menu_model(m_main_menu);
+    header->pack_end(*menu_btn);
+
     setHeaderBar(header);
 }
 
@@ -185,25 +192,9 @@ void NiepceWindow::init_actions()
     m_action_group = Gio::SimpleActionGroup::create();
     gtkWindow().insert_action_group("win", m_action_group);
 
-    submenu = Gio::Menu::create();
-    m_menu->append_submenu(_("Library"), submenu);
-
-    submenu->append(_("New Library..."), "app.NewLibrary");
-    submenu->append(_("Open Library..."), "app.OpenLibrary");
-
-    // move to the workspace
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-    section->append(_("New Project..."), "action");
-
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-    fwk::add_menu_action(m_action_group, "Close",
-                         sigc::mem_fun(gtkWindow(),
-                                       &Gtk::Window::hide),
-                         section, _("Close"), "win", "<Primary>w");
-
-    section->append(_("Quit"), "app.Quit");
+    fwk::add_action(m_action_group, "Close",
+                    sigc::mem_fun(
+                        gtkWindow(), &Gtk::Window::hide), "win", "<Primary>w");
 
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Edit"), submenu);
@@ -230,30 +221,27 @@ void NiepceWindow::init_actions()
                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
                          section, _("Delete"), "win", "Delete");
 
+    // Main "hamburger" menu
     section = Gio::Menu::create();
-    submenu->append_section(section);
-    section->append(_("Preferences..."), "app.Preferences");
+    m_main_menu->append_section(section);
+    section->append(_("New Library..."), "app.NewLibrary");
+    section->append(_("Open Library..."), "app.OpenLibrary");
 
-    submenu = Gio::Menu::create();
-    m_menu->append_submenu(_("Tools"), submenu);
-    fwk::add_menu_action(m_action_group, "EditLabels",
-                         sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
-                         submenu, _("Edit Labels..."), "win", nullptr);
-
+    section = Gio::Menu::create();
+    m_main_menu->append_section(section);
     m_hide_tools_action
         = fwk::add_menu_action(m_action_group, "ToggleToolsVisible",
                                sigc::mem_fun(*this, &Frame::toggle_tools_visible),
-                               submenu, _("Hide tools"), "win",
+                               section, _("Hide tools"), "win",
                                nullptr);
-
-    // Part of the removal of the app menu.
-    submenu = Gio::Menu::create();
-    m_menu->append_submenu(_("Help"), submenu);
-
-    submenu->append(_("Help"), "app.Help");
+    fwk::add_menu_action(m_action_group, "EditLabels",
+                         sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
+                         section, _("Edit Labels..."), "win", nullptr);
+    section->append(_("Preferences..."), "app.Preferences");
 
     section = Gio::Menu::create();
-    submenu->append_section(section);
+    m_main_menu->append_section(section);
+    section->append(_("Help"), "app.Help");
     section->append(_("About"), "app.About");
 }
 

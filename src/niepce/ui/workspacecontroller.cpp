@@ -437,6 +437,9 @@ Gtk::Widget * WorkspaceController::buildWidget()
                          sigc::mem_fun(*this,
                                        &WorkspaceController::action_new_folder),
                          section, _("New Folder..."), "workspace");
+
+    section->append(_("New Project..."), "NewProject");
+
     auto action = fwk::add_menu_action(m_action_group, "DeleteFolder",
                                        sigc::mem_fun(
                                            *this, &WorkspaceController::action_delete_folder),
