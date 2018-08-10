@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <gtkmm/image.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/stackswitcher.h>
 
@@ -34,6 +35,9 @@ ModuleShellWidget::ModuleShellWidget()
     m_mainbar.set_layout(Gtk::BUTTONBOX_START);
     m_mainbar.set_spacing(4);
     m_menubutton.set_direction(Gtk::ARROW_NONE);
+    auto icon = Gtk::manage(new Gtk::Image());
+    icon->set_from_icon_name("view-more-symbolic", Gtk::ICON_SIZE_BUTTON);
+    m_menubutton.set_image(*icon);
     m_mainbox.pack_end(m_menubutton, Gtk::PACK_SHRINK);
     m_mainbox.pack_start(m_mainbar, Gtk::PACK_EXPAND_WIDGET);
     pack_start(m_mainbox, Gtk::PACK_SHRINK);

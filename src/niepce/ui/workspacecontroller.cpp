@@ -24,6 +24,7 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/box.h>
 #include <gtkmm/iconview.h>
+#include <gtkmm/image.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -424,28 +425,31 @@ Gtk::Widget * WorkspaceController::buildWidget()
     header->pack_start(m_label, Gtk::PACK_SHRINK);
     Gtk::MenuButton* add_btn = Gtk::manage(new Gtk::MenuButton);
     add_btn->set_direction(Gtk::ARROW_NONE);
+    auto icon = Gtk::manage(new Gtk::Image());
+    icon->set_from_icon_name("view-more-symbolic", Gtk::ICON_SIZE_BUTTON);
+    add_btn->set_image(*icon);
 
     auto menu = Gio::Menu::create();
 
     auto section = Gio::Menu::create();
     menu->append_section(section);
-    fwk::add_action(m_action_group, "NewFolder",
-                    sigc::mem_fun(*this,
-                                  &WorkspaceController::action_new_folder),
-                    section, _("New Folder..."), "workspace");
-    auto action = fwk::add_action(m_action_group, "DeleteFolder",
-                                  sigc::mem_fun(*this,
-                                                &WorkspaceController::action_delete_folder),
-                                  section, _("Delete Folder"), "workspace");
+    fwk::add_menu_action(m_action_group, "NewFolder",
+                         sigc::mem_fun(*this,
+                                       &WorkspaceController::action_new_folder),
+                         section, _("New Folder..."), "workspace");
+    auto action = fwk::add_menu_action(m_action_group, "DeleteFolder",
+                                       sigc::mem_fun(
+                                           *this, &WorkspaceController::action_delete_folder),
+                                       section, _("Delete Folder"), "workspace");
     action->set_enabled(false);
 
     section = Gio::Menu::create();
     menu->append_section(section);
 
-    fwk::add_action(m_action_group, "Import",
-                    sigc::mem_fun(*this,
-                                  &WorkspaceController::action_file_import),
-                    section, _("_Import..."), "workspace");
+    fwk::add_menu_action(m_action_group, "Import",
+                         sigc::mem_fun(*this,
+                                       &WorkspaceController::action_file_import),
+                         section, _("_Import..."), "workspace");
 
     add_btn->set_menu_model(menu);
 

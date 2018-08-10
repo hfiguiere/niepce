@@ -55,33 +55,33 @@ Gtk::Widget * ModuleShell::buildWidget()
     m_menu = Gio::Menu::create();
 
     // "go-previous"
-    fwk::add_action(m_actionGroup, "PrevImage",
-                    sigc::mem_fun(*m_selection_controller,
-                                  &SelectionController::select_previous),
-                    m_menu, _("Back"), "shell", "Left");
+    fwk::add_menu_action(m_actionGroup, "PrevImage",
+                         sigc::mem_fun(*m_selection_controller,
+                                       &SelectionController::select_previous),
+                         m_menu, _("Back"), "shell", "Left");
 
     // "go-next"
-    fwk::add_action(m_actionGroup, "NextImage",
-                    sigc::mem_fun(*m_selection_controller,
+    fwk::add_menu_action(m_actionGroup, "NextImage",
+                         sigc::mem_fun(*m_selection_controller,
                                   &SelectionController::select_next),
-                    m_menu, _("Forward"), "shell", "Right");
+                         m_menu, _("Forward"), "shell", "Right");
 
     auto section = Gio::Menu::create();
     m_menu->append_section(section);
 
     // "object-rotate-left"
-    fwk::add_action(m_actionGroup, "RotateLeft",
-                    sigc::bind(
-                        sigc::mem_fun(*m_selection_controller,
-                                      &SelectionController::rotate), -90),
-                    section, _("Rotate Left"), "shell", "bracketleft");
+    fwk::add_menu_action(m_actionGroup, "RotateLeft",
+                         sigc::bind(
+                             sigc::mem_fun(*m_selection_controller,
+                                           &SelectionController::rotate), -90),
+                         section, _("Rotate Left"), "shell", "bracketleft");
 
     // "object-rotate-right"
-    fwk::add_action(m_actionGroup, "RotateRight",
-                    sigc::bind(
-                        sigc::mem_fun(*m_selection_controller,
-                                      &SelectionController::rotate), 90),
-                    section, _("Rotate Right"), "shell", "bracketright");
+    fwk::add_menu_action(m_actionGroup, "RotateRight",
+                         sigc::bind(
+                             sigc::mem_fun(*m_selection_controller,
+                                           &SelectionController::rotate), 90),
+                         section, _("Rotate Right"), "shell", "bracketright");
 
     section = Gio::Menu::create();
     m_menu->append_section(section);
@@ -89,105 +89,104 @@ Gtk::Widget * ModuleShell::buildWidget()
     auto submenu = Gio::Menu::create();
     section->append_submenu(_("Set Label"), submenu);
 
-    fwk::add_action(m_actionGroup,
-                    "SetLabel6",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_label),
-                               1),
-                    submenu, _("Label 6"), "shell", "<Primary>6");
-    fwk::add_action(m_actionGroup,
-                    "SetLabel7",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_label),
-                               2),
-                    submenu, _("Label 7"), "shell", "<Primary>7");
-    fwk::add_action(m_actionGroup,
-                    "SetLabel8",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_label),
-                               3),
-                    submenu, _("Label 8"), "shell", "<Primary>8");
-    fwk::add_action(m_actionGroup,
-                    "SetLabel9",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_label),
-                               4),
-                    submenu, _("Label 9"), "shell", "<Primary>9");
-
+    fwk::add_menu_action(m_actionGroup,
+                         "SetLabel6",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_label),
+                                    1),
+                         submenu, _("Label 6"), "shell", "<Primary>6");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetLabel7",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_label),
+                                    2),
+                         submenu, _("Label 7"), "shell", "<Primary>7");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetLabel8",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_label),
+                                    3),
+                         submenu, _("Label 8"), "shell", "<Primary>8");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetLabel9",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_label),
+                                    4),
+                         submenu, _("Label 9"), "shell", "<Primary>9");
 
     submenu = Gio::Menu::create();
     section->append_submenu(_("Set Rating"), submenu);
 
-    fwk::add_action(m_actionGroup,
-                    "SetRating0",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating0",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_rating),
+                                    0),
+                         submenu, _("Unrated"), "shell", "<Primary>0");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating1",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
                                              &SelectionController::set_rating),
-                               0),
-                    submenu, _("Unrated"), "shell", "<Primary>0");
-    fwk::add_action(m_actionGroup,
-                    "SetRating1",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_rating),
-                               1),
-                    submenu, _("Rating 1"), "shell", "<Primary>1");
-    fwk::add_action(m_actionGroup,
-                    "SetRating2",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_rating),
-                               2),
-                    submenu, _("Rating 2"), "shell", "<Primary>2");
-    fwk::add_action(m_actionGroup,
-                    "SetRating3",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_rating),
-                               3),
-                    submenu, _("Rating 3"), "shell", "<Primary>3");
-    fwk::add_action(m_actionGroup,
-                    "SetRating4",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_rating),
-                               4),
-                    submenu, _("Rating 4"), "shell", "<Primary>4");
-    fwk::add_action(m_actionGroup,
-                    "SetRating5",
-                    sigc::bind(sigc::mem_fun(*m_selection_controller,
-                                             &SelectionController::set_rating),
-                               5),
-                    submenu, _("Rating 5"), "shell", "<Primary>5");
+                                    1),
+                         submenu, _("Rating 1"), "shell", "<Primary>1");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating2",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_rating),
+                                    2),
+                         submenu, _("Rating 2"), "shell", "<Primary>2");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating3",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_rating),
+                                    3),
+                         submenu, _("Rating 3"), "shell", "<Primary>3");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating4",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_rating),
+                                    4),
+                         submenu, _("Rating 4"), "shell", "<Primary>4");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetRating5",
+                         sigc::bind(sigc::mem_fun(*m_selection_controller,
+                                                  &SelectionController::set_rating),
+                                    5),
+                         submenu, _("Rating 5"), "shell", "<Primary>5");
 
     submenu = Gio::Menu::create();
     section->append_submenu(_("Set Flag"), submenu);
 
-    fwk::add_action(m_actionGroup,
-                    "SetFlagReject",
-                    sigc::bind(
-                           sigc::mem_fun(*m_selection_controller,
-                                         &SelectionController::set_flag),
-                           -1),
-                    submenu, _("Flag as Rejected"), "shell", "<Primary><Shift>x");
-    fwk::add_action(m_actionGroup,
-                    "SetFlagNone",
-                    sigc::bind(
-                           sigc::mem_fun(*m_selection_controller,
-                                         &SelectionController::set_flag),
-                           0),
-                    submenu, _("Unflagged"), "shell", "<Primary><Shift>u");
-    fwk::add_action(m_actionGroup,
-                    "SetFlagPick",
-                    sigc::bind(
-                           sigc::mem_fun(*m_selection_controller,
-                                         &SelectionController::set_flag),
-                           1),
-                    submenu, _("Flag as Pick"), "shell", "<Primary><Shift>p");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetFlagReject",
+                         sigc::bind(
+                             sigc::mem_fun(*m_selection_controller,
+                                           &SelectionController::set_flag),
+                             -1),
+                         submenu, _("Flag as Rejected"), "shell", "<Primary><Shift>x");
+    fwk::add_menu_action(m_actionGroup,
+                         "SetFlagNone",
+                         sigc::bind(
+                             sigc::mem_fun(*m_selection_controller,
+                                           &SelectionController::set_flag),
+                             0),
+                         submenu, _("Unflagged"), "shell", "<Primary><Shift>u");
+    fwk::add_menu_action(m_actionGroup,
+                          "SetFlagPick",
+                         sigc::bind(
+                             sigc::mem_fun(*m_selection_controller,
+                                           &SelectionController::set_flag),
+                             1),
+                         submenu, _("Flag as Pick"), "shell", "<Primary><Shift>p");
 
     section = Gio::Menu::create();
     m_menu->append_section(section);
 
-    fwk::add_action(m_actionGroup,
-                    "WriteMetadata",
-                    sigc::mem_fun(*m_selection_controller,
-                                  &SelectionController::write_metadata),
-                    section, _("Write metadata"), "shell", nullptr);
+    fwk::add_menu_action(m_actionGroup,
+                         "WriteMetadata",
+                         sigc::mem_fun(*m_selection_controller,
+                                       &SelectionController::write_metadata),
+                         section, _("Write metadata"), "shell", nullptr);
 
     // Module menu placeholder
     m_module_menu = Gio::Menu::create();

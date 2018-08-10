@@ -147,7 +147,7 @@ Glib::RefPtr<Gio::Action>
 Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
                           const Glib::RefPtr<Gio::Menu> & menu)
 {
-    m_undo_action = fwk::add_action(g, "Undo",
+    m_undo_action = fwk::add_menu_action(g, "Undo",
                                         sigc::mem_fun(Application::app()->undo_history(),
                                                           &UndoHistory::undo),
                                         menu, _("Undo"), "win", "<control>Z");
@@ -162,7 +162,7 @@ Glib::RefPtr<Gio::Action>
 Frame::create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g,
                           const Glib::RefPtr<Gio::Menu> & menu)
 {
-    m_redo_action = fwk::add_action(g, "Redo",
+    m_redo_action = fwk::add_menu_action(g, "Redo",
                                     sigc::mem_fun(Application::app()->undo_history(),
                                                   &UndoHistory::redo),
                                     menu, _("Redo"), "win", "<control><shift>Z");

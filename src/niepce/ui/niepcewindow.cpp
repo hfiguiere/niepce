@@ -188,6 +188,9 @@ void NiepceWindow::init_actions()
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Library"), submenu);
 
+    submenu->append(_("New Library..."), "app.NewLibrary");
+    submenu->append(_("Open Library..."), "app.OpenLibrary");
+
     // move to the workspace
     section = Gio::Menu::create();
     submenu->append_section(section);
@@ -195,10 +198,12 @@ void NiepceWindow::init_actions()
 
     section = Gio::Menu::create();
     submenu->append_section(section);
-    fwk::add_action(m_action_group, "Close",
-                    sigc::mem_fun(gtkWindow(),
-                                  &Gtk::Window::hide),
-                    section, _("Close"), "win", "<Primary>w");
+    fwk::add_menu_action(m_action_group, "Close",
+                         sigc::mem_fun(gtkWindow(),
+                                       &Gtk::Window::hide),
+                         section, _("Close"), "win", "<Primary>w");
+
+    section->append(_("Quit"), "app.Quit");
 
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Edit"), submenu);
@@ -209,38 +214,47 @@ void NiepceWindow::init_actions()
     create_undo_action(m_action_group, section);
     create_redo_action(m_action_group, section);
 
-    // FIXME: bind
     section = Gio::Menu::create();
     submenu->append_section(section);
 
-    fwk::add_action(m_action_group,
-                    "Cut",
-                    Gio::ActionMap::ActivateSlot(), section,
-                    _("Cut"), "win", "<control>x");
-    fwk::add_action(m_action_group,
-                    "Copy",
+    fwk::add_menu_action(m_action_group, "Cut",
+                         Gio::ActionMap::ActivateSlot(), section,
+                         _("Cut"), "win", "<control>x");
+    fwk::add_menu_action(m_action_group, "Copy",
                     Gio::ActionMap::ActivateSlot(), section,
                     _("Copy"), "win", "<control>c");
-    fwk::add_action(m_action_group,
-                    "Paste",
-                    Gio::ActionMap::ActivateSlot(), section,
-                    _("Paste"), "win" "<control>v");
-    fwk::add_action(m_action_group,
-                    "Delete",
-                    sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
-                    section, _("Delete"), "win", "Delete");
+    fwk::add_menu_action(m_action_group, "Paste",
+                         Gio::ActionMap::ActivateSlot(), section,
+                         _("Paste"), "win" "<control>v");
+    fwk::add_menu_action(m_action_group, "Delete",
+                         sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
+                         section, _("Delete"), "win", "Delete");
+
+    section = Gio::Menu::create();
+    submenu->append_section(section);
+    section->append(_("Preferences..."), "app.Preferences");
 
     submenu = Gio::Menu::create();
     m_menu->append_submenu(_("Tools"), submenu);
-    fwk::add_action(m_action_group, "EditLabels",
-                    sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
-                    submenu, _("Edit Labels..."), "win", nullptr);
+    fwk::add_menu_action(m_action_group, "EditLabels",
+                         sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
+                         submenu, _("Edit Labels..."), "win", nullptr);
 
     m_hide_tools_action
-        = fwk::add_action(m_action_group, "ToggleToolsVisible",
-                          sigc::mem_fun(*this, &Frame::toggle_tools_visible),
-                          submenu, _("Hide tools"), "win",
-                          nullptr);
+        = fwk::add_menu_action(m_action_group, "ToggleToolsVisible",
+                               sigc::mem_fun(*this, &Frame::toggle_tools_visible),
+                               submenu, _("Hide tools"), "win",
+                               nullptr);
+
+    // Part of the removal of the app menu.
+    submenu = Gio::Menu::create();
+    m_menu->append_submenu(_("Help"), submenu);
+
+    submenu->append(_("Help"), "app.Help");
+
+    section = Gio::Menu::create();
+    submenu->append_section(section);
+    section->append(_("About"), "app.About");
 }
 
 void NiepceWindow::on_open_library()

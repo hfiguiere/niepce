@@ -27,13 +27,31 @@ Glib::RefPtr<Gio::SimpleAction>
 add_action(const Glib::RefPtr<Gio::ActionMap> & group,
            const char* name,
            const Gio::ActionMap::ActivateSlot& slot,
-           const Glib::RefPtr<Gio::Menu> & menu,
-           const char* label, const char* context, const char* accel)
+           const char* context,
+           const char* accel)
 {
     auto an_action = Gio::SimpleAction::create(name);
     group->add_action(an_action);
     an_action->signal_activate().connect(sigc::hide(slot));
-    if (menu && label && context) {
+
+    if (context && accel) {
+        Glib::ustring detail = Glib::ustring::compose("%1.%2", context, name);
+        Application::app()->gtkApp()->set_accel_for_action(detail, accel);
+    }
+    return an_action;
+}
+
+Glib::RefPtr<Gio::SimpleAction>
+add_menu_action(const Glib::RefPtr<Gio::ActionMap> & group,
+                const char* name,
+                const Gio::ActionMap::ActivateSlot& slot,
+                const Glib::RefPtr<Gio::Menu> & menu,
+                const char* label, const char* context, const char* accel)
+{
+    auto an_action = Gio::SimpleAction::create(name);
+    group->add_action(an_action);
+    an_action->signal_activate().connect(sigc::hide(slot));
+    if (label && context) {
         Glib::ustring detail = Glib::ustring::compose("%1.%2", context, name);
         menu->append(label, detail);
         if(accel) {

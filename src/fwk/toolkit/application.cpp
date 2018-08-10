@@ -117,46 +117,23 @@ void Application::on_startup()
 
 void Application::init_actions()
 {
-    auto menu = Gio::Menu::create();
-    auto section = Gio::Menu::create();
-
-    menu->append_section(section);
-    section->append(_("New"), "action");
     fwk::add_action(m_gtkapp, "OpenLibrary",
                     sigc::mem_fun(*this,
                                   &Application::on_action_file_open),
-                    section, _("Open"), "app", "<Primary>o");
-
-
-    // separator
-    section = Gio::Menu::create();
-    menu->append_section(section);
+                    "app", "<Primary>o");
     fwk::add_action(m_gtkapp, "Preferences",
                     sigc::mem_fun(*this,
-                                  &Application::on_action_preferences),
-                    section, _("Preferences..."), "app", nullptr);
-
-    section = Gio::Menu::create();
-    menu->append_section(section);
+                                  &Application::on_action_preferences));
     fwk::add_action(m_gtkapp, "Help",
                     sigc::mem_fun(*this,
-                                  &Application::about),
-                    section, _("Help"), "app", nullptr);
-
+                                  &Application::about));
     fwk::add_action(m_gtkapp, "About",
                     sigc::mem_fun(*this,
-                                  &Application::about),
-                    section, _("About"), "app", nullptr);
-
-    section = Gio::Menu::create();
-    menu->append_section(section);
-
+                                  &Application::about));
     fwk::add_action(m_gtkapp, "Quit",
                     sigc::mem_fun(*this,
                                   &Application::quit),
-                    section, _("Quit"), "app", "<Primary>q");
-
-    m_gtkapp->set_app_menu(menu);
+                    "app", "<Primary>q");
 }
 
 void Application::terminate()

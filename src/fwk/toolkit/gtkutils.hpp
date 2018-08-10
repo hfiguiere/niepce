@@ -32,17 +32,27 @@
 
 namespace fwk {
 
-/** Helper to add an action.
- * @param group the action group
- * @param name the action name
- */
 Glib::RefPtr<Gio::SimpleAction>
 add_action(const Glib::RefPtr<Gio::ActionMap> & group,
            const char* name,
            const Gio::ActionMap::ActivateSlot& slot,
-           const Glib::RefPtr<Gio::Menu> & menu = Glib::RefPtr<Gio::Menu>(),
-           const char* label = nullptr, const char* context = nullptr,
+           const char* context = nullptr,
            const char* accel = nullptr);
+
+/** Helper to add an action with a menu.
+ * @param group the action group
+ * @param name the action name
+ * @param slot the action slot
+ * @param menu the menu append the action to.
+ * @param label the label of the menu
+ */
+Glib::RefPtr<Gio::SimpleAction>
+add_menu_action(const Glib::RefPtr<Gio::ActionMap> & group,
+                const char* name,
+                const Gio::ActionMap::ActivateSlot& slot,
+                const Glib::RefPtr<Gio::Menu> & menu,
+                const char* label, const char* context = nullptr,
+                const char* accel = nullptr);
 
 
 /** a simple model record with one text column.
