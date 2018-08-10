@@ -73,6 +73,21 @@ NiepceWindow::NiepceWindow()
     menu_btn->set_menu_model(m_main_menu);
     header->pack_end(*menu_btn);
 
+    // Undo redo buttons
+    Gtk::Box *button_box = Gtk::manage(new Gtk::Box);
+    button_box->get_style_context()->add_class("linked");
+    Gtk::Button *undo_button = Gtk::manage(new Gtk::Button);
+    undo_button->set_image_from_icon_name("edit-undo-symbolic");
+    undo_button->set_label(_("Undo"));
+    undo_button->set_always_show_image(true);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(undo_button->gobj()), "win.Undo");
+    Gtk::Button *redo_button = Gtk::manage(new Gtk::Button);
+    redo_button->set_image_from_icon_name("edit-redo-symbolic");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(redo_button->gobj()), "win.Redo");
+    button_box->pack_start(*undo_button, false, false, 0);
+    button_box->pack_start(*redo_button, false, false, 0);
+    header->pack_start(*button_box);
+
     setHeaderBar(header);
 }
 
@@ -196,30 +211,22 @@ void NiepceWindow::init_actions()
                     sigc::mem_fun(
                         gtkWindow(), &Gtk::Window::hide), "win", "<Primary>w");
 
-    submenu = Gio::Menu::create();
-    m_menu->append_submenu(_("Edit"), submenu);
+    // XXX Move to shell?
+    create_undo_action(m_action_group);
+    create_redo_action(m_action_group);
 
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-
-    create_undo_action(m_action_group, section);
-    create_redo_action(m_action_group, section);
-
-    section = Gio::Menu::create();
-    submenu->append_section(section);
-
-    fwk::add_menu_action(m_action_group, "Cut",
-                         Gio::ActionMap::ActivateSlot(), section,
-                         _("Cut"), "win", "<control>x");
-    fwk::add_menu_action(m_action_group, "Copy",
-                    Gio::ActionMap::ActivateSlot(), section,
-                    _("Copy"), "win", "<control>c");
-    fwk::add_menu_action(m_action_group, "Paste",
-                         Gio::ActionMap::ActivateSlot(), section,
-                         _("Paste"), "win" "<control>v");
-    fwk::add_menu_action(m_action_group, "Delete",
-                         sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
-                         section, _("Delete"), "win", "Delete");
+    fwk::add_action(m_action_group, "Cut",
+                    Gio::ActionMap::ActivateSlot(),
+                    "win", "<control>x");
+    fwk::add_action(m_action_group, "Copy",
+                    Gio::ActionMap::ActivateSlot(),
+                    "win", "<control>c");
+    fwk::add_action(m_action_group, "Paste",
+                    Gio::ActionMap::ActivateSlot(),
+                    "win" "<control>v");
+    fwk::add_action(m_action_group, "Delete",
+                    sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
+                    "win", "Delete");
 
     // Main "hamburger" menu
     section = Gio::Menu::create();

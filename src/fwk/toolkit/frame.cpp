@@ -144,13 +144,12 @@ void Frame::redo_state()
 
 
 Glib::RefPtr<Gio::Action>
-Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
-                          const Glib::RefPtr<Gio::Menu> & menu)
+Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g)
 {
-    m_undo_action = fwk::add_menu_action(g, "Undo",
-                                        sigc::mem_fun(Application::app()->undo_history(),
-                                                          &UndoHistory::undo),
-                                        menu, _("Undo"), "win", "<control>Z");
+    m_undo_action = fwk::add_action(g, "Undo",
+                                    sigc::mem_fun(Application::app()->undo_history(),
+                                                  &UndoHistory::undo),
+                                    "win", "<control>Z");
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &Frame::undo_state));
     undo_state();
@@ -159,13 +158,12 @@ Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
 
 
 Glib::RefPtr<Gio::Action>
-Frame::create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g,
-                          const Glib::RefPtr<Gio::Menu> & menu)
+Frame::create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g)
 {
-    m_redo_action = fwk::add_menu_action(g, "Redo",
+    m_redo_action = fwk::add_action(g, "Redo",
                                     sigc::mem_fun(Application::app()->undo_history(),
                                                   &UndoHistory::redo),
-                                    menu, _("Redo"), "win", "<control><shift>Z");
+                                    "win", "<control><shift>Z");
     Application::app()->undo_history().signal_changed.connect(
         sigc::mem_fun(*this, &Frame::redo_state));
     redo_state();

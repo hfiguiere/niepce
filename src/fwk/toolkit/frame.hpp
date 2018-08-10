@@ -102,10 +102,8 @@ protected:
 
     void undo_state();
     void redo_state();
-    Glib::RefPtr<Gio::Action> create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g,
-                                                 const Glib::RefPtr<Gio::Menu> & menu);
-    Glib::RefPtr<Gio::Action> create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g,
-                                                 const Glib::RefPtr<Gio::Menu> & menu);
+    Glib::RefPtr<Gio::Action> create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g);
+    Glib::RefPtr<Gio::Action> create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g);
 
     /** close signal handler */
     virtual bool _close();
