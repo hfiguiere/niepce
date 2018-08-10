@@ -117,25 +117,25 @@ Gtk::Widget * DarkroomModule::buildWidget()
     auto tool_item = new Gtk::ToolButton();
     gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
                                    "shell.PrevImage");
-    tool_item->set_icon_name("go-previous");
+    tool_item->set_icon_name("go-previous-symbolic");
     toolbar->append(*manage(tool_item));
 
     tool_item = new Gtk::ToolButton();
     gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
                                    "shell.NextImage");
-    tool_item->set_icon_name("go-next");
+    tool_item->set_icon_name("go-next-symbolic");
     toolbar->append(*manage(tool_item));
 
     tool_item = new Gtk::ToolButton();
     gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
                                    "shell.RotateLeft");
-    tool_item->set_icon_name("object-rotate-left");
+    tool_item->set_icon_name("object-rotate-left-symbolic");
     toolbar->append(*manage(tool_item));
 
     tool_item = new Gtk::ToolButton();
     gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
                                    "shell.RotateRight");
-    tool_item->set_icon_name("object-rotate-right");
+    tool_item->set_icon_name("object-rotate-right-symbolic");
     toolbar->append(*manage(tool_item));
 
     m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
