@@ -24,6 +24,8 @@
 
 #include <exempi/xmpconsts.h>
 
+#include "rust_bindings.hpp"
+
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
@@ -31,7 +33,6 @@
 #include "gridviewmodule.hpp"
 #include "moduleshell.hpp"
 #include "librarycellrenderer.hpp"
-
 
 namespace ui {
 
@@ -121,7 +122,14 @@ Gtk::Widget * GridViewModule::buildWidget()
   m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   m_lib_splitview.set_wide_handle(true);
-  m_lib_splitview.pack1(m_scrollview);
+
+  // build the toolbar
+  auto box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+  box->pack_start(m_scrollview);
+  auto toolbar = ffi::image_toolbar_new();
+  gtk_box_pack_end(box->gobj(), GTK_WIDGET(toolbar), false, false, 0);
+  m_lib_splitview.pack1(*box);
+
   m_dock = new fwk::Dock();
   m_metapanecontroller = MetaDataPaneController::Ptr(new MetaDataPaneController);
   m_metapanecontroller->signal_metadata_changed.connect(

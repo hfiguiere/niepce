@@ -18,7 +18,8 @@
  */
 
 #include <gdkmm/pixbuf.h>
-#include <gtkmm/toolbar.h>
+
+#include "rust_bindings.hpp"
 
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
@@ -111,34 +112,9 @@ Gtk::Widget * DarkroomModule::buildWidget()
     m_imagecanvas->set_image(m_image);
 
     // build the toolbar.
-    auto toolbar = Gtk::manage(new Gtk::Toolbar);
+    auto toolbar = ffi::image_toolbar_new();
+    gtk_box_pack_start(m_vbox.gobj(), GTK_WIDGET(toolbar), false, false, 0);
 
-    Glib::RefPtr<Gio::Action> an_action;
-    auto tool_item = new Gtk::ToolButton();
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
-                                   "shell.PrevImage");
-    tool_item->set_icon_name("go-previous-symbolic");
-    toolbar->append(*manage(tool_item));
-
-    tool_item = new Gtk::ToolButton();
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
-                                   "shell.NextImage");
-    tool_item->set_icon_name("go-next-symbolic");
-    toolbar->append(*manage(tool_item));
-
-    tool_item = new Gtk::ToolButton();
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
-                                   "shell.RotateLeft");
-    tool_item->set_icon_name("object-rotate-left-symbolic");
-    toolbar->append(*manage(tool_item));
-
-    tool_item = new Gtk::ToolButton();
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(tool_item->gobj()),
-                                   "shell.RotateRight");
-    tool_item->set_icon_name("object-rotate-right-symbolic");
-    toolbar->append(*manage(tool_item));
-
-    m_vbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
     m_dr_splitview.pack1(m_vbox, Gtk::EXPAND);
     m_dock = Gtk::manage(new fwk::Dock());
     m_dr_splitview.pack2(*m_dock, Gtk::SHRINK);
