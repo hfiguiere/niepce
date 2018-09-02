@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/niepce/issues\n"
-"POT-Creation-Date: 2018-04-22 00:07+0000\n"
-"PO-Revision-Date: 2018-07-05 14:58-0200\n"
+"POT-Creation-Date: 2018-08-10 23:03+0000\n"
+"PO-Revision-Date: 2018-09-02 17:03-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_BR-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -29,31 +29,31 @@ msgstr "Câmera"
 msgid "File"
 msgstr "Arquivo"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:447
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:455
 msgid "_Import..."
 msgstr "_Importar…"
 
-#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:201
+#: camerawire/src/cwwindow.cpp:96
 msgid "Close"
 msgstr "Fechar"
 
-#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:204
+#: camerawire/src/cwwindow.cpp:99
 msgid "Edit"
 msgstr "Editar"
 
-#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:219
+#: camerawire/src/cwwindow.cpp:113
 msgid "Cut"
 msgstr "Recortar"
 
-#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:223
+#: camerawire/src/cwwindow.cpp:117
 msgid "Copy"
 msgstr "Copiar"
 
-#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:227
+#: camerawire/src/cwwindow.cpp:121
 msgid "Paste"
 msgstr "Colar"
 
-#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:234
+#: camerawire/src/cwwindow.cpp:124
 msgid "Tools"
 msgstr "Ferramentas"
 
@@ -109,38 +109,6 @@ msgstr "foto;"
 #: data/niepce.desktop.in:9
 msgid "niepce"
 msgstr "niepce"
-
-#: src/fwk/toolkit/application.cpp:129
-msgid "New"
-msgstr "Nova"
-
-#: src/fwk/toolkit/application.cpp:133 src/niepce/ui/niepcewindow.cpp:334
-msgid "Open"
-msgstr "Abrir"
-
-#: src/fwk/toolkit/application.cpp:142
-msgid "Preferences..."
-msgstr "Preferências…"
-
-#: src/fwk/toolkit/application.cpp:149
-msgid "Help"
-msgstr "Ajuda"
-
-#: src/fwk/toolkit/application.cpp:154
-msgid "About"
-msgstr "Sobre"
-
-#: src/fwk/toolkit/application.cpp:162
-msgid "Quit"
-msgstr "Sair"
-
-#: src/fwk/toolkit/frame.cpp:153
-msgid "Undo"
-msgstr "Desfazer"
-
-#: src/fwk/toolkit/frame.cpp:168
-msgid "Redo"
-msgstr "Refazer"
 
 #: src/fwk/toolkit/widgets/addinstreemodel.cpp:64
 msgid "Name"
@@ -332,7 +300,7 @@ msgstr "Importar pasta de fotos"
 
 #: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
 #: src/niepce/ui/dialogs/requestnewfolder.rs:41
-#: src/niepce/ui/niepcewindow.cpp:333
+#: src/niepce/ui/niepcewindow.cpp:342
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -378,12 +346,10 @@ msgid "Folder _name:"
 msgstr "_Nome da pasta:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:36
-#| msgid "Folder _name:"
 msgid "File Name:"
 msgstr "Nome do arquivo:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:37
-#| msgid "Folder _name:"
 msgid "Folder:"
 msgstr "Pasta:"
 
@@ -469,7 +435,6 @@ msgid "Keywords:"
 msgstr "Palavras-chave:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:72
-#| msgid "Camera Information"
 msgid "File Information"
 msgstr "Informações do arquivo"
 
@@ -529,63 +494,63 @@ msgstr "Rótulo 8"
 msgid "Label 9"
 msgstr "Rótulo 9"
 
-#: src/niepce/ui/moduleshell.cpp:119 src/niepce/ui/selectioncontroller.cpp:287
+#: src/niepce/ui/moduleshell.cpp:118 src/niepce/ui/selectioncontroller.cpp:287
 msgid "Set Rating"
 msgstr "Definir avaliação"
 
-#: src/niepce/ui/moduleshell.cpp:126
+#: src/niepce/ui/moduleshell.cpp:125
 msgid "Unrated"
 msgstr "Não avaliada"
 
-#: src/niepce/ui/moduleshell.cpp:132
+#: src/niepce/ui/moduleshell.cpp:131
 msgid "Rating 1"
 msgstr "Avaliação 1"
 
-#: src/niepce/ui/moduleshell.cpp:138
+#: src/niepce/ui/moduleshell.cpp:137
 msgid "Rating 2"
 msgstr "Avaliação 2"
 
-#: src/niepce/ui/moduleshell.cpp:144
+#: src/niepce/ui/moduleshell.cpp:143
 msgid "Rating 3"
 msgstr "Avaliação 3"
 
-#: src/niepce/ui/moduleshell.cpp:150
+#: src/niepce/ui/moduleshell.cpp:149
 msgid "Rating 4"
 msgstr "Avaliação 4"
 
-#: src/niepce/ui/moduleshell.cpp:156
+#: src/niepce/ui/moduleshell.cpp:155
 msgid "Rating 5"
 msgstr "Avaliação 5"
 
-#: src/niepce/ui/moduleshell.cpp:159 src/niepce/ui/selectioncontroller.cpp:284
+#: src/niepce/ui/moduleshell.cpp:158 src/niepce/ui/selectioncontroller.cpp:284
 msgid "Set Flag"
 msgstr "Definir sinalização"
 
-#: src/niepce/ui/moduleshell.cpp:167
+#: src/niepce/ui/moduleshell.cpp:166
 msgid "Flag as Rejected"
 msgstr "Sinalizar como rejeitada"
 
-#: src/niepce/ui/moduleshell.cpp:174
+#: src/niepce/ui/moduleshell.cpp:173
 msgid "Unflagged"
 msgstr "Não sinalizada"
 
-#: src/niepce/ui/moduleshell.cpp:181
+#: src/niepce/ui/moduleshell.cpp:180
 msgid "Flag as Pick"
 msgstr "Sinalizar como escolhida"
 
-#: src/niepce/ui/moduleshell.cpp:190
+#: src/niepce/ui/moduleshell.cpp:189
 msgid "Write metadata"
 msgstr "Escrever metadados"
 
-#: src/niepce/ui/moduleshell.cpp:200 src/niepce/ui/niepcewindow.cpp:189
+#: src/niepce/ui/moduleshell.cpp:199
 msgid "Library"
 msgstr "Biblioteca"
 
-#: src/niepce/ui/moduleshell.cpp:209
+#: src/niepce/ui/moduleshell.cpp:208
 msgid "Darkroom"
 msgstr "Sala escura"
 
-#: src/niepce/ui/moduleshell.cpp:212
+#: src/niepce/ui/moduleshell.cpp:211
 msgid "Map"
 msgstr "Mapa"
 
@@ -599,53 +564,75 @@ msgstr ""
 "\n"
 "Opções de compilação: "
 
-#: src/niepce/ui/niepcewindow.cpp:143
+#: src/niepce/ui/niepcewindow.cpp:81
+msgid "Undo"
+msgstr "Desfazer"
+
+#: src/niepce/ui/niepcewindow.cpp:165
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/niepce/ui/niepcewindow.cpp:194
-msgid "New Project..."
-msgstr "Novo projeto…"
+#: src/niepce/ui/niepcewindow.cpp:234
+#| msgid "Library"
+msgid "New Library..."
+msgstr "Nova biblioteca…"
 
-#: src/niepce/ui/niepcewindow.cpp:231
-msgid "Delete"
-msgstr "Excluir"
+#: src/niepce/ui/niepcewindow.cpp:235
+#| msgid "Open library"
+msgid "Open Library..."
+msgstr "Abrir biblioteca…"
 
-#: src/niepce/ui/niepcewindow.cpp:237
+#: src/niepce/ui/niepcewindow.cpp:246
 msgid "Edit Labels..."
 msgstr "Editar rótulos…"
 
+#: src/niepce/ui/niepcewindow.cpp:247
+msgid "Preferences..."
+msgstr "Preferências…"
+
+#: src/niepce/ui/niepcewindow.cpp:251
+msgid "Help"
+msgstr "Ajuda"
+
+#: src/niepce/ui/niepcewindow.cpp:252
+msgid "About"
+msgstr "Sobre"
+
 #. TODO make this parametric from resources
-#: src/niepce/ui/niepcewindow.cpp:279
+#: src/niepce/ui/niepcewindow.cpp:288
 msgid "Label 1"
 msgstr "Rótulo 1"
 
 #. 217, 37, 17
-#: src/niepce/ui/niepcewindow.cpp:280
+#: src/niepce/ui/niepcewindow.cpp:289
 msgid "Label 2"
 msgstr "Rótulo 2"
 
 #. 97, 217, 17
-#: src/niepce/ui/niepcewindow.cpp:281
+#: src/niepce/ui/niepcewindow.cpp:290
 msgid "Label 3"
 msgstr "Rótulo 3"
 
 #. 17, 197, 217
-#: src/niepce/ui/niepcewindow.cpp:282
+#: src/niepce/ui/niepcewindow.cpp:291
 msgid "Label 4"
 msgstr "Rótulo 4"
 
 #. 137, 17, 217
-#: src/niepce/ui/niepcewindow.cpp:283
+#: src/niepce/ui/niepcewindow.cpp:292
 msgid "Label 5"
 msgstr "Rótulo 5"
 
-#: src/niepce/ui/niepcewindow.cpp:331
+#: src/niepce/ui/niepcewindow.cpp:340
 msgid "Open library"
 msgstr "Reabrir biblioteca"
 
+#: src/niepce/ui/niepcewindow.cpp:343
+msgid "Open"
+msgstr "Abrir"
+
 # Nome do aplicativo
-#: src/niepce/ui/niepcewindow.cpp:390
+#: src/niepce/ui/niepcewindow.cpp:399
 msgid "Niepce Digital - "
 msgstr "Niepce Digital – "
 
@@ -661,34 +648,50 @@ msgstr "Definir propriedades"
 msgid "Move to Trash"
 msgstr "Mover para a lixeira"
 
-#: src/niepce/ui/workspacecontroller.cpp:103
+#: src/niepce/ui/workspacecontroller.cpp:104
 msgid "Delete selected folder?"
 msgstr "Excluir a pasta selecionada?"
 
-#: src/niepce/ui/workspacecontroller.cpp:399
+#: src/niepce/ui/workspacecontroller.cpp:401
 msgid "Pictures"
 msgstr "Imagens"
 
-#: src/niepce/ui/workspacecontroller.cpp:403
+#: src/niepce/ui/workspacecontroller.cpp:405
 msgid "Projects"
 msgstr "Projetos"
 
-#: src/niepce/ui/workspacecontroller.cpp:407
+#: src/niepce/ui/workspacecontroller.cpp:409
 msgid "Keywords"
 msgstr "Palavras-chave"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:421
+#: src/niepce/ui/workspacecontroller.cpp:423
 msgid "_Workspace"
 msgstr "_Espaço de trabalho"
 
-#: src/niepce/ui/workspacecontroller.cpp:434
+#: src/niepce/ui/workspacecontroller.cpp:439
 msgid "New Folder..."
 msgstr "Nova pasta…"
 
-#: src/niepce/ui/workspacecontroller.cpp:438
+#: src/niepce/ui/workspacecontroller.cpp:441
+msgid "New Project..."
+msgstr "Novo projeto…"
+
+#: src/niepce/ui/workspacecontroller.cpp:446
 msgid "Delete Folder"
 msgstr "Excluir pasta"
+
+#~ msgid "New"
+#~ msgstr "Nova"
+
+#~ msgid "Quit"
+#~ msgstr "Sair"
+
+#~ msgid "Redo"
+#~ msgstr "Refazer"
+
+#~ msgid "Delete"
+#~ msgstr "Excluir"
 
 #~ msgid "Trash"
 #~ msgstr "Lixeira"
