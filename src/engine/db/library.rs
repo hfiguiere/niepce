@@ -17,24 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::path::{Path, PathBuf};
 use std::fs::File;
 use std::io::Write;
+use std::path::{Path, PathBuf};
 
 use chrono::Utc;
 use rusqlite;
 
 use super::{FromDb, LibraryId};
-use engine::db::label::Label;
-use engine::db::libfolder;
-use engine::db::libfolder::LibFolder;
-use engine::db::libfile;
-use engine::db::libfile::LibFile;
-use engine::db::libmetadata::LibMetadata;
 use engine::db::filebundle::{FileBundle, Sidecar};
 use engine::db::keyword::Keyword;
-use engine::library::notification::Notification as LibNotification;
+use engine::db::label::Label;
+use engine::db::libfile;
+use engine::db::libfile::LibFile;
+use engine::db::libfolder;
+use engine::db::libfolder::LibFolder;
+use engine::db::libmetadata::LibMetadata;
 use engine::library::notification::engine_library_notify;
+use engine::library::notification::Notification as LibNotification;
 use fwk;
 use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
@@ -390,23 +390,20 @@ impl Library {
     /// Return the LibFolder or None
     pub fn get_folder(&self, path: &str) -> Option<LibFolder> {
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!("SELECT {} FROM {} WHERE path=:1",
-                          LibFolder::read_db_columns(),
-                          LibFolder::read_db_tables()
-                          );
+        let sql = format!(
+            "SELECT {} FROM {} WHERE path=:1",
+            LibFolder::read_db_columns(),
+            LibFolder::read_db_tables()
+        );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
         let mut rows = try_opt!(stmt.query(&[&path]).ok());
         match rows.next() {
-            None => {
-                None
-            },
+            None => None,
             Some(Err(err)) => {
                 err_out!("Error {:?}", err);
                 None
-            },
-            Some(Ok(row)) => {
-                Some(LibFolder::read_from(&row))
             }
+            Some(Ok(row)) => Some(LibFolder::read_from(&row)),
         }
     }
 
@@ -648,8 +645,7 @@ impl Library {
                 }
                 let keyword_id = conn.last_insert_rowid();
                 self.notify(Box::new(LibNotification::AddedKeyword(Keyword::new(
-                    keyword_id,
-                    keyword,
+                    keyword_id, keyword,
                 ))));
                 return keyword_id;
             }
@@ -996,10 +992,10 @@ impl Library {
 
 #[cfg(test)]
 mod test {
+    use engine::db::filebundle::FileBundle;
+    use std::fs;
     use std::path::Path;
     use std::path::PathBuf;
-    use std::fs;
-    use engine::db::filebundle::FileBundle;
 
     struct AutoDelete {
         path: PathBuf,

@@ -40,7 +40,9 @@ fn main() {
         builder = builder.clang_arg(include);
     }
 
-    builder.dump_preprocessed_input().expect("Unable to dump preprocessed input");
+    builder
+        .dump_preprocessed_input()
+        .expect("Unable to dump preprocessed input");
     // Finish the builder and generate the bindings.
     let bindings = builder
         .rustfmt_bindings(true)

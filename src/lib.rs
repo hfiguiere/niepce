@@ -33,9 +33,9 @@ extern crate try_opt;
 
 #[macro_use]
 pub mod fwk;
+pub mod capi;
 pub mod engine;
 pub mod libraryclient;
-pub mod capi;
 pub mod niepce;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
