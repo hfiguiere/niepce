@@ -379,17 +379,25 @@ impl Library {
     }
 
     pub fn get_folder(&self, folder: &str) -> Option<LibFolder> {
-        let foldername = try_opt!(Self::leaf_name_for_pathname(folder));
         let conn = try_opt!(self.dbconn.as_ref());
-        let sql = format!(
-            "SELECT {} FROM {} WHERE path=:1",
-            LibFolder::read_db_columns(),
-            LibFolder::read_db_tables()
-        );
+        let sql = format!("SELECT {} FROM {} WHERE path=:1",
+                          LibFolder::read_db_columns(),
+                          LibFolder::read_db_tables()
+                          );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
-        let mut rows = try_opt!(stmt.query(&[&foldername]).ok());
-        let row = try_opt!(try_opt!(rows.next()).ok());
-        return Some(LibFolder::read_from(&row));
+        let mut rows = try_opt!(stmt.query(&[&folder]).ok());
+        match rows.next() {
+            None => {
+                None
+            },
+            Some(Err(err)) => {
+                err_out!("Error {:?}", err);
+                None
+            },
+            Some(Ok(row)) => {
+                Some(LibFolder::read_from(&row))
+            }
+        }
     }
 
     pub fn get_all_folders(&self) -> Option<Vec<LibFolder>> {
