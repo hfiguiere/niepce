@@ -61,6 +61,22 @@ pub fn cmd_list_all_folders(lib: &Library) -> bool {
     false
 }
 
+//
+// Get the folder for import. Create it if needed otherwise return the one that exists
+//
+fn get_folder_for_import(lib: &Library, folder: &str) -> Option<LibFolder> {
+    if let Some(lf) = lib.get_folder(folder) {
+        return Some(lf);
+    } else if let Some(name) = Library::leaf_name_for_pathname(folder) {
+        if let Some(lf) = lib.add_folder(&name, Some(String::from(folder))) {
+            let libfolder = lf.clone();
+            lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+            return Some(libfolder);
+        }
+    }
+    None
+}
+
 pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
@@ -69,28 +85,12 @@ pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
 
     let folder = Path::new(path).parent().unwrap_or(Path::new(""));
 
-    let libfolder: LibFolder;
-    match lib.get_folder(&*folder.to_string_lossy()) {
-        Some(lf) =>
-            libfolder = lf,
-        _ => {
-            let folder = &*folder.to_string_lossy();
-            if let Some(name) = Library::leaf_name_for_pathname(folder) {
-                if let Some(lf) = lib.add_folder(&name, Some(String::from(folder))) {
-                    libfolder = lf.clone();
-                    lib.notify(Box::new(LibNotification::AddedFolder(lf)));
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
+    if let Some(libfolder) = get_folder_for_import(lib, &*folder.to_string_lossy()) {
+        lib.add_bundle(libfolder.id(), &bundle, manage);
+        lib.notify(Box::new(LibNotification::AddedFile));
+        return true;
     }
-
-    lib.add_bundle(libfolder.id(), &bundle, manage);
-    lib.notify(Box::new(LibNotification::AddedFile));
-    true
+    false
 }
 
 pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
@@ -98,29 +98,15 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
     let bundles = FileBundle::filter_bundles(files);
-    let libfolder: LibFolder;
-    match lib.get_folder(folder) {
-        Some(lf) =>
-            libfolder = lf,
-        _ => {
-            if let Some(name) = Library::leaf_name_for_pathname(folder) {
-                if let Some(lf) = lib.add_folder(&name, Some(String::from(folder))) {
-                    libfolder = lf.clone();
-                    lib.notify(Box::new(LibNotification::AddedFolder(lf)));
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+    if let Some(libfolder) = get_folder_for_import(lib, folder) {
+        let folder_id = libfolder.id();
+        for bundle in bundles {
+            lib.add_bundle(folder_id, &bundle, manage.clone());
         }
+        lib.notify(Box::new(LibNotification::AddedFiles));
+        return true;
     }
-    let folder_id = libfolder.id();
-    for bundle in bundles {
-        lib.add_bundle(folder_id, &bundle, manage.clone());
-    }
-    lib.notify(Box::new(LibNotification::AddedFiles));
-    true
+    false
 }
 
 pub fn cmd_create_folder(lib: &Library, name: &String, path: Option<String>) -> LibraryId {
