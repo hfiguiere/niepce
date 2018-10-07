@@ -340,12 +340,19 @@ impl Library {
     }
 
     /// Add a folder at the root.
+    ///
+    /// name: the folder name
+    /// path: An optional path that indicate the physical location
+    ///
+    /// Returns a LibFolder or None in case of error.
     pub fn add_folder(&self, name: &str, path: Option<String>) -> Option<LibFolder> {
         self.add_folder_into(name, path, 0)
     }
 
-    /// Add folder with name into parent whose id is `into`.
+    /// Add folder with name and optional path into parent whose id is `into`.
     /// A value of 0 means root.
+    ///
+    /// Returns a LibFolder or None in case of error.
     pub fn add_folder_into(
         &self,
         name: &str,
@@ -378,14 +385,17 @@ impl Library {
         false
     }
 
-    pub fn get_folder(&self, folder: &str) -> Option<LibFolder> {
+    /// Get the folder from its path
+    ///
+    /// Return the LibFolder or None
+    pub fn get_folder(&self, path: &str) -> Option<LibFolder> {
         let conn = try_opt!(self.dbconn.as_ref());
         let sql = format!("SELECT {} FROM {} WHERE path=:1",
                           LibFolder::read_db_columns(),
                           LibFolder::read_db_tables()
                           );
         let mut stmt = try_opt!(conn.prepare(&sql).ok());
-        let mut rows = try_opt!(stmt.query(&[&folder]).ok());
+        let mut rows = try_opt!(stmt.query(&[&path]).ok());
         match rows.next() {
             None => {
                 None
@@ -1017,19 +1027,19 @@ mod test {
         assert!(lib.is_ok());
         assert!(lib.check_database_version() == super::DB_SCHEMA_VERSION);
 
-        let folder_added = lib.add_folder("foo", Some(String::from("foo")));
+        let folder_added = lib.add_folder("foo", Some(String::from("/bar/foo")));
         assert!(folder_added.is_some());
         let folder_added = folder_added.unwrap();
         assert!(folder_added.id() > 0);
 
-        let f = lib.get_folder("foo");
+        let f = lib.get_folder("/bar/foo");
         assert!(f.is_some());
         let f = f.unwrap();
         assert_eq!(folder_added.id(), f.id());
 
         let id = f.id();
-        lib.add_folder_into("bar", Some(String::from("bar")), id);
-        let f = lib.get_folder("bar");
+        lib.add_folder_into("bar", Some(String::from("/bar/bar")), id);
+        let f = lib.get_folder("/bar/bar");
         assert!(f.is_some());
         let f = f.unwrap();
         assert_eq!(f.parent(), id);
