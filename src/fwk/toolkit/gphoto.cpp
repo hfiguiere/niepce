@@ -288,11 +288,20 @@ std::list<std::pair<std::string, std::string>> GpCamera::list_content() const
     DBG_OUT("list content");
 
     // XXX fixme this should not be hardcoded.
-    std::string root_folder = "/store_00010001/DCIM";
+    // This is the path for PTP.
+    std::string root_folder_ptp = "/store_00010001/DCIM";
+    // This is the path for a regular DCIF.
+    std::string root_folder = "/DCIM";
     gp::CameraListPtr list = gp::list_new();
     int result = gp_camera_folder_list_folders(m_priv->camera, root_folder.c_str(), list.get(),
                                                m_priv->context);
-
+    if (result != GP_OK) {
+        DBG_OUT("Folder %s not found, trying %s", root_folder.c_str(),
+                root_folder_ptp.c_str());
+        root_folder = root_folder_ptp;
+        result = gp_camera_folder_list_folders(m_priv->camera, root_folder.c_str(),
+                                               list.get(), m_priv->context);
+    }
     DBG_OUT("initial folder list %d", result);
     if (result == GP_OK) {
         std::vector<std::string> folders;
