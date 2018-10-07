@@ -88,6 +88,11 @@ NiepceWindow::NiepceWindow()
     button_box->pack_start(*redo_button, false, false, 0);
     header->pack_start(*button_box);
 
+    Gtk::Button *import_button = Gtk::manage(new Gtk::Button);
+    import_button->set_label(_("Import..."));
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(import_button->gobj()), "workspace.Import");
+    header->pack_start(*import_button);
+
     setHeaderBar(header);
 }
 
