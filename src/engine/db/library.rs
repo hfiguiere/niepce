@@ -250,7 +250,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let filetype: i32 = libfile::FileType::RAW_JPEG.into();
             if let Ok(c) = conn.execute(
-                "UPDATE files SET jpeg_file=:1 file_type=:3 WHERE id=:2;",
+                "UPDATE files SET jpeg_file=:1, file_type=:3 WHERE id=:2;",
                 &[&fsfile_id, &file_id, &filetype],
             ) {
                 if c == 1 {
