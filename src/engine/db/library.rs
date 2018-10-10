@@ -66,7 +66,7 @@ impl From<rusqlite::Error> for Error {
     }
 }
 
-type Result<T> = result::Result<T, Error>;
+pub type Result<T> = result::Result<T, Error>;
 
 pub struct Library {
     // maindir: PathBuf,

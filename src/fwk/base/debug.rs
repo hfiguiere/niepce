@@ -7,6 +7,7 @@ macro_rules! dbg_out {
     };
 }
 
+/// Print an error message on the console.
 #[macro_export]
 macro_rules! err_out {
     ( $( $x:expr ),* ) => {
@@ -17,12 +18,25 @@ macro_rules! err_out {
     };
 }
 
+/// Like err_out!() but print the file and line number
+#[macro_export]
+macro_rules! err_out_line {
+    ( $( $x:expr ),* ) => {
+        {
+            print!("ERROR: {}:{}:", file!(), line!());
+            println!( $($x),* );
+        }
+    };
+}
+
+/// Assert and print a message if true.
+/// Does NOT abort of call assert!()
 #[macro_export]
 macro_rules! dbg_assert {
     ( $cond:expr,  $msg:expr ) => {
         {
             if !$cond {
-                print!("ASSERT: {}", stringify!($cond));
+                print!("ASSERT: {}:{}: {}", file!(), line!(), stringify!($cond));
                 println!( $msg );
             }
         }
