@@ -245,7 +245,7 @@ eng::library_id_t WorkspaceController::get_selected_folder_id()
 {
     auto selection = m_librarytree.get_selection();
     auto selected = selection->get_selected();
-    if (selected == m_librarytree.get_model()->children().end()) {
+    if (!selected) {
         return 0;
     }
     int type = (*selected)[m_librarycolumns.m_type];
@@ -260,6 +260,10 @@ void WorkspaceController::on_libtree_selection()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = m_librarytree.get_selection();
     auto selected = selection->get_selected();
+    if (!selected) {
+        DBG_OUT("Invalid iterator");
+        return;
+    }
     int type = (*selected)[m_librarycolumns.m_type];
     eng::library_id_t id = (*selected)[m_librarycolumns.m_id];
 
