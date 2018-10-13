@@ -93,11 +93,10 @@ bool DirectoryImporter::get_previews_for(const std::string& /*source*/,
 bool DirectoryImporter::do_import(const std::string& source, const std::string& /*dest_dir*/,
                                   const FileImporter& callback)
 {
-    // pretty trivial, we have the source path.
-    callback(source, IImporter::Import::DIRECTORY, Managed::NO);
+    fwk::FileListPtr files;
+    files = fwk::FileList::getFilesFromDirectory(source, &fwk::filter_none);
 
-    // XXX return a real error
-    return true;
+    return callback(source, files, Managed::NO);
 }
 
 }

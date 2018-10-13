@@ -140,12 +140,6 @@ impl ClientInterface for LibraryClient {
         self.pimpl.process_xmp_update_queue(write_xmp);
     }
 
-    /// Import file
-    /// @param path the file path
-    /// @param manage true if imported file have to be managed
-    fn import_file(&mut self, path: String, manage: Managed) {
-        self.pimpl.import_file(path, manage);
-    }
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed
@@ -310,14 +304,6 @@ pub extern "C" fn libraryclient_update_label(client: &mut LibraryClientWrapper,
 pub extern "C" fn libraryclient_process_xmp_update_queue(client: &mut LibraryClientWrapper,
                                                          write_xmp: bool) {
     client.unwrap_mut().process_xmp_update_queue(write_xmp);
-}
-
-#[no_mangle]
-pub extern "C" fn libraryclient_import_file(client: &mut LibraryClientWrapper,
-                                            file_path: *const c_char,
-                                            manage: Managed) {
-    let path = String::from(unsafe { CStr::from_ptr(file_path) }.to_string_lossy());
-    client.unwrap_mut().import_file(path, manage);
 }
 
 #[no_mangle]

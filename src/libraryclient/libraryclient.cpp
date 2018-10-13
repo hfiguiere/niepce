@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 
 #include "fwk/base/moniker.hpp"
-#include "fwk/utils/files.hpp"
 
 #include "libraryclient.hpp"
 #include "uidataprovider.hpp"
@@ -44,14 +43,6 @@ LibraryClient::LibraryClient(const fwk::Moniker & moniker,
 
 LibraryClient::~LibraryClient()
 {
-}
-
-void LibraryClient::importFromDirectory(const std::string& dir, eng::Managed manage)
-{
-    fwk::FileListPtr files;
-    files = fwk::FileList::getFilesFromDirectory(dir, &fwk::filter_none);
-
-    ffi::libraryclient_import_files(m_client.get(), dir.c_str(), files.get(), manage);
 }
 
 }

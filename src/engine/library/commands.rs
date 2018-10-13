@@ -18,7 +18,6 @@
  */
 
 use std::os::raw::c_void;
-use std::path::Path;
 
 use fwk::PropertyValue;
 use engine::db::LibraryId;
@@ -100,34 +99,6 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
         Err(err) => {
             err_out_line!("get folder failed: {:?}", err);
             Err(err)
-        }
-    }
-}
-
-pub fn cmd_import_file(lib: &Library, path: &str, manage: Managed) -> bool {
-    dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
-
-    let mut bundle = FileBundle::new();
-    bundle.add(path);
-
-    let folder = Path::new(path).parent().unwrap_or(Path::new(""));
-
-    match get_folder_for_import(lib, &*folder.to_string_lossy()) {
-        Ok(libfolder) =>  {
-            match lib.add_bundle(libfolder.id(), &bundle, manage) {
-                Ok(_) =>  {
-                    lib.notify(Box::new(LibNotification::AddedFile));
-                    true
-                },
-                Err(err) => {
-                    err_out_line!("Failed to add bundle {:?}", err);
-                    false
-                }
-            }
-        },
-        Err(err) => {
-            err_out_line!("Can't get folder name for import: {:?}.", err);
-            false
         }
     }
 }

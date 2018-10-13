@@ -217,14 +217,6 @@ impl ClientInterface for ClientImpl {
         });
     }
 
-    /// Import file
-    /// @param path the file path
-    /// @param manage true if imported file have to be managed
-    fn import_file(&mut self, path: String, manage: Managed) {
-        self.schedule_op(move |lib| {
-            commands::cmd_import_file(&lib, &path, manage)
-        });
-    }
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed

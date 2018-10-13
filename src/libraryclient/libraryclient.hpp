@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2015 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +43,6 @@ public:
 
     LibraryClient(const fwk::Moniker & moniker, uint64_t notif_id);
     virtual ~LibraryClient();
-
-    /** Import files from a directory
-     * @param dir the directory
-     * @param manage true if imports have to be managed
-     */
-    void importFromDirectory(const std::string & dir, eng::Managed manage);
 
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }

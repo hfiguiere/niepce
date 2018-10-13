@@ -135,13 +135,11 @@ void WorkspaceController::action_file_import()
             auto dest_dir = import_dialog->get_dest_dir();
             importer->do_import(
                 source, dest_dir,
-                [this] (const std::string & path, IImporter::Import type, Managed manage) {
-                    if (type == IImporter::Import::SINGLE) {
-                        ffi::libraryclient_import_file(getLibraryClient()->client(),
-                                                       path.c_str(), manage);
-                    } else {
-                        getLibraryClient()->importFromDirectory(path, manage);
-                    }
+                [this] (const std::string& path, const fwk::FileListPtr& files, Managed manage) -> bool {
+                        ffi::libraryclient_import_files(
+                            getLibraryClient()->client(), path.c_str(), files.get(), manage);
+                        // XXX the libraryclient function returns void
+                        return true;
                 });
         }
         break;

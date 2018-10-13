@@ -54,10 +54,6 @@ pub trait ClientInterface {
     /// tell to process the Xmp update Queue
     fn process_xmp_update_queue(&mut self, write_xmp: bool);
 
-    /// Import file
-    /// @param path the file path
-    /// @param manage true if imported file have to be managed
-    fn import_file(&mut self, path: String, manage: Managed);
     /// Import files from a directory
     /// @param dir the directory
     /// @param files the files to import

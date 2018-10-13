@@ -25,6 +25,7 @@
 #include <functional>
 
 #include "fwk/toolkit/thumbnail.hpp"
+#include "fwk/utils/files.hpp"
 #include "engine/importer/importedfile.hpp"
 
 #include "rust_bindings.hpp"
@@ -53,12 +54,9 @@ public:
                                   const std::list<std::string>& paths,
                                   const PreviewReady& callback) = 0;
 
-    enum class Import {
-        SINGLE,
-        DIRECTORY
-    };
-    /** file importer callback */
-    typedef std::function<void (const std::string&, Import, Managed)> FileImporter;
+    /** file importer callback
+     */
+    typedef std::function<bool (const std::string& path, const fwk::FileListPtr&, Managed)> FileImporter;
     /** perform import from source
      * @param source the source identified by a string.
      * @param dest_dir the suggested destination directory is the importer needs to copy
