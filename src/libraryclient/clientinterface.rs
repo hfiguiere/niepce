@@ -60,8 +60,9 @@ pub trait ClientInterface {
     fn import_file(&mut self, path: String, manage: Managed);
     /// Import files from a directory
     /// @param dir the directory
+    /// @param files the files to import
     /// @param manage true if imports have to be managed
-    fn import_from_directory(&mut self, dir: String, files: Vec<String>, manage: Managed);
+    fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed);
 }
 
 /// Sync client interface

@@ -149,8 +149,8 @@ impl ClientInterface for LibraryClient {
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed
-    fn import_from_directory(&mut self, dir: String, files: Vec<String>, manage: Managed) {
-        self.pimpl.import_from_directory(dir, files, manage);
+    fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed) {
+        self.pimpl.import_files(dir, files, manage);
     }
 
 }
@@ -334,5 +334,5 @@ pub extern "C" fn libraryclient_import_files(client: &mut LibraryClientWrapper,
             files.push(String::from(cstr));
         }
     }
-    client.unwrap_mut().import_from_directory(String::from(folder), files, manage);
+    client.unwrap_mut().import_files(String::from(folder), files, manage);
 }
