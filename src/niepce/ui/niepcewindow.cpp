@@ -236,8 +236,8 @@ void NiepceWindow::init_actions()
     // Main "hamburger" menu
     section = Gio::Menu::create();
     m_main_menu->append_section(section);
-    section->append(_("New Library..."), "app.NewLibrary");
-    section->append(_("Open Library..."), "app.OpenLibrary");
+    section->append(_("New Catalog..."), "app.NewCatalog");
+    section->append(_("Open Catalog..."), "app.OpenCatalog");
 
     section = Gio::Menu::create();
     m_main_menu->append_section(section);
@@ -263,13 +263,13 @@ void NiepceWindow::on_open_library()
     std::string libMoniker;
     int reopen = 0;
     try {
-        reopen = std::stoi(cfg.getValue("reopen_last_library", "0"));
+        reopen = std::stoi(cfg.getValue("reopen_last_catalog", "0"));
     }
     catch(...)
     {
     }
     if(reopen) {
-        libMoniker = cfg.getValue("lastOpenLibrary", "");
+        libMoniker = cfg.getValue("last_open_catalog", "");
     }
     if(libMoniker.empty()) {
         libMoniker = prompt_open_library();
@@ -342,7 +342,7 @@ void NiepceWindow::on_lib_notification(const eng::LibNotification& ln)
 std::string NiepceWindow::prompt_open_library()
 {
     std::string libMoniker;
-    Gtk::FileChooserDialog dialog(gtkWindow(), _("Open library"),
+    Gtk::FileChooserDialog dialog(gtkWindow(), _("Open catalog"),
                                   Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
     dialog.add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
     dialog.add_button(_("Open"), Gtk::RESPONSE_OK);
@@ -357,8 +357,8 @@ std::string NiepceWindow::prompt_open_library()
         // pass it to the library
         libMoniker = "local:";
         libMoniker += libraryToCreate.c_str();
-        cfg.setValue("lastOpenLibrary", libMoniker);
-        DBG_OUT("created library %s", libMoniker.c_str());
+        cfg.setValue("last_open_catalog", libMoniker);
+        DBG_OUT("created catalog %s", libMoniker.c_str());
         break;
     }
     default:

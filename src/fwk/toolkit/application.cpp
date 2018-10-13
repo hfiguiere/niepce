@@ -117,7 +117,7 @@ void Application::on_startup()
 
 void Application::init_actions()
 {
-    fwk::add_action(m_gtkapp, "OpenLibrary",
+    fwk::add_action(m_gtkapp, "OpenCatalog",
                     sigc::mem_fun(*this,
                                   &Application::on_action_file_open),
                     "app", "<Primary>o");

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/dialogs/preferencesdialog.cpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ void PreferencesDialog::setup_widget()
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
 				    reopen_checkbutton->property_active(),
 				    fwk::Application::app()->config(),
-				    "reopen_last_library"));
+				    "reopen_last_catalog"));
     builder()->get_widget("write_xmp_checkbutton", write_xmp_checkbutton);
     binder_pool->add_binder(new fwk::ConfigDataBinder<bool>(
 				  write_xmp_checkbutton->property_active(),

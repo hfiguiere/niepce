@@ -4,8 +4,8 @@ gconf keys
 /app/niepce
       ui_theme_file = the UI rc file to load. Empty means use the system one.
       ui_theme_set = 0, use system theme. 1, use the dark theme.
-      reopen_last_library = 1 or 0 to reopen the last library
-      lastOpenLibrary = the last open library to reopen (a directory)
+      reopen_last_catalog = 1 or 0 to reopen the last library
+      last_open_catalog = the last open catalog to reopen (a directory)
 
 Things to move to the library conf file.
       last_import_location
