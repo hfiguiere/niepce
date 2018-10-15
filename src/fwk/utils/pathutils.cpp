@@ -55,18 +55,6 @@ std::string::size_type _path_extension_pos(const std::string &path)
     return idx;
 }
 
-/** return the stem of a path, ie basename minus extension
-    /foo/bar/baz.txt returns /foo/bar/baz
- */
-std::string path_stem(const std::string & path)
-{
-    auto idx = _path_extension_pos(path);
-    if(idx == std::string::npos) {
-        return path;
-    }
-    return std::string(path.cbegin(), path.cbegin() + idx);
-}
-
 std::string path_dirname(const std::string & path)
 {
     auto slash_idx = path.find_last_of("/");

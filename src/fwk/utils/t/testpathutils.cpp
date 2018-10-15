@@ -27,8 +27,6 @@ TEST(testPathUtils, testPathUtilsSanity)
 {
   ASSERT_EQ(fwk::path_basename("/foo/bar/baz.txt"), "baz.txt");
 
-  ASSERT_EQ(fwk::path_stem("/foo/bar/baz.txt"), "/foo/bar/baz");
-
   ASSERT_EQ(fwk::path_dirname("/foo/bar/"), "/foo/bar");
   ASSERT_EQ(fwk::path_dirname("/foo/bar/baz.txt"), "/foo/bar");
   ASSERT_EQ(fwk::path_dirname("baz.txt"), ".");

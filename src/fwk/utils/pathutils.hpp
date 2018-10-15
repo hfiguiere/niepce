@@ -29,11 +29,6 @@ namespace fwk {
  */
 std::string path_basename(const std::string & path);
 
-/** return the stem of a path, ie basename minus extension
-    /foo/bar/baz.txt returns baz
- */
-std::string path_stem(const std::string & path);
-
 /** return the dirname of a path and trailing slash removed.
     Assume the last component is a file.
     /foo/bar/baz.txt returns /foo/bar
