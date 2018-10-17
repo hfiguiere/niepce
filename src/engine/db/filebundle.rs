@@ -18,7 +18,7 @@
  */
 
 use std::ffi::OsString;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use engine::db::libfile::FileType;
 use fwk::MimeType;
@@ -77,6 +77,8 @@ pub struct FileBundle {
     sidecars: Vec<Sidecar>,
 }
 
+/// A file bundle represent files that are together based on their
+/// basename.
 impl FileBundle {
     pub fn new() -> FileBundle {
         FileBundle {
@@ -88,6 +90,8 @@ impl FileBundle {
         }
     }
 
+    /// Filter the file list and turn them to bundles
+    ///
     pub fn filter_bundles(files: &Vec<String>) -> Vec<FileBundle> {
         let mut bundles: Vec<FileBundle> = vec![];
         let mut sorted_files: Vec<&String> = files.iter().collect();
@@ -98,17 +102,30 @@ impl FileBundle {
         for f in sorted_files {
             let path = Path::new(&f);
             if let Some(basename) = path.file_stem() {
+                let mut basename = basename.to_os_string();
+                while basename != current_base {
+                    let path2 = PathBuf::from(&basename);
+                    match path2.file_stem() {
+                        None => break,
+                        Some(b) => {
+                            if basename == b {
+                                break;
+                            }
+                            basename = b.to_os_string();
+                        }
+                    }
+                }
                 if basename == current_base {
                     current_bundle.as_mut().unwrap().add(&f);
-                } else {
-                    if current_bundle.is_some() {
-                        bundles.push(current_bundle.unwrap());
-                    }
-                    let mut bundle = FileBundle::new();
-                    bundle.add(&f);
-                    current_base = basename.to_os_string();
-                    current_bundle = Some(bundle);
+                    continue;
                 }
+                if current_bundle.is_some() {
+                    bundles.push(current_bundle.unwrap());
+                }
+                let mut bundle = FileBundle::new();
+                bundle.add(&f);
+                current_base = basename;
+                current_bundle = Some(bundle);
             }
         }
         if current_bundle.is_some() {
@@ -216,9 +233,17 @@ mod test {
         thelist.push(String::from("/foo/bar/mvi_0145.mov"));
         thelist.push(String::from("/foo/bar/mvi_0145.thm"));
 
+        thelist.push(String::from("/foo/bar/scs_3445.jpg"));
+        thelist.push(String::from("/foo/bar/scs_3445.raf"));
+        thelist.push(String::from("/foo/bar/scs_3445.jpg.xmp"));
+
+        thelist.push(String::from("/foo/bar/scs_3446.jpg"));
+        thelist.push(String::from("/foo/bar/scs_3446.raf"));
+        thelist.push(String::from("/foo/bar/scs_3446.raf.pp3"));
+
         let bundles_list = FileBundle::filter_bundles(&thelist);
 
-        assert_eq!(bundles_list.len(), 6);
+        assert_eq!(bundles_list.len(), 8);
 
         let mut iter = bundles_list.iter();
         if let Some(b) = iter.next() {
@@ -294,5 +319,29 @@ mod test {
         } else {
             assert!(false);
         }
-    }
+
+        if let Some(b) = iter.next() {
+            println!("main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                     b.main(), b.jpeg(), b.xmp_sidecar() /*, b.sidecars()*/);
+            assert_eq!(b.bundle_type(), FileType::RAW_JPEG);
+            assert_eq!(b.main(), "/foo/bar/scs_3445.raf");
+            assert_eq!(b.jpeg(), "/foo/bar/scs_3445.jpg");
+            assert_eq!(b.xmp_sidecar(), "/foo/bar/scs_3445.jpg.xmp");
+            assert_eq!(b.sidecars.len(), 0);
+        } else {
+            assert!(false);
+        }
+
+        if let Some(b) = iter.next() {
+            println!("main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                     b.main(), b.jpeg(), b.xmp_sidecar() /*, b.sidecars()*/);
+            assert_eq!(b.bundle_type(), FileType::RAW_JPEG);
+            assert_eq!(b.main(), "/foo/bar/scs_3446.raf");
+            assert_eq!(b.jpeg(), "/foo/bar/scs_3446.jpg");
+            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.sidecars.len(), 0);
+        } else {
+            assert!(false);
+        }
+}
 }
