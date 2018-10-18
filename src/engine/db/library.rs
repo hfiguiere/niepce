@@ -100,7 +100,7 @@ impl Library {
     fn init(&mut self) -> Result<()> {
         let conn = rusqlite::Connection::open(self.dbpath.clone())?;
         let notif_id = self.notif_id;
-        match conn.create_scalar_function("rewrite_xmp", 0, false, |_| {
+        match conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
             Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
             Ok(true)
         }) {
