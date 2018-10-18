@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ impl ClientImpl {
         let terminate2 = terminate.clone();
 
         /* let thread = */ thread::spawn(move || {
-            let library = Library::new(dir, notif_id);
+            let library = Library::new(dir, None, notif_id);
             Self::main(&mut terminate, tasks, &library);
         });
 

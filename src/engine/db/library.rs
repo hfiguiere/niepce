@@ -77,9 +77,13 @@ pub struct Library {
 }
 
 impl Library {
-    pub fn new(dir: PathBuf, notif_id: u64) -> Library {
+    pub fn new(dir: PathBuf, name: Option<&str>, notif_id: u64) -> Library {
         let mut dbpath = dir.clone();
-        dbpath.push(DATABASENAME);
+        if let Some(filename) = name {
+            dbpath.push(filename);
+        } else {
+            dbpath.push(DATABASENAME);
+        }
         let mut lib = Library {
             // maindir: dir,
             dbpath: dbpath,
@@ -1025,11 +1029,12 @@ mod test {
         }
     }
 
+    use super::{Library, Managed};
+
     #[test]
     fn library_works() {
-        use super::{Library, Managed};
 
-        let lib = Library::new(PathBuf::from("."), 0);
+        let lib = Library::new(PathBuf::from("."), Some("library_works.db"), 0);
         let _autodelete = AutoDelete::new(lib.dbpath());
 
         assert!(lib.is_ok());
