@@ -271,7 +271,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let filetype: i32 = libfile::FileType::RAW_JPEG.into();
             let c = conn.execute(
-                "UPDATE files SET jpeg_file=:1, file_type=:3 WHERE id=:2;",
+                "UPDATE files SET jpeg_file=?1, file_type=?3 WHERE id=?2;",
                 &[&fsfile_id, &file_id, &filetype],
             )?;
             if c == 1 {
@@ -1124,4 +1124,33 @@ mod test {
         assert!(bundle_id.is_ok());
         assert!(bundle_id.ok().unwrap() > 0);
     }
+
+    #[test]
+    fn file_bundle_import() {
+        let lib = Library::new(PathBuf::from("."), Some("file_bundle_import.db"), 0);
+        let _autodelete = AutoDelete::new(lib.dbpath());
+
+        assert!(lib.is_ok());
+
+        let folder_added = lib.add_folder("foo", Some(String::from("/bar/foo")));
+        assert!(folder_added.is_ok());
+        let folder_added = folder_added.unwrap();
+
+        let mut bundle0 = FileBundle::new();
+        assert!(bundle0.add("img_0123.jpg"));
+        assert!(bundle0.add("img_0123.raf"));
+
+        let bundle_id = lib.add_bundle(folder_added.id(), &bundle0, Managed::NO);
+        assert!(bundle_id.is_ok());
+        assert!(bundle_id.ok().unwrap() > 0);
+
+
+        let mut bundle = FileBundle::new();
+        assert!(bundle.add("img_0124.jpg"));
+        assert!(bundle.add("img_0124.raf"));
+
+        let bundle_id = lib.add_bundle(folder_added.id(), &bundle, Managed::NO);
+        assert!(bundle_id.is_ok());
+        assert!(bundle_id.ok().unwrap() > 0);
+}
 }
