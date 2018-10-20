@@ -181,7 +181,7 @@ impl Library {
             let trash_type = libfolder::FolderVirtualType::TRASH as i32;
             conn.execute(
                 "insert into folders (name, locked, virtual, parent_id, path) \
-                 values (:1, 1, :2, 0, '')",
+                 values (?1, 1, ?2, 0, '')",
                 &[&"Trash", &trash_type],
             ).unwrap();
 
@@ -289,7 +289,7 @@ impl Library {
     ) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute(
-                "UPDATE files SET xmp_file=:1 WHERE id=:2;",
+                "UPDATE files SET xmp_file=?1 WHERE id=?2;",
                 &[&fsfile_id, &file_id],
             )?;
             if c == 1 {
@@ -326,7 +326,7 @@ impl Library {
     ) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute(
-                "INSERT INTO sidecars (file_id, fsfile_id, type, ext) VALUES(:1, :2, :3, :4)",
+                "INSERT INTO sidecars (file_id, fsfile_id, type, ext) VALUES(?1, ?2, ?3, ?4)",
                 &[&file_id, &fsfile_id, &sidecar_type, &ext],
             )?;
             if c == 1 {
@@ -385,7 +385,7 @@ impl Library {
     ) -> Result<LibFolder> {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute(
-                "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(:1, :2, '0', :3)",
+                "INSERT INTO folders (path,name,vault_id,parent_id) VALUES(?1, ?2, '0', ?3)",
                 &[&path, &name, &into],
             )?;
             if c != 1 {
@@ -402,7 +402,7 @@ impl Library {
 
     pub fn delete_folder(&self, id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            if let Some(c) = conn.execute("DELETE FROM folders WHERE id=:1", &[&id]).ok() {
+            if let Some(c) = conn.execute("DELETE FROM folders WHERE id=?1", &[&id]).ok() {
                 if c == 1 {
                     return Ok(());;
                 }
@@ -418,7 +418,7 @@ impl Library {
     pub fn get_folder(&self, path: &str) -> Result<LibFolder> {
         if let Some(ref conn) = self.dbconn {
             let sql = format!(
-                "SELECT {} FROM {} WHERE path=:1",
+                "SELECT {} FROM {} WHERE path=?1",
                 LibFolder::read_db_columns(),
                 LibFolder::read_db_tables()
             );
@@ -455,14 +455,14 @@ impl Library {
     }
 
     pub fn get_folder_content(&self, folder_id: LibraryId) -> Result<Vec<LibFile>> {
-        self.get_content(folder_id, "parent_id = :1")
+        self.get_content(folder_id, "parent_id = ?1")
     }
 
     pub fn count_folder(&self, folder_id: LibraryId) -> Result<i64> {
         if let Some(ref conn) = self.dbconn {
             let mut stmt = conn.prepare(
                 "SELECT COUNT(id) FROM files \
-                 WHERE parent_id=:1;",
+                 WHERE parent_id=?1;",
             )?;
             let mut rows = stmt.query(&[&folder_id])?;
             return match rows.next() {
@@ -496,7 +496,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let mut stmt = conn.prepare(
                 "SELECT COUNT(keyword_id) FROM keywording \
-                 WHERE keyword_id=:1;",
+                 WHERE keyword_id=?1;",
             )?;
             let mut rows = stmt.query(&[&id])?;
             return match rows.next() {
@@ -510,7 +510,7 @@ impl Library {
 
     pub fn add_fs_file(&self, file: &str) -> Result<LibraryId> {
         if let Some(ref conn) = self.dbconn {
-            let c = conn.execute("INSERT INTO fsfiles (path) VALUES(:1)", &[&file])?;
+            let c = conn.execute("INSERT INTO fsfiles (path) VALUES(?1)", &[&file])?;
             if c != 1 {
                 return Err(Error::InvalidResult);
             }
@@ -522,7 +522,7 @@ impl Library {
 
     fn get_fs_file(&self, id: LibraryId) -> Result<String> {
         if let Some(ref conn) = self.dbconn {
-            let mut stmt = conn.prepare("SELECT path FROM fsfiles WHERE id=:1")?;
+            let mut stmt = conn.prepare("SELECT path FROM fsfiles WHERE id=?1")?;
             let mut rows = stmt.query(&[&id])?;
             return match rows.next() {
                 Some(Ok(row)) => Ok(row.get(0)),
@@ -620,7 +620,7 @@ impl Library {
                  orientation, file_date, rating, label, \
                  file_type, flag, xmp) \
                  VALUES (\
-                 :1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12)",
+                 ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
                 &[
                     &fs_file_id,
                     &filename,
@@ -660,7 +660,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let mut stmt = conn.prepare(
                 "SELECT id FROM keywords WHERE \
-                 keyword=:1;",
+                 keyword=?1;",
             )?;
             let mut rows = stmt.query(&[&keyword])?;
             if let Some(Ok(row)) = rows.next() {
@@ -671,7 +671,7 @@ impl Library {
             }
 
             let c = conn.execute(
-                "INSERT INTO keywords (keyword, parent_id) VALUES(:1, 0);",
+                "INSERT INTO keywords (keyword, parent_id) VALUES(?1, 0);",
                 &[&keyword],
             )?;
             if c != 1 {
@@ -691,7 +691,7 @@ impl Library {
             conn.execute(
                 "INSERT OR IGNORE INTO keywording\
                  (file_id, keyword_id) \
-                 VALUES(:1, :2)",
+                 VALUES(?1, ?2)",
                 &[&kw_id, &file_id],
             )?;
             Ok(())
@@ -705,14 +705,14 @@ impl Library {
             keyword_id,
             "files.id IN \
              (SELECT file_id FROM keywording \
-             WHERE keyword_id=:1) ",
+             WHERE keyword_id=?1) ",
         )
     }
 
     pub fn get_metadata(&self, file_id: LibraryId) -> Result<LibMetadata> {
         if let Some(ref conn) = self.dbconn {
             let sql = format!(
-                "SELECT {} FROM {} WHERE {}=:1",
+                "SELECT {} FROM {} WHERE {}=?1",
                 LibMetadata::read_db_columns(),
                 LibMetadata::read_db_tables(),
                 LibMetadata::read_db_where_id()
@@ -725,7 +725,7 @@ impl Library {
                 Some(Ok(row)) => {
                     let mut metadata = LibMetadata::read_from(&row);
 
-                    let sql = "SELECT ext FROM sidecars WHERE file_id=:1";
+                    let sql = "SELECT ext FROM sidecars WHERE file_id=?1";
                     let mut stmt = conn.prepare(&sql)?;
                     let mut rows = stmt.query(&[&file_id])?;
                     while let Some(Ok(row)) = rows.next() {
@@ -742,7 +742,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             conn.execute(
                 "DELETE FROM keywording \
-                 WHERE file_id=:1;",
+                 WHERE file_id=?1;",
                 &[&file_id],
             )?;
             // XXX check success.
@@ -754,7 +754,7 @@ impl Library {
     fn set_internal_metadata(&self, file_id: LibraryId, column: &str, value: i32) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute(
-                format!("UPDATE files SET {}=:1 WHERE id=:2;", column).as_ref(),
+                format!("UPDATE files SET {}=?1 WHERE id=?2;", column).as_ref(),
                 &[&value, &file_id],
             )?;
             if c != 1 {
@@ -769,7 +769,7 @@ impl Library {
     fn set_metadata_block(&self, file_id: LibraryId, metablock: &LibMetadata) -> Result<()> {
         let xmp = metablock.serialize_inline();
         if let Some(ref conn) = self.dbconn {
-            let c = conn.execute("UPDATE files SET xmp=:1 WHERE id=:2;", &[&xmp, &file_id])?;
+            let c = conn.execute("UPDATE files SET xmp=?1 WHERE id=?2;", &[&xmp, &file_id])?;
             if c != 1 {
                 err_out!("error setting metadatablock");
                 return Err(Error::InvalidResult);
@@ -838,11 +838,11 @@ impl Library {
 
     pub fn move_file_to_folder(&self, file_id: LibraryId, folder_id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            let mut stmt = conn.prepare("SELECT id FROM folders WHERE id=:1;")?;
+            let mut stmt = conn.prepare("SELECT id FROM folders WHERE id=?1;")?;
             let mut rows = stmt.query(&[&folder_id])?;
             if let Some(Ok(_)) = rows.next() {
                 conn.execute(
-                    "UPDATE files SET parent_id = :1 WHERE id = :2;",
+                    "UPDATE files SET parent_id = ?1 WHERE id = ?2;",
                     &[&folder_id, &file_id],
                 )?;
                 return Ok(());
@@ -874,7 +874,7 @@ impl Library {
     pub fn add_label(&self, name: &str, colour: &str) -> Result<LibraryId> {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute(
-                "INSERT INTO  labels (name,color) VALUES (:1, :2);",
+                "INSERT INTO  labels (name,color) VALUES (?1, ?2);",
                 &[&name, &colour],
             )?;
             if c != 1 {
@@ -890,7 +890,7 @@ impl Library {
     pub fn update_label(&self, label_id: LibraryId, name: &str, colour: &str) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
             conn.execute(
-                "UPDATE labels SET name=:2, color=:3 FROM labels WHERE id=:1;",
+                "UPDATE labels SET name=?2, color=?3 FROM labels WHERE id=?1;",
                 &[&label_id, &name, &colour],
             )?;
             // XXX check success.
@@ -901,7 +901,7 @@ impl Library {
 
     pub fn delete_label(&self, label_id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            conn.execute("DELETE FROM labels WHERE id=:1;", &[&label_id])?;
+            conn.execute("DELETE FROM labels WHERE id=?1;", &[&label_id])?;
             // XXX check success.
             return Ok(());
         }
@@ -934,14 +934,14 @@ impl Library {
         // 3. make sure the update happened correctly, possibly ensure we don't
         // clobber the xmp.
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=:1;", &[&id]) {
+            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=?1;", &[&id]) {
                 // we don't want to write the XMP so we don't need to list them.
                 if !write_xmp {
                     return Ok(());
                 }
                 if let Ok(mut stmt) = conn.prepare(
                     "SELECT xmp, main_file, xmp_file FROM files \
-                     WHERE id=:1;",
+                     WHERE id=?1;",
                 ) {
                     let mut rows = stmt.query(&[&id]).unwrap();
                     while let Some(Ok(row)) = rows.next() {
