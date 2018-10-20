@@ -77,6 +77,24 @@ pub struct Library {
 }
 
 impl Library {
+    #[cfg(test)]
+    pub fn new_in_memory(notif_id: u64) -> Library {
+        let mut lib = Library {
+            // maindir: dir,
+            dbpath: PathBuf::default(),
+            dbconn: None,
+            inited: false,
+            notif_id,
+        };
+
+        if let Ok(conn) = rusqlite::Connection::open_in_memory() {
+            lib.dbconn = Some(conn);
+            lib.inited = lib.init().is_ok();
+        }
+
+        lib
+    }
+
     pub fn new(dir: PathBuf, name: Option<&str>, notif_id: u64) -> Library {
         let mut dbpath = dir.clone();
         if let Some(filename) = name {
@@ -86,29 +104,32 @@ impl Library {
         }
         let mut lib = Library {
             // maindir: dir,
-            dbpath: dbpath,
+            dbpath: dbpath.clone(),
             dbconn: None,
             inited: false,
-            notif_id: notif_id,
+            notif_id,
         };
 
-        lib.inited = lib.init().is_ok();
+        if let Ok(conn) = rusqlite::Connection::open(dbpath) {
+            lib.dbconn = Some(conn);
+            lib.inited = lib.init().is_ok();
+        }
 
         lib
     }
 
     fn init(&mut self) -> Result<()> {
-        let conn = rusqlite::Connection::open(self.dbpath.clone())?;
-        let notif_id = self.notif_id;
-        match conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
-            Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
-            Ok(true)
-        }) {
-            Ok(_) => self.dbconn = Some(conn),
-            Err(err) => {
+        if let Some(ref conn) = self.dbconn {
+            let notif_id = self.notif_id;
+            if let Err(err) = conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
+                Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
+                Ok(true)
+            }) {
                 err_out!("failed to create scalar function.");
                 return Err(Error::SqlError(err));
             }
+        } else {
+            return Err(Error::NoSqlDb);
         }
 
         let version = self.check_database_version()?;
@@ -123,6 +144,7 @@ impl Library {
         } else if version != DB_SCHEMA_VERSION {
             // WAT?
         }
+
         Ok(())
     }
 
@@ -1014,33 +1036,13 @@ impl Library {
 #[cfg(test)]
 mod test {
     use engine::db::filebundle::FileBundle;
-    use std::fs;
-    use std::path::Path;
-    use std::path::PathBuf;
-
-    struct AutoDelete {
-        path: PathBuf,
-    }
-    impl AutoDelete {
-        pub fn new(path: &Path) -> AutoDelete {
-            AutoDelete {
-                path: PathBuf::from(path),
-            }
-        }
-    }
-    impl Drop for AutoDelete {
-        fn drop(&mut self) {
-            fs::remove_file(&self.path).is_ok();
-        }
-    }
 
     use super::{Library, Managed};
 
     #[test]
     fn library_works() {
 
-        let lib = Library::new(PathBuf::from("."), Some("library_works.db"), 0);
-        let _autodelete = AutoDelete::new(lib.dbpath());
+        let lib = Library::new_in_memory(0);
 
         assert!(lib.is_ok());
         let version = lib.check_database_version();
@@ -1132,8 +1134,7 @@ mod test {
 
     #[test]
     fn file_bundle_import() {
-        let lib = Library::new(PathBuf::from("."), Some("file_bundle_import.db"), 0);
-        let _autodelete = AutoDelete::new(lib.dbpath());
+        let lib = Library::new_in_memory(0);
 
         assert!(lib.is_ok());
 
