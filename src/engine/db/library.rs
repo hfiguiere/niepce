@@ -745,7 +745,8 @@ impl Library {
                  WHERE file_id=?1;",
                 &[&file_id],
             )?;
-            // XXX check success.
+            // we don't really know how many rows are supposed to be impacted
+            // even 0 is valid.
             return Ok(());
         }
         Err(Error::NoSqlDb)
@@ -889,11 +890,13 @@ impl Library {
 
     pub fn update_label(&self, label_id: LibraryId, name: &str, colour: &str) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            conn.execute(
+            let c = conn.execute(
                 "UPDATE labels SET name=?2, color=?3 FROM labels WHERE id=?1;",
                 &[&label_id, &name, &colour],
             )?;
-            // XXX check success.
+            if c != 1 {
+                return Err(Error::InvalidResult);
+            }
             return Ok(());
         }
         Err(Error::NoSqlDb)
@@ -901,8 +904,10 @@ impl Library {
 
     pub fn delete_label(&self, label_id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            conn.execute("DELETE FROM labels WHERE id=?1;", &[&label_id])?;
-            // XXX check success.
+            let c = conn.execute("DELETE FROM labels WHERE id=?1;", &[&label_id])?;
+            if c != 1 {
+                return Err(Error::InvalidResult);
+            }
             return Ok(());
         }
         Err(Error::NoSqlDb)
