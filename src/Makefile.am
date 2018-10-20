@@ -34,6 +34,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/fwk/toolkit/mimetype.rs \
 	@top_srcdir@/src/fwk/toolkit/mod.rs \
 	@top_srcdir@/src/fwk/utils/exempi.rs \
+	@top_srcdir@/src/fwk/utils/files.rs \
 	@top_srcdir@/src/fwk/utils/mod.rs \
 	@top_srcdir@/src/lib.rs \
 	@top_srcdir@/src/libraryclient/clientimpl.rs \

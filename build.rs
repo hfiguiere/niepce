@@ -70,6 +70,7 @@ fn main() {
             .with_parse_exclude(&["exempi", "chrono"])
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
+            .exclude_item("GFileInfo")
             .with_crate(&crate_dir);
 
         if let Ok(bindings) = cbuilder.generate() {

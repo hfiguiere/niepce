@@ -50,7 +50,7 @@ pub struct MimeType {
     mtype: MType,
 }
 
-fn guess_type(gmtype: &str) -> MType {
+pub fn guess_type(gmtype: &str) -> MType {
     if gio::content_type_is_a(&gmtype, "image/*") {
         if gio::content_type_is_a(&gmtype, "image/x-dcraw") {
             return MType::Image(IsRaw::Yes);

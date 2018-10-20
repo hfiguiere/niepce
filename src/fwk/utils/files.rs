@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/utils/mod.rs
+ * niepce - fwk/utils/files.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,5 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-pub mod exempi;
-pub mod files;
+use glib::translate::*;
+use gio;
+use gio_sys;
+use gio::prelude::*;
+
+use fwk::toolkit::mimetype::{
+    guess_type,
+    MType
+};
+
+#[no_mangle]
+pub unsafe extern "C" fn file_is_media(finfo: *mut gio_sys::GFileInfo) -> bool {
+    let fileinfo = gio::FileInfo::from_glib_none(finfo);
+    if let Some(gmtype) = fileinfo.get_content_type() {
+        let t = guess_type(&gmtype);
+        return match t {
+            MType::Image(_) |
+            MType::Movie => true,
+            _ => false
+        };
+    }
+
+    false
+}

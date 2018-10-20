@@ -27,6 +27,8 @@
 #include "files.hpp"
 #include "pathutils.hpp"
 
+#include "rust_bindings.hpp"
+
 namespace fwk {
 
 std::string make_tmp_dir(const std::string& base)
@@ -66,6 +68,12 @@ bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
     static const std::string ext(".xmp");
     return filter_ext(file, ext);
 }
+
+bool filter_only_media(const Glib::RefPtr<Gio::FileInfo> & file)
+{
+    return ffi::file_is_media(file->gobj());
+}
+
 
 
 FileList::FileList()
