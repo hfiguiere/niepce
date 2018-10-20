@@ -103,7 +103,7 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
     }
 }
 
-pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
+pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String],
                         manage: Managed) -> bool {
     dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
 
@@ -112,7 +112,7 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
         Ok(libfolder) =>  {
             let folder_id = libfolder.id();
             for bundle in bundles {
-                if let Err(err) = lib.add_bundle(folder_id, &bundle, manage.clone()) {
+                if let Err(err) = lib.add_bundle(folder_id, &bundle, manage) {
                     err_out!("Add bundle failed: {:?}", err);
                 }
             }
@@ -126,7 +126,7 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &Vec<String>,
     }
 }
 
-pub fn cmd_create_folder(lib: &Library, name: &String, path: Option<String>) -> LibraryId {
+pub fn cmd_create_folder(lib: &Library, name: &str, path: Option<String>) -> LibraryId {
     match lib.add_folder(name, path) {
         Ok(lf) =>  {
             let id = lf.id();
@@ -201,11 +201,11 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
     }
 }
 
-pub fn cmd_count_folder(lib: &Library, folder_id: LibraryId) -> bool {
-    match lib.count_folder(folder_id) {
+pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
+    match lib.count_folder(id) {
         Ok(count) => {
             lib.notify(Box::new(LibNotification::FolderCounted(
-                Count{id: folder_id, count: count})));
+                Count{id, count})));
             true
         },
         Err(err) => {
@@ -249,7 +249,7 @@ pub fn cmd_count_keyword(lib: &Library, id: LibraryId) -> bool {
     match lib.count_keyword(id) {
         Ok(count) => {
             lib.notify(Box::new(LibNotification::KeywordCounted(
-                Count{id: id, count: count})));
+                Count{id, count})));
             true
         },
         Err(err) => {
@@ -274,7 +274,7 @@ pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryI
     match lib.move_file_to_folder(file_id, to) {
         Ok(_) => {
             lib.notify(Box::new(LibNotification::FileMoved(
-                FileMove{file: file_id, from: from, to: to})));
+                FileMove{file: file_id, from, to})));
             lib.notify(Box::new(LibNotification::FolderCountChanged(
                 Count{id: from, count: -1})));
             lib.notify(Box::new(LibNotification::FolderCountChanged(

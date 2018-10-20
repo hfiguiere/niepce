@@ -83,8 +83,9 @@ fn guess_type_for_file(filename: &str) -> MType {
     // alternative
     let mut uncertainty: gboolean = 0;
     let content_type = unsafe {
+        let cstr = CString::new(filename).unwrap();
         gio_sys::g_content_type_guess(
-            CString::new(filename).unwrap().as_ptr(),
+            cstr.as_ptr(),
             ptr::null_mut(),
             0,
             &mut uncertainty,

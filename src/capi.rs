@@ -1,7 +1,7 @@
 /*
  * niepce - capi.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,6 @@ use std::ffi::CString;
 
 /// Release the raw pointer from a CString.
 #[no_mangle]
-pub extern "C" fn rust_cstring_delete(string: *mut c_char) {
-    unsafe { CString::from_raw(string); }
+pub unsafe extern "C" fn rust_cstring_delete(string: *mut c_char) {
+    CString::from_raw(string);
 }

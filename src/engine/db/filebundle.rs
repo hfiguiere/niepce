@@ -40,12 +40,12 @@ pub enum Sidecar {
 
 impl Sidecar {
     pub fn to_int(&self) -> i32 {
-        match self {
-            &Sidecar::Live(_) => 1,
-            &Sidecar::Thumbnail(_) => 2,
-            &Sidecar::Xmp(_) => 3,
-            &Sidecar::Jpeg(_) => 4,
-            &Sidecar::Invalid => 0,
+        match *self {
+            Sidecar::Live(_) => 1,
+            Sidecar::Thumbnail(_) => 2,
+            Sidecar::Xmp(_) => 3,
+            Sidecar::Jpeg(_) => 4,
+            Sidecar::Invalid => 0,
         }
     }
 }
@@ -77,6 +77,12 @@ pub struct FileBundle {
     sidecars: Vec<Sidecar>,
 }
 
+impl Default for FileBundle {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// A file bundle represent files that are together based on their
 /// basename.
 impl FileBundle {
@@ -92,7 +98,7 @@ impl FileBundle {
 
     /// Filter the file list and turn them to bundles
     ///
-    pub fn filter_bundles(files: &Vec<String>) -> Vec<FileBundle> {
+    pub fn filter_bundles(files: &[String]) -> Vec<FileBundle> {
         let mut bundles: Vec<FileBundle> = vec![];
         let mut sorted_files: Vec<&String> = files.iter().collect();
         sorted_files.sort();

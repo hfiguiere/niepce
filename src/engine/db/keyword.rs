@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/keyword.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ pub struct Keyword {
 impl Keyword {
     pub fn new(id: LibraryId, keyword: &str) -> Keyword {
         Keyword {
-            id: id, keyword: String::from(keyword),
+            id, keyword: String::from(keyword),
         }
     }
 
@@ -65,8 +65,8 @@ impl FromDb for Keyword {
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
-    let kw = Box::new(Keyword::new(id, &*unsafe { CStr::from_ptr(keyword) }.to_string_lossy()));
+pub unsafe extern fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
+    let kw = Box::new(Keyword::new(id, &*CStr::from_ptr(keyword).to_string_lossy()));
     Box::into_raw(kw)
 }
 
@@ -82,6 +82,6 @@ pub extern fn engine_db_keyword_keyword(obj: &Keyword) -> *mut c_char {
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_delete(kw: *mut Keyword) {
-    unsafe { Box::from_raw(kw) };
+pub unsafe extern fn engine_db_keyword_delete(kw: *mut Keyword) {
+    Box::from_raw(kw);
 }

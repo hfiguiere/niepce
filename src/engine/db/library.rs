@@ -95,8 +95,8 @@ impl Library {
         lib
     }
 
-    pub fn new(dir: PathBuf, name: Option<&str>, notif_id: u64) -> Library {
-        let mut dbpath = dir.clone();
+    pub fn new(dir: &Path, name: Option<&str>, notif_id: u64) -> Library {
+        let mut dbpath = PathBuf::from(dir);
         if let Some(filename) = name {
             dbpath.push(filename);
         } else {
@@ -323,11 +323,11 @@ impl Library {
     }
 
     pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, sidecar: &Sidecar) -> Result<()> {
-        let sidecar_t: (i32, &String) = match sidecar {
-            &Sidecar::Live(ref p)
-            | &Sidecar::Thumbnail(ref p)
-            | &Sidecar::Xmp(ref p)
-            | &Sidecar::Jpeg(ref p) => (sidecar.to_int(), p),
+        let sidecar_t: (i32, &String) = match *sidecar {
+            Sidecar::Live(ref p)
+            | Sidecar::Thumbnail(ref p)
+            | Sidecar::Xmp(ref p)
+            | Sidecar::Jpeg(ref p) => (sidecar.to_int(), p),
             _ => return Err(Error::InvalidArg),
         };
         let p = Path::new(sidecar_t.1);
@@ -424,12 +424,11 @@ impl Library {
 
     pub fn delete_folder(&self, id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            if let Some(c) = conn.execute("DELETE FROM folders WHERE id=?1", &[&id]).ok() {
-                if c == 1 {
-                    return Ok(());;
-                }
-                return Err(Error::InvalidResult);
+            let c = conn.execute("DELETE FROM folders WHERE id=?1", &[&id])?;
+            if c == 1 {
+                return Ok(());;
             }
+            return Err(Error::InvalidResult);
         }
         Err(Error::NoSqlDb)
     }
@@ -625,7 +624,7 @@ impl Library {
             xmp = String::from("");
         }
 
-        let filename = Self::leaf_name_for_pathname(file).unwrap_or(String::from(""));
+        let filename = Self::leaf_name_for_pathname(file).unwrap_or_default();
         let fs_file_id = self.add_fs_file(file)?;
         if fs_file_id <= 0 {
             err_out!("add fsfile failed");
@@ -835,8 +834,8 @@ impl Library {
             Np::NpIptcKeywordsProp => {
                 self.unassign_all_keywords_for_file(file_id)?;
 
-                match value {
-                    &PropertyValue::StringArray(ref keywords) =>
+                match *value {
+                    PropertyValue::StringArray(ref keywords) =>
                         for kw in keywords {
                             let id = self.make_keyword(&kw)?;
                             if id != -1 {
@@ -961,7 +960,7 @@ impl Library {
         // 3. make sure the update happened correctly, possibly ensure we don't
         // clobber the xmp.
         if let Some(ref conn) = self.dbconn {
-            if let Ok(_) = conn.execute("DELETE FROM xmp_update_queue WHERE id=?1;", &[&id]) {
+            if conn.execute("DELETE FROM xmp_update_queue WHERE id=?1;", &[&id]).is_ok() {
                 // we don't want to write the XMP so we don't need to list them.
                 if !write_xmp {
                     return Ok(());
@@ -1029,7 +1028,7 @@ impl Library {
             self.rewrite_xmp_for_id(id, write_xmp)?;
         }
 
-        return Ok(());
+        Ok(())
     }
 }
 

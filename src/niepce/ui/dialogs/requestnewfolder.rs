@@ -31,9 +31,9 @@ use gtk::{
 use libraryclient::{ClientInterface,LibraryClientWrapper};
 
 #[no_mangle]
-pub extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
-                                            parent: *mut gtk_sys::GtkWindow) {
-    let parent = unsafe { gtk::Window::from_glib_none(parent) };
+pub unsafe extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
+                                                   parent: *mut gtk_sys::GtkWindow) {
+    let parent = gtk::Window::from_glib_none(parent);
     let dialog = Dialog::new_with_buttons(
         Some("New folder"), Some(&parent),
         gtk::DialogFlags::MODAL,

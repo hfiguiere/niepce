@@ -96,10 +96,10 @@ impl LibFile {
                path: PathBuf, name: &str) -> LibFile {
         let main_file = FsFile::new(fs_file_id, path);
         LibFile {
-            id: id, folder_id: folder_id,
+            id, folder_id,
             name: String::from(name),
             cstr: CString::new("").unwrap(),
-            main_file: main_file, orientation: 0,
+            main_file, orientation: 0,
             rating: 0, label: 0, flag: 0,
             file_type: FileType::UNKNOWN,
         }
@@ -246,20 +246,20 @@ pub fn mimetype_to_filetype(mime: &fwk::MimeType) -> FileType {
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_new(id: LibraryId, folder_id: LibraryId,
+pub unsafe extern fn engine_db_libfile_new(id: LibraryId, folder_id: LibraryId,
                                     fs_file_id: LibraryId, path: *const c_char,
                                     name: *const c_char) -> *mut LibFile {
     let lf = Box::new(
         LibFile::new(id, folder_id, fs_file_id,
-                     PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy()),
-                     &*unsafe { CStr::from_ptr(name) }.to_string_lossy())
+                     PathBuf::from(&*CStr::from_ptr(path).to_string_lossy()),
+                     &*CStr::from_ptr(name).to_string_lossy())
             );
     Box::into_raw(lf)
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_delete(lf: *mut LibFile) {
-    unsafe { Box::from_raw(lf) };
+pub unsafe extern fn engine_db_libfile_delete(lf: *mut LibFile) {
+    Box::from_raw(lf);
 }
 
 #[no_mangle]

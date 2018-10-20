@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/label.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,12 @@ pub struct Label {
 impl Label {
 
     pub fn new(id: LibraryId, label: &str, colourstring: &str) -> Label {
-        let colour = RgbColour::from_str(colourstring).unwrap_or(Default::default());
+        let colour = RgbColour::from_str(colourstring).unwrap_or_default();
         Label {
-            id: id,
+            id,
             label: String::from(label),
             cstr: CString::new("").unwrap(),
-            colour: colour
+            colour,
         }
     }
 
@@ -89,8 +89,8 @@ impl FromDb for Label {
 
 
 #[no_mangle]
-pub extern fn engine_db_label_delete(l: *mut Label) {
-    unsafe { Box::from_raw(l) };
+pub unsafe extern fn engine_db_label_delete(l: *mut Label) {
+    Box::from_raw(l);
 }
 
 #[no_mangle]

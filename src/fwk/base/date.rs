@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/date.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ pub fn xmp_date_from(d: &chrono::DateTime<chrono::Utc>) -> exempi::DateTime {
 }
 
 #[no_mangle]
-pub extern "C" fn fwk_date_delete(date: *mut Date) {
-    unsafe { Box::from_raw(date); }
+pub unsafe extern "C" fn fwk_date_delete(date: *mut Date) {
+    Box::from_raw(date);
 }
 
 #[no_mangle]

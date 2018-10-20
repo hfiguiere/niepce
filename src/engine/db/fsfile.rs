@@ -31,7 +31,7 @@ impl FsFile {
 
     pub fn new(id: LibraryId, path: PathBuf) -> FsFile {
         FsFile {
-            id: id, path: path,
+            id, path,
         }
     }
 

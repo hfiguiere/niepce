@@ -29,12 +29,12 @@ use gtk::{
 };
 
 #[no_mangle]
-pub extern "C" fn dialog_confirm(message: *const c_char,
-                                 parent: *mut gtk_sys::GtkWindow) -> bool {
+pub unsafe extern "C" fn dialog_confirm(message: *const c_char,
+                                        parent: *mut gtk_sys::GtkWindow) -> bool {
 
     let mut result: bool = false;
-    let msg = unsafe { CStr::from_ptr(message) }.to_string_lossy();
-    let parent = unsafe { gtk::Window::from_glib_none(parent) };
+    let msg = CStr::from_ptr(message).to_string_lossy();
+    let parent = gtk::Window::from_glib_none(parent);
     let dialog = MessageDialog::new(Some(&parent), gtk::DialogFlags::MODAL,
                                     gtk::MessageType::Question, gtk::ButtonsType::YesNo,
                                     &*msg);

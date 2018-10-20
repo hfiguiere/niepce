@@ -58,8 +58,8 @@ pub struct LibFolder {
 impl LibFolder {
     pub fn new(id: LibraryId, name: &str, path: Option<String>) -> LibFolder {
         LibFolder {
-            id: id, name: String::from(name),
-            path: path,
+            id, name: String::from(name),
+            path,
             locked: false,
             expanded: false, virt: FolderVirtualType::NONE,
             parent: 0,

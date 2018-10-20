@@ -52,8 +52,8 @@ impl ClientImpl {
         let terminate2 = terminate.clone();
 
         /* let thread = */ thread::spawn(move || {
-            let library = Library::new(dir, None, notif_id);
-            Self::main(&mut terminate, tasks, &library);
+            let library = Library::new(&dir, None, notif_id);
+            Self::main(&mut terminate, &tasks, &library);
         });
 
 
@@ -69,7 +69,7 @@ impl ClientImpl {
     }
 
     fn main(terminate: &mut sync::Arc<atomic::AtomicBool>,
-            tasks: sync::Arc<(sync::Mutex<VecDeque<Op>>, sync::Condvar)>,
+            tasks: &sync::Arc<(sync::Mutex<VecDeque<Op>>, sync::Condvar)>,
             library: &Library) {
 
         while !terminate.load(atomic::Ordering::Relaxed) {

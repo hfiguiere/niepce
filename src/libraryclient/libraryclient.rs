@@ -164,14 +164,14 @@ impl ClientInterfaceSync for LibraryClient {
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_new(path: *const c_char, notif_id: u64) -> *mut LibraryClientWrapper {
-    let dir = PathBuf::from(&*unsafe { CStr::from_ptr(path) }.to_string_lossy());
+pub unsafe extern "C" fn libraryclient_new(path: *const c_char, notif_id: u64) -> *mut LibraryClientWrapper {
+    let dir = PathBuf::from(&*CStr::from_ptr(path).to_string_lossy());
     Box::into_raw(Box::new(LibraryClientWrapper::new(dir, notif_id)))
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_delete(obj: *mut LibraryClientWrapper) {
-    unsafe { Box::from_raw(obj); }
+pub unsafe extern "C" fn libraryclient_delete(obj: *mut LibraryClientWrapper) {
+    Box::from_raw(obj);
 }
 
 #[no_mangle]
@@ -201,14 +201,14 @@ pub extern "C" fn libraryclient_query_folder_content(client: &mut LibraryClientW
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWrapper,
-                                                   n: *const c_char,
-                                                   p: *const c_char) -> LibraryId {
-    let name = String::from(unsafe { CStr::from_ptr(n) }.to_string_lossy());
+pub unsafe extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWrapper,
+                                                          n: *const c_char,
+                                                          p: *const c_char) -> LibraryId {
+    let name = String::from(CStr::from_ptr(n).to_string_lossy());
     let path = if p.is_null() {
         None
     } else {
-        Some(String::from(unsafe { CStr::from_ptr(p) }.to_string_lossy()))
+        Some(String::from(CStr::from_ptr(p).to_string_lossy()))
     };
     client.unwrap_mut().create_folder_sync(name, path)
 }
@@ -270,18 +270,18 @@ pub extern "C" fn libraryclient_get_all_labels(client: &mut LibraryClientWrapper
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_create_label(client: &mut LibraryClientWrapper,
-                                             s: *const c_char, c: *const c_char) {
-    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
+pub unsafe extern "C" fn libraryclient_create_label(client: &mut LibraryClientWrapper,
+                                                    s: *const c_char, c: *const c_char) {
+    let name = CStr::from_ptr(s).to_string_lossy();
+    let colour = CStr::from_ptr(c).to_string_lossy();
     client.unwrap_mut().create_label(String::from(name), String::from(colour));
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_create_label_sync(
+pub unsafe extern "C" fn libraryclient_create_label_sync(
     client: &mut LibraryClientWrapper, s: *const c_char, c: *const c_char) -> LibraryId {
-    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
+    let name = CStr::from_ptr(s).to_string_lossy();
+    let colour = CStr::from_ptr(c).to_string_lossy();
     client.unwrap_mut().create_label_sync(String::from(name), String::from(colour))
 }
 
@@ -292,11 +292,11 @@ pub extern "C" fn libraryclient_delete_label(client: &mut LibraryClientWrapper,
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_update_label(client: &mut LibraryClientWrapper,
-                                             label_id: LibraryId,
-                                             s: *const c_char, c: *const c_char) {
-    let name = unsafe { CStr::from_ptr(s) }.to_string_lossy();
-    let colour = unsafe { CStr::from_ptr(c) }.to_string_lossy();
+pub unsafe extern "C" fn libraryclient_update_label(client: &mut LibraryClientWrapper,
+                                                    label_id: LibraryId,
+                                                    s: *const c_char, c: *const c_char) {
+    let name = CStr::from_ptr(s).to_string_lossy();
+    let colour = CStr::from_ptr(c).to_string_lossy();
     client.unwrap_mut().update_label(label_id, String::from(name), String::from(colour));
 }
 
@@ -307,16 +307,16 @@ pub extern "C" fn libraryclient_process_xmp_update_queue(client: &mut LibraryCli
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_import_files(client: &mut LibraryClientWrapper,
-                                             dir: *const c_char, cfiles: &mut FileList,
-                                             manage: Managed) {
-    let folder = unsafe { CStr::from_ptr(dir) }.to_string_lossy();
+pub unsafe extern "C" fn libraryclient_import_files(client: &mut LibraryClientWrapper,
+                                                    dir: *const c_char, cfiles: &mut FileList,
+                                                    manage: Managed) {
+    let folder = CStr::from_ptr(dir).to_string_lossy();
     let mut files: Vec<String> = vec!();
     {
-        let len = unsafe { cfiles.size() };
+        let len = cfiles.size();
         for i in 0..len {
-            let f = unsafe { cfiles.at_cstr(i) };
-            let cstr = unsafe { CStr::from_ptr(f) }.to_string_lossy();
+            let f = cfiles.at_cstr(i);
+            let cstr = CStr::from_ptr(f).to_string_lossy();
             files.push(String::from(cstr));
         }
     }

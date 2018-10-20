@@ -22,7 +22,7 @@ use std::f64;
 
 pub fn fraction_to_decimal(value: &str) -> Option<f64>
 {
-    let numbers: Vec<i64> = value.split("/")
+    let numbers: Vec<i64> = value.split('/')
         .map(|s| { s.parse::<i64>().unwrap_or(0) })
         .collect();
     if numbers.len() != 2 {

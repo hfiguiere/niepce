@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/mod.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ pub extern "C" fn fwk_property_set_new() -> *mut PropertySet {
 }
 
 #[no_mangle]
-pub extern "C" fn fwk_property_set_delete(set: *mut PropertySet) {
-    unsafe { Box::from_raw(set); }
+pub unsafe extern "C" fn fwk_property_set_delete(set: *mut PropertySet) {
+    Box::from_raw(set);
 }
 
 #[no_mangle]

@@ -67,6 +67,11 @@ pub struct XmpMeta {
     keywords_fetched: bool,
 }
 
+impl Default for XmpMeta {
+    fn default() -> XmpMeta {
+        XmpMeta::new()
+    }
+}
 
 impl XmpMeta {
     pub fn new() -> XmpMeta {
@@ -83,7 +88,7 @@ impl XmpMeta {
             if let Some(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
                 if let Some(xmp) = xmpfile.get_new_xmp() {
                     meta = Some(XmpMeta {
-                        xmp: xmp,
+                        xmp,
                         keywords: Vec::new(),
                         keywords_fetched: false
                     });
@@ -95,14 +100,14 @@ impl XmpMeta {
         let filepath = Path::new(file);
         let sidecar = filepath.with_extension("xmp");
         let sidecaropen = File::open(sidecar);
-        if let Some(mut sidecarfile) = sidecaropen.ok() {
+        if let Ok(mut sidecarfile) = sidecaropen {
             let mut sidecarcontent = String::new();
             let result = sidecarfile.read_to_string(&mut sidecarcontent);
             if result.ok().is_some() {
                 let mut xmp = exempi::Xmp::new();
                 if xmp.parse(sidecarcontent.into_bytes().as_slice()) {
                     sidecar_meta = Some(XmpMeta {
-                        xmp: xmp,
+                        xmp,
                         keywords: Vec::new(),
                         keywords_fetched: false
                     });
@@ -200,7 +205,7 @@ impl XmpMeta {
 
     pub fn orientation(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        return self.xmp.get_property_i32(NS_TIFF, "Orientation", &mut flags);
+        self.xmp.get_property_i32(NS_TIFF, "Orientation", &mut flags)
     }
 
     pub fn label(&self) -> Option<String> {
@@ -211,12 +216,12 @@ impl XmpMeta {
 
     pub fn rating(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PROP_NONE;
-        return self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags);
+        self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags)
     }
 
     pub fn flag(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        return self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags);
+        self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags)
     }
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
@@ -224,7 +229,7 @@ impl XmpMeta {
         let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags));
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
 
-        return Some(date.with_timezone(&Utc));
+        Some(date.with_timezone(&Utc))
     }
 
     pub fn creation_date_str(&self) -> Option<String> {
@@ -239,14 +244,14 @@ impl XmpMeta {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         let xmpstring = try_opt!(self.xmp.get_property(ns, property, &mut flags));
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
-        return Some(date.with_timezone(&Utc));
+        Some(date.with_timezone(&Utc))
     }
 
     pub fn keywords(&mut self) -> &Vec<String> {
         if !self.keywords_fetched {
             use exempi::XmpString;
 
-            let mut iter = exempi::XmpIterator::new(&mut self.xmp, NS_DC, "subject",
+            let mut iter = exempi::XmpIterator::new(&self.xmp, NS_DC, "subject",
                                                     exempi::ITER_JUST_LEAF_NODES);
             let mut schema = XmpString::new();
             let mut name = XmpString::new();
@@ -272,7 +277,7 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     degs = d;
 
     // step 2 - minutes
-    if current.len() < 1 {
+    if current.is_empty() {
         return None;
     }
     // get rid of the comma
@@ -315,17 +320,17 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     deg += fminutes / 60.0;
     deg *= orientation;
 
-    return Some(deg);
+    Some(deg)
 }
 
 #[no_mangle]
 pub extern "C" fn fwk_exempi_manager_new() -> *mut ExempiManager {
-    return Box::into_raw(Box::new(ExempiManager::new(None)))
+    Box::into_raw(Box::new(ExempiManager::new(None)))
 }
 
 #[no_mangle]
-pub extern "C" fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
-    unsafe { Box::from_raw(em); }
+pub unsafe extern "C" fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
+    Box::from_raw(em);
 }
 
 #[cfg(test)]

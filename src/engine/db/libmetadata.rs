@@ -59,7 +59,7 @@ impl LibMetadata {
     pub fn new(id: LibraryId) -> LibMetadata {
         LibMetadata {
             xmp: XmpMeta::new(),
-            id: id,
+            id,
             sidecars: vec![], file_type: FileType::UNKNOWN,
             name: String::new(),
             folder: String::new()
@@ -68,8 +68,8 @@ impl LibMetadata {
 
     pub fn new_with_xmp(id: LibraryId, xmp: XmpMeta) -> LibMetadata {
         LibMetadata {
-            xmp: xmp,
-            id: id,
+            xmp,
+            id,
             sidecars: vec![],
             file_type: FileType::UNKNOWN,
             name: String::new(),
@@ -111,14 +111,14 @@ impl LibMetadata {
 
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {
         if let Some(ix) = property_index_to_xmp(meta) {
-            match value {
-                &PropertyValue::Empty => return self.xmp.xmp.delete_property(&ix.ns, &ix.property),
-                &PropertyValue::Int(i) => {
+            match *value {
+                PropertyValue::Empty => return self.xmp.xmp.delete_property(&ix.ns, &ix.property),
+                PropertyValue::Int(i) => {
                     return self.xmp
                         .xmp
                         .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE)
                 }
-                &PropertyValue::String(ref s) => {
+                PropertyValue::String(ref s) => {
                     if s.is_empty() {
                         return self.xmp.xmp.delete_property(&ix.ns, &ix.property);
                     } else if !self.xmp
@@ -139,20 +139,20 @@ impl LibMetadata {
                         return true;
                     }
                 }
-                &PropertyValue::StringArray(ref sa) => {
+                PropertyValue::StringArray(ref sa) => {
                     self.xmp.xmp.delete_property(&ix.ns, &ix.property);
-                    for i in 0..sa.len() {
+                    for s in sa {
                         self.xmp.xmp.append_array_item(
                             &ix.ns,
                             &ix.property,
                             exempi::PROP_VALUE_IS_ARRAY,
-                            &sa[i],
+                            s,
                             exempi::PROP_NONE,
                         );
                     }
                     return true;
                 }
-                &PropertyValue::Date(ref d) => {
+                PropertyValue::Date(ref d) => {
                     let xmp_date = xmp_date_from(d);
                     return self.xmp.xmp.set_property_date(
                         &ix.ns,
@@ -243,9 +243,9 @@ impl LibMetadata {
 
     pub fn touch(&mut self) -> bool {
         let xmpdate = xmp_date_from(&Utc::now());
-        return self.xmp
+        self.xmp
             .xmp
-            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE);
+            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE)
     }
 }
 
