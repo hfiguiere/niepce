@@ -47,7 +47,7 @@ pub enum Managed {
     YES = 1,
 }
 
-const DB_SCHEMA_VERSION: i32 = 8;
+const DB_SCHEMA_VERSION: i32 = 9;
 const DATABASENAME: &str = "niepcelibrary.db";
 
 #[derive(Debug)]
@@ -200,6 +200,15 @@ impl Library {
                  parent_id INTEGER)",
                 &[],
             ).unwrap();
+            // Version 9
+            conn.execute(
+                "CREATE TRIGGER folder_delete_trigger AFTER DELETE ON folders \
+                 BEGIN \
+                 DELETE FROM files WHERE parent_id = old.id; \
+                 END",
+                &[],
+            ).unwrap();
+            //
             let trash_type = libfolder::FolderVirtualType::TRASH as i32;
             conn.execute(
                 "insert into folders (name, locked, virtual, parent_id, path) \
@@ -230,12 +239,19 @@ impl Library {
                  UNIQUE(file_id, fsfile_id))",
                 &[],
             ).unwrap();
-            conn.execute(
-                "CREATE TRIGGER file_delete_trigger AFTER DELETE ON files \
+            conn.execute_batch(
+                "BEGIN; \
+                 CREATE TRIGGER pre_file_delete_trigger BEFORE DELETE ON files \
+                 BEGIN \
+                 DELETE FROM fsfiles WHERE id = old.main_file \
+                                    OR id = old.xmp_file OR id = old.jpeg_file; \
+                 END; \
+                 CREATE TRIGGER file_delete_trigger AFTER DELETE ON files \
                  BEGIN \
                  DELETE FROM sidecars WHERE file_id = old.id; \
-                 END",
-                &[],
+                 DELETE FROM keywording WHERE file_id = old.id; \
+                 END; \
+                 COMMIT;",
             ).unwrap();
             //
             conn.execute(
@@ -247,6 +263,11 @@ impl Library {
                 "CREATE TABLE keywording (file_id INTEGER,\
                  keyword_id INTEGER, UNIQUE(file_id, keyword_id))",
                 &[],
+            ).unwrap();
+            conn.execute("CREATE TRIGGER keyword_delete_trigger AFTER DELETE ON keywords \
+                 BEGIN \
+                 DELETE FROM keywording WHERE keyword_id = old.id; \
+                 END;", &[],
             ).unwrap();
             conn.execute(
                 "CREATE TABLE labels (id INTEGER PRIMARY KEY,\
