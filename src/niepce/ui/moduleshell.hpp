@@ -1,7 +1,7 @@
 /*
  * niepce - ui/moduleshell.hpp
  *
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,8 +83,14 @@ public:
     Glib::RefPtr<Gio::Menu> getMenu() const
         { return m_menu; }
 
+    /** called when the content will change
+     * the content being what the grid view displays.
+     */
+    void on_content_will_change();
+
     /** called when something is selected by the shared selection */
-    void on_selected(eng::library_id_t id);
+    void on_image_selected(eng::library_id_t id);
+    /** called when an image is activate in the shared selection */
     void on_image_activated(eng::library_id_t id);
 
     virtual Gtk::Widget * buildWidget() override;

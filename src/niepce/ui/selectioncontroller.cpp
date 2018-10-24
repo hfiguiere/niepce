@@ -314,6 +314,11 @@ void SelectionController::set_properties(const fwk::PropertyBagPtr & props,
     }
 }
 
+void SelectionController::content_will_change()
+{
+    m_imageliststore->clear_content();
+}
+
 void SelectionController::write_metadata()
 {
     eng::library_id_t selection = get_selection();

@@ -100,6 +100,8 @@ public:
     void set_properties(const fwk::PropertyBagPtr & props,
                         const fwk::PropertyBagPtr & old);
 
+    /** the content will change */
+    void content_will_change();
     /** Write the file(s) metadata to disk. */
     void write_metadata();
     void move_to_trash();

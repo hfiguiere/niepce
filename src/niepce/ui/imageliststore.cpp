@@ -102,6 +102,13 @@ void ImageListStore::add_libfile(const eng::LibFilePtr & f)
     m_idmap[engine_db_libfile_id(f.get())] = riter;
 }
 
+void ImageListStore::clear_content()
+{
+    // clear the map before the list.
+    m_idmap.clear();
+    clear();
+}
+
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
 {
     auto type = engine_library_notification_type(&ln);
@@ -118,10 +125,8 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             m_current_folder = 0;
             m_current_keyword = param->container;
         }
+        clear_content();
         DBG_OUT("received folder content file # %lu", l->size());
-        // clear the map before the list.
-        m_idmap.clear();
-        clear();
         for_each(l->cbegin(), l->cend(), [this] (const eng::LibFilePtr & f) {
                 this->add_libfile(f);
             });

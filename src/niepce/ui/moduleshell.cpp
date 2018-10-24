@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/moduleshell.cpp
  *
- * Copyright (C) 2007-2017 Hubert Figuière
+ * Copyright (C) 2007-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ Gtk::Widget * ModuleShell::buildWidget()
 
     m_selection_controller->add_selectable(m_gridview);
     m_selection_controller->signal_selected
-        .connect(sigc::mem_fun(*this, &ModuleShell::on_selected));
+        .connect(sigc::mem_fun(*this, &ModuleShell::on_image_selected));
     m_selection_controller->signal_activated
         .connect(sigc::mem_fun(*this, &ModuleShell::on_image_activated));
 
@@ -240,8 +240,12 @@ void ModuleShell::on_ready()
 {
 }
 
+void ModuleShell::on_content_will_change()
+{
+    m_selection_controller->content_will_change();
+}
 
-void ModuleShell::on_selected(eng::library_id_t id)
+void ModuleShell::on_image_selected(eng::library_id_t id)
 {
     DBG_OUT("selected callback %Ld", (long long)id);
     if(id > 0) {

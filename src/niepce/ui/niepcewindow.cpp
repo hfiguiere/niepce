@@ -138,6 +138,8 @@ NiepceWindow::_createModuleShell()
     auto workspace_actions = Gio::SimpleActionGroup::create();
     gtkWindow().insert_action_group("workspace", workspace_actions);
     m_workspacectrl = WorkspaceController::Ptr(new WorkspaceController(workspace_actions));
+    m_workspacectrl->libtree_selection_changed.connect(
+        sigc::mem_fun(*m_moduleshell, &ModuleShell::on_content_will_change));
 
     m_notifcenter->signal_lib_notification
         .connect(sigc::mem_fun(*m_workspacectrl,

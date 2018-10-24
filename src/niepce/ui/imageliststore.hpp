@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.h
  *
- * Copyright (C) 2008 Hubert Figuiere
+ * Copyright (C) 2008-2018 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,8 @@ public:
     void set_parent_controller(const fwk::Controller::WeakPtr & ctrl)
         { m_controller = ctrl; }
 
+    // Should be called when the content will change
+    void clear_content();
     void on_lib_notification(const eng::LibNotification &n);
     void on_tnail_notification(const eng::ThumbnailNotification &n);
 protected:

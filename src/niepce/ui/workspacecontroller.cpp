@@ -281,6 +281,7 @@ void WorkspaceController::on_libtree_selection()
 
     Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(
         m_action_group->lookup_action("DeleteFolder"))->set_enabled(type == FOLDER_ITEM);
+    libtree_selection_changed.emit();
 }
 
 void WorkspaceController::on_row_expanded_collapsed(const Gtk::TreeIter& iter,

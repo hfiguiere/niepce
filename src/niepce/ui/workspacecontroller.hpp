@@ -75,14 +75,16 @@ public:
         Gtk::TreeModelColumn<Glib::ustring> m_count;
         Gtk::TreeModelColumn<int> m_count_n;
     };
-    
+
     virtual void on_ready() override;
-    
+
     void on_lib_notification(const eng::LibNotification &);
     void on_count_notification(int);
     void on_libtree_selection();
-    
+
     virtual Gtk::Widget * buildWidget() override;
+
+    sigc::signal<void> libtree_selection_changed;
 private:
     /** Return the selected folder id. 0 if not a folder or no selection*/
     eng::library_id_t get_selected_folder_id();
