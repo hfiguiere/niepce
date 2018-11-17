@@ -582,30 +582,32 @@ impl Library {
         manage: Managed,
     ) -> Result<LibraryId> {
         let file_id = self.add_file(folder_id, bundle.main(), manage)?;
-        if file_id > 0 {
-            if !bundle.xmp_sidecar().is_empty() {
-                let fsfile_id = self.add_fs_file(bundle.xmp_sidecar())?;
-                if fsfile_id > 0 {
-                    self.add_xmp_sidecar_to_bundle(file_id, fsfile_id)?;
-                    self.add_sidecar_fsfile_to_bundle(
-                        file_id,
-                        fsfile_id,
-                        Sidecar::Xmp(String::new()).to_int(),
-                        "xmp",
-                    )?;
-                }
+        if file_id <= 0 {
+            err_out!("add_file returned {}", file_id);
+            return Err(Error::InvalidResult);
+        }
+        if !bundle.xmp_sidecar().is_empty() {
+            let fsfile_id = self.add_fs_file(bundle.xmp_sidecar())?;
+            if fsfile_id > 0 {
+                self.add_xmp_sidecar_to_bundle(file_id, fsfile_id)?;
+                self.add_sidecar_fsfile_to_bundle(
+                    file_id,
+                    fsfile_id,
+                    Sidecar::Xmp(String::new()).to_int(),
+                    "xmp",
+                )?;
             }
-            if !bundle.jpeg().is_empty() {
-                let fsfile_id = self.add_fs_file(bundle.jpeg())?;
-                if fsfile_id > 0 {
-                    self.add_jpeg_file_to_bundle(file_id, fsfile_id)?;
-                    self.add_sidecar_fsfile_to_bundle(
-                        file_id,
-                        fsfile_id,
-                        Sidecar::Jpeg(String::new()).to_int(),
-                        "jpg",
-                    )?;
-                }
+        }
+        if !bundle.jpeg().is_empty() {
+            let fsfile_id = self.add_fs_file(bundle.jpeg())?;
+            if fsfile_id > 0 {
+                self.add_jpeg_file_to_bundle(file_id, fsfile_id)?;
+                self.add_sidecar_fsfile_to_bundle(
+                    file_id,
+                    fsfile_id,
+                    Sidecar::Jpeg(String::new()).to_int(),
+                    "jpg",
+                )?;
             }
         }
 
