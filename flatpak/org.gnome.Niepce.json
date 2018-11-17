@@ -1,8 +1,8 @@
 {
     "app-id" : "org.gnome.Niepce",
     "branch" : "master",
-    "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "3.26",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "3.30",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.rust-stable"
@@ -20,7 +20,6 @@
         "--filesystem=host",
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
-        /* Needed for dconf to work (+ host or homedir read access from above) */
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
@@ -30,8 +29,8 @@
         "cflags" : "-O2 -g",
         "cxxflags" : "-O2 -g",
         "env" : {
-            "CARGO_HOME" : "/run/build/niepce/cargo",
-            "V" : "1"
+            "V" : "1",
+            "CARGO_HOME" : "/run/build/niepce/cargo"
         },
         "append-path" : "/usr/lib/sdk/rust-stable/bin"
     },
@@ -51,14 +50,19 @@
             ]
         },
         {
-            "name": "libraw",
-            "config-opts": [ "--disable-static" ],
-            "cleanup": [ "/bin", "/share/doc" ],
-            "sources": [
+            "name" : "libraw",
+            "config-opts" : [
+                "--disable-static"
+            ],
+            "cleanup" : [
+                "/bin",
+                "/share/doc"
+            ],
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "http://www.libraw.org/data/LibRaw-0.19.0.tar.gz",
-                    "sha256": "e83f51e83b19f9ba6b8bd144475fc12edf2d7b3b930d8d280bdebd8a8f3ed259"
+                    "type" : "archive",
+                    "url" : "http://www.libraw.org/data/LibRaw-0.19.0.tar.gz",
+                    "sha256" : "e83f51e83b19f9ba6b8bd144475fc12edf2d7b3b930d8d280bdebd8a8f3ed259"
                 }
             ]
         },
@@ -221,9 +225,9 @@
                 "/lib/libboost_*.so*",
                 "/lib/libboost_*.a"
             ],
-            "build-commands": [
-              "./bootstrap.sh",
-              "./b2 install variant=release link=shared runtime-link=shared --prefix=/app --without-math --without-thread --without-container --without-log --without-system --without-filesystem --without-chrono --without-random --without-python -j $FLATPAK_BUILDER_N_JOBS"
+            "build-commands" : [
+                "./bootstrap.sh",
+                "./b2 install variant=release link=shared runtime-link=shared --prefix=/app --without-math --without-thread --without-container --without-log --without-system --without-filesystem --without-chrono --without-random --without-python -j $FLATPAK_BUILDER_N_JOBS"
             ],
             "sources" : [
                 {
