@@ -581,7 +581,7 @@ impl Library {
         bundle: &FileBundle,
         manage: Managed,
     ) -> Result<LibraryId> {
-        let file_id = self.add_file(folder_id, bundle.main(), manage)?;
+        let file_id = self.add_file(folder_id, bundle.main(), Some(bundle), manage)?;
         if file_id <= 0 {
             err_out!("add_file returned {}", file_id);
             return Err(Error::InvalidResult);
@@ -614,7 +614,7 @@ impl Library {
         Ok(file_id)
     }
 
-    pub fn add_file(&self, folder_id: LibraryId, file: &str, manage: Managed) -> Result<LibraryId> {
+    pub fn add_file(&self, folder_id: LibraryId, file: &str, bundle: Option<&FileBundle>, manage: Managed) -> Result<LibraryId> {
         dbg_assert!(manage == Managed::NO, "manage not supported");
         dbg_assert!(folder_id != -1, "invalid folder ID");
         let mime = fwk::MimeType::new(file);
@@ -626,7 +626,20 @@ impl Library {
         let flag: i32;
         let creation_date: fwk::Time;
         let xmp: String;
-        let meta = fwk::XmpMeta::new_from_file(file, file_type == libfile::FileType::RAW);
+
+        // Until we get better metadata support for RAW files, we use the Exif reconcile
+        // from the sidecar JPEG to get the initial metadata.
+        let meta = if let Some(bundle) = bundle {
+            match bundle.bundle_type() {
+                libfile::FileType::RAW_JPEG => {
+                    fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
+                },
+                _ => fwk::XmpMeta::new_from_file(file, file_type == libfile::FileType::RAW)
+            }
+        } else {
+            fwk::XmpMeta::new_from_file(file, file_type == libfile::FileType::RAW)
+        };
+
         if let Some(ref meta) = meta {
             orientation = meta.orientation().unwrap_or(0);
             rating = meta.rating().unwrap_or(0);
@@ -1094,7 +1107,7 @@ mod test {
         let folders = folders.ok().unwrap();
         assert_eq!(folders.len(), 3);
 
-        let file_id = lib.add_file(folder_added.id(), "foo/myfile", super::Managed::NO);
+        let file_id = lib.add_file(folder_added.id(), "foo/myfile", None, super::Managed::NO);
         assert!(file_id.is_ok());
         let file_id = file_id.ok().unwrap();
         assert!(file_id > 0);
