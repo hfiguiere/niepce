@@ -28,9 +28,14 @@
 using fwk::FileList;
 
 // stub to avoid linking the Rust library.
-extern "C"
+extern "C" {
 void niepce_init()
 {
+}
+bool file_is_media(GFileInfo *)
+{
+  return false;
+}
 }
 
 TEST(testFiles, testFilesSanity)
