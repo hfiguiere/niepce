@@ -27,6 +27,7 @@ extern crate glib_sys;
 extern crate gtk;
 extern crate gtk_sys;
 extern crate libc;
+extern crate rexiv2;
 extern crate rusqlite;
 #[macro_use]
 extern crate try_opt;

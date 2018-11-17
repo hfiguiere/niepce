@@ -27,6 +27,7 @@ niepce_LDADD = \
 	@GPHOTO_LIBS@ \
 	@BABL_LIBS@ \
 	@GEGL_LIBS@ @OPENRAW_LIBS@ \
+	@GEXIV2_LIBS@ \
 	-ldl \
 	$(NULL)
 

@@ -73,6 +73,10 @@ PKG_CHECK_MODULES(GEGL, gegl-0.3 >= $GEGL_VERSION)
 AC_SUBST(GEGL_CFLAGS)
 AC_SUBST(GEGL_LIBS)
 
+dnl gexiv2 is needed in the Rust code
+PKG_CHECK_MODULES(GEXIV2, gexiv2)
+AC_SUBST(GEXIV2_LIBS)
+
 AX_BOOST_BASE([$BOOST_VERSION])
 
 dnl Relative googletest dir from top srcdir.
