@@ -85,8 +85,8 @@ impl XmpMeta {
     pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
         let mut meta: Option<XmpMeta> = None;
         if !sidecar_only {
-            if let Some(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
-                if let Some(xmp) = xmpfile.get_new_xmp() {
+            if let Ok(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
+                if let Ok(xmp) = xmpfile.get_new_xmp() {
                     meta = Some(XmpMeta {
                         xmp,
                         keywords: Vec::new(),
@@ -102,10 +102,9 @@ impl XmpMeta {
         let sidecaropen = File::open(sidecar);
         if let Ok(mut sidecarfile) = sidecaropen {
             let mut sidecarcontent = String::new();
-            let result = sidecarfile.read_to_string(&mut sidecarcontent);
-            if result.ok().is_some() {
+            if sidecarfile.read_to_string(&mut sidecarcontent).is_ok() {
                 let mut xmp = exempi::Xmp::new();
-                if xmp.parse(sidecarcontent.into_bytes().as_slice()) {
+                if let Ok(_) = xmp.parse(sidecarcontent.into_bytes().as_slice()) {
                     sidecar_meta = Some(XmpMeta {
                         xmp,
                         keywords: Vec::new(),
@@ -171,8 +170,10 @@ impl XmpMeta {
                 }
 
                 if !dest.xmp.has_property(schema.to_str(), name.to_str()) {
-                    dest.xmp.set_property(schema.to_str(), name.to_str(),
-                                          value.to_str(), exempi::PROP_NONE);
+                    if dest.xmp.set_property(schema.to_str(), name.to_str(),
+                                          value.to_str(), exempi::PROP_NONE).is_err() {
+                        err_out!("Can set property {}", name);
+                    }
                 }
             }
         }
@@ -181,7 +182,7 @@ impl XmpMeta {
     }
 
     pub fn serialize_inline(&self) -> String {
-        if let Some(xmpstr) = self.xmp.serialize_and_format(
+        if let Ok(xmpstr) = self.xmp.serialize_and_format(
             exempi::SERIAL_OMITPACKETWRAPPER | exempi::SERIAL_OMITALLFORMATTING,
             0, "", "", 0) {
             let buf = String::from(xmpstr.to_str());
@@ -191,7 +192,7 @@ impl XmpMeta {
     }
 
     pub fn serialize(&self) -> String {
-        if let Some(xmpstr) = self.xmp.serialize_and_format(
+        if let Ok(xmpstr) = self.xmp.serialize_and_format(
             exempi::SERIAL_OMITPACKETWRAPPER, 0, "\n", "", 0) {
             let buf = String::from(xmpstr.to_str());
             return buf;
@@ -200,33 +201,33 @@ impl XmpMeta {
     }
 
     pub fn unserialize(&mut self, buf: &str) -> bool {
-        self.xmp.parse(buf.as_bytes())
+        self.xmp.parse(buf.as_bytes()).is_ok() // XXX actually report the error.
     }
 
     pub fn orientation(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        self.xmp.get_property_i32(NS_TIFF, "Orientation", &mut flags)
+        self.xmp.get_property_i32(NS_TIFF, "Orientation", &mut flags).ok()
     }
 
     pub fn label(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PROP_NONE;
-        let xmpstring = try_opt!(self.xmp.get_property(NS_XAP, "Label", &mut flags));
+        let xmpstring = try_opt!(self.xmp.get_property(NS_XAP, "Label", &mut flags).ok());
         Some(String::from(xmpstring.to_str()))
     }
 
     pub fn rating(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PROP_NONE;
-        self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags)
+        self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags).ok()
     }
 
     pub fn flag(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags)
+        self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags).ok()
     }
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags));
+        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags).ok());
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
 
         Some(date.with_timezone(&Utc))
@@ -234,7 +235,7 @@ impl XmpMeta {
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags));
+        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags).ok());
         Some(String::from(xmpstring.to_str()))
     }
 
@@ -242,7 +243,7 @@ impl XmpMeta {
     /// from the string value.
     pub fn get_date_property(&self, ns: &str, property: &str) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(ns, property, &mut flags));
+        let xmpstring = try_opt!(self.xmp.get_property(ns, property, &mut flags).ok());
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
         Some(date.with_timezone(&Utc))
     }
@@ -385,7 +386,7 @@ mod tests {
                            property: &str, expected_value: &str) {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         let value = meta.xmp.get_property(ns, property, &mut flags);
-        assert!(value.is_some());
+        assert!(value.is_ok());
         assert_eq!(value.unwrap().to_str(), expected_value);
     }
 
@@ -393,7 +394,7 @@ mod tests {
                                  property: &str, idx: i32, expected_value: &str) {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         let value = meta.xmp.get_array_item(ns, property, idx, &mut flags);
-        assert!(value.is_some());
+        assert!(value.is_ok());
         assert_eq!(value.unwrap().to_str(), expected_value);
     }
 

@@ -89,41 +89,37 @@ impl LibMetadata {
             self.xmp
                 .xmp
                 .get_property(&index_to_xmp.ns, &index_to_xmp.property, &mut prop_flags);
-        if xmp_result.is_some() && prop_flags.contains(exempi::ARRAY_IS_ALTTEXT) {
-            let mut value = exempi::XmpString::new();
-            let mut actual_lang = exempi::XmpString::new();
-            if self.xmp.xmp.get_localized_text(
+        if xmp_result.is_ok() && prop_flags.contains(exempi::ARRAY_IS_ALTTEXT) {
+            if let Ok((_, value)) = self.xmp.xmp.get_localized_text(
                 &index_to_xmp.ns,
                 &index_to_xmp.property,
                 "",
                 "x-default",
-                &mut actual_lang,
-                &mut value,
                 &mut prop_flags,
             ) {
-                xmp_result = Some(value);
+                xmp_result = Ok(value);
             }
         }
         Some(PropertyValue::String(String::from(
-            try_opt!(xmp_result).to_str(),
+            try_opt!(xmp_result.ok()).to_str(),
         )))
     }
 
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {
         if let Some(ix) = property_index_to_xmp(meta) {
             match *value {
-                PropertyValue::Empty => return self.xmp.xmp.delete_property(&ix.ns, &ix.property),
+                PropertyValue::Empty => return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok(),
                 PropertyValue::Int(i) => {
                     return self.xmp
                         .xmp
-                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE)
+                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE).is_ok()
                 }
                 PropertyValue::String(ref s) => {
                     if s.is_empty() {
-                        return self.xmp.xmp.delete_property(&ix.ns, &ix.property);
+                        return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok();
                     } else if !self.xmp
                         .xmp
-                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE)
+                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE).is_ok()
                     {
                         if exempi::get_error() == exempi::Error::BadXPath {
                             return self.xmp.xmp.set_localized_text(
@@ -133,22 +129,28 @@ impl LibMetadata {
                                 "x-default",
                                 s,
                                 exempi::PROP_NONE,
-                            );
+                            ).is_ok();
                         }
                     } else {
                         return true;
                     }
                 }
                 PropertyValue::StringArray(ref sa) => {
-                    self.xmp.xmp.delete_property(&ix.ns, &ix.property);
+                    if self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_err() {
+                        err_out!("Error deleting property {}", &ix.property);
+                        return false;
+                    }
                     for s in sa {
-                        self.xmp.xmp.append_array_item(
+                        if self.xmp.xmp.append_array_item(
                             &ix.ns,
                             &ix.property,
                             exempi::PROP_VALUE_IS_ARRAY,
                             s,
                             exempi::PROP_NONE,
-                        );
+                        ).is_err() {
+                            err_out!("Error appending array item {} in property {}", &s, &ix.ns);
+                            return false;
+                        }
                     }
                     return true;
                 }
@@ -159,7 +161,7 @@ impl LibMetadata {
                         &ix.property,
                         &xmp_date,
                         exempi::PROP_NONE,
-                    );
+                    ).is_ok();
                 }
             }
             err_out!(
@@ -245,7 +247,7 @@ impl LibMetadata {
         let xmpdate = xmp_date_from(&Utc::now());
         self.xmp
             .xmp
-            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE)
+            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE).is_ok()
     }
 }
 

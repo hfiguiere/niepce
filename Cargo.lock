@@ -175,17 +175,17 @@ dependencies = [
 [[package]]
 name = "exempi"
 version = "2.5.0"
-source = "git+https://github.com/hfiguiere/exempi-rs.git#3c42c300a36414bf24e52c935f9c7a005657bdf2"
+source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4#065721c48de36cf8f3e3d89691e3891a3d3230cc"
 dependencies = [
  "bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "exempi-sys 2.4.1 (git+https://github.com/hfiguiere/exempi-rs.git)",
+ "exempi-sys 2.4.1 (git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4)",
  "libc 0.2.39 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "exempi-sys"
 version = "2.4.1"
-source = "git+https://github.com/hfiguiere/exempi-rs.git#3c42c300a36414bf24e52c935f9c7a005657bdf2"
+source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4#065721c48de36cf8f3e3d89691e3891a3d3230cc"
 dependencies = [
  "libc 0.2.39 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -480,7 +480,7 @@ dependencies = [
  "bindgen 0.37.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cbindgen 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git)",
+ "exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4)",
  "gettext-rs 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gio 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gio-sys 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -944,8 +944,8 @@ dependencies = [
 "checksum clap 2.31.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5dc18f6f4005132120d9711636b32c46a233fad94df6217fa1d81c5e97a9f200"
 "checksum dtoa 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "09c3753c3db574d215cba4ea76018483895d7bff25a31b49ba45db21c48e50ab"
 "checksum env_logger 0.5.10 (registry+https://github.com/rust-lang/crates.io-index)" = "0e6e40ebb0e66918a37b38c7acab4e10d299e0463fe2af5d29b9cc86710cfd2a"
-"checksum exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git)" = "<none>"
-"checksum exempi-sys 2.4.1 (git+https://github.com/hfiguiere/exempi-rs.git)" = "<none>"
+"checksum exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4)" = "<none>"
+"checksum exempi-sys 2.4.1 (git+https://github.com/hfiguiere/exempi-rs.git?rev=065721c4)" = "<none>"
 "checksum fragile 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "05f8140122fa0d5dcb9fc8627cfce2b37cc1500f752636d46ea28bc26785c2f9"
 "checksum fuchsia-zircon 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2e9763c69ebaae630ba35f74888db465e49e259ba1bc0eda7d06f4a067615d82"
 "checksum fuchsia-zircon-sys 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "3dcaa9ae7725d12cdb85b3ad99a434db70b468c09ded17e012d86b5c1010f7a7"
