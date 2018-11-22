@@ -26,6 +26,8 @@ extern crate glib;
 extern crate glib_sys;
 extern crate gtk;
 extern crate gtk_sys;
+#[macro_use]
+extern crate lazy_static;
 extern crate libc;
 extern crate rexiv2;
 extern crate rusqlite;

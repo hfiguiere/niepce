@@ -630,14 +630,13 @@ impl Library {
         // Until we get better metadata support for RAW files, we use the Exif reconcile
         // from the sidecar JPEG to get the initial metadata.
         let meta = if let Some(bundle) = bundle {
-            match bundle.bundle_type() {
-                libfile::FileType::RAW_JPEG => {
-                    fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
-                },
-                _ => fwk::XmpMeta::new_from_file(file, file_type == libfile::FileType::RAW)
+            if bundle.bundle_type() == libfile::FileType::RAW_JPEG {
+                fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
+            } else {
+                fwk::XmpMeta::new_from_file(file, false)
             }
         } else {
-            fwk::XmpMeta::new_from_file(file, file_type == libfile::FileType::RAW)
+            fwk::XmpMeta::new_from_file(file, false)
         };
 
         if let Some(ref meta) = meta {

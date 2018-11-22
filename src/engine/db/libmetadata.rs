@@ -117,9 +117,9 @@ impl LibMetadata {
                 PropertyValue::String(ref s) => {
                     if s.is_empty() {
                         return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok();
-                    } else if !self.xmp
+                    } else if self.xmp
                         .xmp
-                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE).is_ok()
+                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE).is_err()
                     {
                         if exempi::get_error() == exempi::Error::BadXPath {
                             return self.xmp.xmp.set_localized_text(

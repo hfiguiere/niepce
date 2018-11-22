@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exempi.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,18 @@ use chrono::{DateTime, Utc};
 use exempi;
 use exempi::Xmp;
 
-static NIEPCE_XMP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/niepce/1.0";
-static NIEPCE_XMP_NS_PREFIX: &'static str = "niepce";
-static UFRAW_INTEROP_NAMESPACE: &'static str = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
-static UFRAW_INTEROP_NS_PREFIX: &'static str = "ufrint";
+use super::exiv2;
 
+const NIEPCE_XMP_NAMESPACE: &str = "http://xmlns.figuiere.net/ns/niepce/1.0";
+const NIEPCE_XMP_NS_PREFIX: &str = "niepce";
+const UFRAW_INTEROP_NAMESPACE: &str = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
+const UFRAW_INTEROP_NS_PREFIX: &str = "ufrint";
 
-pub static NS_TIFF: &'static str = "http://ns.adobe.com/tiff/1.0/";
-pub static NS_XAP: &'static str = "http://ns.adobe.com/xap/1.0/";
-pub static NS_EXIF: &'static str = "http://ns.adobe.com/exif/1.0/";
-pub static NS_DC: &'static str = "http://purl.org/dc/elements/1.1/";
-pub static NS_AUX: &'static str = "http://ns.adobe.com/exif/1.0/aux/";
+pub const NS_TIFF: &str = "http://ns.adobe.com/tiff/1.0/";
+pub const NS_XAP: &str = "http://ns.adobe.com/xap/1.0/";
+pub const NS_EXIF: &str = "http://ns.adobe.com/exif/1.0/";
+pub const NS_DC: &str = "http://purl.org/dc/elements/1.1/";
+pub const NS_AUX: &str = "http://ns.adobe.com/exif/1.0/aux/";
 
 pub struct NsDef {
     ns: String,
@@ -82,16 +83,21 @@ impl XmpMeta {
         }
     }
 
+    pub fn new_with_xmp(xmp: exempi::Xmp) -> XmpMeta {
+        XmpMeta {
+            xmp,
+            keywords: Vec::new(),
+            keywords_fetched: false,
+        }
+    }
+
     pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
         let mut meta: Option<XmpMeta> = None;
         if !sidecar_only {
             if let Ok(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
-                if let Ok(xmp) = xmpfile.get_new_xmp() {
-                    meta = Some(XmpMeta {
-                        xmp,
-                        keywords: Vec::new(),
-                        keywords_fetched: false
-                    });
+                meta = match xmpfile.get_new_xmp() {
+                    Ok(xmp) => Some(Self::new_with_xmp(xmp)),
+                    _ => exiv2::xmp_from_exiv2(file)
                 }
             }
         }
@@ -104,12 +110,8 @@ impl XmpMeta {
             let mut sidecarcontent = String::new();
             if sidecarfile.read_to_string(&mut sidecarcontent).is_ok() {
                 let mut xmp = exempi::Xmp::new();
-                if let Ok(_) = xmp.parse(sidecarcontent.into_bytes().as_slice()) {
-                    sidecar_meta = Some(XmpMeta {
-                        xmp,
-                        keywords: Vec::new(),
-                        keywords_fetched: false
-                    });
+                if xmp.parse(sidecarcontent.into_bytes().as_slice()).is_ok() {
+                    sidecar_meta = Some(Self::new_with_xmp(xmp));
                 }
             }
         }
@@ -147,7 +149,7 @@ impl XmpMeta {
             return false;
         }
         if source_date > dest_date {
-            dbg_out!("file meta is more recent than sidecar");
+            dbg_out!("source meta is more recent than sidecar");
             return false;
         }
 
@@ -169,11 +171,10 @@ impl XmpMeta {
                     continue;
                 }
 
-                if !dest.xmp.has_property(schema.to_str(), name.to_str()) {
-                    if dest.xmp.set_property(schema.to_str(), name.to_str(),
+                if !dest.xmp.has_property(schema.to_str(), name.to_str()) &&
+                    dest.xmp.set_property(schema.to_str(), name.to_str(),
                                           value.to_str(), exempi::PROP_NONE).is_err() {
                         err_out!("Can set property {}", name);
-                    }
                 }
             }
         }
@@ -239,12 +240,22 @@ impl XmpMeta {
         Some(String::from(xmpstring.to_str()))
     }
 
-    /// Get the date property and return a DateTime<Utc> parsed
+    /// Get the date property and return a Option<DateTime<Utc>> parsed
     /// from the string value.
     pub fn get_date_property(&self, ns: &str, property: &str) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(ns, property, &mut flags).ok());
-        let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
+        let property = self.xmp.get_property(ns, property, &mut flags);
+        if property.is_err() {
+            err_out!("Error getting date property {:?}", property.err());
+            return None;
+        }
+        let xmpstring = property.unwrap();
+        let parsed = DateTime::parse_from_rfc3339(xmpstring.to_str());
+        if parsed.is_err() {
+            err_out!("Error parsing property value '{}': {:?}", xmpstring, parsed.err());
+            return None;
+        }
+        let date = parsed.unwrap();
         Some(date.with_timezone(&Utc))
     }
 
@@ -324,6 +335,57 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     Some(deg)
 }
 
+/// Get and XMP date from an Exif date string
+/// XXX Currently assume it is UTC.
+pub fn xmp_date_from_exif(d: &str) -> Option<exempi::DateTime> {
+    let v: Vec<&str> = d.split(' ').collect();
+    if v.len() != 2 {
+        err_out!("Space split failed {:?}", v);
+        return None;
+    }
+
+    let ymd: Vec<&str> = v[0].split(':').collect();
+    if ymd.len() != 3 {
+        err_out!("ymd split failed {:?}", ymd);
+        return None;
+    }
+    let year = try_opt!(i32::from_str_radix(ymd[0], 10).ok());
+    let month = try_opt!(i32::from_str_radix(ymd[1], 10).ok());
+    if month < 1 || month > 12 {
+        return None;
+    }
+    let day = try_opt!(i32::from_str_radix(ymd[2], 10).ok());
+    if day < 1 || day > 31 {
+        return None;
+    }
+    let hms: Vec<&str> = v[1].split(':').collect();
+    if hms.len() != 3 {
+        err_out!("hms split failed {:?}", hms);
+        return None;
+    }
+    let hour = try_opt!(i32::from_str_radix(hms[0], 10).ok());
+    if hour < 0 || hour > 23 {
+        return None;
+    }
+    let min = try_opt!(i32::from_str_radix(hms[1], 10).ok());
+    if min < 0 || min > 59 {
+        return None;
+    }
+    let sec = try_opt!(i32::from_str_radix(hms[2], 10).ok());
+    if sec < 0 || sec > 59 {
+        return None;
+    }
+
+    let mut xmp_date = exempi::DateTime::new();
+
+    xmp_date.set_date(year, month, day);
+    xmp_date.set_time(hour, min, sec);
+    // XXX use an actual timezone
+    xmp_date.set_timezone(exempi::XmpTzSign::UTC, 0, 0);
+
+    Some(xmp_date)
+}
+
 #[no_mangle]
 pub extern "C" fn fwk_exempi_manager_new() -> *mut ExempiManager {
     Box::into_raw(Box::new(ExempiManager::new(None)))
@@ -339,6 +401,7 @@ mod tests {
     use std::path::PathBuf;
     use super::ExempiManager;
     use super::XmpMeta;
+    use super::xmp_date_from_exif;
     use exempi;
 
     fn get_xmp_sample_path() -> PathBuf {
@@ -475,5 +538,24 @@ mod tests {
         output = gps_coord_from_xmp("45,29,30.45N");
         assert!(output.is_some());
         assert_eq!(output.unwrap(), 45.49179166666666418450404307805001735687255859375);
+    }
+
+    #[test]
+    fn test_xmp_date_from_exif() {
+        let d = xmp_date_from_exif("2012:02:17 11:10:49");
+        assert!(d.is_some());
+        let d = d.unwrap();
+        assert_eq!(d.year(), 2012);
+        assert_eq!(d.month(), 02);
+        assert_eq!(d.day(), 17);
+        assert_eq!(d.hour(), 11);
+        assert_eq!(d.minute(), 10);
+        assert_eq!(d.second(), 49);
+
+        let d = xmp_date_from_exif("2012:02:17/11:10:49");
+        assert!(d.is_none());
+
+        let d = xmp_date_from_exif("2012.02.17 11.10.49");
+        assert!(d.is_none());
     }
 }

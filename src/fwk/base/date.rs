@@ -29,16 +29,9 @@ pub type Date = chrono::DateTime<chrono::Utc>;
 
 pub fn xmp_date_from(d: &chrono::DateTime<chrono::Utc>) -> exempi::DateTime {
     let mut xmp_date = exempi::DateTime::new();
-    xmp_date.c.year = d.year();
-    xmp_date.c.month = d.month() as i32;
-    xmp_date.c.day = d.day() as i32;
-    xmp_date.c.hour = d.hour() as i32;
-    xmp_date.c.minute = d.minute() as i32;
-    xmp_date.c.second = d.second() as i32;
-    xmp_date.c.tz_sign = exempi::XmpTzSign::UTC;
-    xmp_date.c.tz_hour = 0;
-    xmp_date.c.tz_minute = 0;
-    xmp_date.c.nano_second = 0;
+    xmp_date.set_date(d.year(), d.month() as i32, d.day() as i32);
+    xmp_date.set_time(d.hour() as i32, d.minute() as i32, d.second() as i32);
+    xmp_date.set_timezone(exempi::XmpTzSign::UTC, 0, 0);
 
     xmp_date
 }

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/mod.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2018 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,4 +18,5 @@
  */
 
 pub mod exempi;
+pub mod exiv2;
 pub mod files;
