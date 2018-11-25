@@ -23,28 +23,64 @@ use std::collections::HashMap;
 use exempi;
 use rexiv2;
 
-use super::exempi::{XmpMeta, NS_TIFF, NS_EXIF, NS_XAP, xmp_date_from_exif};
+use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_XAP, NS_AUX, xmp_date_from_exif};
 
-#[derive(Clone, Copy)]
+/// Property conversion rules
+#[derive(Clone, Copy, Debug)]
 enum Conversion {
+    /// Use value as is
     None,
+    /// Convert from the Exif date format to a date
     ExifDate,
+    /// Convert the Exif flash tag to the struct for XMP
+    Flash,
 }
 
-#[derive(Clone)]
+/// Converstion result
+#[derive(Clone, Debug)]
 enum Converted {
+    /// A String
     Str(String),
+    /// An int 32
+    Int(i32),
+    /// an Xmp DateTime value
     Date(Option<exempi::DateTime>),
+    /// The Flash XMP structure
+    Flash(Flash),
 }
 
 lazy_static! {
     static ref exiv2_to_xmp: HashMap<&'static str, (&'static str, &'static str, Conversion)> = {
         [
+            ("Exif.Image.DateTime", (NS_XAP, "ModifyDate", Conversion::ExifDate)),
+            ("Exif.Image.ImageHeight", (NS_TIFF, "ImageHeight", Conversion::None)),
+            ("Exif.Image.ImageWidth", (NS_TIFF, "ImageWidth", Conversion::None)),
+            ("Exif.Image.Make", (NS_TIFF, "Make", Conversion::None)),
+            ("Exif.Image.Model", (NS_TIFF, "Model", Conversion::None)),
+            ("Exif.Image.Orientation", (NS_TIFF, "Orientation", Conversion::None)),
+            ("Exif.Photo.ApertureValue", (NS_EXIF, "ApertureValue", Conversion::None)),
+            ("Exif.Photo.ColorSpace", (NS_EXIF, "ColorSpace", Conversion::None)),
             ("Exif.Photo.DateTimeOriginal", (NS_EXIF, "DateTimeOriginal", Conversion::ExifDate)),
             ("Exif.Photo.DateTimeDigitized", (NS_XAP, "CreateDate", Conversion::ExifDate)),
-            ("Exif.Image.DateTime", (NS_XAP, "ModifyDate", Conversion::ExifDate)),
-            ("Exif.Image.Make", (NS_TIFF, "Make", Conversion::None)),
-            ("Exif.Image.Model", (NS_TIFF, "Model", Conversion::None))
+            ("Exif.Photo.ExposureBiasValue", (NS_EXIF, "ExposureBiasValue", Conversion::None)),
+            ("Exif.Photo.ExposureMode", (NS_EXIF, "ExposureMode", Conversion::None)),
+            ("Exif.Photo.ExposureProgram", (NS_EXIF, "ExposureProgram", Conversion::None)),
+            ("Exif.Photo.ExposureTime", (NS_EXIF, "ExposureTime", Conversion::None)),
+            ("Exif.Photo.FNumber", (NS_EXIF, "FNumber", Conversion::None)),
+            ("Exif.Photo.Flash", (NS_EXIF, "Flash", Conversion::Flash)),
+            ("Exif.Photo.FocalLength", (NS_EXIF, "FocalLength", Conversion::None)),
+            ("Exif.Photo.ISOSpeedRatings", (NS_EXIF, "ISOSpeedRatings", Conversion::None)),
+            ("Exif.Photo.LightSource", (NS_EXIF, "LightSource", Conversion::None)),
+            ("Exif.Photo.MeteringMode", (NS_EXIF, "MeteringMode", Conversion::None)),
+            ("Exif.Photo.SceneCaptureType", (NS_EXIF, "SceneCaptureType", Conversion::None)),
+            ("Exif.Photo.ShutterSpeedValue", (NS_EXIF, "ShutterSpeedValue", Conversion::None)),
+            ("Exif.Photo.UserComment", (NS_EXIF, "UserComment", Conversion::None)),
+            ("Exif.Photo.WhiteBalance", (NS_EXIF, "WhiteBalance", Conversion::None)),
+
+            ("Exif.Canon.LensModel", (NS_AUX, "Lens", Conversion::None)),
+
+            ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
+            ("Exif.OlympusEq.LensSerialNumber", (NS_AUX, "LensSerialNumber", Conversion::None))
         ].iter().cloned().collect()
     };
 }
@@ -53,6 +89,21 @@ fn convert(conversion: Conversion, value: &str) -> Converted {
     match conversion {
         Conversion::None => Converted::Str(value.to_string()),
         Conversion::ExifDate => Converted::Date(xmp_date_from_exif(&value)),
+        _ => {
+            err_out!("Conversion error fro str to {:?}", conversion);
+            Converted::Str(value.to_string())
+        }
+    }
+}
+
+fn convert_int(conversion: Conversion, int: i32) -> Converted {
+    match conversion {
+        Conversion::None => Converted::Int(int),
+        Conversion::Flash => Converted::Flash(Flash::from(int)),
+        _ => {
+            err_out!("Conversion error from int to {:?}", conversion);
+            Converted::Int(int)
+        }
     }
 }
 
@@ -86,6 +137,9 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                     } else {
                                         err_out!("Couldn't convert Exif date {}", &value);
                                     }
+                                },
+                                _ => {
+                                    err_out!("Unknown conversion result {:?}", &converted);
                                 }
                             }
                         }
@@ -95,8 +149,22 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                     Ok(rexiv2::TagType::SignedShort) |
                     Ok(rexiv2::TagType::SignedLong) => {
                         // XXX rexiv2 returns an i32, which is a problem for UnsignedLong
-                        let value = meta.get_tag_numeric(&tag);
-                        xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                        match xmp_prop.2 {
+                            Conversion::Flash => {
+                                if let Converted::Flash(flash) = convert_int(xmp_prop.2, meta.get_tag_numeric(&tag)) {
+                                    flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash");
+                                }
+                            },
+                            Conversion::None => {
+                                let value = meta.get_tag_numeric(&tag);
+                                xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                            },
+                            _ => {
+                                err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
+                                let value = meta.get_tag_numeric(&tag);
+                                xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                            }
+                        }
                     },
                     Ok(rexiv2::TagType::UnsignedRational) |
                     Ok(rexiv2::TagType::SignedRational) => {
@@ -104,14 +172,18 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                             let value_str = format!("{}/{}", value.numer(), value.denom());
                             xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE);
                         }
-                        println!("value {} = {:?}", &tag, meta.get_tag_rational(&tag));
+                    },
+                    Ok(rexiv2::TagType::Comment) => {
+                        if let Ok(value) = meta.get_tag_string(&tag) {
+                            xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE);
+                        }
                     },
                     _ => {
-                        println!("Unhandled type {:?} for {}", tagtype, &tag);
+                        err_out!("Unhandled type {:?} for {}", tagtype, &tag);
                     }
                 }
             } else {
-                println!("Unknown property {}", &tag);
+                err_out!("Unknown property {}", &tag);
             }
         }
         meta.get_gps_info();

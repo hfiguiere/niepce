@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::convert::From;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
@@ -37,6 +38,53 @@ pub const NS_XAP: &str = "http://ns.adobe.com/xap/1.0/";
 pub const NS_EXIF: &str = "http://ns.adobe.com/exif/1.0/";
 pub const NS_DC: &str = "http://purl.org/dc/elements/1.1/";
 pub const NS_AUX: &str = "http://ns.adobe.com/exif/1.0/aux/";
+
+const XMP_TRUE: &str = "True";
+const XMP_FALSE: &str = "False";
+
+/// Convert a bool to a propstring
+fn bool_to_propstring(val: bool) -> &'static str {
+    if val {
+        XMP_TRUE
+    } else {
+        XMP_FALSE
+    }
+}
+
+/// The Flash property, decoded
+#[derive(Clone, Default, Debug)]
+pub struct Flash {
+    fired: bool,
+    rturn: u8,
+    mode: u8,
+    function: bool,
+    red_eye: bool,
+}
+
+impl From<i32> for Flash {
+    /// Interpret the exif value and make it a Flash struct
+    fn from(flash: i32) -> Flash {
+        let fired = (flash & 0x1) != 0;
+        let rturn = ((flash >> 1) & 0x3) as u8;
+        let mode = ((flash >> 3) & 0x3) as u8;
+        let function = ((flash >> 5) & 0x1) != 0;
+        let red_eye = ((flash >> 6) & 0x10) != 0;
+        Flash { fired, rturn, mode, function, red_eye }
+    }
+}
+
+impl Flash {
+    pub fn set_as_xmp_property(&self, xmp: &mut Xmp, ns: &str, property: &str) -> exempi::Result<()> {
+        // XXX use set_struct_field() as soon as it is available
+        xmp.set_property(ns, &format!("{}/exif:Fired", property), bool_to_propstring(self.fired), exempi::PROP_NONE)?;
+        xmp.set_property(ns, &format!("{}/exif:Return", property), &format!("{}", self.rturn), exempi::PROP_NONE)?;
+        xmp.set_property(ns, &format!("{}/exif:Mode", property), &format!("{}", self.mode), exempi::PROP_NONE)?;
+        xmp.set_property(ns, &format!("{}/exif:Function", property), bool_to_propstring(self.function), exempi::PROP_NONE)?;
+        xmp.set_property(ns, &format!("{}/exif:RedEyeMode", property), bool_to_propstring(self.red_eye), exempi::PROP_NONE)?;
+
+        Ok(())
+    }
+}
 
 pub struct NsDef {
     ns: String,
