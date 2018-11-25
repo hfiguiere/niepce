@@ -40,6 +40,7 @@ libopenraw >= 0.1.0
 gegl >= 0.3.0
 babl
 libgphoto2
+gexiv2 >= 0.10 (as required by rexiv2)
 
 Niepce is being developed on Linux. It should build and work on other
 UNIX systems.
