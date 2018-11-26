@@ -167,19 +167,18 @@ impl XmpMeta {
             if meta.is_some() {
                 return meta;
             }
-            return sidecar_meta;
-
+            sidecar_meta
         } else {
             let mut final_meta = sidecar_meta.unwrap();
             if !meta.as_ref().unwrap().merge_missing_into_xmp(&mut final_meta) {
                 err_out!("xmp merge failed");
+                // XXX with the current heuristics, it is probably safe to just
+                // keep the source metadata.
+                meta
             } else {
-                return Some(final_meta);
+                Some(final_meta)
             }
         }
-        // XXX maybe we should be more permissible. Returning the
-        // built-in meta if merge failed might not be the best option.
-        None
     }
 
     ///
@@ -201,7 +200,7 @@ impl XmpMeta {
             return false;
         }
 
-        // in properties in source not in destination gets copied over.
+        // Properties in source but not in destination gets copied over.
         let mut iter = exempi::XmpIterator::new(&self.xmp, "", "", exempi::ITER_PROPERTIES);
         {
             use exempi::XmpString;
