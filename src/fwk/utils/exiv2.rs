@@ -23,7 +23,7 @@ use std::collections::HashMap;
 use exempi;
 use rexiv2;
 
-use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_XAP, NS_AUX, xmp_date_from_exif};
+use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_EXIF_EX, NS_XAP, xmp_date_from_exif};
 
 /// Property conversion rules
 #[derive(Clone, Copy, Debug)]
@@ -58,7 +58,10 @@ lazy_static! {
             ("Exif.Image.Make", (NS_TIFF, "Make", Conversion::None)),
             ("Exif.Image.Model", (NS_TIFF, "Model", Conversion::None)),
             ("Exif.Image.Orientation", (NS_TIFF, "Orientation", Conversion::None)),
+            ("Exif.Image.Software", (NS_TIFF, "Software", Conversion::None)),
             ("Exif.Photo.ApertureValue", (NS_EXIF, "ApertureValue", Conversion::None)),
+            ("Exif.Photo.BodySerialNumber", (NS_EXIF_EX, "BodySerialNumber", Conversion::None)),
+            ("Exif.Photo.CameraOwnerName", (NS_EXIF_EX, "CameraOwnerName", Conversion::None)),
             ("Exif.Photo.ColorSpace", (NS_EXIF, "ColorSpace", Conversion::None)),
             ("Exif.Photo.DateTimeOriginal", (NS_EXIF, "DateTimeOriginal", Conversion::ExifDate)),
             ("Exif.Photo.DateTimeDigitized", (NS_XAP, "CreateDate", Conversion::ExifDate)),
@@ -69,7 +72,12 @@ lazy_static! {
             ("Exif.Photo.FNumber", (NS_EXIF, "FNumber", Conversion::None)),
             ("Exif.Photo.Flash", (NS_EXIF, "Flash", Conversion::Flash)),
             ("Exif.Photo.FocalLength", (NS_EXIF, "FocalLength", Conversion::None)),
+            ("Exif.Photo.FocalLengthIn35mmFilm", (NS_EXIF, "FocalLengthIn35mmFilm", Conversion::None)),
             ("Exif.Photo.ISOSpeedRatings", (NS_EXIF, "ISOSpeedRatings", Conversion::None)),
+            ("Exif.Photo.LensMake", (NS_EXIF_EX, "LensMake", Conversion::None)),
+            ("Exif.Photo.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
+            ("Exif.Photo.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
+            ("Exif.Photo.LensSpecification", (NS_EXIF_EX, "LensSpecification", Conversion::None)),
             ("Exif.Photo.LightSource", (NS_EXIF, "LightSource", Conversion::None)),
             ("Exif.Photo.MeteringMode", (NS_EXIF, "MeteringMode", Conversion::None)),
             ("Exif.Photo.SceneCaptureType", (NS_EXIF, "SceneCaptureType", Conversion::None)),
@@ -77,10 +85,12 @@ lazy_static! {
             ("Exif.Photo.UserComment", (NS_EXIF, "UserComment", Conversion::None)),
             ("Exif.Photo.WhiteBalance", (NS_EXIF, "WhiteBalance", Conversion::None)),
 
-            ("Exif.Canon.LensModel", (NS_AUX, "Lens", Conversion::None)),
+            ("Exif.Canon.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
 
-            ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.OlympusEq.LensSerialNumber", (NS_AUX, "LensSerialNumber", Conversion::None))
+            ("Exif.OlympusEq.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
+            ("Exif.OlympusEq.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
+
+            ("Exif.Pentax.LensType", (NS_EXIF_EX, "LensModel", Conversion::None))
         ].iter().cloned().collect()
     };
 }

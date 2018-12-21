@@ -36,6 +36,7 @@ const UFRAW_INTEROP_NS_PREFIX: &str = "ufrint";
 pub const NS_TIFF: &str = "http://ns.adobe.com/tiff/1.0/";
 pub const NS_XAP: &str = "http://ns.adobe.com/xap/1.0/";
 pub const NS_EXIF: &str = "http://ns.adobe.com/exif/1.0/";
+pub const NS_EXIF_EX: &str = "http://cipa.jp/exif/1.0/";
 pub const NS_DC: &str = "http://purl.org/dc/elements/1.1/";
 pub const NS_AUX: &str = "http://ns.adobe.com/exif/1.0/aux/";
 
