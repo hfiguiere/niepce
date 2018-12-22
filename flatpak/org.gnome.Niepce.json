@@ -96,6 +96,7 @@
                 "/bin"
             ],
             "config-opts" : [
+                "--without-libavformat",
                 "--disable-docs",
                 "--disable-introspection"
             ],
