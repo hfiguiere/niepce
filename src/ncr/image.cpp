@@ -108,29 +108,44 @@ GeglNode* Image::Private::_rotate_node(int orientation)
     switch(orientation) {
     case 0:
     case 1:
+        m_orientation = 0;
+        m_vertical = false;
+        m_flip = false;
         break;
     case 2:
+        m_orientation = 0;
+        m_vertical = false;
         m_flip = true;
         break;
     case 4:
+        m_orientation = 180;
+        m_vertical = false;
         m_flip = true;
-        // fall through
+        break;
     case 3:
         m_orientation = 180;
+        m_vertical = false;
+        m_flip = false;
         break;
     case 5:
+        m_orientation = 270;
+        m_vertical = true;
         m_flip = true;
-        // fall through
+        break;
     case 6:
         m_orientation = 270;
         m_vertical = true;
+        m_flip = false;
         break;
     case 7:
+        m_orientation = 90;
+        m_vertical = true;
         m_flip = true;
-        // fall through
+        break;
     case 8:
         m_orientation = 90;
         m_vertical = true;
+        m_flip = false;
         break;
     }
 
