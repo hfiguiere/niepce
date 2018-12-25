@@ -29,6 +29,7 @@ extern crate gtk_sys;
 #[macro_use]
 extern crate lazy_static;
 extern crate libc;
+extern crate multimap;
 extern crate rexiv2;
 extern crate rusqlite;
 #[macro_use]

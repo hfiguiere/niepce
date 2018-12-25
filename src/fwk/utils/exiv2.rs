@@ -18,12 +18,12 @@
  */
 
 use std::ffi::OsStr;
-use std::collections::HashMap;
+use multimap::MultiMap;
 
 use exempi;
 use rexiv2;
 
-use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_EXIF_EX, NS_XAP, xmp_date_from_exif};
+use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_EXIF_EX, NS_AUX, NS_XAP, xmp_date_from_exif};
 
 /// Property conversion rules
 #[derive(Clone, Copy, Debug)]
@@ -50,7 +50,7 @@ enum Converted {
 }
 
 lazy_static! {
-    static ref exiv2_to_xmp: HashMap<&'static str, (&'static str, &'static str, Conversion)> = {
+    static ref exiv2_to_xmp: MultiMap<&'static str, (&'static str, &'static str, Conversion)> = {
         [
             ("Exif.Image.DateTime", (NS_XAP, "ModifyDate", Conversion::ExifDate)),
             ("Exif.Image.ImageHeight", (NS_TIFF, "ImageHeight", Conversion::None)),
@@ -75,6 +75,7 @@ lazy_static! {
             ("Exif.Photo.FocalLengthIn35mmFilm", (NS_EXIF, "FocalLengthIn35mmFilm", Conversion::None)),
             ("Exif.Photo.ISOSpeedRatings", (NS_EXIF, "ISOSpeedRatings", Conversion::None)),
             ("Exif.Photo.LensMake", (NS_EXIF_EX, "LensMake", Conversion::None)),
+            ("Exif.Photo.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.Photo.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
             ("Exif.Photo.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
             ("Exif.Photo.LensSpecification", (NS_EXIF_EX, "LensSpecification", Conversion::None)),
@@ -85,11 +86,14 @@ lazy_static! {
             ("Exif.Photo.UserComment", (NS_EXIF, "UserComment", Conversion::None)),
             ("Exif.Photo.WhiteBalance", (NS_EXIF, "WhiteBalance", Conversion::None)),
 
+            ("Exif.Canon.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.Canon.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
 
+            ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.OlympusEq.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
             ("Exif.OlympusEq.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
 
+            ("Exif.Pentax.LensType", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.Pentax.LensType", (NS_EXIF_EX, "LensModel", Conversion::None))
         ].iter().cloned().collect()
     };
@@ -131,65 +135,67 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
             all_tags.append(&mut tags);
         }
         for tag in all_tags {
-            if let Some(xmp_prop) = exiv2_to_xmp.get(tag.as_str()) {
-                let tagtype = rexiv2::get_tag_type(&tag);
-                match tagtype {
-                    Ok(rexiv2::TagType::AsciiString) => {
-                        if let Ok(value) = meta.get_tag_string(&tag) {
-                            let converted = convert(xmp_prop.2, &value);
-                            match converted {
-                                Converted::Str(s) => {
-                                    xmp.set_property(xmp_prop.0, xmp_prop.1, &s, exempi::PROP_NONE);
-                                },
-                                Converted::Date(d) => {
-                                    if let Some(d) = d {
-                                        xmp.set_property_date(xmp_prop.0, xmp_prop.1, &d, exempi::PROP_NONE);
-                                    } else {
-                                        err_out!("Couldn't convert Exif date {}", &value);
+            if let Some(xmp_props) = exiv2_to_xmp.get_vec(tag.as_str()) {
+                for xmp_prop in xmp_props {
+                    let tagtype = rexiv2::get_tag_type(&tag);
+                    match tagtype {
+                        Ok(rexiv2::TagType::AsciiString) => {
+                            if let Ok(value) = meta.get_tag_string(&tag) {
+                                let converted = convert(xmp_prop.2, &value);
+                                match converted {
+                                    Converted::Str(s) => {
+                                        xmp.set_property(xmp_prop.0, xmp_prop.1, &s, exempi::PROP_NONE);
+                                    },
+                                    Converted::Date(d) => {
+                                        if let Some(d) = d {
+                                            xmp.set_property_date(xmp_prop.0, xmp_prop.1, &d, exempi::PROP_NONE);
+                                        } else {
+                                            err_out!("Couldn't convert Exif date {}", &value);
+                                        }
+                                    },
+                                    _ => {
+                                        err_out!("Unknown conversion result {:?}", &converted);
+                                    }
+                                }
+                            }
+                        },
+                        Ok(rexiv2::TagType::UnsignedShort) |
+                        Ok(rexiv2::TagType::UnsignedLong) |
+                        Ok(rexiv2::TagType::SignedShort) |
+                        Ok(rexiv2::TagType::SignedLong) => {
+                            // XXX rexiv2 returns an i32, which is a problem for UnsignedLong
+                            match xmp_prop.2 {
+                                Conversion::Flash => {
+                                    if let Converted::Flash(flash) = convert_int(xmp_prop.2, meta.get_tag_numeric(&tag)) {
+                                        flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash");
                                     }
                                 },
+                                Conversion::None => {
+                                    let value = meta.get_tag_numeric(&tag);
+                                    xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                                },
                                 _ => {
-                                    err_out!("Unknown conversion result {:?}", &converted);
+                                    err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
+                                    let value = meta.get_tag_numeric(&tag);
+                                    xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
                                 }
                             }
-                        }
-                    },
-                    Ok(rexiv2::TagType::UnsignedShort) |
-                    Ok(rexiv2::TagType::UnsignedLong) |
-                    Ok(rexiv2::TagType::SignedShort) |
-                    Ok(rexiv2::TagType::SignedLong) => {
-                        // XXX rexiv2 returns an i32, which is a problem for UnsignedLong
-                        match xmp_prop.2 {
-                            Conversion::Flash => {
-                                if let Converted::Flash(flash) = convert_int(xmp_prop.2, meta.get_tag_numeric(&tag)) {
-                                    flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash");
-                                }
-                            },
-                            Conversion::None => {
-                                let value = meta.get_tag_numeric(&tag);
-                                xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
-                            },
-                            _ => {
-                                err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
-                                let value = meta.get_tag_numeric(&tag);
-                                xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                        },
+                        Ok(rexiv2::TagType::UnsignedRational) |
+                        Ok(rexiv2::TagType::SignedRational) => {
+                            if let Some(value) = meta.get_tag_rational(&tag) {
+                                let value_str = format!("{}/{}", value.numer(), value.denom());
+                                xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE);
                             }
+                        },
+                        Ok(rexiv2::TagType::Comment) => {
+                            if let Ok(value) = meta.get_tag_string(&tag) {
+                                xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE);
+                            }
+                        },
+                        _ => {
+                            err_out!("Unhandled type {:?} for {}", tagtype, &tag);
                         }
-                    },
-                    Ok(rexiv2::TagType::UnsignedRational) |
-                    Ok(rexiv2::TagType::SignedRational) => {
-                        if let Some(value) = meta.get_tag_rational(&tag) {
-                            let value_str = format!("{}/{}", value.numer(), value.denom());
-                            xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE);
-                        }
-                    },
-                    Ok(rexiv2::TagType::Comment) => {
-                        if let Ok(value) = meta.get_tag_string(&tag) {
-                            xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE);
-                        }
-                    },
-                    _ => {
-                        err_out!("Unhandled type {:?} for {}", tagtype, &tag);
                     }
                 }
             } else {
