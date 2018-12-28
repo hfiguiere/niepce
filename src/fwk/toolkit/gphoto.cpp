@@ -29,7 +29,9 @@
 #include <gphoto2-port-result.h>
 
 #include <glibmm/miscutils.h>
+#include <giomm/asyncresult.h>
 #include <giomm/file.h>
+#include <giomm/volumemonitor.h>
 #include <gdkmm/pixbufloader.h>
 
 #include "fwk/base/debug.hpp"
@@ -234,19 +236,56 @@ bool GpCamera::open()
     return success;
 }
 
-/** A hackish attempt to unmount the camera */
+/** A hackish attempt to unmount the camera
+ *  The code is specific to Linux as we assume the form of the
+ *  device used for USB.
+ *
+ *  A better solution should be thought.
+ */
 bool GpCamera::try_unmount_camera()
 {
-    std::string camera_mount = "gphoto2://[" + m_device->get_path() + "]/";
+    // Turn the gphoto device ID into a device path.
+    // This code is Linux specific at the moment.
+    std::string device_path = m_device->get_path();
+    // The device path has to start with "usb:".
+    // XXX figure out non USB.
+    if (device_path.find("usb:") != 0) {
+        ERR_OUT("Device %s is not USB", device_path.c_str());
+        return false;
+    }
+    // Conveniently we can replace the ':' by a '/'
+    device_path[3] = '/';
+    auto comma = device_path.find(',');
+    if (comma == std::string::npos) {
+        ERR_OUT("Device %s is not USB", device_path.c_str());
+        return false;
+    }
+    device_path[comma] = '/';
+    // XXX this is specific to Linux
+    std::string device_id = "/dev/bus/";
+    device_id += device_path;
 
-    try {
-        auto file = Gio::File::create_for_uri(camera_mount);
-        auto mount = file->find_enclosing_mount();
-        if (!mount) {
-            return false;
+    auto mounts = Gio::VolumeMonitor::get()->get_mounts();
+    Glib::RefPtr<Gio::Mount> to_unmount;
+    for (auto mount : mounts) {
+        auto volume = mount->get_volume();
+        if (!volume) {
+            DBG_OUT("no volume");
+            continue;
         }
+        auto vol_id = volume->get_identifier("unix-device");
+        if (vol_id == device_id) {
+            to_unmount = mount;
+            break;
+        }
+    }
+    if (!to_unmount) {
+        return false;
+    }
+    try {
         auto mount_op = Gio::MountOperation::create();
-        mount->unmount(mount_op, Gio::MOUNT_UNMOUNT_NONE);
+        // We need to pass a callback or gvfs will crash
+        to_unmount->unmount(mount_op, [] (Glib::RefPtr<Gio::AsyncResult>&) {}, Gio::MOUNT_UNMOUNT_NONE);
     } catch(const Gio::Error& e) {
         ERR_OUT("Gio::Error unmounting camera %d", e.code());
         return false;
