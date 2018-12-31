@@ -26,6 +26,7 @@
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
     "build-options" : {
+        "build-args": ["--share=network"],
         "cflags" : "-O2 -g",
         "cxxflags" : "-O2 -g",
         "env" : {
