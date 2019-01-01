@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exiv2.rs
  *
- * Copyright (C) 2018 Hubert Figuière
+ * Copyright (C) 2018-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,6 +93,9 @@ lazy_static! {
 
             ("Exif.Minolta.LensID", (NS_AUX, "Lens", Conversion::Interpreted)),
             ("Exif.Minolta.LensID", (NS_EXIF_EX, "LensModel", Conversion::Interpreted)),
+
+            ("Exif.Nikon3.Lens", (NS_AUX, "Lens", Conversion::Interpreted)),
+            ("Exif.Nikon3.Lens", (NS_EXIF_EX, "LensModel", Conversion::Interpreted)),
 
             ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.OlympusEq.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
@@ -209,11 +212,20 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                         },
                         Ok(rexiv2::TagType::UnsignedRational) |
                         Ok(rexiv2::TagType::SignedRational) => {
-                            if let Some(value) = meta.get_tag_rational(&tag) {
-                                let value_str = format!("{}/{}", value.numer(), value.denom());
-                                if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE) {
-                                    err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
-                                }
+                            match xmp_prop.2 {
+                                Conversion::Interpreted => {
+                                    if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
+                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
+                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        }
+                                    }
+                                },
+                                _ => if let Some(value) = meta.get_tag_rational(&tag) {
+                                    let value_str = format!("{}/{}", value.numer(), value.denom());
+                                    if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE) {
+                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    }
+                                },
                             }
                         },
                         Ok(rexiv2::TagType::Comment) => {
@@ -241,7 +253,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                     }
                 }
             } else {
-                err_out!("Unknown property {}", &tag);
+//                err_out!("Unknown property {}", &tag);
             }
         }
         meta.get_gps_info();
