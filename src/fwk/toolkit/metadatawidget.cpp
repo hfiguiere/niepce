@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2017 Hubert Figuiere
+ * Copyright (C) 2008-2019 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,6 +98,8 @@ MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
         l->set_xalign(0.0f);
         l->set_yalign(0.5f);
+        // This will prevent the label from being expanded.
+        l->set_ellipsize(Pango::ELLIPSIZE_MIDDLE);
         return l;
     }
 
@@ -119,6 +121,8 @@ MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
         l->set_xalign(0.0f);
         l->set_yalign(0.5f);
+        // This will prevent the label from being expanded.
+        l->set_ellipsize(Pango::ELLIPSIZE_MIDDLE);
         return l;
     }
 
