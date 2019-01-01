@@ -34,6 +34,8 @@ enum Conversion {
     ExifDate,
     /// Convert the Exif flash tag to the struct for XMP
     Flash,
+    /// Use exiv2 get_interpreted_tag_string
+    Interpreted,
 }
 
 /// Converstion result
@@ -89,12 +91,19 @@ lazy_static! {
             ("Exif.Canon.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.Canon.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
 
+            ("Exif.Minolta.LensID", (NS_AUX, "Lens", Conversion::Interpreted)),
+            ("Exif.Minolta.LensID", (NS_EXIF_EX, "LensModel", Conversion::Interpreted)),
+
             ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
             ("Exif.OlympusEq.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
             ("Exif.OlympusEq.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
 
-            ("Exif.Pentax.LensType", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.Pentax.LensType", (NS_EXIF_EX, "LensModel", Conversion::None))
+            ("Exif.Panasonic.LensType", (NS_AUX, "Lens", Conversion::None)),
+            ("Exif.Panasonic.LensType", (NS_EXIF_EX, "LensModel", Conversion::None)),
+            ("Exif.Panasonic.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
+
+            ("Exif.Pentax.LensType", (NS_AUX, "Lens", Conversion::Interpreted)),
+            ("Exif.Pentax.LensType", (NS_EXIF_EX, "LensModel", Conversion::Interpreted))
         ].iter().cloned().collect()
     };
 }
@@ -182,6 +191,13 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
                                     }
                                 },
+                                Conversion::Interpreted => {
+                                    if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
+                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
+                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        }
+                                    }
+                                }
                                 _ => {
                                     err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
                                     let value = meta.get_tag_numeric(&tag);
@@ -207,6 +223,18 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                 }
                             }
                         },
+                        Ok(rexiv2::TagType::UnsignedByte) => {
+                            match xmp_prop.2 {
+                                Conversion::Interpreted => {
+                                    if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
+                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
+                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        }
+                                    }
+                                },
+                                _ => err_out!("Unhandled type {:?} for {}", tagtype, &tag),
+                            }
+                        }
                         _ => {
                             err_out!("Unhandled type {:?} for {}", tagtype, &tag);
                         }
