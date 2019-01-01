@@ -144,11 +144,15 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                 let converted = convert(xmp_prop.2, &value);
                                 match converted {
                                     Converted::Str(s) => {
-                                        xmp.set_property(xmp_prop.0, xmp_prop.1, &s, exempi::PROP_NONE);
+                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &s, exempi::PROP_NONE) {
+                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        }
                                     },
                                     Converted::Date(d) => {
                                         if let Some(d) = d {
-                                            xmp.set_property_date(xmp_prop.0, xmp_prop.1, &d, exempi::PROP_NONE);
+                                            if let Err(err) = xmp.set_property_date(xmp_prop.0, xmp_prop.1, &d, exempi::PROP_NONE) {
+                                                err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                            }
                                         } else {
                                             err_out!("Couldn't convert Exif date {}", &value);
                                         }
@@ -167,17 +171,23 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                             match xmp_prop.2 {
                                 Conversion::Flash => {
                                     if let Converted::Flash(flash) = convert_int(xmp_prop.2, meta.get_tag_numeric(&tag)) {
-                                        flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash");
+                                        if let Err(err) = flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash") {
+                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        }
                                     }
                                 },
                                 Conversion::None => {
                                     let value = meta.get_tag_numeric(&tag);
-                                    xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                                    if let Err(err) = xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE) {
+                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    }
                                 },
                                 _ => {
                                     err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
                                     let value = meta.get_tag_numeric(&tag);
-                                    xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE);
+                                    if let Err(err) = xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE) {
+                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    }
                                 }
                             }
                         },
@@ -185,12 +195,16 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                         Ok(rexiv2::TagType::SignedRational) => {
                             if let Some(value) = meta.get_tag_rational(&tag) {
                                 let value_str = format!("{}/{}", value.numer(), value.denom());
-                                xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE);
+                                if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE) {
+                                    err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                }
                             }
                         },
                         Ok(rexiv2::TagType::Comment) => {
                             if let Ok(value) = meta.get_tag_string(&tag) {
-                                xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE);
+                                if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
+                                    err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                }
                             }
                         },
                         _ => {
@@ -206,8 +220,8 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
 
         let mut options = exempi::PROP_NONE;
         if let Ok(date) = xmp.get_property_date(NS_XAP, "ModifyDate", &mut options) {
-            if xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PROP_NONE).is_err() {
-                err_out!("Error setting MetadataDate");
+            if let Err(err) = xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PROP_NONE) {
+                err_out!("Error setting MetadataDate: {:?}", &err);
             }
         } else {
             err_out!("Couldn't get the ModifyDate");
