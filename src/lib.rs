@@ -1,7 +1,7 @@
 /*
  * niepce - lib.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,8 +44,15 @@ pub mod niepce;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
-/// Call this to initialize the gtk-rs bindings
+use std::sync::{Once, ONCE_INIT};
+
+/// Call this to initialize rexiv2 and the gtk-rs bindings
 #[no_mangle]
 pub extern "C" fn niepce_init() {
-    gtk::init().unwrap();
+    static START: Once = ONCE_INIT;
+
+    START.call_once(|| unsafe {
+        gtk::init().unwrap();
+        rexiv2::initialize().expect("Unable to initialize rexiv2");
+    });
 }
