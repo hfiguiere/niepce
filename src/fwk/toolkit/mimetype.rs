@@ -65,7 +65,8 @@ pub fn guess_type(gmtype: &str) -> MType {
 fn guess_type_for_file(filename: &str) -> MType {
     let path = Path::new(filename);
     let file = gio::File::new_for_path(path);
-    if let Ok(fileinfo) = file.query_info("*", gio::FileQueryInfoFlags::NONE, None) {
+    let cancellable: Option<&gio::Cancellable> = None;
+    if let Ok(fileinfo) = file.query_info("*", gio::FileQueryInfoFlags::NONE, cancellable) {
         if let Some(gmtype) = fileinfo.get_content_type() {
             let t = guess_type_for_file(&gmtype);
             if t != MType::None {

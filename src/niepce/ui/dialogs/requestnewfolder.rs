@@ -51,6 +51,6 @@ pub unsafe extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWra
     let folder_name = entry.get_text();
     dialog.destroy();
     if !cancel && folder_name.is_some() {
-        client.unwrap_mut().create_folder(folder_name.unwrap(), None);
+        client.unwrap_mut().create_folder(folder_name.unwrap().to_string(), None);
     }
 }
