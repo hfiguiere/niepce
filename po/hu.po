@@ -1,14 +1,14 @@
 # Hungarian translation for niepce.
-# Copyright (C) 2014, 2016, 2017, 2018 Free Software Foundation, Inc.
+# Copyright (C) 2014, 2016, 2017, 2018, 2019 Free Software Foundation, Inc.
 # This file is distributed under the same license as the niepce package.
 #
-# Balázs Úr <urbalazs at gmail dot com>, 2014, 2016, 2017, 2018.
+# Balázs Úr <urbalazs at gmail dot com>, 2014, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 18:26+0000\n"
-"PO-Revision-Date: 2018-03-04 23:02+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/niepce/issues\n"
+"POT-Creation-Date: 2018-10-13 17:45+0000\n"
+"PO-Revision-Date: 2019-02-05 21:42+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list@gnome.org>\n"
 "Language: hu\n"
@@ -27,31 +27,31 @@ msgstr "Fényképezőgép"
 msgid "File"
 msgstr "Fájl"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:427
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:457
 msgid "_Import..."
 msgstr "_Importálás…"
 
-#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:201
+#: camerawire/src/cwwindow.cpp:96
 msgid "Close"
 msgstr "Bezárás"
 
-#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:204
+#: camerawire/src/cwwindow.cpp:99
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:219
+#: camerawire/src/cwwindow.cpp:113
 msgid "Cut"
 msgstr "Kivágás"
 
-#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:223
+#: camerawire/src/cwwindow.cpp:117
 msgid "Copy"
 msgstr "Másolás"
 
-#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:227
+#: camerawire/src/cwwindow.cpp:121
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:234
+#: camerawire/src/cwwindow.cpp:124
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -59,7 +59,7 @@ msgstr "Eszközök"
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:242
+#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:247
 msgid "Hide tools"
 msgstr "Eszközök elrejtése"
 
@@ -108,38 +108,6 @@ msgstr "fénykép;fotó;"
 #: data/niepce.desktop.in:9
 msgid "niepce"
 msgstr "niepce"
-
-#: src/fwk/toolkit/application.cpp:129
-msgid "New"
-msgstr "Új"
-
-#: src/fwk/toolkit/application.cpp:133 src/niepce/ui/niepcewindow.cpp:334
-msgid "Open"
-msgstr "Megnyitás"
-
-#: src/fwk/toolkit/application.cpp:142
-msgid "Preferences..."
-msgstr "Beállítások…"
-
-#: src/fwk/toolkit/application.cpp:149
-msgid "Help"
-msgstr "Súgó"
-
-#: src/fwk/toolkit/application.cpp:154
-msgid "About"
-msgstr "Névjegy"
-
-#: src/fwk/toolkit/application.cpp:162
-msgid "Quit"
-msgstr "Kilépés"
-
-#: src/fwk/toolkit/frame.cpp:153
-msgid "Undo"
-msgstr "Visszavonás"
-
-#: src/fwk/toolkit/frame.cpp:168
-msgid "Redo"
-msgstr "Újra"
 
 #: src/fwk/toolkit/widgets/addinstreemodel.cpp:64
 msgid "Name"
@@ -292,7 +260,7 @@ msgid "You can still change this after importing the pictures."
 msgstr "Ezt még a fényképek importálása után is megváltoztathatja."
 
 #: src/niepce/ui/dialogs/importdialog.ui:406
-#: src/niepce/ui/metadatapanecontroller.cpp:51
+#: src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Date:"
 msgstr "Dátum:"
 
@@ -330,8 +298,8 @@ msgid "Import picture folder"
 msgstr "Fényképmappa importálása"
 
 #: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
-#: src/niepce/ui/dialogs/requestnewfolder.rs:40
-#: src/niepce/ui/niepcewindow.cpp:333
+#: src/niepce/ui/dialogs/requestnewfolder.rs:41
+#: src/niepce/ui/niepcewindow.cpp:347
 msgid "Cancel"
 msgstr "Mégse"
 
@@ -348,120 +316,144 @@ msgstr "…"
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: src/niepce/ui/dialogs/preferences.ui:67
-msgid "_Reopen Library"
-msgstr "_Gyűjtemény ismételt megnyitása"
+#: src/niepce/ui/dialogs/preferences.ui:70
+msgid "_Reopen Catalog"
+msgstr "_Katalógus ismételt megnyitása"
 
-#: src/niepce/ui/dialogs/preferences.ui:83
+#: src/niepce/ui/dialogs/preferences.ui:86
 msgid "Write XMP automatically (not recommended)"
 msgstr "XMP automatikus írása (nem javasolt)"
 
-#: src/niepce/ui/dialogs/preferences.ui:102
+#: src/niepce/ui/dialogs/preferences.ui:105
 msgid "_General"
 msgstr "Á_ltalános"
 
-#: src/niepce/ui/dialogs/preferences.ui:116
+#: src/niepce/ui/dialogs/preferences.ui:119
 msgid "Use dark interface"
 msgstr "Sötét felület használata"
 
-#: src/niepce/ui/dialogs/preferences.ui:138
+#: src/niepce/ui/dialogs/preferences.ui:141
 msgid "_User Interface"
 msgstr "_Felhasználói felület"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:39
+#: src/niepce/ui/dialogs/requestnewfolder.rs:40
 msgid "OK"
 msgstr "OK"
 
-#: src/niepce/ui/dialogs/requestnewfolder.rs:41
+#: src/niepce/ui/dialogs/requestnewfolder.rs:42
 msgid "Folder _name:"
 msgstr "Mappa _neve:"
 
 #: src/niepce/ui/metadatapanecontroller.cpp:36
+msgid "File Name:"
+msgstr "Fájlnév:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:37
+msgid "Folder:"
+msgstr "Mappa:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "File Type:"
+msgstr "Fájltípus:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "File Size:"
+msgstr "Fájlméret:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:40
+msgid "Sidecar Files:"
+msgstr "Metaadat fájlok:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Make:"
 msgstr "Márka:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:37
+#: src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Model:"
 msgstr "Modell:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:38
+#: src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "Lens:"
 msgstr "Lencse:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:42
+#: src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Exposure Program:"
 msgstr "Expozíciós program:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:43
+#: src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Speed:"
 msgstr "Sebesség:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:44
+#: src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Aperture:"
 msgstr "Rekesz:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:45
+#: src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "ISO:"
 msgstr "ISO:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:46
+#: src/niepce/ui/metadatapanecontroller.cpp:54
 msgid "Exposure Bias:"
 msgstr "Expozíciós korrekciók:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:47
+#: src/niepce/ui/metadatapanecontroller.cpp:55
 msgid "Flash:"
 msgstr "Vaku:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:48
+#: src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Flash compensation:"
 msgstr "Vaku ellensúlyozás:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:49
+#: src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Focal length:"
 msgstr "Fókusztávolság:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:50
+#: src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "White balance:"
 msgstr "Fehéregyensúly:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:55
+#: src/niepce/ui/metadatapanecontroller.cpp:63
 msgid "Headline:"
 msgstr "Főcím:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:56
+#: src/niepce/ui/metadatapanecontroller.cpp:64
 msgid "Caption:"
 msgstr "Felirat:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:57
+#: src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Rating:"
 msgstr "Értékelés:"
 
 #. FIXME change this type to the right one when there is a widget
-#: src/niepce/ui/metadatapanecontroller.cpp:59
+#: src/niepce/ui/metadatapanecontroller.cpp:67
 msgid "Label:"
 msgstr "Címke:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:60
+#: src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Keywords:"
 msgstr "Kulcsszavak:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:64
+#: src/niepce/ui/metadatapanecontroller.cpp:72
+msgid "File Information"
+msgstr "Fájlinformációk"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:75
 msgid "Camera Information"
 msgstr "Fényképezőgép információk"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:67
+#: src/niepce/ui/metadatapanecontroller.cpp:78
 msgid "Shooting Information"
 msgstr "Képkészítési információk"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:70
+#: src/niepce/ui/metadatapanecontroller.cpp:81
 msgid "IPTC"
 msgstr "IPTC"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:73
+#: src/niepce/ui/metadatapanecontroller.cpp:84
 msgid "Rights"
 msgstr "Jogok"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:103
+#: src/niepce/ui/metadatapanecontroller.cpp:114
 msgid "Image Properties"
 msgstr "Képtulajdonságok"
 
@@ -501,63 +493,63 @@ msgstr "8. címke"
 msgid "Label 9"
 msgstr "9. címke"
 
-#: src/niepce/ui/moduleshell.cpp:119 src/niepce/ui/selectioncontroller.cpp:287
+#: src/niepce/ui/moduleshell.cpp:118 src/niepce/ui/selectioncontroller.cpp:287
 msgid "Set Rating"
 msgstr "Értékelés beállítása"
 
-#: src/niepce/ui/moduleshell.cpp:126
+#: src/niepce/ui/moduleshell.cpp:125
 msgid "Unrated"
 msgstr "Nem értékelt"
 
-#: src/niepce/ui/moduleshell.cpp:132
+#: src/niepce/ui/moduleshell.cpp:131
 msgid "Rating 1"
 msgstr "1. értékelés"
 
-#: src/niepce/ui/moduleshell.cpp:138
+#: src/niepce/ui/moduleshell.cpp:137
 msgid "Rating 2"
 msgstr "2. értékelés"
 
-#: src/niepce/ui/moduleshell.cpp:144
+#: src/niepce/ui/moduleshell.cpp:143
 msgid "Rating 3"
 msgstr "3. értékelés"
 
-#: src/niepce/ui/moduleshell.cpp:150
+#: src/niepce/ui/moduleshell.cpp:149
 msgid "Rating 4"
 msgstr "4. értékelés"
 
-#: src/niepce/ui/moduleshell.cpp:156
+#: src/niepce/ui/moduleshell.cpp:155
 msgid "Rating 5"
 msgstr "5. értékelés"
 
-#: src/niepce/ui/moduleshell.cpp:159 src/niepce/ui/selectioncontroller.cpp:284
+#: src/niepce/ui/moduleshell.cpp:158 src/niepce/ui/selectioncontroller.cpp:284
 msgid "Set Flag"
 msgstr "Jelző beállítása"
 
-#: src/niepce/ui/moduleshell.cpp:167
+#: src/niepce/ui/moduleshell.cpp:166
 msgid "Flag as Rejected"
 msgstr "Megjelölés visszautasítottként"
 
-#: src/niepce/ui/moduleshell.cpp:174
+#: src/niepce/ui/moduleshell.cpp:173
 msgid "Unflagged"
 msgstr "Jelöletlen"
 
-#: src/niepce/ui/moduleshell.cpp:181
+#: src/niepce/ui/moduleshell.cpp:180
 msgid "Flag as Pick"
 msgstr "Megjelölés kiválasztottként"
 
-#: src/niepce/ui/moduleshell.cpp:190
+#: src/niepce/ui/moduleshell.cpp:189
 msgid "Write metadata"
 msgstr "Metaadatok írása"
 
-#: src/niepce/ui/moduleshell.cpp:200 src/niepce/ui/niepcewindow.cpp:189
-msgid "Library"
-msgstr "Gyűjtemény"
+#: src/niepce/ui/moduleshell.cpp:199
+msgid "Catalog"
+msgstr "Katalógus"
 
-#: src/niepce/ui/moduleshell.cpp:209
+#: src/niepce/ui/moduleshell.cpp:208
 msgid "Darkroom"
 msgstr "Sötétszoba"
 
-#: src/niepce/ui/moduleshell.cpp:212
+#: src/niepce/ui/moduleshell.cpp:211
 msgid "Map"
 msgstr "Térkép"
 
@@ -571,52 +563,76 @@ msgstr ""
 "\n"
 "Fordítási beállítások: "
 
-#: src/niepce/ui/niepcewindow.cpp:143
+#: src/niepce/ui/niepcewindow.cpp:81
+msgid "Undo"
+msgstr "Visszavonás"
+
+#: src/niepce/ui/niepcewindow.cpp:92
+msgid "Import..."
+msgstr "Importálás…"
+
+#: src/niepce/ui/niepcewindow.cpp:170
 msgid "Ready"
 msgstr "Kész"
 
-#: src/niepce/ui/niepcewindow.cpp:194
-msgid "New Project..."
-msgstr "Új projekt…"
+#: src/niepce/ui/niepcewindow.cpp:239
+msgid "New Catalog..."
+msgstr "Új katalógus…"
 
-#: src/niepce/ui/niepcewindow.cpp:231
-msgid "Delete"
-msgstr "Törlés"
+#: src/niepce/ui/niepcewindow.cpp:240
+msgid "Open Catalog..."
+msgstr "Katalógus megnyitása…"
 
-#: src/niepce/ui/niepcewindow.cpp:237
+#: src/niepce/ui/niepcewindow.cpp:251
 msgid "Edit Labels..."
 msgstr "Címkék szerkesztése…"
 
+#: src/niepce/ui/niepcewindow.cpp:252
+msgid "Preferences..."
+msgstr "Beállítások…"
+
+#: src/niepce/ui/niepcewindow.cpp:256
+msgid "Help"
+msgstr "Súgó"
+
+#: src/niepce/ui/niepcewindow.cpp:257
+msgid "About"
+msgstr "Névjegy"
+
 #. TODO make this parametric from resources
-#: src/niepce/ui/niepcewindow.cpp:279
+#: src/niepce/ui/niepcewindow.cpp:293
 msgid "Label 1"
 msgstr "1. címke"
 
 #. 217, 37, 17
-#: src/niepce/ui/niepcewindow.cpp:280
+#: src/niepce/ui/niepcewindow.cpp:294
 msgid "Label 2"
 msgstr "2. címke"
 
 #. 97, 217, 17
-#: src/niepce/ui/niepcewindow.cpp:281
+#: src/niepce/ui/niepcewindow.cpp:295
 msgid "Label 3"
 msgstr "3. címke"
 
 #. 17, 197, 217
-#: src/niepce/ui/niepcewindow.cpp:282
+#: src/niepce/ui/niepcewindow.cpp:296
 msgid "Label 4"
 msgstr "4. címke"
 
 #. 137, 17, 217
-#: src/niepce/ui/niepcewindow.cpp:283
+#: src/niepce/ui/niepcewindow.cpp:297
 msgid "Label 5"
 msgstr "5. címke"
 
-#: src/niepce/ui/niepcewindow.cpp:331
-msgid "Open library"
-msgstr "Gyűjtemény megnyitása"
+#: src/niepce/ui/niepcewindow.cpp:345
+msgid "Open catalog"
+msgstr "Katalógus megnyitása"
 
-#: src/niepce/ui/niepcewindow.cpp:390
+#: src/niepce/ui/niepcewindow.cpp:348
+msgid "Open"
+msgstr "Megnyitás"
+
+#: src/niepce/ui/niepcewindow.cpp:404
 msgid "Niepce Digital - "
 msgstr "Niepce Digital - "
 
@@ -636,28 +652,49 @@ msgstr "Áthelyezés a kukába"
 msgid "Delete selected folder?"
 msgstr "Törli a kijelölt mappát?"
 
-#: src/niepce/ui/workspacecontroller.cpp:379
+#: src/niepce/ui/workspacecontroller.cpp:403
 msgid "Pictures"
 msgstr "Fényképek"
 
-#: src/niepce/ui/workspacecontroller.cpp:383
+#: src/niepce/ui/workspacecontroller.cpp:407
 msgid "Projects"
 msgstr "Projektek"
 
-#: src/niepce/ui/workspacecontroller.cpp:387
+#: src/niepce/ui/workspacecontroller.cpp:411
 msgid "Keywords"
 msgstr "Kulcsszavak"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:401
+#: src/niepce/ui/workspacecontroller.cpp:425
 msgid "_Workspace"
 msgstr "_Munkaterület"
 
-#: src/niepce/ui/workspacecontroller.cpp:414
+#: src/niepce/ui/workspacecontroller.cpp:441
 msgid "New Folder..."
 msgstr "Új mappa…"
 
-#: src/niepce/ui/workspacecontroller.cpp:418
+#: src/niepce/ui/workspacecontroller.cpp:443
+msgid "New Project..."
+msgstr "Új projekt…"
+
+#: src/niepce/ui/workspacecontroller.cpp:448
 msgid "Delete Folder"
 msgstr "Mappa törlése"
 
+#~ msgid "New"
+#~ msgstr "Új"
+
+#~ msgid "Quit"
+#~ msgstr "Kilépés"
+
+#~ msgid "Redo"
+#~ msgstr "Újra"
+
+#~ msgid "Library"
+#~ msgstr "Gyűjtemény"
+
+#~ msgid "Delete"
+#~ msgstr "Törlés"
+
+#~ msgid "Open library"
+#~ msgstr "Gyűjtemény megnyitása"
