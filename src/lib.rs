@@ -51,7 +51,7 @@ use std::sync::{Once, ONCE_INIT};
 pub extern "C" fn niepce_init() {
     static START: Once = ONCE_INIT;
 
-    START.call_once(|| unsafe {
+    START.call_once(|| {
         gtk::init().unwrap();
         rexiv2::initialize().expect("Unable to initialize rexiv2");
     });
