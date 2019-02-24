@@ -34,11 +34,6 @@
 #include "eog-thumb-nav.hpp"
 #include "thumbstripview.hpp"
 
-#define EOG_THUMB_NAV_GET_PRIVATE(object) \
-	(G_TYPE_INSTANCE_GET_PRIVATE ((object), EOG_TYPE_THUMB_NAV, EogThumbNavPrivate))
-
-G_DEFINE_TYPE (EogThumbNav, eog_thumb_nav, GTK_TYPE_BOX)
-
 #define EOG_THUMB_NAV_SCROLL_INC     1
 #define EOG_THUMB_NAV_SCROLL_MOVE    20
 #define EOG_THUMB_NAV_SCROLL_TIMEOUT 20
@@ -62,6 +57,8 @@ struct _EogThumbNavPrivate {
 	ui::ThumbStripView   *thumbview;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE (EogThumbNav, eog_thumb_nav, GTK_TYPE_BOX)
+
 static void
 eog_thumb_nav_adj_changed (GtkAdjustment *adj, gpointer user_data)
 {
@@ -70,7 +67,7 @@ eog_thumb_nav_adj_changed (GtkAdjustment *adj, gpointer user_data)
 	gdouble upper, page_size;
 
 	nav = EOG_THUMB_NAV (user_data);
-	priv = EOG_THUMB_NAV_GET_PRIVATE (nav);
+	priv = (EogThumbNavPrivate *)eog_thumb_nav_get_instance_private (nav);
 
 	g_object_get (G_OBJECT (adj),
 		      "upper", &upper,
@@ -88,7 +85,7 @@ eog_thumb_nav_adj_value_changed (GtkAdjustment *adj, gpointer user_data)
 	gdouble upper, page_size, value;
 
 	nav = EOG_THUMB_NAV (user_data);
-	priv = EOG_THUMB_NAV_GET_PRIVATE (nav);
+	priv = (EogThumbNavPrivate *)eog_thumb_nav_get_instance_private (nav);
 
 	g_object_get (G_OBJECT (adj),
 		      "upper", &upper,
@@ -289,8 +286,6 @@ eog_thumb_nav_class_init (EogThumbNavClass *klass)
                             static_cast<gint>(EogThumbNavMode::MULTIPLE_ROWS),
                             static_cast<gint>(EogThumbNavMode::ONE_ROW),
                             (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE)));
-
-	g_type_class_add_private (g_object_class, sizeof (EogThumbNavPrivate));
 }
 
 static void
@@ -300,7 +295,7 @@ eog_thumb_nav_init (EogThumbNav *nav)
 	GtkAdjustment *adj;
 	GtkWidget *arrow;
 
-	nav->priv = EOG_THUMB_NAV_GET_PRIVATE (nav);
+	nav->priv = (EogThumbNavPrivate *)eog_thumb_nav_get_instance_private (nav);
 
 	priv = nav->priv;
 
