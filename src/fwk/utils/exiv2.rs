@@ -52,7 +52,7 @@ enum Converted {
 }
 
 lazy_static! {
-    static ref exiv2_to_xmp: MultiMap<&'static str, (&'static str, &'static str, Conversion)> = {
+    static ref EXIV2_TO_XMP: MultiMap<&'static str, (&'static str, &'static str, Conversion)> = {
         [
             ("Exif.Image.DateTime", (NS_XAP, "ModifyDate", Conversion::ExifDate)),
             ("Exif.Image.ImageHeight", (NS_TIFF, "ImageHeight", Conversion::None)),
@@ -147,7 +147,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
             all_tags.append(&mut tags);
         }
         for tag in all_tags {
-            if let Some(xmp_props) = exiv2_to_xmp.get_vec(tag.as_str()) {
+            if let Some(xmp_props) = EXIV2_TO_XMP.get_vec(tag.as_str()) {
                 for xmp_prop in xmp_props {
                     let tagtype = rexiv2::get_tag_type(&tag);
                     match tagtype {
