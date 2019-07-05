@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/files.rs
  *
- * Copyright (C) 2018 Hubert Figuière
+ * Copyright (C) 2018-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 use glib::translate::*;
 use gio;
 use gio_sys;
-use gio::prelude::*;
 
 use fwk::toolkit::mimetype::{
     guess_type,

@@ -28,32 +28,31 @@ pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
     let toolbar = gtk::Toolbar::new();
 
     let icon = gtk::Image::new_from_icon_name(
-        "go-previous-symbolic", gtk::IconSize::SmallToolbar.into());
+        Some("go-previous-symbolic"), gtk::IconSize::SmallToolbar.into());
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
-    tool_item.set_action_name("shell.PrevImage");
+    tool_item.set_action_name(Some("shell.PrevImage"));
     toolbar.add(&tool_item);
 
     let icon = gtk::Image::new_from_icon_name(
-        "go-next-symbolic", gtk::IconSize::SmallToolbar.into());
+        Some("go-next-symbolic"), gtk::IconSize::SmallToolbar.into());
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
-    tool_item.set_action_name("shell.NextImage");
+    tool_item.set_action_name(Some("shell.NextImage"));
     toolbar.add(&tool_item);
 
     let separator = gtk::SeparatorToolItem::new();
     toolbar.add(&separator);
 
     let icon = gtk::Image::new_from_icon_name(
-        "object-rotate-left-symbolic", gtk::IconSize::SmallToolbar.into());
+        Some("object-rotate-left-symbolic"), gtk::IconSize::SmallToolbar.into());
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
-    tool_item.set_action_name("shell.RotateLeft");
+    tool_item.set_action_name(Some("shell.RotateLeft"));
     toolbar.add(&tool_item);
 
     let icon = gtk::Image::new_from_icon_name(
-        "object-rotate-right-symbolic", gtk::IconSize::SmallToolbar.into());
+        Some("object-rotate-right-symbolic"), gtk::IconSize::SmallToolbar.into());
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
-    tool_item.set_action_name("shell.RotateRight");
+    tool_item.set_action_name(Some("shell.RotateRight"));
     toolbar.add(&tool_item);
-
 
     toolbar.to_glib_full()
 }

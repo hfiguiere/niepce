@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/requestnewfolder.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ pub unsafe extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWra
         gtk::DialogFlags::MODAL,
         &[(&gettext("OK"), gtk::ResponseType::Ok.into()),
           (&gettext("Cancel"), gtk::ResponseType::Cancel.into())]);
-    let label = Label::new_with_mnemonic(gettext("Folder _name:").as_str());
+    let label = Label::new_with_mnemonic(Some(gettext("Folder _name:").as_str()));
     dialog.get_content_area().pack_start(&label, true, false, 4);
     let entry = Entry::new();
     entry.set_text("foobar");

@@ -9,11 +9,11 @@ chrono = "0.4.0"
 exempi = { version = "2.5.0", git = "https://github.com/hfiguiere/exempi-rs.git", rev="d5c013c" }
 gettext-rs = "0.3.0"
 glib-sys = "*"
-glib = { version = "^0.7.0", features = ["subclassing"] }
+glib = { version = "^0.8.0", features = ["subclassing"] }
 gio-sys = "*"
-gio = "^0.6.0"
+gio = "^0.7.0"
 gtk-sys = { version = "*", features = ["v3_16"] }
-gtk = "^0.6.0"
+gtk = "^0.7.0"
 lazy_static = "^1.2.0"
 libc = "0.2.39"
 multimap = "0.4.0"
