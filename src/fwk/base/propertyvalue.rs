@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertyvalue.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ pub enum PropertyValue {
     Date(Date)
 }
 
-impl PropertyValue {
+unsafe impl Send for PropertyValue {
 }
 
 #[no_mangle]

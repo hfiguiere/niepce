@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@ use engine::db::libfile::LibFile;
 use engine::db::libfolder;
 use engine::db::libfolder::LibFolder;
 use engine::db::libmetadata::LibMetadata;
-use engine::library::notification::engine_library_notify;
-use engine::library::notification::Notification as LibNotification;
+use engine::library::notification::LibNotification;
 use fwk;
 use fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
@@ -73,18 +72,19 @@ pub struct Library {
     dbpath: PathBuf,
     dbconn: Option<rusqlite::Connection>,
     inited: bool,
-    notif_id: u64,
+    sender: glib::Sender<LibNotification>,
 }
 
 impl Library {
     #[cfg(test)]
-    pub fn new_in_memory(notif_id: u64) -> Library {
+    pub fn new_in_memory() -> Library {
+        let (sender, _) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
         let mut lib = Library {
             // maindir: dir,
             dbpath: PathBuf::default(),
             dbconn: None,
             inited: false,
-            notif_id,
+            sender
         };
 
         if let Ok(conn) = rusqlite::Connection::open_in_memory() {
@@ -95,7 +95,8 @@ impl Library {
         lib
     }
 
-    pub fn new(dir: &Path, name: Option<&str>, notif_id: u64) -> Library {
+    pub fn new(dir: &Path, name: Option<&str>,
+               sender: glib::Sender<LibNotification>) -> Library {
         let mut dbpath = PathBuf::from(dir);
         if let Some(filename) = name {
             dbpath.push(filename);
@@ -107,7 +108,7 @@ impl Library {
             dbpath: dbpath.clone(),
             dbconn: None,
             inited: false,
-            notif_id,
+            sender,
         };
 
         if let Ok(conn) = rusqlite::Connection::open(dbpath) {
@@ -120,9 +121,9 @@ impl Library {
 
     fn init(&mut self) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            let notif_id = self.notif_id;
+            let sender = self.sender.clone();
             if let Err(err) = conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
-                Library::notify_by_id(notif_id, Box::new(LibNotification::XmpNeedsUpdate));
+                sender.send(LibNotification::XmpNeedsUpdate);
                 Ok(true)
             }) {
                 err_out!("failed to create scalar function.");
@@ -292,22 +293,14 @@ impl Library {
                 &[],
             ).unwrap();
 
-            self.notify(Box::new(LibNotification::LibCreated));
+            self.notify(LibNotification::LibCreated);
             return Ok(());
         }
         Err(Error::NoSqlDb)
     }
 
-    pub fn notify(&self, notif: Box<LibNotification>) {
-        unsafe {
-            engine_library_notify(self.notif_id, Box::into_raw(notif));
-        }
-    }
-
-    pub fn notify_by_id(id: u64, notif: Box<LibNotification>) {
-        unsafe {
-            engine_library_notify(id, Box::into_raw(notif));
-        }
+    pub fn notify(&self, notif: LibNotification) {
+        self.sender.send(notif);
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> Result<()> {
@@ -734,9 +727,9 @@ impl Library {
                 return Err(Error::InvalidResult);
             }
             let keyword_id = conn.last_insert_rowid();
-            self.notify(Box::new(LibNotification::AddedKeyword(Keyword::new(
+            self.notify(LibNotification::AddedKeyword(Keyword::new(
                 keyword_id, keyword,
-            ))));
+            )));
             return Ok(keyword_id);
         }
         Err(Error::NoSqlDb)
@@ -1076,7 +1069,7 @@ mod test {
     #[test]
     fn library_works() {
 
-        let lib = Library::new_in_memory(0);
+        let lib = Library::new_in_memory();
 
         assert!(lib.is_ok());
         let version = lib.check_database_version();
@@ -1168,7 +1161,7 @@ mod test {
 
     #[test]
     fn file_bundle_import() {
-        let lib = Library::new_in_memory(0);
+        let lib = Library::new_in_memory();
 
         assert!(lib.is_ok());
 

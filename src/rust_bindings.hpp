@@ -66,7 +66,7 @@ typedef ffi::LibFolder LibFolder;
 typedef ffi::LibMetadata LibMetadata;
 typedef ffi::Label Label;
 typedef ffi::Managed Managed;
-typedef ffi::Notification LibNotification;
+typedef ffi::LibNotification LibNotification;
 typedef ffi::NotificationType NotificationType;
 typedef ffi::FolderVirtualType FolderVirtualType;
 }

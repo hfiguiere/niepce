@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ use engine::db::{Library, LibraryId};
 use engine::db::library::Managed;
 use engine::library::op::Op;
 use engine::library::commands;
+use engine::library::notification::LibNotification;
 use super::clientinterface::{ClientInterface,ClientInterfaceSync};
 use root::eng::NiepceProperties as Np;
 
@@ -45,14 +46,14 @@ impl Drop for ClientImpl {
 
 impl ClientImpl {
 
-    pub fn new(dir: PathBuf, notif_id: u64) -> ClientImpl {
+    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> ClientImpl {
         let tasks = sync::Arc::new((sync::Mutex::new(VecDeque::new()), sync::Condvar::new()));
         let mut terminate = sync::Arc::new(atomic::AtomicBool::new(false));
         let tasks2 = tasks.clone();
         let terminate2 = terminate.clone();
 
         /* let thread = */ thread::spawn(move || {
-            let library = Library::new(&dir, None, notif_id);
+            let library = Library::new(&dir, None, sender);
             Self::main(&mut terminate, &tasks, &library);
         });
 

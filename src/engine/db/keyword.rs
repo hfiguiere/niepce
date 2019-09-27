@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/keyword.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ use std::ffi::CStr;
 use std::ffi::CString;
 use rusqlite;
 
+#[derive(Clone)]
 pub struct Keyword {
     id: LibraryId,
     keyword: String,

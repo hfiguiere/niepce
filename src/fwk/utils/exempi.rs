@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exempi.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,6 +111,7 @@ impl ExempiManager {
     }
 }
 
+#[derive(Clone)]
 pub struct XmpMeta {
     pub xmp: Xmp,
     keywords: Vec<String>,

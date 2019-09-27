@@ -25,6 +25,7 @@
 #include <glibmm/miscutils.h>
 
 #include "niepce/notifications.hpp"
+#include "niepce/notificationcenter.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/thumbnail.hpp"
@@ -98,8 +99,13 @@ void ThumbnailCache::execute(const ptr_t & task)
     fwk::Thumbnail pix = getThumbnail(libfile, w, h, dest);
     if (!fwk::path_exists(path)) {
         DBG_OUT("file doesn't exist");
-        ffi::engine_library_notify_filestatus_changed(m_notif_id, id,
-                                                      FileStatus::Missing);
+        auto wnc = fwk::NotificationCenter::get_nc(m_notif_id);
+        auto nc = wnc.lock();
+        if (nc) {
+            auto lnc = std::static_pointer_cast<niepce::NotificationCenter>(nc);
+            ffi::engine_library_notify_filestatus_changed(lnc->get_channel().get(), id,
+                                                          FileStatus::Missing);
+        }
     }
 
     if(!pix.ok()) {

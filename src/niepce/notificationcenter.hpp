@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/notificationcenter.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __NIEPCE_NOTIFICATIONCENTER_HPP_
-#define __NIEPCE_NOTIFICATIONCENTER_HPP_
+#pragma once
 
 #include <memory>
 #include <sigc++/signal.h>
@@ -28,14 +26,14 @@
 #include "engine/library/notification.hpp"
 #include "engine/library/thumbnailnotification.hpp"
 
-
 namespace niepce {
-
 
 class NotificationCenter
   : public fwk::NotificationCenter
 {
 public:
+  ~NotificationCenter();
+
   typedef std::shared_ptr<NotificationCenter> Ptr;
   static Ptr make(uint64_t notif_id)
     {
@@ -47,16 +45,19 @@ public:
   sigc::signal<void, const eng::LibNotification &> signal_lib_notification;
   sigc::signal<void, const eng::ThumbnailNotification &> signal_thumbnail_notification;
 
+  const std::shared_ptr<ffi::LcChannel>& get_channel() const
+    { return m_channel; };
 protected:
   NotificationCenter(uint64_t notif_id);
 
 private:
-  void dispatch_notification(const fwk::Notification::Ptr &n);
+  static int32_t channel_callback(const eng::LibNotification *notification, void *data);
+  void dispatch_lib_notification(const eng::LibNotification *n) const;
+  void dispatch_notification(const fwk::Notification::Ptr &n) const;
+  std::shared_ptr<ffi::LcChannel> m_channel;
 };
 
 }
-
-#endif
 /*
   Local Variables:
   mode:c++

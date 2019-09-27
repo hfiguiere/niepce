@@ -28,7 +28,7 @@ libniepceengine_a_SOURCES = \
 	db/properties.hpp db/properties.cpp \
 	db/properties-def.hpp \
 	library/clienttypes.hpp \
-	library/notification.hpp library/notification.cpp \
+	library/notification.hpp \
 	library/thumbnailcache.hpp library/thumbnailcache.cpp \
 	library/thumbnailnotification.hpp \
 	importer/iimporter.hpp \

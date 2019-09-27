@@ -167,18 +167,19 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     case eng::NotificationType::METADATA_CHANGED:
     {
         auto m = engine_library_notification_get_metadatachange(&ln);
-        const fwk::PropertyIndex& prop = m->meta;
+        const fwk::PropertyIndex& prop = ffi::metadatachange_get_meta(m);
         DBG_OUT("metadata changed %s", eng::_propertyName(prop));
         // only interested in a few props
         if(is_property_interesting(prop)) {
             std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter =
-                m_idmap.find(m->id);
+                m_idmap.find(ffi::metadatachange_get_id(m));
             if(iter != m_idmap.end()) {
                 Gtk::TreeRow row = *(iter->second);
                 //
                 eng::LibFilePtr file = row[m_columns.m_libfile];
                 engine_db_libfile_set_property(
-                    file.get(), prop, fwk_property_value_get_integer(m->value));
+                    file.get(), prop, fwk_property_value_get_integer(
+                        ffi::metadatachange_get_value(m)));
                 row[m_columns.m_libfile] = file;
             }
         }

@@ -1,7 +1,7 @@
 /*
- * niepce - niepce/notificationcenter.hpp
+ * niepce - niepce/notificationcenter.cpp
  *
- * Copyright (C) 2009, 2013 Hubert Figuiere
+ * Copyright (C) 2009-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,26 +26,39 @@
 
 namespace niepce {
 
-NotificationCenter::NotificationCenter(uint64_t notif_id)
-    : fwk::NotificationCenter(notif_id)
+int32_t NotificationCenter::channel_callback(const eng::LibNotification *notification, void *data)
 {
-  subscribe(NOTIFICATION_LIB,
-            sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
-  subscribe(NOTIFICATION_THUMBNAIL,
-            sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
+    DBG_ASSERT(data, "Notification center is NULL");
+    if (data) {
+        auto self = (NotificationCenter*)data;
+        self->dispatch_lib_notification(notification);
+        DBG_OUT("callback called");
+    }
+    return 1;
 }
 
+NotificationCenter::NotificationCenter(uint64_t notif_id)
+    : fwk::NotificationCenter(notif_id)
+    , m_channel(ffi::lcchannel_new(&channel_callback, this), ffi::lcchannel_delete)
+{
+    subscribe(NOTIFICATION_THUMBNAIL,
+              sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
+}
 
-void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
+NotificationCenter::~NotificationCenter()
+{
+    ffi::lcchannel_destroy(m_channel.get());
+}
+
+void NotificationCenter::dispatch_lib_notification(const eng::LibNotification *n) const
+{
+    signal_lib_notification(*n);
+}
+
+void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n) const
 {
     try {
         switch(n->type()) {
-        case NOTIFICATION_LIB:
-        {
-            auto ln = boost::any_cast<eng::LibNotificationPtr>(n->data());
-            signal_lib_notification(*ln);
-            break;
-        }
         case NOTIFICATION_THUMBNAIL:
         {
             eng::ThumbnailNotification tn
@@ -54,6 +67,7 @@ void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
             break;
         }
         default:
+            ERR_OUT("Unhandled notification type %d", n->type());
             break;
         }
     }
@@ -72,7 +86,6 @@ void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n)
         ERR_OUT("unknown exception");
     }
 }
-
 
 }
 /*

@@ -372,8 +372,9 @@ std::string NiepceWindow::prompt_open_library()
 bool NiepceWindow::open_library(const std::string & libMoniker)
 {
     fwk::Moniker mon = fwk::Moniker(libMoniker);
-    m_libClient = LibraryClientPtr(new LibraryClient(mon,
-                                                     m_notifcenter->id()));
+    m_libClient
+        = LibraryClientPtr(new LibraryClient(
+                               mon, m_notifcenter->get_channel(), m_notifcenter->id()));
     // XXX ensure the library is open.
     set_title(libMoniker);
     m_library_cfg

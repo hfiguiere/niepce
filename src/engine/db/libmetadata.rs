@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ use super::{FromDb, LibraryId};
 use root::eng::NiepceProperties as Np;
 use engine::db::libfile::FileType;
 
+#[derive(Clone)]
 pub struct LibMetadata {
     xmp: XmpMeta,
     id: LibraryId,

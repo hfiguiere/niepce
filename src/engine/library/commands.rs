@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/commands.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ use engine::db::filebundle::FileBundle;
 use engine::db::keyword::Keyword;
 use engine::db::label::Label;
 use engine::db::libfolder::LibFolder;
-use super::notification::Notification as LibNotification;
+use super::notification::LibNotification;
 use super::notification::{
     Content,
     Count,
@@ -44,7 +44,7 @@ pub fn cmd_list_all_keywords(lib: &Library) -> bool {
         Ok(list) => {
             // XXX change this to "LoadKeywords"
             for kw in list {
-                lib.notify(Box::new(LibNotification::AddedKeyword(kw)));
+                lib.notify(LibNotification::AddedKeyword(kw));
             }
             true
         },
@@ -60,7 +60,7 @@ pub fn cmd_list_all_folders(lib: &Library) -> bool {
         Ok(list) => {
             // XXX change this to "LoadedFolders"
             for folder in list {
-                lib.notify(Box::new(LibNotification::AddedFolder(folder)));
+                lib.notify(LibNotification::AddedFolder(folder));
             }
             true
         },
@@ -83,7 +83,7 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
                 match lib.add_folder(&name, Some(String::from(folder))) {
                     Ok(lf) =>  {
                         let libfolder = lf.clone();
-                        lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+                        lib.notify(LibNotification::AddedFolder(lf));
                         Ok(libfolder)
                     },
                     Err(err) => {
@@ -116,7 +116,7 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String],
                     err_out!("Add bundle failed: {:?}", err);
                 }
             }
-            lib.notify(Box::new(LibNotification::AddedFiles));
+            lib.notify(LibNotification::AddedFiles);
             true
         },
         Err(err) => {
@@ -130,7 +130,7 @@ pub fn cmd_create_folder(lib: &Library, name: &str, path: Option<String>) -> Lib
     match lib.add_folder(name, path) {
         Ok(lf) =>  {
             let id = lf.id();
-            lib.notify(Box::new(LibNotification::AddedFolder(lf)));
+            lib.notify(LibNotification::AddedFolder(lf));
             id
         },
         Err(err) =>  {
@@ -143,7 +143,7 @@ pub fn cmd_create_folder(lib: &Library, name: &str, path: Option<String>) -> Lib
 pub fn cmd_delete_folder(lib: &Library, id: LibraryId) -> bool {
     match lib.delete_folder(id) {
         Ok(_) => {
-            lib.notify(Box::new(LibNotification::FolderDeleted(id)));
+            lib.notify(LibNotification::FolderDeleted(id));
             true
         },
         Err(err) => {
@@ -156,7 +156,7 @@ pub fn cmd_delete_folder(lib: &Library, id: LibraryId) -> bool {
 pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
     match lib.get_metadata(file_id) {
         Ok(lm) => {
-            lib.notify(Box::new(LibNotification::MetadataQueried(lm)));
+            lib.notify(LibNotification::MetadataQueried(lm));
             true
         },
         Err(err) => {
@@ -169,9 +169,9 @@ pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
 pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
     match lib.get_folder_content(folder_id) {
         Ok(fl) => {
-            let mut value = Box::new(
-                LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) }));
-            if let LibNotification::FolderContentQueried(ref mut content) = *value {
+            let mut value =
+                LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) });
+            if let LibNotification::FolderContentQueried(ref mut content) = value {
                 for f in fl {
                     unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
                 }
@@ -190,8 +190,8 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
                         value: &PropertyValue) -> bool {
     match lib.set_metadata(id, meta, value) {
         Ok(_) => {
-            lib.notify(Box::new(LibNotification::MetadataChanged(
-                MetadataChange::new(id, meta as u32, Box::new(value.clone())))));
+            lib.notify(LibNotification::MetadataChanged(
+                MetadataChange::new(id, meta as u32, value.clone())));
             true
         },
         Err(err) => {
@@ -204,8 +204,8 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
 pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
     match lib.count_folder(id) {
         Ok(count) => {
-            lib.notify(Box::new(LibNotification::FolderCounted(
-                Count{id, count})));
+            lib.notify(LibNotification::FolderCounted(
+                Count{id, count}));
             true
         },
         Err(err) => {
@@ -218,7 +218,7 @@ pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
 pub fn cmd_add_keyword(lib: &Library, keyword: &str) -> LibraryId {
     match lib.make_keyword(keyword) {
         Ok(id) => {
-            lib.notify(Box::new(LibNotification::AddedKeyword(Keyword::new(id, keyword))));
+            lib.notify(LibNotification::AddedKeyword(Keyword::new(id, keyword)));
             id
         },
         Err(err) => {
@@ -235,7 +235,7 @@ pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
             for f in fl {
                 unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
             }
-            lib.notify(Box::new(LibNotification::KeywordContentQueried(content)));
+            lib.notify(LibNotification::KeywordContentQueried(content));
             true
         },
         Err(err) => {
@@ -248,8 +248,8 @@ pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
 pub fn cmd_count_keyword(lib: &Library, id: LibraryId) -> bool {
     match lib.count_keyword(id) {
         Ok(count) => {
-            lib.notify(Box::new(LibNotification::KeywordCounted(
-                Count{id, count})));
+            lib.notify(LibNotification::KeywordCounted(
+                Count{id, count}));
             true
         },
         Err(err) => {
@@ -273,12 +273,12 @@ pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryI
                                to: LibraryId) -> bool {
     match lib.move_file_to_folder(file_id, to) {
         Ok(_) => {
-            lib.notify(Box::new(LibNotification::FileMoved(
-                FileMove{file: file_id, from, to})));
-            lib.notify(Box::new(LibNotification::FolderCountChanged(
-                Count{id: from, count: -1})));
-            lib.notify(Box::new(LibNotification::FolderCountChanged(
-                Count{id: to, count: 1})));
+            lib.notify(LibNotification::FileMoved(
+                FileMove{file: file_id, from, to}));
+            lib.notify(LibNotification::FolderCountChanged(
+                Count{id: from, count: -1}));
+            lib.notify(LibNotification::FolderCountChanged(
+                Count{id: to, count: 1}));
             true
         },
         Err(err) => {
@@ -293,7 +293,7 @@ pub fn cmd_list_all_labels(lib: &Library) -> bool {
         Ok(l) => {
             // XXX change this notification type
             for label in l {
-                lib.notify(Box::new(LibNotification::AddedLabel(label)));
+                lib.notify(LibNotification::AddedLabel(label));
             }
             true
         },
@@ -308,7 +308,7 @@ pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> LibraryId {
     match lib.add_label(name, colour) {
         Ok(id) => {
             let l = Label::new(id, name, colour);
-            lib.notify(Box::new(LibNotification::AddedLabel(l)));
+            lib.notify(LibNotification::AddedLabel(l));
             id
         },
         Err(err) => {
@@ -321,7 +321,7 @@ pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> LibraryId {
 pub fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {
     match lib.delete_label(label_id) {
         Ok(_) => {
-            lib.notify(Box::new(LibNotification::LabelDeleted(label_id)));
+            lib.notify(LibNotification::LabelDeleted(label_id));
             true
         },
         Err(err) => {
@@ -336,7 +336,7 @@ pub fn cmd_update_label(lib: &Library, label_id: LibraryId, name: &str,
     match lib.update_label(label_id, name, colour) {
         Ok(_) => {
             let label = Label::new(label_id, name, colour);
-            lib.notify(Box::new(LibNotification::LabelChanged(label)));
+            lib.notify(LibNotification::LabelChanged(label));
             true
         },
         Err(err) => {

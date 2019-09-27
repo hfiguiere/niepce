@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/mod.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ pub mod clientinterface;
 
 pub use self::clientinterface::{ClientInterface,ClientInterfaceSync};
 
-use libc::c_char;
+use libc::{c_char, c_void};
 use std::ffi::CStr;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -31,8 +31,12 @@ use fwk::base::PropertyValue;
 use self::clientimpl::ClientImpl;
 use engine::db::LibraryId;
 use engine::db::library::Managed;
+use engine::library::notification::LibNotification;
 use root::fwk::FileList;
 use root::eng::NiepceProperties as Np;
+
+/// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
+pub struct LcChannel(pub glib::Sender<LibNotification>, glib::SourceId);
 
 /// Wrap the libclient Arc so that it can be passed around
 /// Used in the ffi for example.
@@ -41,8 +45,8 @@ pub struct LibraryClientWrapper {
 }
 
 impl LibraryClientWrapper {
-    pub fn new(dir: PathBuf, notif_id: u64) -> LibraryClientWrapper {
-        LibraryClientWrapper { client: Arc::new(LibraryClient::new(dir, notif_id)) }
+    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClientWrapper {
+        LibraryClientWrapper { client: Arc::new(LibraryClient::new(dir, sender)) }
     }
 
     /// unwrap the mutable client Arc
@@ -61,9 +65,9 @@ pub struct LibraryClient {
 
 impl LibraryClient {
 
-    pub fn new(dir: PathBuf, notif_id: u64) -> LibraryClient {
+    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClient {
         LibraryClient {
-            pimpl: ClientImpl::new(dir, notif_id),
+            pimpl: ClientImpl::new(dir, sender),
             trash_id: 0
         }
     }
@@ -168,9 +172,34 @@ impl ClientInterfaceSync for LibraryClient {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_new(path: *const c_char, notif_id: u64) -> *mut LibraryClientWrapper {
+pub unsafe extern "C" fn lcchannel_new(cb: extern fn(n: *const LibNotification, data: *mut c_void) -> i32, data: *mut c_void) -> *mut LcChannel {
+    let (sender, receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+    let source_id = receiver.attach(None, move |n: LibNotification| {
+        let mut continuation = false;
+        if cb(&n, data) != 0 {
+            continuation = true;
+        }
+        glib::Continue(continuation)
+    });
+    Box::into_raw(Box::new(LcChannel(sender, source_id)))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn lcchannel_delete(obj: *mut LcChannel) {
+    Box::from_raw(obj);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn lcchannel_destroy(obj: *mut LcChannel) {
+    if let Some(source) = glib::MainContext::default().find_source_by_id(&(*obj).1) {
+        source.destroy();
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn libraryclient_new(path: *const c_char, channel: *const LcChannel) -> *mut LibraryClientWrapper {
     let dir = PathBuf::from(&*CStr::from_ptr(path).to_string_lossy());
-    Box::into_raw(Box::new(LibraryClientWrapper::new(dir, notif_id)))
+    Box::into_raw(Box::new(LibraryClientWrapper::new(dir, (*channel).0.clone())))
 }
 
 #[no_mangle]

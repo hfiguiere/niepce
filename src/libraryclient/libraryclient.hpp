@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2018 Hubert Figuière
+ * Copyright (C) 2007-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LIBRARYCLIENT_H_
-#define _LIBRARYCLIENT_H_
+#pragma once
 
 #include <string>
 #include <memory>
@@ -41,7 +40,8 @@ public:
     LibraryClient() = delete;
     LibraryClient& operator=(const LibraryClient&) = delete;
 
-    LibraryClient(const fwk::Moniker & moniker, uint64_t notif_id);
+    LibraryClient(const fwk::Moniker & moniker, const std::shared_ptr<ffi::LcChannel>& channel,
+                  uint64_t notif_id);
     virtual ~LibraryClient();
 
     eng::ThumbnailCache & thumbnailCache()
@@ -63,8 +63,6 @@ private:
 typedef std::shared_ptr<LibraryClient> LibraryClientPtr;
 
 }
-
-#endif
 /*
   Local Variables:
   mode:c++
