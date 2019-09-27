@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/op.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ use std::sync::Arc;
 use engine::db::Library;
 
 // When we can use a FnOnce here, we should.
-type Function = Fn(&Library) -> bool + Send + Sync + 'static;
+type Function = dyn Fn(&Library) -> bool + Send + Sync + 'static;
 
 pub struct Op {
     op: Arc<Function>
