@@ -69,7 +69,7 @@ PKG_CHECK_MODULES(OPENRAW, libopenraw-0.1 >= $LIBOPENRAW_VERSION)
 AC_SUBST(OPENRAW_CFLAGS)
 AC_SUBST(OPENRAW_LIBS)
 
-PKG_CHECK_MODULES(GEGL, gegl-0.3 >= $GEGL_VERSION)
+PKG_CHECK_MODULES(GEGL, gegl-0.4 >= $GEGL_VERSION)
 AC_SUBST(GEGL_CFLAGS)
 AC_SUBST(GEGL_LIBS)
 
@@ -94,6 +94,7 @@ AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option], [
 AX_APPEND_COMPILE_FLAGS([ \
    -Wchar-subscripts \
    -Wcast-align \
+   -Wclass-memaccess \
 dnl sigc++ 2.10.0 breaks with that warning.
    -Wno-cast-function-type \
    -Wextra \
