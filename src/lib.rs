@@ -28,7 +28,6 @@ extern crate gtk;
 extern crate gtk_sys;
 extern crate libc;
 extern crate multimap;
-extern crate rexiv2;
 extern crate rusqlite;
 #[macro_use]
 extern crate try_opt;
@@ -37,7 +36,6 @@ extern crate try_opt;
 #[macro_use]
 extern crate npc_fwk;
 
-pub mod capi;
 pub mod engine;
 pub mod libraryclient;
 pub mod niepce;
@@ -46,13 +44,13 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 use std::sync::Once;
 
-/// Call this to initialize rexiv2 and the gtk-rs bindings
+/// Call this to initialize npc-fwk the gtk-rs bindings
 #[no_mangle]
 pub extern "C" fn niepce_init() {
     static START: Once = Once::new();
 
     START.call_once(|| {
         gtk::init().unwrap();
-        rexiv2::initialize().expect("Unable to initialize rexiv2");
+        npc_fwk::init();
     });
 }

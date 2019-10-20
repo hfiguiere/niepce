@@ -33,6 +33,7 @@ extern crate try_opt;
 
 #[macro_use]
 pub mod base;
+pub mod capi;
 pub mod utils;
 pub mod toolkit;
 
@@ -79,4 +80,13 @@ pub unsafe extern "C" fn fwk_fraction_to_decimal(cvalue: *const c_char) -> f64 {
         }
     }
     f64::NAN
+}
+
+///
+/// Init funtion because rexiv2 need one.
+///
+/// Make sure to call it after gtk::init()
+///
+pub fn init() {
+    rexiv2::initialize().expect("Unable to initialize rexiv2");
 }

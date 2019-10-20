@@ -8,7 +8,6 @@ RUST_SOURCES = \
 	@top_srcdir@/build.rs \
 	@top_srcdir@/Cargo.toml \
 	@top_srcdir@/Cargo.lock \
-	@top_srcdir@/src/capi.rs \
 	@top_srcdir@/src/engine/db/filebundle.rs \
 	@top_srcdir@/src/engine/db/fsfile.rs \
 	@top_srcdir@/src/engine/db/keyword.rs \
@@ -25,6 +24,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/engine/mod.rs \
 	@top_srcdir@/crates/npc-fwk/Cargo.toml \
 	@top_srcdir@/crates/npc-fwk/build.rs \
+	@top_srcdir@/crates/npc-fwk/src/capi.rs \
 	@top_srcdir@/crates/npc-fwk/src/base/date.rs \
 	@top_srcdir@/crates/npc-fwk/src/base/debug.rs \
 	@top_srcdir@/crates/npc-fwk/src/base/fractions.rs \
