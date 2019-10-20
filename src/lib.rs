@@ -44,12 +44,12 @@ pub mod niepce;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
-use std::sync::{Once, ONCE_INIT};
+use std::sync::Once;
 
 /// Call this to initialize rexiv2 and the gtk-rs bindings
 #[no_mangle]
 pub extern "C" fn niepce_init() {
-    static START: Once = ONCE_INIT;
+    static START: Once = Once::new();
 
     START.call_once(|| {
         gtk::init().unwrap();
