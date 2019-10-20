@@ -10,8 +10,6 @@ Here are the different directories for the source code:
                    the framework.
     * fwk - the framework
         * utils - utilities
-            * db - database access code. currently only support
-	           sqlite3.
         * toolkit - the UI toolkit (Gtkmm based)
             * widgets - reusable widgets
     * engine - the backend engine
