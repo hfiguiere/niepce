@@ -153,12 +153,17 @@ impl Drop for LibNotification {
 }
 
 /// Send a notification for the file status change.
+/// Return `false` if sending failed.
 #[no_mangle]
 pub unsafe extern "C" fn engine_library_notify_filestatus_changed(channel: *const LcChannel,
                                                            id: LibraryId,
-                                                           status: FileStatus) {
-    (*channel).0.clone().send(LibNotification::FileStatusChanged(
-        FileStatusChange{id, status}));
+                                                           status: FileStatus) -> bool {
+    if let Err(err) = (*channel).0.clone().send(LibNotification::FileStatusChanged(
+        FileStatusChange{id, status})) {
+        err_out!("Error sending notification: {}", err);
+        return false;
+    }
+    true
 }
 
 /// Delete the Notification object.

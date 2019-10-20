@@ -21,6 +21,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::result;
+use std::sync::mpsc;
 
 use chrono::Utc;
 use rusqlite;
@@ -123,7 +124,11 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let sender = self.sender.clone();
             if let Err(err) = conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
-                sender.send(LibNotification::XmpNeedsUpdate);
+                if let Err(err) = sender.send(LibNotification::XmpNeedsUpdate) {
+                    // This not fatal, at least the data should be saved.
+                    // But still, it's not good.
+                    err_out!("Error sending XmpNeedsUpdate notification: {}", err);
+                }
                 Ok(true)
             }) {
                 err_out!("failed to create scalar function.");
@@ -293,14 +298,20 @@ impl Library {
                 &[],
             ).unwrap();
 
-            self.notify(LibNotification::LibCreated);
+            if self.notify(LibNotification::LibCreated).is_err() {
+                err_out!("Error sending LibCreated notification");
+            }
             return Ok(());
         }
         Err(Error::NoSqlDb)
     }
 
-    pub fn notify(&self, notif: LibNotification) {
-        self.sender.send(notif);
+    ///
+    /// Send a `LibNotification`.
+    /// @returns the result (nothing or an error
+    ///
+    pub fn notify(&self, notif: LibNotification) -> std::result::Result<(), mpsc::SendError<LibNotification>> {
+        self.sender.send(notif)
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> Result<()> {
@@ -727,9 +738,10 @@ impl Library {
                 return Err(Error::InvalidResult);
             }
             let keyword_id = conn.last_insert_rowid();
-            self.notify(LibNotification::AddedKeyword(Keyword::new(
-                keyword_id, keyword,
-            )));
+            if self.notify(LibNotification::AddedKeyword(Keyword::new(
+                keyword_id, keyword))).is_err() {
+                err_out!("Failed to send AddedKeyword notification");
+            }
             return Ok(keyword_id);
         }
         Err(Error::NoSqlDb)
