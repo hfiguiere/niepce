@@ -24,7 +24,7 @@ use std::sync::mpsc;
 use std::sync::atomic;
 use std::thread;
 
-use fwk::base::PropertyValue;
+use npc_fwk::base::PropertyValue;
 use engine::db::{Library, LibraryId};
 use engine::db::library::Managed;
 use engine::library::op::Op;

@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientinterface.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use fwk::base::PropertyValue;
+use npc_fwk::base::PropertyValue;
 use engine::db::LibraryId;
 use engine::db::library::Managed;
 use root::eng::NiepceProperties as Np;

@@ -27,7 +27,7 @@ use std::ffi::CStr;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use fwk::base::PropertyValue;
+use npc_fwk::base::PropertyValue;
 use self::clientimpl::ClientImpl;
 use engine::db::LibraryId;
 use engine::db::library::Managed;

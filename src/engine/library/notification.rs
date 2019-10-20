@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use fwk::base::PropertyIndex;
-use fwk::PropertyValue;
+use npc_fwk::base::PropertyIndex;
+use npc_fwk::PropertyValue;
 use engine::db::{
     LibraryId,
     Label, LibFolder, LibMetadata, Keyword

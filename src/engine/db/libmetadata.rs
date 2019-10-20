@@ -23,8 +23,8 @@ use rusqlite;
 use chrono::Utc;
 use exempi;
 
-use fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
-use fwk::utils::exempi::{NS_DC, NS_XAP};
+use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
+use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use super::{FromDb, LibraryId};
 use root::eng::NiepceProperties as Np;
 use engine::db::libfile::FileType;

@@ -23,20 +23,22 @@ RUST_SOURCES = \
 	@top_srcdir@/src/engine/library/notification.rs \
 	@top_srcdir@/src/engine/library/op.rs \
 	@top_srcdir@/src/engine/mod.rs \
-	@top_srcdir@/src/fwk/base/date.rs \
-	@top_srcdir@/src/fwk/base/debug.rs \
-	@top_srcdir@/src/fwk/base/fractions.rs \
-	@top_srcdir@/src/fwk/base/mod.rs \
-	@top_srcdir@/src/fwk/base/propertybag.rs \
-	@top_srcdir@/src/fwk/base/propertyvalue.rs \
-	@top_srcdir@/src/fwk/base/rgbcolour.rs \
-	@top_srcdir@/src/fwk/mod.rs \
-	@top_srcdir@/src/fwk/toolkit/mimetype.rs \
-	@top_srcdir@/src/fwk/toolkit/mod.rs \
-	@top_srcdir@/src/fwk/utils/exempi.rs \
-	@top_srcdir@/src/fwk/utils/exiv2.rs \
-	@top_srcdir@/src/fwk/utils/files.rs \
-	@top_srcdir@/src/fwk/utils/mod.rs \
+	@top_srcdir@/crates/npc-fwk/Cargo.toml \
+	@top_srcdir@/crates/npc-fwk/build.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/date.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/debug.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/fractions.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/mod.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/propertybag.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/propertyvalue.rs \
+	@top_srcdir@/crates/npc-fwk/src/base/rgbcolour.rs \
+	@top_srcdir@/crates/npc-fwk/src/lib.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/mimetype.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/mod.rs \
+	@top_srcdir@/crates/npc-fwk/src/utils/exempi.rs \
+	@top_srcdir@/crates/npc-fwk/src/utils/exiv2.rs \
+	@top_srcdir@/crates/npc-fwk/src/utils/files.rs \
+	@top_srcdir@/crates/npc-fwk/src/utils/mod.rs \
 	@top_srcdir@/src/lib.rs \
 	@top_srcdir@/src/libraryclient/clientimpl.rs \
 	@top_srcdir@/src/libraryclient/clientinterface.rs \

@@ -20,8 +20,8 @@
 use std::collections::BTreeMap;
 use std::ptr;
 
-use fwk::base::PropertyIndex;
-use fwk::base::propertyvalue::PropertyValue;
+use crate::base::PropertyIndex;
+use crate::base::propertyvalue::PropertyValue;
 
 #[derive(Default)]
 pub struct PropertyBag {

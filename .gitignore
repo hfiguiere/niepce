@@ -110,3 +110,4 @@ po/quot.sed
 po/remove-potcdate.s*
 target/
 **/*.rs.bk
+crates/npc-fwk/Cargo.lock

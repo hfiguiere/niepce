@@ -71,6 +71,7 @@ fn main() {
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
             .exclude_item("GFileInfo")
+            .exclude_item("RgbColour")
             .with_crate(&crate_dir);
 
         if let Ok(bindings) = cbuilder.generate() {

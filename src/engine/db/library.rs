@@ -36,8 +36,8 @@ use engine::db::libfolder;
 use engine::db::libfolder::LibFolder;
 use engine::db::libmetadata::LibMetadata;
 use engine::library::notification::LibNotification;
-use fwk;
-use fwk::PropertyValue;
+use npc_fwk;
+use npc_fwk::PropertyValue;
 use root::eng::NiepceProperties as Np;
 
 #[repr(i32)]
@@ -621,26 +621,26 @@ impl Library {
     pub fn add_file(&self, folder_id: LibraryId, file: &str, bundle: Option<&FileBundle>, manage: Managed) -> Result<LibraryId> {
         dbg_assert!(manage == Managed::NO, "manage not supported");
         dbg_assert!(folder_id != -1, "invalid folder ID");
-        let mime = fwk::MimeType::new(file);
+        let mime = npc_fwk::MimeType::new(file);
         let file_type = libfile::mimetype_to_filetype(&mime);
         let label_id: LibraryId = 0;
         let orientation: i32;
         let rating: i32;
         //let label: String; // XXX fixme
         let flag: i32;
-        let creation_date: fwk::Time;
+        let creation_date: npc_fwk::Time;
         let xmp: String;
 
         // Until we get better metadata support for RAW files, we use the Exif reconcile
         // from the sidecar JPEG to get the initial metadata.
         let meta = if let Some(bundle) = bundle {
             if bundle.bundle_type() == libfile::FileType::RAW_JPEG {
-                fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
+                npc_fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
             } else {
-                fwk::XmpMeta::new_from_file(file, false)
+                npc_fwk::XmpMeta::new_from_file(file, false)
             }
         } else {
-            fwk::XmpMeta::new_from_file(file, false)
+            npc_fwk::XmpMeta::new_from_file(file, false)
         };
 
         if let Some(ref meta) = meta {
@@ -1042,7 +1042,7 @@ impl Library {
                         if p.exists() {
                             dbg_out!("{:?} already exist", p);
                         }
-                        let mut xmppacket = fwk::XmpMeta::new();
+                        let mut xmppacket = npc_fwk::XmpMeta::new();
                         xmppacket.unserialize(&xmp_buffer);
                         if let Ok(mut f) = File::create(p.clone()) {
                             let sidecar = xmppacket.serialize();

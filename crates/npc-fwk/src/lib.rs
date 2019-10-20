@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/mod.rs
+ * niepce - fwk/lib.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+extern crate chrono;
+extern crate exempi;
+extern crate gio_sys;
+extern crate gio;
+extern crate glib_sys;
+extern crate glib;
+#[macro_use]
+extern crate lazy_static;
+extern crate libc;
+extern crate multimap;
+#[macro_use]
+extern crate try_opt;
 
 #[macro_use]
 pub mod base;

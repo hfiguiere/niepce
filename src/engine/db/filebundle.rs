@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/filebundle.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@ use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 
 use engine::db::libfile::FileType;
-use fwk::MimeType;
-use fwk::toolkit::mimetype::{IsRaw, MType};
+use npc_fwk::MimeType;
+use npc_fwk::toolkit::mimetype::{IsRaw, MType};
 
 /// Sidecar.
 #[derive(Debug, PartialEq)]

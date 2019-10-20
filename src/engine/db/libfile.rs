@@ -27,9 +27,9 @@ use rusqlite;
 use super::FromDb;
 use super::LibraryId;
 use super::fsfile::FsFile;
-use fwk::base::PropertyIndex;
+use npc_fwk::base::PropertyIndex;
 use root::eng::NiepceProperties as Np;
-use fwk;
+use npc_fwk;
 
 #[repr(i32)]
 #[allow(non_camel_case_types)]
@@ -234,7 +234,7 @@ impl FromDb for LibFile {
  * @return the filetype
  * @todo: add the JPEG+RAW file types.
  */
-pub fn mimetype_to_filetype(mime: &fwk::MimeType) -> FileType {
+pub fn mimetype_to_filetype(mime: &npc_fwk::MimeType) -> FileType {
     if mime.is_digicam_raw() {
         return FileType::RAW;
     } else if mime.is_image() {

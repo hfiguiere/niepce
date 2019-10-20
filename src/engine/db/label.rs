@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/label.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ use rusqlite;
 
 use super::LibraryId;
 use super::FromDb;
-use fwk::base::rgbcolour::RgbColour;
+use npc_fwk::base::rgbcolour::RgbColour;
 
 #[derive(Clone)]
 pub struct Label {

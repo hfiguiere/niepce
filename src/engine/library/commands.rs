@@ -19,7 +19,7 @@
 
 use std::os::raw::c_void;
 
-use fwk::PropertyValue;
+use npc_fwk::PropertyValue;
 use engine::db::LibraryId;
 use engine::db::library;
 use engine::db::library::{

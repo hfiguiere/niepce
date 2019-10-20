@@ -26,8 +26,6 @@ extern crate glib;
 extern crate glib_sys;
 extern crate gtk;
 extern crate gtk_sys;
-#[macro_use]
-extern crate lazy_static;
 extern crate libc;
 extern crate multimap;
 extern crate rexiv2;
@@ -35,8 +33,10 @@ extern crate rusqlite;
 #[macro_use]
 extern crate try_opt;
 
+// internal crates
 #[macro_use]
-pub mod fwk;
+extern crate npc_fwk;
+
 pub mod capi;
 pub mod engine;
 pub mod libraryclient;

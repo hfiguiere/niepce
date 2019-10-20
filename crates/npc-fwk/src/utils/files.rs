@@ -21,7 +21,7 @@ use glib::translate::*;
 use gio;
 use gio_sys;
 
-use fwk::toolkit::mimetype::{
+use crate::toolkit::mimetype::{
     guess_type,
     MType
 };
