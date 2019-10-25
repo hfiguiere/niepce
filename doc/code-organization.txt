@@ -4,12 +4,9 @@ Code organization
 Here are the different directories for the source code:
 
 * crates - internal Rust crates.
-    * npc-fwk - the framework in Rust. Replaces src/fwk.
+    * npc-fwk - the framework in Rust. Replaces C++ code in src/fwk.
+    * npc-engine - the engine in Rust. Replaces C++ code in src/engine.
 * src
-    * ext - external code
-        * libgdl - "stolen" from Inkscape, a fork of libgdl
-	           from Anjuta. Has matching C++ code in
-                   the framework.
     * fwk - the framework
         * utils - utilities
         * toolkit - the UI toolkit (Gtkmm based)

@@ -28,15 +28,13 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use npc_fwk::base::PropertyValue;
+use npc_fwk::toolkit::PortableChannel;
 use self::clientimpl::ClientImpl;
-use engine::db::LibraryId;
-use engine::db::library::Managed;
-use engine::library::notification::LibNotification;
-use root::fwk::FileList;
-use root::eng::NiepceProperties as Np;
-
-/// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
-pub struct LcChannel(pub glib::Sender<LibNotification>, glib::SourceId);
+use npc_engine::db::LibraryId;
+use npc_engine::db::library::Managed;
+use npc_engine::library::notification::{LibNotification, LcChannel};
+use npc_engine::root::fwk::FileList;
+use npc_engine::root::eng::NiepceProperties as Np;
 
 /// Wrap the libclient Arc so that it can be passed around
 /// Used in the ffi for example.
@@ -181,7 +179,7 @@ pub unsafe extern "C" fn lcchannel_new(cb: extern fn(n: *const LibNotification, 
         }
         glib::Continue(continuation)
     });
-    Box::into_raw(Box::new(LcChannel(sender, source_id)))
+    Box::into_raw(Box::new(PortableChannel::<LibNotification>(sender, source_id)))
 }
 
 #[no_mangle]

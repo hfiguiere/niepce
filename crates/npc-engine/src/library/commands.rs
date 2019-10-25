@@ -20,16 +20,17 @@
 use std::os::raw::c_void;
 
 use npc_fwk::PropertyValue;
-use engine::db::LibraryId;
-use engine::db::library;
-use engine::db::library::{
+use crate::db::LibraryId;
+use crate::db::library;
+use crate::db::library::{
     Library,
     Managed
 };
-use engine::db::filebundle::FileBundle;
-use engine::db::keyword::Keyword;
-use engine::db::label::Label;
-use engine::db::libfolder::LibFolder;
+use crate::db::filebundle::FileBundle;
+use crate::db::keyword::Keyword;
+use crate::db::label::Label;
+use crate::db::libfolder::LibFolder;
+use crate::root::eng::NiepceProperties as Np;
 use super::notification::LibNotification;
 use super::notification::{
     Content,
@@ -37,7 +38,6 @@ use super::notification::{
     FileMove,
     MetadataChange,
 };
-use root::eng::NiepceProperties as Np;
 
 pub fn cmd_list_all_keywords(lib: &Library) -> bool {
     match lib.get_all_keywords() {

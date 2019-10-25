@@ -19,19 +19,22 @@
 
 use npc_fwk::base::PropertyIndex;
 use npc_fwk::PropertyValue;
-use engine::db::{
+use npc_fwk::toolkit::PortableChannel;
+use crate::db::{
     LibraryId,
     Label, LibFolder, LibMetadata, Keyword
 };
-use engine::db::libfile::{
+use crate::db::libfile::{
     FileStatus,
 };
-use libraryclient::LcChannel;
+
 
 #[cfg(not(test))]
-use root::eng::QueriedContent;
+use crate::root::eng::QueriedContent;
 #[cfg(not(test))]
 pub type Content = QueriedContent;
+
+pub type LcChannel = PortableChannel<LibNotification>;
 
 // Content need to be stubbed for the test as it is a FFI struct
 // and is missing the proper C++ code.

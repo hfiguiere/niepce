@@ -1,7 +1,7 @@
 /*
  * niepce - engine/mod.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,5 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#[macro_use]
+extern crate try_opt;
+
+#[macro_use]
+extern crate npc_fwk;
+
 pub mod db;
 pub mod library;
+
+include!(concat!(env!("OUT_DIR"), "/bindings.rs"));

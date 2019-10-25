@@ -8,20 +8,21 @@ RUST_SOURCES = \
 	@top_srcdir@/build.rs \
 	@top_srcdir@/Cargo.toml \
 	@top_srcdir@/Cargo.lock \
-	@top_srcdir@/src/engine/db/filebundle.rs \
-	@top_srcdir@/src/engine/db/fsfile.rs \
-	@top_srcdir@/src/engine/db/keyword.rs \
-	@top_srcdir@/src/engine/db/label.rs \
-	@top_srcdir@/src/engine/db/libfile.rs \
-	@top_srcdir@/src/engine/db/libfolder.rs \
-	@top_srcdir@/src/engine/db/libmetadata.rs \
-	@top_srcdir@/src/engine/db/library.rs \
-	@top_srcdir@/src/engine/db/mod.rs \
-	@top_srcdir@/src/engine/library/commands.rs \
-	@top_srcdir@/src/engine/library/mod.rs \
-	@top_srcdir@/src/engine/library/notification.rs \
-	@top_srcdir@/src/engine/library/op.rs \
-	@top_srcdir@/src/engine/mod.rs \
+	@top_srcdir@/crates/npc-engine/Cargo.toml \
+	@top_srcdir@/crates/npc-engine/src/db/filebundle.rs \
+	@top_srcdir@/crates/npc-engine/src/db/fsfile.rs \
+	@top_srcdir@/crates/npc-engine/src/db/keyword.rs \
+	@top_srcdir@/crates/npc-engine/src/db/label.rs \
+	@top_srcdir@/crates/npc-engine/src/db/libfile.rs \
+	@top_srcdir@/crates/npc-engine/src/db/libfolder.rs \
+	@top_srcdir@/crates/npc-engine/src/db/libmetadata.rs \
+	@top_srcdir@/crates/npc-engine/src/db/library.rs \
+	@top_srcdir@/crates/npc-engine/src/db/mod.rs \
+	@top_srcdir@/crates/npc-engine/src/library/commands.rs \
+	@top_srcdir@/crates/npc-engine/src/library/mod.rs \
+	@top_srcdir@/crates/npc-engine/src/library/notification.rs \
+	@top_srcdir@/crates/npc-engine/src/library/op.rs \
+	@top_srcdir@/crates/npc-engine/src/lib.rs \
 	@top_srcdir@/crates/npc-fwk/Cargo.toml \
 	@top_srcdir@/crates/npc-fwk/build.rs \
 	@top_srcdir@/crates/npc-fwk/src/capi.rs \

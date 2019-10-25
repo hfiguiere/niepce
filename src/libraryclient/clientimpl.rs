@@ -25,13 +25,13 @@ use std::sync::atomic;
 use std::thread;
 
 use npc_fwk::base::PropertyValue;
-use engine::db::{Library, LibraryId};
-use engine::db::library::Managed;
-use engine::library::op::Op;
-use engine::library::commands;
-use engine::library::notification::LibNotification;
+use npc_engine::db::{Library, LibraryId};
+use npc_engine::db::library::Managed;
+use npc_engine::library::op::Op;
+use npc_engine::library::commands;
+use npc_engine::library::notification::LibNotification;
 use super::clientinterface::{ClientInterface,ClientInterfaceSync};
-use root::eng::NiepceProperties as Np;
+use npc_engine::root::eng::NiepceProperties as Np;
 
 pub struct ClientImpl {
     terminate: sync::Arc<atomic::AtomicBool>,
@@ -46,7 +46,7 @@ impl Drop for ClientImpl {
 
 impl ClientImpl {
 
-    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> ClientImpl {
+    pub fn new(dir: PathBuf, sender: npc_fwk::toolkit::Sender<LibNotification>) -> ClientImpl {
         let tasks = sync::Arc::new((sync::Mutex::new(VecDeque::new()), sync::Condvar::new()));
         let mut terminate = sync::Arc::new(atomic::AtomicBool::new(false));
         let tasks2 = tasks.clone();

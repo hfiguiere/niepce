@@ -20,7 +20,7 @@
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 
-use engine::db::libfile::FileType;
+use crate::db::libfile::FileType;
 use npc_fwk::MimeType;
 use npc_fwk::toolkit::mimetype::{IsRaw, MType};
 
@@ -213,7 +213,7 @@ impl FileBundle {
 #[cfg(test)]
 mod test {
     use super::{FileBundle, Sidecar};
-    use engine::db::libfile::FileType;
+    use crate::db::libfile::FileType;
 
     #[test]
     fn test_filebundle() {

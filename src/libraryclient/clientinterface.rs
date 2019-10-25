@@ -18,9 +18,9 @@
  */
 
 use npc_fwk::base::PropertyValue;
-use engine::db::LibraryId;
-use engine::db::library::Managed;
-use root::eng::NiepceProperties as Np;
+use npc_engine::db::LibraryId;
+use npc_engine::db::library::Managed;
+use npc_engine::root::eng::NiepceProperties as Np;
 
 /// Client interface.
 pub trait ClientInterface {

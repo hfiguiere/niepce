@@ -27,18 +27,18 @@ use chrono::Utc;
 use rusqlite;
 
 use super::{FromDb, LibraryId};
-use engine::db::filebundle::{FileBundle, Sidecar};
-use engine::db::keyword::Keyword;
-use engine::db::label::Label;
-use engine::db::libfile;
-use engine::db::libfile::LibFile;
-use engine::db::libfolder;
-use engine::db::libfolder::LibFolder;
-use engine::db::libmetadata::LibMetadata;
-use engine::library::notification::LibNotification;
+use crate::db::filebundle::{FileBundle, Sidecar};
+use crate::db::keyword::Keyword;
+use crate::db::label::Label;
+use crate::db::libfile;
+use crate::db::libfile::LibFile;
+use crate::db::libfolder;
+use crate::db::libfolder::LibFolder;
+use crate::db::libmetadata::LibMetadata;
+use crate::library::notification::LibNotification;
+use crate::root::eng::NiepceProperties as Np;
 use npc_fwk;
 use npc_fwk::PropertyValue;
-use root::eng::NiepceProperties as Np;
 
 #[repr(i32)]
 #[derive(PartialEq, Clone, Copy)]
@@ -73,7 +73,7 @@ pub struct Library {
     dbpath: PathBuf,
     dbconn: Option<rusqlite::Connection>,
     inited: bool,
-    sender: glib::Sender<LibNotification>,
+    sender: npc_fwk::toolkit::Sender<LibNotification>,
 }
 
 impl Library {
@@ -97,7 +97,7 @@ impl Library {
     }
 
     pub fn new(dir: &Path, name: Option<&str>,
-               sender: glib::Sender<LibNotification>) -> Library {
+               sender: npc_fwk::toolkit::Sender<LibNotification>) -> Library {
         let mut dbpath = PathBuf::from(dir);
         if let Some(filename) = name {
             dbpath.push(filename);
@@ -1074,7 +1074,7 @@ impl Library {
 
 #[cfg(test)]
 mod test {
-    use engine::db::filebundle::FileBundle;
+    use crate::db::filebundle::FileBundle;
 
     use super::{Library, Managed};
 

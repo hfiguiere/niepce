@@ -17,30 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern crate chrono;
-extern crate exempi;
 extern crate gettextrs;
 extern crate gio;
-extern crate gio_sys;
 extern crate glib;
-extern crate glib_sys;
 extern crate gtk;
 extern crate gtk_sys;
 extern crate libc;
-extern crate multimap;
-extern crate rusqlite;
-#[macro_use]
-extern crate try_opt;
 
 // internal crates
 #[macro_use]
 extern crate npc_fwk;
+extern crate npc_engine;
 
-pub mod engine;
 pub mod libraryclient;
 pub mod niepce;
-
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 use std::sync::Once;
 

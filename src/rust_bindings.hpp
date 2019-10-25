@@ -45,6 +45,7 @@ typedef fwk::FileList FileList;
 }
 
 #include "target/fwk_bindings.h"
+#include "target/eng_bindings.h"
 #include "target/bindings.h"
 
 namespace fwk {

@@ -27,8 +27,8 @@ use rusqlite;
 use super::FromDb;
 use super::LibraryId;
 use super::fsfile::FsFile;
+use crate::root::eng::NiepceProperties as Np;
 use npc_fwk::base::PropertyIndex;
-use root::eng::NiepceProperties as Np;
 use npc_fwk;
 
 #[repr(i32)]

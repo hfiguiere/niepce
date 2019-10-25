@@ -26,8 +26,8 @@ use exempi;
 use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
 use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use super::{FromDb, LibraryId};
-use root::eng::NiepceProperties as Np;
-use engine::db::libfile::FileType;
+use crate::root::eng::NiepceProperties as Np;
+use crate::db::libfile::FileType;
 
 #[derive(Clone)]
 pub struct LibMetadata {
@@ -45,7 +45,7 @@ struct IndexToXmp {
 }
 
 fn property_index_to_xmp(meta: Np) -> Option<IndexToXmp> {
-    let index = unsafe { ::root::eng::property_index_to_xmp(meta as u32) };
+    let index = unsafe { crate::root::eng::property_index_to_xmp(meta as u32) };
     if index.ns.is_null() || index.property.is_null() {
         err_out!("property {} not found", meta as u32);
         return None;
