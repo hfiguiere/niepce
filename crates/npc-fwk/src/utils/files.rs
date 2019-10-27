@@ -17,14 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use glib::translate::*;
 use gio;
 use gio_sys;
+use glib::translate::*;
 
-use crate::toolkit::mimetype::{
-    guess_type,
-    MType
-};
+use crate::toolkit::mimetype::{guess_type, MType};
 
 #[no_mangle]
 pub unsafe extern "C" fn file_is_media(finfo: *mut gio_sys::GFileInfo) -> bool {
@@ -32,9 +29,8 @@ pub unsafe extern "C" fn file_is_media(finfo: *mut gio_sys::GFileInfo) -> bool {
     if let Some(gmtype) = fileinfo.get_content_type() {
         let t = guess_type(&gmtype);
         return match t {
-            MType::Image(_) |
-            MType::Movie => true,
-            _ => false
+            MType::Image(_) | MType::Movie => true,
+            _ => false,
         };
     }
 

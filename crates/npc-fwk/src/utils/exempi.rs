@@ -70,18 +70,54 @@ impl From<i32> for Flash {
         let mode = ((flash >> 3) & 0x3) as u8;
         let function = ((flash >> 5) & 0x1) != 0;
         let red_eye = ((flash >> 6) & 0x10) != 0;
-        Flash { fired, rturn, mode, function, red_eye }
+        Flash {
+            fired,
+            rturn,
+            mode,
+            function,
+            red_eye,
+        }
     }
 }
 
 impl Flash {
-    pub fn set_as_xmp_property(&self, xmp: &mut Xmp, ns: &str, property: &str) -> exempi::Result<()> {
+    pub fn set_as_xmp_property(
+        &self,
+        xmp: &mut Xmp,
+        ns: &str,
+        property: &str,
+    ) -> exempi::Result<()> {
         // XXX use set_struct_field() as soon as it is available
-        xmp.set_property(ns, &format!("{}/exif:Fired", property), bool_to_propstring(self.fired), exempi::PROP_NONE)?;
-        xmp.set_property(ns, &format!("{}/exif:Return", property), &format!("{}", self.rturn), exempi::PROP_NONE)?;
-        xmp.set_property(ns, &format!("{}/exif:Mode", property), &format!("{}", self.mode), exempi::PROP_NONE)?;
-        xmp.set_property(ns, &format!("{}/exif:Function", property), bool_to_propstring(self.function), exempi::PROP_NONE)?;
-        xmp.set_property(ns, &format!("{}/exif:RedEyeMode", property), bool_to_propstring(self.red_eye), exempi::PROP_NONE)?;
+        xmp.set_property(
+            ns,
+            &format!("{}/exif:Fired", property),
+            bool_to_propstring(self.fired),
+            exempi::PROP_NONE,
+        )?;
+        xmp.set_property(
+            ns,
+            &format!("{}/exif:Return", property),
+            &format!("{}", self.rturn),
+            exempi::PROP_NONE,
+        )?;
+        xmp.set_property(
+            ns,
+            &format!("{}/exif:Mode", property),
+            &format!("{}", self.mode),
+            exempi::PROP_NONE,
+        )?;
+        xmp.set_property(
+            ns,
+            &format!("{}/exif:Function", property),
+            bool_to_propstring(self.function),
+            exempi::PROP_NONE,
+        )?;
+        xmp.set_property(
+            ns,
+            &format!("{}/exif:RedEyeMode", property),
+            bool_to_propstring(self.red_eye),
+            exempi::PROP_NONE,
+        )?;
 
         Ok(())
     }
@@ -92,8 +128,7 @@ pub struct NsDef {
     prefix: String,
 }
 
-pub struct ExempiManager {
-}
+pub struct ExempiManager {}
 
 impl ExempiManager {
     pub fn new(namespaces: Option<Vec<NsDef>>) -> ExempiManager {
@@ -147,7 +182,7 @@ impl XmpMeta {
             if let Ok(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
                 meta = match xmpfile.get_new_xmp() {
                     Ok(xmp) => Some(Self::new_with_xmp(xmp)),
-                    _ => exiv2::xmp_from_exiv2(file)
+                    _ => exiv2::xmp_from_exiv2(file),
                 }
             }
         }
@@ -172,7 +207,11 @@ impl XmpMeta {
             sidecar_meta
         } else {
             let mut final_meta = sidecar_meta.unwrap();
-            if !meta.as_ref().unwrap().merge_missing_into_xmp(&mut final_meta) {
+            if !meta
+                .as_ref()
+                .unwrap()
+                .merge_missing_into_xmp(&mut final_meta)
+            {
                 err_out!("xmp merge failed");
                 // XXX with the current heuristics, it is probably safe to just
                 // keep the source metadata.
@@ -193,8 +232,11 @@ impl XmpMeta {
         let dest_date = dest.get_date_property(NS_XAP, "MetadataDate");
 
         if source_date.is_none() || dest_date.is_none() {
-            dbg_out!("missing metadata date {} {}", source_date.is_some(),
-                     dest_date.is_some());
+            dbg_out!(
+                "missing metadata date {} {}",
+                source_date.is_some(),
+                dest_date.is_some()
+            );
             return false;
         }
         if source_date > dest_date {
@@ -215,15 +257,22 @@ impl XmpMeta {
                     continue;
                 }
                 if option.contains(exempi::PROP_VALUE_IS_ARRAY)
-                      || option.contains(exempi::PROP_VALUE_IS_STRUCT) {
+                    || option.contains(exempi::PROP_VALUE_IS_STRUCT)
+                {
                     iter.skip(exempi::ITER_SKIP_SUBTREE);
                     continue;
                 }
 
-                if !dest.xmp.has_property(schema.to_str(), name.to_str()) &&
-                    dest.xmp.set_property(schema.to_str(), name.to_str(),
-                                          value.to_str(), exempi::PROP_NONE).is_err() {
-                        err_out!("Can set property {}", name);
+                if !dest.xmp.has_property(schema.to_str(), name.to_str()) && dest
+                    .xmp
+                    .set_property(
+                        schema.to_str(),
+                        name.to_str(),
+                        value.to_str(),
+                        exempi::PROP_NONE,
+                    ).is_err()
+                {
+                    err_out!("Can set property {}", name);
                 }
             }
         }
@@ -234,7 +283,11 @@ impl XmpMeta {
     pub fn serialize_inline(&self) -> String {
         if let Ok(xmpstr) = self.xmp.serialize_and_format(
             exempi::SERIAL_OMITPACKETWRAPPER | exempi::SERIAL_OMITALLFORMATTING,
-            0, "", "", 0) {
+            0,
+            "",
+            "",
+            0,
+        ) {
             let buf = String::from(xmpstr.to_str());
             return buf;
         }
@@ -242,8 +295,10 @@ impl XmpMeta {
     }
 
     pub fn serialize(&self) -> String {
-        if let Ok(xmpstr) = self.xmp.serialize_and_format(
-            exempi::SERIAL_OMITPACKETWRAPPER, 0, "\n", "", 0) {
+        if let Ok(xmpstr) =
+            self.xmp
+                .serialize_and_format(exempi::SERIAL_OMITPACKETWRAPPER, 0, "\n", "", 0)
+        {
             let buf = String::from(xmpstr.to_str());
             return buf;
         }
@@ -256,7 +311,9 @@ impl XmpMeta {
 
     pub fn orientation(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        self.xmp.get_property_i32(NS_TIFF, "Orientation", &mut flags).ok()
+        self.xmp
+            .get_property_i32(NS_TIFF, "Orientation", &mut flags)
+            .ok()
     }
 
     pub fn label(&self) -> Option<String> {
@@ -272,12 +329,18 @@ impl XmpMeta {
 
     pub fn flag(&self) -> Option<i32> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        self.xmp.get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags).ok()
+        self.xmp
+            .get_property_i32(NIEPCE_XMP_NAMESPACE, "Flag", &mut flags)
+            .ok()
     }
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags).ok());
+        let xmpstring = try_opt!(
+            self.xmp
+                .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
+                .ok()
+        );
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
 
         Some(date.with_timezone(&Utc))
@@ -285,7 +348,11 @@ impl XmpMeta {
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self.xmp.get_property(NS_EXIF, "DateTimeOriginal", &mut flags).ok());
+        let xmpstring = try_opt!(
+            self.xmp
+                .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
+                .ok()
+        );
         Some(String::from(xmpstring.to_str()))
     }
 
@@ -301,7 +368,11 @@ impl XmpMeta {
         let xmpstring = property.unwrap();
         let parsed = DateTime::parse_from_rfc3339(xmpstring.to_str());
         if parsed.is_err() {
-            err_out!("Error parsing property value '{}': {:?}", xmpstring, parsed.err());
+            err_out!(
+                "Error parsing property value '{}': {:?}",
+                xmpstring,
+                parsed.err()
+            );
             return None;
         }
         let date = parsed.unwrap();
@@ -312,8 +383,8 @@ impl XmpMeta {
         if !self.keywords_fetched {
             use exempi::XmpString;
 
-            let mut iter = exempi::XmpIterator::new(&self.xmp, NS_DC, "subject",
-                                                    exempi::ITER_JUST_LEAF_NODES);
+            let mut iter =
+                exempi::XmpIterator::new(&self.xmp, NS_DC, "subject", exempi::ITER_JUST_LEAF_NODES);
             let mut schema = XmpString::new();
             let mut name = XmpString::new();
             let mut value = XmpString::new();
@@ -344,10 +415,8 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     // get rid of the comma
     let (_, current) = current.split_at(1);
     let orientation = match current.chars().last() {
-        Some('N') | Some('E') =>
-            1.0f64,
-        Some('S') | Some('W') =>
-            -1.0f64,
+        Some('N') | Some('E') => 1.0f64,
+        Some('S') | Some('W') => -1.0f64,
         _ => return None,
     };
 
@@ -447,11 +516,11 @@ pub unsafe extern "C" fn fwk_exempi_manager_delete(em: *mut ExempiManager) {
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
+    use super::xmp_date_from_exif;
     use super::ExempiManager;
     use super::XmpMeta;
-    use super::xmp_date_from_exif;
     use exempi;
+    use std::path::PathBuf;
 
     fn get_xmp_sample_path() -> PathBuf {
         use std::env;
@@ -470,7 +539,6 @@ mod tests {
 
     #[test]
     fn xmp_meta_works() {
-
         let mut dir = get_xmp_sample_path();
         dir.push("test.xmp");
         let _xmp_manager = ExempiManager::new(None);
@@ -494,16 +562,20 @@ mod tests {
         }
     }
 
-    fn test_property_value(meta: &XmpMeta, ns: &str,
-                           property: &str, expected_value: &str) {
+    fn test_property_value(meta: &XmpMeta, ns: &str, property: &str, expected_value: &str) {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         let value = meta.xmp.get_property(ns, property, &mut flags);
         assert!(value.is_ok());
         assert_eq!(value.unwrap().to_str(), expected_value);
     }
 
-    fn test_property_array_value(meta: &XmpMeta, ns: &str,
-                                 property: &str, idx: i32, expected_value: &str) {
+    fn test_property_array_value(
+        meta: &XmpMeta,
+        ns: &str,
+        property: &str,
+        idx: i32,
+        expected_value: &str,
+    ) {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
         let value = meta.xmp.get_array_item(ns, property, idx, &mut flags);
         assert!(value.is_ok());
@@ -542,7 +614,13 @@ mod tests {
                 test_property_array_value(&dstmeta, super::NS_DC, "subject", 1, "night");
                 test_property_array_value(&dstmeta, super::NS_DC, "subject", 2, "ontario");
                 test_property_array_value(&dstmeta, super::NS_DC, "subject", 3, "ottawa");
-                test_property_array_value(&dstmeta, super::NS_DC, "subject", 4, "parliament of canada");
+                test_property_array_value(
+                    &dstmeta,
+                    super::NS_DC,
+                    "subject",
+                    4,
+                    "parliament of canada",
+                );
                 assert!(!dstmeta.xmp.has_property(super::NS_DC, "dc:subject[5]"));
             }
         } else {
@@ -576,17 +654,26 @@ mod tests {
         // well-formed 1
         output = gps_coord_from_xmp("45,29.6681666667N");
         assert!(output.is_some());
-        assert_eq!(output.unwrap(), 45.494469444445002181964810006320476531982421875);
+        assert_eq!(
+            output.unwrap(),
+            45.494469444445002181964810006320476531982421875
+        );
 
         // well-formed 2
         output = gps_coord_from_xmp("73,38.2871666667W");
         assert!(output.is_some());
-        assert_eq!(output.unwrap(), -73.6381194444449960201382054947316646575927734375);
+        assert_eq!(
+            output.unwrap(),
+            -73.6381194444449960201382054947316646575927734375
+        );
 
         // well-formed 3
         output = gps_coord_from_xmp("45,29,30.45N");
         assert!(output.is_some());
-        assert_eq!(output.unwrap(), 45.49179166666666418450404307805001735687255859375);
+        assert_eq!(
+            output.unwrap(),
+            45.49179166666666418450404307805001735687255859375
+        );
     }
 
     #[test]

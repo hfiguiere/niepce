@@ -17,13 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::ffi::OsStr;
 use multimap::MultiMap;
+use std::ffi::OsStr;
 
 use exempi;
 use rexiv2;
 
-use super::exempi::{Flash, XmpMeta, NS_TIFF, NS_EXIF, NS_EXIF_EX, NS_AUX, NS_XAP, xmp_date_from_exif};
+use super::exempi::{
+    xmp_date_from_exif, Flash, XmpMeta, NS_AUX, NS_EXIF, NS_EXIF_EX, NS_TIFF, NS_XAP,
+};
 
 /// Property conversion rules
 #[derive(Clone, Copy, Debug)]
@@ -54,60 +56,180 @@ enum Converted {
 lazy_static! {
     static ref EXIV2_TO_XMP: MultiMap<&'static str, (&'static str, &'static str, Conversion)> = {
         [
-            ("Exif.Image.DateTime", (NS_XAP, "ModifyDate", Conversion::ExifDate)),
-            ("Exif.Image.ImageHeight", (NS_TIFF, "ImageHeight", Conversion::None)),
-            ("Exif.Image.ImageWidth", (NS_TIFF, "ImageWidth", Conversion::None)),
+            (
+                "Exif.Image.DateTime",
+                (NS_XAP, "ModifyDate", Conversion::ExifDate),
+            ),
+            (
+                "Exif.Image.ImageHeight",
+                (NS_TIFF, "ImageHeight", Conversion::None),
+            ),
+            (
+                "Exif.Image.ImageWidth",
+                (NS_TIFF, "ImageWidth", Conversion::None),
+            ),
             ("Exif.Image.Make", (NS_TIFF, "Make", Conversion::None)),
             ("Exif.Image.Model", (NS_TIFF, "Model", Conversion::None)),
-            ("Exif.Image.Orientation", (NS_TIFF, "Orientation", Conversion::None)),
-            ("Exif.Image.Software", (NS_TIFF, "Software", Conversion::None)),
-            ("Exif.Photo.ApertureValue", (NS_EXIF, "ApertureValue", Conversion::None)),
-            ("Exif.Photo.BodySerialNumber", (NS_EXIF_EX, "BodySerialNumber", Conversion::None)),
-            ("Exif.Photo.CameraOwnerName", (NS_EXIF_EX, "CameraOwnerName", Conversion::None)),
-            ("Exif.Photo.ColorSpace", (NS_EXIF, "ColorSpace", Conversion::None)),
-            ("Exif.Photo.DateTimeOriginal", (NS_EXIF, "DateTimeOriginal", Conversion::ExifDate)),
-            ("Exif.Photo.DateTimeDigitized", (NS_XAP, "CreateDate", Conversion::ExifDate)),
-            ("Exif.Photo.ExposureBiasValue", (NS_EXIF, "ExposureBiasValue", Conversion::None)),
-            ("Exif.Photo.ExposureMode", (NS_EXIF, "ExposureMode", Conversion::None)),
-            ("Exif.Photo.ExposureProgram", (NS_EXIF, "ExposureProgram", Conversion::None)),
-            ("Exif.Photo.ExposureTime", (NS_EXIF, "ExposureTime", Conversion::None)),
+            (
+                "Exif.Image.Orientation",
+                (NS_TIFF, "Orientation", Conversion::None),
+            ),
+            (
+                "Exif.Image.Software",
+                (NS_TIFF, "Software", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ApertureValue",
+                (NS_EXIF, "ApertureValue", Conversion::None),
+            ),
+            (
+                "Exif.Photo.BodySerialNumber",
+                (NS_EXIF_EX, "BodySerialNumber", Conversion::None),
+            ),
+            (
+                "Exif.Photo.CameraOwnerName",
+                (NS_EXIF_EX, "CameraOwnerName", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ColorSpace",
+                (NS_EXIF, "ColorSpace", Conversion::None),
+            ),
+            (
+                "Exif.Photo.DateTimeOriginal",
+                (NS_EXIF, "DateTimeOriginal", Conversion::ExifDate),
+            ),
+            (
+                "Exif.Photo.DateTimeDigitized",
+                (NS_XAP, "CreateDate", Conversion::ExifDate),
+            ),
+            (
+                "Exif.Photo.ExposureBiasValue",
+                (NS_EXIF, "ExposureBiasValue", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ExposureMode",
+                (NS_EXIF, "ExposureMode", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ExposureProgram",
+                (NS_EXIF, "ExposureProgram", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ExposureTime",
+                (NS_EXIF, "ExposureTime", Conversion::None),
+            ),
             ("Exif.Photo.FNumber", (NS_EXIF, "FNumber", Conversion::None)),
             ("Exif.Photo.Flash", (NS_EXIF, "Flash", Conversion::Flash)),
-            ("Exif.Photo.FocalLength", (NS_EXIF, "FocalLength", Conversion::None)),
-            ("Exif.Photo.FocalLengthIn35mmFilm", (NS_EXIF, "FocalLengthIn35mmFilm", Conversion::None)),
-            ("Exif.Photo.ISOSpeedRatings", (NS_EXIF, "ISOSpeedRatings", Conversion::None)),
-            ("Exif.Photo.LensMake", (NS_EXIF_EX, "LensMake", Conversion::None)),
+            (
+                "Exif.Photo.FocalLength",
+                (NS_EXIF, "FocalLength", Conversion::None),
+            ),
+            (
+                "Exif.Photo.FocalLengthIn35mmFilm",
+                (NS_EXIF, "FocalLengthIn35mmFilm", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ISOSpeedRatings",
+                (NS_EXIF, "ISOSpeedRatings", Conversion::None),
+            ),
+            (
+                "Exif.Photo.LensMake",
+                (NS_EXIF_EX, "LensMake", Conversion::None),
+            ),
             ("Exif.Photo.LensModel", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.Photo.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
-            ("Exif.Photo.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
-            ("Exif.Photo.LensSpecification", (NS_EXIF_EX, "LensSpecification", Conversion::None)),
-            ("Exif.Photo.LightSource", (NS_EXIF, "LightSource", Conversion::None)),
-            ("Exif.Photo.MeteringMode", (NS_EXIF, "MeteringMode", Conversion::None)),
-            ("Exif.Photo.SceneCaptureType", (NS_EXIF, "SceneCaptureType", Conversion::None)),
-            ("Exif.Photo.ShutterSpeedValue", (NS_EXIF, "ShutterSpeedValue", Conversion::None)),
-            ("Exif.Photo.UserComment", (NS_EXIF, "UserComment", Conversion::None)),
-            ("Exif.Photo.WhiteBalance", (NS_EXIF, "WhiteBalance", Conversion::None)),
-
+            (
+                "Exif.Photo.LensModel",
+                (NS_EXIF_EX, "LensModel", Conversion::None),
+            ),
+            (
+                "Exif.Photo.LensSerialNumber",
+                (NS_EXIF_EX, "LensSerialNumber", Conversion::None),
+            ),
+            (
+                "Exif.Photo.LensSpecification",
+                (NS_EXIF_EX, "LensSpecification", Conversion::None),
+            ),
+            (
+                "Exif.Photo.LightSource",
+                (NS_EXIF, "LightSource", Conversion::None),
+            ),
+            (
+                "Exif.Photo.MeteringMode",
+                (NS_EXIF, "MeteringMode", Conversion::None),
+            ),
+            (
+                "Exif.Photo.SceneCaptureType",
+                (NS_EXIF, "SceneCaptureType", Conversion::None),
+            ),
+            (
+                "Exif.Photo.ShutterSpeedValue",
+                (NS_EXIF, "ShutterSpeedValue", Conversion::None),
+            ),
+            (
+                "Exif.Photo.UserComment",
+                (NS_EXIF, "UserComment", Conversion::None),
+            ),
+            (
+                "Exif.Photo.WhiteBalance",
+                (NS_EXIF, "WhiteBalance", Conversion::None),
+            ),
             ("Exif.Canon.LensModel", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.Canon.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
-
-            ("Exif.Minolta.LensID", (NS_AUX, "Lens", Conversion::Interpreted)),
-            ("Exif.Minolta.LensID", (NS_EXIF_EX, "LensModel", Conversion::Interpreted)),
-
-            ("Exif.Nikon3.Lens", (NS_AUX, "Lens", Conversion::Interpreted)),
-            ("Exif.Nikon3.Lens", (NS_EXIF_EX, "LensModel", Conversion::Interpreted)),
-
-            ("Exif.OlympusEq.LensModel", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.OlympusEq.LensModel", (NS_EXIF_EX, "LensModel", Conversion::None)),
-            ("Exif.OlympusEq.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
-
-            ("Exif.Panasonic.LensType", (NS_AUX, "Lens", Conversion::None)),
-            ("Exif.Panasonic.LensType", (NS_EXIF_EX, "LensModel", Conversion::None)),
-            ("Exif.Panasonic.LensSerialNumber", (NS_EXIF_EX, "LensSerialNumber", Conversion::None)),
-
-            ("Exif.Pentax.LensType", (NS_AUX, "Lens", Conversion::Interpreted)),
-            ("Exif.Pentax.LensType", (NS_EXIF_EX, "LensModel", Conversion::Interpreted))
-        ].iter().cloned().collect()
+            (
+                "Exif.Canon.LensModel",
+                (NS_EXIF_EX, "LensModel", Conversion::None),
+            ),
+            (
+                "Exif.Minolta.LensID",
+                (NS_AUX, "Lens", Conversion::Interpreted),
+            ),
+            (
+                "Exif.Minolta.LensID",
+                (NS_EXIF_EX, "LensModel", Conversion::Interpreted),
+            ),
+            (
+                "Exif.Nikon3.Lens",
+                (NS_AUX, "Lens", Conversion::Interpreted),
+            ),
+            (
+                "Exif.Nikon3.Lens",
+                (NS_EXIF_EX, "LensModel", Conversion::Interpreted),
+            ),
+            (
+                "Exif.OlympusEq.LensModel",
+                (NS_AUX, "Lens", Conversion::None),
+            ),
+            (
+                "Exif.OlympusEq.LensModel",
+                (NS_EXIF_EX, "LensModel", Conversion::None),
+            ),
+            (
+                "Exif.OlympusEq.LensSerialNumber",
+                (NS_EXIF_EX, "LensSerialNumber", Conversion::None),
+            ),
+            (
+                "Exif.Panasonic.LensType",
+                (NS_AUX, "Lens", Conversion::None),
+            ),
+            (
+                "Exif.Panasonic.LensType",
+                (NS_EXIF_EX, "LensModel", Conversion::None),
+            ),
+            (
+                "Exif.Panasonic.LensSerialNumber",
+                (NS_EXIF_EX, "LensSerialNumber", Conversion::None),
+            ),
+            (
+                "Exif.Pentax.LensType",
+                (NS_AUX, "Lens", Conversion::Interpreted),
+            ),
+            (
+                "Exif.Pentax.LensType",
+                (NS_EXIF_EX, "LensModel", Conversion::Interpreted),
+            ),
+        ]
+            .iter()
+            .cloned()
+            .collect()
     };
 }
 
@@ -136,7 +258,7 @@ fn convert_int(conversion: Conversion, int: i32) -> Converted {
 pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
     if let Ok(meta) = rexiv2::Metadata::new_from_path(file) {
         let mut xmp = exempi::Xmp::new();
-        let mut all_tags : Vec<String> = vec!();
+        let mut all_tags: Vec<String> = vec![];
         if let Ok(mut tags) = meta.get_exif_tags() {
             all_tags.append(&mut tags);
         }
@@ -156,111 +278,212 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                 let converted = convert(xmp_prop.2, &value);
                                 match converted {
                                     Converted::Str(s) => {
-                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &s, exempi::PROP_NONE) {
-                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        if let Err(err) = xmp.set_property(
+                                            xmp_prop.0,
+                                            xmp_prop.1,
+                                            &s,
+                                            exempi::PROP_NONE,
+                                        ) {
+                                            err_out!(
+                                                "Error setting property {} {}: {:?}",
+                                                &xmp_prop.0,
+                                                &xmp_prop.1,
+                                                &err
+                                            );
                                         }
-                                    },
+                                    }
                                     Converted::Date(d) => {
                                         if let Some(d) = d {
-                                            if let Err(err) = xmp.set_property_date(xmp_prop.0, xmp_prop.1, &d, exempi::PROP_NONE) {
-                                                err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                            if let Err(err) = xmp.set_property_date(
+                                                xmp_prop.0,
+                                                xmp_prop.1,
+                                                &d,
+                                                exempi::PROP_NONE,
+                                            ) {
+                                                err_out!(
+                                                    "Error setting property {} {}: {:?}",
+                                                    &xmp_prop.0,
+                                                    &xmp_prop.1,
+                                                    &err
+                                                );
                                             }
                                         } else {
                                             err_out!("Couldn't convert Exif date {}", &value);
                                         }
-                                    },
+                                    }
                                     _ => {
                                         err_out!("Unknown conversion result {:?}", &converted);
                                     }
                                 }
                             }
-                        },
-                        Ok(rexiv2::TagType::UnsignedShort) |
-                        Ok(rexiv2::TagType::UnsignedLong) |
-                        Ok(rexiv2::TagType::SignedShort) |
-                        Ok(rexiv2::TagType::SignedLong) => {
+                        }
+                        Ok(rexiv2::TagType::UnsignedShort)
+                        | Ok(rexiv2::TagType::UnsignedLong)
+                        | Ok(rexiv2::TagType::SignedShort)
+                        | Ok(rexiv2::TagType::SignedLong) => {
                             // XXX rexiv2 returns an i32, which is a problem for UnsignedLong
                             match xmp_prop.2 {
                                 Conversion::Flash => {
-                                    if let Converted::Flash(flash) = convert_int(xmp_prop.2, meta.get_tag_numeric(&tag)) {
-                                        if let Err(err) = flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash") {
-                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    if let Converted::Flash(flash) =
+                                        convert_int(xmp_prop.2, meta.get_tag_numeric(&tag))
+                                    {
+                                        if let Err(err) =
+                                            flash.set_as_xmp_property(&mut xmp, NS_EXIF, "Flash")
+                                        {
+                                            err_out!(
+                                                "Error setting property {} {}: {:?}",
+                                                &xmp_prop.0,
+                                                &xmp_prop.1,
+                                                &err
+                                            );
                                         }
                                     }
-                                },
+                                }
                                 Conversion::None => {
                                     let value = meta.get_tag_numeric(&tag);
-                                    if let Err(err) = xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE) {
-                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    if let Err(err) = xmp.set_property_i32(
+                                        xmp_prop.0,
+                                        xmp_prop.1,
+                                        value,
+                                        exempi::PROP_NONE,
+                                    ) {
+                                        err_out!(
+                                            "Error setting property {} {}: {:?}",
+                                            &xmp_prop.0,
+                                            &xmp_prop.1,
+                                            &err
+                                        );
                                     }
-                                },
+                                }
                                 Conversion::Interpreted => {
                                     if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
-                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
-                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                        if let Err(err) = xmp.set_property(
+                                            xmp_prop.0,
+                                            xmp_prop.1,
+                                            &value,
+                                            exempi::PROP_NONE,
+                                        ) {
+                                            err_out!(
+                                                "Error setting property {} {}: {:?}",
+                                                &xmp_prop.0,
+                                                &xmp_prop.1,
+                                                &err
+                                            );
                                         }
                                     }
                                 }
                                 _ => {
-                                    err_out!("Unknown conversion from {:?} to {:?}", tagtype, xmp_prop.2);
+                                    err_out!(
+                                        "Unknown conversion from {:?} to {:?}",
+                                        tagtype,
+                                        xmp_prop.2
+                                    );
                                     let value = meta.get_tag_numeric(&tag);
-                                    if let Err(err) = xmp.set_property_i32(xmp_prop.0, xmp_prop.1, value, exempi::PROP_NONE) {
-                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                    if let Err(err) = xmp.set_property_i32(
+                                        xmp_prop.0,
+                                        xmp_prop.1,
+                                        value,
+                                        exempi::PROP_NONE,
+                                    ) {
+                                        err_out!(
+                                            "Error setting property {} {}: {:?}",
+                                            &xmp_prop.0,
+                                            &xmp_prop.1,
+                                            &err
+                                        );
                                     }
                                 }
                             }
-                        },
-                        Ok(rexiv2::TagType::UnsignedRational) |
-                        Ok(rexiv2::TagType::SignedRational) => {
-                            match xmp_prop.2 {
-                                Conversion::Interpreted => {
-                                    if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
-                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
-                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
-                                        }
+                        }
+                        Ok(rexiv2::TagType::UnsignedRational)
+                        | Ok(rexiv2::TagType::SignedRational) => match xmp_prop.2 {
+                            Conversion::Interpreted => {
+                                if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
+                                    if let Err(err) = xmp.set_property(
+                                        xmp_prop.0,
+                                        xmp_prop.1,
+                                        &value,
+                                        exempi::PROP_NONE,
+                                    ) {
+                                        err_out!(
+                                            "Error setting property {} {}: {:?}",
+                                            &xmp_prop.0,
+                                            &xmp_prop.1,
+                                            &err
+                                        );
                                     }
-                                },
-                                _ => if let Some(value) = meta.get_tag_rational(&tag) {
-                                    let value_str = format!("{}/{}", value.numer(), value.denom());
-                                    if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value_str, exempi::PROP_NONE) {
-                                        err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
-                                    }
-                                },
+                                }
                             }
+                            _ => if let Some(value) = meta.get_tag_rational(&tag) {
+                                let value_str = format!("{}/{}", value.numer(), value.denom());
+                                if let Err(err) = xmp.set_property(
+                                    xmp_prop.0,
+                                    xmp_prop.1,
+                                    &value_str,
+                                    exempi::PROP_NONE,
+                                ) {
+                                    err_out!(
+                                        "Error setting property {} {}: {:?}",
+                                        &xmp_prop.0,
+                                        &xmp_prop.1,
+                                        &err
+                                    );
+                                }
+                            },
                         },
                         Ok(rexiv2::TagType::Comment) => {
                             if let Ok(value) = meta.get_tag_string(&tag) {
-                                if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
-                                    err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
+                                if let Err(err) = xmp.set_property(
+                                    xmp_prop.0,
+                                    xmp_prop.1,
+                                    &value,
+                                    exempi::PROP_NONE,
+                                ) {
+                                    err_out!(
+                                        "Error setting property {} {}: {:?}",
+                                        &xmp_prop.0,
+                                        &xmp_prop.1,
+                                        &err
+                                    );
                                 }
                             }
-                        },
-                        Ok(rexiv2::TagType::UnsignedByte) => {
-                            match xmp_prop.2 {
-                                Conversion::Interpreted => {
-                                    if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
-                                        if let Err(err) = xmp.set_property(xmp_prop.0, xmp_prop.1, &value, exempi::PROP_NONE) {
-                                            err_out!("Error setting property {} {}: {:?}", &xmp_prop.0, &xmp_prop.1, &err);
-                                        }
-                                    }
-                                },
-                                _ => err_out!("Unhandled type {:?} for {}", tagtype, &tag),
-                            }
                         }
+                        Ok(rexiv2::TagType::UnsignedByte) => match xmp_prop.2 {
+                            Conversion::Interpreted => {
+                                if let Ok(value) = meta.get_tag_interpreted_string(&tag) {
+                                    if let Err(err) = xmp.set_property(
+                                        xmp_prop.0,
+                                        xmp_prop.1,
+                                        &value,
+                                        exempi::PROP_NONE,
+                                    ) {
+                                        err_out!(
+                                            "Error setting property {} {}: {:?}",
+                                            &xmp_prop.0,
+                                            &xmp_prop.1,
+                                            &err
+                                        );
+                                    }
+                                }
+                            }
+                            _ => err_out!("Unhandled type {:?} for {}", tagtype, &tag),
+                        },
                         _ => {
                             err_out!("Unhandled type {:?} for {}", tagtype, &tag);
                         }
                     }
                 }
             } else {
-//                err_out!("Unknown property {}", &tag);
+                //                err_out!("Unknown property {}", &tag);
             }
         }
         meta.get_gps_info();
 
         let mut options = exempi::PROP_NONE;
         if let Ok(date) = xmp.get_property_date(NS_XAP, "ModifyDate", &mut options) {
-            if let Err(err) = xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PROP_NONE) {
+            if let Err(err) =
+                xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PROP_NONE)
+            {
                 err_out!("Error setting MetadataDate: {:?}", &err);
             }
         } else {
@@ -271,4 +494,3 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
         None
     }
 }
-

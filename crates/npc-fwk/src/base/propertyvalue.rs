@@ -18,21 +18,20 @@
  */
 
 use libc::c_char;
-use std::ffi::{CStr,CString};
+use std::ffi::{CStr, CString};
 
 use super::date::Date;
 
-#[derive(Clone,Debug)]
+#[derive(Clone, Debug)]
 pub enum PropertyValue {
     Empty,
     Int(i32),
     String(String),
     StringArray(Vec<String>),
-    Date(Date)
+    Date(Date),
 }
 
-unsafe impl Send for PropertyValue {
-}
+unsafe impl Send for PropertyValue {}
 
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_value_new_str(v: *const c_char) -> *mut PropertyValue {
@@ -55,7 +54,7 @@ pub extern "C" fn fwk_property_value_new_date(v: &Date) -> *mut PropertyValue {
 
 #[no_mangle]
 pub extern "C" fn fwk_property_value_new_string_array() -> *mut PropertyValue {
-    let value = Box::new(PropertyValue::StringArray(vec!()));
+    let value = Box::new(PropertyValue::StringArray(vec![]));
     Box::into_raw(value)
 }
 
@@ -70,7 +69,7 @@ pub unsafe extern "C" fn fwk_property_value_delete(v: *mut PropertyValue) {
 pub unsafe extern "C" fn fwk_property_value_is_empty(v: *const PropertyValue) -> bool {
     match v.as_ref() {
         Some(&PropertyValue::Empty) => true,
-        _ => false
+        _ => false,
     }
 }
 
@@ -78,7 +77,7 @@ pub unsafe extern "C" fn fwk_property_value_is_empty(v: *const PropertyValue) ->
 pub unsafe extern "C" fn fwk_property_value_is_integer(v: *const PropertyValue) -> bool {
     match v.as_ref() {
         Some(&PropertyValue::Int(_)) => true,
-        _ => false
+        _ => false,
     }
 }
 
@@ -86,7 +85,7 @@ pub unsafe extern "C" fn fwk_property_value_is_integer(v: *const PropertyValue) 
 pub unsafe extern "C" fn fwk_property_value_get_integer(v: *const PropertyValue) -> i32 {
     match v.as_ref() {
         Some(&PropertyValue::Int(i)) => i,
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 
@@ -94,7 +93,7 @@ pub unsafe extern "C" fn fwk_property_value_get_integer(v: *const PropertyValue)
 pub unsafe extern "C" fn fwk_property_value_is_date(v: *const PropertyValue) -> bool {
     match v.as_ref() {
         Some(&PropertyValue::Date(_)) => true,
-        _ => false
+        _ => false,
     }
 }
 
@@ -102,7 +101,7 @@ pub unsafe extern "C" fn fwk_property_value_is_date(v: *const PropertyValue) -> 
 pub unsafe extern "C" fn fwk_property_value_get_date(v: *const PropertyValue) -> *const Date {
     match v.as_ref() {
         Some(&PropertyValue::Date(ref d)) => d,
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 
@@ -110,17 +109,15 @@ pub unsafe extern "C" fn fwk_property_value_get_date(v: *const PropertyValue) ->
 pub unsafe extern "C" fn fwk_property_value_is_string(v: *const PropertyValue) -> bool {
     match v.as_ref() {
         Some(&PropertyValue::String(_)) => true,
-        _ => false
+        _ => false,
     }
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_value_get_string(v: *const PropertyValue) -> *mut c_char {
     match v.as_ref() {
-        Some(&PropertyValue::String(ref s)) => {
-            CString::new(s.as_bytes()).unwrap().into_raw()
-        },
-        _ => unreachable!()
+        Some(&PropertyValue::String(ref s)) => CString::new(s.as_bytes()).unwrap().into_raw(),
+        _ => unreachable!(),
     }
 }
 
@@ -129,29 +126,28 @@ pub unsafe extern "C" fn fwk_property_value_add_string(v: *mut PropertyValue, st
     match v.as_mut() {
         Some(&mut PropertyValue::StringArray(ref mut sa)) => {
             sa.push(CStr::from_ptr(str).to_string_lossy().into_owned());
-        },
-        _ => unreachable!()
+        }
+        _ => unreachable!(),
     }
-
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_value_count_string_array(v: *const PropertyValue) -> usize {
     match v.as_ref() {
-        Some(&PropertyValue::StringArray(ref sa)) => {
-            sa.len()
-        },
-        _ => unreachable!()
+        Some(&PropertyValue::StringArray(ref sa)) => sa.len(),
+        _ => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_get_string_at(v: *const PropertyValue, idx: usize)
-                                                   -> *mut c_char {
+pub unsafe extern "C" fn fwk_property_value_get_string_at(
+    v: *const PropertyValue,
+    idx: usize,
+) -> *mut c_char {
     match v.as_ref() {
         Some(&PropertyValue::StringArray(ref sa)) => {
             CString::new(sa[idx].as_bytes()).unwrap().into_raw()
-        },
-        _ => unreachable!()
+        }
+        _ => unreachable!(),
     }
 }

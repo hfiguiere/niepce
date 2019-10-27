@@ -43,5 +43,7 @@ pub unsafe extern "C" fn fwk_date_delete(date: *mut Date) {
 
 #[no_mangle]
 pub extern "C" fn fwk_date_to_string(date: &Date) -> *mut libc::c_char {
-    CString::new(date.to_string().as_bytes()).unwrap().into_raw()
+    CString::new(date.to_string().as_bytes())
+        .unwrap()
+        .into_raw()
 }

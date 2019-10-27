@@ -1,4 +1,3 @@
-
 #[macro_export]
 macro_rules! dbg_out {
     ( $( $x:expr ),* ) => {
@@ -33,14 +32,12 @@ macro_rules! err_out_line {
 /// Does NOT abort of call assert!()
 #[macro_export]
 macro_rules! dbg_assert {
-    ( $cond:expr,  $msg:expr ) => {
-        {
-            if !$cond {
-                print!("ASSERT: {}:{}: {}", file!(), line!(), stringify!($cond));
-                println!( $msg );
-            }
+    ( $cond:expr,  $msg:expr ) => {{
+        if !$cond {
+            print!("ASSERT: {}:{}: {}", file!(), line!(), stringify!($cond));
+            println!($msg);
         }
-    };
+    }};
 }
 
 #[cfg(test)]

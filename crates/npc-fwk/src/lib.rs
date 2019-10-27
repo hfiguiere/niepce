@@ -17,13 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 extern crate chrono;
 extern crate exempi;
-extern crate gio_sys;
 extern crate gio;
-extern crate glib_sys;
+extern crate gio_sys;
 extern crate glib;
+extern crate glib_sys;
 #[macro_use]
 extern crate lazy_static;
 extern crate libc;
@@ -34,31 +33,22 @@ extern crate try_opt;
 #[macro_use]
 pub mod base;
 pub mod capi;
-pub mod utils;
 pub mod toolkit;
+pub mod utils;
 
-pub use self::utils::exempi::{
-    NsDef,
-    ExempiManager,
-    XmpMeta,
-    gps_coord_from_xmp
-};
-pub use self::base::propertyvalue::PropertyValue;
+pub use self::base::fractions::fraction_to_decimal;
 pub use self::base::propertybag::PropertyBag;
+pub use self::base::propertyvalue::PropertyValue;
 pub use self::base::PropertySet;
-pub use self::base::fractions::{
-    fraction_to_decimal
-};
+pub use self::utils::exempi::{gps_coord_from_xmp, ExempiManager, NsDef, XmpMeta};
 
 pub use self::base::date::*;
 
-pub use self::toolkit::mimetype::{
-    MimeType
-};
+pub use self::toolkit::mimetype::MimeType;
 
+use libc::c_char;
 use std::f64;
 use std::ffi::CStr;
-use libc::c_char;
 
 #[no_mangle]
 pub unsafe extern "C" fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {

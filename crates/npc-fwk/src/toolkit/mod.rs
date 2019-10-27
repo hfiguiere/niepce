@@ -1,4 +1,3 @@
-
 pub mod mimetype;
 
 pub type Sender<T> = glib::Sender<T>;

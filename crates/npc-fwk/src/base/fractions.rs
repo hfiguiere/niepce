@@ -19,11 +19,10 @@
 
 use std::f64;
 
-
-pub fn fraction_to_decimal(value: &str) -> Option<f64>
-{
-    let numbers: Vec<i64> = value.split('/')
-        .map(|s| { s.parse::<i64>().unwrap_or(0) })
+pub fn fraction_to_decimal(value: &str) -> Option<f64> {
+    let numbers: Vec<i64> = value
+        .split('/')
+        .map(|s| s.parse::<i64>().unwrap_or(0))
         .collect();
     if numbers.len() != 2 {
         return None;
@@ -33,7 +32,6 @@ pub fn fraction_to_decimal(value: &str) -> Option<f64>
     }
     Some(numbers[0] as f64 / numbers[1] as f64)
 }
-
 
 #[cfg(test)]
 mod tests {

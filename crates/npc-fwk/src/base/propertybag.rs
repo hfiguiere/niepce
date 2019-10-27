@@ -20,8 +20,8 @@
 use std::collections::BTreeMap;
 use std::ptr;
 
-use crate::base::PropertyIndex;
 use crate::base::propertyvalue::PropertyValue;
+use crate::base::PropertyIndex;
 
 #[derive(Default)]
 pub struct PropertyBag {
@@ -30,7 +30,6 @@ pub struct PropertyBag {
 }
 
 impl PropertyBag {
-
     pub fn new() -> Self {
         PropertyBag::default()
     }
@@ -67,7 +66,7 @@ pub unsafe extern "C" fn fwk_property_bag_delete(bag: *mut PropertyBag) {
 pub unsafe extern "C" fn fwk_property_bag_is_empty(b: *const PropertyBag) -> bool {
     match b.as_ref() {
         Some(ref pb) => pb.is_empty(),
-        None => true
+        None => true,
     }
 }
 
@@ -75,22 +74,26 @@ pub unsafe extern "C" fn fwk_property_bag_is_empty(b: *const PropertyBag) -> boo
 pub unsafe extern "C" fn fwk_property_bag_len(b: *const PropertyBag) -> usize {
     match b.as_ref() {
         Some(ref pb) => pb.len(),
-        None => unreachable!()
+        None => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_key_by_index(b: *const PropertyBag, idx: usize)
-                                         -> PropertyIndex {
+pub unsafe extern "C" fn fwk_property_bag_key_by_index(
+    b: *const PropertyBag,
+    idx: usize,
+) -> PropertyIndex {
     match b.as_ref() {
         Some(ref pb) => pb.bag[idx],
-        None => unreachable!()
+        None => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_value(b: *const PropertyBag, key: PropertyIndex)
-                                         -> *mut PropertyValue {
+pub unsafe extern "C" fn fwk_property_bag_value(
+    b: *const PropertyBag,
+    key: PropertyIndex,
+) -> *mut PropertyValue {
     match b.as_ref() {
         Some(ref pb) => {
             if pb.map.contains_key(&key) {
@@ -99,22 +102,23 @@ pub unsafe extern "C" fn fwk_property_bag_value(b: *const PropertyBag, key: Prop
             } else {
                 ptr::null_mut()
             }
-        },
-        None => unreachable!()
+        }
+        None => unreachable!(),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_set_value(b: *mut PropertyBag, key: PropertyIndex,
-                                             v: *const PropertyValue) -> bool {
+pub unsafe extern "C" fn fwk_property_bag_set_value(
+    b: *mut PropertyBag,
+    key: PropertyIndex,
+    v: *const PropertyValue,
+) -> bool {
     let value = match v.as_ref() {
         Some(value) => value.clone(),
-        None => unreachable!()
+        None => unreachable!(),
     };
     match b.as_mut() {
-        Some(ref mut pb) => {
-            pb.set_value(key, value)
-        },
-        None => unreachable!()
+        Some(ref mut pb) => pb.set_value(key, value),
+        None => unreachable!(),
     }
 }

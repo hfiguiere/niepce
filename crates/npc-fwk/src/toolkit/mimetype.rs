@@ -18,16 +18,16 @@
  */
 
 use gio;
+use gio::prelude::*;
+use gio_sys;
 use glib_sys;
 use glib_sys::gboolean;
-use gio_sys;
-use gio::prelude::*;
 
 use libc::c_void;
 use std::ffi::CStr;
 use std::ffi::CString;
-use std::ptr;
 use std::path::Path;
+use std::ptr;
 
 #[derive(PartialEq, Copy, Clone, Debug)]
 pub enum IsRaw {
@@ -85,12 +85,7 @@ fn guess_type_for_file(filename: &str) -> MType {
     let mut uncertainty: gboolean = 0;
     let content_type = unsafe {
         let cstr = CString::new(filename).unwrap();
-        gio_sys::g_content_type_guess(
-            cstr.as_ptr(),
-            ptr::null_mut(),
-            0,
-            &mut uncertainty,
-        )
+        gio_sys::g_content_type_guess(cstr.as_ptr(), ptr::null_mut(), 0, &mut uncertainty)
     };
     let content_type_real = unsafe { CStr::from_ptr(content_type) };
     let t = guess_type(&*content_type_real.to_string_lossy());

@@ -23,11 +23,11 @@ use std::num::ParseIntError;
 use std::str::FromStr;
 
 #[repr(C)]
-#[derive(Clone,Default)]
+#[derive(Clone, Default)]
 pub struct RgbColour {
     pub r: u16,
     pub g: u16,
-    pub b: u16
+    pub b: u16,
 }
 
 #[derive(Debug)]
@@ -47,14 +47,12 @@ impl From<ParseIntError> for ColourParseError {
 }
 
 impl RgbColour {
-
     pub fn new(r: u16, g: u16, b: u16) -> RgbColour {
-        RgbColour{r, g, b}
+        RgbColour { r, g, b }
     }
 }
 
 impl FromStr for RgbColour {
-
     type Err = ColourParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -91,7 +89,7 @@ pub extern "C" fn fwk_rgbcolour_component(c: &RgbColour, idx: i32) -> u16 {
         0 => c.r,
         1 => c.g,
         2 => c.b,
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 
