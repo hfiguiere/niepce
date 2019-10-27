@@ -19,25 +19,17 @@
 
 use std::os::raw::c_void;
 
-use npc_fwk::PropertyValue;
-use crate::db::LibraryId;
-use crate::db::library;
-use crate::db::library::{
-    Library,
-    Managed
-};
+use super::notification::LibNotification;
+use super::notification::{Content, Count, FileMove, MetadataChange};
 use crate::db::filebundle::FileBundle;
 use crate::db::keyword::Keyword;
 use crate::db::label::Label;
 use crate::db::libfolder::LibFolder;
+use crate::db::library;
+use crate::db::library::{Library, Managed};
+use crate::db::LibraryId;
 use crate::root::eng::NiepceProperties as Np;
-use super::notification::LibNotification;
-use super::notification::{
-    Content,
-    Count,
-    FileMove,
-    MetadataChange,
-};
+use npc_fwk::PropertyValue;
 
 pub fn cmd_list_all_keywords(lib: &Library) -> bool {
     match lib.get_all_keywords() {
@@ -50,7 +42,7 @@ pub fn cmd_list_all_keywords(lib: &Library) -> bool {
                 }
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("get all keywords failed: {:?}", err);
             false
@@ -69,7 +61,7 @@ pub fn cmd_list_all_folders(lib: &Library) -> bool {
                 }
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("get_all_folders failed: {:?}", err);
             false
@@ -87,13 +79,13 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
             // folder doesn't exist, we'll create it
             if let Some(name) = Library::leaf_name_for_pathname(folder) {
                 match lib.add_folder(&name, Some(String::from(folder))) {
-                    Ok(lf) =>  {
+                    Ok(lf) => {
                         let libfolder = lf.clone();
                         if lib.notify(LibNotification::AddedFolder(lf)).is_err() {
                             err_out!("Failed to notify AddedFolder");
                         }
                         Ok(libfolder)
-                    },
+                    }
                     Err(err) => {
                         err_out_line!("Add folder failed {:?}", err);
                         Err(err)
@@ -103,7 +95,7 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
                 err_out_line!("Can't get folder name.");
                 Err(library::Error::InvalidResult)
             }
-        },
+        }
         Err(err) => {
             err_out_line!("get folder failed: {:?}", err);
             Err(err)
@@ -111,13 +103,15 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
     }
 }
 
-pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String],
-                        manage: Managed) -> bool {
-    dbg_assert!(manage == Managed::NO, "managing file is currently unsupported");
+pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String], manage: Managed) -> bool {
+    dbg_assert!(
+        manage == Managed::NO,
+        "managing file is currently unsupported"
+    );
 
     let bundles = FileBundle::filter_bundles(files);
     match get_folder_for_import(lib, folder) {
-        Ok(libfolder) =>  {
+        Ok(libfolder) => {
             let folder_id = libfolder.id();
             for bundle in bundles {
                 // XXX properle handle this error. Should be a failure.
@@ -129,7 +123,7 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String],
                 err_out!("Failed to notify AddedFiles");
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("Get folder for import {:?}", err);
             false
@@ -139,14 +133,14 @@ pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String],
 
 pub fn cmd_create_folder(lib: &Library, name: &str, path: Option<String>) -> LibraryId {
     match lib.add_folder(name, path) {
-        Ok(lf) =>  {
+        Ok(lf) => {
             let id = lf.id();
             if lib.notify(LibNotification::AddedFolder(lf)).is_err() {
                 err_out!("Failed to notifu AddedFolder");
             }
             id
-        },
-        Err(err) =>  {
+        }
+        Err(err) => {
             err_out_line!("Folder creation failed {:?}", err);
             -1
         }
@@ -160,7 +154,7 @@ pub fn cmd_delete_folder(lib: &Library, id: LibraryId) -> bool {
                 err_out!("Failed to notify FolderDeleted");
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("Delete folder failed {:?}", err);
             false
@@ -177,10 +171,10 @@ pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
                 Err(err) => {
                     err_out!("Failed to notify Metadata {:?}", err);
                     false
-                },
-                Ok(_) => true
+                }
+                Ok(_) => true,
             }
-        },
+        }
         Err(err) => {
             err_out_line!("Get metadata failed {:?}", err);
             false
@@ -204,10 +198,10 @@ pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
                 Err(err) => {
                     err_out!("Failed to notify FolderContent {:?}", err);
                     false
-                },
-                Ok(_) => true
+                }
+                Ok(_) => true,
             }
-        },
+        }
         Err(err) => {
             err_out_line!("Get folder content failed {:?}", err);
             false
@@ -215,16 +209,20 @@ pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
     }
 }
 
-pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np,
-                        value: &PropertyValue) -> bool {
+pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np, value: &PropertyValue) -> bool {
     match lib.set_metadata(id, meta, value) {
         Ok(_) => {
-            if lib.notify(LibNotification::MetadataChanged(
-                MetadataChange::new(id, meta as u32, value.clone()))).is_err() {
+            if lib
+                .notify(LibNotification::MetadataChanged(MetadataChange::new(
+                    id,
+                    meta as u32,
+                    value.clone(),
+                ))).is_err()
+            {
                 err_out!("Failed to notify MetadataChange");
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("set_matadata failed: {:?}", err);
             false
@@ -237,16 +235,14 @@ pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
         Ok(count) => {
             // This time it's a fatal error since the purpose of this comand
             // is to retrieve.
-            match lib.notify(LibNotification::FolderCounted(Count{id, count})) {
+            match lib.notify(LibNotification::FolderCounted(Count { id, count })) {
                 Err(err) => {
                     err_out!("Failed to notify FolderCounted {:?}", err);
                     false
-                },
-                Ok(_) => {
-                    true
                 }
+                Ok(_) => true,
             }
-        },
+        }
         Err(err) => {
             err_out_line!("count_folder failed: {:?}", err);
             false
@@ -257,11 +253,14 @@ pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
 pub fn cmd_add_keyword(lib: &Library, keyword: &str) -> LibraryId {
     match lib.make_keyword(keyword) {
         Ok(id) => {
-            if lib.notify(LibNotification::AddedKeyword(Keyword::new(id, keyword))).is_err() {
+            if lib
+                .notify(LibNotification::AddedKeyword(Keyword::new(id, keyword)))
+                .is_err()
+            {
                 err_out!("Failed to notify AddedKeyword");
             }
             id
-        },
+        }
         Err(err) => {
             err_out_line!("make_keyword failed: {:?}", err);
             -1
@@ -282,10 +281,10 @@ pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
                 Err(err) => {
                     err_out!("Failed to notify KeywordContentQueried {:?}", err);
                     false
-                },
-                Ok(_) => true
+                }
+                Ok(_) => true,
             }
-        },
+        }
         Err(err) => {
             err_out_line!("get_keyword_content failed: {:?}", err);
             false
@@ -298,14 +297,14 @@ pub fn cmd_count_keyword(lib: &Library, id: LibraryId) -> bool {
         Ok(count) => {
             // This time it's a fatal error since the purpose of this comand
             // is to retrieve.
-            match lib.notify(LibNotification::KeywordCounted(Count{id, count})) {
+            match lib.notify(LibNotification::KeywordCounted(Count { id, count })) {
                 Err(err) => {
                     err_out!("Failed to notify KeywordCounted {:?}", err);
                     false
-                },
-                Ok(_) => true
+                }
+                Ok(_) => true,
             }
-        },
+        }
         Err(err) => {
             err_out_line!("count_keyword failed: {:?}", err);
             false
@@ -323,24 +322,41 @@ pub fn cmd_write_metadata(lib: &Library, file_id: LibraryId) -> bool {
     }
 }
 
-pub fn cmd_move_file_to_folder(lib: &Library, file_id: LibraryId, from: LibraryId,
-                               to: LibraryId) -> bool {
+pub fn cmd_move_file_to_folder(
+    lib: &Library,
+    file_id: LibraryId,
+    from: LibraryId,
+    to: LibraryId,
+) -> bool {
     match lib.move_file_to_folder(file_id, to) {
         Ok(_) => {
-            if lib.notify(LibNotification::FileMoved(FileMove{file: file_id, from, to}))
-                .is_err() {
-                    err_out!("Failed to notify FileMoved");
-                }
-            if lib.notify(LibNotification::FolderCountChanged(Count{id: from, count: -1}))
-                .is_err() {
-                    err_out!("Failed to notify FileMoved");
-                }
-            if lib.notify(LibNotification::FolderCountChanged(Count{id: to, count: 1}))
-                .is_err() {
-                    err_out!("Failed to notify FileMoved");
-                }
+            if lib
+                .notify(LibNotification::FileMoved(FileMove {
+                    file: file_id,
+                    from,
+                    to,
+                })).is_err()
+            {
+                err_out!("Failed to notify FileMoved");
+            }
+            if lib
+                .notify(LibNotification::FolderCountChanged(Count {
+                    id: from,
+                    count: -1,
+                })).is_err()
+            {
+                err_out!("Failed to notify FileMoved");
+            }
+            if lib
+                .notify(LibNotification::FolderCountChanged(Count {
+                    id: to,
+                    count: 1,
+                })).is_err()
+            {
+                err_out!("Failed to notify FileMoved");
+            }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("move file to folder failed: {:?}", err);
             false
@@ -359,7 +375,7 @@ pub fn cmd_list_all_labels(lib: &Library) -> bool {
                 }
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("get_all_labels failed: {:?}", err);
             false
@@ -375,7 +391,7 @@ pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> LibraryId {
                 err_out!("Failed to notify AddedLabel");
             }
             id
-        },
+        }
         Err(err) => {
             err_out_line!("add_label failed: {:?}", err);
             -1
@@ -390,7 +406,7 @@ pub fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {
                 err_out!("Failed to notify LabelDeleted");
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("delete label failed: {:?}", err);
             false
@@ -398,8 +414,7 @@ pub fn cmd_delete_label(lib: &Library, label_id: LibraryId) -> bool {
     }
 }
 
-pub fn cmd_update_label(lib: &Library, label_id: LibraryId, name: &str,
-                        colour: &str) -> bool {
+pub fn cmd_update_label(lib: &Library, label_id: LibraryId, name: &str, colour: &str) -> bool {
     match lib.update_label(label_id, name, colour) {
         Ok(_) => {
             let label = Label::new(label_id, name, colour);
@@ -407,7 +422,7 @@ pub fn cmd_update_label(lib: &Library, label_id: LibraryId, name: &str,
                 err_out!("Failed to notify LabelChanged");
             }
             true
-        },
+        }
         Err(err) => {
             err_out_line!("update label failed: {:?}", err);
             false

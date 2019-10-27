@@ -25,12 +25,14 @@ use crate::db::Library;
 type Function = dyn Fn(&Library) -> bool + Send + Sync + 'static;
 
 pub struct Op {
-    op: Arc<Function>
+    op: Arc<Function>,
 }
 
 impl Op {
     pub fn new<F>(f: F) -> Op
-        where F: Fn(&Library) -> bool + Send + Sync + 'static {
+    where
+        F: Fn(&Library) -> bool + Send + Sync + 'static,
+    {
         Op { op: Arc::new(f) }
     }
 

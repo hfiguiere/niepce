@@ -18,18 +18,18 @@
  */
 
 use libc::c_char;
+use rusqlite;
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::mem::transmute;
 use std::path::{Path, PathBuf};
-use rusqlite;
 
+use super::fsfile::FsFile;
 use super::FromDb;
 use super::LibraryId;
-use super::fsfile::FsFile;
 use crate::root::eng::NiepceProperties as Np;
-use npc_fwk::base::PropertyIndex;
 use npc_fwk;
+use npc_fwk::base::PropertyIndex;
 
 #[repr(i32)]
 #[allow(non_camel_case_types)]
@@ -91,16 +91,24 @@ pub struct LibFile {
 }
 
 impl LibFile {
-
-    pub fn new(id: LibraryId, folder_id: LibraryId, fs_file_id: LibraryId,
-               path: PathBuf, name: &str) -> LibFile {
+    pub fn new(
+        id: LibraryId,
+        folder_id: LibraryId,
+        fs_file_id: LibraryId,
+        path: PathBuf,
+        name: &str,
+    ) -> LibFile {
         let main_file = FsFile::new(fs_file_id, path);
         LibFile {
-            id, folder_id,
+            id,
+            folder_id,
             name: String::from(name),
             cstr: CString::new("").unwrap(),
-            main_file, orientation: 0,
-            rating: 0, label: 0, flag: 0,
+            main_file,
+            orientation: 0,
+            rating: 0,
+            label: 0,
+            flag: 0,
             file_type: FileType::UNKNOWN,
         }
     }
@@ -158,31 +166,21 @@ impl LibFile {
 
     pub fn property(&self, idx: Np) -> i32 {
         match idx {
-            Np::NpTiffOrientationProp =>
-                self.orientation(),
-            Np::NpXmpRatingProp =>
-                self.rating(),
-            Np::NpXmpLabelProp =>
-                self.label(),
-            Np::NpNiepceFlagProp =>
-                self.flag(),
-            _ =>
-                -1,
+            Np::NpTiffOrientationProp => self.orientation(),
+            Np::NpXmpRatingProp => self.rating(),
+            Np::NpXmpLabelProp => self.label(),
+            Np::NpNiepceFlagProp => self.flag(),
+            _ => -1,
         }
     }
 
     pub fn set_property(&mut self, idx: Np, value: i32) {
         match idx {
-            Np::NpTiffOrientationProp =>
-                self.set_orientation(value),
-            Np::NpXmpRatingProp =>
-                self.set_rating(value),
-            Np::NpXmpLabelProp =>
-                self.set_label(value),
-            Np::NpNiepceFlagProp =>
-                self.set_flag(value),
-            _ =>
-                err_out!("invalid property {:?} - noop", idx),
+            Np::NpTiffOrientationProp => self.set_orientation(value),
+            Np::NpXmpRatingProp => self.set_rating(value),
+            Np::NpXmpLabelProp => self.set_label(value),
+            Np::NpNiepceFlagProp => self.set_flag(value),
+            _ => err_out!("invalid property {:?} - noop", idx),
         };
     }
 
@@ -246,94 +244,100 @@ pub fn mimetype_to_filetype(mime: &npc_fwk::MimeType) -> FileType {
 }
 
 #[no_mangle]
-pub unsafe extern fn engine_db_libfile_new(id: LibraryId, folder_id: LibraryId,
-                                    fs_file_id: LibraryId, path: *const c_char,
-                                    name: *const c_char) -> *mut LibFile {
-    let lf = Box::new(
-        LibFile::new(id, folder_id, fs_file_id,
-                     PathBuf::from(&*CStr::from_ptr(path).to_string_lossy()),
-                     &*CStr::from_ptr(name).to_string_lossy())
-            );
+pub unsafe extern "C" fn engine_db_libfile_new(
+    id: LibraryId,
+    folder_id: LibraryId,
+    fs_file_id: LibraryId,
+    path: *const c_char,
+    name: *const c_char,
+) -> *mut LibFile {
+    let lf = Box::new(LibFile::new(
+        id,
+        folder_id,
+        fs_file_id,
+        PathBuf::from(&*CStr::from_ptr(path).to_string_lossy()),
+        &*CStr::from_ptr(name).to_string_lossy(),
+    ));
     Box::into_raw(lf)
 }
 
 #[no_mangle]
-pub unsafe extern fn engine_db_libfile_delete(lf: *mut LibFile) {
+pub unsafe extern "C" fn engine_db_libfile_delete(lf: *mut LibFile) {
     Box::from_raw(lf);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_path(obj: &mut LibFile) -> *const c_char {
+pub extern "C" fn engine_db_libfile_path(obj: &mut LibFile) -> *const c_char {
     obj.cstr = CString::new(obj.path().to_str().unwrap_or("")).unwrap();
     obj.cstr.as_ptr()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_id(obj: &LibFile) -> LibraryId {
+pub extern "C" fn engine_db_libfile_id(obj: &LibFile) -> LibraryId {
     obj.id()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_folderid(obj: &LibFile) -> LibraryId {
+pub extern "C" fn engine_db_libfile_folderid(obj: &LibFile) -> LibraryId {
     obj.folder_id()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_orientation(obj: &LibFile) -> i32 {
+pub extern "C" fn engine_db_libfile_orientation(obj: &LibFile) -> i32 {
     obj.orientation()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_rating(obj: &LibFile) -> i32 {
+pub extern "C" fn engine_db_libfile_rating(obj: &LibFile) -> i32 {
     obj.rating()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_label(obj: &LibFile) -> i32 {
+pub extern "C" fn engine_db_libfile_label(obj: &LibFile) -> i32 {
     obj.label()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_flag(obj: &LibFile) -> i32 {
+pub extern "C" fn engine_db_libfile_flag(obj: &LibFile) -> i32 {
     obj.flag()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_property(obj: &LibFile, idx: PropertyIndex) -> i32 {
+pub extern "C" fn engine_db_libfile_property(obj: &LibFile, idx: PropertyIndex) -> i32 {
     obj.property(unsafe { transmute(idx) })
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_file_type(obj: &LibFile) -> FileType {
+pub extern "C" fn engine_db_libfile_file_type(obj: &LibFile) -> FileType {
     obj.file_type()
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_orientation(obj: &mut LibFile, o: i32) {
+pub extern "C" fn engine_db_libfile_set_orientation(obj: &mut LibFile, o: i32) {
     obj.set_orientation(o);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_rating(obj: &mut LibFile, r: i32) {
+pub extern "C" fn engine_db_libfile_set_rating(obj: &mut LibFile, r: i32) {
     obj.set_rating(r);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_label(obj: &mut LibFile, l: i32) {
+pub extern "C" fn engine_db_libfile_set_label(obj: &mut LibFile, l: i32) {
     obj.set_label(l);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_flag(obj: &mut LibFile, f: i32) {
+pub extern "C" fn engine_db_libfile_set_flag(obj: &mut LibFile, f: i32) {
     obj.set_flag(f);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_property(obj: &mut LibFile, idx: PropertyIndex, v: i32) {
+pub extern "C" fn engine_db_libfile_set_property(obj: &mut LibFile, idx: PropertyIndex, v: i32) {
     obj.set_property(unsafe { transmute(idx) }, v);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfile_set_file_type(obj: &mut LibFile, t: FileType) {
+pub extern "C" fn engine_db_libfile_set_file_type(obj: &mut LibFile, t: FileType) {
     obj.set_file_type(t);
 }

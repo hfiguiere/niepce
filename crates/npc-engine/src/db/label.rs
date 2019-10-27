@@ -18,12 +18,12 @@
  */
 
 use libc::c_char;
+use rusqlite;
 use std::ffi::CString;
 use std::str::FromStr;
-use rusqlite;
 
-use super::LibraryId;
 use super::FromDb;
+use super::LibraryId;
 use npc_fwk::base::rgbcolour::RgbColour;
 
 #[derive(Clone)]
@@ -35,7 +35,6 @@ pub struct Label {
 }
 
 impl Label {
-
     pub fn new(id: LibraryId, label: &str, colourstring: &str) -> Label {
         let colour = RgbColour::from_str(colourstring).unwrap_or_default();
         Label {
@@ -81,30 +80,29 @@ impl FromDb for Label {
     }
 
     fn read_from(row: &rusqlite::Row) -> Self {
-        let label : String = row.get(1);
-        let colour : String = row.get(2);
+        let label: String = row.get(1);
+        let colour: String = row.get(2);
         Label::new(row.get(0), &label, &colour)
     }
 }
 
-
 #[no_mangle]
-pub unsafe extern fn engine_db_label_delete(l: *mut Label) {
+pub unsafe extern "C" fn engine_db_label_delete(l: *mut Label) {
     Box::from_raw(l);
 }
 
 #[no_mangle]
-pub extern fn engine_db_label_clone(l: &Label) -> *mut Label {
+pub extern "C" fn engine_db_label_clone(l: &Label) -> *mut Label {
     Box::into_raw(Box::new(l.clone()))
 }
 
 #[no_mangle]
-pub extern fn engine_db_label_id(l: &Label) -> LibraryId {
+pub extern "C" fn engine_db_label_id(l: &Label) -> LibraryId {
     l.id()
 }
 
 #[no_mangle]
-pub extern fn engine_db_label_label(obj: &mut Label) -> *const c_char {
+pub extern "C" fn engine_db_label_label(obj: &mut Label) -> *const c_char {
     let cstr;
     {
         let s = obj.label();
@@ -115,6 +113,6 @@ pub extern fn engine_db_label_label(obj: &mut Label) -> *const c_char {
 }
 
 #[no_mangle]
-pub extern fn engine_db_label_colour(l: &Label) -> *const RgbColour {
+pub extern "C" fn engine_db_label_colour(l: &Label) -> *const RgbColour {
     l.colour()
 }

@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use super::LibraryId;
 use super::FromDb;
+use super::LibraryId;
 use libc::c_char;
+use rusqlite;
 use std::ffi::CStr;
 use std::ffi::CString;
-use rusqlite;
 
 #[derive(Clone)]
 pub struct Keyword {
@@ -33,7 +33,8 @@ pub struct Keyword {
 impl Keyword {
     pub fn new(id: LibraryId, keyword: &str) -> Keyword {
         Keyword {
-            id, keyword: String::from(keyword),
+            id,
+            keyword: String::from(keyword),
         }
     }
 
@@ -60,29 +61,32 @@ impl FromDb for Keyword {
     }
 
     fn read_from(row: &rusqlite::Row) -> Self {
-        let kw : String = row.get(1);
+        let kw: String = row.get(1);
         Keyword::new(row.get(0), &kw)
     }
 }
 
 #[no_mangle]
-pub unsafe extern fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
-    let kw = Box::new(Keyword::new(id, &*CStr::from_ptr(keyword).to_string_lossy()));
+pub unsafe extern "C" fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
+    let kw = Box::new(Keyword::new(
+        id,
+        &*CStr::from_ptr(keyword).to_string_lossy(),
+    ));
     Box::into_raw(kw)
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_id(obj: &Keyword) -> i64 {
+pub extern "C" fn engine_db_keyword_id(obj: &Keyword) -> i64 {
     obj.id() as i64
 }
 
 #[no_mangle]
-pub extern fn engine_db_keyword_keyword(obj: &Keyword) -> *mut c_char {
+pub extern "C" fn engine_db_keyword_keyword(obj: &Keyword) -> *mut c_char {
     let cstr = CString::new(obj.keyword().clone()).unwrap();
     cstr.into_raw()
 }
 
 #[no_mangle]
-pub unsafe extern fn engine_db_keyword_delete(kw: *mut Keyword) {
+pub unsafe extern "C" fn engine_db_keyword_delete(kw: *mut Keyword) {
     Box::from_raw(kw);
 }

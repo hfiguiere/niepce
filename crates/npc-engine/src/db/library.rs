@@ -85,7 +85,7 @@ impl Library {
             dbpath: PathBuf::default(),
             dbconn: None,
             inited: false,
-            sender
+            sender,
         };
 
         if let Ok(conn) = rusqlite::Connection::open_in_memory() {
@@ -96,8 +96,11 @@ impl Library {
         lib
     }
 
-    pub fn new(dir: &Path, name: Option<&str>,
-               sender: npc_fwk::toolkit::Sender<LibNotification>) -> Library {
+    pub fn new(
+        dir: &Path,
+        name: Option<&str>,
+        sender: npc_fwk::toolkit::Sender<LibNotification>,
+    ) -> Library {
         let mut dbpath = PathBuf::from(dir);
         if let Some(filename) = name {
             dbpath.push(filename);
@@ -250,7 +253,7 @@ impl Library {
                  CREATE TRIGGER pre_file_delete_trigger BEFORE DELETE ON files \
                  BEGIN \
                  DELETE FROM fsfiles WHERE id = old.main_file \
-                                    OR id = old.xmp_file OR id = old.jpeg_file; \
+                 OR id = old.xmp_file OR id = old.jpeg_file; \
                  END; \
                  CREATE TRIGGER file_delete_trigger AFTER DELETE ON files \
                  BEGIN \
@@ -270,10 +273,12 @@ impl Library {
                  keyword_id INTEGER, UNIQUE(file_id, keyword_id))",
                 &[],
             ).unwrap();
-            conn.execute("CREATE TRIGGER keyword_delete_trigger AFTER DELETE ON keywords \
+            conn.execute(
+                "CREATE TRIGGER keyword_delete_trigger AFTER DELETE ON keywords \
                  BEGIN \
                  DELETE FROM keywording WHERE keyword_id = old.id; \
-                 END;", &[],
+                 END;",
+                &[],
             ).unwrap();
             conn.execute(
                 "CREATE TABLE labels (id INTEGER PRIMARY KEY,\
@@ -310,7 +315,10 @@ impl Library {
     /// Send a `LibNotification`.
     /// @returns the result (nothing or an error
     ///
-    pub fn notify(&self, notif: LibNotification) -> std::result::Result<(), mpsc::SendError<LibNotification>> {
+    pub fn notify(
+        &self,
+        notif: LibNotification,
+    ) -> std::result::Result<(), mpsc::SendError<LibNotification>> {
         self.sender.send(notif)
     }
 
@@ -618,7 +626,13 @@ impl Library {
         Ok(file_id)
     }
 
-    pub fn add_file(&self, folder_id: LibraryId, file: &str, bundle: Option<&FileBundle>, manage: Managed) -> Result<LibraryId> {
+    pub fn add_file(
+        &self,
+        folder_id: LibraryId,
+        file: &str,
+        bundle: Option<&FileBundle>,
+        manage: Managed,
+    ) -> Result<LibraryId> {
         dbg_assert!(manage == Managed::NO, "manage not supported");
         dbg_assert!(folder_id != -1, "invalid folder ID");
         let mime = npc_fwk::MimeType::new(file);
@@ -738,8 +752,11 @@ impl Library {
                 return Err(Error::InvalidResult);
             }
             let keyword_id = conn.last_insert_rowid();
-            if self.notify(LibNotification::AddedKeyword(Keyword::new(
-                keyword_id, keyword))).is_err() {
+            if self
+                .notify(LibNotification::AddedKeyword(Keyword::new(
+                    keyword_id, keyword,
+                ))).is_err()
+            {
                 err_out!("Failed to send AddedKeyword notification");
             }
             return Ok(keyword_id);
@@ -843,52 +860,46 @@ impl Library {
 
     pub fn set_metadata(&self, file_id: LibraryId, meta: Np, value: &PropertyValue) -> Result<()> {
         match meta {
-            Np::NpXmpRatingProp |
-            Np::NpXmpLabelProp |
-            Np::NpTiffOrientationProp |
-            Np::NpNiepceFlagProp => {
+            Np::NpXmpRatingProp
+            | Np::NpXmpLabelProp
+            | Np::NpTiffOrientationProp
+            | Np::NpNiepceFlagProp => {
                 match *value {
                     PropertyValue::Int(i) => {
                         // internal
                         // make the column mapping more generic.
                         let column = match meta {
-                            Np::NpXmpRatingProp =>
-                                "rating",
-                            Np::NpXmpLabelProp =>
-                                "orientation",
-                            Np::NpTiffOrientationProp =>
-                                "label",
-                            Np::NpNiepceFlagProp =>
-                                "flag",
-                            _ =>
-                                unreachable!()
+                            Np::NpXmpRatingProp => "rating",
+                            Np::NpXmpLabelProp => "orientation",
+                            Np::NpTiffOrientationProp => "label",
+                            Np::NpNiepceFlagProp => "flag",
+                            _ => unreachable!(),
                         };
                         if !column.is_empty() {
                             self.set_internal_metadata(file_id, column, i)?;
                         }
-                    },
-                    _ =>
-                        err_out!("improper value type for {:?}", meta),
+                    }
+                    _ => err_out!("improper value type for {:?}", meta),
                 }
-            },
+            }
             Np::NpIptcKeywordsProp => {
                 self.unassign_all_keywords_for_file(file_id)?;
 
                 match *value {
-                    PropertyValue::StringArray(ref keywords) =>
-                        for kw in keywords {
-                            let id = self.make_keyword(&kw)?;
-                            if id != -1 {
-                                self.assign_keyword(id, file_id)?;
-                            }
-                        },
-                    _ =>
-                        err_out!("improper value_type for {:?} : {:?}", meta, value),
+                    PropertyValue::StringArray(ref keywords) => for kw in keywords {
+                        let id = self.make_keyword(&kw)?;
+                        if id != -1 {
+                            self.assign_keyword(id, file_id)?;
+                        }
+                    },
+                    _ => err_out!("improper value_type for {:?} : {:?}", meta, value),
                 }
-            },
+            }
             _ =>
-                // XXX TODO
-                err_out!("unhandled meta {:?}", meta),
+            // XXX TODO
+            {
+                err_out!("unhandled meta {:?}", meta)
+            }
         }
         let mut metablock = self.get_metadata(file_id)?;
         metablock.set_metadata(meta, value);
@@ -1000,7 +1011,10 @@ impl Library {
         // 3. make sure the update happened correctly, possibly ensure we don't
         // clobber the xmp.
         if let Some(ref conn) = self.dbconn {
-            if conn.execute("DELETE FROM xmp_update_queue WHERE id=?1;", &[&id]).is_ok() {
+            if conn
+                .execute("DELETE FROM xmp_update_queue WHERE id=?1;", &[&id])
+                .is_ok()
+            {
                 // we don't want to write the XMP so we don't need to list them.
                 if !write_xmp {
                     return Ok(());
@@ -1080,7 +1094,6 @@ mod test {
 
     #[test]
     fn library_works() {
-
         let lib = Library::new_in_memory();
 
         assert!(lib.is_ok());
@@ -1189,7 +1202,6 @@ mod test {
         assert!(bundle_id.is_ok());
         assert!(bundle_id.ok().unwrap() > 0);
 
-
         let mut bundle = FileBundle::new();
         assert!(bundle.add("img_0124.jpg"));
         assert!(bundle.add("img_0124.raf"));
@@ -1197,5 +1209,5 @@ mod test {
         let bundle_id = lib.add_bundle(folder_added.id(), &bundle, Managed::NO);
         assert!(bundle_id.is_ok());
         assert!(bundle_id.ok().unwrap() > 0);
-}
+    }
 }

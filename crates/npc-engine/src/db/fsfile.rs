@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::path::{ Path, PathBuf };
+use std::path::{Path, PathBuf};
 
 use super::LibraryId;
 
@@ -28,11 +28,8 @@ pub struct FsFile {
 }
 
 impl FsFile {
-
     pub fn new(id: LibraryId, path: PathBuf) -> FsFile {
-        FsFile {
-            id, path,
-        }
+        FsFile { id, path }
     }
 
     pub fn id(&self) -> LibraryId {

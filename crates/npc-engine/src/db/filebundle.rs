@@ -21,8 +21,8 @@ use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 
 use crate::db::libfile::FileType;
-use npc_fwk::MimeType;
 use npc_fwk::toolkit::mimetype::{IsRaw, MType};
+use npc_fwk::MimeType;
 
 /// Sidecar.
 #[derive(Debug, PartialEq)]
@@ -327,8 +327,12 @@ mod test {
         }
 
         if let Some(b) = iter.next() {
-            println!("main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
-                     b.main(), b.jpeg(), b.xmp_sidecar() /*, b.sidecars()*/);
+            println!(
+                "main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                b.main(),
+                b.jpeg(),
+                b.xmp_sidecar() /*, b.sidecars()*/
+            );
             assert_eq!(b.bundle_type(), FileType::RAW_JPEG);
             assert_eq!(b.main(), "/foo/bar/scs_3445.raf");
             assert_eq!(b.jpeg(), "/foo/bar/scs_3445.jpg");
@@ -339,8 +343,12 @@ mod test {
         }
 
         if let Some(b) = iter.next() {
-            println!("main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
-                     b.main(), b.jpeg(), b.xmp_sidecar() /*, b.sidecars()*/);
+            println!(
+                "main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                b.main(),
+                b.jpeg(),
+                b.xmp_sidecar() /*, b.sidecars()*/
+            );
             assert_eq!(b.bundle_type(), FileType::RAW_JPEG);
             assert_eq!(b.main(), "/foo/bar/scs_3446.raf");
             assert_eq!(b.jpeg(), "/foo/bar/scs_3446.jpg");
@@ -349,5 +357,5 @@ mod test {
         } else {
             assert!(false);
         }
-}
+    }
 }

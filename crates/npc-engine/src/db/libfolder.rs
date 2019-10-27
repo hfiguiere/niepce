@@ -18,8 +18,8 @@
  */
 
 use libc::c_char;
-use std::ffi::CString;
 use rusqlite;
+use std::ffi::CString;
 
 use super::FromDb;
 use super::LibraryId;
@@ -28,7 +28,7 @@ use super::LibraryId;
 #[derive(Clone)]
 pub enum FolderVirtualType {
     NONE = 0,
-    TRASH = 1
+    TRASH = 1,
 }
 
 impl From<i32> for FolderVirtualType {
@@ -58,10 +58,12 @@ pub struct LibFolder {
 impl LibFolder {
     pub fn new(id: LibraryId, name: &str, path: Option<String>) -> LibFolder {
         LibFolder {
-            id, name: String::from(name),
+            id,
+            name: String::from(name),
             path,
             locked: false,
-            expanded: false, virt: FolderVirtualType::NONE,
+            expanded: false,
+            virt: FolderVirtualType::NONE,
             parent: 0,
             cstr: CString::new("").unwrap(),
         }
@@ -109,7 +111,6 @@ impl LibFolder {
 }
 
 impl FromDb for LibFolder {
-
     fn read_db_columns() -> &'static str {
         "id,name,virtual,locked,expanded,path,parent_id"
     }
@@ -163,16 +164,16 @@ pub extern "C" fn engine_db_libfolder_expanded(obj: &LibFolder) -> bool {
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_locked(obj: &mut LibFolder, locked: bool) {
+pub extern "C" fn engine_db_libfolder_set_locked(obj: &mut LibFolder, locked: bool) {
     obj.set_locked(locked);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_expanded(obj: &mut LibFolder, expanded: bool) {
+pub extern "C" fn engine_db_libfolder_set_expanded(obj: &mut LibFolder, expanded: bool) {
     obj.set_expanded(expanded);
 }
 
 #[no_mangle]
-pub extern fn engine_db_libfolder_set_virtual_type(obj: &mut LibFolder, t: FolderVirtualType) {
+pub extern "C" fn engine_db_libfolder_set_virtual_type(obj: &mut LibFolder, t: FolderVirtualType) {
     obj.set_virtual_type(t);
 }

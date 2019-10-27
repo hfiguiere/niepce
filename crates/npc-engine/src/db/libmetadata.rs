@@ -17,17 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::ffi::CStr;
-use std::mem::transmute;
-use rusqlite;
 use chrono::Utc;
 use exempi;
+use rusqlite;
+use std::ffi::CStr;
+use std::mem::transmute;
 
-use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
-use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use super::{FromDb, LibraryId};
-use crate::root::eng::NiepceProperties as Np;
 use crate::db::libfile::FileType;
+use crate::root::eng::NiepceProperties as Np;
+use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
+use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
 
 #[derive(Clone)]
 pub struct LibMetadata {
@@ -61,9 +61,10 @@ impl LibMetadata {
         LibMetadata {
             xmp: XmpMeta::new(),
             id,
-            sidecars: vec![], file_type: FileType::UNKNOWN,
+            sidecars: vec![],
+            file_type: FileType::UNKNOWN,
             name: String::new(),
-            folder: String::new()
+            folder: String::new(),
         }
     }
 
@@ -74,7 +75,7 @@ impl LibMetadata {
             sidecars: vec![],
             file_type: FileType::UNKNOWN,
             name: String::new(),
-            folder: String::new()
+            folder: String::new(),
         }
     }
 
@@ -109,28 +110,37 @@ impl LibMetadata {
     pub fn set_metadata(&mut self, meta: Np, value: &PropertyValue) -> bool {
         if let Some(ix) = property_index_to_xmp(meta) {
             match *value {
-                PropertyValue::Empty => return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok(),
+                PropertyValue::Empty => {
+                    return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok()
+                }
                 PropertyValue::Int(i) => {
-                    return self.xmp
+                    return self
                         .xmp
-                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE).is_ok()
+                        .xmp
+                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE)
+                        .is_ok()
                 }
                 PropertyValue::String(ref s) => {
                     if s.is_empty() {
                         return self.xmp.xmp.delete_property(&ix.ns, &ix.property).is_ok();
-                    } else if self.xmp
+                    } else if self
                         .xmp
-                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE).is_err()
+                        .xmp
+                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE)
+                        .is_err()
                     {
                         if exempi::get_error() == exempi::Error::BadXPath {
-                            return self.xmp.xmp.set_localized_text(
-                                &ix.ns,
-                                &ix.property,
-                                "",
-                                "x-default",
-                                s,
-                                exempi::PROP_NONE,
-                            ).is_ok();
+                            return self
+                                .xmp
+                                .xmp
+                                .set_localized_text(
+                                    &ix.ns,
+                                    &ix.property,
+                                    "",
+                                    "x-default",
+                                    s,
+                                    exempi::PROP_NONE,
+                                ).is_ok();
                         }
                     } else {
                         return true;
@@ -142,13 +152,17 @@ impl LibMetadata {
                         return false;
                     }
                     for s in sa {
-                        if self.xmp.xmp.append_array_item(
-                            &ix.ns,
-                            &ix.property,
-                            exempi::PROP_VALUE_IS_ARRAY,
-                            s,
-                            exempi::PROP_NONE,
-                        ).is_err() {
+                        if self
+                            .xmp
+                            .xmp
+                            .append_array_item(
+                                &ix.ns,
+                                &ix.property,
+                                exempi::PROP_VALUE_IS_ARRAY,
+                                s,
+                                exempi::PROP_NONE,
+                            ).is_err()
+                        {
                             err_out!("Error appending array item {} in property {}", &s, &ix.ns);
                             return false;
                         }
@@ -157,12 +171,11 @@ impl LibMetadata {
                 }
                 PropertyValue::Date(ref d) => {
                     let xmp_date = xmp_date_from(d);
-                    return self.xmp.xmp.set_property_date(
-                        &ix.ns,
-                        &ix.property,
-                        &xmp_date,
-                        exempi::PROP_NONE,
-                    ).is_ok();
+                    return self
+                        .xmp
+                        .xmp
+                        .set_property_date(&ix.ns, &ix.property, &xmp_date, exempi::PROP_NONE)
+                        .is_ok();
                 }
             }
             err_out!(
@@ -248,7 +261,8 @@ impl LibMetadata {
         let xmpdate = xmp_date_from(&Utc::now());
         self.xmp
             .xmp
-            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE).is_ok()
+            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE)
+            .is_ok()
     }
 }
 

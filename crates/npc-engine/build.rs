@@ -46,7 +46,7 @@ fn main() {
     let bindings = builder
         .rustfmt_bindings(true)
         .generate()
-    // Unwrap the Result and panic on failure.
+        // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
