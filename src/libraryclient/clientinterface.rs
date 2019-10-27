@@ -17,14 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use npc_fwk::base::PropertyValue;
-use npc_engine::db::LibraryId;
 use npc_engine::db::library::Managed;
+use npc_engine::db::LibraryId;
 use npc_engine::root::eng::NiepceProperties as Np;
+use npc_fwk::base::PropertyValue;
 
 /// Client interface.
 pub trait ClientInterface {
-
     /// get all the keywords
     fn get_all_keywords(&mut self);
     fn query_keyword_content(&mut self, id: LibraryId);
@@ -42,8 +41,7 @@ pub trait ClientInterface {
     fn set_metadata(&mut self, id: LibraryId, meta: Np, value: &PropertyValue);
     fn write_metadata(&mut self, id: LibraryId);
 
-    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId,
-                               to: LibraryId);
+    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId, to: LibraryId);
     /// get all the labels
     fn get_all_labels(&mut self);
     fn create_label(&mut self, label: String, colour: String);
@@ -63,7 +61,6 @@ pub trait ClientInterface {
 
 /// Sync client interface
 pub trait ClientInterfaceSync {
-
     /// Create a keyword. Return the id for the keyword.
     /// If the keyword already exists, return its `LibraryId`.
     fn create_keyword_sync(&mut self, keyword: String) -> LibraryId;

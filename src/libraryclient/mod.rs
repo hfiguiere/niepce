@@ -20,31 +20,33 @@
 pub mod clientimpl;
 pub mod clientinterface;
 
-pub use self::clientinterface::{ClientInterface,ClientInterfaceSync};
+pub use self::clientinterface::{ClientInterface, ClientInterfaceSync};
 
 use libc::{c_char, c_void};
 use std::ffi::CStr;
 use std::path::PathBuf;
 use std::sync::Arc;
 
+use self::clientimpl::ClientImpl;
+use npc_engine::db::library::Managed;
+use npc_engine::db::LibraryId;
+use npc_engine::library::notification::{LcChannel, LibNotification};
+use npc_engine::root::eng::NiepceProperties as Np;
+use npc_engine::root::fwk::FileList;
 use npc_fwk::base::PropertyValue;
 use npc_fwk::toolkit::PortableChannel;
-use self::clientimpl::ClientImpl;
-use npc_engine::db::LibraryId;
-use npc_engine::db::library::Managed;
-use npc_engine::library::notification::{LibNotification, LcChannel};
-use npc_engine::root::fwk::FileList;
-use npc_engine::root::eng::NiepceProperties as Np;
 
 /// Wrap the libclient Arc so that it can be passed around
 /// Used in the ffi for example.
 pub struct LibraryClientWrapper {
-    client: Arc<LibraryClient>
+    client: Arc<LibraryClient>,
 }
 
 impl LibraryClientWrapper {
     pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClientWrapper {
-        LibraryClientWrapper { client: Arc::new(LibraryClient::new(dir, sender)) }
+        LibraryClientWrapper {
+            client: Arc::new(LibraryClient::new(dir, sender)),
+        }
     }
 
     /// unwrap the mutable client Arc
@@ -58,15 +60,14 @@ impl LibraryClientWrapper {
 pub struct LibraryClient {
     pimpl: ClientImpl,
 
-    trash_id: LibraryId
+    trash_id: LibraryId,
 }
 
 impl LibraryClient {
-
     pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClient {
         LibraryClient {
             pimpl: ClientImpl::new(dir, sender),
-            trash_id: 0
+            trash_id: 0,
         }
     }
 
@@ -77,7 +78,6 @@ impl LibraryClient {
     pub fn set_trash_id(&mut self, id: LibraryId) {
         self.trash_id = id;
     }
-
 }
 
 impl ClientInterface for LibraryClient {
@@ -122,8 +122,7 @@ impl ClientInterface for LibraryClient {
         self.pimpl.write_metadata(id);
     }
 
-    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId,
-                           to: LibraryId) {
+    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId, to: LibraryId) {
         self.pimpl.move_file_to_folder(file_id, from, to);
     }
     /// get all the labels
@@ -152,7 +151,6 @@ impl ClientInterface for LibraryClient {
     fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed) {
         self.pimpl.import_files(dir, files, manage);
     }
-
 }
 
 impl ClientInterfaceSync for LibraryClient {
@@ -170,7 +168,10 @@ impl ClientInterfaceSync for LibraryClient {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn lcchannel_new(cb: extern fn(n: *const LibNotification, data: *mut c_void) -> i32, data: *mut c_void) -> *mut LcChannel {
+pub unsafe extern "C" fn lcchannel_new(
+    cb: extern "C" fn(n: *const LibNotification, data: *mut c_void) -> i32,
+    data: *mut c_void,
+) -> *mut LcChannel {
     let (sender, receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
     let source_id = receiver.attach(None, move |n: LibNotification| {
         let mut continuation = false;
@@ -179,7 +180,9 @@ pub unsafe extern "C" fn lcchannel_new(cb: extern fn(n: *const LibNotification, 
         }
         glib::Continue(continuation)
     });
-    Box::into_raw(Box::new(PortableChannel::<LibNotification>(sender, source_id)))
+    Box::into_raw(Box::new(PortableChannel::<LibNotification>(
+        sender, source_id,
+    )))
 }
 
 #[no_mangle]
@@ -195,9 +198,15 @@ pub unsafe extern "C" fn lcchannel_destroy(obj: *mut LcChannel) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_new(path: *const c_char, channel: *const LcChannel) -> *mut LibraryClientWrapper {
+pub unsafe extern "C" fn libraryclient_new(
+    path: *const c_char,
+    channel: *const LcChannel,
+) -> *mut LibraryClientWrapper {
     let dir = PathBuf::from(&*CStr::from_ptr(path).to_string_lossy());
-    Box::into_raw(Box::new(LibraryClientWrapper::new(dir, (*channel).0.clone())))
+    Box::into_raw(Box::new(LibraryClientWrapper::new(
+        dir,
+        (*channel).0.clone(),
+    )))
 }
 
 #[no_mangle]
@@ -226,15 +235,19 @@ pub extern "C" fn libraryclient_get_all_folders(client: &mut LibraryClientWrappe
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_query_folder_content(client: &mut LibraryClientWrapper,
-                                                     folder_id: LibraryId) {
+pub extern "C" fn libraryclient_query_folder_content(
+    client: &mut LibraryClientWrapper,
+    folder_id: LibraryId,
+) {
     client.unwrap_mut().query_folder_content(folder_id);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryClientWrapper,
-                                                          n: *const c_char,
-                                                          p: *const c_char) -> LibraryId {
+pub unsafe extern "C" fn libraryclient_create_folder_sync(
+    client: &mut LibraryClientWrapper,
+    n: *const c_char,
+    p: *const c_char,
+) -> LibraryId {
     let name = String::from(CStr::from_ptr(n).to_string_lossy());
     let path = if p.is_null() {
         None
@@ -245,53 +258,64 @@ pub unsafe extern "C" fn libraryclient_create_folder_sync(client: &mut LibraryCl
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_delete_folder(client: &mut LibraryClientWrapper,
-                                             id: LibraryId) {
+pub extern "C" fn libraryclient_delete_folder(client: &mut LibraryClientWrapper, id: LibraryId) {
     client.unwrap_mut().delete_folder(id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_count_folder(client: &mut LibraryClientWrapper,
-                                             folder_id: LibraryId) {
+pub extern "C" fn libraryclient_count_folder(
+    client: &mut LibraryClientWrapper,
+    folder_id: LibraryId,
+) {
     client.unwrap_mut().count_folder(folder_id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_query_keyword_content(client: &mut LibraryClientWrapper,
-                                                      keyword_id: LibraryId) {
+pub extern "C" fn libraryclient_query_keyword_content(
+    client: &mut LibraryClientWrapper,
+    keyword_id: LibraryId,
+) {
     client.unwrap_mut().query_keyword_content(keyword_id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_count_keyword(client: &mut LibraryClientWrapper,
-                                             id: LibraryId) {
+pub extern "C" fn libraryclient_count_keyword(client: &mut LibraryClientWrapper, id: LibraryId) {
     client.unwrap_mut().count_keyword(id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_request_metadata(client: &mut LibraryClientWrapper,
-                                                 file_id: LibraryId) {
+pub extern "C" fn libraryclient_request_metadata(
+    client: &mut LibraryClientWrapper,
+    file_id: LibraryId,
+) {
     client.unwrap_mut().request_metadata(file_id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_set_metadata(client: &mut LibraryClientWrapper,
-                                             file_id: LibraryId,
-                                             meta: Np, value: &PropertyValue) {
+pub extern "C" fn libraryclient_set_metadata(
+    client: &mut LibraryClientWrapper,
+    file_id: LibraryId,
+    meta: Np,
+    value: &PropertyValue,
+) {
     client.unwrap_mut().set_metadata(file_id, meta, value);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_write_metadata(client: &mut LibraryClientWrapper,
-                                               file_id: LibraryId) {
+pub extern "C" fn libraryclient_write_metadata(
+    client: &mut LibraryClientWrapper,
+    file_id: LibraryId,
+) {
     client.unwrap_mut().write_metadata(file_id);
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_move_file_to_folder(client: &mut LibraryClientWrapper,
-                                                    file_id: LibraryId,
-                                                    from: LibraryId,
-                                                    to: LibraryId) {
+pub extern "C" fn libraryclient_move_file_to_folder(
+    client: &mut LibraryClientWrapper,
+    file_id: LibraryId,
+    from: LibraryId,
+    to: LibraryId,
+) {
     client.unwrap_mut().move_file_to_folder(file_id, from, to);
 }
 
@@ -301,48 +325,70 @@ pub extern "C" fn libraryclient_get_all_labels(client: &mut LibraryClientWrapper
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_create_label(client: &mut LibraryClientWrapper,
-                                                    s: *const c_char, c: *const c_char) {
+pub unsafe extern "C" fn libraryclient_create_label(
+    client: &mut LibraryClientWrapper,
+    s: *const c_char,
+    c: *const c_char,
+) {
     let name = CStr::from_ptr(s).to_string_lossy();
     let colour = CStr::from_ptr(c).to_string_lossy();
-    client.unwrap_mut().create_label(String::from(name), String::from(colour));
+    client
+        .unwrap_mut()
+        .create_label(String::from(name), String::from(colour));
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn libraryclient_create_label_sync(
-    client: &mut LibraryClientWrapper, s: *const c_char, c: *const c_char) -> LibraryId {
+    client: &mut LibraryClientWrapper,
+    s: *const c_char,
+    c: *const c_char,
+) -> LibraryId {
     let name = CStr::from_ptr(s).to_string_lossy();
     let colour = CStr::from_ptr(c).to_string_lossy();
-    client.unwrap_mut().create_label_sync(String::from(name), String::from(colour))
+    client
+        .unwrap_mut()
+        .create_label_sync(String::from(name), String::from(colour))
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_delete_label(client: &mut LibraryClientWrapper,
-                                             label_id: LibraryId) {
+pub extern "C" fn libraryclient_delete_label(
+    client: &mut LibraryClientWrapper,
+    label_id: LibraryId,
+) {
     client.unwrap_mut().delete_label(label_id);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_update_label(client: &mut LibraryClientWrapper,
-                                                    label_id: LibraryId,
-                                                    s: *const c_char, c: *const c_char) {
+pub unsafe extern "C" fn libraryclient_update_label(
+    client: &mut LibraryClientWrapper,
+    label_id: LibraryId,
+    s: *const c_char,
+    c: *const c_char,
+) {
     let name = CStr::from_ptr(s).to_string_lossy();
     let colour = CStr::from_ptr(c).to_string_lossy();
-    client.unwrap_mut().update_label(label_id, String::from(name), String::from(colour));
+    client
+        .unwrap_mut()
+        .update_label(label_id, String::from(name), String::from(colour));
 }
 
 #[no_mangle]
-pub extern "C" fn libraryclient_process_xmp_update_queue(client: &mut LibraryClientWrapper,
-                                                         write_xmp: bool) {
+pub extern "C" fn libraryclient_process_xmp_update_queue(
+    client: &mut LibraryClientWrapper,
+    write_xmp: bool,
+) {
     client.unwrap_mut().process_xmp_update_queue(write_xmp);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn libraryclient_import_files(client: &mut LibraryClientWrapper,
-                                                    dir: *const c_char, cfiles: &mut FileList,
-                                                    manage: Managed) {
+pub unsafe extern "C" fn libraryclient_import_files(
+    client: &mut LibraryClientWrapper,
+    dir: *const c_char,
+    cfiles: &mut FileList,
+    manage: Managed,
+) {
     let folder = CStr::from_ptr(dir).to_string_lossy();
-    let mut files: Vec<String> = vec!();
+    let mut files: Vec<String> = vec![];
     {
         let len = cfiles.size();
         for i in 0..len {
@@ -351,5 +397,7 @@ pub unsafe extern "C" fn libraryclient_import_files(client: &mut LibraryClientWr
             files.push(String::from(cstr));
         }
     }
-    client.unwrap_mut().import_files(String::from(folder), files, manage);
+    client
+        .unwrap_mut()
+        .import_files(String::from(folder), files, manage);
 }

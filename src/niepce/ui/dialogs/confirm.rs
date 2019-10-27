@@ -21,23 +21,26 @@ use libc::c_char;
 use std::ffi::CStr;
 
 use glib::translate::*;
-use gtk::prelude::*;
 use gtk;
+use gtk::prelude::*;
+use gtk::MessageDialog;
 use gtk_sys;
-use gtk::{
-    MessageDialog,
-};
 
 #[no_mangle]
-pub unsafe extern "C" fn dialog_confirm(message: *const c_char,
-                                        parent: *mut gtk_sys::GtkWindow) -> bool {
-
+pub unsafe extern "C" fn dialog_confirm(
+    message: *const c_char,
+    parent: *mut gtk_sys::GtkWindow,
+) -> bool {
     let mut result: bool = false;
     let msg = CStr::from_ptr(message).to_string_lossy();
     let parent = gtk::Window::from_glib_none(parent);
-    let dialog = MessageDialog::new(Some(&parent), gtk::DialogFlags::MODAL,
-                                    gtk::MessageType::Question, gtk::ButtonsType::YesNo,
-                                    &*msg);
+    let dialog = MessageDialog::new(
+        Some(&parent),
+        gtk::DialogFlags::MODAL,
+        gtk::MessageType::Question,
+        gtk::ButtonsType::YesNo,
+        &*msg,
+    );
 
     if dialog.run() == gtk::ResponseType::Yes.into() {
         result = true;

@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 use glib::translate::*;
-use gtk::prelude::*;
 use gtk;
+use gtk::prelude::*;
 use gtk_sys;
 
 #[no_mangle]
@@ -28,13 +27,17 @@ pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
     let toolbar = gtk::Toolbar::new();
 
     let icon = gtk::Image::new_from_icon_name(
-        Some("go-previous-symbolic"), gtk::IconSize::SmallToolbar.into());
+        Some("go-previous-symbolic"),
+        gtk::IconSize::SmallToolbar.into(),
+    );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.PrevImage"));
     toolbar.add(&tool_item);
 
     let icon = gtk::Image::new_from_icon_name(
-        Some("go-next-symbolic"), gtk::IconSize::SmallToolbar.into());
+        Some("go-next-symbolic"),
+        gtk::IconSize::SmallToolbar.into(),
+    );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.NextImage"));
     toolbar.add(&tool_item);
@@ -43,13 +46,17 @@ pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
     toolbar.add(&separator);
 
     let icon = gtk::Image::new_from_icon_name(
-        Some("object-rotate-left-symbolic"), gtk::IconSize::SmallToolbar.into());
+        Some("object-rotate-left-symbolic"),
+        gtk::IconSize::SmallToolbar.into(),
+    );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.RotateLeft"));
     toolbar.add(&tool_item);
 
     let icon = gtk::Image::new_from_icon_name(
-        Some("object-rotate-right-symbolic"), gtk::IconSize::SmallToolbar.into());
+        Some("object-rotate-right-symbolic"),
+        gtk::IconSize::SmallToolbar.into(),
+    );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.RotateRight"));
     toolbar.add(&tool_item);

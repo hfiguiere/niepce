@@ -19,26 +19,28 @@
 
 use gettextrs::gettext;
 use glib::translate::*;
-use gtk::prelude::*;
 use gtk;
+use gtk::prelude::*;
+use gtk::{Dialog, Entry, Label};
 use gtk_sys;
-use gtk::{
-    Dialog,
-    Entry,
-    Label,
-};
 
-use libraryclient::{ClientInterface,LibraryClientWrapper};
+use libraryclient::{ClientInterface, LibraryClientWrapper};
 
 #[no_mangle]
-pub unsafe extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWrapper,
-                                                   parent: *mut gtk_sys::GtkWindow) {
+pub unsafe extern "C" fn dialog_request_new_folder(
+    client: &mut LibraryClientWrapper,
+    parent: *mut gtk_sys::GtkWindow,
+) {
     let parent = gtk::Window::from_glib_none(parent);
     let dialog = Dialog::new_with_buttons(
-        Some("New folder"), Some(&parent),
+        Some("New folder"),
+        Some(&parent),
         gtk::DialogFlags::MODAL,
-        &[(&gettext("OK"), gtk::ResponseType::Ok.into()),
-          (&gettext("Cancel"), gtk::ResponseType::Cancel.into())]);
+        &[
+            (&gettext("OK"), gtk::ResponseType::Ok.into()),
+            (&gettext("Cancel"), gtk::ResponseType::Cancel.into()),
+        ],
+    );
     let label = Label::new_with_mnemonic(Some(gettext("Folder _name:").as_str()));
     dialog.get_content_area().pack_start(&label, true, false, 4);
     let entry = Entry::new();
@@ -51,6 +53,8 @@ pub unsafe extern "C" fn dialog_request_new_folder(client: &mut LibraryClientWra
     let folder_name = entry.get_text();
     dialog.destroy();
     if !cancel && folder_name.is_some() {
-        client.unwrap_mut().create_folder(folder_name.unwrap().to_string(), None);
+        client
+            .unwrap_mut()
+            .create_folder(folder_name.unwrap().to_string(), None);
     }
 }

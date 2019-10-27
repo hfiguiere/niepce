@@ -20,18 +20,18 @@
 use std::collections::VecDeque;
 use std::path::PathBuf;
 use std::sync;
-use std::sync::mpsc;
 use std::sync::atomic;
+use std::sync::mpsc;
 use std::thread;
 
-use npc_fwk::base::PropertyValue;
-use npc_engine::db::{Library, LibraryId};
+use super::clientinterface::{ClientInterface, ClientInterfaceSync};
 use npc_engine::db::library::Managed;
-use npc_engine::library::op::Op;
+use npc_engine::db::{Library, LibraryId};
 use npc_engine::library::commands;
 use npc_engine::library::notification::LibNotification;
-use super::clientinterface::{ClientInterface,ClientInterfaceSync};
+use npc_engine::library::op::Op;
 use npc_engine::root::eng::NiepceProperties as Np;
+use npc_fwk::base::PropertyValue;
 
 pub struct ClientImpl {
     terminate: sync::Arc<atomic::AtomicBool>,
@@ -45,18 +45,17 @@ impl Drop for ClientImpl {
 }
 
 impl ClientImpl {
-
     pub fn new(dir: PathBuf, sender: npc_fwk::toolkit::Sender<LibNotification>) -> ClientImpl {
         let tasks = sync::Arc::new((sync::Mutex::new(VecDeque::new()), sync::Condvar::new()));
         let mut terminate = sync::Arc::new(atomic::AtomicBool::new(false));
         let tasks2 = tasks.clone();
         let terminate2 = terminate.clone();
 
-        /* let thread = */ thread::spawn(move || {
+        /* let thread = */
+        thread::spawn(move || {
             let library = Library::new(&dir, None, sender);
             Self::main(&mut terminate, &tasks, &library);
         });
-
 
         ClientImpl {
             terminate: terminate2,
@@ -69,12 +68,12 @@ impl ClientImpl {
         self.tasks.1.notify_one();
     }
 
-    fn main(terminate: &mut sync::Arc<atomic::AtomicBool>,
-            tasks: &sync::Arc<(sync::Mutex<VecDeque<Op>>, sync::Condvar)>,
-            library: &Library) {
-
+    fn main(
+        terminate: &mut sync::Arc<atomic::AtomicBool>,
+        tasks: &sync::Arc<(sync::Mutex<VecDeque<Op>>, sync::Condvar)>,
+        library: &Library,
+    ) {
         while !terminate.load(atomic::Ordering::Relaxed) {
-
             let elem: Option<Op>;
             {
                 let mut queue = tasks.0.lock().unwrap();
@@ -100,109 +99,78 @@ impl ClientImpl {
     }
 
     pub fn schedule_op<F>(&mut self, f: F)
-        where F: Fn(&Library) -> bool + Send + Sync + 'static {
-
+    where
+        F: Fn(&Library) -> bool + Send + Sync + 'static,
+    {
         let op = Op::new(f);
 
         let mut queue = self.tasks.0.lock().unwrap();
         queue.push_back(op);
         self.tasks.1.notify_all();
     }
-
 }
 
 impl ClientInterface for ClientImpl {
     /// get all the keywords
     fn get_all_keywords(&mut self) {
-        self.schedule_op(move |lib| {
-            commands::cmd_list_all_keywords(&lib)
-        });
+        self.schedule_op(move |lib| commands::cmd_list_all_keywords(&lib));
     }
 
     fn query_keyword_content(&mut self, keyword_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_query_keyword_content(&lib, keyword_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_query_keyword_content(&lib, keyword_id));
     }
 
     fn count_keyword(&mut self, id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_count_keyword(&lib, id)
-        });
+        self.schedule_op(move |lib| commands::cmd_count_keyword(&lib, id));
     }
 
     /// get all the folder
     fn get_all_folders(&mut self) {
-        self.schedule_op(move |lib| {
-            commands::cmd_list_all_folders(&lib)
-        });
+        self.schedule_op(move |lib| commands::cmd_list_all_folders(&lib));
     }
 
     fn query_folder_content(&mut self, folder_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_query_folder_content(&lib, folder_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_query_folder_content(&lib, folder_id));
     }
 
     fn count_folder(&mut self, folder_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_count_folder(&lib, folder_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_count_folder(&lib, folder_id));
     }
 
     fn create_folder(&mut self, name: String, path: Option<String>) {
-        self.schedule_op(move |lib| {
-            commands::cmd_create_folder(&lib, &name, path.clone()) != 0
-        });
+        self.schedule_op(move |lib| commands::cmd_create_folder(&lib, &name, path.clone()) != 0);
     }
 
     fn delete_folder(&mut self, id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_delete_folder(&lib, id)
-        });
+        self.schedule_op(move |lib| commands::cmd_delete_folder(&lib, id));
     }
 
     fn request_metadata(&mut self, file_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_request_metadata(&lib, file_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_request_metadata(&lib, file_id));
     }
 
     /// set the metadata
     fn set_metadata(&mut self, file_id: LibraryId, meta: Np, value: &PropertyValue) {
         let value2 = value.clone();
-        self.schedule_op(move |lib| {
-            commands::cmd_set_metadata(&lib, file_id, meta, &value2)
-        });
+        self.schedule_op(move |lib| commands::cmd_set_metadata(&lib, file_id, meta, &value2));
     }
     fn write_metadata(&mut self, file_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_write_metadata(&lib, file_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_write_metadata(&lib, file_id));
     }
 
-    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId,
-                           to: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_move_file_to_folder(&lib, file_id, from, to)
-        });
+    fn move_file_to_folder(&mut self, file_id: LibraryId, from: LibraryId, to: LibraryId) {
+        self.schedule_op(move |lib| commands::cmd_move_file_to_folder(&lib, file_id, from, to));
     }
 
     /// get all the labels
     fn get_all_labels(&mut self) {
-        self.schedule_op(move |lib| {
-            commands::cmd_list_all_labels(&lib)
-        });
+        self.schedule_op(move |lib| commands::cmd_list_all_labels(&lib));
     }
     fn create_label(&mut self, name: String, colour: String) {
-        self.schedule_op(move |lib| {
-            commands::cmd_create_label(&lib, &name, &colour) != 0
-        });
+        self.schedule_op(move |lib| commands::cmd_create_label(&lib, &name, &colour) != 0);
     }
     fn delete_label(&mut self, label_id: LibraryId) {
-        self.schedule_op(move |lib| {
-            commands::cmd_delete_label(&lib, label_id)
-        });
+        self.schedule_op(move |lib| commands::cmd_delete_label(&lib, label_id));
     }
     /// update a label
     fn update_label(&mut self, label_id: LibraryId, new_name: String, new_colour: String) {
@@ -213,30 +181,25 @@ impl ClientInterface for ClientImpl {
 
     /// tell to process the Xmp update Queue
     fn process_xmp_update_queue(&mut self, write_xmp: bool) {
-        self.schedule_op(move |lib| {
-            commands::cmd_process_xmp_update_queue(&lib, write_xmp)
-        });
+        self.schedule_op(move |lib| commands::cmd_process_xmp_update_queue(&lib, write_xmp));
     }
 
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed
     fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed) {
-        self.schedule_op(move |lib| {
-            commands::cmd_import_files(&lib, &dir, &files, manage)
-        });
+        self.schedule_op(move |lib| commands::cmd_import_files(&lib, &dir, &files, manage));
     }
 }
 
-
 impl ClientInterfaceSync for ClientImpl {
-
     fn create_label_sync(&mut self, name: String, colour: String) -> LibraryId {
         // can't use futures::sync::oneshot
         let (tx, rx) = mpsc::sync_channel::<LibraryId>(1);
 
         self.schedule_op(move |lib| {
-            tx.send(commands::cmd_create_label(&lib, &name, &colour)).unwrap();
+            tx.send(commands::cmd_create_label(&lib, &name, &colour))
+                .unwrap();
             true
         });
 
@@ -260,7 +223,8 @@ impl ClientInterfaceSync for ClientImpl {
         let (tx, rx) = mpsc::sync_channel::<LibraryId>(1);
 
         self.schedule_op(move |lib| {
-            tx.send(commands::cmd_create_folder(&lib, &name, path.clone())).unwrap();
+            tx.send(commands::cmd_create_folder(&lib, &name, path.clone()))
+                .unwrap();
             true
         });
 
