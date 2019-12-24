@@ -459,7 +459,7 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let c = conn.execute("DELETE FROM folders WHERE id=?1", &[&id])?;
             if c == 1 {
-                return Ok(());;
+                return Ok(());
             }
             return Err(Error::InvalidResult);
         }
