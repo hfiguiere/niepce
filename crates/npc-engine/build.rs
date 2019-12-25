@@ -27,6 +27,9 @@ fn main() {
         .whitelist_type("eng::IndexToXmp")
         .whitelist_function("eng::property_index_to_xmp")
         .header("../../src/engine/db/bindings.hpp")
+        // bindgen 0.38+ now require to set the language so that it can find
+        // the proper headers for C++
+        .clang_arg("-xc++")
         .clang_arg("--std=c++11")
         .clang_arg("-DRUST_BINDGEN=1")
         .clang_arg("-I../../src");
