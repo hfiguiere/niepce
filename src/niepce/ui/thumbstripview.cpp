@@ -79,6 +79,7 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
                                const IModuleShell& shell)
     : Glib::ObjectBase(typeid(ThumbStripView))
     , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
+    , property_item_height(*this, "item-height", 100)
     , m_start_thumb(0)
     , m_end_thumb(0)
     , m_store(store)
@@ -87,6 +88,10 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
     m_renderer = manage(new ThumbStripCell(shell));
 
     pack_start(*m_renderer, FALSE);
+    connect_property_changed("item-height",
+                             [this] () {
+                                 m_renderer->property_height() = this->property_item_height;
+                             });
     m_renderer->property_height() = 100;
     m_renderer->property_yalign() = 0.5;
     m_renderer->property_xalign() = 0.5;
@@ -323,7 +328,7 @@ void ThumbStripView::on_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
 void
 ThumbStripView::set_item_height (int height)
 {
-    m_renderer->property_height() = height;
+    property_item_height = height;
 }
 
 

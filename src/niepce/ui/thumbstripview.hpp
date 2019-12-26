@@ -42,6 +42,7 @@ public:
     const Glib::RefPtr<ui::ImageListStore> & get_model() const;
     void set_item_height(int height);
 
+    Glib::Property<gint> property_item_height;
 private:
     void on_parent_set(Gtk::Widget* previous_parent);
     void on_visible_range_changed();
