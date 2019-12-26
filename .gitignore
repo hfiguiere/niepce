@@ -111,3 +111,5 @@ po/remove-potcdate.s*
 target/
 **/*.rs.bk
 crates/npc-*/Cargo.lock
+__bindgen.cpp
+__bindgen.ii
