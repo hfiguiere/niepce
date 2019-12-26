@@ -60,7 +60,7 @@ EXTRA_DIST = \
 CARGO_VERBOSE = $(cargo_verbose_$(V))
 cargo_verbose_ = $(cargo_verbose_$(AM_DEFAULT_VERBOSITY))
 cargo_verbose_0 =
-cargo_verbose_1 = --verbose
+cargo_verbose_1 = -vv
 
 if DEBUG
 CARGO_RELEASE_ARGS=
