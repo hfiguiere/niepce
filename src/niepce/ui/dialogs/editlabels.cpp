@@ -40,7 +40,7 @@ using libraryclient::LibraryClientPtr;
 namespace ui {
 
 EditLabels::EditLabels(const LibraryClientPtr & libclient)
-    : fwk::Dialog(GLADEDIR"editlabels.ui", "editLabels")
+    : fwk::Dialog("/org/gnome/Niepce/ui/editlabels.ui", "editLabels")
     , m_labels(libclient->getDataProvider()->getLabels())
     , m_lib_client(libclient)
 {

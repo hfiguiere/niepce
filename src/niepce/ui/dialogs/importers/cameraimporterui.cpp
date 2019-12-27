@@ -42,8 +42,8 @@ CameraImporterUI::CameraImporterUI()
 Gtk::Widget* CameraImporterUI::setup_widget(const fwk::Frame::Ptr&)
 {
     Gtk::Grid* main_widget;
-    m_builder = Gtk::Builder::create_from_file(GLADEDIR"cameraimporterui.ui",
-                                               "main_widget");
+    m_builder = Gtk::Builder::create_from_resource("/org/gnome/Niepce/ui/cameraimporterui.ui",
+                                                   "main_widget");
     m_builder->get_widget("main_widget", main_widget);
     m_builder->get_widget("select_camera_btn", m_select_camera_btn);
     m_select_camera_btn->signal_clicked()

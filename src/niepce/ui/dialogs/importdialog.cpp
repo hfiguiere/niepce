@@ -43,7 +43,7 @@
 namespace ui {
 
 ImportDialog::ImportDialog()
-  : fwk::Dialog(GLADEDIR"importdialog.ui", "importDialog")
+  : fwk::Dialog("/org/gnome/Niepce/ui/importdialog.ui", "importDialog")
   , m_current_importer(nullptr)
   , m_importer_ui_stack(nullptr)
   , m_date_tz_combo(nullptr)

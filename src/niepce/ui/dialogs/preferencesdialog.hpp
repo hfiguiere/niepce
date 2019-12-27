@@ -30,7 +30,7 @@ class PreferencesDialog
 {
 public:
     PreferencesDialog()
-        : fwk::Dialog(GLADEDIR"preferences.ui", "preferences", "")
+        : fwk::Dialog("/org/gnome/Niepce/ui/preferences.ui", "preferences", "")
         {
         }
     virtual void setup_widget() override;

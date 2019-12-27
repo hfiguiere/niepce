@@ -51,7 +51,7 @@ Frame::Frame(const std::string & gladeFile,
              const Glib::ustring & widgetName,
              const std::string & layout_cfg_key)
     : m_window(nullptr),
-      m_builder(Gtk::Builder::create_from_file(gladeFile)),
+      m_builder(Gtk::Builder::create_from_resource(gladeFile)),
       m_layout_cfg_key(layout_cfg_key)
 {
     if (m_builder) {

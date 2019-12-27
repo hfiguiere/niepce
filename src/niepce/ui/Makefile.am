@@ -7,12 +7,8 @@ gladefiles = dialogs/preferences.ui \
 	dialogs/importers/cameraimporterui.ui \
 	$(NULL)
 
-gladedir = @datarootdir@/niepce/glade/
-glade_DATA = $(gladefiles)
-
 AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. \
 	-I$(top_srcdir)/src/ext \
-	-DGLADEDIR=\"$(gladedir)\" \
 	-DDATADIR=\"$(datadir)\" \
 	@FRAMEWORK_CFLAGS@ @GPHOTO_CFLAGS@ \
 	$(NULL)

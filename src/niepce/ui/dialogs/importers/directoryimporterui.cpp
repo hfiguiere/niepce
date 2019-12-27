@@ -40,8 +40,8 @@ Gtk::Widget* DirectoryImporterUI::setup_widget(const fwk::Frame::Ptr& frame)
 {
     m_frame = frame;
     Gtk::Button* select_directories = nullptr;
-    m_builder = Gtk::Builder::create_from_file(GLADEDIR"directoryimporterui.ui",
-                                               "main_widget");
+    m_builder = Gtk::Builder::create_from_resource("/org/gnome/Niepce/ui/directoryimporterui.ui",
+                                                   "main_widget");
     Gtk::Box* main_widget = nullptr;
     m_builder->get_widget("main_widget", main_widget);
     m_builder->get_widget("select_directories", select_directories);
