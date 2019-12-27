@@ -55,7 +55,7 @@ ToolboxController::buildWidget()
 
     item = manage(new DrItemWidget(_("Crop")));
     toolbox->pack_start(*item, Gtk::PACK_SHRINK);
-    s = Gtk::manage(new fwk::EditableHScale(DATADIR"/niepce/pixmaps/niepce-transform-rotate.png",
+    s = Gtk::manage(new fwk::EditableHScale("/org/gnome/Niepce/pixmaps/niepce-transform-rotate.png",
                                             -45.0, 45.0, 0.5));
     item->add_widget(_("Tilt"), *s);
 
