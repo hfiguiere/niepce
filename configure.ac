@@ -152,7 +152,6 @@ doc/Doxyfile
 doc/Makefile
 doc/doxygen/Makefile
 data/Makefile
-data/icons/Makefile
 data/themes/Makefile
 third_party/Makefile
 src/Makefile

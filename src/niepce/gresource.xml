@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/Niepce">
+    <file alias="/pixmaps/niepce-set-star.png">data/icons/niepce-set-star.png</file>
+    <file alias="/pixmaps/niepce-unset-star.png">data/icons/niepce-unset-star.png</file>
+    <file alias="/pixmaps/niepce-missing.png">data/icons/niepce-missing.png</file>
+    <file alias="/pixmaps/niepce-flag-pick.png">data/icons/niepce-flag-pick.png</file>
+    <file alias="/pixmaps/niepce-flag-reject.png">data/icons/niepce-flag-reject.png</file>
+    <file alias="/pixmaps/niepce-transform-rotate.png">data/icons/niepce-transform-rotate.png</file>
+    <file alias="/pixmaps/niepce-img-fmt.png">data/icons/niepce-img-fmt.png</file>
+    <file alias="/pixmaps/niepce-raw-fmt.png">data/icons/niepce-raw-fmt.png</file>
+    <file alias="/pixmaps/niepce-jpg-fmt.png">data/icons/niepce-jpg-fmt.png</file>
+    <file alias="/pixmaps/niepce-rawjpeg-fmt.png">data/icons/niepce-rawjpeg-fmt.png</file>
+    <file alias="/pixmaps/niepce-png-fmt.png">data/icons/niepce-png-fmt.png</file>
+    <file alias="/pixmaps/niepce-tiff-fmt.png">data/icons/niepce-tiff-fmt.png</file>
+    <file alias="/pixmaps/niepce-video-fmt.png">data/icons/niepce-video-fmt.png</file>
+    <file alias="/pixmaps/niepce-unknown-fmt.png">data/icons/niepce-unknown-fmt.png</file>
+    <file alias="/pixmaps/niepce-image-generic.png">data/icons/niepce-image-generic.png</file>
+    <file alias="/pixmaps/niepce-image-missing.png">data/icons/niepce-image-missing.png</file>
+  </gresource>
+</gresources>

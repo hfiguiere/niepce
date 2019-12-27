@@ -59,8 +59,8 @@ void DarkroomModule::reload_image()
     }
     else {
         // reset
-        Glib::RefPtr<Gdk::Pixbuf> p = Gdk::Pixbuf::create_from_file(
-            DATADIR"/niepce/pixmaps/niepce-image-generic.png");
+        Glib::RefPtr<Gdk::Pixbuf> p = Gdk::Pixbuf::create_from_resource(
+            "/org/gnome/Niepce/pixmaps/niepce-image-generic.png", -1, -1);
         m_image->reload(p);
     }
     m_need_reload = false;

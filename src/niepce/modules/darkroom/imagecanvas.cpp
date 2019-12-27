@@ -1,7 +1,7 @@
 /*
  * niepce - darkroom/imagecanvas.cpp
  *
- * Copyright (C) 2008-2018 Hubert Figuière
+ * Copyright (C) 2008-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,10 @@
 #include <cairomm/context.h>
 #include <gdkmm.h>
 
-
 #include "fwk/base/debug.hpp"
 #include "fwk/base/geometry.hpp"
 
 #include "imagecanvas.hpp"
-
-#include <gdkmm/general.h>
-
-#ifndef DATADIR
-#error DATADIR is not defined
-#endif
 
 namespace dr {
 
@@ -101,8 +94,9 @@ Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_error_placeholder()
 {
     Cairo::RefPtr<Cairo::ImageSurface> s;
     try {
-        s = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-image-generic.png"));
+        auto pixbuf = Gdk::Pixbuf::create_from_resource(
+            "/org/gnome/Niepce/pixmaps/niepce-image-generic.png", -1, -1);
+        s = Gdk::Cairo::create_surface_from_pixbuf(pixbuf, 0);
     }
     catch(...) {
     }
@@ -114,8 +108,9 @@ Cairo::RefPtr<Cairo::ImageSurface> ImageCanvas::_get_missing_placeholder()
 {
     Cairo::RefPtr<Cairo::ImageSurface> s;
     try {
-        s = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-image-missing.png"));
+        auto pixbuf = Gdk::Pixbuf::create_from_resource(
+            "/org/gnome/Niepce/pixmaps/niepce-image-missing.png", -1, -1);
+        s = Gdk::Cairo::create_surface_from_pixbuf(pixbuf, 0);
     }
     catch(...) {
     }

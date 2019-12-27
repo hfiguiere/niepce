@@ -28,10 +28,6 @@
 
 #include <gdkmm/general.h>
 
-#ifndef DATADIR
-#error DATADIR is not defined
-#endif
-
 #define CELL_PADDING 4
 
 namespace ui {
@@ -54,30 +50,30 @@ LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
     try {
         m_raw_format_emblem
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-raw-fmt.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-raw-fmt.png", -1, -1);
         m_rawjpeg_format_emblem
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-rawjpeg-fmt.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-rawjpeg-fmt.png", -1, -1);
         m_img_format_emblem
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-img-fmt.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-img-fmt.png", -1, -1);
         m_video_format_emblem
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-video-fmt.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-video-fmt.png", -1, -1);
         m_unknown_format_emblem
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-unknown-fmt.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-unknown-fmt.png", -1, -1);
 
         m_status_missing
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-missing.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-missing.png", -1, -1);
         m_flag_reject
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-flag-reject.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-flag-reject.png", -1, -1);
         m_flag_pick
-            = Cairo::ImageSurface::create_from_png(
-                std::string(DATADIR"/niepce/pixmaps/niepce-flag-pick.png"));
+            = Gdk::Pixbuf::create_from_resource(
+                "/org/gnome/Niepce/pixmaps/niepce-flag-pick.png", -1, -1);
     }
     catch(const std::exception & e) {
         ERR_OUT("exception while creating emblems: %s", e.what());
@@ -129,7 +125,7 @@ LibraryCellRenderer::draw_status(const Cairo::RefPtr<Cairo::Context>& cr,
     double x = r.x + CELL_PADDING;
     double y = r.y + CELL_PADDING;
 
-    cr->set_source(m_status_missing, x, y);
+    Gdk::Cairo::set_source_pixbuf(cr, m_status_missing, x, y);
     cr->paint();
 }
 
@@ -141,7 +137,7 @@ LibraryCellRenderer::draw_flag(const Cairo::RefPtr<Cairo::Context>& cr,
         return;
     }
 
-    Cairo::RefPtr<Cairo::ImageSurface> pixbuf;
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf;
     if (flag_value == -1) {
         pixbuf = m_flag_reject;
     } else if(flag_value == 1) {
@@ -153,14 +149,14 @@ LibraryCellRenderer::draw_flag(const Cairo::RefPtr<Cairo::Context>& cr,
     int w = pixbuf->get_width();
     double x = r.x + r.width - CELL_PADDING - w;
     double y = r.y + CELL_PADDING;
-    cr->set_source(pixbuf, x, y);
+    Gdk::Cairo::set_source_pixbuf(cr, pixbuf, x, y);
     cr->paint();
 }
 
 namespace {
 
 int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context>& cr,
-                      const Cairo::RefPtr<Cairo::ImageSurface>& emblem,
+                      const Glib::RefPtr<Gdk::Pixbuf>& emblem,
                       const GdkRectangle& r)
 {
     int left = 0;
@@ -172,7 +168,7 @@ int drawFormatEmblem(const Cairo::RefPtr<Cairo::Context>& cr,
         left = CELL_PADDING + w;
         x = r.x + r.width - left;
         y = r.y + r.height - CELL_PADDING - h;
-        cr->set_source(emblem, x, y);
+        Gdk::Cairo::set_source_pixbuf(cr, emblem, x, y);
         cr->paint();
     }
     return left;
@@ -267,7 +263,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     }
 
     if (m_drawemblem) {
-        Cairo::RefPtr<Cairo::ImageSurface> emblem;
+        Glib::RefPtr<Gdk::Pixbuf> emblem;
 
         switch(engine_db_libfile_file_type(file.get())) {
         case eng::FileType::RAW:

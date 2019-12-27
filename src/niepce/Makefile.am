@@ -31,8 +31,24 @@ niepce_LDADD = \
 	-ldl \
 	$(NULL)
 
+## Resources compilation
+npc-resources.c: gresource.xml
+	$(AM_V_GEN) glib-compile-resources \
+                --sourcedir=$(top_srcdir) --target=$@ \
+                --generate-source --c-name npc $(srcdir)/gresource.xml
+
+npc-resources.h: gresource.xml
+	$(AM_V_GEN) glib-compile-resources                                  \
+                --sourcedir=$(top_srcdir) --target=$@ \
+		--generate-header --c-name npc $(srcdir)/gresource.xml
+
+BUILT_SOURCES = \
+        npc-resources.c \
+        npc-resources.h
 
 niepce_SOURCES = \
 	notificationcenter.hpp notificationcenter.cpp \
         notifications.hpp \
+        npc-resources.c \
+        npc-resources.h \
 	main.cpp

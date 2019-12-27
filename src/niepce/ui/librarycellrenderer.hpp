@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.h
  *
- * Copyright (C) 2008-2018 Hubert Figuiere
+ * Copyright (C) 2008-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,16 +95,16 @@ private:
     Glib::Property<eng::LibFilePtr>   m_libfileproperty;
     Glib::Property<eng::FileStatus> m_statusproperty;
 
-    Cairo::RefPtr<Cairo::ImageSurface>  m_raw_format_emblem;
-    Cairo::RefPtr<Cairo::ImageSurface>  m_rawjpeg_format_emblem;
-    Cairo::RefPtr<Cairo::ImageSurface>  m_img_format_emblem;
-    Cairo::RefPtr<Cairo::ImageSurface>  m_video_format_emblem;
-    Cairo::RefPtr<Cairo::ImageSurface>  m_unknown_format_emblem;
+    Glib::RefPtr<Gdk::Pixbuf>  m_raw_format_emblem;
+    Glib::RefPtr<Gdk::Pixbuf>  m_rawjpeg_format_emblem;
+    Glib::RefPtr<Gdk::Pixbuf>  m_img_format_emblem;
+    Glib::RefPtr<Gdk::Pixbuf>  m_video_format_emblem;
+    Glib::RefPtr<Gdk::Pixbuf>  m_unknown_format_emblem;
 
-    Cairo::RefPtr<Cairo::ImageSurface>  m_status_missing;
+    Glib::RefPtr<Gdk::Pixbuf>  m_status_missing;
 
-    Cairo::RefPtr<Cairo::ImageSurface>  m_flag_reject;
-    Cairo::RefPtr<Cairo::ImageSurface>  m_flag_pick;
+    Glib::RefPtr<Gdk::Pixbuf>  m_flag_reject;
+    Glib::RefPtr<Gdk::Pixbuf>  m_flag_pick;
 };
 
 }

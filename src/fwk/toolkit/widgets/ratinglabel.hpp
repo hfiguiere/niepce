@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/ratinglabel.hpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FWK_TOOLKIT_RATINGLABEL_HPP__
-#define __FWK_TOOLKIT_RATINGLABEL_HPP__
+#pragma once
 
 #include <gtkmm/drawingarea.h>
 #include <cairomm/surface.h>
@@ -37,15 +36,15 @@ public:
   void set_editable(bool);
 
   void set_rating(int rating);
-  static const Cairo::RefPtr<Cairo::ImageSurface> & get_star();
-  static const Cairo::RefPtr<Cairo::ImageSurface> & get_unstar();
+  static const Glib::RefPtr<Gdk::Pixbuf> & get_star();
+  static const Glib::RefPtr<Gdk::Pixbuf> & get_unstar();
 
   // draw the rating at x and y in the context.
   // this can be called by anybody who wants to print these
-  static void draw_rating(const Cairo::RefPtr<Cairo::Context> & cr, 
+  static void draw_rating(const Cairo::RefPtr<Cairo::Context> & cr,
 			  int32_t rating,
-			  const Cairo::RefPtr<Cairo::ImageSurface> & star,
-			  const Cairo::RefPtr<Cairo::ImageSurface> & unstar,
+			  const Glib::RefPtr<Gdk::Pixbuf> & star,
+			  const Glib::RefPtr<Gdk::Pixbuf> & unstar,
 			  double x, double y);
   static void get_geometry(double & w, double & h);
   static int rating_value_from_hit_x(double x);
@@ -66,5 +65,3 @@ private:
 };
 
 }
-
-#endif
