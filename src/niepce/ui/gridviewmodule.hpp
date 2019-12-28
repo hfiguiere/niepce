@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.hpp
  *
- * Copyright (C) 2009-2014 Hubert Figuiere
+ * Copyright (C) 2009-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#ifndef __UI_GRIDVIEWMODULE_HPP_
-#define __UI_GRIDVIEWMODULE_HPP_
+#pragma once
 
 #include <gtkmm/iconview.h>
 #include <gtkmm/scrolledwindow.h>
@@ -90,8 +87,7 @@ private:
   MetaDataPaneController::Ptr  m_metapanecontroller;
   Gtk::Paned                   m_lib_splitview;
   fwk::Dock                   *m_dock;
+  Gtk::Menu* m_context_menu;
 };
 
-
 }
-#endif

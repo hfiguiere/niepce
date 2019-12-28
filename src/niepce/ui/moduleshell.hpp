@@ -80,7 +80,7 @@ public:
         {
             return m_libraryclient->getDataProvider();
         }
-    Glib::RefPtr<Gio::Menu> getMenu() const
+    virtual Glib::RefPtr<Gio::Menu> getMenu() const override
         { return m_menu; }
 
     /** called when the content will change

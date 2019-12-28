@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imoduleshell.hpp
  *
- * Copyright (C) 2011-2017 Hubert Figuiere
+ * Copyright (C) 2011-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef _UI_IMODULESHELL_HPP__
-#define _UI_IMODULESHELL_HPP__
+#pragma once
 
 #include <memory>
+#include <giomm/menu.h>
 #include "niepce/ui/selectioncontroller.hpp"
 
 namespace libraryclient {
@@ -37,11 +36,11 @@ public:
     virtual const ui::SelectionController::Ptr & get_selection_controller() const = 0;
     virtual libraryclient::LibraryClientPtr getLibraryClient() const = 0;
     virtual const std::unique_ptr<libraryclient::UIDataProvider>& get_ui_data_provider() const = 0;
+    virtual Glib::RefPtr<Gio::Menu> getMenu() const = 0;
 };
 
 }
 
-#endif
 /*
   Local Variables:
   mode:c++

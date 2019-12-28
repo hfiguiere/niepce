@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.cpp
  *
- * Copyright (C) 2009-2018 Hubert Figuiere
+ * Copyright (C) 2009-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@
 
 namespace ui {
 
-
 GridViewModule::GridViewModule(const IModuleShell & shell,
                                const Glib::RefPtr<ImageListStore> & store)
   : m_shell(shell)
@@ -44,6 +43,7 @@ GridViewModule::GridViewModule(const IModuleShell & shell,
   , m_librarylistview(nullptr)
   , m_lib_splitview(Gtk::ORIENTATION_HORIZONTAL)
   , m_dock(nullptr)
+  , m_context_menu(nullptr)
 {
 }
 
@@ -82,12 +82,10 @@ GridViewModule::on_lib_notification(const eng::LibNotification &ln)
     }
 }
 
-
 void GridViewModule::display_none()
 {
     m_metapanecontroller->display(0, nullptr);
 }
-
 
 Gtk::Widget * GridViewModule::buildWidget()
 {
@@ -101,6 +99,10 @@ Gtk::Widget * GridViewModule::buildWidget()
   m_librarylistview->property_column_spacing() = 0;
   m_librarylistview->property_spacing() = 0;
   m_librarylistview->property_margin() = 0;
+
+  auto shell_menu = m_shell.getMenu();
+  m_context_menu = Gtk::manage(new Gtk::Menu(shell_menu));
+  m_context_menu->attach_to_widget(*m_librarylistview);
 
   m_librarylistview->signal_button_press_event()
       .connect(sigc::mem_fun(*this,  &GridViewModule::on_librarylistview_click));
@@ -145,7 +147,6 @@ Gtk::Widget * GridViewModule::buildWidget()
   return m_widget;
 }
 
-
 void GridViewModule::dispatch_action(const std::string & /*action_name*/)
 {
 }
@@ -153,7 +154,6 @@ void GridViewModule::dispatch_action(const std::string & /*action_name*/)
 void GridViewModule::set_active(bool /*active*/)
 {
 }
-
 
 Gtk::IconView * GridViewModule::image_list()
 {
@@ -195,7 +195,6 @@ void GridViewModule::select_image(eng::library_id_t id)
     }
 }
 
-
 void GridViewModule::on_metadata_changed(const fwk::PropertyBagPtr & props,
                                          const fwk::PropertyBagPtr & old)
 {
@@ -211,6 +210,14 @@ void GridViewModule::on_rating_changed(int /*id*/, int rating)
 
 bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
 {
+    guint button = 0;
+    GdkEvent* event = (GdkEvent*)e;
+    if (gdk_event_get_button(event, &button)) {
+        if (button == 3) {
+            m_context_menu->popup_at_pointer(event);
+            return false;
+        }
+    }
     double x, y;
     int bx, by;
     bx = by = 0;
@@ -220,14 +227,13 @@ bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
     Gtk::CellRenderer * renderer = nullptr;
     DBG_OUT("click (%f, %f)", x, y);
     m_librarylistview->convert_widget_to_bin_window_coords(x, y, bx, by);
-    if(m_librarylistview->get_item_at_pos(bx, by, path, renderer)){
+    if (m_librarylistview->get_item_at_pos(bx, by, path, renderer)){
         DBG_OUT("found an item");
 
         return true;
     }
     return false;
 }
-
 
 }
 /*
