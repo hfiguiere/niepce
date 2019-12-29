@@ -118,20 +118,20 @@ void Application::on_startup()
 
 void Application::init_actions()
 {
-    fwk::add_action(m_gtkapp, "OpenCatalog",
+    fwk::add_action(m_gtkapp.get(), "OpenCatalog",
                     sigc::mem_fun(*this,
                                   &Application::on_action_file_open),
                     "app", "<Primary>o");
-    fwk::add_action(m_gtkapp, "Preferences",
+    fwk::add_action(m_gtkapp.get(), "Preferences",
                     sigc::mem_fun(*this,
                                   &Application::on_action_preferences));
-    fwk::add_action(m_gtkapp, "Help",
+    fwk::add_action(m_gtkapp.get(), "Help",
                     sigc::mem_fun(*this,
                                   &Application::about));
-    fwk::add_action(m_gtkapp, "About",
+    fwk::add_action(m_gtkapp.get(), "About",
                     sigc::mem_fun(*this,
                                   &Application::about));
-    fwk::add_action(m_gtkapp, "Quit",
+    fwk::add_action(m_gtkapp.get(), "Quit",
                     sigc::mem_fun(*this,
                                   &Application::quit),
                     "app", "<Primary>q");

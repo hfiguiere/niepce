@@ -1,5 +1,5 @@
 /*
- * niepce - fwk/toolkit/appframe.hpp
+ * niepce - fwk/toolkit/appframe.cpp
  *
  * Copyright (C) 2019 Hubert Figuière
  *
@@ -17,34 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <gtkmm/applicationwindow.h>
-
-#include "fwk/toolkit/frame.hpp"
+#include "appframe.hpp"
 
 namespace fwk {
 
-class AppFrame
-  : public Frame
+AppFrame::AppFrame(const std::string & layout_cfg_key)
+  : Frame(new Gtk::ApplicationWindow(), layout_cfg_key)
 {
-public:
-  typedef std::shared_ptr<AppFrame> Ptr;
-  typedef std::weak_ptr<AppFrame> WeakPtr;
+}
 
-  AppFrame(const std::string & layout_cfg_key = "");
-
-  virtual void on_ready() override;
-
-  Gtk::ApplicationWindow* gtkAppWindow()
-    {
-      return dynamic_cast<Gtk::ApplicationWindow*>(&gtkWindow());
-    }
-  Glib::RefPtr<Gio::Menu> get_menu() const
-    { return m_menu; }
-
-protected:
-  Glib::RefPtr<Gio::Menu> m_menu;
-};
+void AppFrame::on_ready()
+{
+  gtkWindow().show();
+}
 
 }

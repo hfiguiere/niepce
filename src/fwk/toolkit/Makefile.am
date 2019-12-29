@@ -31,6 +31,7 @@ testconfigdatabinder_LDADD = $(testing_ldadd)
 
 libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	application.hpp application.cpp \
+	appframe.hpp appframe.cpp \
 	dialog.hpp dialog.cpp \
 	frame.hpp frame.cpp \
 	controller.hpp controller.cpp \

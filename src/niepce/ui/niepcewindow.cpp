@@ -56,7 +56,6 @@ using fwk::UndoHistory;
 
 namespace ui {
 
-
 NiepceWindow::NiepceWindow()
     : fwk::AppFrame("mainWindow-frame")
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
@@ -211,27 +210,28 @@ void NiepceWindow::init_actions()
     Glib::RefPtr<Gio::Menu> submenu;
     Glib::RefPtr<Gio::Menu> section;
 
-    m_action_group = Gio::SimpleActionGroup::create();
-    gtkWindow().insert_action_group("win", m_action_group);
-
-    fwk::add_action(m_action_group, "Close",
+    // Get the action group.
+    // Gtkmm doesn't allow GActionMap from GtkApplicationWindow
+    auto action_map = dynamic_cast<Gio::ActionMap*>(&gtkWindow());
+    DBG_ASSERT(action_map, "Not an action map");
+    fwk::add_action(action_map, "Close",
                     sigc::mem_fun(
                         gtkWindow(), &Gtk::Window::hide), "win", "<Primary>w");
 
     // XXX Move to shell?
-    create_undo_action(m_action_group);
-    create_redo_action(m_action_group);
+    create_undo_action(action_map);
+    create_redo_action(action_map);
 
-    fwk::add_action(m_action_group, "Cut",
+    fwk::add_action(action_map, "Cut",
                     Gio::ActionMap::ActivateSlot(),
                     "win", "<control>x");
-    fwk::add_action(m_action_group, "Copy",
+    fwk::add_action(action_map, "Copy",
                     Gio::ActionMap::ActivateSlot(),
                     "win", "<control>c");
-    fwk::add_action(m_action_group, "Paste",
+    fwk::add_action(action_map, "Paste",
                     Gio::ActionMap::ActivateSlot(),
                     "win" "<control>v");
-    fwk::add_action(m_action_group, "Delete",
+    fwk::add_action(action_map, "Delete",
                     sigc::mem_fun(*this, &NiepceWindow::on_action_edit_delete),
                     "win", "Delete");
 
@@ -244,11 +244,11 @@ void NiepceWindow::init_actions()
     section = Gio::Menu::create();
     m_main_menu->append_section(section);
     m_hide_tools_action
-        = fwk::add_menu_action(m_action_group, "ToggleToolsVisible",
+        = fwk::add_menu_action(action_map, "ToggleToolsVisible",
                                sigc::mem_fun(*this, &Frame::toggle_tools_visible),
                                section, _("Hide tools"), "win",
                                nullptr);
-    fwk::add_menu_action(m_action_group, "EditLabels",
+    fwk::add_menu_action(action_map, "EditLabels",
                          sigc::mem_fun(*this, &NiepceWindow::on_action_edit_labels),
                          section, _("Edit Labels..."), "win", nullptr);
     section->append(_("Preferences..."), "app.Preferences");
@@ -407,11 +407,7 @@ void NiepceWindow::set_title(const std::string & title)
     Frame::set_title(_("Niepce Digital - ") + title);
 }
 
-
 }
-
-
-
 /*
   Local Variables:
   mode:c++

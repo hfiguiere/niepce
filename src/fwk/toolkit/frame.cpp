@@ -144,7 +144,7 @@ void Frame::redo_state()
 
 
 Glib::RefPtr<Gio::Action>
-Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g)
+Frame::create_undo_action(Gio::ActionMap* g)
 {
     m_undo_action = fwk::add_action(g, "Undo",
                                     sigc::mem_fun(Application::app()->undo_history(),
@@ -158,7 +158,7 @@ Frame::create_undo_action(const Glib::RefPtr<Gio::ActionMap> & g)
 
 
 Glib::RefPtr<Gio::Action>
-Frame::create_redo_action(const Glib::RefPtr<Gio::ActionMap> & g)
+Frame::create_redo_action(Gio::ActionMap* g)
 {
     m_redo_action = fwk::add_action(g, "Redo",
                                     sigc::mem_fun(Application::app()->undo_history(),

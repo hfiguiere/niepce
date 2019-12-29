@@ -55,13 +55,13 @@ Gtk::Widget * ModuleShell::buildWidget()
     m_menu = Gio::Menu::create();
 
     // "go-previous"
-    fwk::add_menu_action(m_actionGroup, "PrevImage",
+    fwk::add_menu_action(m_actionGroup.get(), "PrevImage",
                          sigc::mem_fun(*m_selection_controller,
                                        &SelectionController::select_previous),
                          m_menu, _("Back"), "shell", "Left");
 
     // "go-next"
-    fwk::add_menu_action(m_actionGroup, "NextImage",
+    fwk::add_menu_action(m_actionGroup.get(), "NextImage",
                          sigc::mem_fun(*m_selection_controller,
                                   &SelectionController::select_next),
                          m_menu, _("Forward"), "shell", "Right");
@@ -70,14 +70,14 @@ Gtk::Widget * ModuleShell::buildWidget()
     m_menu->append_section(section);
 
     // "object-rotate-left"
-    fwk::add_menu_action(m_actionGroup, "RotateLeft",
+    fwk::add_menu_action(m_actionGroup.get(), "RotateLeft",
                          sigc::bind(
                              sigc::mem_fun(*m_selection_controller,
                                            &SelectionController::rotate), -90),
                          section, _("Rotate Left"), "shell", "bracketleft");
 
     // "object-rotate-right"
-    fwk::add_menu_action(m_actionGroup, "RotateRight",
+    fwk::add_menu_action(m_actionGroup.get(), "RotateRight",
                          sigc::bind(
                              sigc::mem_fun(*m_selection_controller,
                                            &SelectionController::rotate), 90),
@@ -89,25 +89,25 @@ Gtk::Widget * ModuleShell::buildWidget()
     auto submenu = Gio::Menu::create();
     section->append_submenu(_("Set Label"), submenu);
 
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetLabel6",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_label),
                                     1),
                          submenu, _("Label 6"), "shell", "<Primary>6");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetLabel7",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_label),
                                     2),
                          submenu, _("Label 7"), "shell", "<Primary>7");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetLabel8",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_label),
                                     3),
                          submenu, _("Label 8"), "shell", "<Primary>8");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetLabel9",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_label),
@@ -117,37 +117,37 @@ Gtk::Widget * ModuleShell::buildWidget()
     submenu = Gio::Menu::create();
     section->append_submenu(_("Set Rating"), submenu);
 
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating0",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_rating),
                                     0),
                          submenu, _("Unrated"), "shell", "<Primary>0");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating1",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                              &SelectionController::set_rating),
                                     1),
                          submenu, _("Rating 1"), "shell", "<Primary>1");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating2",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_rating),
                                     2),
                          submenu, _("Rating 2"), "shell", "<Primary>2");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating3",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_rating),
                                     3),
                          submenu, _("Rating 3"), "shell", "<Primary>3");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating4",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_rating),
                                     4),
                          submenu, _("Rating 4"), "shell", "<Primary>4");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetRating5",
                          sigc::bind(sigc::mem_fun(*m_selection_controller,
                                                   &SelectionController::set_rating),
@@ -157,21 +157,21 @@ Gtk::Widget * ModuleShell::buildWidget()
     submenu = Gio::Menu::create();
     section->append_submenu(_("Set Flag"), submenu);
 
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetFlagReject",
                          sigc::bind(
                              sigc::mem_fun(*m_selection_controller,
                                            &SelectionController::set_flag),
                              -1),
                          submenu, _("Flag as Rejected"), "shell", "<Primary><Shift>x");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "SetFlagNone",
                          sigc::bind(
                              sigc::mem_fun(*m_selection_controller,
                                            &SelectionController::set_flag),
                              0),
                          submenu, _("Unflagged"), "shell", "<Primary><Shift>u");
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                           "SetFlagPick",
                          sigc::bind(
                              sigc::mem_fun(*m_selection_controller,
@@ -182,7 +182,7 @@ Gtk::Widget * ModuleShell::buildWidget()
     section = Gio::Menu::create();
     m_menu->append_section(section);
 
-    fwk::add_menu_action(m_actionGroup,
+    fwk::add_menu_action(m_actionGroup.get(),
                          "WriteMetadata",
                          sigc::mem_fun(*m_selection_controller,
                                        &SelectionController::write_metadata),

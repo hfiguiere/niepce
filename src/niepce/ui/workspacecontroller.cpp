@@ -436,14 +436,14 @@ Gtk::Widget * WorkspaceController::buildWidget()
 
     auto section = Gio::Menu::create();
     menu->append_section(section);
-    fwk::add_menu_action(m_action_group, "NewFolder",
+    fwk::add_menu_action(m_action_group.get(), "NewFolder",
                          sigc::mem_fun(*this,
                                        &WorkspaceController::action_new_folder),
                          section, _("New Folder..."), "workspace");
 
     section->append(_("New Project..."), "NewProject");
 
-    auto action = fwk::add_menu_action(m_action_group, "DeleteFolder",
+    auto action = fwk::add_menu_action(m_action_group.get(), "DeleteFolder",
                                        sigc::mem_fun(
                                            *this, &WorkspaceController::action_delete_folder),
                                        section, _("Delete Folder"), "workspace");
@@ -452,7 +452,7 @@ Gtk::Widget * WorkspaceController::buildWidget()
     section = Gio::Menu::create();
     menu->append_section(section);
 
-    fwk::add_menu_action(m_action_group, "Import",
+    fwk::add_menu_action(m_action_group.get(), "Import",
                          sigc::mem_fun(*this,
                                        &WorkspaceController::action_file_import),
                          section, _("_Import..."), "workspace");

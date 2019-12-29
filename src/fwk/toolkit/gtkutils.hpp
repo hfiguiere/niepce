@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/gtkutils.hpp
  *
- * Copyright (C) 2009-2014 Hubert Figuiere
+ * Copyright (C) 2009-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __FWK_GTKUTILS_H__
-#define __FWK_GTKUTILS_H__
+#pragma once
 
 #include <string>
 
@@ -29,25 +28,24 @@
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
 
-
 namespace fwk {
 
 Glib::RefPtr<Gio::SimpleAction>
-add_action(const Glib::RefPtr<Gio::ActionMap> & group,
+add_action(Gio::ActionMap* group,
            const char* name,
            const Gio::ActionMap::ActivateSlot& slot,
            const char* context = nullptr,
            const char* accel = nullptr);
 
 /** Helper to add an action with a menu.
- * @param group the action group
+ * @param group the action group (raw pointer)
  * @param name the action name
  * @param slot the action slot
  * @param menu the menu append the action to.
  * @param label the label of the menu
  */
 Glib::RefPtr<Gio::SimpleAction>
-add_menu_action(const Glib::RefPtr<Gio::ActionMap> & group,
+add_menu_action(Gio::ActionMap* group,
                 const char* name,
                 const Gio::ActionMap::ActivateSlot& slot,
                 const Glib::RefPtr<Gio::Menu> & menu,
@@ -100,9 +98,6 @@ public:
 };
 
 }
-
-
-#endif
 /*
   Local Variables:
   mode:c++

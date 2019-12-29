@@ -24,7 +24,7 @@
 namespace fwk {
 
 Glib::RefPtr<Gio::SimpleAction>
-add_action(const Glib::RefPtr<Gio::ActionMap> & group,
+add_action(Gio::ActionMap* group,
            const char* name,
            const Gio::ActionMap::ActivateSlot& slot,
            const char* context,
@@ -42,7 +42,7 @@ add_action(const Glib::RefPtr<Gio::ActionMap> & group,
 }
 
 Glib::RefPtr<Gio::SimpleAction>
-add_menu_action(const Glib::RefPtr<Gio::ActionMap> & group,
+add_menu_action(Gio::ActionMap* group,
                 const char* name,
                 const Gio::ActionMap::ActivateSlot& slot,
                 const Glib::RefPtr<Gio::Menu> & menu,

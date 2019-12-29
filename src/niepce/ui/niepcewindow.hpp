@@ -85,7 +85,6 @@ private:
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
     Gtk::Statusbar                 m_statusBar;
-    Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
     libraryclient::LibraryClientPtr m_libClient;
     fwk::Configuration::Ptr        m_library_cfg;
 };
