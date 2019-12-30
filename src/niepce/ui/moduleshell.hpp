@@ -106,6 +106,7 @@ protected:
 private:
     libraryclient::LibraryClientPtr m_libraryclient;
     Glib::RefPtr<Gio::SimpleActionGroup> m_actionGroup;
+    ui::SelectionController::Ptr  m_selection_controller;
     std::map<std::string, ILibraryModule::Ptr> m_modules;
 
     // managed widgets...
@@ -113,7 +114,6 @@ private:
     Glib::RefPtr<Gio::Menu>       m_menu;
     Glib::RefPtr<Gio::Menu>       m_module_menu;
 
-    ui::SelectionController::Ptr  m_selection_controller;
     // these should be dynamic
     GridViewModule::Ptr           m_gridview;
     dr::DarkroomModule::Ptr       m_darkroom;

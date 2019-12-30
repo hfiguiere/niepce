@@ -77,11 +77,11 @@ private:
     void _createModuleShell();
 
     niepce::NotificationCenter::Ptr m_notifcenter;
+    ModuleShell::Ptr               m_moduleshell; // the main views stacked.
 
     Gtk::Box                       m_vbox;
     Gtk::Paned                     m_hbox;
     Glib::RefPtr<Gio::Menu>        m_main_menu;
-    ModuleShell::Ptr               m_moduleshell; // the main views stacked.
     WorkspaceController::Ptr       m_workspacectrl;
     FilmStripController::Ptr       m_filmstrip;
     Gtk::Statusbar                 m_statusBar;
