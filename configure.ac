@@ -58,7 +58,7 @@ AC_LANG_CPLUSPLUS
 AC_LANG_COMPILER_REQUIRE
 
 dnl Framework requirements.
-PKG_CHECK_MODULES(FRAMEWORK, [glibmm-2.4 >= $LIBGLIBMM_VERSION giomm-2.4 >= $LIBGIOMM_VERSION gthread-2.0 gtkmm-3.0 >= $LIBGTKMM_VERSION sqlite3 >= $SQLITE_VERSION exempi-2.0 >= $EXEMPI_VERSION libxml-2.0 >= $LIBXML2_VERSION champlain-gtk-0.12])
+PKG_CHECK_MODULES(FRAMEWORK, [glibmm-2.4 >= $LIBGLIBMM_VERSION giomm-2.4 >= $LIBGIOMM_VERSION gthread-2.0 gtkmm-3.0 >= $LIBGTKMM_VERSION sqlite3 >= $SQLITE_VERSION exempi-2.0 >= $EXEMPI_VERSION libxml-2.0 >= $LIBXML2_VERSION osmgpsmap-1.0])
 
 dnl optional framework
 PKG_CHECK_MODULES(GPHOTO, [libgphoto2 >= $LIBGPHOTO_VERSION libgphoto2_port])

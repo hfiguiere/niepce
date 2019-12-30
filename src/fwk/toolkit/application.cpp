@@ -21,7 +21,6 @@
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/settings.h>
-#include <clutter-gtk/clutter-gtk.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/utils/modulemanager.hpp"
@@ -40,10 +39,6 @@ Application::Application(int & argc, char** &argv, const char* app_id,
     , m_module_manager(new ModuleManager())
     , m_gtkapp(Gtk::Application::create(argc, argv, app_id))
 {
-    ClutterInitError error = gtk_clutter_init(&argc, &argv);
-    if (error != CLUTTER_INIT_SUCCESS) {
-        ERR_OUT("clutter init error: %d", (int)error);
-    }
     m_gtkapp->signal_startup().connect(
         sigc::mem_fun(*this, &Application::on_startup));
     getIconTheme()->add_resource_path("/org/gnome/Niepce");

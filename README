@@ -31,7 +31,7 @@ glibmm 2.32
 gtkmm 3.16
 giomm
 cairomm
-champlain-gtk 0.12
+osm-gps-map 1.1
 sqlite3
 libxml2 > 2.5.0
 boost 1.60

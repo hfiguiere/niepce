@@ -19,25 +19,43 @@
 
 #include "mapcontroller.hpp"
 
-#include <champlain-gtk/champlain-gtk.h>
-
 #include <gtkmm/widget.h>
+#include <osm-gps-map.h>
 
 namespace fwk {
 
 class MapController::Priv {
 public:
     Priv()
-        : m_clutter_map(nullptr)
+        : m_map(nullptr)
         {
         }
     ~Priv()
         {
-            if (m_clutter_map) {
-                g_object_unref(G_OBJECT(m_clutter_map));
+            if (m_map) {
+                g_object_unref(G_OBJECT(m_map));
             }
         }
-    ChamplainView* m_clutter_map;
+    void create_widget()
+        {
+            m_map = OSM_GPS_MAP(osm_gps_map_new());
+            g_object_ref(m_map);
+
+            OsmGpsMapLayer* osd = OSM_GPS_MAP_LAYER(
+                g_object_new (OSM_TYPE_GPS_MAP_OSD,
+                              "show-scale", TRUE,
+                              "show-coordinates", TRUE,
+                              "show-crosshair", TRUE,
+                              "show-dpad", TRUE,
+                              "show-zoom", TRUE,
+                              "show-gps-in-dpad", TRUE,
+                              "show-gps-in-zoom", FALSE,
+                              "dpad-radius", 30,
+                              nullptr));
+            osm_gps_map_layer_add(OSM_GPS_MAP(m_map), osd);
+            g_object_unref(G_OBJECT(osd));
+        }
+    OsmGpsMap* m_map;
 };
 
 MapController::MapController()
@@ -58,11 +76,9 @@ MapController::buildWidget()
         return m_widget;
     }
 
-    auto embed = gtk_champlain_embed_new();
-    m_widget = Gtk::manage(Glib::wrap(embed));
+    m_priv->create_widget();
 
-    m_priv->m_clutter_map = gtk_champlain_embed_get_view(GTK_CHAMPLAIN_EMBED(embed));
-    g_object_ref(G_OBJECT(m_priv->m_clutter_map));
+    m_widget = Gtk::manage(Glib::wrap(GTK_WIDGET(m_priv->m_map)));
 
     // Default position. Somewhere over Montréal, QC
     setZoomLevel(10);
@@ -73,22 +89,22 @@ MapController::buildWidget()
 
 void MapController::centerOn(double lat, double longitude)
 {
-    champlain_view_center_on(m_priv->m_clutter_map, lat, longitude);
+    osm_gps_map_set_center(m_priv->m_map, lat, longitude);
 }
 
 void MapController::zoomIn()
 {
-    champlain_view_zoom_in(m_priv->m_clutter_map);
+    osm_gps_map_zoom_in(m_priv->m_map);
 }
 
 void MapController::zoomOut()
 {
-    champlain_view_zoom_out(m_priv->m_clutter_map);
+    osm_gps_map_zoom_out(m_priv->m_map);
 }
 
 void MapController::setZoomLevel(uint8_t level)
 {
-    champlain_view_set_zoom_level(m_priv->m_clutter_map, level);
+    osm_gps_map_set_zoom(m_priv->m_map, level);
 }
 
 }
