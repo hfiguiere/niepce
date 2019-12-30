@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/mapcontroller.hpp
  *
- * Copyright (C) 2014 Hubert Figuiere
+ * Copyright (C) 2014-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <champlain-gtk/champlain-gtk.h>
-
 #include "fwk/toolkit/uicontroller.hpp"
 
 namespace fwk {
@@ -31,17 +29,9 @@ class MapController
 public:
     typedef std::shared_ptr<MapController> Ptr;
 
-    MapController()
-        : UiController()
-        , m_clutter_map(nullptr)
-        {
-        }
-    ~MapController()
-        {
-            if (m_clutter_map) {
-                g_object_unref(G_OBJECT(m_clutter_map));
-            }
-        }
+    MapController();
+    virtual ~MapController();
+
     virtual Gtk::Widget * buildWidget() override;
 
     void centerOn(double lat, double longitude);
@@ -51,7 +41,8 @@ public:
     void setZoomLevel(uint8_t level); // 1 to 20
 
 private:
-    ChamplainView* m_clutter_map;
+    class Priv;
+    Priv* m_priv;
 };
 
 
@@ -61,6 +52,8 @@ private:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset:4
+  tab-width:4
   indent-tabs-mode:nil
   fill-column:99
   End:
