@@ -105,7 +105,9 @@ Gtk::Widget * GridViewModule::buildWidget()
   m_context_menu->attach_to_widget(*m_librarylistview);
 
   m_librarylistview->signal_button_press_event()
-      .connect(sigc::mem_fun(*this,  &GridViewModule::on_librarylistview_click));
+      .connect(sigc::mem_fun(*this, &GridViewModule::on_librarylistview_click));
+  m_librarylistview->signal_popup_menu()
+      .connect(sigc::mem_fun(*this, &GridViewModule::on_popup_menu));
 
   // the main cell
   LibraryCellRenderer* libcell = Gtk::manage(new LibraryCellRenderer(m_shell));
@@ -208,15 +210,22 @@ void GridViewModule::on_rating_changed(int /*id*/, int rating)
     m_shell.get_selection_controller()->set_rating(rating);
 }
 
+bool GridViewModule::on_popup_menu()
+{
+    if (m_context_menu && !m_librarylistview->get_selected_items().empty()) {
+        m_context_menu->popup_at_widget(m_librarylistview, Gdk::GRAVITY_CENTER, Gdk::GRAVITY_NORTH, nullptr);
+        return true;
+    }
+    return false;
+}
+
 bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
 {
-    guint button = 0;
     GdkEvent* event = (GdkEvent*)e;
-    if (gdk_event_get_button(event, &button)) {
-        if (button == 3) {
-            m_context_menu->popup_at_pointer(event);
-            return false;
-        }
+    if (gdk_event_triggers_context_menu(event)
+        && gdk_event_get_event_type(event) == GDK_BUTTON_PRESS
+        && !m_librarylistview->get_selected_items().empty()) {
+        m_context_menu->popup_at_pointer(event);
     }
     double x, y;
     int bx, by;
@@ -241,6 +250,8 @@ bool GridViewModule::on_librarylistview_click(GdkEventButton *e)
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset:4
+  tab-width:4
   indent-tabs-mode:nil
   fill-column:80
   End:
