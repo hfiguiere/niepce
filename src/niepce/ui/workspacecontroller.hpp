@@ -101,6 +101,8 @@ private:
                          const Gtk::TreePath& path);
     void on_row_collapsed(const Gtk::TreeIter& iter,
                           const Gtk::TreePath& path);
+    bool on_popup_menu();
+    void on_button_press_event(GdkEventButton *event);
 
     libraryclient::LibraryClientPtr getLibraryClient() const;
     fwk::Configuration::Ptr getLibraryConfig() const;
@@ -143,6 +145,7 @@ private:
     Gtk::Box                       m_vbox;
     Gtk::Label                     m_label;
     Gtk::TreeView                  m_librarytree;
+    Gtk::Menu* m_context_menu;
     Gtk::TreeModel::iterator       m_folderNode;  /**< the folder node */
     Gtk::TreeModel::iterator       m_projectNode; /**< the project node */
     Gtk::TreeModel::iterator       m_keywordsNode; /**< the keywords node */

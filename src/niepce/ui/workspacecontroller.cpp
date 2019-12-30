@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.cpp
  *
- * Copyright (C) 2007-2018 Hubert Figuiere
+ * Copyright (C) 2007-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <boost/any.hpp>
 
 #include <glibmm/i18n.h>
 
@@ -51,6 +49,7 @@ WorkspaceController::WorkspaceController(const Glib::RefPtr<Gio::SimpleActionGro
     : fwk::UiController()
     , m_action_group(action_group)
     , m_vbox(Gtk::ORIENTATION_VERTICAL)
+    , m_context_menu(nullptr)
 {
     static struct _Icons {
         int icon_id;
@@ -396,6 +395,7 @@ Gtk::Widget * WorkspaceController::buildWidget()
     m_widget = &m_vbox;
     m_treestore = Gtk::TreeStore::create(m_librarycolumns);
     m_librarytree.set_model(m_treestore);
+    m_librarytree.set_activate_on_single_click(true);
     DBG_ASSERT(m_treestore->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST,
         "Model isn't persistent");
 
@@ -465,6 +465,9 @@ Gtk::Widget * WorkspaceController::buildWidget()
     m_vbox.pack_start(*scrolled);
     scrolled->add(m_librarytree);
 
+    m_context_menu = Gtk::manage(new Gtk::Menu(menu));
+    m_context_menu->attach_to_widget(m_librarytree);
+
     m_librarytree.get_selection()->signal_changed().connect (
         sigc::mem_fun(this,
                       &WorkspaceController::on_libtree_selection));
@@ -474,7 +477,10 @@ Gtk::Widget * WorkspaceController::buildWidget()
     m_librarytree.signal_row_collapsed().connect(
         sigc::mem_fun(this,
                       &WorkspaceController::on_row_collapsed));
-
+    m_librarytree.signal_popup_menu()
+        .connect(sigc::mem_fun(*this, &WorkspaceController::on_popup_menu));
+    m_librarytree.signal_button_press_event()
+        .connect_notify(sigc::mem_fun(*this, &WorkspaceController::on_button_press_event));
     return m_widget;
 }
 
@@ -500,12 +506,35 @@ void WorkspaceController::on_ready()
     }
 }
 
+bool WorkspaceController::on_popup_menu()
+{
+    if (m_context_menu && m_librarytree.get_selection()->count_selected_rows() != 0) {
+        m_context_menu->popup_at_widget(&m_librarytree, Gdk::GRAVITY_CENTER,
+                                        Gdk::GRAVITY_NORTH, nullptr);
+        return true;
+    }
+    return false;
+}
+
+void WorkspaceController::on_button_press_event(GdkEventButton* e)
+{
+    GdkEvent* event = (GdkEvent*)e;
+    if (gdk_event_triggers_context_menu(event)
+        && gdk_event_get_event_type(event) == GDK_BUTTON_PRESS
+        && m_librarytree.get_selection()->count_selected_rows() != 0) {
+
+        m_context_menu->popup_at_pointer(event);
+    }
+}
+
 }
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
+  c-basic-offset:4
+  tab-width:4
   indent-tabs-mode:nil
   fill-column:80
   End:
