@@ -1,7 +1,7 @@
 /*
  * niepce - ui/niepceapplication.cpp
  *
- * Copyright (C) 2007-2015 Hubert Figuiere
+ * Copyright (C) 2007-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ void NiepceApplication::on_about()
 //    dlg.set_name("Niepce");
     dlg.set_program_name("Niepce Digital");
     dlg.set_version(VERSION);
-    dlg.set_logo_icon_name("camera-photo");
+    dlg.set_logo_icon_name("org.gnome.Niepce");
     dlg.set_license_type(Gtk::LICENSE_GPL_3_0);
     dlg.set_comments(Glib::ustring(_("A digital photo application.\n\n"
                                      "Build options: ")) +

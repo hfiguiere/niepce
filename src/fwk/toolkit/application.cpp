@@ -1,7 +1,7 @@
 /*
  * niepce - framework/application.cpp
  *
- * Copyright (C) 2007-2018 Hubert Figuiere
+ * Copyright (C) 2007-2019 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/settings.h>
@@ -39,6 +40,7 @@ Application::Application(int & argc, char** &argv, const char* app_id,
     , m_module_manager(new ModuleManager())
     , m_gtkapp(Gtk::Application::create(argc, argv, app_id))
 {
+    Glib::set_prgname(app_id);
     m_gtkapp->signal_startup().connect(
         sigc::mem_fun(*this, &Application::on_startup));
     getIconTheme()->add_resource_path("/org/gnome/Niepce");

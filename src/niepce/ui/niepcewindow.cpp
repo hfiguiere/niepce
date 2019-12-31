@@ -191,8 +191,9 @@ NiepceWindow::buildWidget()
 
     m_notifcenter = niepce::NotificationCenter::make(reinterpret_cast<uint64_t>(this));
 
-    Glib::ustring name("camera-photo");
+    Glib::ustring name("org.gnome.Niepce");
     set_icon_from_theme(name);
+    win.set_icon_name(name);
 
     m_notifcenter->signal_lib_notification.connect(
         sigc::mem_fun(*this, &NiepceWindow::on_lib_notification));

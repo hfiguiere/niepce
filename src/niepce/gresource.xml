@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/Niepce">
+    <file alias="/scalable/apps/org.gnome.Niepce.svg">data/org.gnome.Niepce.svg</file>
     <file alias="/pixmaps/niepce-set-star.png">data/icons/niepce-set-star.png</file>
     <file alias="/pixmaps/niepce-unset-star.png">data/icons/niepce-unset-star.png</file>
     <file alias="/pixmaps/niepce-missing.png">data/icons/niepce-missing.png</file>
