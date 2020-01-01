@@ -22,6 +22,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-engine/src/library/commands.rs \
 	@top_srcdir@/crates/npc-engine/src/library/mod.rs \
 	@top_srcdir@/crates/npc-engine/src/library/notification.rs \
+	@top_srcdir@/crates/npc-engine/src/library/queriedcontent.rs \
 	@top_srcdir@/crates/npc-engine/src/library/op.rs \
 	@top_srcdir@/crates/npc-engine/src/lib.rs \
 	@top_srcdir@/crates/npc-fwk/Cargo.toml \

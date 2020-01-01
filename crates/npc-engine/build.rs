@@ -20,8 +20,6 @@ fn main() {
         // bindings for.
         .whitelist_type("eng::NiepceProperties")
         .rustified_enum("eng::NiepceProperties")
-        .whitelist_type("eng::QueriedContent")
-        .opaque_type("eng::QueriedContent")
         .opaque_type("std::.*")
         .whitelist_type("fwk::FileList")
         .whitelist_type("eng::IndexToXmp")

@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/fsfile.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ use std::path::{Path, PathBuf};
 use super::LibraryId;
 
 /// Describe a file on the file system
+#[derive(Clone)]
 pub struct FsFile {
     id: LibraryId,
     path: PathBuf,

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.cpp
  *
- * Copyright (C) 2008-2018 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,20 +116,22 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     case eng::NotificationType::FOLDER_CONTENT_QUERIED:
     case eng::NotificationType::KEYWORD_CONTENT_QUERIED:
     {
-        auto param = engine_library_notification_get_content(&ln);
-        const auto& l = param->files;
+        auto content = engine_library_notification_get_content(&ln);
         if (type == eng::NotificationType::FOLDER_CONTENT_QUERIED) {
-            m_current_folder = param->container;
+            m_current_folder = ffi::engine_queried_content_id(content);
             m_current_keyword = 0;
         } else if (type == eng::NotificationType::KEYWORD_CONTENT_QUERIED) {
             m_current_folder = 0;
-            m_current_keyword = param->container;
+            m_current_keyword = ffi::engine_queried_content_id(content);
         }
         clear_content();
-        DBG_OUT("received folder content file # %lu", l->size());
-        for_each(l->cbegin(), l->cend(), [this] (const eng::LibFilePtr & f) {
-                this->add_libfile(f);
-            });
+        DBG_OUT("received folder content file # %lu", engine_queried_content_size(content));
+        eng::LibFileListPtr l(new eng::LibFileList);
+        for (uint64_t i = 0; i < engine_queried_content_size(content); i++) {
+            auto f = eng::libfile_wrap(engine_queried_content_get(content, i));
+            add_libfile(f);
+            l->push_back(f);
+        }
         // at that point clear the cache because the icon view is populated.
         getLibraryClient()->thumbnailCache().request(*l);
         break;

@@ -1,7 +1,7 @@
 /*
  * niepce - db/libfile.cpp
  *
- * Copyright (C) 2007-2009 Hubert Figuiere
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,38 +18,12 @@
  */
 
 #include "libfile.hpp"
-#include "engine/library/notification.hpp"
 
 namespace eng {
-
-// some glue for rust
-QueriedContent::QueriedContent(library_id_t _container)
-    : container(_container)
-    , files(new LibFileList)
-{
-}
-
-QueriedContent::~QueriedContent()
-{
-}
-
-void QueriedContent::push(void* f)
-{
-    files->push_back(eng::libfile_wrap(static_cast<LibFile*>(f)));
-}
 
 LibFilePtr libfile_wrap(eng::LibFile *lf)
 {
     return LibFilePtr(lf, &ffi::engine_db_libfile_delete);
-}
-
-
-LibFilePtr libfile_new(library_id_t id, library_id_t folder_id,
-                       library_id_t fs_file_id, const char *path,
-                       const char *name)
-{
-    return libfile_wrap(
-        ffi::engine_db_libfile_new(id, folder_id, fs_file_id, path, name));
 }
 
 /**

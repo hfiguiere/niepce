@@ -28,10 +28,6 @@
 namespace fwk {
 class FileList;
 }
-namespace eng {
-struct QueriedContent;
-}
-
 
 namespace ffi {
 class rust_str;
@@ -39,7 +35,6 @@ struct Utc;
 template <class T>
 struct DateTime;
 typedef rust_str str;
-typedef eng::QueriedContent QueriedContent;
 typedef eng::NiepceProperties Np;
 typedef fwk::FileList FileList;
 }

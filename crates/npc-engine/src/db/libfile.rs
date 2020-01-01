@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfile.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ impl Into<i32> for FileType {
     }
 }
 
+#[derive(Clone)]
 pub struct LibFile {
     id: LibraryId,
     folder_id: LibraryId,

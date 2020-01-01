@@ -1,7 +1,7 @@
 /*
- * niepce - engine/library/commands.rs
+ * niepce - npc-engine/library/commands.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use std::os::raw::c_void;
-
 use super::notification::LibNotification;
-use super::notification::{Content, Count, FileMove, MetadataChange};
+use super::notification::{Count, FileMove, MetadataChange};
+use super::queriedcontent::QueriedContent;
 use crate::db::filebundle::FileBundle;
 use crate::db::keyword::Keyword;
 use crate::db::label::Label;
@@ -185,13 +184,12 @@ pub fn cmd_request_metadata(lib: &Library, file_id: LibraryId) -> bool {
 pub fn cmd_query_folder_content(lib: &Library, folder_id: LibraryId) -> bool {
     match lib.get_folder_content(folder_id) {
         Ok(fl) => {
-            let mut value =
-                LibNotification::FolderContentQueried(unsafe { Content::new(folder_id) });
-            if let LibNotification::FolderContentQueried(ref mut content) = value {
-                for f in fl {
-                    unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
-                }
+            let mut content = QueriedContent::new(folder_id);
+            for f in fl {
+                content.push(f);
             }
+            let value = LibNotification::FolderContentQueried(content);
+
             // This time it's a fatal error since the purpose of this comand
             // is to retrieve.
             match lib.notify(value) {
@@ -273,9 +271,9 @@ pub fn cmd_add_keyword(lib: &Library, keyword: &str) -> LibraryId {
 pub fn cmd_query_keyword_content(lib: &Library, keyword_id: LibraryId) -> bool {
     match lib.get_keyword_content(keyword_id) {
         Ok(fl) => {
-            let mut content = unsafe { Content::new(keyword_id) };
+            let mut content = QueriedContent::new(keyword_id);
             for f in fl {
-                unsafe { content.push(Box::into_raw(Box::new(f)) as *mut c_void) };
+                content.push(f);
             }
             // This time it's a fatal error since the purpose of this comand
             // is to retrieve.

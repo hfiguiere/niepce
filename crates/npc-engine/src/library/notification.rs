@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/notification.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,12 @@
 
 use crate::db::libfile::FileStatus;
 use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId};
+use super::queriedcontent::QueriedContent;
 use npc_fwk::base::PropertyIndex;
 use npc_fwk::toolkit::PortableChannel;
 use npc_fwk::PropertyValue;
 
-#[cfg(not(test))]
-use crate::root::eng::QueriedContent;
-#[cfg(not(test))]
-pub type Content = QueriedContent;
-
 pub type LcChannel = PortableChannel<LibNotification>;
-
-// Content need to be stubbed for the test as it is a FFI struct
-// and is missing the proper C++ code.
-#[cfg(test)]
-#[derive(Clone, Copy)]
-pub struct Content {}
 
 #[repr(i32)]
 #[allow(non_camel_case_types)]
@@ -123,11 +113,11 @@ pub enum LibNotification {
     AddedLabel(Label),
     FileMoved(FileMove),
     FileStatusChanged(FileStatusChange),
-    FolderContentQueried(Content),
+    FolderContentQueried(QueriedContent),
     FolderCounted(Count),
     FolderCountChanged(Count),
     FolderDeleted(LibraryId),
-    KeywordContentQueried(Content),
+    KeywordContentQueried(QueriedContent),
     KeywordCounted(Count),
     KeywordCountChanged(Count),
     LabelChanged(Label),
@@ -136,18 +126,6 @@ pub enum LibNotification {
     MetadataChanged(MetadataChange),
     MetadataQueried(LibMetadata),
     XmpNeedsUpdate,
-}
-
-impl Drop for LibNotification {
-    fn drop(&mut self) {
-        match *self {
-            LibNotification::FolderContentQueried(mut c)
-            | LibNotification::KeywordContentQueried(mut c) => unsafe {
-                c.destruct();
-            },
-            _ => (),
-        }
-    }
 }
 
 /// Send a notification for the file status change.
@@ -309,24 +287,10 @@ pub unsafe extern "C" fn engine_library_notification_get_keyword(
 #[no_mangle]
 pub unsafe extern "C" fn engine_library_notification_get_content(
     n: *const LibNotification,
-) -> *const Content {
+) -> *const QueriedContent {
     match n.as_ref() {
         Some(&LibNotification::FolderContentQueried(ref c))
         | Some(&LibNotification::KeywordContentQueried(ref c)) => c,
         _ => unreachable!(),
     }
-}
-
-#[cfg(test)]
-use libc::c_void;
-
-#[cfg(test)]
-impl Content {
-    pub unsafe fn new(_: LibraryId) -> Self {
-        Content {}
-    }
-
-    pub unsafe fn push(&mut self, _: *mut c_void) {}
-
-    pub unsafe fn destruct(&self) {}
 }

@@ -43,8 +43,6 @@ typedef std::weak_ptr<LibFile> LibFileWeakPtr;
 typedef std::list<LibFilePtr> LibFileList;
 typedef std::shared_ptr<LibFileList> LibFileListPtr;
 
-LibFilePtr libfile_new(library_id_t, library_id_t, library_id_t, const char *,
-                       const char *);
 LibFilePtr libfile_wrap(LibFile *);
 }
 

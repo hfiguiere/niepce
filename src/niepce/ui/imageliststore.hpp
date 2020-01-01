@@ -29,7 +29,6 @@
 #include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.hpp"
-#include "engine/library/notification.hpp"
 #include "engine/library/thumbnailnotification.hpp"
 #include "libraryclient/libraryclient.hpp"
 

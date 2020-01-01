@@ -20,7 +20,6 @@
 #include <boost/any.hpp>
 
 #include "fwk/base/debug.hpp"
-#include "engine/library/notification.hpp"
 #include "niepce/notifications.hpp"
 #include "niepce/notificationcenter.hpp"
 
