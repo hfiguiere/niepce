@@ -26,24 +26,6 @@ LibFilePtr libfile_wrap(eng::LibFile *lf)
     return LibFilePtr(lf, &ffi::engine_db_libfile_delete);
 }
 
-/**
- * Converts a mimetype, which is expensive to calculate, into a FileType.
- * @param mime The mimetype we want to know as a filetype
- * @return the filetype
- * @todo: add the JPEG+RAW file types.
- */
-FileType mimetype_to_filetype(fwk::MimeType mime)
-{
-    if (mime.isDigicamRaw()) {
-        return FileType::RAW;
-    } else if (mime.isImage()) {
-        return FileType::IMAGE;
-    } else if (mime.isMovie()) {
-        return FileType::VIDEO;
-    } else {
-        return FileType::UNKNOWN;
-    }
-}
 }
 /*
   Local Variables:

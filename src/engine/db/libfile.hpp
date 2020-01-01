@@ -22,17 +22,9 @@
 #include <list>
 #include <memory>
 
-#if !RUST_BINDGEN
-#include "fwk/toolkit/mimetype.hpp"
-#endif
-
 #include "rust_bindings.hpp"
 
 namespace eng {
-
-#if !RUST_BINDGEN
-ffi::FileType mimetype_to_filetype(fwk::MimeType mime);
-#endif
 
 #if RUST_BINDGEN
 class LibFile;
