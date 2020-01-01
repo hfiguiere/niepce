@@ -250,6 +250,8 @@ pub fn cmd_count_folder(lib: &Library, id: LibraryId) -> bool {
     }
 }
 
+/// Add a keyword. Return `LibraryId` of the keyword, already existing
+/// or created.
 pub fn cmd_add_keyword(lib: &Library, keyword: &str) -> LibraryId {
     match lib.make_keyword(keyword) {
         Ok(id) => {
@@ -383,6 +385,8 @@ pub fn cmd_list_all_labels(lib: &Library) -> bool {
     }
 }
 
+/// This command will create a label, with `name` and `colour`.
+/// Returns id of the label. Or 0 on error.
 pub fn cmd_create_label(lib: &Library, name: &str, colour: &str) -> LibraryId {
     match lib.add_label(name, colour) {
         Ok(id) => {
