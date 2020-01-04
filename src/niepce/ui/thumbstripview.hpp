@@ -44,14 +44,9 @@ public:
 
     Glib::Property<gint> property_item_height;
 private:
-    void on_parent_set(Gtk::Widget* previous_parent);
-    void on_visible_range_changed();
-    void on_adjustment_changed();
     void on_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
                           Gtk::SelectionData&,guint,guint) override;
     void update_visible_range(int, int);
-    void add_range(int, int);
-    void clear_range (int start_thumb, int end_thumb);
 
     void setup_model(const Glib::RefPtr<ui::ImageListStore> & store);
     void row_added(const Gtk::TreeModel::Path&,
@@ -59,8 +54,6 @@ private:
     void row_deleted(const Gtk::TreeModel::Path&);
     void update_item_count();
 
-    gint m_start_thumb; /* the first visible thumbnail */
-    gint m_end_thumb;   /* the last visible thumbnail  */
     Glib::RefPtr<ui::ImageListStore> m_store;
     Gtk::CellRendererPixbuf  *m_renderer;
 
