@@ -10,7 +10,7 @@ fn main() {
         let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or(String::from("./target"));
         let mut target_file = PathBuf::from(target_dir);
         target_file.push("bindings.h");
-        let cbuilder = cbindgen::Builder::new()
+        cbindgen::Builder::new()
             .with_include_guard("niepce_rust_bindings_h")
             .with_namespace("ffi")
             .with_language(cbindgen::Language::Cxx)
@@ -20,12 +20,9 @@ fn main() {
             .exclude_item("GtkToolbar")
             .exclude_item("GFileInfo")
             .exclude_item("RgbColour")
-            .with_crate(&crate_dir);
-
-        if let Ok(bindings) = cbuilder.generate() {
-            bindings.write_to_file(&*target_file.to_string_lossy());
-        } else {
-            println!("Couldn't generate bindings");
-        }
+            .with_crate(&crate_dir)
+            .generate()
+            .expect("Couldn't generate bindings")
+            .write_to_file(&target_file);
     }
 }
