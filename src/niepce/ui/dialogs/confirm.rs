@@ -42,7 +42,7 @@ pub unsafe extern "C" fn dialog_confirm(
         &*msg,
     );
 
-    if dialog.run() == gtk::ResponseType::Yes.into() {
+    if dialog.run() == gtk::ResponseType::Yes {
         result = true;
     }
     dialog.destroy();

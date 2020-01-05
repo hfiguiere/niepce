@@ -174,10 +174,7 @@ pub unsafe extern "C" fn lcchannel_new(
 ) -> *mut LcChannel {
     let (sender, receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
     let source_id = receiver.attach(None, move |n: LibNotification| {
-        let mut continuation = false;
-        if cb(&n, data) != 0 {
-            continuation = true;
-        }
+        let continuation = cb(&n, data) != 0;
         glib::Continue(continuation)
     });
     Box::into_raw(Box::new(PortableChannel::<LibNotification>(

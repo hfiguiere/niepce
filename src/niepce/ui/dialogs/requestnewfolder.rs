@@ -37,8 +37,8 @@ pub unsafe extern "C" fn dialog_request_new_folder(
         Some(&parent),
         gtk::DialogFlags::MODAL,
         &[
-            (&gettext("OK"), gtk::ResponseType::Ok.into()),
-            (&gettext("Cancel"), gtk::ResponseType::Cancel.into()),
+            (&gettext("OK"), gtk::ResponseType::Ok),
+            (&gettext("Cancel"), gtk::ResponseType::Cancel),
         ],
     );
     let label = Label::new_with_mnemonic(Some(gettext("Folder _name:").as_str()));
@@ -49,12 +49,14 @@ pub unsafe extern "C" fn dialog_request_new_folder(
     dialog.get_content_area().pack_end(&entry, true, false, 4);
 
     dialog.get_content_area().show_all();
-    let cancel = dialog.run() != gtk::ResponseType::Ok.into();
+    let cancel = dialog.run() != gtk::ResponseType::Ok;
     let folder_name = entry.get_text();
     dialog.destroy();
-    if !cancel && folder_name.is_some() {
-        client
-            .unwrap_mut()
-            .create_folder(folder_name.unwrap().to_string(), None);
+    if !cancel {
+        if let Some(folder_name) = folder_name {
+            client
+                .unwrap_mut()
+                .create_folder(folder_name.to_string(), None);
+        }
     }
 }

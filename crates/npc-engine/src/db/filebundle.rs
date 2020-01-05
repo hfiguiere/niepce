@@ -125,8 +125,8 @@ impl FileBundle {
                     current_bundle.as_mut().unwrap().add(&f);
                     continue;
                 }
-                if current_bundle.is_some() {
-                    bundles.push(current_bundle.unwrap());
+                if let Some(current_bundle) = current_bundle {
+                    bundles.push(current_bundle);
                 }
                 let mut bundle = FileBundle::new();
                 bundle.add(&f);
@@ -134,8 +134,8 @@ impl FileBundle {
                 current_bundle = Some(bundle);
             }
         }
-        if current_bundle.is_some() {
-            bundles.push(current_bundle.unwrap());
+        if let Some(current_bundle) = current_bundle {
+            bundles.push(current_bundle);
         }
         bundles
     }

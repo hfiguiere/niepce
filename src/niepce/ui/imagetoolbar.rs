@@ -26,18 +26,14 @@ use gtk_sys;
 pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
     let toolbar = gtk::Toolbar::new();
 
-    let icon = gtk::Image::new_from_icon_name(
-        Some("go-previous-symbolic"),
-        gtk::IconSize::SmallToolbar.into(),
-    );
+    let icon =
+        gtk::Image::new_from_icon_name(Some("go-previous-symbolic"), gtk::IconSize::SmallToolbar);
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.PrevImage"));
     toolbar.add(&tool_item);
 
-    let icon = gtk::Image::new_from_icon_name(
-        Some("go-next-symbolic"),
-        gtk::IconSize::SmallToolbar.into(),
-    );
+    let icon =
+        gtk::Image::new_from_icon_name(Some("go-next-symbolic"), gtk::IconSize::SmallToolbar);
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.NextImage"));
     toolbar.add(&tool_item);
@@ -47,7 +43,7 @@ pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
 
     let icon = gtk::Image::new_from_icon_name(
         Some("object-rotate-left-symbolic"),
-        gtk::IconSize::SmallToolbar.into(),
+        gtk::IconSize::SmallToolbar,
     );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.RotateLeft"));
@@ -55,7 +51,7 @@ pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {
 
     let icon = gtk::Image::new_from_icon_name(
         Some("object-rotate-right-symbolic"),
-        gtk::IconSize::SmallToolbar.into(),
+        gtk::IconSize::SmallToolbar,
     );
     let tool_item = gtk::ToolButton::new(Some(&icon), None);
     tool_item.set_action_name(Some("shell.RotateRight"));
