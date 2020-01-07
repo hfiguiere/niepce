@@ -86,3 +86,7 @@ clean-local:
 check-local:
 	cd $(top_srcdir) && \
 	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo test $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)
+
+clippy:
+	cd $(top_srcdir) && \
+	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo clippy $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS) -- -A clippy::missing_safety_doc

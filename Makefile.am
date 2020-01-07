@@ -7,3 +7,5 @@ EXTRA_DIST = COPYING AUTHORS README \
 SUBDIRS =  data third_party src po
 DIST_SUBDIRS = po art data doc src
 
+clippy:
+	make -C src clippy
