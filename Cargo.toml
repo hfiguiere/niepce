@@ -17,7 +17,7 @@ npc-fwk = { path = "crates/npc-fwk" }
 npc-engine = { path = "crates/npc-engine" }
 
 [build-dependencies]
-cbindgen = { version = "0.8.3" }
+cbindgen = { version = "=0.8.4" }
 
 [lib]
 name = "niepce_rust"
