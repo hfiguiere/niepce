@@ -161,7 +161,9 @@ NiepceWindow::_createModuleShell()
 
     SelectionController::Ptr selection_controller = m_moduleshell->get_selection_controller();
     m_filmstrip = FilmStripController::Ptr(
-        new FilmStripController(m_moduleshell->get_list_store(), *m_moduleshell));
+        new FilmStripController(
+            m_moduleshell->get_list_store(),
+            libraryclient::UIDataProviderWeakPtr(m_moduleshell->get_ui_data_provider())));
     add(m_filmstrip);
 
     m_vbox.pack_start(*(m_filmstrip->buildWidget()), Gtk::PACK_SHRINK);

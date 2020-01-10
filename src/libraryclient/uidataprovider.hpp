@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/uidataprovider.hpp
  *
- * Copyright (C) 2011-2017 Hubert Figuière
+ * Copyright (C) 2011-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBRARYCLIENT_UIDATAPROVIDER_HPP__
-#define __LIBRARYCLIENT_UIDATAPROVIDER_HPP__
+#pragma once
 
 #include <stdint.h>
+#include <memory>
 
 #include "fwk/base/option.hpp"
 #include "fwk/base/colour.hpp"
@@ -43,9 +43,10 @@ private:
     eng::LabelList m_labels;
 };
 
-}
+typedef std::shared_ptr<UIDataProvider> UIDataProviderPtr;
+typedef std::weak_ptr<UIDataProvider> UIDataProviderWeakPtr;
 
-#endif
+}
 /*
   Local Variables:
   mode:c++

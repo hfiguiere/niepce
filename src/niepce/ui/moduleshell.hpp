@@ -1,7 +1,7 @@
 /*
- * niepce - ui/moduleshell.hpp
+ * niepce - niepce/ui/moduleshell.hpp
  *
- * Copyright (C) 2007-2018 Hubert Figuière
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __UI_MODULESHELL_HPP__
-#define __UI_MODULESHELL_HPP__
+#pragma once
 
 #include <vector>
 
@@ -76,7 +74,7 @@ public:
         {
             return m_libraryclient;
         }
-    virtual const std::unique_ptr<libraryclient::UIDataProvider>& get_ui_data_provider() const override
+    virtual const libraryclient::UIDataProviderPtr& get_ui_data_provider() const override
         {
             return m_libraryclient->getDataProvider();
         }
@@ -131,5 +129,3 @@ private:
   fill-column:80
   End:
 */
-
-#endif

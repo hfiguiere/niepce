@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/filmstripcontroller.cpp
  *
- * Copyright (C) 2008-2009 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@
 namespace ui {
 
 FilmStripController::FilmStripController(const Glib::RefPtr<ImageListStore> & store,
-                                         const IModuleShell& shell)
-    : m_shell(shell)
+                                         const libraryclient::UIDataProviderWeakPtr& ui_data_provider)
+    : m_ui_data_provider(ui_data_provider)
     , m_store(store)
 {
 }
@@ -43,7 +43,7 @@ Gtk::Widget * FilmStripController::buildWidget()
         return m_widget;
     }
     DBG_ASSERT(static_cast<bool>(m_store), "m_store NULL");
-    m_thumbview = manage(new ThumbStripView(m_store, m_shell));
+    m_thumbview = manage(new ThumbStripView(m_store, m_ui_data_provider));
     GtkWidget *thn = eog_thumb_nav_new(m_thumbview,
                                        EogThumbNavMode::ONE_ROW, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);
@@ -100,6 +100,7 @@ void FilmStripController::select_image(eng::library_id_t id)
 /*
   Local Variables:
   mode:c++
+  c-basic-offset:4
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0))
   indent-tabs-mode:nil

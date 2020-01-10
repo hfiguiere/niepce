@@ -1,7 +1,7 @@
 /*
- * niepce - ui/librarycellrenderer.h
+ * niepce - niepce/ui/librarycellrenderer.hpp
  *
- * Copyright (C) 2008-2019 Hubert Figuière
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,18 +24,18 @@
 #include <cairomm/surface.h>
 
 #include "engine/db/libfile.hpp"
+#include "fwk/base/colour.hpp"
 #include "fwk/toolkit/widgets/imagegridview.hpp"
 
 namespace ui {
-
-class IModuleShell;
 
 class LibraryCellRenderer
     : public Gtk::CellRendererPixbuf
     , public fwk::ClickableCellRenderer
 {
 public:
-    LibraryCellRenderer(const IModuleShell& shell);
+    typedef std::function<fwk::Option<fwk::RgbColourPtr>(int)> GetColourFunc;
+    LibraryCellRenderer(const GetColourFunc& get_colour);
 
     virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const override;
     virtual void get_preferred_height_vfunc(Gtk::Widget& widget, int& minimum_height, int& natural_height) const override;
@@ -83,7 +83,7 @@ protected:
                      eng::FileStatus status, const GdkRectangle& r) const;
 
 private:
-    const IModuleShell& m_shell;
+    GetColourFunc m_get_colour;
     int                                 m_size;
     int                                 m_pad;
     bool                                m_drawborder;

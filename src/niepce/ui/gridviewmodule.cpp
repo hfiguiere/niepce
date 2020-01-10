@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.cpp
  *
- * Copyright (C) 2009-2019 Hubert Figuière
+ * Copyright (C) 2009-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configdatabinder.hpp"
 #include "fwk/toolkit/widgets/dock.hpp"
+#include "libraryclient/uidataprovider.hpp"
 #include "gridviewmodule.hpp"
 #include "moduleshell.hpp"
 #include "librarycellrenderer.hpp"
@@ -110,7 +111,18 @@ Gtk::Widget * GridViewModule::buildWidget()
       .connect(sigc::mem_fun(*this, &GridViewModule::on_popup_menu));
 
   // the main cell
-  LibraryCellRenderer* libcell = Gtk::manage(new LibraryCellRenderer(m_shell));
+  libraryclient::UIDataProviderWeakPtr ui_data_provider(m_shell.get_ui_data_provider());
+  LibraryCellRenderer* libcell = Gtk::manage(
+      new LibraryCellRenderer(
+          [ui_data_provider] (int label) {
+              auto provider = ui_data_provider.lock();
+              if (provider) {
+                  return provider->colourForLabel(label);
+              }
+              ERR_OUT("couldn't lock UI provider");
+              return fwk::Option<fwk::RgbColourPtr>();
+          })
+      );
   libcell->signal_rating_changed.connect(
       sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
 

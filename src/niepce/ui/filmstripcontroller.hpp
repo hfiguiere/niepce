@@ -1,7 +1,7 @@
 /*
- * niepce - niepce/ui/filmstripcontroller.h
+ * niepce - niepce/ui/filmstripcontroller.hpp
  *
- * Copyright (C) 2008-2013 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#ifndef __UI_FILMSTRIPCONTROLLER_H_
-#define __UI_FILMSTRIPCONTROLLER_H_
+#pragma once
 
 #include "fwk/toolkit/uicontroller.hpp"
 #include "fwk/toolkit/notificationcenter.hpp"
@@ -32,8 +29,6 @@ namespace Gtk {
 
 namespace ui {
 
-class IModuleShell;
-
 class FilmStripController
 	: public fwk::UiController,
 	  public IImageSelectable
@@ -42,8 +37,9 @@ public:
 	typedef std::shared_ptr<FilmStripController> Ptr;
 	typedef std::weak_ptr<FilmStripController> WeakPtr;
 
-	FilmStripController(const Glib::RefPtr<ImageListStore>& store,
-	                    const IModuleShell& shell);
+	FilmStripController(
+          const Glib::RefPtr<ImageListStore>& store,
+          const libraryclient::UIDataProviderWeakPtr& ui_data_provider);
 
 	virtual Gtk::IconView * image_list() override;
 	virtual eng::library_id_t get_selected() override;
@@ -52,12 +48,21 @@ public:
 	virtual Gtk::Widget * buildWidget() override;
 
 private:
-	const IModuleShell& m_shell;
+	libraryclient::UIDataProviderWeakPtr m_ui_data_provider;
 	Gtk::IconView * m_thumbview;
 	Glib::RefPtr<ImageListStore> m_store;
 };
 
 
 }
-
-#endif
+/*
+  Local Variables:
+  mode:c++
+  c-basic-offset:4
+  tab-width:4
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0))
+  indent-tabs-mode:t
+  fill-column:99
+  End:
+*/

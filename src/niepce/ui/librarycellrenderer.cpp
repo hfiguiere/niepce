@@ -1,7 +1,7 @@
 /*
  * niepce - ui/librarycellrenderer.cpp
  *
- * Copyright (C) 2008-2018 Hubert Figuière
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@
 
 namespace ui {
 
-LibraryCellRenderer::LibraryCellRenderer(const IModuleShell& shell)
+LibraryCellRenderer::LibraryCellRenderer(const GetColourFunc& get_colour)
     : Glib::ObjectBase(typeid(LibraryCellRenderer))
     , Gtk::CellRendererPixbuf()
-    , m_shell(shell)
+    , m_get_colour(get_colour)
     , m_size(160)
     , m_pad(16)
     , m_drawborder(true)
@@ -287,7 +287,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         if (m_drawlabel) {
             uint32_t label_id = engine_db_libfile_label(file.get());
             if (label_id != 0) {
-                auto result = m_shell.get_ui_data_provider()->colourForLabel(label_id);
+                auto result = m_get_colour(label_id);
                 DBG_ASSERT(!result.empty(), "colour not found");
                 if (!result.empty()) {
                     drawLabel(cr, left, *result.unwrap(), r);

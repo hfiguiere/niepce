@@ -26,17 +26,17 @@
 #include <gtkmm/orientable.h>
 #include <gtkmm/cellrendererpixbuf.h>
 
+#include "libraryclient/uidataprovider.hpp"
 #include "niepce/ui/imageliststore.hpp"
 
 namespace ui {
-
-class IModuleShell;
 
 class ThumbStripView
   : public Gtk::IconView
 {
 public:
-    ThumbStripView(const Glib::RefPtr<ui::ImageListStore>& store, const IModuleShell& shell);
+    ThumbStripView(const Glib::RefPtr<ui::ImageListStore>& store,
+                   const libraryclient::UIDataProviderWeakPtr& ui_data_provider);
 
     void set_model(const Glib::RefPtr<ui::ImageListStore> & store);
     const Glib::RefPtr<ui::ImageListStore> & get_model() const;

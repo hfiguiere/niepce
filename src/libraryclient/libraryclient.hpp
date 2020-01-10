@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.hpp
  *
- * Copyright (C) 2007-2019 Hubert Figuière
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "engine/library/thumbnailcache.hpp"
+#include "uidataprovider.hpp"
 
 #include "rust_bindings.hpp"
 
@@ -31,8 +32,6 @@ class Moniker;
 }
 
 namespace libraryclient {
-
-class UIDataProvider;
 
 class LibraryClient
 {
@@ -47,7 +46,7 @@ public:
     eng::ThumbnailCache & thumbnailCache()
         { return m_thumbnailCache; }
 
-    const std::unique_ptr<UIDataProvider>& getDataProvider() const
+    const UIDataProviderPtr& getDataProvider() const
         { return m_uidataprovider; }
 
     ffi::LibraryClientWrapper* client() const {
@@ -57,7 +56,7 @@ private:
     std::shared_ptr<ffi::LibraryClientWrapper> m_client;
 
     eng::ThumbnailCache m_thumbnailCache;
-    std::unique_ptr<UIDataProvider> m_uidataprovider;
+    UIDataProviderPtr m_uidataprovider;
 };
 
 typedef std::shared_ptr<LibraryClient> LibraryClientPtr;

@@ -1,7 +1,7 @@
 /* Eye Of Gnome - Thumbnail View
  *
  * Copyright (C) 2006 The Free Software Foundation
- * Copyright (C) 2007-2018 Hubert Figuière
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * C++-ization: Hubert Figuiere <hub@figuiere.net>
  * Original Author: Claudio Saavedra <csaavedra@alumnos.utalca.cl>
@@ -59,12 +59,12 @@ class ThumbStripCell
     : public LibraryCellRenderer
 {
 public:
-    ThumbStripCell(const IModuleShell& shell);
+    ThumbStripCell(const GetColourFunc& get_colour);
 };
 
-ThumbStripCell::ThumbStripCell(const IModuleShell& shell)
+ThumbStripCell::ThumbStripCell(const GetColourFunc& get_colour)
     : Glib::ObjectBase(typeid(ThumbStripCell))
-    , LibraryCellRenderer(shell)
+    , LibraryCellRenderer(get_colour)
 {
     set_pad(0);
     set_size(100);
@@ -76,14 +76,24 @@ ThumbStripCell::ThumbStripCell(const IModuleShell& shell)
 }
 
 ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
-                               const IModuleShell& shell)
+                               const libraryclient::UIDataProviderWeakPtr& ui_data_provider)
     : Glib::ObjectBase(typeid(ThumbStripView))
     , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
     , property_item_height(*this, "item-height", 100)
     , m_store(store)
     , m_model_item_count(0)
 {
-    m_renderer = manage(new ThumbStripCell(shell));
+    m_renderer = manage(
+        new ThumbStripCell(
+            [ui_data_provider] (int label) {
+                auto provider = ui_data_provider.lock();
+                if (provider) {
+                    return provider->colourForLabel(label);
+                }
+                ERR_OUT("couldn't lock UI provider");
+                return fwk::Option<fwk::RgbColourPtr>();
+            })
+        );
 
     pack_start(*m_renderer, FALSE);
     connect_property_changed("item-height",
