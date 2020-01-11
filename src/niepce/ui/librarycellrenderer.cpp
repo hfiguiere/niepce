@@ -197,7 +197,6 @@ void
 LibraryCellRenderer::get_preferred_width_vfunc(Gtk::Widget& /*widget*/,
                                                int& minimum_width, int& natural_width) const
 {
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
     int maxdim = m_size + pad() * 2;
     minimum_width = natural_width = maxdim;
 }
@@ -206,7 +205,6 @@ void
 LibraryCellRenderer::get_preferred_height_vfunc(Gtk::Widget& /*widget*/,
                                                 int& minimum_height, int& natural_height) const
 {
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf = property_pixbuf();
     int maxdim = m_size + pad() * 2;
     minimum_height = natural_height = maxdim;
 }
