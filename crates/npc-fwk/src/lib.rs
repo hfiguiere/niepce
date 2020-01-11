@@ -19,6 +19,7 @@
 
 extern crate chrono;
 extern crate exempi;
+extern crate gdk;
 extern crate gio;
 extern crate gio_sys;
 extern crate glib;
