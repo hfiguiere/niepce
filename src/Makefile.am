@@ -38,6 +38,8 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-fwk/src/lib.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mimetype.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mod.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/widgets/mod.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/widgets/rating_label.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/exempi.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/exiv2.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/files.rs \

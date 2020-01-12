@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/lib.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 extern crate chrono;
 extern crate exempi;
 extern crate gdk;
+extern crate gdk_pixbuf;
 extern crate gio;
 extern crate gio_sys;
 extern crate glib;
@@ -28,6 +29,7 @@ extern crate glib_sys;
 extern crate lazy_static;
 extern crate libc;
 extern crate multimap;
+extern crate once_cell;
 #[macro_use]
 extern crate try_opt;
 

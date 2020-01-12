@@ -1,5 +1,5 @@
 /*
- * niepce - crates/npc-fwk/src/toolkit/mod.rs
+ * niepce - crates/npc-fwk/src/toolkit/widgets/mod.rs
  *
  * Copyright (C) 2020 Hubert Figuière
  *
@@ -16,10 +16,5 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-pub mod mimetype;
-pub mod widgets;
 
-pub type Sender<T> = glib::Sender<T>;
-
-/// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
-pub struct PortableChannel<T>(pub Sender<T>, pub glib::SourceId);
+pub mod rating_label;
