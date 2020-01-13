@@ -263,14 +263,16 @@ impl XmpMeta {
                     continue;
                 }
 
-                if !dest.xmp.has_property(schema.to_str(), name.to_str()) && dest
-                    .xmp
-                    .set_property(
-                        schema.to_str(),
-                        name.to_str(),
-                        value.to_str(),
-                        exempi::PROP_NONE,
-                    ).is_err()
+                if !dest.xmp.has_property(schema.to_str(), name.to_str())
+                    && dest
+                        .xmp
+                        .set_property(
+                            schema.to_str(),
+                            name.to_str(),
+                            value.to_str(),
+                            exempi::PROP_NONE,
+                        )
+                        .is_err()
                 {
                     err_out!("Can set property {}", name);
                 }
@@ -336,11 +338,10 @@ impl XmpMeta {
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(
-            self.xmp
-                .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
-                .ok()
-        );
+        let xmpstring = try_opt!(self
+            .xmp
+            .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
+            .ok());
         let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
 
         Some(date.with_timezone(&Utc))
@@ -348,11 +349,10 @@ impl XmpMeta {
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(
-            self.xmp
-                .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
-                .ok()
-        );
+        let xmpstring = try_opt!(self
+            .xmp
+            .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
+            .ok());
         Some(String::from(xmpstring.to_str()))
     }
 

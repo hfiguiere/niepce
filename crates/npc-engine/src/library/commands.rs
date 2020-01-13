@@ -215,7 +215,8 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np, value: &Property
                     id,
                     meta as u32,
                     value.clone(),
-                ))).is_err()
+                )))
+                .is_err()
             {
                 err_out!("Failed to notify MetadataChange");
             }
@@ -335,7 +336,8 @@ pub fn cmd_move_file_to_folder(
                     file: file_id,
                     from,
                     to,
-                })).is_err()
+                }))
+                .is_err()
             {
                 err_out!("Failed to notify FileMoved");
             }
@@ -343,7 +345,8 @@ pub fn cmd_move_file_to_folder(
                 .notify(LibNotification::FolderCountChanged(Count {
                     id: from,
                     count: -1,
-                })).is_err()
+                }))
+                .is_err()
             {
                 err_out!("Failed to notify FileMoved");
             }
@@ -351,7 +354,8 @@ pub fn cmd_move_file_to_folder(
                 .notify(LibNotification::FolderCountChanged(Count {
                     id: to,
                     count: 1,
-                })).is_err()
+                }))
+                .is_err()
             {
                 err_out!("Failed to notify FileMoved");
             }

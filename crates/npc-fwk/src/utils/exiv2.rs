@@ -415,22 +415,24 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                     }
                                 }
                             }
-                            _ => if let Some(value) = meta.get_tag_rational(&tag) {
-                                let value_str = format!("{}/{}", value.numer(), value.denom());
-                                if let Err(err) = xmp.set_property(
-                                    xmp_prop.0,
-                                    xmp_prop.1,
-                                    &value_str,
-                                    exempi::PROP_NONE,
-                                ) {
-                                    err_out!(
-                                        "Error setting property {} {}: {:?}",
-                                        &xmp_prop.0,
-                                        &xmp_prop.1,
-                                        &err
-                                    );
+                            _ => {
+                                if let Some(value) = meta.get_tag_rational(&tag) {
+                                    let value_str = format!("{}/{}", value.numer(), value.denom());
+                                    if let Err(err) = xmp.set_property(
+                                        xmp_prop.0,
+                                        xmp_prop.1,
+                                        &value_str,
+                                        exempi::PROP_NONE,
+                                    ) {
+                                        err_out!(
+                                            "Error setting property {} {}: {:?}",
+                                            &xmp_prop.0,
+                                            &xmp_prop.1,
+                                            &err
+                                        );
+                                    }
                                 }
-                            },
+                            }
                         },
                         Ok(rexiv2::TagType::Comment) => {
                             if let Ok(value) = meta.get_tag_string(&tag) {

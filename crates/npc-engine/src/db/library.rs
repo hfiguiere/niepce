@@ -194,11 +194,13 @@ impl Library {
                 "INSERT INTO admin (key, value) \
                  VALUES ('version', ?1)",
                 &[&DB_SCHEMA_VERSION],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TABLE vaults (id INTEGER PRIMARY KEY, path TEXT)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TABLE folders (id INTEGER PRIMARY KEY,\
                  path TEXT, name TEXT, \
@@ -208,7 +210,8 @@ impl Library {
                  expanded INTEGER DEFAULT 0, \
                  parent_id INTEGER)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             // Version 9
             conn.execute(
                 "CREATE TRIGGER folder_delete_trigger AFTER DELETE ON folders \
@@ -216,14 +219,16 @@ impl Library {
                  DELETE FROM files WHERE parent_id = old.id; \
                  END",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             //
             let trash_type = libfolder::FolderVirtualType::TRASH as i32;
             conn.execute(
                 "insert into folders (name, locked, virtual, parent_id, path) \
                  values (?1, 1, ?2, 0, '')",
                 &[&"Trash", &trash_type],
-            ).unwrap();
+            )
+            .unwrap();
 
             conn.execute(
                 "CREATE TABLE files (id INTEGER PRIMARY KEY,\
@@ -235,19 +240,22 @@ impl Library {
                  xmp TEXT, xmp_date INTEGER, xmp_file INTEGER,\
                  jpeg_file INTEGER)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TABLE fsfiles (id INTEGER PRIMARY KEY,\
                  path TEXT)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             // version = 7
             conn.execute(
                 "CREATE TABLE sidecars (file_id INTEGER,\
                  fsfile_id INTEGER, type INTEGER, ext TEXT NOT NULL,\
                  UNIQUE(file_id, fsfile_id))",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute_batch(
                 "BEGIN; \
                  CREATE TRIGGER pre_file_delete_trigger BEFORE DELETE ON files \
@@ -261,30 +269,35 @@ impl Library {
                  DELETE FROM keywording WHERE file_id = old.id; \
                  END; \
                  COMMIT;",
-            ).unwrap();
+            )
+            .unwrap();
             //
             conn.execute(
                 "CREATE TABLE keywords (id INTEGER PRIMARY KEY,\
                  keyword TEXT, parent_id INTEGER DEFAULT 0)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TABLE keywording (file_id INTEGER,\
                  keyword_id INTEGER, UNIQUE(file_id, keyword_id))",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TRIGGER keyword_delete_trigger AFTER DELETE ON keywords \
                  BEGIN \
                  DELETE FROM keywording WHERE keyword_id = old.id; \
                  END;",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TABLE labels (id INTEGER PRIMARY KEY,\
                  name TEXT, color TEXT)",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute("CREATE TABLE xmp_update_queue (id INTEGER UNIQUE)", &[])
                 .unwrap();
             conn.execute(
@@ -293,7 +306,8 @@ impl Library {
                  UPDATE files SET mod_date = strftime('%s','now');\
                  END",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
             conn.execute(
                 "CREATE TRIGGER xmp_update_trigger UPDATE OF xmp ON files \
                  BEGIN \
@@ -301,7 +315,8 @@ impl Library {
                  SELECT rewrite_xmp();\
                  END",
                 &[],
-            ).unwrap();
+            )
+            .unwrap();
 
             if self.notify(LibNotification::LibCreated).is_err() {
                 err_out!("Error sending LibCreated notification");
@@ -755,7 +770,8 @@ impl Library {
             if self
                 .notify(LibNotification::AddedKeyword(Keyword::new(
                     keyword_id, keyword,
-                ))).is_err()
+                )))
+                .is_err()
             {
                 err_out!("Failed to send AddedKeyword notification");
             }
@@ -886,12 +902,14 @@ impl Library {
                 self.unassign_all_keywords_for_file(file_id)?;
 
                 match *value {
-                    PropertyValue::StringArray(ref keywords) => for kw in keywords {
-                        let id = self.make_keyword(&kw)?;
-                        if id != -1 {
-                            self.assign_keyword(id, file_id)?;
+                    PropertyValue::StringArray(ref keywords) => {
+                        for kw in keywords {
+                            let id = self.make_keyword(&kw)?;
+                            if id != -1 {
+                                self.assign_keyword(id, file_id)?;
+                            }
                         }
-                    },
+                    }
                     _ => err_out!("improper value_type for {:?} : {:?}", meta, value),
                 }
             }

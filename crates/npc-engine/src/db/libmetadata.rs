@@ -140,7 +140,8 @@ impl LibMetadata {
                                     "x-default",
                                     s,
                                     exempi::PROP_NONE,
-                                ).is_ok();
+                                )
+                                .is_ok();
                         }
                     } else {
                         return true;
@@ -161,7 +162,8 @@ impl LibMetadata {
                                 exempi::PROP_VALUE_IS_ARRAY,
                                 s,
                                 exempi::PROP_NONE,
-                            ).is_err()
+                            )
+                            .is_err()
                         {
                             err_out!("Error appending array item {} in property {}", &s, &ix.ns);
                             return false;
@@ -195,18 +197,26 @@ impl LibMetadata {
         for prop_id in propset {
             let prop_id_np: Np = unsafe { transmute(*prop_id) };
             match prop_id_np {
-                Np::NpXmpRatingProp => if let Some(rating) = self.xmp.rating() {
-                    props.set_value(*prop_id, PropertyValue::Int(rating));
-                },
-                Np::NpXmpLabelProp => if let Some(label) = self.xmp.label() {
-                    props.set_value(*prop_id, PropertyValue::String(label));
-                },
-                Np::NpTiffOrientationProp => if let Some(orientation) = self.xmp.orientation() {
-                    props.set_value(*prop_id, PropertyValue::Int(orientation));
-                },
-                Np::NpExifDateTimeOriginalProp => if let Some(date) = self.xmp.creation_date() {
-                    props.set_value(*prop_id, PropertyValue::Date(date));
-                },
+                Np::NpXmpRatingProp => {
+                    if let Some(rating) = self.xmp.rating() {
+                        props.set_value(*prop_id, PropertyValue::Int(rating));
+                    }
+                }
+                Np::NpXmpLabelProp => {
+                    if let Some(label) = self.xmp.label() {
+                        props.set_value(*prop_id, PropertyValue::String(label));
+                    }
+                }
+                Np::NpTiffOrientationProp => {
+                    if let Some(orientation) = self.xmp.orientation() {
+                        props.set_value(*prop_id, PropertyValue::Int(orientation));
+                    }
+                }
+                Np::NpExifDateTimeOriginalProp => {
+                    if let Some(date) = self.xmp.creation_date() {
+                        props.set_value(*prop_id, PropertyValue::Date(date));
+                    }
+                }
                 Np::NpIptcKeywordsProp => {
                     let mut iter = exempi::XmpIterator::new(
                         &self.xmp.xmp,

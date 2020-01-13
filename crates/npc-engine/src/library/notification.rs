@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use super::queriedcontent::QueriedContent;
 use crate::db::libfile::FileStatus;
 use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId};
-use super::queriedcontent::QueriedContent;
 use npc_fwk::base::PropertyIndex;
 use npc_fwk::toolkit::PortableChannel;
 use npc_fwk::PropertyValue;
@@ -142,7 +142,8 @@ pub unsafe extern "C" fn engine_library_notify_filestatus_changed(
         .send(LibNotification::FileStatusChanged(FileStatusChange {
             id,
             status,
-        })) {
+        }))
+    {
         err_out!("Error sending notification: {}", err);
         return false;
     }
