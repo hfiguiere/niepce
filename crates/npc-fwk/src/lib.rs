@@ -25,8 +25,6 @@ extern crate gio;
 extern crate gio_sys;
 extern crate glib;
 extern crate glib_sys;
-#[macro_use]
-extern crate lazy_static;
 extern crate libc;
 extern crate multimap;
 extern crate once_cell;

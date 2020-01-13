@@ -20,6 +20,8 @@
 use multimap::MultiMap;
 use std::ffi::OsStr;
 
+use once_cell::unsync::Lazy;
+
 use exempi;
 use rexiv2;
 
@@ -53,8 +55,8 @@ enum Converted {
     Flash(Flash),
 }
 
-lazy_static! {
-    static ref EXIV2_TO_XMP: MultiMap<&'static str, (&'static str, &'static str, Conversion)> = {
+const EXIV2_TO_XMP: Lazy<MultiMap<&'static str, (&'static str, &'static str, Conversion)>> =
+    Lazy::new(|| {
         [
             (
                 "Exif.Image.DateTime",
@@ -227,11 +229,10 @@ lazy_static! {
                 (NS_EXIF_EX, "LensModel", Conversion::Interpreted),
             ),
         ]
-            .iter()
-            .cloned()
-            .collect()
-    };
-}
+        .iter()
+        .cloned()
+        .collect()
+    });
 
 fn convert(conversion: Conversion, value: &str) -> Converted {
     match conversion {
