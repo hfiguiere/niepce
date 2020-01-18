@@ -117,11 +117,11 @@ private:
     libraryclient::LibraryClientPtr getLibraryClient();
 
     bool _set_metadata(const std::string & undo_label,
-                       const eng::LibFilePtr& file,
+                       eng::library_id_t file_id,
                        ffi::Np meta,
                        int old_value, int new_value);
     bool _set_metadata(const std::string & undo_label,
-                       const eng::LibFilePtr& file,
+                       eng::library_id_t file_id,
                        const fwk::PropertyBagPtr & props,
                        const fwk::PropertyBagPtr & old);
     /** move the selection and emit the signal

@@ -71,7 +71,7 @@ ImageListStore::ImageListStore(const Columns& _columns)
 }
 
 
-Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id)
+Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id) const
 {
     auto iter = m_idmap.find( id );
     if(iter != m_idmap.end()) {
@@ -80,13 +80,32 @@ Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id)
     return Gtk::TreeIter();
 }
 
-Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id)
+Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id) const
 {
     Gtk::TreeIter iter = get_iter_from_id(id);
     if(iter) {
         return get_path(iter);
     }
     return Gtk::TreePath();
+}
+
+eng::library_id_t ImageListStore::get_libfile_id_at_path(const Gtk::TreePath& path)
+{
+    auto iter = get_iter(path);
+    eng::LibFilePtr libfile = (*iter)[columns().m_libfile];
+    if (libfile) {
+        return engine_db_libfile_id(libfile.get());
+    }
+    return 0;
+}
+
+eng::LibFilePtr ImageListStore::get_file(eng::library_id_t id) const
+{
+    auto iter = get_iter_from_id(id);
+    if (iter) {
+        return (*iter)[m_columns.m_libfile];
+    }
+    return eng::LibFilePtr();
 }
 
 void ImageListStore::add_libfile(const eng::LibFilePtr & f)

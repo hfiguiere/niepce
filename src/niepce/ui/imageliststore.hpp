@@ -64,8 +64,10 @@ public:
 
     const Columns & columns() const
         { return m_columns; }
-    Gtk::TreePath get_path_from_id(eng::library_id_t id);
-    Gtk::TreeIter get_iter_from_id(eng::library_id_t id);
+    Gtk::TreePath get_path_from_id(eng::library_id_t id) const;
+    Gtk::TreeIter get_iter_from_id(eng::library_id_t id) const;
+    eng::library_id_t get_libfile_id_at_path(const Gtk::TreePath& path);
+    eng::LibFilePtr get_file(eng::library_id_t id) const;
     size_t get_count() const
         { return children().size(); }
 
