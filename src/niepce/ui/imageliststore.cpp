@@ -35,8 +35,8 @@ namespace ui {
 
 Glib::RefPtr<Gdk::Pixbuf> ImageListStore::get_loading_icon()
 {
-    Glib::RefPtr<Gdk::Pixbuf> icon;
-    if(!icon) {
+    static Glib::RefPtr<Gdk::Pixbuf> icon;
+    if (!icon) {
         static std::mutex m;
         m.lock();
         if (!icon) {
