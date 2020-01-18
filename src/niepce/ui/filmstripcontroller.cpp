@@ -59,7 +59,6 @@ Gtk::IconView * FilmStripController::image_list()
 
 eng::library_id_t FilmStripController::get_selected()
 {
-    eng::library_id_t id = 0;
     DBG_OUT("get selected in filmstrip");
     std::vector<Gtk::TreePath> paths = m_thumbview->get_selected_items();
 
@@ -69,16 +68,7 @@ eng::library_id_t FilmStripController::get_selected()
 
     Gtk::TreePath path(*(paths.begin()));
     DBG_OUT("found path %s", path.to_string().c_str());
-    Gtk::TreeRow row = *(m_store->get_iter(path));
-    if(row) {
-        DBG_OUT("found row");
-        eng::LibFilePtr libfile = row[m_store->columns().m_libfile];
-        if(libfile) {
-            id = engine_db_libfile_id(libfile.get());
-        }
-    }
-
-    return id;
+    return m_store->get_libfile_id_at_path(path);
 }
 
 void FilmStripController::select_image(eng::library_id_t id)

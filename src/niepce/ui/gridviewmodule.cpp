@@ -129,11 +129,11 @@ Gtk::Widget * GridViewModule::buildWidget()
   Glib::RefPtr<Gtk::CellArea> cell_area = m_librarylistview->property_cell_area();
   cell_area->pack_start(*libcell, FALSE);
   cell_area->add_attribute(*libcell, "pixbuf",
-                                  m_model->columns().m_pix.index());
+                           ImageListStore::Columns::THUMB_INDEX);
   cell_area->add_attribute(*libcell, "libfile",
-                                  m_model->columns().m_libfile.index());
+                           ImageListStore::Columns::FILE_INDEX);
   cell_area->add_attribute(*libcell, "status",
-                                  m_model->columns().m_file_status.index());
+                           ImageListStore::Columns::FILE_STATUS_INDEX);
 
   m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -183,14 +183,7 @@ eng::library_id_t GridViewModule::get_selected()
     if(!paths.empty()) {
         Gtk::TreePath path(*(paths.begin()));
         DBG_OUT("found path %s", path.to_string().c_str());
-        Gtk::TreeRow row = *(m_model->get_iter(path));
-        if(row) {
-            DBG_OUT("found row");
-            eng::LibFilePtr libfile = row[m_model->columns().m_libfile];
-            if(libfile) {
-                id = engine_db_libfile_id(libfile.get());
-            }
-        }
+        id = m_model->get_libfile_id_at_path(path);
     }
     DBG_OUT("get_selected %Ld", (long long)id);
     return id;

@@ -260,9 +260,8 @@ void ModuleShell::on_image_activated(eng::library_id_t id)
 {
     DBG_OUT("on image activated %Ld", (long long)id);
     auto store = m_selection_controller->get_list_store();
-    auto iter = store->get_iter_from_id(id);
-    if(iter) {
-        auto libfile = (*iter)[store->columns().m_libfile];
+    auto libfile = store->get_file(id);
+    if (libfile) {
         m_darkroom->set_image(libfile);
         m_shell.activatePage("darkroom");
     }

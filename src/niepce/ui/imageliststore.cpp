@@ -92,7 +92,7 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id) const
 eng::library_id_t ImageListStore::get_libfile_id_at_path(const Gtk::TreePath& path)
 {
     auto iter = get_iter(path);
-    eng::LibFilePtr libfile = (*iter)[columns().m_libfile];
+    eng::LibFilePtr libfile = (*iter)[m_columns.m_libfile];
     if (libfile) {
         return engine_db_libfile_id(libfile.get());
     }
