@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/library.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ use crate::db::libfolder;
 use crate::db::libfolder::LibFolder;
 use crate::db::libmetadata::LibMetadata;
 use crate::library::notification::LibNotification;
+use crate::root::eng;
 use crate::root::eng::NiepceProperties as Np;
 use npc_fwk;
 use npc_fwk::PropertyValue;
@@ -876,19 +877,19 @@ impl Library {
 
     pub fn set_metadata(&self, file_id: LibraryId, meta: Np, value: &PropertyValue) -> Result<()> {
         match meta {
-            Np::NpXmpRatingProp
-            | Np::NpXmpLabelProp
-            | Np::NpTiffOrientationProp
-            | Np::NpNiepceFlagProp => {
+            eng::NpXmpRatingProp
+            | eng::NpXmpLabelProp
+            | eng::NpTiffOrientationProp
+            | eng::NpNiepceFlagProp => {
                 match *value {
                     PropertyValue::Int(i) => {
                         // internal
                         // make the column mapping more generic.
                         let column = match meta {
-                            Np::NpXmpRatingProp => "rating",
-                            Np::NpXmpLabelProp => "orientation",
-                            Np::NpTiffOrientationProp => "label",
-                            Np::NpNiepceFlagProp => "flag",
+                            eng::NpXmpRatingProp => "rating",
+                            eng::NpXmpLabelProp => "orientation",
+                            eng::NpTiffOrientationProp => "label",
+                            eng::NpNiepceFlagProp => "flag",
                             _ => unreachable!(),
                         };
                         if !column.is_empty() {
@@ -898,7 +899,7 @@ impl Library {
                     _ => err_out!("improper value type for {:?}", meta),
                 }
             }
-            Np::NpIptcKeywordsProp => {
+            eng::NpIptcKeywordsProp => {
                 self.unassign_all_keywords_for_file(file_id)?;
 
                 match *value {

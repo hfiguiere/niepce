@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@ use chrono::Utc;
 use exempi;
 use rusqlite;
 use std::ffi::CStr;
-use std::mem::transmute;
 
 use super::{FromDb, LibraryId};
 use crate::db::libfile::FileType;
+use crate::root::eng;
 use crate::root::eng::NiepceProperties as Np;
 use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
@@ -195,29 +195,28 @@ impl LibMetadata {
     pub fn to_properties(&self, propset: &PropertySet) -> PropertyBag {
         let mut props = PropertyBag::new();
         for prop_id in propset {
-            let prop_id_np: Np = unsafe { transmute(*prop_id) };
-            match prop_id_np {
-                Np::NpXmpRatingProp => {
+            match *prop_id {
+                eng::NpXmpRatingProp => {
                     if let Some(rating) = self.xmp.rating() {
                         props.set_value(*prop_id, PropertyValue::Int(rating));
                     }
                 }
-                Np::NpXmpLabelProp => {
+                eng::NpXmpLabelProp => {
                     if let Some(label) = self.xmp.label() {
                         props.set_value(*prop_id, PropertyValue::String(label));
                     }
                 }
-                Np::NpTiffOrientationProp => {
+                eng::NpTiffOrientationProp => {
                     if let Some(orientation) = self.xmp.orientation() {
                         props.set_value(*prop_id, PropertyValue::Int(orientation));
                     }
                 }
-                Np::NpExifDateTimeOriginalProp => {
+                eng::NpExifDateTimeOriginalProp => {
                     if let Some(date) = self.xmp.creation_date() {
                         props.set_value(*prop_id, PropertyValue::Date(date));
                     }
                 }
-                Np::NpIptcKeywordsProp => {
+                eng::NpIptcKeywordsProp => {
                     let mut iter = exempi::XmpIterator::new(
                         &self.xmp.xmp,
                         NS_DC,
@@ -234,10 +233,10 @@ impl LibMetadata {
                     }
                     props.set_value(*prop_id, PropertyValue::StringArray(keywords));
                 }
-                Np::NpFileNameProp => {
+                eng::NpFileNameProp => {
                     props.set_value(*prop_id, PropertyValue::String(self.name.clone()));
                 }
-                Np::NpFileTypeProp => {
+                eng::NpFileTypeProp => {
                     // XXX this to string convert should be elsewhere
                     let file_type = match self.file_type {
                         FileType::UNKNOWN => "Unknown",
@@ -248,15 +247,15 @@ impl LibMetadata {
                     };
                     props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
                 }
-                Np::NpFileSizeProp => {}
-                Np::NpFolderProp => {
+                eng::NpFileSizeProp => {}
+                eng::NpFolderProp => {
                     props.set_value(*prop_id, PropertyValue::String(self.folder.clone()));
                 }
-                Np::NpSidecarsProp => {
+                eng::NpSidecarsProp => {
                     props.set_value(*prop_id, PropertyValue::StringArray(self.sidecars.clone()));
                 }
                 _ => {
-                    if let Some(propval) = self.get_metadata(prop_id_np) {
+                    if let Some(propval) = self.get_metadata(*prop_id) {
                         props.set_value(*prop_id, propval);
                     } else {
                         dbg_out!("missing prop {}", prop_id);

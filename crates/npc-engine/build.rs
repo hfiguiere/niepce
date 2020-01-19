@@ -19,7 +19,8 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .whitelist_type("eng::NiepceProperties")
-        .rustified_enum("eng::NiepceProperties")
+        .constified_enum("eng::NiepceProperties")
+        .prepend_enum_name(false)
         .opaque_type("std::.*")
         .whitelist_type("fwk::FileList")
         .whitelist_type("eng::IndexToXmp")
