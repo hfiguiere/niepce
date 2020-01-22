@@ -63,7 +63,7 @@ impl RatingLabel {
         let mut y = y;
         y -= h as f64;
         let mut x = x;
-        for i in 1..5 {
+        for i in 1..=5 {
             if i <= rating {
                 cr.set_source_pixbuf(star, x, y);
             } else {
