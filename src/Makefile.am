@@ -44,6 +44,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-fwk/src/utils/exiv2.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/files.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/mod.rs \
+	@top_srcdir@/examples/widget-test.rs \
 	@top_srcdir@/src/lib.rs \
 	@top_srcdir@/src/libraryclient/clientimpl.rs \
 	@top_srcdir@/src/libraryclient/clientinterface.rs \
@@ -54,6 +55,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/niepce/ui/dialogs/mod.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/confirm.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/requestnewfolder.rs \
+	@top_srcdir@/src/niepce/ui/thumb_nav.rs \
 	$(NULL)
 
 EXTRA_DIST = \

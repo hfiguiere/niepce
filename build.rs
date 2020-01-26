@@ -18,6 +18,8 @@ fn main() {
             .with_parse_exclude(&["exempi", "chrono", "multimap"])
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
+            .exclude_item("GtkIconView")
+            .exclude_item("GtkWidget")
             .exclude_item("GFileInfo")
             .exclude_item("RgbColour")
             .with_crate(&crate_dir)

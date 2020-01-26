@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/filmstripcontroller.cpp
  *
- * Copyright (C) 2008-2020 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include "engine/library/thumbnailnotification.hpp"
 #include "fwk/base/debug.hpp"
 
-#include "thumb_view/eog-thumb-nav.hpp"
 #include "thumbstripview.hpp"
 #include "filmstripcontroller.hpp"
 
@@ -44,8 +43,8 @@ Gtk::Widget * FilmStripController::buildWidget()
     }
     DBG_ASSERT(static_cast<bool>(m_store), "m_store NULL");
     m_thumbview = manage(new ThumbStripView(m_store, m_ui_data_provider));
-    GtkWidget *thn = eog_thumb_nav_new(m_thumbview,
-                                       EogThumbNavMode::ONE_ROW, true);
+    GtkWidget *thn = ffi::npc_thumb_nav_new(m_thumbview->gobj(),
+                                            ffi::ThumbNavMode::OneRow, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);
     m_widget = Glib::wrap(thn);
     m_widget->set_size_request(-1, 134);

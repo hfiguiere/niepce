@@ -1,7 +1,7 @@
 /*
  * niepce - lib.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,13 @@
 
 extern crate gettextrs;
 extern crate gio;
+extern crate gio_sys;
+#[macro_use]
 extern crate glib;
 extern crate gtk;
 extern crate gtk_sys;
 extern crate libc;
+extern crate once_cell;
 
 // internal crates
 #[macro_use]

@@ -5,8 +5,10 @@ authors = ["Hubert Figuière <hub@figuiere.net>"]
 build = "build.rs"
 
 [dependencies]
+once_cell = "^0"
 gettext-rs = "0.3.0"
 glib = { version = "^0.9.0" }
+gio-sys = "*"
 gio = "^0.8.0"
 gtk-sys = { version = "*", features = ["v3_22"] }
 gtk = { version = "^0.8.0", git = "https://github.com/hfiguiere/gtk.git", branch = "0.8.0-p1" }
@@ -21,4 +23,7 @@ cbindgen = { version = "=0.8.4" }
 
 [lib]
 name = "niepce_rust"
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "lib"]
+
+[[example]]
+name = "widget-test"

@@ -41,7 +41,6 @@ libniepceui_a_SOURCES = \
 	dialogs/importers/cameraimporterui.cpp \
 	selectioncontroller.hpp selectioncontroller.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
-	thumb_view/eog-thumb-nav.cpp thumb_view/eog-thumb-nav.hpp \
 	thumbstripview.cpp thumbstripview.hpp \
 	$(PUBLICHEADERS) \
 	$(NULL)
