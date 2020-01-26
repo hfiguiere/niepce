@@ -887,8 +887,8 @@ impl Library {
                         // make the column mapping more generic.
                         let column = match meta {
                             eng::NpXmpRatingProp => "rating",
-                            eng::NpXmpLabelProp => "orientation",
-                            eng::NpTiffOrientationProp => "label",
+                            eng::NpXmpLabelProp => "label",
+                            eng::NpTiffOrientationProp => "orientation",
                             eng::NpNiepceFlagProp => "flag",
                             _ => unreachable!(),
                         };
