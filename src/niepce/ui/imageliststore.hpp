@@ -59,7 +59,7 @@ public:
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
         Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
-        Gtk::TreeModelColumn<eng::FileStatus> m_file_status;
+        Gtk::TreeModelColumn<gint> m_file_status;
     };
 
     Gtk::TreePath get_path_from_id(eng::library_id_t id) const;

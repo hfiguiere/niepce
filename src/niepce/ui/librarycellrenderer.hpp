@@ -34,7 +34,7 @@ class LibraryCellRenderer
     , public fwk::ClickableCellRenderer
 {
 public:
-    typedef std::function<fwk::Option<fwk::RgbColourPtr>(int)> GetColourFunc;
+    typedef std::function<bool (int32_t, fwk::RgbColour*)> GetColourFunc;
     LibraryCellRenderer(const GetColourFunc& get_colour);
 
     virtual void get_preferred_width_vfunc(Gtk::Widget& widget, int& minimum_width, int& natural_width) const override;
@@ -93,7 +93,7 @@ private:
     bool                                m_drawflag;
     bool m_drawstatus;
     Glib::Property<eng::LibFilePtr>   m_libfileproperty;
-    Glib::Property<eng::FileStatus> m_statusproperty;
+    Glib::Property<gint> m_statusproperty;
 
     Glib::RefPtr<Gdk::Pixbuf>  m_raw_format_emblem;
     Glib::RefPtr<Gdk::Pixbuf>  m_rawjpeg_format_emblem;

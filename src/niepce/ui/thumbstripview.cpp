@@ -85,13 +85,17 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
 {
     m_renderer = manage(
         new ThumbStripCell(
-            [ui_data_provider] (int label) {
+            [ui_data_provider] (int32_t label, ffi::RgbColour* out) {
                 auto provider = ui_data_provider.lock();
+                DBG_ASSERT(static_cast<bool>(provider), "couldn't lock UI provider");
                 if (provider) {
-                    return provider->colourForLabel(label);
+                    auto c = provider->colourForLabel(label);
+                    if (c.ok() && out) {
+                        *out = c.unwrap();
+                        return true;
+                    }
                 }
-                ERR_OUT("couldn't lock UI provider");
-                return fwk::Option<fwk::RgbColourPtr>();
+                return false;
             })
         );
 

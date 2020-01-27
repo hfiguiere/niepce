@@ -1,5 +1,5 @@
 /*
- * niepce - crates/npc-fwk/src/toolkit/mod.rs
+ * niepce - npc-fwk/toolkit/clickable_cell_renderer.rs
  *
  * Copyright (C) 2020 Hubert Figuière
  *
@@ -17,11 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-pub mod clickable_cell_renderer;
-pub mod mimetype;
-pub mod widgets;
-
-pub type Sender<T> = glib::Sender<T>;
-
-/// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
-pub struct PortableChannel<T>(pub Sender<T>, pub glib::SourceId);
+/// Trait for get clicks from cell renderer.
+/// This is used to work around some bug in Gtk.
+pub trait ClickableCellRenderer {
+    fn hit(&mut self, x: i32, y: i32);
+    fn x(&self) -> i32;
+    fn y(&self) -> i32;
+    fn is_hit(&self) -> bool;
+    fn reset_hit(&mut self);
+}

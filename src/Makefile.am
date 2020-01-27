@@ -56,6 +56,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/niepce/ui/dialogs/confirm.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/requestnewfolder.rs \
 	@top_srcdir@/src/niepce/ui/thumb_nav.rs \
+	@top_srcdir@/src/niepce/ui/library_cell_renderer.rs \
 	$(NULL)
 
 EXTRA_DIST = \

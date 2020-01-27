@@ -58,15 +58,15 @@ void UIDataProvider::deleteLabel(int id)
     }
 }
 
-fwk::Option<fwk::RgbColourPtr> UIDataProvider::colourForLabel(int id) const
+fwk::Option<fwk::RgbColour> UIDataProvider::colourForLabel(int32_t id) const
 {
     for(auto label : m_labels) {
         if (engine_db_label_id(label.get()) == id) {
-            return fwk::Option<fwk::RgbColourPtr>(
-                fwk::rgbcolour_clone(engine_db_label_colour(label.get())));
+            return fwk::Option<fwk::RgbColour>(
+                *engine_db_label_colour(label.get()));
         }
     }
-    return fwk::Option<fwk::RgbColourPtr>();
+    return fwk::Option<fwk::RgbColour>();
 }
 
 

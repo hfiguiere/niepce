@@ -17,6 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+extern crate cairo;
+extern crate gdk;
+extern crate gdk_pixbuf;
 extern crate gettextrs;
 extern crate gio;
 extern crate gio_sys;

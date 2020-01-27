@@ -36,7 +36,7 @@ public:
     void updateLabel(const eng::Label &);
     void addLabel(const eng::Label & l);
     void deleteLabel(int id);
-    fwk::Option<fwk::RgbColourPtr> colourForLabel(int id) const;
+    fwk::Option<fwk::RgbColour> colourForLabel(int32_t id) const;
     const eng::LabelList & getLabels() const
         { return m_labels; }
 private:

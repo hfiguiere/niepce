@@ -117,7 +117,7 @@ void ImageListStore::add_libfile(const eng::LibFilePtr & f)
     row[m_columns.m_libfile] = f;
     row[m_columns.m_strip_thumb]
         = fwk::gdkpixbuf_scale_to_fit(icon, 100);
-    row[m_columns.m_file_status] = eng::FileStatus::Ok;
+    row[m_columns.m_file_status] = static_cast<gint>(eng::FileStatus::Ok);
     m_idmap[engine_db_libfile_id(f.get())] = riter;
 }
 
@@ -181,7 +181,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         auto iter = m_idmap.find(id);
         if (iter != m_idmap.end()) {
             Gtk::TreeRow row = *(iter->second);
-            row[m_columns.m_file_status] = status;
+            row[m_columns.m_file_status] = static_cast<gint>(status);
         }
         break;
     }

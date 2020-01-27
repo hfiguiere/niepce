@@ -255,7 +255,7 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         draw_flag(cr, engine_db_libfile_flag(file.get()), r);
     }
 
-    auto status = m_statusproperty.get_value();
+    auto status = static_cast<eng::FileStatus>(m_statusproperty.get_value());
     if (m_drawstatus && status != eng::FileStatus::Ok) {
         draw_status(cr, status, r);
     }
@@ -285,10 +285,11 @@ LibraryCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         if (m_drawlabel) {
             uint32_t label_id = engine_db_libfile_label(file.get());
             if (label_id != 0) {
-                auto result = m_get_colour(label_id);
-                DBG_ASSERT(!result.empty(), "colour not found");
-                if (!result.empty()) {
-                    drawLabel(cr, left, *result.unwrap(), r);
+                ffi::RgbColour colour;
+                if (m_get_colour(label_id, &colour)) {
+                    drawLabel(cr, left, colour, r);
+                } else {
+                    DBG_ASSERT(false, "colour not found");
                 }
             }
         }

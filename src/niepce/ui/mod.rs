@@ -19,4 +19,5 @@
 
 pub mod dialogs;
 pub mod imagetoolbar;
+pub mod library_cell_renderer;
 pub mod thumb_nav;

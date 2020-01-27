@@ -51,6 +51,18 @@ pub enum FileStatus {
     Ok = 0,
     /// File is missing
     Missing = 1,
+    /// Invalid
+    Invalid = -1,
+}
+
+impl From<i32> for FileStatus {
+    fn from(t: i32) -> Self {
+        match t {
+            0 => FileStatus::Ok,
+            1 => FileStatus::Missing,
+            _ => FileStatus::Invalid,
+        }
+    }
 }
 
 impl From<i32> for FileType {

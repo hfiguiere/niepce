@@ -19,6 +19,7 @@ fn main() {
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
             .exclude_item("GtkIconView")
+            .exclude_item("GtkCellRenderer")
             .exclude_item("GtkWidget")
             .exclude_item("GFileInfo")
             .exclude_item("RgbColour")
