@@ -17,8 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use libc::c_void;
 use once_cell::unsync::Lazy;
 use std::cell::{Cell, RefCell};
+use std::ptr;
 
 use cairo;
 use gdk;
@@ -33,7 +35,8 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::CellRendererPixbufClass;
 
-use npc_engine::db::libfile::{FileStatus, FileType, LibFile};
+use crate::niepce::ui::image_list_store::StoreLibFile;
+use npc_engine::db::libfile::{FileStatus, FileType};
 use npc_fwk::base::rgbcolour::RgbColour;
 use npc_fwk::toolkit::clickable_cell_renderer::ClickableCellRenderer;
 use npc_fwk::toolkit::widgets::rating_label::RatingLabel;
@@ -78,7 +81,10 @@ glib_wrapper! {
 }
 
 impl LibraryCellRenderer {
-    pub fn new(callback: Option<GetColourCallback>) -> Self {
+    /// Create a library cell renderer.
+    /// callback: an optional callback used to get a colour for labels.
+    /// callback_data: raw pointer passed as is to the callback.
+    pub fn new(callback: Option<GetColourCallback>, callback_data: *const c_void) -> Self {
         let obj: Self = glib::Object::new(
             Self::static_type(),
             &[("mode", &gtk::CellRendererMode::Activatable)],
@@ -87,10 +93,79 @@ impl LibraryCellRenderer {
         .downcast()
         .expect("Created Library Cell Renderer is of wrong type");
 
-        let priv_ = LibraryCellRendererPriv::from_instance(&obj);
-        priv_.get_colour_callback.replace(callback);
+        if callback.is_some() {
+            let priv_ = LibraryCellRendererPriv::from_instance(&obj);
+            priv_.get_colour_callback.replace(callback);
+            priv_.callback_data.set(callback_data);
+        }
 
         obj
+    }
+
+    /// Create a new thumb renderer, basicall a LibraryCellRender with some options.
+    /// Mostly just draw the thumbnail.
+    /// Doesn't need the get_colour_callback
+    pub fn new_thumb_renderer() -> Self {
+        let cell_renderer = Self::new(None, ptr::null());
+
+        cell_renderer.set_pad(0);
+        cell_renderer.set_size(100);
+        cell_renderer.set_drawborder(false);
+        cell_renderer.set_drawemblem(false);
+        cell_renderer.set_drawrating(false);
+        cell_renderer.set_drawlabel(false);
+        cell_renderer.set_drawflag(false);
+
+        cell_renderer
+    }
+}
+
+/// Option to set for the LibraryCellRenderer
+pub trait LibraryCellRendererExt {
+    /// Set padding
+    fn set_pad(&self, pad: i32);
+    /// Set size
+    fn set_size(&self, size: i32);
+    /// Whether to draw the border
+    fn set_drawborder(&self, draw: bool);
+    /// Whether to draw the emblem
+    fn set_drawemblem(&self, draw: bool);
+    /// Whether to draw the rating
+    fn set_drawrating(&self, draw: bool);
+    /// Whether to draw the label
+    fn set_drawlabel(&self, draw: bool);
+    /// Whether to draw the flag
+    fn set_drawflag(&self, draw: bool);
+}
+
+impl LibraryCellRendererExt for LibraryCellRenderer {
+    fn set_pad(&self, pad: i32) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.pad.set(pad);
+    }
+    fn set_size(&self, size: i32) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.size.set(size);
+    }
+    fn set_drawborder(&self, draw: bool) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.drawborder.set(draw);
+    }
+    fn set_drawemblem(&self, draw: bool) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.draw_emblem.set(draw);
+    }
+    fn set_drawrating(&self, draw: bool) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.draw_rating.set(draw);
+    }
+    fn set_drawlabel(&self, draw: bool) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.draw_label.set(draw);
+    }
+    fn set_drawflag(&self, draw: bool) {
+        let priv_ = LibraryCellRendererPriv::from_instance(self);
+        priv_.draw_flag.set(draw);
     }
 }
 
@@ -130,21 +205,12 @@ impl ClickableCellRenderer for LibraryCellRenderer {
     }
 }
 
-/// Wrap a libfile into something that can be in a glib::Value
-#[derive(Clone)]
-struct CellLibFile(LibFile);
-
-impl glib::subclass::boxed::BoxedType for CellLibFile {
-    const NAME: &'static str = "CellLibFile";
-
-    glib_boxed_type!();
-}
-glib_boxed_derive_traits!(CellLibFile);
-
-type GetColourCallback = unsafe extern "C" fn(i32, *mut RgbColour) -> bool;
+/// Callback type to get the label colour.
+/// Return false if none is returned.
+type GetColourCallback = unsafe extern "C" fn(i32, *mut RgbColour, *const c_void) -> bool;
 
 pub struct LibraryCellRendererPriv {
-    libfile: RefCell<Option<CellLibFile>>,
+    libfile: RefCell<Option<StoreLibFile>>,
     status: Cell<FileStatus>,
     size: Cell<i32>,
     pad: Cell<i32>,
@@ -156,6 +222,7 @@ pub struct LibraryCellRendererPriv {
     draw_status: Cell<bool>,
     clickable_cell: RefCell<ClickableCell>,
     get_colour_callback: RefCell<Option<GetColourCallback>>,
+    callback_data: Cell<*const c_void>,
 }
 
 impl LibraryCellRendererPriv {
@@ -163,7 +230,7 @@ impl LibraryCellRendererPriv {
         self.status.set(status);
     }
 
-    fn set_libfile(&self, libfile: Option<CellLibFile>) {
+    fn set_libfile(&self, libfile: Option<StoreLibFile>) {
         self.libfile.replace(libfile);
     }
 
@@ -239,7 +306,7 @@ impl LibraryCellRendererPriv {
         if let Some(f) = *self.get_colour_callback.borrow() {
             unsafe {
                 let mut c = RgbColour::default();
-                if f(label_id, &mut c) {
+                if f(label_id, &mut c, self.callback_data.get()) {
                     return Some(c);
                 }
             }
@@ -254,7 +321,7 @@ static PROPERTIES: [subclass::Property; 2] = [
             libfile,
             "Library File",
             "File from the library in the cell",
-            CellLibFile::get_type(),
+            StoreLibFile::get_type(),
             glib::ParamFlags::READWRITE,
         )
     }),
@@ -284,7 +351,7 @@ impl ObjectSubclass for LibraryCellRendererPriv {
         klass.add_signal(
             "rating-changed",
             glib::SignalFlags::RUN_LAST,
-            &[Type::U64, Type::I32],
+            &[Type::I64, Type::I32],
             Type::Unit,
         );
     }
@@ -303,6 +370,7 @@ impl ObjectSubclass for LibraryCellRendererPriv {
             draw_status: Cell::new(true),
             clickable_cell: RefCell::new(ClickableCell::default()),
             get_colour_callback: RefCell::new(None),
+            callback_data: Cell::new(ptr::null()),
         }
     }
 }
@@ -319,7 +387,7 @@ impl ObjectImpl for LibraryCellRendererPriv {
         match *prop {
             subclass::Property("libfile", ..) => {
                 let libfile = value
-                    .get::<&CellLibFile>()
+                    .get::<&StoreLibFile>()
                     .expect("type conformity checked by `Object::set_property`")
                     .map(|f| f.clone());
                 self.set_libfile(libfile);
@@ -556,12 +624,32 @@ unsafe impl<T: ObjectSubclass + LibraryCellRendererImpl> IsSubclassable<T>
     }
 }
 
-// XXX we must pass the get_colour callback
 #[no_mangle]
 pub unsafe extern "C" fn npc_library_cell_renderer_new(
-    get_colour: Option<unsafe extern "C" fn(i32, *mut RgbColour) -> bool>,
+    get_colour: Option<unsafe extern "C" fn(i32, *mut RgbColour, *const c_void) -> bool>,
+    callback_data: *const c_void,
 ) -> *mut gtk_sys::GtkCellRenderer {
-    LibraryCellRenderer::new(get_colour)
+    LibraryCellRenderer::new(get_colour, callback_data)
+        .upcast::<gtk::CellRenderer>()
+        .to_glib_full()
+}
+
+/// Hit test for the cellrenderer.
+#[no_mangle]
+pub unsafe extern "C" fn npc_library_cell_renderer_hit(
+    ptr: *mut gtk_sys::GtkCellRenderer,
+    x: i32,
+    y: i32,
+) {
+    let mut renderer = gtk::CellRenderer::from_glib_borrow(ptr)
+        .downcast::<LibraryCellRenderer>()
+        .expect("Expected a LibraryCellRenderer");
+    renderer.hit(x, y);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn npc_library_thumb_cell_renderer_new() -> *mut gtk_sys::GtkCellRenderer {
+    LibraryCellRenderer::new_thumb_renderer()
         .upcast::<gtk::CellRenderer>()
         .to_glib_full()
 }

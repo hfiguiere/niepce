@@ -32,7 +32,6 @@
 #include "fwk/utils/boost.hpp"
 #include "engine/db/libfile.hpp"
 #include "thumbstripview.hpp"
-#include "librarycellrenderer.hpp"
 
 #include <gdkmm/general.h>
 
@@ -55,65 +54,33 @@ static GtkTargetEntry target_table[] = {
 };
 #endif
 
-class ThumbStripCell
-    : public LibraryCellRenderer
-{
-public:
-    ThumbStripCell(const GetColourFunc& get_colour);
-};
-
-ThumbStripCell::ThumbStripCell(const GetColourFunc& get_colour)
-    : Glib::ObjectBase(typeid(ThumbStripCell))
-    , LibraryCellRenderer(get_colour)
-{
-    set_pad(0);
-    set_size(100);
-    set_drawborder(false);
-    set_drawemblem(false);
-    set_drawrating(false);
-    set_drawlabel(false);
-    set_drawflag(false);
-}
-
-ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
-                               const libraryclient::UIDataProviderWeakPtr& ui_data_provider)
+ThumbStripView::ThumbStripView(const ui::ImageListStorePtr& store)
     : Glib::ObjectBase(typeid(ThumbStripView))
-    , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store))
+    , Gtk::IconView(Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(store->gobjmm()))
     , property_item_height(*this, "item-height", 100)
     , m_store(store)
     , m_model_item_count(0)
 {
-    m_renderer = manage(
-        new ThumbStripCell(
-            [ui_data_provider] (int32_t label, ffi::RgbColour* out) {
-                auto provider = ui_data_provider.lock();
-                DBG_ASSERT(static_cast<bool>(provider), "couldn't lock UI provider");
-                if (provider) {
-                    auto c = provider->colourForLabel(label);
-                    if (c.ok() && out) {
-                        *out = c.unwrap();
-                        return true;
-                    }
-                }
-                return false;
-            })
-        );
+    auto r = ffi::npc_library_thumb_cell_renderer_new();
+    DBG_ASSERT(r, "Renderer is null");
+    m_renderer = manage(Glib::wrap(GTK_CELL_RENDERER_PIXBUF(r)));
 
     pack_start(*m_renderer, FALSE);
     connect_property_changed("item-height",
                              [this] () {
                                  m_renderer->property_height() = this->property_item_height;
                              });
+
     m_renderer->property_height() = 100;
     m_renderer->property_yalign() = 0.5;
     m_renderer->property_xalign() = 0.5;
 
     add_attribute(*m_renderer, "pixbuf",
-                  ui::ImageListStore::Columns::STRIP_THUMB_INDEX);
+                  static_cast<gint>(ffi::ColIndex::StripThumb));
     add_attribute(*m_renderer, "libfile",
-                  ui::ImageListStore::Columns::FILE_INDEX);
+                  static_cast<gint>(ffi::ColIndex::File));
     add_attribute(*m_renderer, "status",
-                  ui::ImageListStore::Columns::FILE_STATUS_INDEX);
+                  static_cast<gint>(ffi::ColIndex::FileStatus));
     set_selection_mode(Gtk::SELECTION_MULTIPLE);
     set_column_spacing(THUMB_STRIP_VIEW_SPACING);
 
@@ -128,14 +95,14 @@ ThumbStripView::ThumbStripView(const Glib::RefPtr<ui::ImageListStore> & store,
     setup_model(store);
 }
 
-void ThumbStripView::set_model(const Glib::RefPtr<ui::ImageListStore> & store)
+void ThumbStripView::set_model(const ui::ImageListStorePtr& store)
 {
     m_store = store;
     setup_model(store);
-    IconView::set_model(store);
+    IconView::set_model(store->gobjmm());
 }
 
-void ThumbStripView::setup_model(const Glib::RefPtr<ui::ImageListStore> & store)
+void ThumbStripView::setup_model(const ui::ImageListStorePtr& store)
 {
     m_model_add.disconnect();
     m_model_rm.disconnect();
@@ -143,13 +110,13 @@ void ThumbStripView::setup_model(const Glib::RefPtr<ui::ImageListStore> & store)
     m_model_item_count = m_store->get_count();
     update_item_count();
 
-    m_model_add = store->signal_row_inserted()
+    m_model_add = store->gobjmm()->signal_row_inserted()
         .connect(sigc::mem_fun(*this, &ThumbStripView::row_added));
-    m_model_rm = store->signal_row_deleted()
+    m_model_rm = store->gobjmm()->signal_row_deleted()
         .connect(sigc::mem_fun(*this, &ThumbStripView::row_deleted));
 }
 
-const Glib::RefPtr<ui::ImageListStore> & ThumbStripView::get_model() const
+const ui::ImageListStorePtr& ThumbStripView::get_model() const
 {
     return m_store;
 }

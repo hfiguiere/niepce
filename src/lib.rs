@@ -20,6 +20,7 @@
 extern crate cairo;
 extern crate gdk;
 extern crate gdk_pixbuf;
+extern crate gdk_pixbuf_sys;
 extern crate gettextrs;
 extern crate gio;
 extern crate gio_sys;

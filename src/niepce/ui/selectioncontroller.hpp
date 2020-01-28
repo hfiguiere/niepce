@@ -72,7 +72,7 @@ public:
     void selected(const IImageSelectable::WeakPtr &);
 
 
-    const Glib::RefPtr<ImageListStore> & get_list_store() const
+    const ImageListStorePtr& get_list_store() const
         { return m_imageliststore; }
 
     // the signal to call when selection is changed.
@@ -129,7 +129,7 @@ private:
      */
     void _selection_move(bool backwards);
 
-    Glib::RefPtr<ImageListStore>  m_imageliststore;
+    ImageListStorePtr  m_imageliststore;
     bool m_in_handler;
     std::vector<IImageSelectable::WeakPtr> m_selectables;
 };

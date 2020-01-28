@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.h
  *
- * Copyright (C) 2008-2018 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-#ifndef __UI_IMAGELISTSTORE__
-#define __UI_IMAGELISTSTORE__
-
+#pragma once
 
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/liststore.h>
@@ -34,42 +30,43 @@
 
 namespace ui {
 
-/** @brief the general list store */
+class ImageListStore;
+
+typedef std::shared_ptr<ImageListStore> ImageListStorePtr;
+
+/** @brief the general list store. Wraps the list store from Rust. */
 class ImageListStore
-    : public Gtk::ListStore
 {
 public:
     class Columns
         : public Gtk::TreeModelColumnRecord
     {
     public:
-        enum {
-            THUMB_INDEX = 0,
-            FILE_INDEX = 1,
-            STRIP_THUMB_INDEX = 2,
-            FILE_STATUS_INDEX = 3
-        };
         Columns()
             {
                 add(m_pix);
-                add(m_libfile);
+                add(m_libfile_do_not_use);
                 add(m_strip_thumb);
                 add(m_file_status);
             }
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-        Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile;
+        Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile_do_not_use;
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
         Gtk::TreeModelColumn<gint> m_file_status;
     };
 
+    ImageListStore(ffi::ImageListStore*);
+    ~ImageListStore();
+    Glib::RefPtr<Gtk::ListStore> gobjmm() const
+        { return m_store_wrap; }
     Gtk::TreePath get_path_from_id(eng::library_id_t id) const;
     Gtk::TreeIter get_iter_from_id(eng::library_id_t id) const;
-    eng::library_id_t get_libfile_id_at_path(const Gtk::TreePath& path);
+    eng::library_id_t get_libfile_id_at_path(const Gtk::TreePath& path) const;
     eng::LibFilePtr get_file(eng::library_id_t id) const;
     size_t get_count() const
-        { return children().size(); }
+        { return m_store_wrap->children().size(); }
 
-    static Glib::RefPtr<ImageListStore> create();
+    static ImageListStorePtr create();
 
     void set_parent_controller(const fwk::Controller::WeakPtr & ctrl)
         { m_controller = ctrl; }
@@ -78,8 +75,7 @@ public:
     void clear_content();
     void on_lib_notification(const eng::LibNotification &n);
     void on_tnail_notification(const eng::ThumbnailNotification &n);
-protected:
-    ImageListStore(const Columns& columns);
+
 private:
     /// Add the LibFile to the model
     void add_libfile(const eng::LibFilePtr & f);
@@ -88,7 +84,9 @@ private:
     libraryclient::LibraryClientPtr getLibraryClient();
     static bool is_property_interesting(fwk::PropertyIndex idx);
 
-    const Columns           & m_columns;
+    Columns m_columns;
+    ffi::ImageListStore* m_store;
+    Glib::RefPtr<Gtk::ListStore> m_store_wrap;
     eng::library_id_t m_current_folder;
     eng::library_id_t m_current_keyword;
     std::map<eng::library_id_t, Gtk::TreeIter> m_idmap;
@@ -96,7 +94,6 @@ private:
 };
 
 }
-
 /*
   Local Variables:
   mode:c++
@@ -107,4 +104,3 @@ private:
   End:
 */
 
-#endif

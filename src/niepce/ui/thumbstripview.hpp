@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/thumbstripview.hpp
  *
- * Copyright (C) 2009-2014 Hubert Figuiere
+ * Copyright (C) 2009-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _THUMB_STRIP_VIEW_HPP_
-#define _THUMB_STRIP_VIEW_HPP_
+#pragma once
 
 #include <glibmm/property.h>
 
@@ -26,7 +25,6 @@
 #include <gtkmm/orientable.h>
 #include <gtkmm/cellrendererpixbuf.h>
 
-#include "libraryclient/uidataprovider.hpp"
 #include "niepce/ui/imageliststore.hpp"
 
 namespace ui {
@@ -35,11 +33,10 @@ class ThumbStripView
   : public Gtk::IconView
 {
 public:
-    ThumbStripView(const Glib::RefPtr<ui::ImageListStore>& store,
-                   const libraryclient::UIDataProviderWeakPtr& ui_data_provider);
+    ThumbStripView(const ImageListStorePtr& store);
 
-    void set_model(const Glib::RefPtr<ui::ImageListStore> & store);
-    const Glib::RefPtr<ui::ImageListStore> & get_model() const;
+    void set_model(const ui::ImageListStorePtr& store);
+    const ui::ImageListStorePtr& get_model() const;
     void set_item_height(int height);
 
     Glib::Property<gint> property_item_height;
@@ -48,14 +45,14 @@ private:
                           Gtk::SelectionData&,guint,guint) override;
     void update_visible_range(int, int);
 
-    void setup_model(const Glib::RefPtr<ui::ImageListStore> & store);
+    void setup_model(const ui::ImageListStorePtr& store);
     void row_added(const Gtk::TreeModel::Path&,
                    const Gtk::TreeModel::iterator&);
     void row_deleted(const Gtk::TreeModel::Path&);
     void update_item_count();
 
-    Glib::RefPtr<ui::ImageListStore> m_store;
-    Gtk::CellRendererPixbuf  *m_renderer;
+    ImageListStorePtr m_store;
+    Gtk::CellRendererPixbuf* m_renderer;
 
     int m_model_item_count;
     sigc::connection m_model_add;
@@ -64,8 +61,6 @@ private:
 
 
 }
-
-#endif
 /*
   Local Variables:
   mode:c++

@@ -56,24 +56,28 @@ Glib::RefPtr<Gdk::Pixbuf> ImageListStore::get_loading_icon()
     return icon;
 }
 
-Glib::RefPtr<ImageListStore> ImageListStore::create()
+ImageListStorePtr ImageListStore::create()
 {
-    static const Columns columns;
-    return Glib::RefPtr<ImageListStore>(new ImageListStore(columns));
+    return std::make_shared<ImageListStore>(ffi::npc_image_list_store_new());
 }
 
-ImageListStore::ImageListStore(const Columns& _columns)
-    : Gtk::ListStore(_columns)
-    , m_columns(_columns)
+ImageListStore::ImageListStore(ffi::ImageListStore* store)
+    : m_store(store)
+    , m_store_wrap(Glib::wrap(GTK_LIST_STORE(ffi::npc_image_list_store_gobj(store)), true))
     , m_current_folder(0)
     , m_current_keyword(0)
 {
 }
 
+ImageListStore::~ImageListStore()
+{
+    m_store_wrap.reset();
+    ffi::npc_image_list_store_delete(m_store);
+}
 
 Gtk::TreeIter ImageListStore::get_iter_from_id(eng::library_id_t id) const
 {
-    auto iter = m_idmap.find( id );
+    auto iter = m_idmap.find(id);
     if(iter != m_idmap.end()) {
         return iter->second;
     }
@@ -84,48 +88,45 @@ Gtk::TreePath ImageListStore::get_path_from_id(eng::library_id_t id) const
 {
     Gtk::TreeIter iter = get_iter_from_id(id);
     if(iter) {
-        return get_path(iter);
+        return m_store_wrap->get_path(iter);
     }
     return Gtk::TreePath();
 }
 
-eng::library_id_t ImageListStore::get_libfile_id_at_path(const Gtk::TreePath& path)
+eng::library_id_t ImageListStore::get_libfile_id_at_path(const Gtk::TreePath &path) const
 {
-    auto iter = get_iter(path);
-    eng::LibFilePtr libfile = (*iter)[m_columns.m_libfile];
-    if (libfile) {
-        return engine_db_libfile_id(libfile.get());
-    }
-    return 0;
+    return ffi::npc_image_list_store_get_file_id_at_path(m_store, path.gobj());
 }
 
 eng::LibFilePtr ImageListStore::get_file(eng::library_id_t id) const
 {
     auto iter = get_iter_from_id(id);
     if (iter) {
-        return (*iter)[m_columns.m_libfile];
+        auto f = ffi::npc_image_list_store_get_file(m_store, iter.gobj());
+        if (f) {
+            return eng::libfile_wrap(f);
+        }
     }
     return eng::LibFilePtr();
 }
 
 void ImageListStore::add_libfile(const eng::LibFilePtr & f)
 {
-    Gtk::TreeModel::iterator riter = append();
-    Gtk::TreeRow row = *riter;
     Glib::RefPtr<Gdk::Pixbuf> icon = get_loading_icon();
-    row[m_columns.m_pix] = icon;
-    row[m_columns.m_libfile] = f;
-    row[m_columns.m_strip_thumb]
-        = fwk::gdkpixbuf_scale_to_fit(icon, 100);
-    row[m_columns.m_file_status] = static_cast<gint>(eng::FileStatus::Ok);
-    m_idmap[engine_db_libfile_id(f.get())] = riter;
+    DBG_ASSERT(static_cast<bool>(f), "f can't be null");
+    auto iter = ffi::npc_image_list_store_add_row(m_store,
+        icon->gobj(), f.get(), fwk::gdkpixbuf_scale_to_fit(icon, 100)->gobj(),
+        eng::FileStatus::Ok);
+
+    m_idmap[engine_db_libfile_id(f.get())] = Gtk::TreeIter(
+        GTK_TREE_MODEL(m_store_wrap->gobj()), &iter);
 }
 
 void ImageListStore::clear_content()
 {
     // clear the map before the list.
     m_idmap.clear();
-    clear();
+    m_store_wrap->clear();
 }
 
 void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
@@ -167,7 +168,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             DBG_OUT("from this folder");
             auto iter = get_iter_from_id(param->file);
             if (iter) {
-                iter = erase(iter);
+                iter = m_store_wrap->erase(iter);
             }
         } else if (param->to == m_current_folder) {
             // XXX add to list. but this isn't likely to happen atm.
@@ -194,14 +195,8 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         if(is_property_interesting(prop)) {
             std::map<eng::library_id_t, Gtk::TreeIter>::const_iterator iter =
                 m_idmap.find(ffi::metadatachange_get_id(m));
-            if(iter != m_idmap.end()) {
-                Gtk::TreeRow row = *(iter->second);
-                //
-                eng::LibFilePtr file = row[m_columns.m_libfile];
-                engine_db_libfile_set_property(
-                    file.get(), prop, fwk_property_value_get_integer(
-                        ffi::metadatachange_get_value(m)));
-                row[m_columns.m_libfile] = file;
+            if (iter != m_idmap.end()) {
+                ffi::npc_image_list_store_set_property(m_store, iter->second.gobj(), m);
             }
         }
         break;
@@ -235,9 +230,9 @@ void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
     if(iter != m_idmap.end()) {
         // found the icon view item
         auto pixbuf = tn.pixmap.pixbuf();
-        Gtk::TreeRow row = *(iter->second);
-        row[m_columns.m_pix] = pixbuf;
-        row[m_columns.m_strip_thumb] = fwk::gdkpixbuf_scale_to_fit(pixbuf, 100);
+        ffi::npc_image_list_store_set_tnail(
+            m_store, iter->second.gobj(), pixbuf->gobj(),
+            fwk::gdkpixbuf_scale_to_fit(pixbuf, 100)->gobj());
     }
     else {
         DBG_OUT("row %Ld not found", (long long)tn.id);

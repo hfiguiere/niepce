@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/imagegridview.hpp
  *
- * Copyright (C) 2011-2013 Hubert Figuiere
+ * Copyright (C) 2011-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,51 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IMAGE_GRID_VIEW_H__
-#define IMAGE_GRID_VIEW_H__
+#pragma once
 
 #include <gtkmm/iconview.h>
-#include <gtkmm/cellareabox.h>
 
 namespace fwk {
-
-/**
- * Clickable Cell Renderer
- * To work around https://bugzilla.gnome.org/show_bug.cgi?id=664368
- */
-class ClickableCellRenderer
-{
-public:
-  ClickableCellRenderer()
-    : m_x(0)
-    , m_y(0)
-    , m_hit(false)
-  {
-  }
-  /**
-   * Hit.
-   */
-  void hit(int x, int y);
-  int x() const 
-  {
-    return m_x;
-  }
-  int y() const
-  {
-    return m_y;
-  }
-  bool is_hit() const
-  {
-    return m_hit;
-  }
-  void reset_hit()
-  {
-    m_hit = false;
-  }
-private:
-  int m_x, m_y;
-  bool m_hit;
-};
 
 class ImageGridView
   : public Gtk::IconView
@@ -80,5 +40,3 @@ private:
 };
 
 }
-
-#endif

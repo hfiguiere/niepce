@@ -25,7 +25,6 @@ libniepceui_a_SOURCES = \
 	gridviewmodule.hpp gridviewmodule.cpp \
 	moduleshell.hpp moduleshell.cpp \
 	moduleshellwidget.hpp moduleshellwidget.cpp \
-	librarycellrenderer.hpp librarycellrenderer.cpp \
 	imageliststore.hpp imageliststore.cpp\
 	workspacecontroller.hpp workspacecontroller.cpp \
 	metadatapanecontroller.hpp metadatapanecontroller.cpp \

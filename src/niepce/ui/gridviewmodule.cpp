@@ -33,12 +33,11 @@
 #include "libraryclient/uidataprovider.hpp"
 #include "gridviewmodule.hpp"
 #include "moduleshell.hpp"
-#include "librarycellrenderer.hpp"
 
 namespace ui {
 
 GridViewModule::GridViewModule(const IModuleShell & shell,
-                               const Glib::RefPtr<ImageListStore> & store)
+                               const ImageListStorePtr& store)
   : m_shell(shell)
   , m_model(store)
   , m_librarylistview(nullptr)
@@ -88,13 +87,37 @@ void GridViewModule::display_none()
     m_metapanecontroller->display(0, nullptr);
 }
 
+bool GridViewModule::get_colour_callback_c(int32_t label, ffi::RgbColour* out,
+                                           const void* user_data)
+{
+    if (user_data == nullptr) {
+        return false;
+    }
+    return static_cast<const GridViewModule*>(user_data)->get_colour_callback(label, out);
+}
+
+bool GridViewModule::get_colour_callback(int32_t label, ffi::RgbColour* out) const
+{
+    libraryclient::UIDataProviderWeakPtr ui_data_provider(m_shell.get_ui_data_provider());
+    auto provider = ui_data_provider.lock();
+    DBG_ASSERT(static_cast<bool>(provider), "couldn't lock UI provider");
+    if (provider) {
+        auto c = provider->colourForLabel(label);
+        if (c.ok() && out) {
+            *out = c.unwrap();
+            return true;
+        }
+    }
+    return false;
+}
+
 Gtk::Widget * GridViewModule::buildWidget()
 {
   if(m_widget) {
     return m_widget;
   }
   m_widget = &m_lib_splitview;
-  m_librarylistview = Gtk::manage(new fwk::ImageGridView(m_model));
+  m_librarylistview = Gtk::manage(new fwk::ImageGridView(m_model->gobjmm()));
   m_librarylistview->set_selection_mode(Gtk::SELECTION_SINGLE);
   m_librarylistview->property_row_spacing() = 0;
   m_librarylistview->property_column_spacing() = 0;
@@ -111,33 +134,20 @@ Gtk::Widget * GridViewModule::buildWidget()
       .connect(sigc::mem_fun(*this, &GridViewModule::on_popup_menu));
 
   // the main cell
-  libraryclient::UIDataProviderWeakPtr ui_data_provider(m_shell.get_ui_data_provider());
-  LibraryCellRenderer* libcell = Gtk::manage(
-      new LibraryCellRenderer(
-          [ui_data_provider] (int32_t label, ffi::RgbColour* out) {
-              auto provider = ui_data_provider.lock();
-              DBG_ASSERT(static_cast<bool>(provider), "couldn't lock UI provider");
-              if (provider) {
-                  auto c = provider->colourForLabel(label);
-                  if (c.ok() && out) {
-                      *out = c.unwrap();
-                      return true;
-                  }
-              }
-              return false;
-          })
-      );
-  libcell->signal_rating_changed.connect(
-      sigc::mem_fun(*this, &GridViewModule::on_rating_changed));
+  Gtk::CellRenderer* libcell = manage(
+      Glib::wrap(
+          ffi::npc_library_cell_renderer_new(&get_colour_callback_c, this)));
+  g_signal_connect(
+      libcell->gobj(), "rating-changed", G_CALLBACK(GridViewModule::on_rating_changed), this);
 
   Glib::RefPtr<Gtk::CellArea> cell_area = m_librarylistview->property_cell_area();
   cell_area->pack_start(*libcell, FALSE);
   cell_area->add_attribute(*libcell, "pixbuf",
-                           ImageListStore::Columns::THUMB_INDEX);
+                           static_cast<gint>(ffi::ColIndex::Thumb));
   cell_area->add_attribute(*libcell, "libfile",
-                           ImageListStore::Columns::FILE_INDEX);
+                           static_cast<gint>(ffi::ColIndex::File));
   cell_area->add_attribute(*libcell, "status",
-                           ImageListStore::Columns::FILE_STATUS_INDEX);
+                           static_cast<gint>(ffi::ColIndex::FileStatus));
 
   m_scrollview.add(*m_librarylistview);
   m_scrollview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -214,9 +224,11 @@ void GridViewModule::on_metadata_changed(const fwk::PropertyBagPtr & props,
     m_shell.get_selection_controller()->set_properties(props, old);
 }
 
-void GridViewModule::on_rating_changed(int /*id*/, int rating)
+void GridViewModule::on_rating_changed(GtkCellRenderer*, eng::library_id_t /*id*/,
+                                       int32_t rating, gpointer user_data)
 {
-    m_shell.get_selection_controller()->set_rating(rating);
+    auto self = static_cast<GridViewModule*>(user_data);
+    self->m_shell.get_selection_controller()->set_rating(rating);
 }
 
 bool GridViewModule::on_popup_menu()

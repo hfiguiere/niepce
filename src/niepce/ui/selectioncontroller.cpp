@@ -66,7 +66,7 @@ void SelectionController::activated(const Gtk::TreeModel::Path & path,
                                     const IImageSelectable::WeakPtr & /*selectable*/)
 {
     fwk::AutoFlag f(m_in_handler);
-    eng::library_id_t selection = m_imageliststore->get_libfile_id_at_path(path);
+    auto selection = m_imageliststore->get_libfile_id_at_path(path);
     if (selection) {
         DBG_OUT("item activated %Ld", (long long)selection);
         signal_activated(selection);
@@ -131,7 +131,7 @@ void SelectionController::_selection_move(bool backwards)
     }
 
     if(backwards) {
-        if(iter != m_imageliststore->children().begin()) {
+        if(iter != m_imageliststore->gobjmm()->children().begin()) {
             --iter;
         }
     }

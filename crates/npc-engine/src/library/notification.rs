@@ -76,9 +76,9 @@ pub struct Count {
 
 #[derive(Clone)]
 pub struct MetadataChange {
-    id: LibraryId,
-    meta: PropertyIndex,
-    value: PropertyValue,
+    pub id: LibraryId,
+    pub meta: PropertyIndex,
+    pub value: PropertyValue,
 }
 
 impl MetadataChange {

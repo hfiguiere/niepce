@@ -38,7 +38,7 @@ public:
 	typedef std::weak_ptr<FilmStripController> WeakPtr;
 
 	FilmStripController(
-          const Glib::RefPtr<ImageListStore>& store,
+          const ImageListStorePtr& store,
           const libraryclient::UIDataProviderWeakPtr& ui_data_provider);
 
 	virtual Gtk::IconView * image_list() override;
@@ -50,7 +50,7 @@ public:
 private:
 	libraryclient::UIDataProviderWeakPtr m_ui_data_provider;
 	Gtk::IconView * m_thumbview;
-	Glib::RefPtr<ImageListStore> m_store;
+	ImageListStorePtr m_store;
 };
 
 

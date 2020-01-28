@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/widgets/imagegridview.cpp
  *
- * Copyright (C) 2011-2013 Hubert Figuiere
+ * Copyright (C) 2011-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,9 @@
 #include "fwk/base/debug.hpp"
 #include "imagegridview.hpp"
 
-namespace fwk {
+#include "rust_bindings.hpp"
 
-void ClickableCellRenderer::hit(int x, int y)
-{
-  m_x = x;
-  m_y = y;
-  m_hit = true;
-}
+namespace fwk {
 
 ImageGridView::ImageGridView(const Glib::RefPtr<Gtk::TreeModel> & model)
   : Gtk::IconView(model)
@@ -45,12 +40,10 @@ bool ImageGridView::on_button_press_event(GdkEventButton *event)
 
   Gtk::CellRenderer* cell = nullptr;
   bool found = get_item_at_pos(event->x, event->y, cell);
-  if(found) {
-    ClickableCellRenderer* clickable_cell = dynamic_cast<ClickableCellRenderer*>(cell);
-    
-    if(clickable_cell) {
+  if (found) {
+    if (strcmp(G_OBJECT_TYPE_NAME(cell->gobj()), "LibraryCellRenderer") == 0) {
       DBG_OUT("clickable cell");
-      clickable_cell->hit(event->x, event->y);
+      ffi::npc_library_cell_renderer_hit(GTK_CELL_RENDERER(cell->gobj()), event->x, event->y);
     }
   }
 

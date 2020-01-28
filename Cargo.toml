@@ -13,6 +13,7 @@ gio = "^0.8.0"
 cairo-rs = "*"
 gdk = "*"
 gdk-pixbuf = "*"
+gdk-pixbuf-sys = "*"
 gtk-sys = { version = "*", features = ["v3_22"] }
 gtk = { version = "^0.8.0", git = "https://github.com/hfiguiere/gtk.git", branch = "0.8.0-p1" }
 libc = "0.2.39"

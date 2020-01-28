@@ -1,7 +1,7 @@
 /*
  * niepce - ui/gridviewmodule.hpp
  *
- * Copyright (C) 2009-2019 Hubert Figuière
+ * Copyright (C) 2009-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public:
   typedef std::shared_ptr<GridViewModule> Ptr;
 
   GridViewModule(const IModuleShell & shell,
-                 const Glib::RefPtr<ImageListStore> & store);
+                 const ImageListStorePtr& store);
   virtual ~GridViewModule();
 
   void on_lib_notification(const eng::LibNotification &);
@@ -74,13 +74,16 @@ protected:
 
 
 private:
+  static bool get_colour_callback_c(int32_t label, ffi::RgbColour* out, const void* user_data);
+  bool get_colour_callback(int32_t label, ffi::RgbColour* out) const;
   void on_metadata_changed(const fwk::PropertyBagPtr&, const fwk::PropertyBagPtr& old);
-  void on_rating_changed(int id, int rating);
+  static void on_rating_changed(GtkCellRenderer*, eng::library_id_t id, int rating,
+                                gpointer user_data);
   bool on_popup_menu();
   bool on_librarylistview_click(GdkEventButton *e);
 
   const IModuleShell &               m_shell;
-  Glib::RefPtr<ImageListStore> m_model;
+  ImageListStorePtr m_model;
 
   // library split view
   fwk::ImageGridView*          m_librarylistview;

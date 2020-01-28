@@ -62,7 +62,7 @@ public:
         {
             return m_mapm;
         }
-    const Glib::RefPtr<ImageListStore> & get_list_store() const
+    const ImageListStorePtr& get_list_store() const
         {
             return m_selection_controller->get_list_store();
         }
