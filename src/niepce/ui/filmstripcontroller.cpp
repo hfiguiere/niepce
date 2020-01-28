@@ -24,7 +24,6 @@
 #include "engine/library/thumbnailnotification.hpp"
 #include "fwk/base/debug.hpp"
 
-#include "thumbstripview.hpp"
 #include "filmstripcontroller.hpp"
 
 namespace ui {
@@ -42,7 +41,11 @@ Gtk::Widget * FilmStripController::buildWidget()
         return m_widget;
     }
     DBG_ASSERT(static_cast<bool>(m_store), "m_store NULL");
-    m_thumbview = manage(new ThumbStripView(m_store));
+    // We need to ref m_store since it's held by the RefPtr<>
+    // and the ThumbStripView in Rust gets full ownership.
+    m_thumbview = manage(
+        Glib::wrap(GTK_ICON_VIEW(ffi::npc_thumb_strip_view_new(
+                                     GTK_TREE_MODEL(g_object_ref(m_store->gobjmm()->gobj()))))));
     GtkWidget *thn = ffi::npc_thumb_nav_new(m_thumbview->gobj(),
                                             ffi::ThumbNavMode::OneRow, true);
     m_thumbview->set_selection_mode(Gtk::SELECTION_SINGLE);

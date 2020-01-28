@@ -40,6 +40,5 @@ libniepceui_a_SOURCES = \
 	dialogs/importers/cameraimporterui.cpp \
 	selectioncontroller.hpp selectioncontroller.cpp \
 	filmstripcontroller.hpp filmstripcontroller.cpp \
-	thumbstripview.cpp thumbstripview.hpp \
 	$(PUBLICHEADERS) \
 	$(NULL)

@@ -17,11 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+extern crate gdk_pixbuf;
 extern crate gtk;
 extern crate niepce_rust;
 
 use gtk::prelude::*;
 use niepce_rust::niepce::ui::thumb_nav::{ThumbNav, ThumbNavMode};
+use niepce_rust::niepce::ui::thumb_strip_view::ThumbStripView;
 
 pub fn main() {
     if let Err(err) = gtk::init() {
@@ -29,8 +31,13 @@ pub fn main() {
         panic!();
     }
 
-    let thumbview = gtk::IconView::new();
-    let thn = ThumbNav::new(&thumbview, ThumbNavMode::OneRow, true);
+    let model = gtk::ListStore::new(&[gdk_pixbuf::Pixbuf::static_type()]);
+    let thumbview = ThumbStripView::new(&model.upcast::<gtk::TreeModel>());
+    let thn = NpcThumbNav::new(
+        &thumbview.upcast::<gtk::IconView>(),
+        NpcThumbNavMode::OneRow,
+        true,
+    );
     thn.set_size_request(-1, 134);
 
     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 0);

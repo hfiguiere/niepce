@@ -41,7 +41,6 @@
 #include "fwk/toolkit/gtkutils.hpp"
 #include "libraryclient/uidataprovider.hpp"
 
-#include "thumbstripview.hpp"
 #include "niepcewindow.hpp"
 #include "dialogs/editlabels.hpp"
 #include "selectioncontroller.hpp"

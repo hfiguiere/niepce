@@ -21,6 +21,7 @@ fn main() {
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
             .exclude_item("GtkTreeIter")
+            .exclude_item("GtkTreeModel")
             .exclude_item("GtkIconView")
             .exclude_item("GtkListStore")
             .exclude_item("GtkTreePath")

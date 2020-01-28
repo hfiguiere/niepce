@@ -22,3 +22,4 @@ pub mod image_list_store;
 pub mod imagetoolbar;
 pub mod library_cell_renderer;
 pub mod thumb_nav;
+pub mod thumb_strip_view;
