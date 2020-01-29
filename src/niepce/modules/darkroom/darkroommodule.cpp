@@ -1,7 +1,7 @@
 /*
  * niepce - ui/darkroommodule.cpp
  *
- * Copyright (C) 2008-2014 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,8 +52,8 @@ void DarkroomModule::reload_image()
         // currently we treat RAW + JPEG as RAW.
         // TODO: have a way to actually choose the JPEG.
         auto file_type = engine_db_libfile_file_type(file.get());
-        bool isRaw = (file_type == eng::FileType::RAW)
-            || (file_type == eng::FileType::RAW_JPEG);
+        bool isRaw = (file_type == eng::FileType::Raw)
+            || (file_type == eng::FileType::RawJpeg);
         std::string path = engine_db_libfile_path(file.get());
         m_image->reload(path, isRaw, engine_db_libfile_orientation(file.get()));
     }

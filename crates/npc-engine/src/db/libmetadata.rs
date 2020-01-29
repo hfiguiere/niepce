@@ -62,7 +62,7 @@ impl LibMetadata {
             xmp: XmpMeta::new(),
             id,
             sidecars: vec![],
-            file_type: FileType::UNKNOWN,
+            file_type: FileType::Unknown,
             name: String::new(),
             folder: String::new(),
         }
@@ -73,7 +73,7 @@ impl LibMetadata {
             xmp,
             id,
             sidecars: vec![],
-            file_type: FileType::UNKNOWN,
+            file_type: FileType::Unknown,
             name: String::new(),
             folder: String::new(),
         }
@@ -239,11 +239,11 @@ impl LibMetadata {
                 eng::NpFileTypeProp => {
                     // XXX this to string convert should be elsewhere
                     let file_type = match self.file_type {
-                        FileType::UNKNOWN => "Unknown",
-                        FileType::RAW => "RAW",
-                        FileType::RAW_JPEG => "RAW + JPEG",
-                        FileType::IMAGE => "Image",
-                        FileType::VIDEO => "Video",
+                        FileType::Unknown => "Unknown",
+                        FileType::Raw => "RAW",
+                        FileType::RawJpeg => "RAW + JPEG",
+                        FileType::Image => "Image",
+                        FileType::Video => "Video",
                     };
                     props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
                 }

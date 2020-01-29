@@ -32,14 +32,13 @@ use npc_fwk;
 use npc_fwk::base::PropertyIndex;
 
 #[repr(i32)]
-#[allow(non_camel_case_types)]
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum FileType {
-    UNKNOWN = 0,
-    RAW = 1,
-    RAW_JPEG = 2,
-    IMAGE = 3,
-    VIDEO = 4,
+    Unknown = 0,
+    Raw = 1,
+    RawJpeg = 2,
+    Image = 3,
+    Video = 4,
 }
 
 #[repr(i32)]
@@ -67,12 +66,12 @@ impl From<i32> for FileStatus {
 impl From<i32> for FileType {
     fn from(t: i32) -> Self {
         match t {
-            0 => FileType::UNKNOWN,
-            1 => FileType::RAW,
-            2 => FileType::RAW_JPEG,
-            3 => FileType::IMAGE,
-            4 => FileType::VIDEO,
-            _ => FileType::UNKNOWN,
+            0 => FileType::Unknown,
+            1 => FileType::Raw,
+            2 => FileType::RawJpeg,
+            3 => FileType::Image,
+            4 => FileType::Video,
+            _ => FileType::Unknown,
         }
     }
 }
@@ -80,11 +79,11 @@ impl From<i32> for FileType {
 impl Into<i32> for FileType {
     fn into(self) -> i32 {
         match self {
-            FileType::UNKNOWN => 0,
-            FileType::RAW => 1,
-            FileType::RAW_JPEG => 2,
-            FileType::IMAGE => 3,
-            FileType::VIDEO => 4,
+            FileType::Unknown => 0,
+            FileType::Raw => 1,
+            FileType::RawJpeg => 2,
+            FileType::Image => 3,
+            FileType::Video => 4,
         }
     }
 }
@@ -122,7 +121,7 @@ impl LibFile {
             rating: 0,
             label: 0,
             flag: 0,
-            file_type: FileType::UNKNOWN,
+            file_type: FileType::Unknown,
         }
     }
 
@@ -247,13 +246,14 @@ impl FromDb for LibFile {
  */
 pub fn mimetype_to_filetype(mime: &npc_fwk::MimeType) -> FileType {
     if mime.is_digicam_raw() {
-        return FileType::RAW;
+        FileType::Raw
     } else if mime.is_image() {
-        return FileType::IMAGE;
+        FileType::Image
     } else if mime.is_movie() {
-        return FileType::VIDEO;
+        FileType::Video
+    } else {
+        FileType::Unknown
     }
-    FileType::UNKNOWN
 }
 
 #[no_mangle]

@@ -340,7 +340,7 @@ impl Library {
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> Result<()> {
         if let Some(ref conn) = self.dbconn {
-            let filetype: i32 = libfile::FileType::RAW_JPEG.into();
+            let filetype: i32 = libfile::FileType::RawJpeg.into();
             let c = conn.execute(
                 "UPDATE files SET jpeg_file=?1, file_type=?3 WHERE id=?2;",
                 &[&fsfile_id, &file_id, &filetype],
@@ -664,7 +664,7 @@ impl Library {
         // Until we get better metadata support for RAW files, we use the Exif reconcile
         // from the sidecar JPEG to get the initial metadata.
         let meta = if let Some(bundle) = bundle {
-            if bundle.bundle_type() == libfile::FileType::RAW_JPEG {
+            if bundle.bundle_type() == libfile::FileType::RawJpeg {
                 npc_fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
             } else {
                 npc_fwk::XmpMeta::new_from_file(file, false)

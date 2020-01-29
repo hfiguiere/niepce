@@ -516,14 +516,14 @@ impl CellRendererImpl for LibraryCellRendererPriv {
         if self.draw_emblem.get() {
             let file_type = match &*file {
                 Some(f) => f.0.file_type(),
-                None => FileType::UNKNOWN,
+                None => FileType::Unknown,
             };
             let emblem: Pixbuf = match file_type {
-                FileType::RAW => EMBLEMS.raw.clone(),
-                FileType::RAW_JPEG => EMBLEMS.raw_jpeg.clone(),
-                FileType::IMAGE => EMBLEMS.img.clone(),
-                FileType::VIDEO => EMBLEMS.video.clone(),
-                FileType::UNKNOWN => EMBLEMS.unknown.clone(),
+                FileType::Raw => EMBLEMS.raw.clone(),
+                FileType::RawJpeg => EMBLEMS.raw_jpeg.clone(),
+                FileType::Image => EMBLEMS.img.clone(),
+                FileType::Video => EMBLEMS.video.clone(),
+                FileType::Unknown => EMBLEMS.unknown.clone(),
             };
             let left = Self::do_draw_format_emblem(cr, &emblem, &r);
 
