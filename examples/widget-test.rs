@@ -28,6 +28,7 @@ use gio::{resources_register, Resource};
 use glib::{Bytes, Error};
 use gtk::prelude::*;
 
+use niepce_rust::niepce::ui::image_grid_view::ImageGridView;
 use niepce_rust::niepce::ui::thumb_nav::{ThumbNav, ThumbNavMode};
 use niepce_rust::niepce::ui::thumb_strip_view::ThumbStripView;
 use npc_fwk::toolkit::widgets::rating_label::RatingLabel;
@@ -60,7 +61,7 @@ pub fn main() {
     }
 
     let model = gtk::ListStore::new(&[gdk_pixbuf::Pixbuf::static_type()]);
-    let thumbview = ThumbStripView::new(&model.upcast::<gtk::TreeModel>());
+    let thumbview = ThumbStripView::new(model.upcast_ref::<gtk::TreeModel>());
     let thn = ThumbNav::new(
         &thumbview.upcast::<gtk::IconView>(),
         ThumbNavMode::OneRow,
@@ -70,7 +71,10 @@ pub fn main() {
 
     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 0);
     let rating = RatingLabel::new(3, true);
+
+    let image_grid = ImageGridView::new(model.upcast_ref::<gtk::TreeModel>());
     box_.pack_start(&rating, false, false, 0);
+    box_.pack_start(&image_grid, true, true, 0);
     box_.pack_start(&thn, false, false, 0);
 
     let window = gtk::Window::new(gtk::WindowType::Toplevel);

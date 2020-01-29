@@ -33,7 +33,6 @@
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
-#include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "engine/importer/directoryimporter.hpp"
 #include "engine/importer/importedfile.hpp"
 #include "importdialog.hpp"
@@ -120,8 +119,8 @@ void ImportDialog::setup_widget()
     a_builder->get_widget("images_list_scrolled", m_images_list_scrolled);
     m_images_list_model = Gtk::ListStore::create(m_grid_columns);
     m_gridview = Gtk::manage(
-        new Gtk::IconView(
-            Glib::RefPtr<Gtk::TreeModel>::cast_dynamic(m_images_list_model)));
+        Glib::wrap(GTK_ICON_VIEW(ffi::npc_image_grid_view_new(
+                                     GTK_TREE_MODEL(g_object_ref(m_images_list_model->gobj()))))));
     m_gridview->set_pixbuf_column(m_grid_columns.pixbuf);
     m_gridview->set_text_column(m_grid_columns.filename);
     m_gridview->set_item_width(100);

@@ -26,7 +26,6 @@
 #include <gtkmm/treestore.h>
 
 #include "fwk/base/propertybag.hpp"
-#include "fwk/toolkit/widgets/imagegridview.hpp"
 #include "niepce/ui/ilibrarymodule.hpp"
 #include "niepce/ui/imoduleshell.hpp"
 #include "niepce/ui/metadatapanecontroller.hpp"
@@ -86,7 +85,7 @@ private:
   ImageListStorePtr m_model;
 
   // library split view
-  fwk::ImageGridView*          m_librarylistview;
+  Gtk::IconView* m_librarylistview;
   Gtk::ScrolledWindow          m_scrollview;
   MetaDataPaneController::Ptr  m_metapanecontroller;
   Gtk::Paned                   m_lib_splitview;

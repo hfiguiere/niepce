@@ -52,6 +52,7 @@ RUST_SOURCES = \
 	@top_srcdir@/src/niepce/mod.rs \
 	@top_srcdir@/src/niepce/ui/mod.rs \
 	@top_srcdir@/src/niepce/ui/imagetoolbar.rs \
+	@top_srcdir@/src/niepce/ui/image_grid_view.rs \
 	@top_srcdir@/src/niepce/ui/image_list_store.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/mod.rs \
 	@top_srcdir@/src/niepce/ui/dialogs/confirm.rs \

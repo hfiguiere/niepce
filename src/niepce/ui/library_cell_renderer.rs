@@ -633,16 +633,3 @@ pub unsafe extern "C" fn npc_library_cell_renderer_new(
         .upcast::<gtk::CellRenderer>()
         .to_glib_full()
 }
-
-/// Hit test for the cellrenderer.
-#[no_mangle]
-pub unsafe extern "C" fn npc_library_cell_renderer_hit(
-    ptr: *mut gtk_sys::GtkCellRenderer,
-    x: i32,
-    y: i32,
-) {
-    let mut renderer = gtk::CellRenderer::from_glib_borrow(ptr)
-        .downcast::<LibraryCellRenderer>()
-        .expect("Expected a LibraryCellRenderer");
-    renderer.hit(x, y);
-}

@@ -117,7 +117,9 @@ Gtk::Widget * GridViewModule::buildWidget()
     return m_widget;
   }
   m_widget = &m_lib_splitview;
-  m_librarylistview = Gtk::manage(new fwk::ImageGridView(m_model->gobjmm()));
+  m_librarylistview = Gtk::manage(
+      Glib::wrap(GTK_ICON_VIEW(ffi::npc_image_grid_view_new(
+                                   GTK_TREE_MODEL(g_object_ref(m_model->gobjmm()->gobj()))))));
   m_librarylistview->set_selection_mode(Gtk::SELECTION_SINGLE);
   m_librarylistview->property_row_spacing() = 0;
   m_librarylistview->property_column_spacing() = 0;

@@ -18,6 +18,7 @@
  */
 
 pub mod dialogs;
+pub mod image_grid_view;
 pub mod image_list_store;
 pub mod imagetoolbar;
 pub mod library_cell_renderer;
