@@ -16,6 +16,8 @@ fn main() {
             .with_language(cbindgen::Language::Cxx)
             .with_parse_deps(true)
             .with_parse_exclude(&["exempi", "chrono", "multimap"])
+            .exclude_item("GtkDrawingArea")
+            .exclude_item("GtkWidget")
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
             .exclude_item("GFileInfo")

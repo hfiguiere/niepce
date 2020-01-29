@@ -18,16 +18,44 @@
  */
 
 extern crate gdk_pixbuf;
+extern crate gio;
+extern crate glib;
 extern crate gtk;
 extern crate niepce_rust;
+extern crate npc_fwk;
 
+use gio::{resources_register, Resource};
+use glib::{Bytes, Error};
 use gtk::prelude::*;
+
 use niepce_rust::niepce::ui::thumb_nav::{ThumbNav, ThumbNavMode};
 use niepce_rust::niepce::ui::thumb_strip_view::ThumbStripView;
+use npc_fwk::toolkit::widgets::rating_label::RatingLabel;
+
+fn init() -> Result<(), Error> {
+    // load the gresource binary at build time and include/link it into the final
+    // binary.
+    let res_bytes = include_bytes!("gresource.gresource");
+
+    // Create Resource it will live as long the value lives.
+    let gbytes = Bytes::from_static(res_bytes.as_ref());
+    let resource = Resource::new_from_data(&gbytes)?;
+
+    // Register the resource so it won't be dropped and will continue to live in
+    // memory.
+    resources_register(&resource);
+
+    Ok(())
+}
 
 pub fn main() {
     if let Err(err) = gtk::init() {
         println!("main: gtk::init failed: {}", err);
+        panic!();
+    }
+
+    if let Err(err) = init() {
+        println!("main: init failed: {}", err);
         panic!();
     }
 
@@ -41,6 +69,8 @@ pub fn main() {
     thn.set_size_request(-1, 134);
 
     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    let rating = RatingLabel::new(3, true);
+    box_.pack_start(&rating, false, false, 0);
     box_.pack_start(&thn, false, false, 0);
 
     let window = gtk::Window::new(gtk::WindowType::Toplevel);

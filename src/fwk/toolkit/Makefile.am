@@ -49,7 +49,6 @@ libniepceframework_a_SOURCES = configuration.hpp configuration.cpp \
 	gtkutils.hpp gtkutils.cpp \
 	gphoto.hpp gphoto.cpp \
 	widgets/addinstreemodel.hpp widgets/addinstreemodel.cpp \
-	widgets/ratinglabel.hpp widgets/ratinglabel.cpp \
 	widgets/toolboxitemwidget.hpp widgets/toolboxitemwidget.cpp \
 	widgets/editablehscale.hpp widgets/editablehscale.cpp \
 	widgets/dock.cpp widgets/dock.hpp \

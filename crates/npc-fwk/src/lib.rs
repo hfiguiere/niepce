@@ -23,8 +23,11 @@ extern crate gdk;
 extern crate gdk_pixbuf;
 extern crate gio;
 extern crate gio_sys;
+#[macro_use]
 extern crate glib;
 extern crate glib_sys;
+extern crate gtk;
+extern crate gtk_sys;
 extern crate libc;
 extern crate multimap;
 extern crate once_cell;

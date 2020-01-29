@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2019 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +28,12 @@
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/drawingarea.h>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/autoflag.hpp"
 #include "fwk/utils/exempi.hpp"
 #include "fwk/utils/stringutils.hpp"
-#include "fwk/toolkit/widgets/ratinglabel.hpp"
 #include "fwk/toolkit/widgets/notabtextview.hpp"
 #include "fwk/toolkit/widgets/tokentextview.hpp"
 
@@ -63,16 +63,22 @@ void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
     create_widgets_for_format(fmt);
 }
 
-Gtk::Widget* 
+void MetaDataWidget::rating_callback(GtkWidget* w, gint rating, gpointer user_data)
+{
+    auto self = static_cast<MetaDataWidget*>(user_data);
+    auto id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w), "id"));
+    self->on_int_changed(rating, id);
+}
+
+Gtk::Widget*
 MetaDataWidget::create_star_rating_widget(bool readonly, uint32_t id)
 {
-    fwk::RatingLabel* r = Gtk::manage(new fwk::RatingLabel(0, !readonly));
-    if(!readonly) {
-        r->signal_changed.connect(
-            sigc::bind(
-                sigc::mem_fun(*this, 
-                              &MetaDataWidget::on_int_changed), 
-                id));
+    Gtk::DrawingArea* r =
+        Gtk::manage(Glib::wrap(
+                        GTK_DRAWING_AREA(ffi::fwk_rating_label_new(0, !readonly))));
+    if (!readonly) {
+        r->set_data("id", GINT_TO_POINTER(id));
+        g_signal_connect(r->gobj(), "rating-changed", G_CALLBACK(rating_callback), this);
     }
     return r;
 }
@@ -218,9 +224,9 @@ void MetaDataWidget::clear_widget(const std::pair<const PropertyIndex, Gtk::Widg
         tv->get_buffer()->set_text("");
         return;
     }
-    fwk::RatingLabel * rl = dynamic_cast<fwk::RatingLabel*>(p.second);
-    if(rl) {
-        rl->set_rating(0);
+    Gtk::DrawingArea* rl = dynamic_cast<Gtk::DrawingArea*>(p.second);
+    if (rl) {
+        ffi::fwk_rating_label_set_rating(rl->gobj(), 0);
         return;
     }
 }
@@ -314,7 +320,7 @@ bool MetaDataWidget::set_star_rating_data(Gtk::Widget* w,
     try {
         int rating = fwk_property_value_get_integer(value.get());
         AutoFlag flag(m_update);
-        static_cast<fwk::RatingLabel*>(w)->set_rating(rating);
+        ffi::fwk_rating_label_set_rating(static_cast<Gtk::DrawingArea*>(w)->gobj(), rating);
     }
     catch(...) {
         return false;

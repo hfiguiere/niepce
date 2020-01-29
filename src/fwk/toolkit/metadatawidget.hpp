@@ -112,6 +112,8 @@ private:
     fwk::PropertyBagPtr m_current_data;
     const MetaDataSectionFormat * m_fmt;
     bool m_update;
+
+    static void rating_callback(GtkWidget* w, gint rating, gpointer user_data);
 };
 
 }
