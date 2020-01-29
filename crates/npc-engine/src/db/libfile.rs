@@ -21,7 +21,6 @@ use libc::c_char;
 use rusqlite;
 use std::ffi::CStr;
 use std::ffi::CString;
-use std::mem::transmute;
 use std::path::{Path, PathBuf};
 
 use super::fsfile::FsFile;
@@ -302,23 +301,8 @@ pub extern "C" fn engine_db_libfile_orientation(obj: &LibFile) -> i32 {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_db_libfile_rating(obj: &LibFile) -> i32 {
-    obj.rating()
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_label(obj: &LibFile) -> i32 {
-    obj.label()
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_flag(obj: &LibFile) -> i32 {
-    obj.flag()
-}
-
-#[no_mangle]
 pub extern "C" fn engine_db_libfile_property(obj: &LibFile, idx: PropertyIndex) -> i32 {
-    obj.property(unsafe { transmute(idx) })
+    obj.property(idx)
 }
 
 #[no_mangle]
@@ -327,31 +311,6 @@ pub extern "C" fn engine_db_libfile_file_type(obj: &LibFile) -> FileType {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_db_libfile_set_orientation(obj: &mut LibFile, o: i32) {
-    obj.set_orientation(o);
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_set_rating(obj: &mut LibFile, r: i32) {
-    obj.set_rating(r);
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_set_label(obj: &mut LibFile, l: i32) {
-    obj.set_label(l);
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_set_flag(obj: &mut LibFile, f: i32) {
-    obj.set_flag(f);
-}
-
-#[no_mangle]
 pub extern "C" fn engine_db_libfile_set_property(obj: &mut LibFile, idx: PropertyIndex, v: i32) {
-    obj.set_property(unsafe { transmute(idx) }, v);
-}
-
-#[no_mangle]
-pub extern "C" fn engine_db_libfile_set_file_type(obj: &mut LibFile, t: FileType) {
-    obj.set_file_type(t);
+    obj.set_property(idx, v);
 }
