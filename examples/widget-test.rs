@@ -33,9 +33,9 @@ pub fn main() {
 
     let model = gtk::ListStore::new(&[gdk_pixbuf::Pixbuf::static_type()]);
     let thumbview = ThumbStripView::new(&model.upcast::<gtk::TreeModel>());
-    let thn = NpcThumbNav::new(
+    let thn = ThumbNav::new(
         &thumbview.upcast::<gtk::IconView>(),
-        NpcThumbNavMode::OneRow,
+        ThumbNavMode::OneRow,
         true,
     );
     thn.set_size_request(-1, 134);
