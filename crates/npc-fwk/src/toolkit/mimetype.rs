@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/mimetype.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,9 @@
 
 use gio;
 use gio::prelude::*;
-use gio_sys;
-use glib_sys;
-use glib_sys::gboolean;
 
-use libc::c_void;
-use std::ffi::CStr;
-use std::ffi::CString;
 use std::path::Path;
-use std::ptr;
+use std::convert::AsRef;
 
 #[derive(PartialEq, Copy, Clone, Debug)]
 pub enum IsRaw {
@@ -46,10 +40,9 @@ pub enum MType {
 }
 
 #[derive(Debug)]
-pub struct MimeType {
-    mtype: MType,
-}
+pub struct MimeType(MType);
 
+/// Guess the type from the gio type string
 pub fn guess_type(gmtype: &str) -> MType {
     if gio::content_type_is_a(&gmtype, "image/*") {
         if gio::content_type_is_a(&gmtype, "image/x-dcraw") {
@@ -62,13 +55,15 @@ pub fn guess_type(gmtype: &str) -> MType {
     MType::None
 }
 
-fn guess_type_for_file(filename: &str) -> MType {
-    let path = Path::new(filename);
+/// Guess the type from a file
+fn guess_type_for_file<P: AsRef<Path>>(p: P) -> MType
+{
+    let path = p.as_ref();
     let file = gio::File::new_for_path(path);
     let cancellable: Option<&gio::Cancellable> = None;
     if let Ok(fileinfo) = file.query_info("*", gio::FileQueryInfoFlags::NONE, cancellable) {
         if let Some(gmtype) = fileinfo.get_content_type() {
-            let t = guess_type_for_file(&gmtype);
+            let t = guess_type(&gmtype);
             if t != MType::None {
                 return t;
             }
@@ -82,60 +77,66 @@ fn guess_type_for_file(filename: &str) -> MType {
         }
     }
     // alternative
-    let mut uncertainty: gboolean = 0;
-    let content_type = unsafe {
-        let cstr = CString::new(filename).unwrap();
-        gio_sys::g_content_type_guess(cstr.as_ptr(), ptr::null_mut(), 0, &mut uncertainty)
-    };
-    let content_type_real = unsafe { CStr::from_ptr(content_type) };
-    let t = guess_type(&*content_type_real.to_string_lossy());
-    unsafe { glib_sys::g_free(content_type as *mut c_void) };
+    let (content_type, _) = gio::content_type_guess(path.to_str(), &[]);
+    let t = guess_type(content_type.as_str());
 
     t
 }
 
 impl MimeType {
-    pub fn new(filename: &str) -> MimeType {
-        MimeType {
-            mtype: guess_type_for_file(filename),
-        }
+    pub fn new<P: AsRef<Path>>(filename: P) -> MimeType {
+        MimeType(guess_type_for_file(filename))
     }
 
     pub fn mime_type(&self) -> MType {
-        self.mtype
+        self.0
     }
 
     pub fn is_image(&self) -> bool {
-        if let MType::Image(_) = self.mtype {
+        if let MType::Image(_) = self.0 {
             return true;
         }
         false
     }
 
     pub fn is_digicam_raw(&self) -> bool {
-        if let MType::Image(ref b) = self.mtype {
+        if let MType::Image(ref b) = self.0 {
             return *b == IsRaw::Yes;
         }
         false
     }
 
     pub fn is_xmp(&self) -> bool {
-        self.mtype == MType::Xmp
+        self.0 == MType::Xmp
     }
 
     pub fn is_movie(&self) -> bool {
-        self.mtype == MType::Movie
+        self.0 == MType::Movie
+    }
+
+    pub fn is_unknown(&self) -> bool {
+        self.0 == MType::None
     }
 }
 
 #[cfg(test)]
-#[test]
-fn mime_type_works() {
-    let mimetype = MimeType::new("/foo/bar/img_0001.cr2");
-    assert_eq!(
-        guess_type_for_file("/foo/bar/img_0001.cr2"),
-        MType::Image(IsRaw::Yes)
-    );
-    assert!(mimetype.is_image());
-    assert!(mimetype.is_digicam_raw());
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mime_type_works() {
+        let mimetype = MimeType::new("/foo/bar/img_0001.cr2");
+        assert_eq!(
+            guess_type_for_file("/foo/bar/img_0001.cr2"),
+            MType::Image(IsRaw::Yes)
+                );
+        assert!(mimetype.is_image());
+        assert!(mimetype.is_digicam_raw());
+    }
+
+    #[test]
+    fn mime_type_unknown() {
+        let mimetype = MimeType::new("");
+        assert!(mimetype.is_unknown());
+    }
 }
