@@ -36,6 +36,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-fwk/src/base/propertyvalue.rs \
 	@top_srcdir@/crates/npc-fwk/src/base/rgbcolour.rs \
 	@top_srcdir@/crates/npc-fwk/src/lib.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/gdk_utils.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mimetype.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mod.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/widgets/mod.rs \

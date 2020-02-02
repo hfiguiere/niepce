@@ -1,5 +1,5 @@
 /*
- * niepce - crates/npc-fwk/src/toolkit/mod.rs
+ * niepce - npc-fwk/toolkit/gdk_utils.rs
  *
  * Copyright (C) 2020 Hubert Figuière
  *
@@ -17,12 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-pub mod clickable_cell_renderer;
-pub mod gdk_utils;
-pub mod mimetype;
-pub mod widgets;
+use std::cmp;
 
-pub type Sender<T> = glib::Sender<T>;
+use gdk_pixbuf;
 
-/// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
-pub struct PortableChannel<T>(pub Sender<T>, pub glib::SourceId);
+pub fn gdkpixbuf_scale_to_fit(
+    pix: Option<&gdk_pixbuf::Pixbuf>,
+    dim: i32,
+) -> Option<gdk_pixbuf::Pixbuf> {
+    if let Some(pix) = pix {
+        let orig_h = pix.get_height();
+        let orig_w = pix.get_width();
+        let orig_dim = cmp::max(orig_h, orig_w);
+        let ratio: f64 = dim as f64 / orig_dim as f64;
+        let width = ratio * orig_w as f64;
+        let height = ratio * orig_h as f64;
+        pix.scale_simple(
+            width as i32,
+            height as i32,
+            gdk_pixbuf::InterpType::Bilinear,
+        )
+    } else {
+        None
+    }
+}
