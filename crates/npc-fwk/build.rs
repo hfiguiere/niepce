@@ -16,6 +16,7 @@ fn main() {
             .with_language(cbindgen::Language::Cxx)
             .with_parse_deps(true)
             .with_parse_exclude(&["exempi", "chrono", "multimap"])
+            .exclude_item("GdkPixbuf")
             .exclude_item("GtkDrawingArea")
             .exclude_item("GtkWidget")
             .exclude_item("GtkWindow")

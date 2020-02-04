@@ -48,7 +48,6 @@ BUILT_SOURCES = \
 
 niepce_SOURCES = \
 	notificationcenter.hpp notificationcenter.cpp \
-        notifications.hpp \
         npc-resources.c \
         npc-resources.h \
 	main.cpp

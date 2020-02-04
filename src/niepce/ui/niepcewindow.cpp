@@ -28,7 +28,6 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/filechooserdialog.h>
 
-#include "niepce/notifications.hpp"
 #include "niepce/notificationcenter.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/base/moniker.hpp"
@@ -126,11 +125,6 @@ NiepceWindow::_createModuleShell()
         .connect(sigc::mem_fun(
                      *m_moduleshell->get_map_module(),
                      &mapm::MapModule::on_lib_notification));
-    m_notifcenter->signal_thumbnail_notification
-        .connect(sigc::mem_fun(
-                     m_moduleshell->get_list_store().get(),
-                     &ImageListStore::on_tnail_notification));
-
 
     // workspace treeview
     auto workspace_actions = Gio::SimpleActionGroup::create();
@@ -190,7 +184,7 @@ NiepceWindow::buildWidget()
 
     init_actions();
 
-    m_notifcenter = niepce::NotificationCenter::make(reinterpret_cast<uint64_t>(this));
+    m_notifcenter = niepce::NotificationCenter::make();
 
     Glib::ustring name("org.gnome.Niepce");
     set_icon_from_theme(name);
@@ -376,7 +370,7 @@ bool NiepceWindow::open_library(const std::string & libMoniker)
     fwk::Moniker mon = fwk::Moniker(libMoniker);
     m_libClient
         = LibraryClientPtr(new LibraryClient(
-                               mon, m_notifcenter->get_channel(), m_notifcenter->id()));
+                               mon, m_notifcenter->get_channel()));
     // XXX ensure the library is open.
     set_title(libMoniker);
     m_library_cfg

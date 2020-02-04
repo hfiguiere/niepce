@@ -23,7 +23,8 @@
 #include <sigc++/signal.h>
 
 #include "fwk/toolkit/notificationcenter.hpp"
-#include "engine/library/thumbnailnotification.hpp"
+
+#include "rust_bindings.hpp"
 
 namespace niepce {
 
@@ -34,20 +35,18 @@ public:
   ~NotificationCenter();
 
   typedef std::shared_ptr<NotificationCenter> Ptr;
-  static Ptr make(uint64_t notif_id)
+  static Ptr make()
     {
-      Ptr nc = Ptr(new NotificationCenter(notif_id));
-      nc->attach();
+      Ptr nc = Ptr(new NotificationCenter());
       return nc;
     }
 
   sigc::signal<void, const eng::LibNotification &> signal_lib_notification;
-  sigc::signal<void, const eng::ThumbnailNotification &> signal_thumbnail_notification;
 
   const std::shared_ptr<ffi::LcChannel>& get_channel() const
     { return m_channel; };
 protected:
-  NotificationCenter(uint64_t notif_id);
+  NotificationCenter();
 
 private:
   static int32_t channel_callback(const eng::LibNotification *notification, void *data);

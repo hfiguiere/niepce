@@ -10,6 +10,8 @@ build = "build.rs"
 [dependencies]
 chrono = "0.4.0"
 exempi = { version = "2.5.0", git = "https://github.com/hfiguiere/exempi-rs.git", rev="53cfc05" }
+gdk-pixbuf-sys = "*"
+gdk-pixbuf = "*"
 glib = "*"
 libc = "0.2.39"
 rusqlite = { version = "0.14.0", features = ["functions"] }

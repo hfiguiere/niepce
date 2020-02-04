@@ -20,39 +20,13 @@
 
 #pragma once
 
-#include <stdint.h>
-
-#include <string>
-
-#include <gdkmm/pixbuf.h>
+#include <memory>
+#include "rust_bindings.hpp"
 
 namespace fwk {
 
-class Thumbnail {
-public:
-    Thumbnail() = default;
-    Thumbnail(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf);
+typedef std::shared_ptr<ffi::Thumbnail> ThumbnailPtr;
 
-    bool ok() const {
-        return !!m_pixbuf;
-    }
-
-    int get_width() const {
-        return m_pixbuf->get_width();
-    }
-    int get_height() const {
-        return m_pixbuf->get_height();
-    }
-    const Glib::RefPtr<Gdk::Pixbuf>& pixbuf() const {
-        return m_pixbuf;
-    }
-
-    void save(const std::string& path, const std::string& format);
-
-    static Thumbnail thumbnail_file(const std::string& path, int w, int h, int32_t orientation);
-
-private:
-    Glib::RefPtr<Gdk::Pixbuf> m_pixbuf;
-};
+ThumbnailPtr thumbnail_wrap(ffi::Thumbnail *);
 
 }

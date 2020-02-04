@@ -20,6 +20,8 @@
 pub mod clickable_cell_renderer;
 pub mod gdk_utils;
 pub mod mimetype;
+pub mod movieutils;
+pub mod thumbnail;
 pub mod widgets;
 
 pub type Sender<T> = glib::Sender<T>;

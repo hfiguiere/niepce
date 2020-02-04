@@ -1,7 +1,7 @@
 /*
  * niepce - engine/importer/iimporter.hpp
  *
- * Copyright (C) 2014-2017 Hubert Figuière
+ * Copyright (C) 2014-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@
 #include "fwk/utils/files.hpp"
 #include "engine/importer/importedfile.hpp"
 
-#include "rust_bindings.hpp"
-
 namespace eng {
 
 /**
@@ -49,7 +47,7 @@ public:
                                      const SourceContentReady& callback) = 0;
 
     typedef std::function<void (const std::string& path,
-                                const fwk::Thumbnail&)> PreviewReady;
+                                const fwk::ThumbnailPtr&)> PreviewReady;
     virtual bool get_previews_for(const std::string& source,
                                   const std::list<std::string>& paths,
                                   const PreviewReady& callback) = 0;

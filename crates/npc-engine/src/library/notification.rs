@@ -17,10 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use gdk_pixbuf;
+use gdk_pixbuf_sys;
+use glib::translate::*;
+
 use super::queriedcontent::QueriedContent;
 use crate::db::libfile::FileStatus;
 use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId};
 use npc_fwk::base::PropertyIndex;
+use npc_fwk::toolkit::thumbnail;
 use npc_fwk::toolkit::PortableChannel;
 use npc_fwk::PropertyValue;
 
@@ -50,6 +55,7 @@ pub enum NotificationType {
     XMP_NEEDS_UPDATE,
     FILE_MOVED,
     FILE_STATUS_CHANGED,
+    ThumbnailLoaded,
 }
 
 #[repr(C)]
@@ -85,6 +91,15 @@ impl MetadataChange {
     pub fn new(id: LibraryId, meta: PropertyIndex, value: PropertyValue) -> Self {
         MetadataChange { id, meta, value }
     }
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct Thumbnail {
+    pub id: LibraryId,
+    pub width: i32,
+    pub height: i32,
+    pub pix: thumbnail::Thumbnail,
 }
 
 #[no_mangle]
@@ -126,6 +141,7 @@ pub enum LibNotification {
     MetadataChanged(MetadataChange),
     MetadataQueried(LibMetadata),
     XmpNeedsUpdate,
+    ThumbnailLoaded(Thumbnail),
 }
 
 /// Send a notification for the file status change.
@@ -183,6 +199,7 @@ pub unsafe extern "C" fn engine_library_notification_type(
         Some(&LibNotification::MetadataChanged(_)) => NotificationType::METADATA_CHANGED,
         Some(&LibNotification::MetadataQueried(_)) => NotificationType::METADATA_QUERIED,
         Some(&LibNotification::XmpNeedsUpdate) => NotificationType::XMP_NEEDS_UPDATE,
+        Some(&LibNotification::ThumbnailLoaded(_)) => NotificationType::ThumbnailLoaded,
         None => unreachable!(),
     }
 }
@@ -196,6 +213,7 @@ pub unsafe extern "C" fn engine_library_notification_get_id(
         Some(&LibNotification::FolderDeleted(id)) => id,
         Some(&LibNotification::LabelDeleted(id)) => id,
         Some(&LibNotification::FileStatusChanged(ref changed)) => changed.id,
+        Some(&LibNotification::ThumbnailLoaded(ref thumbnail)) => thumbnail.id,
         _ => unreachable!(),
     }
 }
@@ -292,6 +310,19 @@ pub unsafe extern "C" fn engine_library_notification_get_content(
     match n.as_ref() {
         Some(&LibNotification::FolderContentQueried(ref c))
         | Some(&LibNotification::KeywordContentQueried(ref c)) => c,
+        _ => unreachable!(),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn engine_library_notification_get_pixbuf(
+    n: *const LibNotification,
+) -> *mut gdk_pixbuf_sys::GdkPixbuf {
+    match n.as_ref() {
+        Some(&LibNotification::ThumbnailLoaded(ref thumbnail)) => {
+            let pixbuf: gdk_pixbuf::Pixbuf = thumbnail.pix.clone().into();
+            pixbuf.to_glib_full()
+        }
         _ => unreachable!(),
     }
 }

@@ -2,7 +2,7 @@
 /*
  * niepce - engine/importer/cameraimporter.cpp
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ bool CameraImporter::get_previews_for(const std::string& source,
     if (ensure_camera_open(source)) {
         for (auto path: paths) {
             DBG_OUT("want thumbnail %s", path.c_str());
-            fwk::Thumbnail thumbnail = m_camera->get_preview(path);
+            fwk::ThumbnailPtr thumbnail = m_camera->get_preview(path);
             callback(path, thumbnail);
         }
 

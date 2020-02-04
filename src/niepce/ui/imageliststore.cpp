@@ -26,7 +26,6 @@
 #include "fwk/base/debug.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
-#include "niepce/notifications.hpp"
 #include "niepcewindow.hpp"
 
 #include "rust_bindings.hpp"
@@ -136,7 +135,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
     case eng::NotificationType::FOLDER_CONTENT_QUERIED:
     case eng::NotificationType::KEYWORD_CONTENT_QUERIED:
     {
-        auto content = engine_library_notification_get_content(&ln);
+        auto content = ffi::engine_library_notification_get_content(&ln);
         if (type == eng::NotificationType::FOLDER_CONTENT_QUERIED) {
             m_current_folder = ffi::engine_queried_content_id(content);
             m_current_keyword = 0;
@@ -153,7 +152,7 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
             l->push_back(f);
         }
         // at that point clear the cache because the icon view is populated.
-        getLibraryClient()->thumbnailCache().request(*l);
+        ffi::engine_library_thumbnail_cache_request(getLibraryClient()->thumbnailCache(), content);
         break;
     }
     case eng::NotificationType::FILE_MOVED:
@@ -218,24 +217,25 @@ void ImageListStore::on_lib_notification(const eng::LibNotification &ln)
         ffi::libraryclient_process_xmp_update_queue(getLibraryClient()->client(), write_xmp);
         break;
     }
+    case eng::NotificationType::ThumbnailLoaded:
+    {
+        auto id = engine_library_notification_get_id(&ln);
+        auto iter = m_idmap.find(id);
+        if(iter != m_idmap.end()) {
+            // found the icon view item
+            auto pixbuf = engine_library_notification_get_pixbuf(&ln);
+            // About the ownership:
+            // The Glib::wrap below will claim it.
+            ffi::npc_image_list_store_set_tnail(
+                m_store, iter->second.gobj(), pixbuf,
+                fwk::gdkpixbuf_scale_to_fit(Glib::wrap(pixbuf), 100)->gobj());
+        }
+        else {
+            DBG_OUT("row %Ld not found", (long long)id);
+        }
+    }
     default:
         break;
-    }
-}
-
-void ImageListStore::on_tnail_notification(const eng::ThumbnailNotification &tn)
-{
-    std::map<eng::library_id_t, Gtk::TreeIter>::iterator iter
-        = m_idmap.find( tn.id );
-    if(iter != m_idmap.end()) {
-        // found the icon view item
-        auto pixbuf = tn.pixmap.pixbuf();
-        ffi::npc_image_list_store_set_tnail(
-            m_store, iter->second.gobj(), pixbuf->gobj(),
-            fwk::gdkpixbuf_scale_to_fit(pixbuf, 100)->gobj());
-    }
-    else {
-        DBG_OUT("row %Ld not found", (long long)tn.id);
     }
 }
 

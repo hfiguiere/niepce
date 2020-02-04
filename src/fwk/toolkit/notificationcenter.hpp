@@ -39,19 +39,14 @@ public:
 
     ~NotificationCenter();
 
-    uint64_t id() const;
-
     // called from out of thread
     void post(Notification::Ptr && n);
 
     void subscribe(int type, const subscriber_t & );
     void unsubscribe(int type, const subscriber_t & );
 
-    static std::weak_ptr<NotificationCenter> get_nc(uint64_t notif_id);
-
 protected:
-    NotificationCenter(uint64_t notif_id);
-    void attach();
+    NotificationCenter();
 
 private:
     typedef sigc::signal<void, Notification::Ptr> subscription_t;

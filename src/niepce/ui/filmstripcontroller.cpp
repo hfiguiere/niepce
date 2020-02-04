@@ -20,8 +20,6 @@
 
 #include <gtkmm/iconview.h>
 
-#include "niepce/notifications.hpp"
-#include "engine/library/thumbnailnotification.hpp"
 #include "fwk/base/debug.hpp"
 
 #include "filmstripcontroller.hpp"

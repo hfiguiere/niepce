@@ -70,6 +70,7 @@ fn main() {
             .with_parse_deps(true)
             .with_parse_exclude(&["exempi", "chrono", "multimap"])
             .include_item("Managed")
+            .exclude_item("GdkPixbuf")
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")
             .exclude_item("GFileInfo")

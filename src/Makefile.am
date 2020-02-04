@@ -24,6 +24,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-engine/src/library/notification.rs \
 	@top_srcdir@/crates/npc-engine/src/library/queriedcontent.rs \
 	@top_srcdir@/crates/npc-engine/src/library/op.rs \
+	@top_srcdir@/crates/npc-engine/src/library/thumbnail_cache.rs \
 	@top_srcdir@/crates/npc-engine/src/lib.rs \
 	@top_srcdir@/crates/npc-fwk/Cargo.toml \
 	@top_srcdir@/crates/npc-fwk/build.rs \
@@ -39,6 +40,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/gdk_utils.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mimetype.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/mod.rs \
+	@top_srcdir@/crates/npc-fwk/src/toolkit/thumbnail.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/widgets/mod.rs \
 	@top_srcdir@/crates/npc-fwk/src/toolkit/widgets/rating_label.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/exempi.rs \

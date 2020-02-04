@@ -20,7 +20,6 @@
 #include <boost/any.hpp>
 
 #include "fwk/base/debug.hpp"
-#include "niepce/notifications.hpp"
 #include "niepce/notificationcenter.hpp"
 
 namespace niepce {
@@ -36,12 +35,9 @@ int32_t NotificationCenter::channel_callback(const eng::LibNotification *notific
     return 1;
 }
 
-NotificationCenter::NotificationCenter(uint64_t notif_id)
-    : fwk::NotificationCenter(notif_id)
-    , m_channel(ffi::lcchannel_new(&channel_callback, this), ffi::lcchannel_delete)
+NotificationCenter::NotificationCenter()
+    : m_channel(ffi::lcchannel_new(&channel_callback, this), ffi::lcchannel_delete)
 {
-    subscribe(NOTIFICATION_THUMBNAIL,
-              sigc::mem_fun(*this, &NotificationCenter::dispatch_notification));
 }
 
 NotificationCenter::~NotificationCenter()
@@ -52,38 +48,6 @@ NotificationCenter::~NotificationCenter()
 void NotificationCenter::dispatch_lib_notification(const eng::LibNotification *n) const
 {
     signal_lib_notification(*n);
-}
-
-void NotificationCenter::dispatch_notification(const fwk::Notification::Ptr &n) const
-{
-    try {
-        switch(n->type()) {
-        case NOTIFICATION_THUMBNAIL:
-        {
-            eng::ThumbnailNotification tn
-                = boost::any_cast<eng::ThumbnailNotification>(n->data());
-            signal_thumbnail_notification(tn);
-            break;
-        }
-        default:
-            ERR_OUT("Unhandled notification type %d", n->type());
-            break;
-        }
-    }
-    catch(const boost::bad_any_cast & e)
-    {
-        ERR_OUT("improper notification data: %s", e.what());
-    }
-    catch(const std::exception & e)
-    {
-        ERR_OUT("other exception notification type %d of %s: %s", n->type(),
-                n->data().type().name(),
-                e.what());
-    }
-    catch(...)
-    {
-        ERR_OUT("unknown exception");
-    }
 }
 
 }

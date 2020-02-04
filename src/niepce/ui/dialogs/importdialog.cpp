@@ -210,7 +210,7 @@ void ImportDialog::append_files_to_import()
         [this, importer, source, paths] () {
             return importer->get_previews_for(
                 source, paths,
-                [this] (const std::string& path, const fwk::Thumbnail& thumbnail) {
+                [this] (const std::string& path, const fwk::ThumbnailPtr& thumbnail) {
                     this->m_previews_to_import.send_data(
                         std::make_pair(path, thumbnail));
                 });
@@ -224,7 +224,9 @@ void ImportDialog::preview_received()
         auto preview = result.unwrap();
         auto iter = m_images_list_map.find(preview.first);
         if (iter != m_images_list_map.end()) {
-            iter->second->set_value(m_grid_columns.pixbuf, preview.second.pixbuf());
+            iter->second->set_value(m_grid_columns.pixbuf,
+                                    Glib::wrap(ffi::fwk_toolkit_thumbnail_to_pixbuf(
+                                                   preview.second.get())));
         }
     }
 }

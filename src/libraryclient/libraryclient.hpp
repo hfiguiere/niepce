@@ -22,7 +22,6 @@
 #include <string>
 #include <memory>
 
-#include "engine/library/thumbnailcache.hpp"
 #include "uidataprovider.hpp"
 
 #include "rust_bindings.hpp"
@@ -39,11 +38,10 @@ public:
     LibraryClient() = delete;
     LibraryClient& operator=(const LibraryClient&) = delete;
 
-    LibraryClient(const fwk::Moniker & moniker, const std::shared_ptr<ffi::LcChannel>& channel,
-                  uint64_t notif_id);
+    LibraryClient(const fwk::Moniker & moniker, const std::shared_ptr<ffi::LcChannel>& channel);
     virtual ~LibraryClient();
 
-    eng::ThumbnailCache & thumbnailCache()
+    ffi::ThumbnailCache* thumbnailCache()
         { return m_thumbnailCache; }
 
     const UIDataProviderPtr& getDataProvider() const
@@ -55,7 +53,7 @@ public:
 private:
     std::shared_ptr<ffi::LibraryClientWrapper> m_client;
 
-    eng::ThumbnailCache m_thumbnailCache;
+    ffi::ThumbnailCache* m_thumbnailCache;
     UIDataProviderPtr m_uidataprovider;
 };
 

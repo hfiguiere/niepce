@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/libraryclient.cpp
  *
- * Copyright (C) 2007-2019 Hubert Figuière
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,17 +32,20 @@ namespace libraryclient {
 const char * s_thumbcacheDirname = "thumbcache";
 
 LibraryClient::LibraryClient(const fwk::Moniker & moniker,
-                             const std::shared_ptr<ffi::LcChannel>& channel, uint64_t notif_id)
+                             const std::shared_ptr<ffi::LcChannel>& channel)
     : m_client(
         ffi::libraryclient_new(moniker.path().c_str(), channel.get()),
         ffi::libraryclient_delete)
-    , m_thumbnailCache(moniker.path() + "/" + s_thumbcacheDirname, notif_id)
+    , m_thumbnailCache(ffi::engine_library_thumbnail_cache_new(
+                           std::string(moniker.path() + "/" + s_thumbcacheDirname).c_str(),
+                           channel.get()))
     , m_uidataprovider(new UIDataProvider())
 {
 }
 
 LibraryClient::~LibraryClient()
 {
+    ffi::engine_library_thumbnail_cache_delete(m_thumbnailCache);
 }
 
 }

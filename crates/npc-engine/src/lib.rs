@@ -20,6 +20,8 @@
 extern crate glib;
 #[macro_use]
 extern crate try_opt;
+extern crate gdk_pixbuf;
+extern crate gdk_pixbuf_sys;
 
 #[macro_use]
 extern crate npc_fwk;

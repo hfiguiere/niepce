@@ -39,7 +39,6 @@
 #include "fwk/utils/files.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/toolkit/gdkutils.hpp"
-#include "fwk/toolkit/thumbnail.hpp"
 #include "gphoto.hpp"
 
 
@@ -360,9 +359,9 @@ std::list<std::pair<std::string, std::string>> GpCamera::list_content() const
     return files;
 }
 
-fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
+fwk::ThumbnailPtr GpCamera::get_preview(const std::string& path) const
 {
-    fwk::Thumbnail thumbnail;
+    fwk::ThumbnailPtr thumbnail;
     std::string folder = fwk::path_dirname(path);
     std::string name = fwk::path_basename(path);
 
@@ -407,7 +406,7 @@ fwk::Thumbnail GpCamera::get_preview(const std::string& path) const
             unlink(exif_path.c_str());
         }
 #endif
-        thumbnail = fwk::Thumbnail(pix);
+        thumbnail = fwk::thumbnail_wrap(ffi::fwk_toolkit_thumbnail_from_pixbuf(pix->gobj()));
     }
 
     return thumbnail;

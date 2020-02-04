@@ -84,7 +84,8 @@ bool DirectoryImporter::get_previews_for(const std::string& /*source*/,
 {
     for (auto path : paths) {
         DBG_OUT("path %s", path.c_str());
-        auto thumbnail = fwk::Thumbnail::thumbnail_file(path, 160, 160, 0);
+        auto thumbnail =
+            fwk::thumbnail_wrap(ffi::fwk_toolkit_thumbnail_file(path.c_str(), 160, 160, 0));
         callback(path, thumbnail);
     }
     return true;

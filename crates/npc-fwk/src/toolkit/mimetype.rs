@@ -20,8 +20,8 @@
 use gio;
 use gio::prelude::*;
 
-use std::path::Path;
 use std::convert::AsRef;
+use std::path::Path;
 
 #[derive(PartialEq, Copy, Clone, Debug)]
 pub enum IsRaw {
@@ -56,8 +56,7 @@ pub fn guess_type(gmtype: &str) -> MType {
 }
 
 /// Guess the type from a file
-fn guess_type_for_file<P: AsRef<Path>>(p: P) -> MType
-{
+fn guess_type_for_file<P: AsRef<Path>>(p: P) -> MType {
     let path = p.as_ref();
     let file = gio::File::new_for_path(path);
     let cancellable: Option<&gio::Cancellable> = None;
@@ -129,7 +128,7 @@ mod tests {
         assert_eq!(
             guess_type_for_file("/foo/bar/img_0001.cr2"),
             MType::Image(IsRaw::Yes)
-                );
+        );
         assert!(mimetype.is_image());
         assert!(mimetype.is_digicam_raw());
     }

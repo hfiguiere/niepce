@@ -46,7 +46,6 @@ class Stack;
 
 namespace fwk {
 class ImageGridView;
-class Thumbnail;
 }
 
 namespace eng {
@@ -120,7 +119,7 @@ private:
     MetaDataPaneController::Ptr m_metadata_pane;
 
     fwk::UIResultSingle<std::list<eng::ImportedFilePtr>> m_files_to_import;
-    fwk::UIResults<std::pair<std::string, fwk::Thumbnail>> m_previews_to_import;
+    fwk::UIResults<std::pair<std::string, fwk::ThumbnailPtr>> m_previews_to_import;
 };
 
 }

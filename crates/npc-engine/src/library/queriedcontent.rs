@@ -38,6 +38,10 @@ impl QueriedContent {
     pub fn push(&mut self, f: LibFile) {
         self.content.push(f);
     }
+
+    pub fn get_content(&self) -> &Vec<LibFile> {
+        &self.content
+    }
 }
 
 #[no_mangle]

@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imageliststore.h
  *
- * Copyright (C) 2008-2020 Hubert Figuiere
+ * Copyright (C) 2008-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include "fwk/base/propertybag.hpp"
 #include "fwk/toolkit/controller.hpp"
 #include "engine/db/libfile.hpp"
-#include "engine/library/thumbnailnotification.hpp"
 #include "libraryclient/libraryclient.hpp"
 
 namespace ui {
@@ -74,7 +73,6 @@ public:
     // Should be called when the content will change
     void clear_content();
     void on_lib_notification(const eng::LibNotification &n);
-    void on_tnail_notification(const eng::ThumbnailNotification &n);
 
 private:
     /// Add the LibFile to the model

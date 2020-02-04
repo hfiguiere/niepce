@@ -1,7 +1,7 @@
 /*
- * niepce - engine/library/thumbnailnotification.hpp
+ * niepce - npc-fwk/toolkit/movieutils.rs
  *
- * Copyright (C) 2007-2017 Hubert Figuiere
+ * Copyright (C) 2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::cmp;
+use std::path::Path;
+use std::process::Command;
 
-#pragma once
-
-#include "fwk/toolkit/thumbnail.hpp"
-
-#include "rust_bindings.hpp"
-
-namespace eng {
-
-struct ThumbnailNotification
+pub fn thumbnail_movie<S, D>(source: S, w: i32, h: i32, dest: D) -> bool
+where
+    S: AsRef<Path> + std::fmt::Debug,
+    D: AsRef<Path>,
 {
-  eng::library_id_t  id;
-  int  width;
-  int  height;
-  fwk::Thumbnail pixmap;
-};
-
+    let status = Command::new("totem-video-thumbnailer")
+        .arg("-s")
+        .arg(format!("{}", cmp::max(w, h)))
+        .arg(source.as_ref().as_os_str())
+        .arg(dest.as_ref().as_os_str())
+        .status()
+        .expect(&format!("Failed to thumbnail {:?}", source));
+    status.success()
 }
