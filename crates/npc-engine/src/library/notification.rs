@@ -17,10 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use gdk_pixbuf;
-use gdk_pixbuf_sys;
-use glib::translate::*;
-
 use super::queriedcontent::QueriedContent;
 use crate::db::libfile::FileStatus;
 use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId};
@@ -231,26 +227,6 @@ pub unsafe extern "C" fn engine_library_notification_get_label(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn engine_library_notification_get_filemoved(
-    n: *const LibNotification,
-) -> *const FileMove {
-    match n.as_ref() {
-        Some(&LibNotification::FileMoved(ref m)) => m,
-        _ => unreachable!(),
-    }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn engine_library_notification_get_filestatus(
-    n: *const LibNotification,
-) -> FileStatus {
-    match n.as_ref() {
-        Some(&LibNotification::FileStatusChanged(ref s)) => s.status,
-        _ => unreachable!(),
-    }
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn engine_library_notification_get_libmetadata(
     n: *const LibNotification,
 ) -> *const LibMetadata {
@@ -274,16 +250,6 @@ pub unsafe extern "C" fn engine_library_notification_get_count(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn engine_library_notification_get_metadatachange(
-    n: *const LibNotification,
-) -> *const MetadataChange {
-    match n.as_ref() {
-        Some(&LibNotification::MetadataChanged(ref c)) => c,
-        _ => unreachable!(),
-    }
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn engine_library_notification_get_libfolder(
     n: *const LibNotification,
 ) -> *const LibFolder {
@@ -299,30 +265,6 @@ pub unsafe extern "C" fn engine_library_notification_get_keyword(
 ) -> *const Keyword {
     match n.as_ref() {
         Some(&LibNotification::AddedKeyword(ref f)) => f,
-        _ => unreachable!(),
-    }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn engine_library_notification_get_content(
-    n: *const LibNotification,
-) -> *const QueriedContent {
-    match n.as_ref() {
-        Some(&LibNotification::FolderContentQueried(ref c))
-        | Some(&LibNotification::KeywordContentQueried(ref c)) => c,
-        _ => unreachable!(),
-    }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn engine_library_notification_get_pixbuf(
-    n: *const LibNotification,
-) -> *mut gdk_pixbuf_sys::GdkPixbuf {
-    match n.as_ref() {
-        Some(&LibNotification::ThumbnailLoaded(ref thumbnail)) => {
-            let pixbuf: gdk_pixbuf::Pixbuf = thumbnail.pix.clone().into();
-            pixbuf.to_glib_full()
-        }
         _ => unreachable!(),
     }
 }

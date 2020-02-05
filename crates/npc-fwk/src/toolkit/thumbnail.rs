@@ -75,7 +75,7 @@ impl Thumbnail {
     }
 
     /// Make a gdk_pixbuf::Pixbuf out of the Thumbnail
-    fn make_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
+    pub fn make_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         if self.ok() {
             // XXX figure out the allocation here.
             // Ideally we should have this shared

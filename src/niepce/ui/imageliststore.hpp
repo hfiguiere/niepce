@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <gdkmm/pixbuf.h>
 #include <gtkmm/liststore.h>
 
 #include "fwk/base/propertybag.hpp"
@@ -37,23 +36,6 @@ typedef std::shared_ptr<ImageListStore> ImageListStorePtr;
 class ImageListStore
 {
 public:
-    class Columns
-        : public Gtk::TreeModelColumnRecord
-    {
-    public:
-        Columns()
-            {
-                add(m_pix);
-                add(m_libfile_do_not_use);
-                add(m_strip_thumb);
-                add(m_file_status);
-            }
-        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_pix;
-        Gtk::TreeModelColumn<eng::LibFilePtr> m_libfile_do_not_use;
-        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > m_strip_thumb;
-        Gtk::TreeModelColumn<gint> m_file_status;
-    };
-
     ImageListStore(ffi::ImageListStore*);
     ~ImageListStore();
     Glib::RefPtr<Gtk::ListStore> gobjmm() const
@@ -75,19 +57,10 @@ public:
     void on_lib_notification(const eng::LibNotification &n);
 
 private:
-    /// Add the LibFile to the model
-    void add_libfile(const eng::LibFilePtr & f);
-
-    static Glib::RefPtr<Gdk::Pixbuf> get_loading_icon();
     libraryclient::LibraryClientPtr getLibraryClient();
-    static bool is_property_interesting(fwk::PropertyIndex idx);
 
-    Columns m_columns;
     ffi::ImageListStore* m_store;
     Glib::RefPtr<Gtk::ListStore> m_store_wrap;
-    eng::library_id_t m_current_folder;
-    eng::library_id_t m_current_keyword;
-    std::map<eng::library_id_t, Gtk::TreeIter> m_idmap;
     fwk::Controller::WeakPtr m_controller;
 };
 

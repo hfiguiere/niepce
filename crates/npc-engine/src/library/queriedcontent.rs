@@ -23,8 +23,8 @@ use crate::db::LibraryId;
 /// Queried content to pass a list of LibFile and the id of the container.
 #[derive(Clone)]
 pub struct QueriedContent {
-    id: LibraryId,
-    content: Vec<LibFile>,
+    pub id: LibraryId,
+    pub content: Vec<LibFile>,
 }
 
 impl QueriedContent {
@@ -42,19 +42,4 @@ impl QueriedContent {
     pub fn get_content(&self) -> &Vec<LibFile> {
         &self.content
     }
-}
-
-#[no_mangle]
-pub extern "C" fn engine_queried_content_id(obj: &QueriedContent) -> LibraryId {
-    obj.id
-}
-
-#[no_mangle]
-pub extern "C" fn engine_queried_content_size(obj: &QueriedContent) -> u64 {
-    obj.content.len() as u64
-}
-
-#[no_mangle]
-pub extern "C" fn engine_queried_content_get(obj: &QueriedContent, idx: usize) -> *mut LibFile {
-    Box::into_raw(Box::new(obj.content[idx].clone()))
 }
