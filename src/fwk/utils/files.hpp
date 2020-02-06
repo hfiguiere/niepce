@@ -68,9 +68,9 @@ public:
 #if !RUST_BINDGEN
     static Ptr getFilesFromDirectory(const value_type& dir,
                                      std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter);
-#endif
 
     value_type at(size_type index) const;
+#endif
     const value_type::value_type* at_cstr(size_type index) const;
 #if !RUST_BINDGEN
     const_iterator begin() const;
