@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011-2017 Hubert Figuiere
+ * Copyright (C) 2011-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 
+#include "string.hpp"
 #include "debug.hpp"
 #include "propertybag.hpp"
 
@@ -64,10 +65,8 @@ PropertyValuePtr property_value_new(const std::vector<std::string>& sa)
 
 std::string property_value_get_string(const PropertyValue &value)
 {
-    auto s = ffi::fwk_property_value_get_string(&value);
-    std::string str(s);
-    ffi::rust_cstring_delete(s);
-    return str;
+    auto s = fwk::RustFfiString(ffi::fwk_property_value_get_string(&value));
+    return s.str();
 }
 
 std::vector<std::string> property_value_get_string_array(const PropertyValue &value)
@@ -75,9 +74,8 @@ std::vector<std::string> property_value_get_string_array(const PropertyValue &va
     std::vector<std::string> v;
     auto len = ffi::fwk_property_value_count_string_array(&value);
     for (size_t i = 0; i < len; i++) {
-        auto s = ffi::fwk_property_value_get_string_at(&value, i);
-        v.push_back(s);
-        ffi::rust_cstring_delete(s);
+        auto s = fwk::RustFfiString(ffi::fwk_property_value_get_string_at(&value, i));
+        v.push_back(s.str());
     }
     return v;
 }

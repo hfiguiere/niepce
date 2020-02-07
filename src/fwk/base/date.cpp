@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/date.cpp
  *
- * Copyright (C) 2012-2017 Hubert Figuiere
+ * Copyright (C) 2012-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "string.hpp"
 #include "date.hpp"
 #include "debug.hpp"
 
@@ -44,10 +45,8 @@ std::string date_to_string(const Date* d)
     if (!d) {
         return "";
     }
-    char* p = ffi::fwk_date_to_string(d);
-    std::string s(p);
-    ffi::rust_cstring_delete(p);
-    return s;
+    auto p = fwk::RustFfiString(ffi::fwk_date_to_string(d));
+    return p.str();
 }
 
 }

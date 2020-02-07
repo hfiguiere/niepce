@@ -42,6 +42,7 @@ libfwkbase_a_SOURCES = colour.hpp colour.cpp \
 	moniker.hpp moniker.cpp \
 	geometry.hpp geometry.cpp \
 	singleton.hpp \
+	string.hpp string.cpp \
 	util.hpp \
 	map.hpp \
 	option.hpp \

@@ -1,7 +1,7 @@
 /*
- * niepce - fwk/base/colour.hpp
+ * niepce - fwk/base/colour.cpp
  *
- * Copyright (C) 2009 Hubert Figuiere
+ * Copyright (C) 2009-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "fwk/base/string.hpp"
 #include "fwk/base/colour.hpp"
 
 #include "rust_bindings.hpp"
@@ -48,10 +49,8 @@ std::string rgbcolour_to_string(uint16_t r, uint16_t g, uint16_t b)
 
 std::string rgbcolour_to_string(const RgbColour* c)
 {
-  char* p = ffi::fwk_rgbcolour_to_string(c);
-  std::string s(p);
-  ffi::rust_cstring_delete(p);
-  return s;
+  auto p = fwk::RustFfiString(ffi::fwk_rgbcolour_to_string(c));
+  return p.str();
 }
 
 }

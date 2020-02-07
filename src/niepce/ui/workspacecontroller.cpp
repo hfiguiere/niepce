@@ -1,7 +1,7 @@
 /*
  * niepce - ui/workspacecontroller.cpp
  *
- * Copyright (C) 2007-2019 Hubert Figuière
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <gtkmm/image.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/base/string.hpp"
 #include "fwk/toolkit/application.hpp"
 #include "fwk/toolkit/configuration.hpp"
 #include "fwk/toolkit/gtkutils.hpp"
@@ -320,11 +321,10 @@ void WorkspaceController::add_keyword_item(const eng::Keyword* k)
 {
     auto children = m_keywordsNode->children();
     bool was_empty = children.empty();
-    char* keyword = engine_db_keyword_keyword(k);
+    auto keyword = fwk::RustFfiString(engine_db_keyword_keyword(k));
     auto iter = add_item(m_treestore, children,
-                         m_icons[ICON_KEYWORD], keyword,
+                         m_icons[ICON_KEYWORD], keyword.c_str(),
                          engine_db_keyword_id(k), KEYWORD_ITEM);
-    ffi::rust_cstring_delete(keyword);
     ffi::libraryclient_count_keyword(getLibraryClient()->client(), engine_db_keyword_id(k));
     m_keywordsidmap[engine_db_keyword_id(k)] = iter;
     if(was_empty) {
