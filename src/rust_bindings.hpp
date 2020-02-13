@@ -25,10 +25,6 @@
 
 #include "engine/db/properties-enum.hpp"
 
-namespace fwk {
-class FileList;
-}
-
 namespace ffi {
 class rust_str;
 struct Utc;
@@ -36,7 +32,6 @@ template <class T>
 struct DateTime;
 typedef rust_str str;
 typedef eng::NiepceProperties Np;
-typedef fwk::FileList FileList;
 }
 
 #include "target/fwk_bindings.h"
@@ -51,6 +46,7 @@ typedef ffi::PropertyBag PropertyBag;
 typedef ffi::PropertySet PropertySet;
 typedef ffi::Date Date;
 typedef ffi::RgbColour RgbColour;
+typedef ffi::FileList FileList;
 }
 
 namespace eng {

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -372,7 +373,7 @@ impl Library {
     }
 
     pub fn add_sidecar_file_to_bundle(&self, file_id: LibraryId, sidecar: &Sidecar) -> Result<()> {
-        let sidecar_t: (i32, &String) = match *sidecar {
+        let sidecar_t: (i32, &PathBuf) = match *sidecar {
             Sidecar::Live(ref p)
             | Sidecar::Thumbnail(ref p)
             | Sidecar::Xmp(ref p)
@@ -578,8 +579,9 @@ impl Library {
         Err(Error::NoSqlDb)
     }
 
-    pub fn add_fs_file(&self, file: &str) -> Result<LibraryId> {
+    pub fn add_fs_file<P: AsRef<Path>>(&self, f: P) -> Result<LibraryId> {
         if let Some(ref conn) = self.dbconn {
+            let file = f.as_ref().to_string_lossy();
             let c = conn.execute("INSERT INTO fsfiles (path) VALUES(?1)", &[&file])?;
             if c != 1 {
                 return Err(Error::InvalidResult);
@@ -614,26 +616,26 @@ impl Library {
             err_out!("add_file returned {}", file_id);
             return Err(Error::InvalidResult);
         }
-        if !bundle.xmp_sidecar().is_empty() {
+        if !bundle.xmp_sidecar().as_os_str().is_empty() {
             let fsfile_id = self.add_fs_file(bundle.xmp_sidecar())?;
             if fsfile_id > 0 {
                 self.add_xmp_sidecar_to_bundle(file_id, fsfile_id)?;
                 self.add_sidecar_fsfile_to_bundle(
                     file_id,
                     fsfile_id,
-                    Sidecar::Xmp(String::new()).to_int(),
+                    Sidecar::Xmp(PathBuf::new()).to_int(),
                     "xmp",
                 )?;
             }
         }
-        if !bundle.jpeg().is_empty() {
+        if !bundle.jpeg().as_os_str().is_empty() {
             let fsfile_id = self.add_fs_file(bundle.jpeg())?;
             if fsfile_id > 0 {
                 self.add_jpeg_file_to_bundle(file_id, fsfile_id)?;
                 self.add_sidecar_fsfile_to_bundle(
                     file_id,
                     fsfile_id,
-                    Sidecar::Jpeg(String::new()).to_int(),
+                    Sidecar::Jpeg(PathBuf::new()).to_int(),
                     "jpg",
                 )?;
             }
@@ -642,16 +644,17 @@ impl Library {
         Ok(file_id)
     }
 
-    pub fn add_file(
+    pub fn add_file<P: AsRef<Path> + AsRef<OsStr>>(
         &self,
         folder_id: LibraryId,
-        file: &str,
+        file: P,
         bundle: Option<&FileBundle>,
         manage: Managed,
     ) -> Result<LibraryId> {
         dbg_assert!(manage == Managed::NO, "manage not supported");
         dbg_assert!(folder_id != -1, "invalid folder ID");
-        let mime = npc_fwk::MimeType::new(file);
+        let file_path: &Path = file.as_ref();
+        let mime = npc_fwk::MimeType::new(file_path);
         let file_type = libfile::mimetype_to_filetype(&mime);
         let label_id: LibraryId = 0;
         let orientation: i32;
@@ -667,10 +670,10 @@ impl Library {
             if bundle.bundle_type() == libfile::FileType::RawJpeg {
                 npc_fwk::XmpMeta::new_from_file(bundle.jpeg(), false)
             } else {
-                npc_fwk::XmpMeta::new_from_file(file, false)
+                npc_fwk::XmpMeta::new_from_file(file_path, false)
             }
         } else {
-            npc_fwk::XmpMeta::new_from_file(file, false)
+            npc_fwk::XmpMeta::new_from_file(file_path, false)
         };
 
         if let Some(ref meta) = meta {
@@ -693,8 +696,11 @@ impl Library {
             xmp = String::from("");
         }
 
-        let filename = Self::leaf_name_for_pathname(file).unwrap_or_default();
-        let fs_file_id = self.add_fs_file(file)?;
+        let filename = file_path
+            .file_name()
+            .map(|s| s.to_string_lossy())
+            .unwrap_or_default();
+        let fs_file_id = self.add_fs_file(file_path)?;
         if fs_file_id <= 0 {
             err_out!("add fsfile failed");
             return Err(Error::InvalidResult);
@@ -1080,7 +1086,7 @@ impl Library {
                         if let Ok(mut f) = File::create(p.clone()) {
                             let sidecar = xmppacket.serialize();
                             if f.write(sidecar.as_bytes()).is_ok() && (xmp_file_id <= 0) {
-                                let xmp_file_id = self.add_fs_file(p.to_string_lossy().as_ref())?;
+                                let xmp_file_id = self.add_fs_file(&p)?;
                                 dbg_assert!(xmp_file_id > 0, "couldn't add xmp_file");
                                 // XXX handle error
                                 let res = self.add_xmp_sidecar_to_bundle(id, xmp_file_id);

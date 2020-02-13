@@ -29,13 +29,13 @@ use npc_fwk::MimeType;
 pub enum Sidecar {
     Invalid,
     /// Sidecar for Live image (MOV file form iPhone)
-    Live(String),
+    Live(PathBuf),
     /// Thumbnail file (THM from Canon)
-    Thumbnail(String),
+    Thumbnail(PathBuf),
     /// XMP Sidecar
-    Xmp(String),
+    Xmp(PathBuf),
     /// JPEG Sidecar (RAW + JPEG)
-    Jpeg(String),
+    Jpeg(PathBuf),
 }
 
 impl Sidecar {
@@ -50,8 +50,8 @@ impl Sidecar {
     }
 }
 
-impl From<(i32, String)> for Sidecar {
-    fn from(t: (i32, String)) -> Self {
+impl From<(i32, PathBuf)> for Sidecar {
+    fn from(t: (i32, PathBuf)) -> Self {
         match t.0 {
             1 => Sidecar::Live(t.1),
             2 => Sidecar::Thumbnail(t.1),
@@ -68,11 +68,11 @@ pub struct FileBundle {
     /// Type of bundle
     bundle_type: FileType,
     /// Main file.
-    main: String,
+    main: PathBuf,
     /// XMP sidecar if it exists.
-    xmp_sidecar: String,
+    xmp_sidecar: PathBuf,
     /// JPEG alternate for RAW_JPEG
-    jpeg: String,
+    jpeg: PathBuf,
     /// Other sidecars: Live, Thumbnail
     sidecars: Vec<Sidecar>,
 }
@@ -89,24 +89,23 @@ impl FileBundle {
     pub fn new() -> FileBundle {
         FileBundle {
             bundle_type: FileType::Unknown,
-            main: String::new(),
-            xmp_sidecar: String::new(),
-            jpeg: String::new(),
+            main: PathBuf::new(),
+            xmp_sidecar: PathBuf::new(),
+            jpeg: PathBuf::new(),
             sidecars: vec![],
         }
     }
 
     /// Filter the file list and turn them to bundles
     ///
-    pub fn filter_bundles(files: &[String]) -> Vec<FileBundle> {
+    pub fn filter_bundles(files: &[PathBuf]) -> Vec<FileBundle> {
         let mut bundles: Vec<FileBundle> = vec![];
-        let mut sorted_files: Vec<&String> = files.iter().collect();
+        let mut sorted_files: Vec<&PathBuf> = files.iter().collect();
         sorted_files.sort();
         let mut current_base = OsString::new();
         let mut current_bundle: Option<FileBundle> = None;
 
-        for f in sorted_files {
-            let path = Path::new(&f);
+        for path in sorted_files {
             if let Some(basename) = path.file_stem() {
                 let mut basename = basename.to_os_string();
                 while basename != current_base {
@@ -122,14 +121,14 @@ impl FileBundle {
                     }
                 }
                 if basename == current_base {
-                    current_bundle.as_mut().unwrap().add(&f);
+                    current_bundle.as_mut().unwrap().add(path);
                     continue;
                 }
                 if let Some(current_bundle) = current_bundle {
                     bundles.push(current_bundle);
                 }
                 let mut bundle = FileBundle::new();
-                bundle.add(&f);
+                bundle.add(path);
                 current_base = basename;
                 current_bundle = Some(bundle);
             }
@@ -140,49 +139,50 @@ impl FileBundle {
         bundles
     }
 
-    pub fn add(&mut self, path: &str) -> bool {
-        dbg_out!("FileBundle::add path {}", path);
+    pub fn add<P: AsRef<Path> + std::fmt::Debug>(&mut self, p: P) -> bool {
+        let path = p.as_ref();
+        dbg_out!("FileBundle::add path {:?}", path);
         let mime_type = MimeType::new(path);
         let mut added = true;
 
         match mime_type.mime_type() {
             MType::Image(is_raw) => match is_raw {
                 IsRaw::Yes => {
-                    if !self.main.is_empty() && self.jpeg.is_empty() {
+                    if !self.main.as_os_str().is_empty() && self.jpeg.as_os_str().is_empty() {
                         self.jpeg = self.main.clone();
                         self.bundle_type = FileType::RawJpeg;
                     } else {
                         self.bundle_type = FileType::Raw;
                     }
-                    self.main = String::from(path);
+                    self.main = path.to_path_buf();
                 }
                 IsRaw::No => {
-                    if !self.main.is_empty() {
-                        self.jpeg = String::from(path);
+                    if !self.main.as_os_str().is_empty() {
+                        self.jpeg = path.to_path_buf();
                         self.bundle_type = FileType::RawJpeg;
                     } else {
-                        self.main = String::from(path);
+                        self.main = path.to_path_buf();
                         self.bundle_type = FileType::Image;
                     }
                 }
             },
-            MType::Xmp => self.xmp_sidecar = String::from(path),
+            MType::Xmp => self.xmp_sidecar = path.to_path_buf(),
             MType::Movie => match self.bundle_type {
                 FileType::Unknown => {
-                    self.main = String::from(path);
+                    self.main = path.to_path_buf();
                     self.bundle_type = FileType::Video;
                 }
                 FileType::Image => {
-                    self.sidecars.push(Sidecar::Live(String::from(path)));
+                    self.sidecars.push(Sidecar::Live(path.to_path_buf()));
                 }
                 _ => {
-                    dbg_out!("Ignoring movie file {}", path);
+                    dbg_out!("Ignoring movie file {:?}", path);
                     added = false;
                 }
             },
-            MType::Thumbnail => self.sidecars.push(Sidecar::Thumbnail(String::from(path))),
+            MType::Thumbnail => self.sidecars.push(Sidecar::Thumbnail(path.to_path_buf())),
             _ => {
-                dbg_out!("Unknown file {} of type {:?}", path, mime_type);
+                dbg_out!("Unknown file {:?} of type {:?}", path, mime_type);
                 added = false;
             }
         }
@@ -193,15 +193,15 @@ impl FileBundle {
         self.bundle_type
     }
 
-    pub fn main(&self) -> &str {
+    pub fn main(&self) -> &Path {
         &self.main
     }
 
-    pub fn jpeg(&self) -> &str {
+    pub fn jpeg(&self) -> &Path {
         &self.jpeg
     }
 
-    pub fn xmp_sidecar(&self) -> &str {
+    pub fn xmp_sidecar(&self) -> &Path {
         &self.xmp_sidecar
     }
 
@@ -214,38 +214,39 @@ impl FileBundle {
 mod test {
     use super::{FileBundle, Sidecar};
     use crate::db::libfile::FileType;
+    use std::path::PathBuf;
 
     #[test]
     fn test_filebundle() {
-        let mut thelist: Vec<String> = vec![];
+        let mut thelist: Vec<PathBuf> = vec![];
 
-        thelist.push(String::from("/foo/bar/img_0001.cr2"));
-        thelist.push(String::from("/foo/bar/img_0001.jpg"));
-        thelist.push(String::from("/foo/bar/img_0001.xmp"));
+        thelist.push(PathBuf::from("/foo/bar/img_0001.cr2"));
+        thelist.push(PathBuf::from("/foo/bar/img_0001.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/img_0001.xmp"));
 
-        thelist.push(String::from("/foo/bar/dcs_0001.jpg"));
-        thelist.push(String::from("/foo/bar/dcs_0001.nef"));
-        thelist.push(String::from("/foo/bar/dcs_0001.xmp"));
+        thelist.push(PathBuf::from("/foo/bar/dcs_0001.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/dcs_0001.nef"));
+        thelist.push(PathBuf::from("/foo/bar/dcs_0001.xmp"));
 
-        thelist.push(String::from("/foo/bar/img_0142.jpg"));
-        thelist.push(String::from("/foo/bar/img_0142.mov"));
+        thelist.push(PathBuf::from("/foo/bar/img_0142.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/img_0142.mov"));
 
-        thelist.push(String::from("/foo/bar/img_0143.mov"));
-        thelist.push(String::from("/foo/bar/img_0143.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/img_0143.mov"));
+        thelist.push(PathBuf::from("/foo/bar/img_0143.jpg"));
 
-        thelist.push(String::from("/foo/bar/img_0144.crw"));
-        thelist.push(String::from("/foo/bar/img_0144.thm"));
+        thelist.push(PathBuf::from("/foo/bar/img_0144.crw"));
+        thelist.push(PathBuf::from("/foo/bar/img_0144.thm"));
 
-        thelist.push(String::from("/foo/bar/mvi_0145.mov"));
-        thelist.push(String::from("/foo/bar/mvi_0145.thm"));
+        thelist.push(PathBuf::from("/foo/bar/mvi_0145.mov"));
+        thelist.push(PathBuf::from("/foo/bar/mvi_0145.thm"));
 
-        thelist.push(String::from("/foo/bar/scs_3445.jpg"));
-        thelist.push(String::from("/foo/bar/scs_3445.raf"));
-        thelist.push(String::from("/foo/bar/scs_3445.jpg.xmp"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3445.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3445.raf"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3445.jpg.xmp"));
 
-        thelist.push(String::from("/foo/bar/scs_3446.jpg"));
-        thelist.push(String::from("/foo/bar/scs_3446.raf"));
-        thelist.push(String::from("/foo/bar/scs_3446.raf.pp3"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3446.jpg"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3446.raf"));
+        thelist.push(PathBuf::from("/foo/bar/scs_3446.raf.pp3"));
 
         let bundles_list = FileBundle::filter_bundles(&thelist);
 
@@ -254,31 +255,31 @@ mod test {
         let mut iter = bundles_list.iter();
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::RawJpeg);
-            assert_eq!(b.main(), "/foo/bar/dcs_0001.nef");
-            assert_eq!(b.jpeg(), "/foo/bar/dcs_0001.jpg");
-            assert_eq!(b.xmp_sidecar(), "/foo/bar/dcs_0001.xmp");
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/dcs_0001.nef"));
+            assert_eq!(b.jpeg(), PathBuf::from("/foo/bar/dcs_0001.jpg"));
+            assert_eq!(b.xmp_sidecar(), PathBuf::from("/foo/bar/dcs_0001.xmp"));
         } else {
             assert!(false);
         }
 
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::RawJpeg);
-            assert_eq!(b.main(), "/foo/bar/img_0001.cr2");
-            assert_eq!(b.jpeg(), "/foo/bar/img_0001.jpg");
-            assert_eq!(b.xmp_sidecar(), "/foo/bar/img_0001.xmp");
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/img_0001.cr2"));
+            assert_eq!(b.jpeg(), PathBuf::from("/foo/bar/img_0001.jpg"));
+            assert_eq!(b.xmp_sidecar(), PathBuf::from("/foo/bar/img_0001.xmp"));
         } else {
             assert!(false);
         }
 
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::Image);
-            assert_eq!(b.main(), "/foo/bar/img_0142.jpg");
-            assert!(b.jpeg().is_empty());
-            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/img_0142.jpg"));
+            assert!(b.jpeg().as_os_str().is_empty());
+            assert!(b.xmp_sidecar().as_os_str().is_empty());
             assert_eq!(b.sidecars.len(), 1);
             assert_eq!(
                 b.sidecars[0],
-                Sidecar::Live(String::from("/foo/bar/img_0142.mov"))
+                Sidecar::Live(PathBuf::from("/foo/bar/img_0142.mov"))
             );
         } else {
             assert!(false);
@@ -286,13 +287,13 @@ mod test {
 
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::Image);
-            assert_eq!(b.main(), "/foo/bar/img_0143.jpg");
-            assert!(b.jpeg().is_empty());
-            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/img_0143.jpg"));
+            assert!(b.jpeg().as_os_str().is_empty());
+            assert!(b.xmp_sidecar().as_os_str().is_empty());
             assert_eq!(b.sidecars.len(), 1);
             assert_eq!(
                 b.sidecars[0],
-                Sidecar::Live(String::from("/foo/bar/img_0143.mov"))
+                Sidecar::Live(PathBuf::from("/foo/bar/img_0143.mov"))
             );
         } else {
             assert!(false);
@@ -300,13 +301,13 @@ mod test {
 
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::Raw);
-            assert_eq!(b.main(), "/foo/bar/img_0144.crw");
-            assert!(b.jpeg().is_empty());
-            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/img_0144.crw"));
+            assert!(b.jpeg().as_os_str().is_empty());
+            assert!(b.xmp_sidecar().as_os_str().is_empty());
             assert_eq!(b.sidecars.len(), 1);
             assert_eq!(
                 b.sidecars[0],
-                Sidecar::Thumbnail(String::from("/foo/bar/img_0144.thm"))
+                Sidecar::Thumbnail(PathBuf::from("/foo/bar/img_0144.thm"))
             );
         } else {
             assert!(false);
@@ -314,13 +315,13 @@ mod test {
 
         if let Some(b) = iter.next() {
             assert_eq!(b.bundle_type(), FileType::Video);
-            assert_eq!(b.main(), "/foo/bar/mvi_0145.mov");
-            assert!(b.jpeg().is_empty());
-            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/mvi_0145.mov"));
+            assert!(b.jpeg().as_os_str().is_empty());
+            assert!(b.xmp_sidecar().as_os_str().is_empty());
             assert_eq!(b.sidecars.len(), 1);
             assert_eq!(
                 b.sidecars[0],
-                Sidecar::Thumbnail(String::from("/foo/bar/mvi_0145.thm"))
+                Sidecar::Thumbnail(PathBuf::from("/foo/bar/mvi_0145.thm"))
             );
         } else {
             assert!(false);
@@ -328,15 +329,15 @@ mod test {
 
         if let Some(b) = iter.next() {
             println!(
-                "main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                "main = {:?}, jpeg = {:?}, xmp_sidecar = {:?}, sidecars =",
                 b.main(),
                 b.jpeg(),
                 b.xmp_sidecar() /*, b.sidecars()*/
             );
             assert_eq!(b.bundle_type(), FileType::RawJpeg);
-            assert_eq!(b.main(), "/foo/bar/scs_3445.raf");
-            assert_eq!(b.jpeg(), "/foo/bar/scs_3445.jpg");
-            assert_eq!(b.xmp_sidecar(), "/foo/bar/scs_3445.jpg.xmp");
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/scs_3445.raf"));
+            assert_eq!(b.jpeg(), PathBuf::from("/foo/bar/scs_3445.jpg"));
+            assert_eq!(b.xmp_sidecar(), PathBuf::from("/foo/bar/scs_3445.jpg.xmp"));
             assert_eq!(b.sidecars.len(), 0);
         } else {
             assert!(false);
@@ -344,15 +345,15 @@ mod test {
 
         if let Some(b) = iter.next() {
             println!(
-                "main = {}, jpeg = {}, xmp_sidecar = {}, sidecars =",
+                "main = {:?}, jpeg = {:?}, xmp_sidecar = {:?}, sidecars =",
                 b.main(),
                 b.jpeg(),
                 b.xmp_sidecar() /*, b.sidecars()*/
             );
             assert_eq!(b.bundle_type(), FileType::RawJpeg);
-            assert_eq!(b.main(), "/foo/bar/scs_3446.raf");
-            assert_eq!(b.jpeg(), "/foo/bar/scs_3446.jpg");
-            assert!(b.xmp_sidecar().is_empty());
+            assert_eq!(b.main(), PathBuf::from("/foo/bar/scs_3446.raf"));
+            assert_eq!(b.jpeg(), PathBuf::from("/foo/bar/scs_3446.jpg"));
+            assert!(b.xmp_sidecar().as_os_str().is_empty());
             assert_eq!(b.sidecars.len(), 0);
         } else {
             assert!(false);

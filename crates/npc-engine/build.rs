@@ -22,7 +22,6 @@ fn main() {
         .constified_enum("eng::NiepceProperties")
         .prepend_enum_name(false)
         .opaque_type("std::.*")
-        .whitelist_type("fwk::FileList")
         .whitelist_type("eng::IndexToXmp")
         .whitelist_function("eng::property_index_to_xmp")
         .header("../../src/engine/db/bindings.hpp")

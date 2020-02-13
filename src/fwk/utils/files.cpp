@@ -71,102 +71,14 @@ bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file)
 
 bool filter_only_media(const Glib::RefPtr<Gio::FileInfo> & file)
 {
-    return ffi::file_is_media(file->gobj());
+    return ffi::fwk_file_is_media(file->gobj());
 }
 
 
-
-FileList::FileList()
+FileListPtr wrapFileList(ffi::FileList* list)
 {
+    return FileListPtr(list, ffi::fwk_file_list_delete);
 }
-
-FileList::FileList( const _impltype_t & v )
-    : _impltype_t( v )
-{
-}
-
-FileList::value_type FileList::at(size_type index) const
-{
-    return _impltype_t::at(index);
-}
-
-const FileList::value_type::value_type*
-FileList::at_cstr(size_type index) const
-{
-    return _impltype_t::at(index).c_str();
-}
-
-FileList::const_iterator FileList::begin() const
-{
-    return _impltype_t::cbegin();
-}
-
-FileList::const_iterator FileList::end() const
-{
-    return _impltype_t::cend();
-}
-
-FileList::const_iterator FileList::cbegin() const
-{
-    return _impltype_t::cbegin();
-}
-
-FileList::const_iterator FileList::cend() const
-{
-    return _impltype_t::cend();
-}
-
-FileList::size_type FileList::size() const
-{
-    return _impltype_t::size();
-}
-
-void FileList::sort()
-{
-    std::sort(_impltype_t::begin(), _impltype_t::end());
-}
-
-void FileList::push_back(const value_type & v)
-{
-    _impltype_t::push_back(v);
-}
-
-FileList::Ptr FileList::getFilesFromDirectory(const FileList::value_type& p, std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter)
-{
-//		if(!exists( p ) ) {
-//			DBG_OUT( "directory %s do not exist", p.c_str() );
-//			return Ptr();
-//		}
-    try {
-        FileList::Ptr l(new FileList());
-
-        Glib::RefPtr<Gio::File> dir = Gio::File::create_for_path(p);
-        Glib::RefPtr<Gio::FileEnumerator> enumerator = dir->enumerate_children();
-
-        for (Glib::RefPtr<Gio::FileInfo> itr = enumerator->next_file();
-             itr ; itr = enumerator->next_file()) {
-            Gio::FileType ftype = itr->get_file_type();
-            if ((ftype == Gio::FILE_TYPE_REGULAR)  || (ftype == Gio::FILE_TYPE_SYMBOLIC_LINK)) {
-                if (filter(itr)) {
-                    std::string fullname =
-                        Glib::build_filename(dir->get_path(), itr->get_name());
-                    l->push_back(fullname);
-                    DBG_OUT("found file %s", fullname.c_str());
-                }
-            }
-        }
-        enumerator->close();
-        l->sort();
-        return l;
-    } catch(const Glib::Error & e) {
-        ERR_OUT("Exception: %s", e.what().c_str());
-    } catch(const std::exception & e) {
-        ERR_OUT("Exception: %s", e.what());
-    }
-
-    return Ptr();
-}
-
 
 }
 

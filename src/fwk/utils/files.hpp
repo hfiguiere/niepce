@@ -18,8 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UTILS_FILES_H__
-#define __UTILS_FILES_H__
+#pragma once
 
 #include <algorithm>
 #include <vector>
@@ -31,6 +30,8 @@
 #if !RUST_BINDGEN
 #include <giomm/fileinfo.h>
 #endif
+
+#include "rust_bindings.hpp"
 
 namespace fwk {
 
@@ -45,44 +46,8 @@ bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
 bool filter_only_media(const Glib::RefPtr<Gio::FileInfo> & file);
 #endif
 
-class FileList;
-typedef std::shared_ptr<FileList> FileListPtr;
+typedef std::shared_ptr<ffi::FileList> FileListPtr;
 
-class FileList
-	: private std::vector<std::string>
-{
-public:
-    typedef FileListPtr Ptr;
-
-    typedef std::vector<std::string>    _impltype_t;
-    typedef _impltype_t::value_type       value_type;
-#if !RUST_BINDGEN
-    typedef _impltype_t::iterator         iterator;
-    typedef _impltype_t::const_iterator   const_iterator;
-#endif
-    typedef _impltype_t::size_type        size_type;
-
-    FileList();
-    FileList(const _impltype_t&);
-
-#if !RUST_BINDGEN
-    static Ptr getFilesFromDirectory(const value_type& dir,
-                                     std::function<bool (const Glib::RefPtr<Gio::FileInfo>&)> filter);
-
-    value_type at(size_type index) const;
-#endif
-    const value_type::value_type* at_cstr(size_type index) const;
-#if !RUST_BINDGEN
-    const_iterator begin() const;
-    const_iterator end() const;
-    const_iterator cbegin() const;
-    const_iterator cend() const;
-#endif
-    size_type size() const;
-    void sort();
-    void push_back(const value_type & v);
-};
+FileListPtr wrapFileList(ffi::FileList* list);
 
 }
-
-#endif

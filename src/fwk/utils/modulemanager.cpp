@@ -35,6 +35,7 @@
 #include "fwk/utils/pathutils.hpp"
 #include "fwk/base/debug.hpp"
 #include "fwk/base/map.hpp"
+#include "fwk/base/string.hpp"
 #include "dynamicmodule.hpp"
 #include "modulemanager.hpp"
 
@@ -57,24 +58,26 @@ namespace fwk {
   }
 
 
+  static bool filter(GFileInfo* f)
+  {
+    return fwk::filter_ext(Glib::wrap(f, true), std::string(".") + G_MODULE_SUFFIX);
+  }
+
   void ModuleManager::load_modules()
   {
-    std::string ext = std::string(".") + G_MODULE_SUFFIX;
-
     for(auto iter = m_dirs.cbegin();
         iter != m_dirs.cend(); ++iter) {
 
-      fwk::FileList::Ptr l;
-      l = FileList::getFilesFromDirectory(*iter, [ext] (const Glib::RefPtr<Gio::FileInfo>& f) {
-          return fwk::filter_ext(f, ext);
-      });
+      fwk::FileListPtr l;
+      l = wrapFileList(ffi::fwk_file_list_get_files_from_directory(
+                         iter->c_str(), filter));
 
-      for(auto mod_iter = l->cbegin();
-          mod_iter != l->cend(); ++mod_iter) {
+      for(size_t i = 0; i < ffi::fwk_file_list_size(l.get()); i++) {
 
-        Glib::Module module(*iter + "/" + path_basename(*mod_iter), 
+        auto file_path = fwk::RustFfiString(ffi::fwk_file_list_at(l.get(), i));
+        Glib::Module module(*iter + "/" + path_basename(file_path.c_str()),
                             Glib::MODULE_BIND_LOCAL);
-        DBG_OUT("load module %s", path_basename(*mod_iter).c_str());
+        DBG_OUT("load module %s", path_basename(file_path.c_str()).c_str());
 
         if(!module) {
           DBG_OUT("error loading %s", Glib::Module::get_last_error().c_str());

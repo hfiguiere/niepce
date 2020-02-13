@@ -18,6 +18,7 @@
  */
 
 use std::convert::From;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
@@ -176,10 +177,16 @@ impl XmpMeta {
         }
     }
 
-    pub fn new_from_file(file: &str, sidecar_only: bool) -> Option<XmpMeta> {
+    pub fn new_from_file<P>(p: P, sidecar_only: bool) -> Option<XmpMeta>
+    where
+        P: AsRef<Path> + AsRef<OsStr>,
+    {
+        let file: &Path = p.as_ref();
         let mut meta: Option<XmpMeta> = None;
         if !sidecar_only {
-            if let Ok(xmpfile) = exempi::XmpFile::open_new(file, exempi::OPEN_READ) {
+            if let Ok(xmpfile) =
+                exempi::XmpFile::open_new(&*file.to_string_lossy(), exempi::OPEN_READ)
+            {
                 meta = match xmpfile.get_new_xmp() {
                     Ok(xmp) => Some(Self::new_with_xmp(xmp)),
                     _ => exiv2::xmp_from_exiv2(file),
@@ -188,8 +195,7 @@ impl XmpMeta {
         }
 
         let mut sidecar_meta: Option<XmpMeta> = None;
-        let filepath = Path::new(file);
-        let sidecar = filepath.with_extension("xmp");
+        let sidecar = file.with_extension("xmp");
         let sidecaropen = File::open(sidecar);
         if let Ok(mut sidecarfile) = sidecaropen {
             let mut sidecarcontent = String::new();

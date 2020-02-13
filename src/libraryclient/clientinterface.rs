@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::path::PathBuf;
+
 use npc_engine::db::library::Managed;
 use npc_engine::db::LibraryId;
 use npc_engine::root::eng::NiepceProperties as Np;
@@ -56,7 +58,7 @@ pub trait ClientInterface {
     /// @param dir the directory
     /// @param files the files to import
     /// @param manage true if imports have to be managed
-    fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed);
+    fn import_files(&mut self, dir: String, files: Vec<PathBuf>, manage: Managed);
 }
 
 /// Sync client interface

@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/mod.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ use npc_engine::db::library::Managed;
 use npc_engine::db::LibraryId;
 use npc_engine::library::notification::{LcChannel, LibNotification};
 use npc_engine::root::eng::NiepceProperties as Np;
-use npc_engine::root::fwk::FileList;
 use npc_fwk::base::PropertyValue;
 use npc_fwk::toolkit::PortableChannel;
+use npc_fwk::utils::files::FileList;
 
 /// Wrap the libclient Arc so that it can be passed around
 /// Used in the ffi for example.
@@ -148,7 +148,7 @@ impl ClientInterface for LibraryClient {
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed
-    fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed) {
+    fn import_files(&mut self, dir: String, files: Vec<PathBuf>, manage: Managed) {
         self.pimpl.import_files(dir, files, manage);
     }
 }
@@ -381,20 +381,11 @@ pub extern "C" fn libraryclient_process_xmp_update_queue(
 pub unsafe extern "C" fn libraryclient_import_files(
     client: &mut LibraryClientWrapper,
     dir: *const c_char,
-    cfiles: &mut FileList,
+    files: &FileList,
     manage: Managed,
 ) {
     let folder = CStr::from_ptr(dir).to_string_lossy();
-    let mut files: Vec<String> = vec![];
-    {
-        let len = cfiles.size();
-        for i in 0..len {
-            let f = cfiles.at_cstr(i);
-            let cstr = CStr::from_ptr(f).to_string_lossy();
-            files.push(String::from(cstr));
-        }
-    }
     client
         .unwrap_mut()
-        .import_files(String::from(folder), files, manage);
+        .import_files(String::from(folder), files.0.clone(), manage);
 }

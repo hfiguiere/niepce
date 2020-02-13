@@ -187,7 +187,7 @@ impl ClientInterface for ClientImpl {
     /// Import files from a directory
     /// @param dir the directory
     /// @param manage true if imports have to be managed
-    fn import_files(&mut self, dir: String, files: Vec<String>, manage: Managed) {
+    fn import_files(&mut self, dir: String, files: Vec<PathBuf>, manage: Managed) {
         self.schedule_op(move |lib| commands::cmd_import_files(&lib, &dir, &files, manage));
     }
 }

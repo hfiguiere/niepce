@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use std::path::PathBuf;
+
 use super::notification::LibNotification;
 use super::notification::{Count, FileMove, MetadataChange};
 use super::queriedcontent::QueriedContent;
@@ -102,7 +104,7 @@ fn get_folder_for_import(lib: &Library, folder: &str) -> library::Result<LibFold
     }
 }
 
-pub fn cmd_import_files(lib: &Library, folder: &str, files: &[String], manage: Managed) -> bool {
+pub fn cmd_import_files(lib: &Library, folder: &str, files: &[PathBuf], manage: Managed) -> bool {
     dbg_assert!(
         manage == Managed::NO,
         "managing file is currently unsupported"

@@ -2,7 +2,7 @@
 /*
  * niepce - engine/importer/directoryimporter.cpp
  *
- * Copyright (C) 2014-2018 Hubert Figuière
+ * Copyright (C) 2014-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <glibmm/miscutils.h>
 
 #include "fwk/base/debug.hpp"
+#include "fwk/base/string.hpp"
 #include "fwk/utils/pathutils.hpp"
 #include "engine/importer/directoryimporter.hpp"
 #include "engine/importer/importedfile.hpp"
@@ -61,17 +62,23 @@ const std::string& DirectoryImporter::id() const
     return _id;
 }
 
+static bool filter_only_media(GFileInfo* info)
+{
+    return fwk::filter_only_media(Glib::wrap(info, true));
+}
+
 bool DirectoryImporter::list_source_content(const std::string & source,
                                             const SourceContentReady& callback)
 {
     auto files =
-        fwk::FileList::getFilesFromDirectory(source,
-                                             &fwk::filter_only_media);
-
+        fwk::wrapFileList(ffi::fwk_file_list_get_files_from_directory(
+                              source.c_str(), &filter_only_media));
+    DBG_OUT("files size: %lu", ffi::fwk_file_list_size(files.get()));
     std::list<ImportedFilePtr> content;
-    for(const auto & entry : *files)
+    for (size_t i = 0; i < ffi::fwk_file_list_size(files.get()); i++)
     {
-        content.push_back(ImportedFilePtr(new DirectoryImportedFile(entry)));
+        auto entry = fwk::RustFfiString(ffi::fwk_file_list_at(files.get(), i));
+        content.push_back(ImportedFilePtr(new DirectoryImportedFile(entry.str())));
     }
     callback(std::move(content));
 
@@ -95,7 +102,8 @@ bool DirectoryImporter::do_import(const std::string& source, const std::string& 
                                   const FileImporter& callback)
 {
     fwk::FileListPtr files;
-    files = fwk::FileList::getFilesFromDirectory(source, &fwk::filter_none);
+    files = fwk::wrapFileList(ffi::fwk_file_list_get_files_from_directory(
+                                  source.c_str(), nullptr));
 
     return callback(source, files, Managed::NO);
 }

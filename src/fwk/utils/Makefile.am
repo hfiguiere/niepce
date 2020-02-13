@@ -4,14 +4,12 @@ niepce_cppflags = -I$(top_srcdir)/src/ \
 
 AM_CPPFLAGS = $(niepce_cppflags)
 
-TESTS = testfiles \
-	testpathutils \
+TESTS = testpathutils \
 	teststringutils
 
 EXTRA_DIST = test.xmp test2.ufraw MODULES_HOWTO
 
-check_PROGRAMS = testfiles \
-	testpathutils \
+check_PROGRAMS = testpathutils \
 	teststringutils
 
 
@@ -20,10 +18,6 @@ testing_ldadd = @top_builddir@/third_party/libgtest.a \
 	libniepceutils.a \
 	../base/libfwkbase.a \
 	@FRAMEWORK_LIBS@
-
-testfiles_SOURCES = t/testfiles.cpp
-testfiles_CPPFLAGS = $(testing_cppflags)
-testfiles_LDADD = $(testing_ldadd)
 
 teststringutils_SOURCES = t/teststringutils.cpp
 teststringutils_CPPFLAGS = $(testing_cppflags)
