@@ -7,7 +7,7 @@ fn main() {
     if env::var("SKIP_CBINDINGS").is_err() {
         // Use cbindgen to generate C bindings.
         let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-        let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or(String::from("./target"));
+        let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| String::from("./target"));
         let mut target_file = PathBuf::from(target_dir);
         target_file.push("fwk_bindings.h");
         cbindgen::Builder::new()

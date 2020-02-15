@@ -57,68 +57,48 @@ pub extern "C" fn fwk_property_bag_new() -> *mut PropertyBag {
     Box::into_raw(Box::new(PropertyBag::new()))
 }
 
+/// Delete the %PropertyBag object
+///
+/// # Safety
+/// Dereference the raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_bag_delete(bag: *mut PropertyBag) {
     Box::from_raw(bag);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_is_empty(b: *const PropertyBag) -> bool {
-    match b.as_ref() {
-        Some(ref pb) => pb.is_empty(),
-        None => true,
-    }
+pub extern "C" fn fwk_property_bag_is_empty(b: &PropertyBag) -> bool {
+    b.is_empty()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_len(b: *const PropertyBag) -> usize {
-    match b.as_ref() {
-        Some(ref pb) => pb.len(),
-        None => unreachable!(),
-    }
+pub extern "C" fn fwk_property_bag_len(b: &PropertyBag) -> usize {
+    b.len()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_key_by_index(
-    b: *const PropertyBag,
-    idx: usize,
-) -> PropertyIndex {
-    match b.as_ref() {
-        Some(ref pb) => pb.bag[idx],
-        None => unreachable!(),
-    }
+pub extern "C" fn fwk_property_bag_key_by_index(b: &PropertyBag, idx: usize) -> PropertyIndex {
+    b.bag[idx]
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_value(
-    b: *const PropertyBag,
+pub extern "C" fn fwk_property_bag_value(
+    b: &PropertyBag,
     key: PropertyIndex,
 ) -> *mut PropertyValue {
-    match b.as_ref() {
-        Some(ref pb) => {
-            if pb.map.contains_key(&key) {
-                let value = Box::new(pb.map[&key].clone());
-                Box::into_raw(value)
-            } else {
-                ptr::null_mut()
-            }
-        }
-        None => unreachable!(),
+    if b.map.contains_key(&key) {
+        let value = Box::new(b.map[&key].clone());
+        Box::into_raw(value)
+    } else {
+        ptr::null_mut()
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_bag_set_value(
-    b: *mut PropertyBag,
+pub extern "C" fn fwk_property_bag_set_value(
+    b: &mut PropertyBag,
     key: PropertyIndex,
-    v: *const PropertyValue,
+    v: &PropertyValue,
 ) -> bool {
-    let value = match v.as_ref() {
-        Some(value) => value.clone(),
-        None => unreachable!(),
-    };
-    match b.as_mut() {
-        Some(ref mut pb) => pb.set_value(key, value),
-        None => unreachable!(),
-    }
+    b.set_value(key, v.clone())
 }

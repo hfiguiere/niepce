@@ -89,6 +89,10 @@ impl FileList {
     }
 }
 
+/// Tell is the file pointed by finfo is a media file
+///
+/// # Safety
+/// Dereference the finfo pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_file_is_media(finfo: *mut gio_sys::GFileInfo) -> bool {
     let fileinfo = gio::FileInfo::from_glib_none(finfo);
@@ -96,15 +100,23 @@ pub unsafe extern "C" fn fwk_file_is_media(finfo: *mut gio_sys::GFileInfo) -> bo
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_file_list_new() -> *mut FileList {
+pub extern "C" fn fwk_file_list_new() -> *mut FileList {
     Box::into_raw(Box::new(FileList::default()))
 }
 
+/// Delete the file list object from ffi code
+///
+/// # Safety
+/// Dereference the pointer
 #[no_mangle]
 pub unsafe extern "C" fn fwk_file_list_delete(l: *mut FileList) {
     Box::from_raw(l);
 }
 
+/// Get the files in directory dir
+///
+/// # Safety
+/// Dereference the dir pointer (C String)
 #[no_mangle]
 pub unsafe extern "C" fn fwk_file_list_get_files_from_directory(
     dir: *const c_char,
@@ -127,20 +139,24 @@ pub unsafe extern "C" fn fwk_file_list_get_files_from_directory(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_file_list_size(l: &FileList) -> usize {
+pub extern "C" fn fwk_file_list_size(l: &FileList) -> usize {
     l.0.len()
 }
 
 /// Return the path string at index %idx
 /// The resulting string must be freeed with %rust_cstring_delete
 #[no_mangle]
-pub unsafe extern "C" fn fwk_file_list_at(l: &FileList, idx: usize) -> *mut c_char {
+pub extern "C" fn fwk_file_list_at(l: &FileList, idx: usize) -> *mut c_char {
     CString::new(l.0[idx].to_string_lossy().as_bytes())
         .unwrap()
         .into_raw()
 }
 
 #[no_mangle]
+/// Push a file path to the list
+///
+/// # Safety
+/// Dereference the value pointer (C string)
 pub unsafe extern "C" fn fwk_file_list_push_back(l: &mut FileList, value: *const c_char) {
     assert!(!value.is_null());
     if value.is_null() {

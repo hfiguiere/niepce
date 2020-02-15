@@ -54,7 +54,7 @@ pub fn gdkpixbuf_exif_rotate(
     orientation: i32,
 ) -> Option<gdk_pixbuf::Pixbuf> {
     match orientation {
-        0 | 1 => pix.map(|p| p.clone()),
+        0 | 1 => pix.cloned(),
         2 => pix.and_then(|p| p.flip(true)),
         3 => pix.and_then(|p| p.rotate_simple(gdk_pixbuf::PixbufRotation::Upsidedown)),
         4 => pix

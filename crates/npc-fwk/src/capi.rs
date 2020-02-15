@@ -21,6 +21,9 @@ use libc::c_char;
 use std::ffi::CString;
 
 /// Release the raw pointer from a CString.
+///
+/// # Safety
+/// Dereference the pointer
 #[no_mangle]
 pub unsafe extern "C" fn rust_cstring_delete(string: *mut c_char) {
     CString::from_raw(string);

@@ -61,7 +61,7 @@ impl Default for Thumbnail {
 impl Thumbnail {
     /// Return true if there is a pixbuf
     pub fn ok(&self) -> bool {
-        self.bytes.len() > 0
+        !self.bytes.is_empty()
     }
 
     /// Get the width of the pixbuf. 0 if None
@@ -191,6 +191,10 @@ impl Into<gdk_pixbuf::Pixbuf> for Thumbnail {
     }
 }
 
+/// Generate the %Thumbnail for the file
+///
+/// # Safety
+/// Dereference filename pointer (C string)
 #[no_mangle]
 pub unsafe extern "C" fn fwk_toolkit_thumbnail_file(
     filename: *const c_char,
@@ -206,11 +210,21 @@ pub unsafe extern "C" fn fwk_toolkit_thumbnail_file(
     )))
 }
 
+/// Delete the %Thumbnail object
+///
+/// # Safety
+/// Dereference the pointer
 #[no_mangle]
 pub unsafe extern "C" fn fwk_toolkit_thumbnail_delete(obj: *mut Thumbnail) {
     Box::from_raw(obj);
 }
 
+/// Create a %Thumbnail from a %GdkPixbuf
+///
+/// The resulting object must be freed by %fwk_toolkit_thumbnail_delete
+///
+/// # Safety
+/// Dereference the pointer
 #[no_mangle]
 pub unsafe extern "C" fn fwk_toolkit_thumbnail_from_pixbuf(
     pixbuf: *mut gdk_pixbuf_sys::GdkPixbuf,
@@ -220,7 +234,7 @@ pub unsafe extern "C" fn fwk_toolkit_thumbnail_from_pixbuf(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_toolkit_thumbnail_to_pixbuf(
+pub extern "C" fn fwk_toolkit_thumbnail_to_pixbuf(
     self_: &Thumbnail,
 ) -> *mut gdk_pixbuf_sys::GdkPixbuf {
     self_.make_pixbuf().to_glib_full()

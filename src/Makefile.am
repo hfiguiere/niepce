@@ -101,4 +101,4 @@ check-local:
 
 clippy:
 	cd $(top_srcdir) && \
-	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo clippy $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS) -- -A clippy::missing_safety_doc
+	CARGO_TARGET_DIR=$(CARGO_TARGET_DIR) cargo clippy $(CARGO_VERBOSE) $(CARGO_RELEASE_ARGS)

@@ -77,9 +77,8 @@ fn guess_type_for_file<P: AsRef<Path>>(p: P) -> MType {
     }
     // alternative
     let (content_type, _) = gio::content_type_guess(path.to_str(), &[]);
-    let t = guess_type(content_type.as_str());
 
-    t
+    guess_type(content_type.as_str())
 }
 
 impl MimeType {

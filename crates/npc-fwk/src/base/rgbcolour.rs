@@ -92,6 +92,10 @@ pub extern "C" fn fwk_rgbcolour_to_string(c: &RgbColour) -> *mut c_char {
     CString::new(c.to_string().as_bytes()).unwrap().into_raw()
 }
 
+/// Delete the %RgbColour object
+///
+/// # Safety
+/// Dereference the pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_rgbcolour_delete(c: *mut RgbColour) {
     Box::from_raw(c);

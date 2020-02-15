@@ -29,6 +29,8 @@ extern crate glib;
 extern crate glib_sys;
 extern crate gtk;
 extern crate gtk_sys;
+#[macro_use]
+extern crate lazy_static;
 extern crate libc;
 extern crate multimap;
 extern crate once_cell;
@@ -55,6 +57,10 @@ use libc::c_char;
 use std::f64;
 use std::ffi::CStr;
 
+/// Convert a gps coord (in string format) to a decimal (floating point)
+///
+/// # Safety
+/// Dereference the pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
     let value = CStr::from_ptr(cvalue);
@@ -66,6 +72,10 @@ pub unsafe extern "C" fn fwk_gps_coord_from_xmp(cvalue: *const c_char) -> f64 {
     f64::NAN
 }
 
+/// Convert a fraction (in string format) to a decimal (floating point)
+///
+/// # Safety
+/// Dereference the pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_fraction_to_decimal(cvalue: *const c_char) -> f64 {
     let value = CStr::from_ptr(cvalue);

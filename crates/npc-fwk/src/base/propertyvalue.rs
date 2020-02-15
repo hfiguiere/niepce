@@ -33,6 +33,10 @@ pub enum PropertyValue {
 
 unsafe impl Send for PropertyValue {}
 
+/// Create a new String %PropertyValue from a C string
+///
+/// # Safety
+/// Dereference the pointer (C string)
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_value_new_str(v: *const c_char) -> *mut PropertyValue {
     let cstr = CStr::from_ptr(v);
@@ -58,6 +62,10 @@ pub extern "C" fn fwk_property_value_new_string_array() -> *mut PropertyValue {
     Box::into_raw(value)
 }
 
+/// Delete the %PropertyValue object
+///
+/// # Safety
+/// Dereference the pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_value_delete(v: *mut PropertyValue) {
     if !v.is_null() {
@@ -66,88 +74,89 @@ pub unsafe extern "C" fn fwk_property_value_delete(v: *mut PropertyValue) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_is_empty(v: *const PropertyValue) -> bool {
-    match v.as_ref() {
-        Some(&PropertyValue::Empty) => true,
+pub extern "C" fn fwk_property_value_is_empty(v: &PropertyValue) -> bool {
+    match *v {
+        PropertyValue::Empty => true,
         _ => false,
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_is_integer(v: *const PropertyValue) -> bool {
-    match v.as_ref() {
-        Some(&PropertyValue::Int(_)) => true,
+pub extern "C" fn fwk_property_value_is_integer(v: &PropertyValue) -> bool {
+    match *v {
+        PropertyValue::Int(_) => true,
         _ => false,
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_get_integer(v: *const PropertyValue) -> i32 {
-    match v.as_ref() {
-        Some(&PropertyValue::Int(i)) => i,
-        _ => unreachable!(),
+pub extern "C" fn fwk_property_value_get_integer(v: &PropertyValue) -> i32 {
+    match *v {
+        PropertyValue::Int(i) => i,
+        _ => panic!("value is not Int"),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_is_date(v: *const PropertyValue) -> bool {
-    match v.as_ref() {
-        Some(&PropertyValue::Date(_)) => true,
+pub extern "C" fn fwk_property_value_is_date(v: &PropertyValue) -> bool {
+    match *v {
+        PropertyValue::Date(_) => true,
         _ => false,
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_get_date(v: *const PropertyValue) -> *const Date {
-    match v.as_ref() {
-        Some(&PropertyValue::Date(ref d)) => d,
-        _ => unreachable!(),
+pub extern "C" fn fwk_property_value_get_date(v: &PropertyValue) -> *const Date {
+    match *v {
+        PropertyValue::Date(ref d) => d,
+        _ => panic!("value is not Date"),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_is_string(v: *const PropertyValue) -> bool {
-    match v.as_ref() {
-        Some(&PropertyValue::String(_)) => true,
+pub extern "C" fn fwk_property_value_is_string(v: &PropertyValue) -> bool {
+    match *v {
+        PropertyValue::String(_) => true,
         _ => false,
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_get_string(v: *const PropertyValue) -> *mut c_char {
-    match v.as_ref() {
-        Some(&PropertyValue::String(ref s)) => CString::new(s.as_bytes()).unwrap().into_raw(),
-        _ => unreachable!(),
+pub extern "C" fn fwk_property_value_get_string(v: &PropertyValue) -> *mut c_char {
+    match *v {
+        PropertyValue::String(ref s) => CString::new(s.as_bytes()).unwrap().into_raw(),
+        _ => panic!("value is not a String"),
     }
 }
 
+/// Add a string a StringArray %PropertyValue
+///
+/// Will panic if the type is incorrect.
+///
+/// # Safety
+/// Dereference the pointer (C string)
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_add_string(v: *mut PropertyValue, str: *const c_char) {
-    match v.as_mut() {
-        Some(&mut PropertyValue::StringArray(ref mut sa)) => {
-            sa.push(CStr::from_ptr(str).to_string_lossy().into_owned());
+pub unsafe extern "C" fn fwk_property_value_add_string(v: &mut PropertyValue, cstr: *const c_char) {
+    match *v {
+        PropertyValue::StringArray(ref mut sa) => {
+            sa.push(CStr::from_ptr(cstr).to_string_lossy().into_owned());
         }
-        _ => unreachable!(),
+        _ => panic!("value is not a StringArray"),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_count_string_array(v: *const PropertyValue) -> usize {
-    match v.as_ref() {
-        Some(&PropertyValue::StringArray(ref sa)) => sa.len(),
-        _ => unreachable!(),
+pub extern "C" fn fwk_property_value_count_string_array(v: &PropertyValue) -> usize {
+    match *v {
+        PropertyValue::StringArray(ref sa) => sa.len(),
+        _ => panic!("value is not a StringArray"),
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_property_value_get_string_at(
-    v: *const PropertyValue,
-    idx: usize,
-) -> *mut c_char {
-    match v.as_ref() {
-        Some(&PropertyValue::StringArray(ref sa)) => {
-            CString::new(sa[idx].as_bytes()).unwrap().into_raw()
-        }
-        _ => unreachable!(),
+pub extern "C" fn fwk_property_value_get_string_at(v: &PropertyValue, idx: usize) -> *mut c_char {
+    match *v {
+        PropertyValue::StringArray(ref sa) => CString::new(sa[idx].as_bytes()).unwrap().into_raw(),
+        _ => panic!("value is not a StringArray"),
     }
 }

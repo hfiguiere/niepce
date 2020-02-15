@@ -269,15 +269,16 @@ impl WidgetImpl for RatingLabelPriv {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn fwk_rating_label_new(
-    rating: c_int,
-    editable: bool,
-) -> *mut gtk_sys::GtkWidget {
+pub extern "C" fn fwk_rating_label_new(rating: c_int, editable: bool) -> *mut gtk_sys::GtkWidget {
     RatingLabel::new(rating, editable)
         .upcast::<gtk::Widget>()
         .to_glib_full()
 }
 
+/// Set the rating for the %RatingLabel widget
+///
+/// # Safety
+/// Dereference the widget pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_rating_label_set_rating(
     widget: *mut gtk_sys::GtkDrawingArea,

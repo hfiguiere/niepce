@@ -38,6 +38,10 @@ pub extern "C" fn fwk_property_set_new() -> *mut PropertySet {
     Box::into_raw(Box::new(PropertySet::new()))
 }
 
+/// Delete a %PropertySet
+///
+/// # Safety
+/// Dereference the pointer.
 #[no_mangle]
 pub unsafe extern "C" fn fwk_property_set_delete(set: *mut PropertySet) {
     Box::from_raw(set);

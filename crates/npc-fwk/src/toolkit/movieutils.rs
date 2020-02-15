@@ -32,6 +32,6 @@ where
         .arg(source.as_ref().as_os_str())
         .arg(dest.as_ref().as_os_str())
         .status()
-        .expect(&format!("Failed to thumbnail {:?}", source));
+        .unwrap_or_else(|_| panic!("Failed to thumbnail {:?}", source));
     status.success()
 }
