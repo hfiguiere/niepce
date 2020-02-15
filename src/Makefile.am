@@ -5,7 +5,6 @@ SUBDIRS = . ext fwk \
 	engine libraryclient ncr niepce
 
 RUST_SOURCES = \
-	@top_srcdir@/build.rs \
 	@top_srcdir@/Cargo.toml \
 	@top_srcdir@/Cargo.lock \
 	@top_srcdir@/crates/npc-engine/Cargo.toml \
@@ -47,22 +46,24 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-fwk/src/utils/exiv2.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/files.rs \
 	@top_srcdir@/crates/npc-fwk/src/utils/mod.rs \
-	@top_srcdir@/examples/widget-test.rs \
-	@top_srcdir@/src/lib.rs \
-	@top_srcdir@/src/libraryclient/clientimpl.rs \
-	@top_srcdir@/src/libraryclient/clientinterface.rs \
-	@top_srcdir@/src/libraryclient/mod.rs \
-	@top_srcdir@/src/niepce/mod.rs \
-	@top_srcdir@/src/niepce/ui/mod.rs \
-	@top_srcdir@/src/niepce/ui/imagetoolbar.rs \
-	@top_srcdir@/src/niepce/ui/image_grid_view.rs \
-	@top_srcdir@/src/niepce/ui/image_list_store.rs \
-	@top_srcdir@/src/niepce/ui/dialogs/mod.rs \
-	@top_srcdir@/src/niepce/ui/dialogs/confirm.rs \
-	@top_srcdir@/src/niepce/ui/dialogs/requestnewfolder.rs \
-	@top_srcdir@/src/niepce/ui/thumb_nav.rs \
-	@top_srcdir@/src/niepce/ui/library_cell_renderer.rs \
-	@top_srcdir@/src/niepce/ui/thumb_strip_view.rs \
+	@top_srcdir@/niepce-main/build.rs \
+	@top_srcdir@/niepce-main/Cargo.toml \
+	@top_srcdir@/niepce-main/examples/widget-test.rs \
+	@top_srcdir@/niepce-main/src/lib.rs \
+	@top_srcdir@/niepce-main/src/libraryclient/clientimpl.rs \
+	@top_srcdir@/niepce-main/src/libraryclient/clientinterface.rs \
+	@top_srcdir@/niepce-main/src/libraryclient/mod.rs \
+	@top_srcdir@/niepce-main/src/niepce/mod.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/mod.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/imagetoolbar.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/image_grid_view.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/image_list_store.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/dialogs/mod.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/dialogs/confirm.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/dialogs/requestnewfolder.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/thumb_nav.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/library_cell_renderer.rs \
+	@top_srcdir@/niepce-main/src/niepce/ui/thumb_strip_view.rs \
 	$(NULL)
 
 EXTRA_DIST = \
