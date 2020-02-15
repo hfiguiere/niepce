@@ -535,7 +535,6 @@ mod tests {
         if let Ok(pdir) = env::var("CARGO_MANIFEST_DIR") {
             dir = PathBuf::from(pdir);
             dir.push("src");
-            dir.push("fwk");
             dir.push("utils");
         } else {
             dir = PathBuf::from(".");
@@ -592,6 +591,8 @@ mod tests {
     fn test_merge_missing_into_xmp() {
         let dir = get_xmp_sample_path();
 
+        // Both these files have to exist. They are on the source
+        // tree.
         let mut source = dir.clone();
         source.push("test.xmp");
 
