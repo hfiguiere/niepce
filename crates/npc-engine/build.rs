@@ -67,8 +67,12 @@ fn main() {
             .with_namespace("ffi")
             .with_language(cbindgen::Language::Cxx)
             .with_parse_deps(true)
-            .with_parse_exclude(&["exempi", "chrono", "multimap"])
+            .with_parse_exclude(&[
+                "exempi", "chrono", "multimap", "clap", "nom", "winapi", "glib", "rusqlite",
+            ])
             .include_item("Managed")
+            .exclude_item("CUSTOM_START")
+            .exclude_item("INTERNAL_START")
             .exclude_item("GdkPixbuf")
             .exclude_item("GtkWindow")
             .exclude_item("GtkToolbar")

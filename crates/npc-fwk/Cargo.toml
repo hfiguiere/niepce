@@ -28,4 +28,4 @@ try_opt = "0.1.1"
 
 
 [build-dependencies]
-cbindgen = { version = "=0.8.4" }
+cbindgen = { version = "0.13.1" }
