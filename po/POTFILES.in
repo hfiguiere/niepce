@@ -3,6 +3,7 @@
 camerawire/src/cwwindow.cpp
 data/org.gnome.Niepce.appdata.xml.in
 data/org.gnome.Niepce.desktop.in
+niepce-main/src/niepce/ui/dialogs/requestnewfolder.rs
 src/fwk/toolkit/application.cpp
 src/fwk/toolkit/frame.cpp
 src/fwk/toolkit/widgets/addinstreemodel.cpp
@@ -16,7 +17,6 @@ src/niepce/ui/dialogs/importers/directoryimporterui.cpp
 src/niepce/ui/dialogs/importers/directoryimporterui.ui
 src/niepce/ui/dialogs/preferencesdialog.cpp
 src/niepce/ui/dialogs/preferences.ui
-src/niepce/ui/dialogs/requestnewfolder.rs
 src/niepce/ui/metadatapanecontroller.cpp
 src/niepce/ui/moduleshell.cpp
 src/niepce/ui/niepceapplication.cpp
