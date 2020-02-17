@@ -241,7 +241,8 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
                           this->clear_widget(p);
                       });
     }
-    bool is_empty = fwk_property_bag_is_empty(properties.get());
+    bool is_empty =
+        static_cast<bool>(properties) ? fwk_property_bag_is_empty(properties.get()) : true;
     set_sensitive(!is_empty);
     if(is_empty) {
         return;
