@@ -86,12 +86,12 @@ impl LibMetadata {
     fn get_metadata(&self, meta: Np) -> Option<PropertyValue> {
         let index_to_xmp = try_opt!(property_index_to_xmp(meta));
 
-        let mut prop_flags = exempi::PROP_NONE;
+        let mut prop_flags = exempi::PropFlags::default();
         let mut xmp_result =
             self.xmp
                 .xmp
                 .get_property(&index_to_xmp.ns, &index_to_xmp.property, &mut prop_flags);
-        if xmp_result.is_ok() && prop_flags.contains(exempi::ARRAY_IS_ALTTEXT) {
+        if xmp_result.is_ok() && prop_flags.contains(exempi::PropFlags::ARRAY_IS_ALTTEXT) {
             if let Ok((_, value)) = self.xmp.xmp.get_localized_text(
                 &index_to_xmp.ns,
                 &index_to_xmp.property,
@@ -117,7 +117,7 @@ impl LibMetadata {
                     return self
                         .xmp
                         .xmp
-                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PROP_NONE)
+                        .set_property_i32(&ix.ns, &ix.property, i, exempi::PropFlags::NONE)
                         .is_ok()
                 }
                 PropertyValue::String(ref s) => {
@@ -126,7 +126,7 @@ impl LibMetadata {
                     } else if self
                         .xmp
                         .xmp
-                        .set_property(&ix.ns, &ix.property, s, exempi::PROP_NONE)
+                        .set_property(&ix.ns, &ix.property, s, exempi::PropFlags::NONE)
                         .is_err()
                     {
                         if exempi::get_error() == exempi::Error::BadXPath {
@@ -139,7 +139,7 @@ impl LibMetadata {
                                     "",
                                     "x-default",
                                     s,
-                                    exempi::PROP_NONE,
+                                    exempi::PropFlags::NONE,
                                 )
                                 .is_ok();
                         }
@@ -159,9 +159,9 @@ impl LibMetadata {
                             .append_array_item(
                                 &ix.ns,
                                 &ix.property,
-                                exempi::PROP_VALUE_IS_ARRAY,
+                                exempi::PropFlags::VALUE_IS_ARRAY,
                                 s,
-                                exempi::PROP_NONE,
+                                exempi::PropFlags::NONE,
                             )
                             .is_err()
                         {
@@ -176,7 +176,7 @@ impl LibMetadata {
                     return self
                         .xmp
                         .xmp
-                        .set_property_date(&ix.ns, &ix.property, &xmp_date, exempi::PROP_NONE)
+                        .set_property_date(&ix.ns, &ix.property, &xmp_date, exempi::PropFlags::NONE)
                         .is_ok();
                 }
             }
@@ -221,13 +221,13 @@ impl LibMetadata {
                         &self.xmp.xmp,
                         NS_DC,
                         "subject",
-                        exempi::ITER_JUST_LEAF_NODES,
+                        exempi::IterFlags::JUST_LEAF_NODES,
                     );
                     let mut keywords: Vec<String> = vec![];
                     let mut schema = exempi::XmpString::new();
                     let mut name = exempi::XmpString::new();
                     let mut value = exempi::XmpString::new();
-                    let mut flags = exempi::PropFlags::empty();
+                    let mut flags = exempi::PropFlags::default();
                     while iter.next(&mut schema, &mut name, &mut value, &mut flags) {
                         keywords.push(String::from(value.to_str()));
                     }
@@ -270,7 +270,7 @@ impl LibMetadata {
         let xmpdate = xmp_date_from(&Utc::now());
         self.xmp
             .xmp
-            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PROP_NONE)
+            .set_property_date(NS_XAP, "MetadataDate", &xmpdate, exempi::PropFlags::NONE)
             .is_ok()
     }
 }

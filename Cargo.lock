@@ -80,11 +80,6 @@ dependencies = [
 
 [[package]]
 name = "bitflags"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "bitflags"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
@@ -209,18 +204,18 @@ dependencies = [
 
 [[package]]
 name = "exempi"
-version = "2.5.0"
-source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05#53cfc0527a3644a8b1a04af811bf0672c49b41e7"
+version = "2.6.0"
+source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5#99e8ba58318d693bdc7aecce1ca6375a3e11d89f"
 dependencies = [
- "bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "exempi-sys 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05)",
+ "bitflags 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "exempi-sys 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5)",
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "exempi-sys"
 version = "2.5.0"
-source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05#53cfc0527a3644a8b1a04af811bf0672c49b41e7"
+source = "git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5#99e8ba58318d693bdc7aecce1ca6375a3e11d89f"
 dependencies = [
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -619,7 +614,7 @@ dependencies = [
  "bindgen 0.53.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "cbindgen 0.13.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.10 (registry+https://github.com/rust-lang/crates.io-index)",
- "exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05)",
+ "exempi 2.6.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5)",
  "gdk-pixbuf 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gdk-pixbuf-sys 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.9.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -637,7 +632,7 @@ dependencies = [
  "cairo-rs 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cbindgen 0.13.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.10 (registry+https://github.com/rust-lang/crates.io-index)",
- "exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05)",
+ "exempi 2.6.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5)",
  "gdk 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "gdk-pixbuf 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gdk-pixbuf-sys 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1112,7 +1107,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)" = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
 "checksum autocfg 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 "checksum bindgen 0.53.1 (registry+https://github.com/rust-lang/crates.io-index)" = "99de13bb6361e01e493b3db7928085dcc474b7ba4f5481818e53a89d76b8393f"
-"checksum bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4f67931368edf3a9a51d29886d245f1c3db2f1ef0dcc9e35ff70341b78c10d23"
 "checksum bitflags 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 "checksum c2-chacha 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "214238caa1bf3a496ec3392968969cab8549f96ff30652c9e56885329315f6bb"
 "checksum cairo-rs 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0b528aca2ef1026235d0122495dbaee0b09479f77c51f6df8d9bb9cb1c6d6f87"
@@ -1126,8 +1120,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5067f5bb2d80ef5d68b4c87db81601f0b75bca627bc2ef76b141d7b846a3c6d9"
 "checksum cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
 "checksum env_logger 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)" = "44533bbbb3bb3c1fa17d9f2e4e38bbbaf8396ba82193c4cb1b6445d711445d36"
-"checksum exempi 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05)" = "<none>"
-"checksum exempi-sys 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=53cfc05)" = "<none>"
+"checksum exempi 2.6.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5)" = "<none>"
+"checksum exempi-sys 2.5.0 (git+https://github.com/hfiguiere/exempi-rs.git?rev=99e8ba5)" = "<none>"
 "checksum futures-channel 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "f0c77d04ce8edd9cb903932b608268b3fffec4163dc053b3b402bf47eac1f1a8"
 "checksum futures-core 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "f25592f769825e89b92358db00d26f965761e094951ac44d3663ef25b7ac464a"
 "checksum futures-executor 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "f674f3e1bcb15b37284a90cedf55afdba482ab061c407a9c0ebbd0f3109741ba"

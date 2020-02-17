@@ -93,31 +93,31 @@ impl Flash {
             ns,
             &format!("{}/exif:Fired", property),
             bool_to_propstring(self.fired),
-            exempi::PROP_NONE,
+            exempi::PropFlags::NONE,
         )?;
         xmp.set_property(
             ns,
             &format!("{}/exif:Return", property),
             &format!("{}", self.rturn),
-            exempi::PROP_NONE,
+            exempi::PropFlags::NONE,
         )?;
         xmp.set_property(
             ns,
             &format!("{}/exif:Mode", property),
             &format!("{}", self.mode),
-            exempi::PROP_NONE,
+            exempi::PropFlags::NONE,
         )?;
         xmp.set_property(
             ns,
             &format!("{}/exif:Function", property),
             bool_to_propstring(self.function),
-            exempi::PROP_NONE,
+            exempi::PropFlags::NONE,
         )?;
         xmp.set_property(
             ns,
             &format!("{}/exif:RedEyeMode", property),
             bool_to_propstring(self.red_eye),
-            exempi::PROP_NONE,
+            exempi::PropFlags::NONE,
         )?;
 
         Ok(())
@@ -185,7 +185,7 @@ impl XmpMeta {
         let mut meta: Option<XmpMeta> = None;
         if !sidecar_only {
             if let Ok(xmpfile) =
-                exempi::XmpFile::open_new(&*file.to_string_lossy(), exempi::OPEN_READ)
+                exempi::XmpFile::open_new(&*file.to_string_lossy(), exempi::OpenFlags::READ)
             {
                 meta = match xmpfile.get_new_xmp() {
                     Ok(xmp) => Some(Self::new_with_xmp(xmp)),
@@ -251,21 +251,21 @@ impl XmpMeta {
         }
 
         // Properties in source but not in destination gets copied over.
-        let mut iter = exempi::XmpIterator::new(&self.xmp, "", "", exempi::ITER_PROPERTIES);
+        let mut iter = exempi::XmpIterator::new(&self.xmp, "", "", exempi::IterFlags::PROPERTIES);
         {
             use exempi::XmpString;
             let mut schema = XmpString::new();
             let mut name = XmpString::new();
             let mut value = XmpString::new();
-            let mut option = exempi::PROP_NONE;
+            let mut option = exempi::PropFlags::default();
             while iter.next(&mut schema, &mut name, &mut value, &mut option) {
                 if name.to_str().is_empty() {
                     continue;
                 }
-                if option.contains(exempi::PROP_VALUE_IS_ARRAY)
-                    || option.contains(exempi::PROP_VALUE_IS_STRUCT)
+                if option.contains(exempi::PropFlags::VALUE_IS_ARRAY)
+                    || option.contains(exempi::PropFlags::VALUE_IS_STRUCT)
                 {
-                    iter.skip(exempi::ITER_SKIP_SUBTREE);
+                    iter.skip(exempi::IterSkipFlags::SUBTREE);
                     continue;
                 }
 
@@ -276,7 +276,7 @@ impl XmpMeta {
                             schema.to_str(),
                             name.to_str(),
                             value.to_str(),
-                            exempi::PROP_NONE,
+                            exempi::PropFlags::NONE,
                         )
                         .is_err()
                 {
@@ -290,7 +290,7 @@ impl XmpMeta {
 
     pub fn serialize_inline(&self) -> String {
         if let Ok(xmpstr) = self.xmp.serialize_and_format(
-            exempi::SERIAL_OMITPACKETWRAPPER | exempi::SERIAL_OMITALLFORMATTING,
+            exempi::SerialFlags::OMITPACKETWRAPPER | exempi::SerialFlags::OMITALLFORMATTING,
             0,
             "",
             "",
@@ -305,7 +305,7 @@ impl XmpMeta {
     pub fn serialize(&self) -> String {
         if let Ok(xmpstr) =
             self.xmp
-                .serialize_and_format(exempi::SERIAL_OMITPACKETWRAPPER, 0, "\n", "", 0)
+                .serialize_and_format(exempi::SerialFlags::OMITPACKETWRAPPER, 0, "\n", "", 0)
         {
             let buf = String::from(xmpstr.to_str());
             return buf;
@@ -318,20 +318,20 @@ impl XmpMeta {
     }
 
     pub fn orientation(&self) -> Option<i32> {
-        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let mut flags: exempi::PropFlags = exempi::PropFlags::default();
         self.xmp
             .get_property_i32(NS_TIFF, "Orientation", &mut flags)
             .ok()
     }
 
     pub fn label(&self) -> Option<String> {
-        let mut flags: exempi::PropFlags = exempi::PROP_NONE;
+        let mut flags: exempi::PropFlags = exempi::PropFlags::default();
         let xmpstring = try_opt!(self.xmp.get_property(NS_XAP, "Label", &mut flags).ok());
         Some(String::from(xmpstring.to_str()))
     }
 
     pub fn rating(&self) -> Option<i32> {
-        let mut flags: exempi::PropFlags = exempi::PROP_NONE;
+        let mut flags: exempi::PropFlags = exempi::PropFlags::default();
         self.xmp.get_property_i32(NS_XAP, "Rating", &mut flags).ok()
     }
 
@@ -343,7 +343,7 @@ impl XmpMeta {
     }
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
-        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let mut flags: exempi::PropFlags = exempi::PropFlags::default();
         let xmpstring = try_opt!(self
             .xmp
             .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
@@ -365,7 +365,7 @@ impl XmpMeta {
     /// Get the date property and return a Option<DateTime<Utc>> parsed
     /// from the string value.
     pub fn get_date_property(&self, ns: &str, property: &str) -> Option<DateTime<Utc>> {
-        let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
+        let mut flags: exempi::PropFlags = exempi::PropFlags::default();
         let property = self.xmp.get_property(ns, property, &mut flags);
         if property.is_err() {
             err_out!("Error getting date property {:?}", property.err());
@@ -389,12 +389,16 @@ impl XmpMeta {
         if !self.keywords_fetched {
             use exempi::XmpString;
 
-            let mut iter =
-                exempi::XmpIterator::new(&self.xmp, NS_DC, "subject", exempi::ITER_JUST_LEAF_NODES);
+            let mut iter = exempi::XmpIterator::new(
+                &self.xmp,
+                NS_DC,
+                "subject",
+                exempi::IterFlags::JUST_LEAF_NODES,
+            );
             let mut schema = XmpString::new();
             let mut name = XmpString::new();
             let mut value = XmpString::new();
-            let mut option = exempi::PROP_NONE;
+            let mut option = exempi::PropFlags::default();
             while iter.next(&mut schema, &mut name, &mut value, &mut option) {
                 self.keywords.push(String::from(value.to_str()));
             }

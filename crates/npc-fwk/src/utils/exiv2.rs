@@ -282,7 +282,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                             xmp_prop.0,
                                             xmp_prop.1,
                                             &s,
-                                            exempi::PROP_NONE,
+                                            exempi::PropFlags::NONE,
                                         ) {
                                             err_out!(
                                                 "Error setting property {} {}: {:?}",
@@ -298,7 +298,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                                 xmp_prop.0,
                                                 xmp_prop.1,
                                                 &d,
-                                                exempi::PROP_NONE,
+                                                exempi::PropFlags::NONE,
                                             ) {
                                                 err_out!(
                                                     "Error setting property {} {}: {:?}",
@@ -345,7 +345,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         xmp_prop.0,
                                         xmp_prop.1,
                                         value,
-                                        exempi::PROP_NONE,
+                                        exempi::PropFlags::NONE,
                                     ) {
                                         err_out!(
                                             "Error setting property {} {}: {:?}",
@@ -361,7 +361,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                             xmp_prop.0,
                                             xmp_prop.1,
                                             &value,
-                                            exempi::PROP_NONE,
+                                            exempi::PropFlags::NONE,
                                         ) {
                                             err_out!(
                                                 "Error setting property {} {}: {:?}",
@@ -383,7 +383,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         xmp_prop.0,
                                         xmp_prop.1,
                                         value,
-                                        exempi::PROP_NONE,
+                                        exempi::PropFlags::NONE,
                                     ) {
                                         err_out!(
                                             "Error setting property {} {}: {:?}",
@@ -403,7 +403,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         xmp_prop.0,
                                         xmp_prop.1,
                                         &value,
-                                        exempi::PROP_NONE,
+                                        exempi::PropFlags::NONE,
                                     ) {
                                         err_out!(
                                             "Error setting property {} {}: {:?}",
@@ -421,7 +421,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         xmp_prop.0,
                                         xmp_prop.1,
                                         &value_str,
-                                        exempi::PROP_NONE,
+                                        exempi::PropFlags::NONE,
                                     ) {
                                         err_out!(
                                             "Error setting property {} {}: {:?}",
@@ -439,7 +439,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                     xmp_prop.0,
                                     xmp_prop.1,
                                     &value,
-                                    exempi::PROP_NONE,
+                                    exempi::PropFlags::NONE,
                                 ) {
                                     err_out!(
                                         "Error setting property {} {}: {:?}",
@@ -457,7 +457,7 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
                                         xmp_prop.0,
                                         xmp_prop.1,
                                         &value,
-                                        exempi::PROP_NONE,
+                                        exempi::PropFlags::NONE,
                                     ) {
                                         err_out!(
                                             "Error setting property {} {}: {:?}",
@@ -481,10 +481,10 @@ pub fn xmp_from_exiv2<S: AsRef<OsStr>>(file: S) -> Option<XmpMeta> {
         }
         meta.get_gps_info();
 
-        let mut options = exempi::PROP_NONE;
+        let mut options = exempi::PropFlags::default();
         if let Ok(date) = xmp.get_property_date(NS_XAP, "ModifyDate", &mut options) {
             if let Err(err) =
-                xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PROP_NONE)
+                xmp.set_property_date(NS_XAP, "MetadataDate", &date, exempi::PropFlags::NONE)
             {
                 err_out!("Error setting MetadataDate: {:?}", &err);
             }
