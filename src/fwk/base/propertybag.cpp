@@ -99,8 +99,6 @@ PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex idx
 bool set_value_for_property(PropertyBag& bag, PropertyIndex idx,
                             const PropertyValue & value)
 {
-    DBG_ASSERT(&bag, "bag is NULL");
-    DBG_ASSERT(&value, "value is NULL");
     return ffi::fwk_property_bag_set_value(&bag, idx, &value);
 }
 
