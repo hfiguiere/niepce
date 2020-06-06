@@ -152,9 +152,7 @@ impl ThumbStripViewPriv {
 
         self.store.replace(model.clone());
         self.setup_model();
-        self.get_instance()
-            .upcast::<gtk::IconView>()
-            .set_model(model.as_ref());
+        self.get_instance().set_model(model.as_ref());
     }
 
     fn setup_model(&self) {
@@ -172,7 +170,7 @@ impl ThumbStripViewPriv {
             };
             self.item_count.set(count);
 
-            let view = self.get_instance().upcast::<gtk::IconView>();
+            let view = self.get_instance();
             // update item count
             self.item_count.update(&view);
 
