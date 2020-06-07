@@ -33,7 +33,7 @@ glib_wrapper! {
         Object<subclass::simple::InstanceStruct<ImageGridViewPriv>,
         subclass::simple::ClassStruct<ImageGridViewPriv>,
         ImageGridViewClass>)
-        @extends gtk::Widget, gtk::Container, gtk::IconView;
+        @extends gtk::IconView, gtk::Container, gtk::Widget;
 
     match fn {
         get_type => || ImageGridViewPriv::get_type().to_glib(),

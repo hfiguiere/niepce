@@ -47,7 +47,7 @@ glib_wrapper! {
         Object<subclass::simple::InstanceStruct<ThumbStripViewPriv>,
         subclass::simple::ClassStruct<ThumbStripViewPriv>,
         ThumbStripViewClass>)
-        @extends gtk::Widget, gtk::Container, gtk::IconView;
+        @extends gtk::IconView, gtk::Container, gtk::Widget;
 
     match fn {
         get_type => || ThumbStripViewPriv::get_type().to_glib(),
