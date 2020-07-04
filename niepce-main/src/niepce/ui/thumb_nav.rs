@@ -362,8 +362,7 @@ impl ObjectImpl for ThumbNavPriv {
 
         let button_left = gtk::Button::new();
         button_left.set_relief(gtk::ReliefStyle::None);
-        let arrow =
-            gtk::Image::new_from_icon_name(Some(&"pan-start-symbolic"), gtk::IconSize::Button);
+        let arrow = gtk::Image::from_icon_name(Some(&"pan-start-symbolic"), gtk::IconSize::Button);
         button_left.add(&arrow);
         button_left.set_size_request(20, 0);
         self_.pack_start(&button_left, false, false, 0);
@@ -389,8 +388,7 @@ impl ObjectImpl for ThumbNavPriv {
 
         let button_right = gtk::Button::new();
         button_right.set_relief(gtk::ReliefStyle::None);
-        let arrow =
-            gtk::Image::new_from_icon_name(Some(&"pan-end-symbolic"), gtk::IconSize::Button);
+        let arrow = gtk::Image::from_icon_name(Some(&"pan-end-symbolic"), gtk::IconSize::Button);
         button_right.add(&arrow);
         button_right.set_size_request(20, 0);
         self_.pack_start(&button_right, false, false, 0);

@@ -55,17 +55,14 @@ struct Emblems {
 }
 
 const EMBLEMS: Lazy<Emblems> = Lazy::new(|| Emblems {
-    raw: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-raw-fmt.png").unwrap(),
-    raw_jpeg: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-rawjpeg-fmt.png")
-        .unwrap(),
-    img: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-img-fmt.png").unwrap(),
-    video: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-video-fmt.png").unwrap(),
-    unknown: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-unknown-fmt.png").unwrap(),
-    status_missing: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-missing.png")
-        .unwrap(),
-    flag_reject: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-flag-reject.png")
-        .unwrap(),
-    flag_pick: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-flag-pick.png").unwrap(),
+    raw: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-raw-fmt.png").unwrap(),
+    raw_jpeg: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-rawjpeg-fmt.png").unwrap(),
+    img: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-img-fmt.png").unwrap(),
+    video: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-video-fmt.png").unwrap(),
+    unknown: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-unknown-fmt.png").unwrap(),
+    status_missing: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-missing.png").unwrap(),
+    flag_reject: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-flag-reject.png").unwrap(),
+    flag_pick: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-flag-pick.png").unwrap(),
 });
 
 glib_wrapper! {

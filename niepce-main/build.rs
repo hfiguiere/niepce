@@ -17,6 +17,7 @@ fn main() {
             .with_parse_deps(true)
             .with_parse_exclude(&[
                 "exempi", "chrono", "multimap", "glib", "clap", "winapi", "rusqlite", "nom",
+                "strum",
             ])
             .include_item("ColIndex")
             .exclude_item("Managed")

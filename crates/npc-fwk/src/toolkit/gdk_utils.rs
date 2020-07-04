@@ -129,7 +129,7 @@ fn thumbnail_to_pixbuf(
             unsafe { or_thumbnail_dimensions(thumbnail, &mut x, &mut y) };
 
             let bytes = glib::Bytes::from(buf);
-            Some(gdk_pixbuf::Pixbuf::new_from_bytes(
+            Some(gdk_pixbuf::Pixbuf::from_bytes(
                 &bytes,
                 gdk_pixbuf::Colorspace::Rgb,
                 false,

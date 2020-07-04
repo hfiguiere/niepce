@@ -15,7 +15,9 @@ fn main() {
             .with_namespace("ffi")
             .with_language(cbindgen::Language::Cxx)
             .with_parse_deps(true)
-            .with_parse_exclude(&["exempi", "chrono", "multimap", "glib", "clap", "winapi"])
+            .with_parse_exclude(&[
+                "exempi", "chrono", "multimap", "glib", "clap", "winapi", "strum",
+            ])
             .exclude_item("CUSTOM_START")
             .exclude_item("INTERNAL_START")
             .exclude_item("GdkPixbuf")

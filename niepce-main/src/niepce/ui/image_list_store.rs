@@ -40,15 +40,9 @@ use npc_fwk::toolkit::gdk_utils;
 use npc_fwk::PropertyValue;
 
 /// Wrap a libfile into something that can be in a glib::Value
-#[derive(Clone)]
+#[derive(Clone, GBoxed)]
+#[gboxed(type_name = "StoreLibFile", nullable)]
 pub struct StoreLibFile(pub LibFile);
-
-impl glib::subclass::boxed::BoxedType for StoreLibFile {
-    const NAME: &'static str = "StoreLibFile";
-
-    glib_boxed_type!();
-}
-glib_boxed_derive_traits!(StoreLibFile);
 
 #[repr(i32)]
 pub enum ColIndex {
@@ -225,10 +219,10 @@ impl ImageListStore {
 
     pub fn get_file_id_at_path(&self, path: &gtk::TreePath) -> LibraryId {
         if let Some(iter) = self.store.get_iter(&path) {
-            if let Ok(libfile) = self
+            if let Ok(Some(libfile)) = self
                 .store
                 .get_value(&iter, ColIndex::File as i32)
-                .get_some::<&StoreLibFile>()
+                .get::<&StoreLibFile>()
             {
                 return libfile.0.id();
             }
@@ -241,9 +235,9 @@ impl ImageListStore {
             if let Ok(libfile) = self
                 .store
                 .get_value(&iter, ColIndex::File as i32)
-                .get_some::<&StoreLibFile>()
+                .get::<&StoreLibFile>()
             {
-                return Some(libfile.0.clone());
+                libfile.map(|v| v.0.clone());
             }
         }
         None
@@ -282,10 +276,10 @@ impl ImageListStore {
     }
 
     pub fn set_property(&self, iter: &gtk::TreeIter, change: &MetadataChange) {
-        if let Ok(libfile) = self
+        if let Ok(Some(libfile)) = self
             .store
             .get_value(&iter, ColIndex::File as i32)
-            .get_some::<&StoreLibFile>()
+            .get::<&StoreLibFile>()
         {
             assert!(libfile.0.id() == change.id);
             let meta = change.meta;

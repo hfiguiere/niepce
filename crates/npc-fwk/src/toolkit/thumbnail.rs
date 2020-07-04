@@ -80,7 +80,7 @@ impl Thumbnail {
             // XXX figure out the allocation here.
             // Ideally we should have this shared
             // Also this is duplicated with Into()
-            Some(gdk_pixbuf::Pixbuf::new_from_bytes(
+            Some(gdk_pixbuf::Pixbuf::from_bytes(
                 &glib::Bytes::from(&self.bytes),
                 self.colorspace,
                 self.has_alpha,
@@ -117,7 +117,7 @@ impl Thumbnail {
             if let Some(mut cached) = glib::get_tmp_dir() {
                 cached.push("temp-1234");
                 if movieutils::thumbnail_movie(filename, w, h, &cached) {
-                    pix = gdk_pixbuf::Pixbuf::new_from_file_at_size(&cached, w, h).ok();
+                    pix = gdk_pixbuf::Pixbuf::from_file_at_size(&cached, w, h).ok();
                     if let Err(err) = fs::remove_file(&cached) {
                         err_out!("Remove temporary file {:?} failed: {}", &cached, err);
                     }
@@ -130,7 +130,7 @@ impl Thumbnail {
             dbg_out!("not an image type");
         } else if !mime_type.is_digicam_raw() {
             dbg_out!("not a raw type, trying GdkPixbuf loaders");
-            match gdk_pixbuf::Pixbuf::new_from_file_at_size(filename, w, h) {
+            match gdk_pixbuf::Pixbuf::from_file_at_size(filename, w, h) {
                 Ok(ref pixbuf) => {
                     pix = gdk_utils::gdkpixbuf_exif_rotate(Some(pixbuf), orientation);
                 }
@@ -179,7 +179,7 @@ impl From<Option<gdk_pixbuf::Pixbuf>> for Thumbnail {
 
 impl Into<gdk_pixbuf::Pixbuf> for Thumbnail {
     fn into(self) -> gdk_pixbuf::Pixbuf {
-        gdk_pixbuf::Pixbuf::new_from_bytes(
+        gdk_pixbuf::Pixbuf::from_bytes(
             &glib::Bytes::from(&self.bytes),
             self.colorspace,
             self.has_alpha,

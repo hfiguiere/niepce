@@ -63,7 +63,7 @@ fn get_thumbnail(f: &LibFile, w: i32, h: i32, cached: &Path) -> Thumbnail {
     let filename = f.path();
     if ThumbnailCache::is_thumbnail_cached(filename, cached) {
         dbg_out!("thumbnail for {:?} is cached!", filename);
-        return Thumbnail::from(gdk_pixbuf::Pixbuf::new_from_file(cached).ok());
+        return Thumbnail::from(gdk_pixbuf::Pixbuf::from_file(cached).ok());
     }
 
     dbg_out!("creating thumbnail for {:?}", filename);

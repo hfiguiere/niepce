@@ -69,6 +69,7 @@ fn main() {
             .with_parse_deps(true)
             .with_parse_exclude(&[
                 "exempi", "chrono", "multimap", "clap", "nom", "winapi", "glib", "rusqlite",
+                "strum",
             ])
             .include_item("Managed")
             .exclude_item("CUSTOM_START")

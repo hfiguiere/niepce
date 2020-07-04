@@ -40,8 +40,8 @@ struct Pixbufs {
 }
 
 const PIXBUFS: Lazy<Pixbufs> = Lazy::new(|| Pixbufs {
-    star: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-set-star.png").unwrap(),
-    unstar: Pixbuf::new_from_resource("/org/gnome/Niepce/pixmaps/niepce-unset-star.png").unwrap(),
+    star: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-set-star.png").unwrap(),
+    unstar: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-unset-star.png").unwrap(),
 });
 
 glib_wrapper! {
@@ -284,7 +284,7 @@ pub unsafe extern "C" fn fwk_rating_label_set_rating(
     widget: *mut gtk_sys::GtkDrawingArea,
     rating: i32,
 ) {
-    let rating_label = gtk::DrawingArea::from_glib_borrow(widget)
+    let rating_label = gtk::DrawingArea::from_glib_none(widget)
         .downcast::<RatingLabel>()
         .expect("Not a RatingLabel widget");
     rating_label.set_rating(rating);

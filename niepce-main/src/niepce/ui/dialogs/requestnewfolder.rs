@@ -32,7 +32,7 @@ pub unsafe extern "C" fn dialog_request_new_folder(
     parent: *mut gtk_sys::GtkWindow,
 ) {
     let parent = gtk::Window::from_glib_none(parent);
-    let dialog = Dialog::new_with_buttons(
+    let dialog = Dialog::with_buttons(
         Some("New folder"),
         Some(&parent),
         gtk::DialogFlags::MODAL,
@@ -41,7 +41,7 @@ pub unsafe extern "C" fn dialog_request_new_folder(
             (&gettext("Cancel"), gtk::ResponseType::Cancel),
         ],
     );
-    let label = Label::new_with_mnemonic(Some(gettext("Folder _name:").as_str()));
+    let label = Label::with_mnemonic(Some(gettext("Folder _name:").as_str()));
     dialog.get_content_area().pack_start(&label, true, false, 4);
     let entry = Entry::new();
     entry.set_text("foobar");
@@ -53,10 +53,8 @@ pub unsafe extern "C" fn dialog_request_new_folder(
     let folder_name = entry.get_text();
     dialog.destroy();
     if !cancel {
-        if let Some(folder_name) = folder_name {
-            client
-                .unwrap_mut()
-                .create_folder(folder_name.to_string(), None);
-        }
+        client
+            .unwrap_mut()
+            .create_folder(folder_name.to_string(), None);
     }
 }

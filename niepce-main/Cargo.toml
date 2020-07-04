@@ -7,15 +7,15 @@ build = "build.rs"
 [dependencies]
 once_cell = "^0"
 gettext-rs = "0.3.0"
-glib = { version = "^0.9.3" }
+glib = "*"
 gio-sys = "*"
-gio = "^0.8.1"
+gio = "*"
 cairo-rs = "*"
 gdk = "*"
 gdk-pixbuf = "*"
 gdk-pixbuf-sys = "*"
 gtk-sys = { version = "*", features = ["v3_22"] }
-gtk = { version = "^0.8.1" }
+gtk = "*"
 libc = "0.2.39"
 #gphoto = "0.1.1"
 
