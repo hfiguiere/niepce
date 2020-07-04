@@ -21,9 +21,7 @@ use libc::c_char;
 use std::ffi::{CStr, CString};
 use std::path::{Path, PathBuf};
 
-use gio;
 use gio::prelude::*;
-use gio_sys;
 use glib::translate::*;
 
 use crate::toolkit::mimetype::{guess_type, MType};

@@ -20,17 +20,14 @@
 use libc::c_int;
 use std::cell::Cell;
 
-use cairo;
 use gdk::prelude::*;
 use gdk_pixbuf::Pixbuf;
 use glib::subclass;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 use glib::Type;
-use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk_sys;
 
 use once_cell::unsync::Lazy;
 

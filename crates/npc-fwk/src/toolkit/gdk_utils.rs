@@ -22,7 +22,6 @@ use std::cmp;
 use std::path::Path;
 use std::slice;
 
-use gdk_pixbuf;
 use gdk_pixbuf::prelude::*;
 use glib::translate::*;
 

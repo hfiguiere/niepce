@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exiv2.rs
  *
- * Copyright (C) 2018-2019 Hubert Figuière
+ * Copyright (C) 2018-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,6 @@
 
 use multimap::MultiMap;
 use std::ffi::OsStr;
-
-use exempi;
-use rexiv2;
 
 use super::exempi::{
     xmp_date_from_exif, Flash, XmpMeta, NS_AUX, NS_EXIF, NS_EXIF_EX, NS_TIFF, NS_XAP,

@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/date.rs
  *
- * Copyright (C) 2017-2018 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc;
 use std::ffi::CString;
 
-use chrono;
 use chrono::{Datelike, Timelike};
-use exempi;
 
 pub type Time = i64;
 pub type Date = chrono::DateTime<chrono::Utc>;

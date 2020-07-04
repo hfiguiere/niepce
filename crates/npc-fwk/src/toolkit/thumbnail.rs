@@ -24,9 +24,7 @@ use std::ffi::CStr;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use gdk_pixbuf;
 use gdk_pixbuf::Colorspace;
-use glib;
 use glib::translate::*;
 
 use super::gdk_utils;

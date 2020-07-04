@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exempi.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2020 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@ use std::io::prelude::*;
 use std::path::Path;
 
 use chrono::{DateTime, Utc};
-use exempi;
 use exempi::Xmp;
 
 use super::exiv2;

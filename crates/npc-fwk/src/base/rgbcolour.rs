@@ -23,8 +23,6 @@ use std::ffi::CString;
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-use gdk;
-
 #[repr(C)]
 #[derive(Clone, Default)]
 pub struct RgbColour {
