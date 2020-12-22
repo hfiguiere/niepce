@@ -1,7 +1,7 @@
 /*
  * niepce - main/main.cpp
  *
- * Copyright (C) 2007, 2013 Hubert Figuiere
+ * Copyright (C) 2007-2020 Hubert Figuière
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <boost/bind.hpp>
-
 #include <glibmm/i18n.h>
 
 #include "fwk/utils/init.hpp"
@@ -41,8 +39,7 @@ int main(int argc, char ** argv)
   fwk::ExempiManagerPtr manager = fwk::exempi_manager_new();
 
   fwk::Application::Ptr app = ui::NiepceApplication::create(argc, argv);
-  return fwk::Application::main(app,
-				argc, argv);
+  return fwk::Application::main(app, argc, argv);
 }
 
 

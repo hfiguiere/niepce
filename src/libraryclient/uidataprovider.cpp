@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>
-#include <boost/bind.hpp>
 
 #include "fwk/base/debug.hpp"
 #include "fwk/base/colour.hpp"
