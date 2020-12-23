@@ -185,8 +185,7 @@ GeglNode* Image::Private::_load_raw(const std::string &p)
     GeglNode* load_file = gegl_node_new_child(m_graph,
                                               "operation", "gegl:buffer-source",
                                               "buffer", buffer, nullptr);
-    ORCfaPatternRef pattern = or_rawdata_get_cfa_pattern(rawdata);
-    or_cfa_pattern pattern_type = or_cfapattern_get_type(pattern);
+    or_cfa_pattern pattern_type = or_rawdata_get_cfa_pattern_type(rawdata);
     or_rawdata_release(rawdata);
 
     GeglNode* stretch =
