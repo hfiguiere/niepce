@@ -237,14 +237,7 @@ impl LibMetadata {
                     props.set_value(*prop_id, PropertyValue::String(self.name.clone()));
                 }
                 eng::NpFileTypeProp => {
-                    // XXX this to string convert should be elsewhere
-                    let file_type = match self.file_type {
-                        FileType::Unknown => "Unknown",
-                        FileType::Raw => "RAW",
-                        FileType::RawJpeg => "RAW + JPEG",
-                        FileType::Image => "Image",
-                        FileType::Video => "Video",
-                    };
+                    let file_type: &str = self.file_type.into();
                     props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
                 }
                 eng::NpFileSizeProp => {}
