@@ -1,22 +1,22 @@
 # Serbian translation for niepce.
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2012—201.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2012—2021.
 # Copyright © 2012 niepce's COPYRIGHT HOLDER
 # This file is distributed under the same license as the niepce package.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2012—2017.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2012—2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: niepce master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-03 04:20+0000\n"
-"PO-Revision-Date: 2017-08-13 08:14+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/niepce/issues\n"
+"POT-Creation-Date: 2020-06-07 15:10+0000\n"
+"PO-Revision-Date: 2021-01-20 09:17+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: camerawire/src/cwwindow.cpp:62
 #: src/niepce/ui/dialogs/importers/cameraimporterui.cpp:36
@@ -27,31 +27,31 @@ msgstr "Фото-апарат"
 msgid "File"
 msgstr "Датотека"
 
-#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/niepcewindow.cpp:198
+#: camerawire/src/cwwindow.cpp:92 src/niepce/ui/workspacecontroller.cpp:456
 msgid "_Import..."
 msgstr "_Увези..."
 
-#: camerawire/src/cwwindow.cpp:96 src/niepce/ui/niepcewindow.cpp:205
+#: camerawire/src/cwwindow.cpp:96
 msgid "Close"
 msgstr "Затвори"
 
-#: camerawire/src/cwwindow.cpp:99 src/niepce/ui/niepcewindow.cpp:208
+#: camerawire/src/cwwindow.cpp:99
 msgid "Edit"
 msgstr "Уреди"
 
-#: camerawire/src/cwwindow.cpp:113 src/niepce/ui/niepcewindow.cpp:223
+#: camerawire/src/cwwindow.cpp:113
 msgid "Cut"
 msgstr "Исеци"
 
-#: camerawire/src/cwwindow.cpp:117 src/niepce/ui/niepcewindow.cpp:227
+#: camerawire/src/cwwindow.cpp:117
 msgid "Copy"
 msgstr "Умножи"
 
-#: camerawire/src/cwwindow.cpp:121 src/niepce/ui/niepcewindow.cpp:231
+#: camerawire/src/cwwindow.cpp:121
 msgid "Paste"
 msgstr "Убаци"
 
-#: camerawire/src/cwwindow.cpp:124 src/niepce/ui/niepcewindow.cpp:238
+#: camerawire/src/cwwindow.cpp:124
 msgid "Tools"
 msgstr "Алати"
 
@@ -59,90 +59,63 @@ msgstr "Алати"
 msgid "Refresh"
 msgstr "Освежи"
 
-#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:246
+#: camerawire/src/cwwindow.cpp:135 src/niepce/ui/niepcewindow.cpp:245
 msgid "Hide tools"
 msgstr "Сакриј алате"
 
 #. Only include 'name' if you want the software center name to be different to the 'Name' in the .desktop file
-#: data/niepce.appdata.xml.in:8 data/niepce.desktop.in:3
+#: data/org.gnome.Niepce.appdata.xml.in:8 data/org.gnome.Niepce.desktop.in:3
 msgid "Niepce Digital"
 msgstr "Дигитално Њепце"
 
 #. Only include 'summary' if you want the software center name to be different to the 'Comment' in the .desktop file
-#: data/niepce.appdata.xml.in:10
+#: data/org.gnome.Niepce.appdata.xml.in:10
 msgid "Advanced Photo Editing"
 msgstr "Напредно уређивање фотографија"
 
-#: data/niepce.appdata.xml.in:12
+#: data/org.gnome.Niepce.appdata.xml.in:12
 msgid "Niepce Digital is an application used to manage and edit photos."
 msgstr ""
 "Дигитално Њепце је програм коришћен за управљање и уређивање фотографија."
 
-#: data/niepce.appdata.xml.in:15
+#: data/org.gnome.Niepce.appdata.xml.in:15
 msgid "Features:"
 msgstr "Могућности:"
 
-#: data/niepce.appdata.xml.in:18
+#: data/org.gnome.Niepce.appdata.xml.in:18
 msgid "Photo library management"
 msgstr "Управљање библиотеком фотографија"
 
-#: data/niepce.appdata.xml.in:19
+#: data/org.gnome.Niepce.appdata.xml.in:19
 msgid "Non destructive image editing"
 msgstr "Уређивање слика без уништавања"
 
-#: data/niepce.appdata.xml.in:20
+#: data/org.gnome.Niepce.appdata.xml.in:20
 msgid "RAW processing"
 msgstr "Сирова обрада"
 
-#: data/niepce.desktop.in:4
+#: data/org.gnome.Niepce.desktop.in:4
 msgid "Manage and edit your photos"
 msgstr "Управљајте и уређујте ваше фотографије"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/niepce.desktop.in:6
+#: data/org.gnome.Niepce.desktop.in:6
 msgid "photo;"
-msgstr "фотографије;слике;"
+msgstr "фотографије;слике;photo;"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/niepce.desktop.in:9
-msgid "niepce"
-msgstr "niepce"
+#: niepce-main/src/niepce/ui/dialogs/requestnewfolder.rs:40
+msgid "OK"
+msgstr "У реду"
 
-#: src/engine/db/library.cpp:139
-msgid "Trash"
-msgstr "Смеће"
+#: niepce-main/src/niepce/ui/dialogs/requestnewfolder.rs:41
+#: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
+#: src/niepce/ui/niepcewindow.cpp:345
+msgid "Cancel"
+msgstr "Откажи"
 
-#: src/fwk/toolkit/application.cpp:129
-msgid "New"
-msgstr "Ново"
-
-#: src/fwk/toolkit/application.cpp:133 src/niepce/ui/niepcewindow.cpp:372
-msgid "Open"
-msgstr "Отвори"
-
-#: src/fwk/toolkit/application.cpp:142
-msgid "Preferences..."
-msgstr "Поставке..."
-
-#: src/fwk/toolkit/application.cpp:149
-msgid "Help"
-msgstr "Помоћ"
-
-#: src/fwk/toolkit/application.cpp:154
-msgid "About"
-msgstr "О програму"
-
-#: src/fwk/toolkit/application.cpp:162
-msgid "Quit"
-msgstr "Изађи"
-
-#: src/fwk/toolkit/frame.cpp:153
-msgid "Undo"
-msgstr "Опозови"
-
-#: src/fwk/toolkit/frame.cpp:168
-msgid "Redo"
-msgstr "Поврати"
+#: niepce-main/src/niepce/ui/dialogs/requestnewfolder.rs:44
+msgid "Folder _name:"
+msgstr "Назив _фасцикле:"
 
 #: src/fwk/toolkit/widgets/addinstreemodel.cpp:64
 msgid "Name"
@@ -214,7 +187,7 @@ msgstr "Вибрација"
 msgid "Edit Labels"
 msgstr "Уредите натписе"
 
-#: src/niepce/ui/dialogs/editlabels.cpp:112
+#: src/niepce/ui/dialogs/editlabels.cpp:114
 msgid "Change Labels"
 msgstr "Измените натписе"
 
@@ -295,7 +268,7 @@ msgid "You can still change this after importing the pictures."
 msgstr "Ово можете још увек да измените након увоза слика."
 
 #: src/niepce/ui/dialogs/importdialog.ui:406
-#: src/niepce/ui/metadatapanecontroller.cpp:50
+#: src/niepce/ui/metadatapanecontroller.cpp:59
 msgid "Date:"
 msgstr "Датум:"
 
@@ -332,11 +305,6 @@ msgstr "Директоријум"
 msgid "Import picture folder"
 msgstr "Увезите фасциклу са сликама"
 
-#: src/niepce/ui/dialogs/importers/directoryimporterui.cpp:72
-#: src/niepce/ui/niepcewindow.cpp:371
-msgid "Cancel"
-msgstr "Откажи"
-
 #: src/niepce/ui/dialogs/importers/directoryimporterui.ui:16
 msgid "_Directory:"
 msgstr "_Директоријум:"
@@ -350,208 +318,235 @@ msgstr "..."
 msgid "Preferences"
 msgstr "Поставке"
 
-#: src/niepce/ui/dialogs/preferences.ui:67
-msgid "_Reopen Library"
+#: src/niepce/ui/dialogs/preferences.ui:70
+#| msgid "_Reopen Library"
+msgid "_Reopen Catalog"
 msgstr "_Поново отвори библиотеку"
 
-#: src/niepce/ui/dialogs/preferences.ui:83
+#: src/niepce/ui/dialogs/preferences.ui:86
 msgid "Write XMP automatically (not recommended)"
 msgstr "Самостално запиши ИксМП (није препоручљиво)"
 
-#: src/niepce/ui/dialogs/preferences.ui:102
+#: src/niepce/ui/dialogs/preferences.ui:105
 msgid "_General"
 msgstr "_Опште"
 
-#: src/niepce/ui/dialogs/preferences.ui:116
+#: src/niepce/ui/dialogs/preferences.ui:119
 msgid "Use dark interface"
 msgstr "Користи тамно сучеље"
 
-#: src/niepce/ui/dialogs/preferences.ui:138
+#: src/niepce/ui/dialogs/preferences.ui:141
 msgid "_User Interface"
 msgstr "_Корисничко сучеље"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:35
+#: src/niepce/ui/metadatapanecontroller.cpp:36
+msgid "File Name:"
+msgstr "Назив датотеке:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:37
+#| msgid "New Folder..."
+msgid "Folder:"
+msgstr "Фасцикла:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:38
+msgid "File Type:"
+msgstr "Врста датотеке:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:39
+msgid "File Size:"
+msgstr "Величина датотеке:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:40
+msgid "Sidecar Files:"
+msgstr "Пратеће датотеке:"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:44
 msgid "Make:"
 msgstr "Произвођач:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:36
+#: src/niepce/ui/metadatapanecontroller.cpp:45
 msgid "Model:"
 msgstr "Модел:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:37
+#: src/niepce/ui/metadatapanecontroller.cpp:46
 msgid "Lens:"
 msgstr "Сочиво:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:41
+#: src/niepce/ui/metadatapanecontroller.cpp:50
 msgid "Exposure Program:"
 msgstr "Програм изложености:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:42
+#: src/niepce/ui/metadatapanecontroller.cpp:51
 msgid "Speed:"
 msgstr "Брзина:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:43
+#: src/niepce/ui/metadatapanecontroller.cpp:52
 msgid "Aperture:"
 msgstr "Бленда:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:44
+#: src/niepce/ui/metadatapanecontroller.cpp:53
 msgid "ISO:"
 msgstr "ИСО:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:45
+#: src/niepce/ui/metadatapanecontroller.cpp:54
 msgid "Exposure Bias:"
 msgstr "Нагиб изложености:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:46
+#: src/niepce/ui/metadatapanecontroller.cpp:55
 msgid "Flash:"
 msgstr "Блиц:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:47
+#: src/niepce/ui/metadatapanecontroller.cpp:56
 msgid "Flash compensation:"
 msgstr "Надокнада блица:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:48
+#: src/niepce/ui/metadatapanecontroller.cpp:57
 msgid "Focal length:"
 msgstr "Жижна даљина:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:49
+#: src/niepce/ui/metadatapanecontroller.cpp:58
 msgid "White balance:"
 msgstr "Баланс белог:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:54
+#: src/niepce/ui/metadatapanecontroller.cpp:63
 msgid "Headline:"
 msgstr "Заглавље:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:55
+#: src/niepce/ui/metadatapanecontroller.cpp:64
 msgid "Caption:"
 msgstr "Наслов:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:56
+#: src/niepce/ui/metadatapanecontroller.cpp:65
 msgid "Rating:"
 msgstr "Оцена:"
 
 #. FIXME change this type to the right one when there is a widget
-#: src/niepce/ui/metadatapanecontroller.cpp:58
+#: src/niepce/ui/metadatapanecontroller.cpp:67
 msgid "Label:"
 msgstr "Натпис:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:59
+#: src/niepce/ui/metadatapanecontroller.cpp:68
 msgid "Keywords:"
 msgstr "Кључне речи:"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:63
+#: src/niepce/ui/metadatapanecontroller.cpp:72
+#| msgid "Camera Information"
+msgid "File Information"
+msgstr "Подаци о датотеци"
+
+#: src/niepce/ui/metadatapanecontroller.cpp:75
 msgid "Camera Information"
 msgstr "Подаци о фото-апарату"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:66
+#: src/niepce/ui/metadatapanecontroller.cpp:78
 msgid "Shooting Information"
 msgstr "Подаци о снимању"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:69
+#: src/niepce/ui/metadatapanecontroller.cpp:81
 msgid "IPTC"
 msgstr "ИПТЦ"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:72
+#: src/niepce/ui/metadatapanecontroller.cpp:84
 msgid "Rights"
 msgstr "Права"
 
-#: src/niepce/ui/metadatapanecontroller.cpp:102
+#: src/niepce/ui/metadatapanecontroller.cpp:114
 msgid "Image Properties"
 msgstr "Особине слике"
 
-#: src/niepce/ui/moduleshell.cpp:62
+#: src/niepce/ui/moduleshell.cpp:60
 msgid "Back"
 msgstr "Назад"
 
-#: src/niepce/ui/moduleshell.cpp:68
+#: src/niepce/ui/moduleshell.cpp:66
 msgid "Forward"
 msgstr "Напред"
 
-#: src/niepce/ui/moduleshell.cpp:78
+#: src/niepce/ui/moduleshell.cpp:76
 msgid "Rotate Left"
 msgstr "Заокрени на лево"
 
-#: src/niepce/ui/moduleshell.cpp:85
+#: src/niepce/ui/moduleshell.cpp:83
 msgid "Rotate Right"
 msgstr "Заокрени на десно"
 
-#: src/niepce/ui/moduleshell.cpp:91 src/niepce/ui/selectioncontroller.cpp:284
+#: src/niepce/ui/moduleshell.cpp:89 src/niepce/ui/selectioncontroller.cpp:281
 msgid "Set Label"
 msgstr "Подеси натпис"
 
-#: src/niepce/ui/moduleshell.cpp:98
+#: src/niepce/ui/moduleshell.cpp:96
 msgid "Label 6"
 msgstr "Натпис 6"
 
-#: src/niepce/ui/moduleshell.cpp:104
+#: src/niepce/ui/moduleshell.cpp:102
 msgid "Label 7"
 msgstr "Натпис 7"
 
-#: src/niepce/ui/moduleshell.cpp:110
+#: src/niepce/ui/moduleshell.cpp:108
 msgid "Label 8"
 msgstr "Натпис 8"
 
-#: src/niepce/ui/moduleshell.cpp:116
+#: src/niepce/ui/moduleshell.cpp:114
 msgid "Label 9"
 msgstr "Натпис 9"
 
-#: src/niepce/ui/moduleshell.cpp:120 src/niepce/ui/selectioncontroller.cpp:281
+#: src/niepce/ui/moduleshell.cpp:117 src/niepce/ui/selectioncontroller.cpp:278
 msgid "Set Rating"
 msgstr "Подеси оцену"
 
-#: src/niepce/ui/moduleshell.cpp:127
+#: src/niepce/ui/moduleshell.cpp:124
 msgid "Unrated"
 msgstr "Неоцењен"
 
-#: src/niepce/ui/moduleshell.cpp:133
+#: src/niepce/ui/moduleshell.cpp:130
 msgid "Rating 1"
 msgstr "Оцена 1"
 
-#: src/niepce/ui/moduleshell.cpp:139
+#: src/niepce/ui/moduleshell.cpp:136
 msgid "Rating 2"
 msgstr "Оцена 2"
 
-#: src/niepce/ui/moduleshell.cpp:145
+#: src/niepce/ui/moduleshell.cpp:142
 msgid "Rating 3"
 msgstr "Оцена 3"
 
-#: src/niepce/ui/moduleshell.cpp:151
+#: src/niepce/ui/moduleshell.cpp:148
 msgid "Rating 4"
 msgstr "Оцена 4"
 
-#: src/niepce/ui/moduleshell.cpp:157
+#: src/niepce/ui/moduleshell.cpp:154
 msgid "Rating 5"
 msgstr "Оцена 5"
 
-#: src/niepce/ui/moduleshell.cpp:160 src/niepce/ui/selectioncontroller.cpp:278
+#: src/niepce/ui/moduleshell.cpp:157 src/niepce/ui/selectioncontroller.cpp:275
 msgid "Set Flag"
 msgstr "Подеси опцију"
 
-#: src/niepce/ui/moduleshell.cpp:168
+#: src/niepce/ui/moduleshell.cpp:165
 msgid "Flag as Rejected"
 msgstr "Означи одбаченом"
 
-#: src/niepce/ui/moduleshell.cpp:175
+#: src/niepce/ui/moduleshell.cpp:172
 msgid "Unflagged"
 msgstr "Без опције"
 
-#: src/niepce/ui/moduleshell.cpp:182
+#: src/niepce/ui/moduleshell.cpp:179
 msgid "Flag as Pick"
 msgstr "Означи изабраном"
 
-#: src/niepce/ui/moduleshell.cpp:191
+#: src/niepce/ui/moduleshell.cpp:188
 msgid "Write metadata"
 msgstr "Запишите метаподатке"
 
-#: src/niepce/ui/moduleshell.cpp:201 src/niepce/ui/niepcewindow.cpp:188
-msgid "Library"
-msgstr "Библиотека"
+#: src/niepce/ui/moduleshell.cpp:198
+msgid "Catalog"
+msgstr "Збирка"
 
-#: src/niepce/ui/moduleshell.cpp:210
+#: src/niepce/ui/moduleshell.cpp:207
 msgid "Darkroom"
 msgstr "Мрачна соба"
 
-#: src/niepce/ui/moduleshell.cpp:213
+#: src/niepce/ui/moduleshell.cpp:210
 msgid "Map"
 msgstr "Карта"
 
@@ -565,87 +560,146 @@ msgstr ""
 "\n"
 "Опције изградње: "
 
-#: src/niepce/ui/niepcewindow.cpp:142
+#: src/niepce/ui/niepcewindow.cpp:78
+msgid "Undo"
+msgstr "Опозови"
+
+#: src/niepce/ui/niepcewindow.cpp:89
+#| msgid "_Import..."
+msgid "Import..."
+msgstr "Увези..."
+
+#: src/niepce/ui/niepcewindow.cpp:166
 msgid "Ready"
 msgstr "Спреман"
 
-#: src/niepce/ui/niepcewindow.cpp:193
-msgid "New Folder..."
-msgstr "Нова фасцикла..."
+#: src/niepce/ui/niepcewindow.cpp:237
+msgid "New Catalog..."
+msgstr "Нова збирка..."
 
-#: src/niepce/ui/niepcewindow.cpp:194
-msgid "New Project..."
-msgstr "Нови пројекат..."
+#: src/niepce/ui/niepcewindow.cpp:238
+msgid "Open Catalog..."
+msgstr "Отвори збирку..."
 
-#: src/niepce/ui/niepcewindow.cpp:235
-msgid "Delete"
-msgstr "Обриши"
-
-#: src/niepce/ui/niepcewindow.cpp:241
+#: src/niepce/ui/niepcewindow.cpp:249
 msgid "Edit Labels..."
 msgstr "Уреди натписе..."
 
+#: src/niepce/ui/niepcewindow.cpp:250
+msgid "Preferences..."
+msgstr "Поставке..."
+
+#: src/niepce/ui/niepcewindow.cpp:254
+msgid "Help"
+msgstr "Помоћ"
+
+#: src/niepce/ui/niepcewindow.cpp:255
+msgid "About"
+msgstr "О програму"
+
 #. TODO make this parametric from resources
-#: src/niepce/ui/niepcewindow.cpp:329
+#: src/niepce/ui/niepcewindow.cpp:291
 msgid "Label 1"
 msgstr "Натпис 1"
 
 #. 217, 37, 17
-#: src/niepce/ui/niepcewindow.cpp:330
+#: src/niepce/ui/niepcewindow.cpp:292
 msgid "Label 2"
 msgstr "Натпис 2"
 
 #. 97, 217, 17
-#: src/niepce/ui/niepcewindow.cpp:331
+#: src/niepce/ui/niepcewindow.cpp:293
 msgid "Label 3"
 msgstr "Натпис 3"
 
 #. 17, 197, 217
-#: src/niepce/ui/niepcewindow.cpp:332
+#: src/niepce/ui/niepcewindow.cpp:294
 msgid "Label 4"
 msgstr "Натпис 4"
 
 #. 137, 17, 217
-#: src/niepce/ui/niepcewindow.cpp:333
+#: src/niepce/ui/niepcewindow.cpp:295
 msgid "Label 5"
 msgstr "Натпис 5"
 
-#: src/niepce/ui/niepcewindow.cpp:369
-msgid "Open library"
-msgstr "Отвори библиотеку"
+#: src/niepce/ui/niepcewindow.cpp:343
+msgid "Open catalog"
+msgstr "Отворите збирку"
 
-#: src/niepce/ui/niepcewindow.cpp:431
+#: src/niepce/ui/niepcewindow.cpp:346
+msgid "Open"
+msgstr "Отвори"
+
+#: src/niepce/ui/niepcewindow.cpp:403
 msgid "Niepce Digital - "
 msgstr "Дигитално Њепце — "
 
-#: src/niepce/ui/selectioncontroller.cpp:287
+#: src/niepce/ui/selectioncontroller.cpp:284
 msgid "Set Property"
 msgstr "Подеси својство"
 
-#: src/niepce/ui/selectioncontroller.cpp:306
+#: src/niepce/ui/selectioncontroller.cpp:299
 msgid "Set Properties"
 msgstr "Подеси својства"
 
-#: src/niepce/ui/selectioncontroller.cpp:329
+#: src/niepce/ui/selectioncontroller.cpp:326
 msgid "Move to Trash"
 msgstr "Премести у смеће"
 
-#: src/niepce/ui/workspacecontroller.cpp:282
+#: src/niepce/ui/workspacecontroller.cpp:102
+msgid "Delete selected folder?"
+msgstr "Да обришем изабрану фасциклу?"
+
+#: src/niepce/ui/workspacecontroller.cpp:402
 msgid "Pictures"
 msgstr "Слике"
 
-#: src/niepce/ui/workspacecontroller.cpp:286
+#: src/niepce/ui/workspacecontroller.cpp:406
 msgid "Projects"
 msgstr "Пројекти"
 
-#: src/niepce/ui/workspacecontroller.cpp:290
+#: src/niepce/ui/workspacecontroller.cpp:410
 msgid "Keywords"
 msgstr "Кључне речи"
 
 #. TODO make it a mnemonic
-#: src/niepce/ui/workspacecontroller.cpp:302
+#: src/niepce/ui/workspacecontroller.cpp:424
 msgid "_Workspace"
 msgstr "_Радни простор"
+
+#: src/niepce/ui/workspacecontroller.cpp:440
+msgid "New Folder..."
+msgstr "Нова фасцикла..."
+
+#: src/niepce/ui/workspacecontroller.cpp:442
+msgid "New Project..."
+msgstr "Нови пројекат..."
+
+#: src/niepce/ui/workspacecontroller.cpp:447
+#| msgid "Delete"
+msgid "Delete Folder"
+msgstr "Обриши фасциклу"
+
+#~ msgid "niepce"
+#~ msgstr "niepce"
+
+#~ msgid "Trash"
+#~ msgstr "Смеће"
+
+#~ msgid "New"
+#~ msgstr "Ново"
+
+#~ msgid "Quit"
+#~ msgstr "Изађи"
+
+#~ msgid "Redo"
+#~ msgstr "Поврати"
+
+#~ msgid "Library"
+#~ msgstr "Библиотека"
+
+#~ msgid "Open library"
+#~ msgstr "Отвори библиотеку"
 
 #~ msgid "_Erase after download"
 #~ msgstr "_Обриши након преузимања"
