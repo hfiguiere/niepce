@@ -1,7 +1,7 @@
 /*
  * niepce - npc-fwk/toolkit/gdk_utils.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use libc::c_char;
 use std::cmp;
 use std::path::Path;
-use std::slice;
 
 use gdk_pixbuf::prelude::*;
-use glib::translate::*;
+use libopenraw_rs as or;
 
 /// Scale the pixbuf to fit in a square of %dim pixels
 pub fn gdkpixbuf_scale_to_fit(
     pix: Option<&gdk_pixbuf::Pixbuf>,
     dim: i32,
 ) -> Option<gdk_pixbuf::Pixbuf> {
-    if let Some(pix) = pix {
+    pix.and_then(|pix| {
         let orig_h = pix.get_height();
         let orig_w = pix.get_width();
         let orig_dim = cmp::max(orig_h, orig_w);
@@ -42,9 +40,7 @@ pub fn gdkpixbuf_scale_to_fit(
             height as i32,
             gdk_pixbuf::InterpType::Bilinear,
         )
-    } else {
-        None
-    }
+    })
 }
 
 /// Rotate the pixbuf according to the Exif orientation value
@@ -71,61 +67,13 @@ pub fn gdkpixbuf_exif_rotate(
     }
 }
 
-// XXX bindgen
-#[repr(i32)]
-#[allow(dead_code)]
-enum ORDataType {
-    None = 0,
-    Pixmap8RGB,
-    Pixmap16RGB,
-    JPEG,
-    TIFF,
-    PNG,
-    RAW,
-    CompressedRAW,
-    Unknown,
-}
-
-#[repr(C)]
-struct ORThumbnail {
-    a: i32,
-}
-#[repr(C)]
-struct ORRawFile {
-    a: i32,
-}
-
-// XXX bindgen these too
-extern "C" {
-    fn or_rawfile_new(path: *const c_char, type_: i32) -> *mut ORRawFile;
-    fn or_rawfile_get_orientation(rawfile: *const ORRawFile) -> i32;
-    fn or_rawfile_get_thumbnail(
-        rawfile: *const ORRawFile,
-        size: u32,
-        thumbnail: *mut ORThumbnail,
-    ) -> i32;
-    fn or_rawfile_release(rawfile: *mut ORRawFile) -> i32;
-    fn or_thumbnail_new() -> *mut ORThumbnail;
-    fn or_thumbnail_release(thumbnail: *mut ORThumbnail) -> i32;
-    fn or_thumbnail_format(thumbnail: *const ORThumbnail) -> ORDataType;
-    fn or_thumbnail_data(thumbnail: *const ORThumbnail) -> *const u8;
-    fn or_thumbnail_data_size(thumbnail: *const ORThumbnail) -> usize;
-    fn or_thumbnail_dimensions(thumbnail: *const ORThumbnail, x: *mut u32, y: *mut u32);
-}
-
-fn thumbnail_to_pixbuf(
-    thumbnail: *const ORThumbnail,
-    orientation: i32,
-) -> Option<gdk_pixbuf::Pixbuf> {
-    let format = unsafe { or_thumbnail_format(thumbnail) };
-    let buf_size = unsafe { or_thumbnail_data_size(thumbnail) };
-    let buf = unsafe { slice::from_raw_parts(or_thumbnail_data(thumbnail), buf_size) };
+fn thumbnail_to_pixbuf(thumbnail: &or::Thumbnail, orientation: i32) -> Option<gdk_pixbuf::Pixbuf> {
+    let format = thumbnail.get_format();
+    let buf = thumbnail.get_data().ok()?;
 
     let pixbuf = match format {
-        ORDataType::Pixmap8RGB => {
-            let mut x: u32 = 0;
-            let mut y: u32 = 0;
-            unsafe { or_thumbnail_dimensions(thumbnail, &mut x, &mut y) };
+        or::DataType::Pixmap8Rgb => {
+            let (x, y) = thumbnail.get_dimensions();
 
             let bytes = glib::Bytes::from(buf);
             Some(gdk_pixbuf::Pixbuf::from_bytes(
@@ -138,10 +86,10 @@ fn thumbnail_to_pixbuf(
                 x as i32 * 3,
             ))
         }
-        ORDataType::JPEG | ORDataType::TIFF | ORDataType::PNG => {
+        or::DataType::Jpeg | or::DataType::Tiff | or::DataType::Png => {
             let loader = gdk_pixbuf::PixbufLoader::new();
 
-            if let Err(err) = loader.write(buf) {
+            if let Err(err) = loader.write(&buf) {
                 err_out!("loader write error: {}", err);
             }
 
@@ -161,24 +109,16 @@ pub fn openraw_extract_rotated_thumbnail<P: AsRef<Path>>(
     path: P,
     dim: u32,
 ) -> Option<gdk_pixbuf::Pixbuf> {
-    let mut pixbuf = None;
-    let rf = unsafe { or_rawfile_new(path.as_ref().to_glib_none().0, 0) };
-    if !rf.is_null() {
-        let orientation = unsafe { or_rawfile_get_orientation(rf) };
-
-        let thumbnail = unsafe { or_thumbnail_new() };
-        let err = unsafe { or_rawfile_get_thumbnail(rf, dim, thumbnail) };
-        if err == 0 {
-            pixbuf = thumbnail_to_pixbuf(thumbnail, orientation);
-        } else {
-            err_out!("or_get_extract_thumbnail() failed with {}.", err);
-        }
-        let err = unsafe { or_thumbnail_release(thumbnail) };
-        if err != 0 {
-            err_out!("or_thumbnail_release() failed with {}", err);
-        }
-        unsafe { or_rawfile_release(rf) };
-    }
-
-    pixbuf
+    let mut orientation: i32 = 0;
+    or::RawFile::from_file(path, or::RawFileType::Unknown)
+        .and_then(|r| {
+            orientation = r.get_orientation();
+            r.get_thumbnail(dim)
+        })
+        .map_err(|err| {
+            err_out!("or_get_extract_thumbnail() failed with {:?}.", err);
+            err
+        })
+        .ok()
+        .and_then(|t| thumbnail_to_pixbuf(&t, orientation))
 }
