@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.h
  *
- * Copyright (C) 2008-2012 Hubert Figuiere
+ * Copyright (C) 2008-2021 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,14 +50,14 @@ enum class MetaDT {
 
 struct MetaDataFormat {
     const char * label;
-    uint32_t     id;
+    ffi::NiepcePropertyIdx id;
     MetaDT       type;
     bool         readonly;
 };
 
 struct MetaDataSectionFormat {
     const char * section;
-    const MetaDataFormat * formats;
+    const std::vector<MetaDataFormat> formats;
 };
 
 class XmpMeta;
@@ -69,28 +69,28 @@ class MetaDataWidget
 public:
     MetaDataWidget(const Glib::ustring & title);
 
-    void add_data(const MetaDataFormat * current,
+    void add_data(const MetaDataFormat& current,
                   fwk::Option<PropertyValuePtr>&& value);
-    void set_data_format(const MetaDataSectionFormat * fmt);
+    void set_data_format(const MetaDataSectionFormat* fmt);
     void set_data_source(const fwk::PropertyBagPtr& properties);
 
     sigc::signal<void, const fwk::PropertyBagPtr &, const fwk::PropertyBagPtr &> signal_metadata_changed;
 protected:
-    bool on_str_changed(GdkEventFocus*, Gtk::Entry *, fwk::PropertyIndex prop);
-    bool on_text_changed(GdkEventFocus*, Glib::RefPtr<Gtk::TextBuffer> b, fwk::PropertyIndex prop);
+    bool on_str_changed(GdkEventFocus*, Gtk::Entry *, ffi::NiepcePropertyIdx prop);
+    bool on_text_changed(GdkEventFocus*, Glib::RefPtr<Gtk::TextBuffer> b, ffi::NiepcePropertyIdx prop);
     bool on_string_array_changed(GdkEventFocus*, fwk::TokenTextView * ttv,
-                                 fwk::PropertyIndex prop);
-    void on_int_changed(int, fwk::PropertyIndex prop);
+                                 ffi::NiepcePropertyIdx prop);
+    void on_int_changed(int, ffi::NiepcePropertyIdx prop);
 private:
-    void clear_widget(const std::pair<const PropertyIndex, Gtk::Widget *> & p);
+    void clear_widget(const std::pair<const ffi::NiepcePropertyIdx, Gtk::Widget *> & p);
     void create_widgets_for_format(const MetaDataSectionFormat * fmt);
 
     // the widget factory
-    Gtk::Widget* create_star_rating_widget(bool readonly, uint32_t id);
-    Gtk::Widget* create_string_array_widget(bool readonly, uint32_t id);
-    Gtk::Widget* create_text_widget(bool readonly, uint32_t id);
-    Gtk::Widget* create_string_widget(bool readonly, uint32_t id);
-    Gtk::Widget* create_date_widget(bool readonly, uint32_t id);
+    Gtk::Widget* create_star_rating_widget(bool readonly, ffi::NiepcePropertyIdx id);
+    Gtk::Widget* create_string_array_widget(bool readonly, ffi::NiepcePropertyIdx id);
+    Gtk::Widget* create_text_widget(bool readonly, ffi::NiepcePropertyIdx id);
+    Gtk::Widget* create_string_widget(bool readonly, ffi::NiepcePropertyIdx id);
+    Gtk::Widget* create_date_widget(bool readonly, ffi::NiepcePropertyIdx id);
 
     // set data
     // Fraction as a decimal
@@ -105,10 +105,10 @@ private:
                          const PropertyValuePtr& value);
     bool set_date_data(Gtk::Widget* w, const PropertyValuePtr& value);
 
-    void emit_metadata_changed(fwk::PropertyIndex prop, const fwk::PropertyValuePtr & value);
+    void emit_metadata_changed(ffi::NiepcePropertyIdx prop, const fwk::PropertyValuePtr & value);
 
     Gtk::Grid    m_table;
-    std::map<const PropertyIndex, Gtk::Widget *> m_data_map;
+    std::map<ffi::NiepcePropertyIdx, Gtk::Widget *> m_data_map;
     fwk::PropertyBagPtr m_current_data;
     const MetaDataSectionFormat * m_fmt;
     bool m_update;

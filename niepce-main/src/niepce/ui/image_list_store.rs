@@ -31,11 +31,11 @@ use gtk_sys;
 use once_cell::unsync::OnceCell;
 
 use npc_engine::db::libfile::{FileStatus, LibFile};
-use npc_engine::db::props::np;
+use npc_engine::db::props::NiepceProperties as Np;
+use npc_engine::db::props::NiepcePropertyIdx::*;
 use npc_engine::db::LibraryId;
 use npc_engine::library::notification::{LibNotification, MetadataChange};
 use npc_engine::library::thumbnail_cache::ThumbnailCache;
-use npc_fwk::base::PropertyIndex;
 use npc_fwk::toolkit::gdk_utils;
 use npc_fwk::PropertyValue;
 
@@ -100,11 +100,11 @@ impl ImageListStore {
             .as_ref()
     }
 
-    fn is_property_interesting(idx: PropertyIndex) -> bool {
-        return (idx == np::NpXmpRatingProp)
-            || (idx == np::NpXmpLabelProp)
-            || (idx == np::NpTiffOrientationProp)
-            || (idx == np::NpNiepceFlagProp);
+    fn is_property_interesting(idx: Np) -> bool {
+        return (idx == Np::Index(NpXmpRatingProp))
+            || (idx == Np::Index(NpXmpLabelProp))
+            || (idx == Np::Index(NpTiffOrientationProp))
+            || (idx == Np::Index(NpNiepceFlagProp));
     }
 
     fn get_iter_from_id(&self, id: LibraryId) -> Option<&gtk::TreeIter> {
@@ -190,7 +190,7 @@ impl ImageListStore {
                 true
             }
             MetadataChanged(ref m) => {
-                dbg_out!("metadata changed {}", m.meta);
+                dbg_out!("metadata changed {:?}", m.meta);
                 // only interested in a few props
                 if Self::is_property_interesting(m.meta) {
                     if let Some(iter) = self.idmap.get(&m.id) {

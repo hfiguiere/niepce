@@ -62,9 +62,9 @@ PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex key
 std::string property_value_get_string(const PropertyValue& v);
 
 /** return true if a property was removed prior to insertion */
-bool set_value_for_property(PropertyBag&, PropertyIndex idx, const PropertyValue & value);
+bool set_value_for_property(PropertyBag&, ffi::NiepcePropertyIdx idx, const PropertyValue & value);
 /** return property or an empty option */
-fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag&, PropertyIndex idx);
+fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag&, ffi::NiepcePropertyIdx idx);
 
 }
 

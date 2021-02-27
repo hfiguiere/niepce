@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/metadatapanecontroller.cpp
  *
- * Copyright (C) 2008-2018 Hubert Figuiere
+ * Copyright (C) 2008-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
@@ -29,63 +31,55 @@
 
 namespace ui {
 
-const fwk::MetaDataSectionFormat *
+using ffi::NiepcePropertyIdx;
+
+const std::vector<fwk::MetaDataSectionFormat>&
 MetaDataPaneController::get_format()
 {
-    static const fwk::MetaDataFormat s_fileinfo_format[] = {
-        { _("File Name:"), eng::NpFileNameProp, fwk::MetaDT::STRING, true },
-        { _("Folder:"), eng::NpFolderProp, fwk::MetaDT::STRING, true },
-        { _("File Type:"), eng::NpFileTypeProp, fwk::MetaDT::STRING, true },
-        { _("File Size:"), eng::NpFileSizeProp, fwk::MetaDT::SIZE, true },
-        { _("Sidecar Files:"), eng::NpSidecarsProp, fwk::MetaDT::STRING_ARRAY, true },
-        { nullptr, 0, fwk::MetaDT::NONE, true }
-    };
-    static const fwk::MetaDataFormat s_camerainfo_format[] = {
-        { _("Make:"), eng::NpTiffMakeProp, fwk::MetaDT::STRING, true },
-        { _("Model:"), eng::NpTiffModelProp, fwk::MetaDT::STRING, true },
-        { _("Lens:"), eng::NpExifAuxLensProp, fwk::MetaDT::STRING, true },
-        { nullptr, 0, fwk::MetaDT::NONE, true }
-    };
-    static const fwk::MetaDataFormat s_shootinginfo_format[] = {
-        { _("Exposure Program:"), eng::NpExifExposureProgramProp, fwk::MetaDT::STRING, true },
-        { _("Speed:"), eng::NpExifExposureTimeProp, fwk::MetaDT::FRAC, true },
-        { _("Aperture:"), eng::NpExifFNumberPropProp, fwk::MetaDT::FRAC_DEC, true },
-        { _("ISO:"), eng::NpExifIsoSpeedRatingsProp, fwk::MetaDT::STRING, true },
-        { _("Exposure Bias:"), eng::NpExifExposureBiasProp, fwk::MetaDT::FRAC_DEC, true },
-        { _("Flash:"), eng::NpExifFlashFiredProp, fwk::MetaDT::STRING, true },
-        { _("Flash compensation:"), eng::NpExifAuxFlashCompensationProp, fwk::MetaDT::STRING, true },
-        { _("Focal length:"), eng::NpExifFocalLengthProp, fwk::MetaDT::FRAC_DEC, true },
-        { _("White balance:"), eng::NpExifWbProp, fwk::MetaDT::STRING, true },
-        { _("Date:"), eng::NpExifDateTimeOriginalProp, fwk::MetaDT::DATE, false },
-        { nullptr, 0, fwk::MetaDT::NONE, true }
-    };
-    static const fwk::MetaDataFormat s_iptc_format[] = {
-        { _("Headline:"), eng::NpIptcHeadlineProp, fwk::MetaDT::STRING, false },
-        { _("Caption:"), eng::NpIptcDescriptionProp, fwk::MetaDT::TEXT, false },
-        { _("Rating:"), eng::NpXmpRatingProp, fwk::MetaDT::STAR_RATING, false },
-        // FIXME change this type to the right one when there is a widget
-        { _("Label:"), eng::NpXmpLabelProp, fwk::MetaDT::STRING, true },
-        { _("Keywords:"), eng::NpIptcKeywordsProp, fwk::MetaDT::STRING_ARRAY, false },
-        { nullptr, 0, fwk::MetaDT::NONE, true }
-    };
-    static const fwk::MetaDataSectionFormat s_format[] = {
+    static const std::vector<fwk::MetaDataSectionFormat> s_format = {
         { _("File Information"),
-          s_fileinfo_format
+          {
+              { _("File Name:"), NiepcePropertyIdx::NpFileNameProp, fwk::MetaDT::STRING, true },
+              { _("Folder:"), NiepcePropertyIdx::NpFolderProp, fwk::MetaDT::STRING, true },
+              { _("File Type:"), NiepcePropertyIdx::NpFileTypeProp, fwk::MetaDT::STRING, true },
+              { _("File Size:"), NiepcePropertyIdx::NpFileSizeProp, fwk::MetaDT::SIZE, true },
+              { _("Sidecar Files:"), NiepcePropertyIdx::NpSidecarsProp, fwk::MetaDT::STRING_ARRAY, true },
+          }
         },
         { _("Camera Information"),
-          s_camerainfo_format
+          {
+              { _("Make:"), NiepcePropertyIdx::NpTiffMakeProp, fwk::MetaDT::STRING, true },
+              { _("Model:"), NiepcePropertyIdx::NpTiffModelProp, fwk::MetaDT::STRING, true },
+              { _("Lens:"), NiepcePropertyIdx::NpExifAuxLensProp, fwk::MetaDT::STRING, true },
+          }
         },
         { _("Shooting Information"),
-          s_shootinginfo_format
+          {
+              { _("Exposure Program:"), NiepcePropertyIdx::NpExifExposureProgramProp, fwk::MetaDT::STRING, true },
+              { _("Speed:"), NiepcePropertyIdx::NpExifExposureTimeProp, fwk::MetaDT::FRAC, true },
+              { _("Aperture:"), NiepcePropertyIdx::NpExifFNumberPropProp, fwk::MetaDT::FRAC_DEC, true },
+              { _("ISO:"), NiepcePropertyIdx::NpExifIsoSpeedRatingsProp, fwk::MetaDT::STRING, true },
+              { _("Exposure Bias:"), NiepcePropertyIdx::NpExifExposureBiasProp, fwk::MetaDT::FRAC_DEC, true },
+              { _("Flash:"), NiepcePropertyIdx::NpExifFlashFiredProp, fwk::MetaDT::STRING, true },
+              { _("Flash compensation:"), NiepcePropertyIdx::NpExifAuxFlashCompensationProp, fwk::MetaDT::STRING, true },
+              { _("Focal length:"), NiepcePropertyIdx::NpExifFocalLengthProp, fwk::MetaDT::FRAC_DEC, true },
+              { _("White balance:"), NiepcePropertyIdx::NpExifWbProp, fwk::MetaDT::STRING, true },
+              { _("Date:"), NiepcePropertyIdx::NpExifDateTimeOriginalProp, fwk::MetaDT::DATE, false },
+          }
         },
         { _("IPTC"),
-          s_iptc_format
+          {
+              { _("Headline:"), NiepcePropertyIdx::NpIptcHeadlineProp, fwk::MetaDT::STRING, false },
+              { _("Caption:"), NiepcePropertyIdx::NpIptcDescriptionProp, fwk::MetaDT::TEXT, false },
+              { _("Rating:"), NiepcePropertyIdx::NpXmpRatingProp, fwk::MetaDT::STAR_RATING, false },
+              // FIXME change this type to the right one when there is a widget
+              { _("Label:"), NiepcePropertyIdx::NpXmpLabelProp, fwk::MetaDT::STRING, true },
+              { _("Keywords:"), NiepcePropertyIdx::NpIptcKeywordsProp, fwk::MetaDT::STRING_ARRAY, false },
+          }
         },
         { _("Rights"),
-          nullptr
+          std::vector<fwk::MetaDataFormat>()
         },
-        { nullptr, nullptr
-        }
     };
     return s_format;
 }
@@ -94,14 +88,14 @@ const fwk::PropertySet* MetaDataPaneController::get_property_set()
 {
     static fwk::PropertySet* propset = nullptr;
     if(!propset) {
-        propset = ffi::fwk_property_set_new();
-        const fwk::MetaDataSectionFormat * formats = get_format();
+        propset = ffi::eng_property_set_new();
+        const std::vector<fwk::MetaDataSectionFormat>& formats = get_format();
 
-        const fwk::MetaDataSectionFormat * current = formats;
-        while(current->section) {
-            const fwk::MetaDataFormat * format = current->formats;
-            while(format && format->label) {
-                ffi::fwk_property_set_add(propset, format->id);
+        auto current = formats.begin();
+        while (current != formats.end()) {
+            auto format = current->formats.begin();
+            while (format != current->formats.end()) {
+                ffi::eng_property_set_add(propset, format->id);
                 format++;
             }
             current++;
@@ -131,13 +125,13 @@ MetaDataPaneController::buildWidget()
     m_widget = box;
     DBG_ASSERT(box, "dockable vbox not found");
 
-    auto formats = get_format();
+    const auto& formats = get_format();
 
-    auto current = formats;
-    while(current->section) {
+    auto current = formats.begin();
+    while (current != formats.end()) {
         auto w = Gtk::manage(new fwk::MetaDataWidget(current->section));
         box->pack_start(*w, Gtk::PACK_SHRINK, 0);
-        w->set_data_format(current);
+        w->set_data_format(&*current);
         m_widgets.push_back(w);
         w->signal_metadata_changed.connect(
             sigc::mem_fun(*this,

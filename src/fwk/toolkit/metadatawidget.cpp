@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/toolkit/metadatawidget.cpp
  *
- * Copyright (C) 2008-2020 Hubert Figuière
+ * Copyright (C) 2008-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ MetaDataWidget::MetaDataWidget(const Glib::ustring & title)
     set_sensitive(false);
 }
 
-void MetaDataWidget::set_data_format(const MetaDataSectionFormat * fmt)
+void MetaDataWidget::set_data_format(const MetaDataSectionFormat* fmt)
 {
     m_fmt = fmt;
     create_widgets_for_format(fmt);
@@ -67,11 +67,11 @@ void MetaDataWidget::rating_callback(GtkWidget* w, gint rating, gpointer user_da
 {
     auto self = static_cast<MetaDataWidget*>(user_data);
     auto id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w), "id"));
-    self->on_int_changed(rating, id);
+    self->on_int_changed(rating, static_cast<ffi::NiepcePropertyIdx>(id));
 }
 
 Gtk::Widget*
-MetaDataWidget::create_star_rating_widget(bool readonly, uint32_t id)
+MetaDataWidget::create_star_rating_widget(bool readonly, ffi::NiepcePropertyIdx id)
 {
     Gtk::DrawingArea* r =
         Gtk::manage(Glib::wrap(
@@ -84,7 +84,7 @@ MetaDataWidget::create_star_rating_widget(bool readonly, uint32_t id)
 }
 
 Gtk::Widget*
-MetaDataWidget::create_string_array_widget(bool readonly, uint32_t id)
+MetaDataWidget::create_string_array_widget(bool readonly, ffi::NiepcePropertyIdx id)
 {
     fwk::TokenTextView * ttv = Gtk::manage(new fwk::TokenTextView());
     if(!readonly) {
@@ -98,7 +98,7 @@ MetaDataWidget::create_string_array_widget(bool readonly, uint32_t id)
 }
 
 Gtk::Widget*
-MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
+MetaDataWidget::create_text_widget(bool readonly, ffi::NiepcePropertyIdx id)
 {
     if(readonly) {
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
@@ -121,7 +121,7 @@ MetaDataWidget::create_text_widget(bool readonly, uint32_t id)
 }
 
 Gtk::Widget*
-MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
+MetaDataWidget::create_string_widget(bool readonly, ffi::NiepcePropertyIdx id)
 {
     if(readonly) {
         Gtk::Label * l = Gtk::manage(new Gtk::Label());
@@ -143,7 +143,7 @@ MetaDataWidget::create_string_widget(bool readonly, uint32_t id)
 }
 
 Gtk::Widget*
-MetaDataWidget::create_date_widget(bool /*readonly*/, uint32_t id)
+MetaDataWidget::create_date_widget(bool /*readonly*/, ffi::NiepcePropertyIdx id)
 {
     // for now a date widget is just like a string. Read only
     return create_string_widget(true, id);
@@ -153,10 +153,10 @@ void
 MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
 {
     Gtk::Widget *w = nullptr;
-    const MetaDataFormat * current = fmt->formats;
+    auto current = fmt->formats.begin();
     int n_row = 0;
 
-    while(current && current->label) {
+    while(current != fmt->formats.end()) {
         Gtk::Label *labelw = Gtk::manage(new Gtk::Label(
                                              Glib::ustring("<b>")
                                              + current->label + "</b>"));
@@ -201,7 +201,7 @@ MetaDataWidget::create_widgets_for_format(const MetaDataSectionFormat * fmt)
     m_table.show_all();
 }
 
-void MetaDataWidget::clear_widget(const std::pair<const PropertyIndex, Gtk::Widget *> & p)
+void MetaDataWidget::clear_widget(const std::pair<const ffi::NiepcePropertyIdx, Gtk::Widget *> & p)
 {
     AutoFlag flag(m_update);
     Gtk::Label * l = dynamic_cast<Gtk::Label*>(p.second);
@@ -242,7 +242,7 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
                       });
     }
     bool is_empty =
-        static_cast<bool>(properties) ? fwk_property_bag_is_empty(properties.get()) : true;
+        static_cast<bool>(properties) ? eng_property_bag_is_empty(properties.get()) : true;
     set_sensitive(!is_empty);
     if(is_empty) {
         return;
@@ -252,15 +252,15 @@ void MetaDataWidget::set_data_source(const fwk::PropertyBagPtr& properties)
         return;
     }
 
-    const MetaDataFormat * current = m_fmt->formats;
-    while(current && current->label) {
+    auto current = m_fmt->formats.begin();
+    while (current != m_fmt->formats.end()) {
         auto result = get_value_for_property(*properties, current->id);
         if (!result.empty() || !current->readonly) {
-            add_data(current, std::move(result));
+            add_data(*current, std::move(result));
         }
         else {
             DBG_OUT("get_property failed id = %d, label = %s",
-                    current->id, current->label);
+                    static_cast<uint32_t>(current->id), current->label);
         }
         current++;
     }
@@ -413,7 +413,7 @@ bool MetaDataWidget::set_date_data(Gtk::Widget* w, const PropertyValuePtr& value
     return true;
 }
 
-void MetaDataWidget::add_data(const MetaDataFormat * current,
+void MetaDataWidget::add_data(const MetaDataFormat& current,
                               fwk::Option<PropertyValuePtr>&& optional_value)
 {
     if (optional_value.empty()) {
@@ -425,7 +425,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
     }
 
     Gtk::Widget *w = nullptr;
-    auto iter = m_data_map.find(current->id);
+    auto iter = m_data_map.find(current.id);
     if(iter == m_data_map.end()) {
         ERR_OUT("no widget for property");
         return;
@@ -433,7 +433,7 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
 
     w = static_cast<Gtk::Label*>(iter->second);
 
-    switch(current->type) {
+    switch(current.type) {
     case MetaDT::FRAC_DEC:
         set_fraction_dec_data(w, value);
         break;
@@ -444,24 +444,24 @@ void MetaDataWidget::add_data(const MetaDataFormat * current,
         set_star_rating_data(w, value);
         break;
     case MetaDT::STRING_ARRAY:
-        set_string_array_data(w, current->readonly, value);
+        set_string_array_data(w, current.readonly, value);
         break;
     case MetaDT::TEXT:
-        set_text_data(w, current->readonly, value);
+        set_text_data(w, current.readonly, value);
         break;
     case MetaDT::DATE:
         set_date_data(w, value);
         break;
     default:
-        if (!set_string_data(w, current->readonly, value)) {
-            ERR_OUT("failed to set value for %u", current->id);
+        if (!set_string_data(w, current.readonly, value)) {
+            ERR_OUT("failed to set value for %u", static_cast<uint32_t>(current.id));
         }
         break;
     }
 }
 
 bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e,
-                                    fwk::PropertyIndex prop)
+                                    ffi::NiepcePropertyIdx prop)
 {
     if(m_update) {
         return true;
@@ -472,7 +472,7 @@ bool MetaDataWidget::on_str_changed(GdkEventFocus*, Gtk::Entry *e,
 
 bool MetaDataWidget::on_text_changed(GdkEventFocus*,
                                      Glib::RefPtr<Gtk::TextBuffer> b,
-                                     fwk::PropertyIndex prop)
+                                     ffi::NiepcePropertyIdx prop)
 {
     if(m_update) {
         return true;
@@ -484,7 +484,7 @@ bool MetaDataWidget::on_text_changed(GdkEventFocus*,
 
 bool MetaDataWidget::on_string_array_changed(GdkEventFocus*,
                                              fwk::TokenTextView * ttv,
-                                             fwk::PropertyIndex prop)
+                                             ffi::NiepcePropertyIdx prop)
 {
     if(m_update) {
         return true;
@@ -496,7 +496,7 @@ bool MetaDataWidget::on_string_array_changed(GdkEventFocus*,
     return true;
 }
 
-void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
+void MetaDataWidget::on_int_changed(int value, ffi::NiepcePropertyIdx prop)
 {
     if(m_update) {
         return;
@@ -504,7 +504,7 @@ void MetaDataWidget::on_int_changed(int value, fwk::PropertyIndex prop)
     emit_metadata_changed(prop, fwk::property_value_new(value));
 }
 
-void MetaDataWidget::emit_metadata_changed(fwk::PropertyIndex prop,
+void MetaDataWidget::emit_metadata_changed(ffi::NiepcePropertyIdx prop,
                                            const fwk::PropertyValuePtr & value)
 {
     fwk::PropertyBagPtr props = fwk::property_bag_new();

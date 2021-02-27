@@ -79,13 +79,13 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
 
         if (lm) {
             fwk::PropertySetPtr propset = fwk::property_set_new();
-            ffi::fwk_property_set_add(propset.get(), eng::NpExifGpsLongProp);
-            ffi::fwk_property_set_add(propset.get(), eng::NpExifGpsLatProp);
+            ffi::eng_property_set_add(propset.get(), ffi::NiepcePropertyIdx::NpExifGpsLongProp);
+            ffi::eng_property_set_add(propset.get(), ffi::NiepcePropertyIdx::NpExifGpsLatProp);
 
             fwk::PropertyBagPtr properties = eng::libmetadata_to_properties(lm, *propset);
             double latitude, longitude;
             latitude = longitude = NAN;
-            auto result = fwk::get_value_for_property(*properties, eng::NpExifGpsLongProp);
+            auto result = fwk::get_value_for_property(*properties, ffi::NiepcePropertyIdx::NpExifGpsLongProp);
             if (!result.empty()) {
                 fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string
@@ -94,7 +94,7 @@ MapModule::on_lib_notification(const eng::LibNotification &ln)
                         fwk::property_value_get_string(*val).c_str());
                 }
             }
-            result = fwk::get_value_for_property(*properties, eng::NpExifGpsLatProp);
+            result = fwk::get_value_for_property(*properties, ffi::NiepcePropertyIdx::NpExifGpsLatProp);
             if (!result.empty()) {
                 fwk::PropertyValuePtr val = result.unwrap();
                 // it is a string

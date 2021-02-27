@@ -27,8 +27,8 @@ use std::sync::mpsc;
 use chrono::Utc;
 use rusqlite;
 
-use super::props::np::*;
 use super::props::NiepceProperties as Np;
+use super::props::NiepcePropertyIdx::*;
 use super::{FromDb, LibraryId};
 use crate::db::filebundle::{FileBundle, Sidecar};
 use crate::db::keyword::Keyword;
@@ -884,16 +884,19 @@ impl Library {
     pub fn set_metadata(&self, file_id: LibraryId, meta: Np, value: &PropertyValue) -> Result<()> {
         #[allow(non_upper_case_globals)]
         match meta {
-            NpXmpRatingProp | NpXmpLabelProp | NpTiffOrientationProp | NpNiepceFlagProp => {
+            Np::Index(NpXmpRatingProp)
+            | Np::Index(NpXmpLabelProp)
+            | Np::Index(NpTiffOrientationProp)
+            | Np::Index(NpNiepceFlagProp) => {
                 match *value {
                     PropertyValue::Int(i) => {
                         // internal
                         // make the column mapping more generic.
                         let column = match meta {
-                            NpXmpRatingProp => "rating",
-                            NpXmpLabelProp => "label",
-                            NpTiffOrientationProp => "orientation",
-                            NpNiepceFlagProp => "flag",
+                            Np::Index(NpXmpRatingProp) => "rating",
+                            Np::Index(NpXmpLabelProp) => "label",
+                            Np::Index(NpTiffOrientationProp) => "orientation",
+                            Np::Index(NpNiepceFlagProp) => "flag",
                             _ => unreachable!(),
                         };
                         if !column.is_empty() {
@@ -903,7 +906,7 @@ impl Library {
                     _ => err_out!("improper value type for {:?}", meta),
                 }
             }
-            NpIptcKeywordsProp => {
+            Np::Index(NpIptcKeywordsProp) => {
                 self.unassign_all_keywords_for_file(file_id)?;
 
                 match *value {

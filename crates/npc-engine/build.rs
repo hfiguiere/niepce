@@ -18,6 +18,7 @@ fn main() {
                 "strum",
             ])
             .include_item("Managed")
+            .include_item("NiepcePropertyIdx")
             .exclude_item("CUSTOM_START")
             .exclude_item("INTERNAL_START")
             .exclude_item("GdkPixbuf")
@@ -25,6 +26,11 @@ fn main() {
             .exclude_item("GtkToolbar")
             .exclude_item("GFileInfo")
             .exclude_item("RgbColour")
+            // Ensure these are opaque as generics are still a problem.
+            .exclude_item("NiepcePropertySet")
+            .exclude_item("NiepcePropertyBag")
+            .exclude_item("PropertySet")
+            .exclude_item("PropertyBag")
             .with_crate(&crate_dir)
             .generate()
             .expect("Couldn't generate bindings")

@@ -31,6 +31,7 @@ use self::clientimpl::ClientImpl;
 use npc_engine::db::library::Managed;
 use npc_engine::db::props::NiepceProperties as Np;
 use npc_engine::db::LibraryId;
+use npc_engine::db::{NiepceProperties, NiepcePropertyIdx};
 use npc_engine::library::notification::{LcChannel, LibNotification};
 use npc_fwk::base::PropertyValue;
 use npc_fwk::toolkit::PortableChannel;
@@ -292,10 +293,12 @@ pub extern "C" fn libraryclient_request_metadata(
 pub extern "C" fn libraryclient_set_metadata(
     client: &mut LibraryClientWrapper,
     file_id: LibraryId,
-    meta: Np,
+    meta: NiepcePropertyIdx,
     value: &PropertyValue,
 ) {
-    client.unwrap_mut().set_metadata(file_id, meta, value);
+    client
+        .unwrap_mut()
+        .set_metadata(file_id, NiepceProperties::Index(meta), value);
 }
 
 #[no_mangle]

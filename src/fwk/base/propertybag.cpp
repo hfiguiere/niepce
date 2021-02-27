@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/propertybag.cpp
  *
- * Copyright (C) 2011-2020 Hubert Figuière
+ * Copyright (C) 2011-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@ namespace fwk {
 
 PropertySetPtr property_set_wrap(PropertySet* s)
 {
-    return PropertySetPtr(s, &ffi::fwk_property_set_delete);
+    return PropertySetPtr(s, &ffi::eng_property_set_delete);
 }
 
 PropertySetPtr property_set_new()
 {
-    return property_set_wrap(ffi::fwk_property_set_new());
+    return property_set_wrap(ffi::eng_property_set_new());
 }
 
 PropertyValuePtr property_value_wrap(PropertyValue* v)
@@ -82,30 +82,30 @@ std::vector<std::string> property_value_get_string_array(const PropertyValue &va
 
 PropertyBagPtr property_bag_wrap(PropertyBag* bag)
 {
-    return PropertyBagPtr(bag, &ffi::fwk_property_bag_delete);
+    return PropertyBagPtr(bag, &ffi::eng_property_bag_delete);
 }
 
 PropertyBagPtr property_bag_new()
 {
-    return property_bag_wrap(ffi::fwk_property_bag_new());
+    return property_bag_wrap(ffi::eng_property_bag_new());
 }
 
 PropertyValuePtr property_bag_value(const PropertyBagPtr& bag, PropertyIndex idx)
 {
-    auto value = ffi::fwk_property_bag_value(bag.get(), idx);
+    auto value = ffi::eng_property_bag_value(bag.get(), idx);
     return property_value_wrap(value);
 }
 
-bool set_value_for_property(PropertyBag& bag, PropertyIndex idx,
+bool set_value_for_property(PropertyBag& bag, ffi::NiepcePropertyIdx idx,
                             const PropertyValue & value)
 {
-    return ffi::fwk_property_bag_set_value(&bag, idx, &value);
+    return ffi::eng_property_bag_set_value(&bag, static_cast<uint32_t>(idx), &value);
 }
 
 fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag& bag,
-                                                     PropertyIndex idx)
+                                                     ffi::NiepcePropertyIdx idx)
 {
-    auto value = ffi::fwk_property_bag_value(&bag, idx);
+    auto value = ffi::eng_property_bag_value(&bag, static_cast<uint32_t>(idx));
     if (!value) {
         return fwk::Option<PropertyValuePtr>();
     }

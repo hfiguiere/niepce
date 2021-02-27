@@ -5,63 +5,83 @@ use npc_fwk::utils::exempi::{NS_DC, NS_EXIF, NS_PHOTOSHOP, NS_TIFF, NS_XAP};
 mod xmp {
     pub use npc_fwk::utils::exempi::NIEPCE_XMP_NAMESPACE;
 }
-
-pub type NiepceProperties = u32;
-
-#[allow(non_upper_case_globals)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[repr(u32)]
+pub enum NiepcePropertyIdx {
+    NpFileNameProp,
+    NpFileTypeProp,
+    NpFileSizeProp,
+    NpFolderProp,
+    NpSidecarsProp,
+    NpXmpRatingProp,
+    NpXmpLabelProp,
+    NpTiffOrientationProp,
+    NpTiffMakeProp,
+    NpTiffModelProp,
+    NpExifAuxLensProp,
+    NpExifExposureProgramProp,
+    NpExifExposureTimeProp,
+    NpExifFNumberPropProp,
+    NpExifIsoSpeedRatingsProp,
+    NpExifExposureBiasProp,
+    NpExifFlashFiredProp,
+    NpExifAuxFlashCompensationProp,
+    NpExifWbProp,
+    NpExifDateTimeOriginalProp,
+    NpExifFocalLengthProp,
+    NpExifGpsLongProp,
+    NpExifGpsLatProp,
+    NpIptcHeadlineProp,
+    NpIptcDescriptionProp,
+    NpIptcKeywordsProp,
+    NpNiepceFlagProp,
+}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(unused_parens)]
-pub mod np {
-    pub const NpFileNameProp: u32 = (0x0f00 << 16 | 0);
-    pub const NpFileTypeProp: u32 = (0x0f00 << 16 | 1);
-    pub const NpFileSizeProp: u32 = (0x0f00 << 16 | 2);
-    pub const NpFolderProp: u32 = (0x0f00 << 16 | 3);
-    pub const NpSidecarsProp: u32 = (0x0f00 << 16 | 4);
-    pub const NpXmpRatingProp: u32 = (0 << 16 | 1);
-    pub const NpXmpLabelProp: u32 = (0 << 16 | 2);
-    pub const NpTiffOrientationProp: u32 = (1 << 16 | 0);
-    pub const NpTiffMakeProp: u32 = (1 << 16 | 1);
-    pub const NpTiffModelProp: u32 = (1 << 16 | 2);
-    pub const NpExifAuxLensProp: u32 = (2 << 16 | 0);
-    pub const NpExifExposureProgramProp: u32 = (2 << 16 | 1);
-    pub const NpExifExposureTimeProp: u32 = (2 << 16 | 2);
-    pub const NpExifFNumberPropProp: u32 = (2 << 16 | 3);
-    pub const NpExifIsoSpeedRatingsProp: u32 = (2 << 16 | 4);
-    pub const NpExifExposureBiasProp: u32 = (2 << 16 | 5);
-    pub const NpExifFlashFiredProp: u32 = (2 << 16 | 6);
-    pub const NpExifAuxFlashCompensationProp: u32 = (2 << 16 | 7);
-    pub const NpExifWbProp: u32 = (2 << 16 | 8);
-    pub const NpExifDateTimeOriginalProp: u32 = (2 << 16 | 9);
-    pub const NpExifFocalLengthProp: u32 = (2 << 16 | 10);
-    pub const NpExifGpsLongProp: u32 = (2 << 16 | 11);
-    pub const NpExifGpsLatProp: u32 = (2 << 16 | 12);
-    pub const NpIptcHeadlineProp: u32 = (3 << 16 | 0);
-    pub const NpIptcDescriptionProp: u32 = (3 << 16 | 1);
-    pub const NpIptcKeywordsProp: u32 = (3 << 16 | 2);
-    pub const NpNiepceFlagProp: u32 = (4 << 16 | 0);
+#[repr(C)]
+pub enum NiepceProperties {
+    Index(NiepcePropertyIdx),
+    Other(u32),
+}
+impl Into<u32> for NiepceProperties {
+    fn into(self) -> u32 {
+        match self {
+            Self::Index(i) => i as u32,
+            Self::Other(i) => i,
+        }
+    }
+}
+impl From<u32> for NiepceProperties {
+    fn from(v: u32) -> NiepceProperties {
+        match v {
+            0..=26 => Self::Index(unsafe { std::mem::transmute(v) }),
+            _ => Self::Other(v),
+        }
+    }
 }
 lazy_static! {
     pub static ref PROP_TO_XMP_MAP: std::collections::HashMap<NiepceProperties, (&'static str, &'static str)> = hashmap! {
-    np::NpXmpRatingProp => (NS_XAP, "Rating"),
-    np::NpXmpLabelProp => (NS_XAP, "Label"),
-    np::NpTiffOrientationProp => (NS_TIFF, "Orientation"),
-    np::NpTiffMakeProp => (NS_TIFF, "Make"),
-    np::NpTiffModelProp => (NS_TIFF, "Model"),
-    np::NpExifAuxLensProp => (NS_EXIF_AUX, "Lens"),
-    np::NpExifExposureProgramProp => (NS_EXIF, "ExposureProgram"),
-    np::NpExifExposureTimeProp => (NS_EXIF, "ExposureTime"),
-    np::NpExifFNumberPropProp => (NS_EXIF, "FNumber"),
-    np::NpExifIsoSpeedRatingsProp => (NS_EXIF, "ISOSpeedRatings"),
-    np::NpExifExposureBiasProp => (NS_EXIF, "ExposureBiasValue"),
-    np::NpExifFlashFiredProp => (NS_EXIF, "Flash/exif:Fired"),
-    np::NpExifAuxFlashCompensationProp => (NS_EXIF_AUX, "FlashCompensation"),
-    np::NpExifWbProp => (NS_EXIF, "WhiteBalance"),
-    np::NpExifDateTimeOriginalProp => (NS_EXIF, "DateTimeOriginal"),
-    np::NpExifFocalLengthProp => (NS_EXIF, "FocalLength"),
-    np::NpExifGpsLongProp => (NS_EXIF, "GPSLongitude"),
-    np::NpExifGpsLatProp => (NS_EXIF, "GPSLatitude"),
-    np::NpIptcHeadlineProp => (NS_PHOTOSHOP, "Headline"),
-    np::NpIptcDescriptionProp => (NS_DC, "description"),
-    np::NpIptcKeywordsProp => (NS_DC, "subject"),
-    np::NpNiepceFlagProp => (xmp::NIEPCE_XMP_NAMESPACE, "Flag"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpXmpRatingProp) => (NS_XAP, "Rating"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpXmpLabelProp) => (NS_XAP, "Label"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpTiffOrientationProp) => (NS_TIFF, "Orientation"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpTiffMakeProp) => (NS_TIFF, "Make"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpTiffModelProp) => (NS_TIFF, "Model"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifAuxLensProp) => (NS_EXIF_AUX, "Lens"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifExposureProgramProp) => (NS_EXIF, "ExposureProgram"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifExposureTimeProp) => (NS_EXIF, "ExposureTime"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifFNumberPropProp) => (NS_EXIF, "FNumber"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifIsoSpeedRatingsProp) => (NS_EXIF, "ISOSpeedRatings"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifExposureBiasProp) => (NS_EXIF, "ExposureBiasValue"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifFlashFiredProp) => (NS_EXIF, "Flash/exif:Fired"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifAuxFlashCompensationProp) => (NS_EXIF_AUX, "FlashCompensation"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifWbProp) => (NS_EXIF, "WhiteBalance"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifDateTimeOriginalProp) => (NS_EXIF, "DateTimeOriginal"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifFocalLengthProp) => (NS_EXIF, "FocalLength"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifGpsLongProp) => (NS_EXIF, "GPSLongitude"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpExifGpsLatProp) => (NS_EXIF, "GPSLatitude"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpIptcHeadlineProp) => (NS_PHOTOSHOP, "Headline"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpIptcDescriptionProp) => (NS_DC, "description"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpIptcKeywordsProp) => (NS_DC, "subject"),
+    NiepceProperties::Index(NiepcePropertyIdx::NpNiepceFlagProp) => (xmp::NIEPCE_XMP_NAMESPACE, "Flag"),
     };
 }

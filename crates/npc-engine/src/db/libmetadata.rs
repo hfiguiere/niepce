@@ -23,9 +23,9 @@ use rusqlite;
 
 use super::libfile::FileType;
 use super::props;
-use super::props::np::*;
-use super::props::NiepceProperties as Np;
+use super::NiepceProperties as Np;
 use super::{FromDb, LibraryId};
+use crate::{NiepcePropertyBag, NiepcePropertySet};
 use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
 
@@ -187,32 +187,32 @@ impl LibMetadata {
         false
     }
 
-    pub fn to_properties(&self, propset: &PropertySet) -> PropertyBag {
+    pub fn to_properties(&self, propset: &PropertySet<Np>) -> PropertyBag<Np> {
+        use super::NiepcePropertyIdx::*;
         let mut props = PropertyBag::new();
         for prop_id in propset {
-            #[allow(non_upper_case_globals)]
             match *prop_id {
-                NpXmpRatingProp => {
+                Np::Index(NpXmpRatingProp) => {
                     if let Some(rating) = self.xmp.rating() {
                         props.set_value(*prop_id, PropertyValue::Int(rating));
                     }
                 }
-                NpXmpLabelProp => {
+                Np::Index(NpXmpLabelProp) => {
                     if let Some(label) = self.xmp.label() {
                         props.set_value(*prop_id, PropertyValue::String(label));
                     }
                 }
-                NpTiffOrientationProp => {
+                Np::Index(NpTiffOrientationProp) => {
                     if let Some(orientation) = self.xmp.orientation() {
                         props.set_value(*prop_id, PropertyValue::Int(orientation));
                     }
                 }
-                NpExifDateTimeOriginalProp => {
+                Np::Index(NpExifDateTimeOriginalProp) => {
                     if let Some(date) = self.xmp.creation_date() {
                         props.set_value(*prop_id, PropertyValue::Date(date));
                     }
                 }
-                NpIptcKeywordsProp => {
+                Np::Index(NpIptcKeywordsProp) => {
                     let mut iter = exempi::XmpIterator::new(
                         &self.xmp.xmp,
                         NS_DC,
@@ -229,25 +229,25 @@ impl LibMetadata {
                     }
                     props.set_value(*prop_id, PropertyValue::StringArray(keywords));
                 }
-                NpFileNameProp => {
+                Np::Index(NpFileNameProp) => {
                     props.set_value(*prop_id, PropertyValue::String(self.name.clone()));
                 }
-                NpFileTypeProp => {
+                Np::Index(NpFileTypeProp) => {
                     let file_type: &str = self.file_type.into();
                     props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
                 }
-                NpFileSizeProp => {}
-                NpFolderProp => {
+                Np::Index(NpFileSizeProp) => {}
+                Np::Index(NpFolderProp) => {
                     props.set_value(*prop_id, PropertyValue::String(self.folder.clone()));
                 }
-                NpSidecarsProp => {
+                Np::Index(NpSidecarsProp) => {
                     props.set_value(*prop_id, PropertyValue::StringArray(self.sidecars.clone()));
                 }
                 _ => {
-                    if let Some(propval) = self.get_metadata(*prop_id) {
+                    if let Some(propval) = self.get_metadata((*prop_id).into()) {
                         props.set_value(*prop_id, propval);
                     } else {
-                        dbg_out!("missing prop {}", prop_id);
+                        dbg_out!("missing prop {:?}", prop_id);
                     }
                 }
             }
@@ -300,8 +300,8 @@ pub extern "C" fn engine_libmetadata_get_id(meta: &LibMetadata) -> LibraryId {
 #[no_mangle]
 pub extern "C" fn engine_libmetadata_to_properties(
     meta: &LibMetadata,
-    propset: &PropertySet,
-) -> *mut PropertyBag {
+    propset: &NiepcePropertySet,
+) -> *mut NiepcePropertyBag {
     let result = Box::new(meta.to_properties(propset));
     Box::into_raw(result)
 }

@@ -85,7 +85,10 @@ pub extern "C" fn fwk_property_value_is_empty(v: &PropertyValue) -> bool {
 pub extern "C" fn fwk_property_value_is_integer(v: &PropertyValue) -> bool {
     match *v {
         PropertyValue::Int(_) => true,
-        _ => false,
+        _ => {
+            println!("PropertyValue is {:?}", &v);
+            false
+        }
     }
 }
 

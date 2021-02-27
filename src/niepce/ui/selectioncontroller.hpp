@@ -95,7 +95,7 @@ public:
     /** set flag */
     void set_flag(int flag);
 
-    void set_property(ffi::Np idx, int value);
+    void set_property(ffi::NiepcePropertyIdx idx, int value);
 
     void set_properties(const fwk::PropertyBagPtr & props,
                         const fwk::PropertyBagPtr & old);
@@ -118,7 +118,7 @@ private:
 
     bool _set_metadata(const std::string & undo_label,
                        eng::library_id_t file_id,
-                       ffi::Np meta,
+                       ffi::NiepcePropertyIdx meta,
                        int old_value, int new_value);
     bool _set_metadata(const std::string & undo_label,
                        eng::library_id_t file_id,

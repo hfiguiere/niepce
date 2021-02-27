@@ -19,7 +19,7 @@
 
 use super::queriedcontent::QueriedContent;
 use crate::db::libfile::FileStatus;
-use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId};
+use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId, NiepceProperties};
 use npc_fwk::base::PropertyIndex;
 use npc_fwk::toolkit::thumbnail;
 use npc_fwk::toolkit::PortableChannel;
@@ -79,12 +79,12 @@ pub struct Count {
 #[derive(Clone)]
 pub struct MetadataChange {
     pub id: LibraryId,
-    pub meta: PropertyIndex,
+    pub meta: NiepceProperties,
     pub value: PropertyValue,
 }
 
 impl MetadataChange {
-    pub fn new(id: LibraryId, meta: PropertyIndex, value: PropertyValue) -> Self {
+    pub fn new(id: LibraryId, meta: NiepceProperties, value: PropertyValue) -> Self {
         MetadataChange { id, meta, value }
     }
 }
@@ -105,7 +105,7 @@ pub unsafe extern "C" fn metadatachange_get_id(meta: *const MetadataChange) -> L
 
 #[no_mangle]
 pub unsafe extern "C" fn metadatachange_get_meta(meta: *const MetadataChange) -> PropertyIndex {
-    (*meta).meta
+    (*meta).meta.into()
 }
 
 #[no_mangle]

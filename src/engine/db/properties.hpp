@@ -26,23 +26,19 @@
 #include "fwk/base/propertybag.hpp"
 #include "engine/db/metadata.hpp"
 
-#include "engine/db/properties-enum.hpp"
-
 namespace eng {
 
 
 struct property_desc_t {
-    fwk::PropertyIndex prop;
+    eng::NiepcePropertyIdx prop;
     const char * name;
     const std::type_info & type;
 };
 
-typedef std::map<fwk::PropertyIndex, const property_desc_t*> PropDescMap;
+typedef std::map<eng::NiepcePropertyIdx, const property_desc_t> PropDescMap;
 
-/** get the properties description */
-const PropDescMap & property_desc_map();
 /** return true of the property is of the type ti */
-bool check_property_type(fwk::PropertyIndex idx, const std::type_info & ti);
+bool check_property_type(eng::NiepcePropertyIdx idx, const std::type_info & ti);
 
 
 /** internal property name */

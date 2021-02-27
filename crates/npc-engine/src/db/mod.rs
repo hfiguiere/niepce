@@ -35,6 +35,8 @@ pub use self::label::Label;
 pub use self::libfolder::LibFolder;
 pub use self::libmetadata::LibMetadata;
 pub use self::library::Library;
+pub use self::props::NiepceProperties;
+pub use self::props::NiepcePropertyIdx;
 
 use rusqlite;
 

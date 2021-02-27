@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/properties.cpp
  *
- * Copyright (C) 2011 Hubert Figuiere
+ * Copyright (C) 2011-2021 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,54 +19,37 @@
 
 #include "properties.hpp"
 
+#include "rust_bindings.hpp"
 
 namespace eng {
 
 #define DEFINE_PROPERTY(a,b,c,d,e)               \
-    { a, #a, typeid(e) },
+    { NiepcePropertyIdx::a, { NiepcePropertyIdx::a, #a, typeid(e) } },
 
-static const property_desc_t properties_names[] = {
+static const PropDescMap propmap = {
 
     #include "engine/db/properties-def.hpp"
 
-    { 0, NULL, typeid(NULL) }
 };
 
 #undef DEFINE_PROPERTY
 
-const char * _propertyName(fwk::PropertyIndex idx)
+const char * _propertyName(eng::NiepcePropertyIdx idx)
 {
-    const PropDescMap & propmap = property_desc_map();
     PropDescMap::const_iterator iter = propmap.find(idx);
     if(iter != propmap.end()) {
-        if(iter->second->name) {
-            return iter->second->name;
+        if(iter->second.name) {
+            return iter->second.name;
         }
     }
     return "UNKNOWN";
 }
 
-const PropDescMap & property_desc_map()
+bool check_property_type(eng::NiepcePropertyIdx idx, const std::type_info & ti)
 {
-    static PropDescMap s_map;
-    if(s_map.empty()) {
-        const eng::property_desc_t * current = eng::properties_names;
-        while(current->prop != 0) {
-            if(current->name) {
-                s_map.insert(std::make_pair(current->prop, current));
-            }
-            ++current;
-        }
-    }
-    return s_map;
-}
-
-bool check_property_type(fwk::PropertyIndex idx, const std::type_info & ti)
-{
-    const PropDescMap & propmap = property_desc_map();
     PropDescMap::const_iterator iter = propmap.find(idx);
     if(iter != propmap.end()) {
-        return iter->second->type == ti;
+        return iter->second.type == ti;
     }
     // we don't know the type. Assume it is OK
     return true;

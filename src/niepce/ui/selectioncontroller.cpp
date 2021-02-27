@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/selectioncontroller.cpp
  *
- * Copyright (C) 2008-2020 Hubert Figuière
+ * Copyright (C) 2008-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -184,7 +184,7 @@ void SelectionController::rotate(int angle)
 
 bool SelectionController::_set_metadata(const std::string & undo_label,
                                         eng::library_id_t file_id,
-                                        ffi::Np meta,
+                                        ffi::NiepcePropertyIdx meta,
                                         int old_value, int new_value)
 {
     std::shared_ptr<fwk::UndoTransaction> undo =
@@ -210,9 +210,9 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
                                         const fwk::PropertyBagPtr & old)
 {
     auto undo = fwk::Application::app()->begin_undo(undo_label);
-    auto len = fwk_property_bag_len(props.get());
+    auto len = eng_property_bag_len(props.get());
     for (size_t i = 0; i < len; i++) {
-        auto key = fwk_property_bag_key_by_index(props.get(), i);
+        auto key = eng_property_bag_key_by_index(props.get(), i);
         fwk::PropertyValuePtr value = fwk::property_bag_value(old, key);
         /*
         if (!result.empty()) {
@@ -230,11 +230,11 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
         undo->new_command<void>(
             [libclient, file_id, key, new_value] () {
                 ffi::libraryclient_set_metadata(
-                    libclient->client(), file_id, static_cast<ffi::Np>(key), new_value.get());
+                    libclient->client(), file_id, static_cast<ffi::NiepcePropertyIdx>(key), new_value.get());
             },
             [libclient, file_id, key, value] () {
                 ffi::libraryclient_set_metadata(
-                    libclient->client(), file_id, static_cast<ffi::Np>(key), value.get());
+                    libclient->client(), file_id, static_cast<ffi::NiepcePropertyIdx>(key), value.get());
             });
     }
     undo->execute();
@@ -243,23 +243,23 @@ bool SelectionController::_set_metadata(const std::string & undo_label,
 
 void SelectionController::set_label(int label)
 {
-    set_property(eng::NpXmpLabelProp, label);
+    set_property(ffi::NiepcePropertyIdx::NpXmpLabelProp, label);
 }
 
 
 void SelectionController::set_rating(int rating)
 {
-    set_property(eng::NpXmpRatingProp, rating);
+    set_property(ffi::NiepcePropertyIdx::NpXmpRatingProp, rating);
 }
 
 void SelectionController::set_flag(int flag)
 {
-    set_property(eng::NpNiepceFlagProp, flag);
+    set_property(ffi::NiepcePropertyIdx::NpNiepceFlagProp, flag);
 }
 
-void SelectionController::set_property(ffi::Np idx, int value)
+void SelectionController::set_property(ffi::NiepcePropertyIdx idx, int value)
 {
-    DBG_OUT("property %u = %d", idx, value);
+    DBG_OUT("property %u = %d", static_cast<uint32_t>(idx), value);
     eng::library_id_t selection = get_selection();
     if(selection >= 0) {
         eng::LibFilePtr file = m_imageliststore->get_file(selection);
@@ -271,13 +271,13 @@ void SelectionController::set_property(ffi::Np idx, int value)
         int32_t old_value = engine_db_libfile_property(file.get(), idx);
         const char *action = nullptr;
         switch(idx) {
-        case eng::NpNiepceFlagProp:
+        case ffi::NiepcePropertyIdx::NpNiepceFlagProp:
             action = _("Set Flag");
             break;
-        case eng::NpXmpRatingProp:
+        case ffi::NiepcePropertyIdx::NpXmpRatingProp:
             action = _("Set Rating");
             break;
-        case eng::NpXmpLabelProp:
+        case ffi::NiepcePropertyIdx::NpXmpLabelProp:
             action = _("Set Label");
             break;
         default:

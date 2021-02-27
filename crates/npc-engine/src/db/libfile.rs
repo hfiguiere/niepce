@@ -24,12 +24,11 @@ use std::ffi::CString;
 use std::path::{Path, PathBuf};
 
 use super::fsfile::FsFile;
-use super::props::np;
-use super::props::NiepceProperties as Np;
 use super::FromDb;
 use super::LibraryId;
+use super::NiepceProperties as Np;
+use super::NiepcePropertyIdx;
 use npc_fwk;
-use npc_fwk::base::PropertyIndex;
 
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -195,21 +194,23 @@ impl LibFile {
     }
 
     pub fn property(&self, idx: Np) -> i32 {
+        use super::NiepcePropertyIdx::*;
         match idx {
-            np::NpTiffOrientationProp => self.orientation(),
-            np::NpXmpRatingProp => self.rating(),
-            np::NpXmpLabelProp => self.label(),
-            np::NpNiepceFlagProp => self.flag(),
+            Np::Index(NpTiffOrientationProp) => self.orientation(),
+            Np::Index(NpXmpRatingProp) => self.rating(),
+            Np::Index(NpXmpLabelProp) => self.label(),
+            Np::Index(NpNiepceFlagProp) => self.flag(),
             _ => -1,
         }
     }
 
     pub fn set_property(&mut self, idx: Np, value: i32) {
+        use super::NiepcePropertyIdx::*;
         match idx {
-            np::NpTiffOrientationProp => self.set_orientation(value),
-            np::NpXmpRatingProp => self.set_rating(value),
-            np::NpXmpLabelProp => self.set_label(value),
-            np::NpNiepceFlagProp => self.set_flag(value),
+            Np::Index(NpTiffOrientationProp) => self.set_orientation(value),
+            Np::Index(NpXmpRatingProp) => self.set_rating(value),
+            Np::Index(NpXmpLabelProp) => self.set_label(value),
+            Np::Index(NpNiepceFlagProp) => self.set_flag(value),
             _ => err_out!("invalid property {:?} - noop", idx),
         };
     }
@@ -319,8 +320,8 @@ pub extern "C" fn engine_db_libfile_orientation(obj: &LibFile) -> i32 {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_db_libfile_property(obj: &LibFile, idx: PropertyIndex) -> i32 {
-    obj.property(idx)
+pub extern "C" fn engine_db_libfile_property(obj: &LibFile, idx: NiepcePropertyIdx) -> i32 {
+    obj.property(Np::Index(idx))
 }
 
 #[no_mangle]
@@ -329,6 +330,10 @@ pub extern "C" fn engine_db_libfile_file_type(obj: &LibFile) -> FileType {
 }
 
 #[no_mangle]
-pub extern "C" fn engine_db_libfile_set_property(obj: &mut LibFile, idx: PropertyIndex, v: i32) {
-    obj.set_property(idx, v);
+pub extern "C" fn engine_db_libfile_set_property(
+    obj: &mut LibFile,
+    idx: NiepcePropertyIdx,
+    v: i32,
+) {
+    obj.set_property(Np::Index(idx), v);
 }

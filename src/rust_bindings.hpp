@@ -1,7 +1,7 @@
 /*
  * niepce - rust_bindings.hpp
  *
- * Copyright (C) 2017-2018 Hubert Figuiere
+ * Copyright (C) 2017-2021 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,15 +21,14 @@
 
 #include <gtk/gtk.h>
 
-#include "engine/db/properties-enum.hpp"
-
 namespace ffi {
 class rust_str;
 struct Utc;
 template <class T>
 struct DateTime;
 typedef rust_str str;
-typedef eng::NiepceProperties Np;
+struct NiepcePropertyBag;
+struct NiepcePropertySet;
 }
 
 #include "target/fwk_bindings.h"
@@ -40,14 +39,16 @@ namespace fwk {
 
 typedef ffi::ExempiManager ExempiManager;
 typedef ffi::PropertyValue PropertyValue;
-typedef ffi::PropertyBag PropertyBag;
-typedef ffi::PropertySet PropertySet;
+typedef ffi::NiepcePropertyBag PropertyBag;
+typedef ffi::NiepcePropertySet PropertySet;
 typedef ffi::Date Date;
 typedef ffi::RgbColour RgbColour;
 typedef ffi::FileList FileList;
 }
 
 namespace eng {
+typedef ffi::NiepcePropertyIdx Np;
+using NiepcePropertyIdx = ffi::NiepcePropertyIdx;
 typedef ffi::LibraryId library_id_t; // XXX change this to LibraryId
 typedef ffi::FileType FileType;
 typedef ffi::FileStatus FileStatus;
