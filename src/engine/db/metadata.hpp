@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/metadata.hpp
  *
- * Copyright (C) 2008,2011 Hubert Figuiere
+ * Copyright (C) 2008,2011-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,10 +95,6 @@ enum {
 
 /** make a metadata index with a namespace and a value */
 #define MAKE_METADATA_IDX(x,y) (x<<16|y)
-/** get the NS form the metadata index */
-#define METADATA_NS(x) (x >>16)
-/** get the data from the metadata index */
-#define METADATA_DATA(x) (x & 0xffff)
 
 }
 

@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.hpp
  *
- * Copyright (C) 2008-2017 Hubert Figuière
+ * Copyright (C) 2008-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +19,12 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "engine/db/metadata.hpp"
 #include "fwk/base/propertybag.hpp"
 
 #include "rust_bindings.hpp"
 
 namespace eng {
-
-#if RUST_BINDGEN
-class LibMetadata;
-#endif
-
-struct IndexToXmp {
-    const char *ns;
-    const char *property;
-};
-IndexToXmp property_index_to_xmp(fwk::PropertyIndex index);
-
 
 fwk::PropertyBagPtr libmetadata_to_properties(const LibMetadata *meta,
                                               const fwk::PropertySet &propset);

@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/image_list_store.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@ use gtk_sys;
 use once_cell::unsync::OnceCell;
 
 use npc_engine::db::libfile::{FileStatus, LibFile};
+use npc_engine::db::props::np;
 use npc_engine::db::LibraryId;
 use npc_engine::library::notification::{LibNotification, MetadataChange};
 use npc_engine::library::thumbnail_cache::ThumbnailCache;
-use npc_engine::root::eng;
 use npc_fwk::base::PropertyIndex;
 use npc_fwk::toolkit::gdk_utils;
 use npc_fwk::PropertyValue;
@@ -101,10 +101,10 @@ impl ImageListStore {
     }
 
     fn is_property_interesting(idx: PropertyIndex) -> bool {
-        return (idx == eng::NpXmpRatingProp)
-            || (idx == eng::NpXmpLabelProp)
-            || (idx == eng::NpTiffOrientationProp)
-            || (idx == eng::NpNiepceFlagProp);
+        return (idx == np::NpXmpRatingProp)
+            || (idx == np::NpXmpLabelProp)
+            || (idx == np::NpTiffOrientationProp)
+            || (idx == np::NpNiepceFlagProp);
     }
 
     fn get_iter_from_id(&self, id: LibraryId) -> Option<&gtk::TreeIter> {

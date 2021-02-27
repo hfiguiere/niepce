@@ -1,7 +1,7 @@
 /*
  * niepce - engine/mod.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,3 @@ extern crate npc_fwk;
 
 pub mod db;
 pub mod library;
-
-#[allow(clippy::all)]
-mod bindings {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
-pub use bindings::*;

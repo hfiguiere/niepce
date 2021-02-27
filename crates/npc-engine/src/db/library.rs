@@ -27,6 +27,8 @@ use std::sync::mpsc;
 use chrono::Utc;
 use rusqlite;
 
+use super::props::np::*;
+use super::props::NiepceProperties as Np;
 use super::{FromDb, LibraryId};
 use crate::db::filebundle::{FileBundle, Sidecar};
 use crate::db::keyword::Keyword;
@@ -37,8 +39,6 @@ use crate::db::libfolder;
 use crate::db::libfolder::LibFolder;
 use crate::db::libmetadata::LibMetadata;
 use crate::library::notification::LibNotification;
-use crate::root::eng;
-use crate::root::eng::NiepceProperties as Np;
 use npc_fwk;
 use npc_fwk::PropertyValue;
 
@@ -882,20 +882,18 @@ impl Library {
     }
 
     pub fn set_metadata(&self, file_id: LibraryId, meta: Np, value: &PropertyValue) -> Result<()> {
+        #[allow(non_upper_case_globals)]
         match meta {
-            eng::NpXmpRatingProp
-            | eng::NpXmpLabelProp
-            | eng::NpTiffOrientationProp
-            | eng::NpNiepceFlagProp => {
+            NpXmpRatingProp | NpXmpLabelProp | NpTiffOrientationProp | NpNiepceFlagProp => {
                 match *value {
                     PropertyValue::Int(i) => {
                         // internal
                         // make the column mapping more generic.
                         let column = match meta {
-                            eng::NpXmpRatingProp => "rating",
-                            eng::NpXmpLabelProp => "label",
-                            eng::NpTiffOrientationProp => "orientation",
-                            eng::NpNiepceFlagProp => "flag",
+                            NpXmpRatingProp => "rating",
+                            NpXmpLabelProp => "label",
+                            NpTiffOrientationProp => "orientation",
+                            NpNiepceFlagProp => "flag",
                             _ => unreachable!(),
                         };
                         if !column.is_empty() {
@@ -905,7 +903,7 @@ impl Library {
                     _ => err_out!("improper value type for {:?}", meta),
                 }
             }
-            eng::NpIptcKeywordsProp => {
+            NpIptcKeywordsProp => {
                 self.unassign_all_keywords_for_file(file_id)?;
 
                 match *value {

@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientinterface.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
 use std::path::PathBuf;
 
 use npc_engine::db::library::Managed;
+use npc_engine::db::props::NiepceProperties as Np;
 use npc_engine::db::LibraryId;
-use npc_engine::root::eng::NiepceProperties as Np;
 use npc_fwk::base::PropertyValue;
 
 /// Client interface.

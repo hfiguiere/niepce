@@ -86,11 +86,6 @@ extern const char * UFRAW_INTEROP_NS_PREFIX;
 
 namespace fwk {
 
-#if RUST_BINDGEN
-class Date;
-class ExempiManager;
-#endif
-
 class XmpMeta;
 typedef std::shared_ptr<ExempiManager> ExempiManagerPtr;
 

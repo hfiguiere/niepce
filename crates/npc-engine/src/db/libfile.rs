@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libfile.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,10 @@ use std::ffi::CString;
 use std::path::{Path, PathBuf};
 
 use super::fsfile::FsFile;
+use super::props::np;
+use super::props::NiepceProperties as Np;
 use super::FromDb;
 use super::LibraryId;
-use crate::root::eng;
-use crate::root::eng::NiepceProperties as Np;
 use npc_fwk;
 use npc_fwk::base::PropertyIndex;
 
@@ -196,20 +196,20 @@ impl LibFile {
 
     pub fn property(&self, idx: Np) -> i32 {
         match idx {
-            eng::NpTiffOrientationProp => self.orientation(),
-            eng::NpXmpRatingProp => self.rating(),
-            eng::NpXmpLabelProp => self.label(),
-            eng::NpNiepceFlagProp => self.flag(),
+            np::NpTiffOrientationProp => self.orientation(),
+            np::NpXmpRatingProp => self.rating(),
+            np::NpXmpLabelProp => self.label(),
+            np::NpNiepceFlagProp => self.flag(),
             _ => -1,
         }
     }
 
     pub fn set_property(&mut self, idx: Np, value: i32) {
         match idx {
-            eng::NpTiffOrientationProp => self.set_orientation(value),
-            eng::NpXmpRatingProp => self.set_rating(value),
-            eng::NpXmpLabelProp => self.set_label(value),
-            eng::NpNiepceFlagProp => self.set_flag(value),
+            np::NpTiffOrientationProp => self.set_orientation(value),
+            np::NpXmpRatingProp => self.set_rating(value),
+            np::NpXmpLabelProp => self.set_label(value),
+            np::NpNiepceFlagProp => self.set_flag(value),
             _ => err_out!("invalid property {:?} - noop", idx),
         };
     }

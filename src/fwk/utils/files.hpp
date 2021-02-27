@@ -27,15 +27,12 @@
 
 #include <functional>
 
-#if !RUST_BINDGEN
 #include <giomm/fileinfo.h>
-#endif
 
 #include "rust_bindings.hpp"
 
 namespace fwk {
 
-#if !RUST_BINDGEN
 /** wrapper around g_dir_make_tmp() */
 std::string make_tmp_dir(const std::string& base);
 
@@ -44,7 +41,6 @@ bool filter_ext(const Glib::RefPtr<Gio::FileInfo> & file,
                 const std::string & ext);
 bool filter_xmp_out(const Glib::RefPtr<Gio::FileInfo> & file);
 bool filter_only_media(const Glib::RefPtr<Gio::FileInfo> & file);
-#endif
 
 typedef std::shared_ptr<ffi::FileList> FileListPtr;
 

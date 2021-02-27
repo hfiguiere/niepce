@@ -19,8 +19,6 @@
 
 #pragma once
 
-#if !RUST_BINDGEN
-
 #include <gtk/gtk.h>
 
 #include "engine/db/properties-enum.hpp"
@@ -68,5 +66,3 @@ namespace ui {
   using ffi::dialog_request_new_folder;
   using ffi::dialog_confirm;
 }
-
-#endif

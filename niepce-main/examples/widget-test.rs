@@ -34,19 +34,19 @@ use niepce_rust::niepce::ui::thumb_strip_view::ThumbStripView;
 use npc_fwk::toolkit::widgets::rating_label::RatingLabel;
 
 fn init() -> Result<(), Error> {
-/*
-    // load the gresource binary at build time and include/link it into the final
-    // binary.
-    let res_bytes = include_bytes!("gresource.gresource");
+    /*
+        // load the gresource binary at build time and include/link it into the final
+        // binary.
+        let res_bytes = include_bytes!("gresource.gresource");
 
-    // Create Resource it will live as long the value lives.
-    let gbytes = Bytes::from_static(res_bytes.as_ref());
-    let resource = Resource::from_data(&gbytes)?;
+        // Create Resource it will live as long the value lives.
+        let gbytes = Bytes::from_static(res_bytes.as_ref());
+        let resource = Resource::from_data(&gbytes)?;
 
-    // Register the resource so it won't be dropped and will continue to live in
-    // memory.
-    resources_register(&resource);
-*/
+        // Register the resource so it won't be dropped and will continue to live in
+        // memory.
+        resources_register(&resource);
+    */
     Ok(())
 }
 

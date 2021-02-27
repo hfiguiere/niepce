@@ -18,6 +18,7 @@ RUST_SOURCES = \
 	@top_srcdir@/crates/npc-engine/src/db/libmetadata.rs \
 	@top_srcdir@/crates/npc-engine/src/db/library.rs \
 	@top_srcdir@/crates/npc-engine/src/db/mod.rs \
+	@top_srcdir@/crates/npc-engine/src/db/props.rs \
 	@top_srcdir@/crates/npc-engine/src/library/commands.rs \
 	@top_srcdir@/crates/npc-engine/src/library/mod.rs \
 	@top_srcdir@/crates/npc-engine/src/library/notification.rs \

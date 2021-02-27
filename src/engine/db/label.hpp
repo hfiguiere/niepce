@@ -1,7 +1,7 @@
 /*
  * niepce - engine/db/label.hpp
  *
- * Copyright (C) 2009-2013 Hubert Figuiere
+ * Copyright (C) 2009-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,6 @@
 
 namespace eng {
 
-
-#if RUST_BINDGEN
-class Label;
-#endif
 typedef std::shared_ptr<Label> LabelPtr;
 typedef std::vector<LabelPtr> LabelList;
 typedef std::shared_ptr<LabelList> LabelListPtr;

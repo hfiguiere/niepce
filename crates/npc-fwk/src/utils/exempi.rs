@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/exempi.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ use exempi::Xmp;
 
 use super::exiv2;
 
-const NIEPCE_XMP_NAMESPACE: &str = "http://xmlns.figuiere.net/ns/niepce/1.0";
-const NIEPCE_XMP_NS_PREFIX: &str = "niepce";
+pub const NIEPCE_XMP_NAMESPACE: &str = "http://xmlns.figuiere.net/ns/niepce/1.0";
+pub const NIEPCE_XMP_NS_PREFIX: &str = "niepce";
 const UFRAW_INTEROP_NAMESPACE: &str = "http://xmlns.figuiere.net/ns/ufraw_interop/1.0";
 const UFRAW_INTEROP_NS_PREFIX: &str = "ufrint";
 
@@ -39,6 +39,7 @@ pub const NS_EXIF: &str = "http://ns.adobe.com/exif/1.0/";
 pub const NS_EXIF_EX: &str = "http://cipa.jp/exif/1.0/";
 pub const NS_DC: &str = "http://purl.org/dc/elements/1.1/";
 pub const NS_AUX: &str = "http://ns.adobe.com/exif/1.0/aux/";
+pub const NS_PHOTOSHOP: &str = "http://ns.adobe.com/photoshop/1.0/";
 
 const XMP_TRUE: &str = "True";
 const XMP_FALSE: &str = "False";

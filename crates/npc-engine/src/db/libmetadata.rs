@@ -1,7 +1,7 @@
 /*
  * niepce - eng/db/libmetadata.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 use chrono::Utc;
 use exempi;
 use rusqlite;
-use std::ffi::CStr;
 
+use super::libfile::FileType;
+use super::props;
+use super::props::np::*;
+use super::props::NiepceProperties as Np;
 use super::{FromDb, LibraryId};
-use crate::db::libfile::FileType;
-use crate::root::eng;
-use crate::root::eng::NiepceProperties as Np;
 use npc_fwk::utils::exempi::{NS_DC, NS_XAP};
 use npc_fwk::{xmp_date_from, PropertyBag, PropertySet, PropertyValue, XmpMeta};
 
@@ -40,19 +40,14 @@ pub struct LibMetadata {
 }
 
 struct IndexToXmp {
-    pub ns: String,
-    pub property: String,
+    pub ns: &'static str,
+    pub property: &'static str,
 }
 
 fn property_index_to_xmp(meta: Np) -> Option<IndexToXmp> {
-    let index = unsafe { crate::root::eng::property_index_to_xmp(meta as u32) };
-    if index.ns.is_null() || index.property.is_null() {
-        err_out!("property {} not found", meta as u32);
-        return None;
-    }
-    Some(IndexToXmp {
-        ns: String::from(unsafe { CStr::from_ptr(index.ns) }.to_string_lossy()),
-        property: String::from(unsafe { CStr::from_ptr(index.property) }.to_string_lossy()),
+    props::PROP_TO_XMP_MAP.get(&meta).map(|t| IndexToXmp {
+        ns: t.0,
+        property: t.1,
     })
 }
 
@@ -195,28 +190,29 @@ impl LibMetadata {
     pub fn to_properties(&self, propset: &PropertySet) -> PropertyBag {
         let mut props = PropertyBag::new();
         for prop_id in propset {
+            #[allow(non_upper_case_globals)]
             match *prop_id {
-                eng::NpXmpRatingProp => {
+                NpXmpRatingProp => {
                     if let Some(rating) = self.xmp.rating() {
                         props.set_value(*prop_id, PropertyValue::Int(rating));
                     }
                 }
-                eng::NpXmpLabelProp => {
+                NpXmpLabelProp => {
                     if let Some(label) = self.xmp.label() {
                         props.set_value(*prop_id, PropertyValue::String(label));
                     }
                 }
-                eng::NpTiffOrientationProp => {
+                NpTiffOrientationProp => {
                     if let Some(orientation) = self.xmp.orientation() {
                         props.set_value(*prop_id, PropertyValue::Int(orientation));
                     }
                 }
-                eng::NpExifDateTimeOriginalProp => {
+                NpExifDateTimeOriginalProp => {
                     if let Some(date) = self.xmp.creation_date() {
                         props.set_value(*prop_id, PropertyValue::Date(date));
                     }
                 }
-                eng::NpIptcKeywordsProp => {
+                NpIptcKeywordsProp => {
                     let mut iter = exempi::XmpIterator::new(
                         &self.xmp.xmp,
                         NS_DC,
@@ -233,18 +229,18 @@ impl LibMetadata {
                     }
                     props.set_value(*prop_id, PropertyValue::StringArray(keywords));
                 }
-                eng::NpFileNameProp => {
+                NpFileNameProp => {
                     props.set_value(*prop_id, PropertyValue::String(self.name.clone()));
                 }
-                eng::NpFileTypeProp => {
+                NpFileTypeProp => {
                     let file_type: &str = self.file_type.into();
                     props.set_value(*prop_id, PropertyValue::String(String::from(file_type)));
                 }
-                eng::NpFileSizeProp => {}
-                eng::NpFolderProp => {
+                NpFileSizeProp => {}
+                NpFolderProp => {
                     props.set_value(*prop_id, PropertyValue::String(self.folder.clone()));
                 }
-                eng::NpSidecarsProp => {
+                NpSidecarsProp => {
                     props.set_value(*prop_id, PropertyValue::StringArray(self.sidecars.clone()));
                 }
                 _ => {

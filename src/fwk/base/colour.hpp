@@ -26,10 +26,6 @@
 
 namespace fwk {
 
-#if RUST_BINDGEN
-class RgbColour;
-#endif
-
 typedef std::shared_ptr<RgbColour> RgbColourPtr;
 
 RgbColourPtr rgbcolour_new(uint16_t r, uint16_t g, uint16_t b);

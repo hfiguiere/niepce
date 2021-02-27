@@ -1,7 +1,7 @@
 /*
  * niepce - npc-engine/library/commands.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ use crate::db::label::Label;
 use crate::db::libfolder::LibFolder;
 use crate::db::library;
 use crate::db::library::{Library, Managed};
+use crate::db::props::NiepceProperties as Np;
 use crate::db::LibraryId;
-use crate::root::eng::NiepceProperties as Np;
 use npc_fwk::PropertyValue;
 
 pub fn cmd_list_all_keywords(lib: &Library) -> bool {

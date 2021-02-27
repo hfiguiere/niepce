@@ -34,7 +34,6 @@ namespace fwk {
 
 typedef uint32_t PropertyIndex;
 
-#if !RUST_BINDGEN
 typedef std::shared_ptr<PropertyValue> PropertyValuePtr;
 
 PropertyValuePtr property_value_new(const std::string&);
@@ -44,12 +43,6 @@ PropertyValuePtr property_value_new(const DatePtr&);
 
 std::string property_value_get_string(const PropertyValue &value);
 std::vector<std::string> property_value_get_string_array(const PropertyValue &value);
-#endif
-
-#if RUST_BINDGEN
-class PropertyBag;
-class PropertySet;
-#endif
 
 typedef std::shared_ptr<PropertySet> PropertySetPtr;
 
@@ -61,7 +54,6 @@ PropertySetPtr property_set_new();
  */
 typedef std::shared_ptr<PropertyBag> PropertyBagPtr;
 
-#if !RUST_BINDGEN
 PropertyBagPtr property_bag_new();
 PropertyBagPtr property_bag_wrap(PropertyBag*);
 
@@ -73,7 +65,6 @@ std::string property_value_get_string(const PropertyValue& v);
 bool set_value_for_property(PropertyBag&, PropertyIndex idx, const PropertyValue & value);
 /** return property or an empty option */
 fwk::Option<PropertyValuePtr> get_value_for_property(const PropertyBag&, PropertyIndex idx);
-#endif
 
 }
 

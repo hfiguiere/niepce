@@ -1,7 +1,7 @@
 /*
  * niepce - libraryclient/clientimpl.rs
  *
- * Copyright (C) 2017-2019 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,11 @@ use std::thread;
 
 use super::clientinterface::{ClientInterface, ClientInterfaceSync};
 use npc_engine::db::library::Managed;
+use npc_engine::db::props::NiepceProperties as Np;
 use npc_engine::db::{Library, LibraryId};
 use npc_engine::library::commands;
 use npc_engine::library::notification::LibNotification;
 use npc_engine::library::op::Op;
-use npc_engine::root::eng::NiepceProperties as Np;
 use npc_fwk::base::PropertyValue;
 
 pub struct ClientImpl {
