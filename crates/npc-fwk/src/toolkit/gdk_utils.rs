@@ -22,6 +22,7 @@ use std::path::Path;
 
 use gdk_pixbuf::prelude::*;
 use libopenraw_rs as or;
+use libopenraw_rs::DataType;
 
 /// Scale the pixbuf to fit in a square of %dim pixels
 pub fn gdkpixbuf_scale_to_fit(
@@ -72,7 +73,7 @@ fn thumbnail_to_pixbuf(thumbnail: &or::Thumbnail, orientation: i32) -> Option<gd
     let buf = thumbnail.get_data().ok()?;
 
     let pixbuf = match format {
-        or::DataType::Pixmap8Rgb => {
+        DataType::Pixmap8Rgb => {
             let (x, y) = thumbnail.get_dimensions();
 
             let bytes = glib::Bytes::from(buf);
@@ -86,7 +87,7 @@ fn thumbnail_to_pixbuf(thumbnail: &or::Thumbnail, orientation: i32) -> Option<gd
                 x as i32 * 3,
             ))
         }
-        or::DataType::Jpeg | or::DataType::Tiff | or::DataType::Png => {
+        DataType::Jpeg | DataType::Tiff | DataType::Png => {
             let loader = gdk_pixbuf::PixbufLoader::new();
 
             if let Err(err) = loader.write(&buf) {

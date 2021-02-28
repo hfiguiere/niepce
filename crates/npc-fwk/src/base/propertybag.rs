@@ -26,6 +26,12 @@ pub struct PropertyBag<Index> {
     pub map: BTreeMap<Index, PropertyValue>,
 }
 
+impl<Index: Ord + Copy> Default for PropertyBag<Index> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<Index: Ord + Copy> PropertyBag<Index> {
     pub fn new() -> Self {
         Self {
