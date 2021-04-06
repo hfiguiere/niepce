@@ -163,7 +163,7 @@ bool ImageCanvas::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
             } else {
                 img_s = _get_error_placeholder();
             }
-            DBG_ASSERT(img_s, "img_s not loaded");
+            DBG_ASSERT(!!img_s, "img_s not loaded");
             img_w = img_s->get_width();
             img_h = img_s->get_height();
         }
