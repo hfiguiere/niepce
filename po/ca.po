@@ -76,7 +76,7 @@ msgstr "Editor de fotografia avançat"
 
 #: data/niepce.appdata.xml.in:12
 msgid "Niepce Digital is an application used to manage and edit photos."
-msgstr "Niepce Digital és una aplicació usada per gestionar i editar fotos."
+msgstr "Niepce Digital és una aplicació usada per a gestionar i editar fotos."
 
 #: data/niepce.appdata.xml.in:15
 msgid "Features:"
@@ -564,7 +564,7 @@ msgstr ""
 
 #: src/niepce/ui/niepcewindow.cpp:81
 msgid "Undo"
-msgstr "Desfés "
+msgstr "Desfés"
 
 #: src/niepce/ui/niepcewindow.cpp:92
 msgid "Import..."
