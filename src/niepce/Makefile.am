@@ -31,13 +31,22 @@ niepce_LDADD = \
 	-ldl \
 	$(NULL)
 
+gladefiles = ui/dialogs/preferences.ui \
+	ui/dialogs/importdialog.ui \
+	ui/dialogs/editlabels.ui \
+	ui/dialogs/importers/directoryimporterui.ui \
+	ui/dialogs/importers/cameraimporterui.ui \
+	$(NULL)
+
+EXTRA_DIST = $(gladefiles)
+
 ## Resources compilation
-npc-resources.c: gresource.xml
+npc-resources.c: gresource.xml $(gladefiles)
 	$(AM_V_GEN) glib-compile-resources \
                 --sourcedir=$(top_srcdir) --target=$@ \
                 --generate-source --c-name npc $(srcdir)/gresource.xml
 
-npc-resources.h: gresource.xml
+npc-resources.h: gresource.xml $(gladefiles)
 	$(AM_V_GEN) glib-compile-resources                                  \
                 --sourcedir=$(top_srcdir) --target=$@ \
 		--generate-header --c-name npc $(srcdir)/gresource.xml

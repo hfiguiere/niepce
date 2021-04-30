@@ -1,19 +1,9 @@
 
-
-gladefiles = dialogs/preferences.ui \
-	dialogs/importdialog.ui \
-	dialogs/editlabels.ui \
-	dialogs/importers/directoryimporterui.ui \
-	dialogs/importers/cameraimporterui.ui \
-	$(NULL)
-
 AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(srcdir)/.. \
 	-I$(top_srcdir)/src/ext \
 	-DDATADIR=\"$(datadir)\" \
 	@FRAMEWORK_CFLAGS@ @GPHOTO_CFLAGS@ \
 	$(NULL)
-
-EXTRA_DIST = $(gladefiles)
 
 noinst_LIBRARIES = libniepceui.a
 
