@@ -237,7 +237,7 @@ impl ImageListStore {
                 .get_value(&iter, ColIndex::File as i32)
                 .get::<&StoreLibFile>()
             {
-                libfile.map(|v| v.0.clone());
+                return libfile.map(|v| v.0.clone());
             }
         }
         None
