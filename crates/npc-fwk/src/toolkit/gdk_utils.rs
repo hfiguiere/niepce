@@ -30,8 +30,8 @@ pub fn gdkpixbuf_scale_to_fit(
     dim: i32,
 ) -> Option<gdk_pixbuf::Pixbuf> {
     pix.and_then(|pix| {
-        let orig_h = pix.get_height();
-        let orig_w = pix.get_width();
+        let orig_h = pix.height();
+        let orig_w = pix.width();
         let orig_dim = cmp::max(orig_h, orig_w);
         let ratio: f64 = dim as f64 / orig_dim as f64;
         let width = ratio * orig_w as f64;
@@ -97,7 +97,7 @@ fn thumbnail_to_pixbuf(thumbnail: &or::Thumbnail, orientation: i32) -> Option<gd
             if let Err(err) = loader.close() {
                 err_out!("loader close error: {}", err);
             }
-            loader.get_pixbuf()
+            loader.pixbuf()
         }
         _ => None,
     };

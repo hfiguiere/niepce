@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/thumb_nav.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ use std::rc::Rc;
 
 use once_cell::unsync::OnceCell;
 
-use glib::subclass;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 use gtk;
@@ -31,7 +30,7 @@ use gtk::subclass::prelude::*;
 
 const SCROLL_INC: f64 = 1.;
 const SCROLL_MOVE: f64 = 20.;
-const SCROLL_TIMEOUT: u32 = 20;
+const SCROLL_TIMEOUT: std::time::Duration = std::time::Duration::from_millis(20);
 
 #[repr(i32)]
 #[derive(Clone, Copy, PartialEq)]
@@ -67,34 +66,23 @@ impl From<i32> for ThumbNavMode {
     }
 }
 
-glib_wrapper! {
+glib::wrapper! {
     pub struct ThumbNav(
-        Object<subclass::simple::InstanceStruct<ThumbNavPriv>,
-        subclass::simple::ClassStruct<ThumbNavPriv>,
-        ThumbNavClass>)
+        ObjectSubclass<ThumbNavPriv>)
         @extends gtk::Box, gtk::Container, gtk::Widget;
-
-    match fn {
-        get_type => || ThumbNavPriv::get_type().to_glib(),
-    }
 }
 
 impl ThumbNav {
     pub fn new(thumbview: &gtk::IconView, mode: ThumbNavMode, show_buttons: bool) -> Self {
         let mode_n: i32 = mode.into();
-        glib::Object::new(
-            Self::static_type(),
-            &[
-                ("mode", &mode_n),
-                ("show-buttons", &show_buttons),
-                ("thumbview", thumbview),
-                ("homogeneous", &false),
-                ("spacing", &0),
-            ],
-        )
+        glib::Object::new(&[
+            ("mode", &mode_n),
+            ("show-buttons", &show_buttons),
+            ("thumbview", thumbview),
+            ("homogeneous", &false),
+            ("spacing", &0),
+        ])
         .expect("Failed to create Thumbnail Navigator")
-        .downcast()
-        .expect("Created Thumbnail Navigator is of wrong type")
     }
 }
 
@@ -116,17 +104,17 @@ pub struct ThumbNavPriv {
 
 pub trait ThumbNavExt {
     /// Get whether we show the left and right scroll buttons.
-    fn get_show_buttons(&self) -> bool;
+    fn show_buttons(&self) -> bool;
     /// Set whether we show the left and right scroll buttons.
     fn set_show_buttons(&self, show_buttons: bool);
     /// Get the navigation mode.
-    fn get_mode(&self) -> ThumbNavMode;
+    fn mode(&self) -> ThumbNavMode;
     /// Set the navigation mode.
     fn set_mode(&self, mode: ThumbNavMode);
 }
 
 impl ThumbNavExt for ThumbNav {
-    fn get_show_buttons(&self) -> bool {
+    fn show_buttons(&self) -> bool {
         let priv_ = ThumbNavPriv::from_instance(self);
         priv_.show_buttons.get()
     }
@@ -136,7 +124,7 @@ impl ThumbNavExt for ThumbNav {
         priv_.set_show_buttons(show_buttons);
     }
 
-    fn get_mode(&self) -> ThumbNavMode {
+    fn mode(&self) -> ThumbNavMode {
         let priv_ = ThumbNavPriv::from_instance(self);
         priv_.mode.get()
     }
@@ -149,33 +137,33 @@ impl ThumbNavExt for ThumbNav {
 
 impl ThumbNavPriv {
     fn left_button_clicked(&self) {
-        if let Some(adj) = self.widgets.get().unwrap().sw.get_hadjustment() {
+        if let Some(adj) = self.widgets.get().map(|w| w.sw.hadjustment()) {
             let adj = Rc::new(adj);
             let i = self.left_i.clone();
-            gtk::timeout_add(SCROLL_TIMEOUT, move || ThumbNavPriv::scroll_left(&i, &adj));
+            glib::timeout_add_local(SCROLL_TIMEOUT, move || ThumbNavPriv::scroll_left(&i, &adj));
         }
     }
 
     fn right_button_clicked(&self) {
-        if let Some(adj) = self.widgets.get().unwrap().sw.get_hadjustment() {
+        if let Some(adj) = self.widgets.get().map(|w| w.sw.hadjustment()) {
             let adj = Rc::new(adj);
             let i = self.right_i.clone();
-            gtk::timeout_add(SCROLL_TIMEOUT, move || ThumbNavPriv::scroll_right(&i, &adj));
+            glib::timeout_add_local(SCROLL_TIMEOUT, move || ThumbNavPriv::scroll_right(&i, &adj));
         }
     }
 
     fn adj_changed(&self, adj: &gtk::Adjustment) {
         if let Some(widgets) = self.widgets.get() {
-            let upper = adj.get_upper();
-            let page_size = adj.get_page_size();
+            let upper = adj.upper();
+            let page_size = adj.page_size();
             widgets.button_right.set_sensitive(upper > page_size)
         }
     }
 
     fn adj_value_changed(&self, adj: &gtk::Adjustment) {
-        let upper = adj.get_upper();
-        let page_size = adj.get_page_size();
-        let value = adj.get_value();
+        let upper = adj.upper();
+        let page_size = adj.page_size();
+        let value = adj.value();
 
         if let Some(w) = self.widgets.get() {
             w.button_left.set_sensitive(value > 0.0);
@@ -184,12 +172,12 @@ impl ThumbNavPriv {
     }
 
     fn scroll_left(ref_i: &Cell<f64>, adj: &gtk::Adjustment) -> glib::Continue {
-        let value = adj.get_value();
+        let value = adj.value();
         let i = ref_i.get();
 
         if i == SCROLL_MOVE || value - SCROLL_INC < 0.0 {
             ref_i.set(0.0);
-            if let Err(err) = adj.emit("value-changed", &[]) {
+            if let Err(err) = adj.emit_by_name("value-changed", &[]) {
                 err_out!("signal emit value-changed {}", err);
             }
             return Continue(false);
@@ -204,9 +192,9 @@ impl ThumbNavPriv {
     }
 
     fn scroll_right(ref_i: &Cell<f64>, adj: &gtk::Adjustment) -> glib::Continue {
-        let upper = adj.get_upper();
-        let page_size = adj.get_page_size();
-        let value = adj.get_value();
+        let upper = adj.upper();
+        let page_size = adj.page_size();
+        let value = adj.value();
         let i = ref_i.get();
 
         if i == SCROLL_MOVE || value + SCROLL_INC > upper - page_size {
@@ -296,49 +284,11 @@ impl ThumbNavPriv {
     }
 }
 
-static PROPERTIES: [subclass::Property; 3] = [
-    subclass::Property("show-buttons", |show_buttons| {
-        glib::ParamSpec::boolean(
-            show_buttons,
-            "Show Buttons",
-            "Whether to show navigation buttons or not",
-            true, // Default value
-            glib::ParamFlags::READWRITE,
-        )
-    }),
-    subclass::Property("thumbview", |thumbview| {
-        glib::ParamSpec::object(
-            thumbview,
-            "Thumbnail View",
-            "The internal thumbnail viewer widget",
-            gtk::IconView::static_type(),
-            glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT_ONLY,
-        )
-    }),
-    subclass::Property("mode", |mode| {
-        glib::ParamSpec::int(
-            mode,
-            "Mode",
-            "Thumb navigator mode",
-            ThumbNavMode::OneRow.into(),
-            ThumbNavMode::MultipleRows.into(),
-            ThumbNavMode::OneRow.into(),
-            glib::ParamFlags::READWRITE,
-        )
-    }),
-];
-
+#[glib::object_subclass]
 impl ObjectSubclass for ThumbNavPriv {
     const NAME: &'static str = "NpcThumbNav";
+    type Type = ThumbNav;
     type ParentType = gtk::Box;
-    type Instance = subclass::simple::InstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
-
-    glib_object_subclass!();
-
-    fn class_init(klass: &mut Self::Class) {
-        klass.install_properties(&PROPERTIES);
-    }
 
     fn new() -> Self {
         Self {
@@ -353,50 +303,45 @@ impl ObjectSubclass for ThumbNavPriv {
 }
 
 impl ObjectImpl for ThumbNavPriv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &ThumbNav) {
         self.parent_constructed(obj);
-
-        let self_ = obj.downcast_ref::<ThumbNav>().unwrap();
 
         let button_left = gtk::Button::new();
         button_left.set_relief(gtk::ReliefStyle::None);
         let arrow = gtk::Image::from_icon_name(Some(&"pan-start-symbolic"), gtk::IconSize::Button);
         button_left.add(&arrow);
         button_left.set_size_request(20, 0);
-        self_.pack_start(&button_left, false, false, 0);
-        button_left.connect_clicked(clone!(@weak self_ => move |_| {
-            let priv_ = ThumbNavPriv::from_instance(&self_);
+        obj.pack_start(&button_left, false, false, 0);
+        button_left.connect_clicked(clone!(@weak obj => move |_| {
+            let priv_ = ThumbNavPriv::from_instance(&obj);
             priv_.left_button_clicked();
         }));
 
         let sw = gtk::ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
         sw.set_shadow_type(gtk::ShadowType::In);
         sw.set_policy(gtk::PolicyType::Always, gtk::PolicyType::Never);
-        if let Some(adj) = sw.get_hadjustment() {
-            adj.connect_changed(clone!(@weak self_ => move |adj| {
-                let priv_ = ThumbNavPriv::from_instance(&self_);
-                priv_.adj_changed(adj);
-            }));
-            adj.connect_value_changed(clone!(@weak self_ => move |adj| {
-                let priv_ = ThumbNavPriv::from_instance(&self_);
-                priv_.adj_value_changed(adj);
-            }));
-        }
-        self_.pack_start(&sw, true, true, 0);
+        let adj = sw.hadjustment();
+        adj.connect_changed(clone!(@weak obj => move |adj| {
+            let priv_ = ThumbNavPriv::from_instance(&obj);
+            priv_.adj_changed(adj);
+        }));
+        adj.connect_value_changed(clone!(@weak obj => move |adj| {
+            let priv_ = ThumbNavPriv::from_instance(&obj);
+            priv_.adj_value_changed(adj);
+        }));
+        obj.pack_start(&sw, true, true, 0);
 
         let button_right = gtk::Button::new();
         button_right.set_relief(gtk::ReliefStyle::None);
         let arrow = gtk::Image::from_icon_name(Some(&"pan-end-symbolic"), gtk::IconSize::Button);
         button_right.add(&arrow);
         button_right.set_size_request(20, 0);
-        self_.pack_start(&button_right, false, false, 0);
-        button_right.connect_clicked(clone!(@weak self_ => move |_| {
-            let priv_ = ThumbNavPriv::from_instance(&self_);
+        obj.pack_start(&button_right, false, false, 0);
+        button_right.connect_clicked(clone!(@weak obj => move |_| {
+            let priv_ = ThumbNavPriv::from_instance(&obj);
             priv_.right_button_clicked();
         }));
-        let adj = sw.get_hadjustment();
+        let adj = sw.hadjustment();
 
         if self
             .widgets
@@ -410,37 +355,72 @@ impl ObjectImpl for ThumbNavPriv {
             err_out!("Widgets already set.");
         }
 
-        if let Some(adj) = adj {
-            // The value-changed signal might not be emitted because the value is already 0.
-            // Ensure the state first.
-            self.adj_value_changed(&adj);
-            if let Err(err) = adj.emit("value-changed", &[]) {
-                err_out!("ThumbNav::constructed: signal emit failed: {}", err);
-            }
+        // The value-changed signal might not be emitted because the value is already 0.
+        // Ensure the state first.
+        self.adj_value_changed(&adj);
+        if let Err(err) = adj.emit_by_name("value-changed", &[]) {
+            err_out!("ThumbNav::constructed: signal emit failed: {}", err);
         }
 
         self.add_thumbview();
     }
 
-    fn set_property(&self, _obj: &glib::Object, id: usize, value: &glib::Value) {
-        let prop = &PROPERTIES[id];
-        match *prop {
-            subclass::Property("show-buttons", ..) => {
+    fn properties() -> &'static [glib::ParamSpec] {
+        use once_cell::sync::Lazy;
+        static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+            vec![
+                glib::ParamSpec::new_boolean(
+                    "show-buttons",
+                    "Show Buttons",
+                    "Whether to show navigation buttons or not",
+                    true, // Default value
+                    glib::ParamFlags::READWRITE,
+                ),
+                glib::ParamSpec::new_object(
+                    "thumbview",
+                    "Thumbnail View",
+                    "The internal thumbnail viewer widget",
+                    gtk::IconView::static_type(),
+                    glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT_ONLY,
+                ),
+                glib::ParamSpec::new_int(
+                    "mode",
+                    "Mode",
+                    "Thumb navigator mode",
+                    ThumbNavMode::OneRow.into(),
+                    ThumbNavMode::MultipleRows.into(),
+                    ThumbNavMode::OneRow.into(),
+                    glib::ParamFlags::READWRITE,
+                ),
+            ]
+        });
+        PROPERTIES.as_ref()
+    }
+
+    fn set_property(
+        &self,
+        _obj: &ThumbNav,
+        _id: usize,
+        value: &glib::Value,
+        pspec: &glib::ParamSpec,
+    ) {
+        match pspec.name() {
+            "show-buttons" => {
                 let show_buttons = value
-                    .get_some()
+                    .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.set_show_buttons(show_buttons);
             }
-            subclass::Property("thumbview", ..) => {
+            "thumbview" => {
                 let thumbview: Option<gtk::IconView> = value
                     .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.thumbview.replace(thumbview);
                 self.add_thumbview();
             }
-            subclass::Property("mode", ..) => {
+            "mode" => {
                 let mode: i32 = value
-                    .get_some()
+                    .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.set_mode(ThumbNavMode::from(mode));
             }
@@ -448,15 +428,13 @@ impl ObjectImpl for ThumbNavPriv {
         }
     }
 
-    fn get_property(&self, _obj: &glib::Object, id: usize) -> Result<glib::Value, ()> {
-        let prop = &PROPERTIES[id];
-
-        match *prop {
-            subclass::Property("show-buttons", ..) => Ok(self.show_buttons.get().to_value()),
-            subclass::Property("thumbview", ..) => Ok(self.thumbview.borrow().to_value()),
-            subclass::Property("mode", ..) => {
+    fn property(&self, _obj: &ThumbNav, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+        match pspec.name() {
+            "show-buttons" => self.show_buttons.get().to_value(),
+            "thumbview" => self.thumbview.borrow().to_value(),
+            "mode" => {
                 let n: i32 = self.mode.get().into();
-                Ok(n.to_value())
+                n.to_value()
             }
             _ => unimplemented!(),
         }

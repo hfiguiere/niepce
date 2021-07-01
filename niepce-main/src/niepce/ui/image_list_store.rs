@@ -25,7 +25,6 @@ use gdk_pixbuf_sys;
 use glib::translate::*;
 use gtk;
 use gtk::prelude::*;
-use gtk::subclass::prelude::*;
 use gtk_sys;
 
 use once_cell::unsync::OnceCell;
@@ -66,7 +65,7 @@ impl ImageListStore {
     pub fn new() -> Self {
         let col_types: [glib::Type; 4] = [
             gdk_pixbuf::Pixbuf::static_type(),
-            StoreLibFile::get_type(),
+            StoreLibFile::static_type(),
             gdk_pixbuf::Pixbuf::static_type(),
             glib::Type::I32,
         ];
@@ -85,7 +84,7 @@ impl ImageListStore {
     fn get_loading_icon(&self) -> Option<&gdk_pixbuf::Pixbuf> {
         self.image_loading_icon
             .get_or_init(|| {
-                if let Some(theme) = gtk::IconTheme::get_default() {
+                if let Some(theme) = gtk::IconTheme::default() {
                     if let Ok(icon) =
                         theme.load_icon("image-loading", 32, gtk::IconLookupFlags::USE_BUILTIN)
                     {
@@ -204,10 +203,12 @@ impl ImageListStore {
                     let pixbuf = t.pix.make_pixbuf();
                     self.store.set(
                         iter,
-                        &[ColIndex::Thumb as u32, ColIndex::StripThumb as u32],
                         &[
-                            &pixbuf,
-                            &gdk_utils::gdkpixbuf_scale_to_fit(pixbuf.as_ref(), 100),
+                            (ColIndex::Thumb as u32, &pixbuf),
+                            (
+                                ColIndex::StripThumb as u32,
+                                &gdk_utils::gdkpixbuf_scale_to_fit(pixbuf.as_ref(), 100),
+                            ),
                         ],
                     );
                 }
@@ -218,10 +219,10 @@ impl ImageListStore {
     }
 
     pub fn get_file_id_at_path(&self, path: &gtk::TreePath) -> LibraryId {
-        if let Some(iter) = self.store.get_iter(&path) {
-            if let Ok(Some(libfile)) = self
+        if let Some(iter) = self.store.iter(&path) {
+            if let Ok(libfile) = self
                 .store
-                .get_value(&iter, ColIndex::File as i32)
+                .value(&iter, ColIndex::File as i32)
                 .get::<&StoreLibFile>()
             {
                 return libfile.0.id();
@@ -232,15 +233,14 @@ impl ImageListStore {
 
     pub fn get_file(&self, id: LibraryId) -> Option<LibFile> {
         if let Some(iter) = self.idmap.get(&id) {
-            if let Ok(libfile) = self
-                .store
-                .get_value(&iter, ColIndex::File as i32)
+            self.store
+                .value(&iter, ColIndex::File as i32)
                 .get::<&StoreLibFile>()
-            {
-                return libfile.map(|v| v.0.clone());
-            }
+                .map(|v| v.0.clone())
+                .ok()
+        } else {
+            None
         }
-        None
     }
 
     pub fn add_row(
@@ -252,16 +252,14 @@ impl ImageListStore {
     ) -> gtk::TreeIter {
         let iter = self.store.append();
         let store_libfile = StoreLibFile(file.clone());
-        let indices: [u32; 4] = [
-            ColIndex::Thumb as u32,
-            ColIndex::File as u32,
-            ColIndex::StripThumb as u32,
-            ColIndex::FileStatus as u32,
-        ];
         self.store.set(
             &iter,
-            &indices,
-            &[&thumb, &store_libfile, &strip_thumb, &(status as i32)],
+            &[
+                (ColIndex::Thumb as u32, &thumb),
+                (ColIndex::File as u32, &store_libfile),
+                (ColIndex::StripThumb as u32, &strip_thumb),
+                (ColIndex::FileStatus as u32, &(status as i32)),
+            ],
         );
         iter
     }
@@ -269,16 +267,21 @@ impl ImageListStore {
     pub fn set_thumbnail(&mut self, id: LibraryId, thumb: &gdk_pixbuf::Pixbuf) {
         if let Some(iter) = self.idmap.get(&id) {
             let strip_thumb = gdk_utils::gdkpixbuf_scale_to_fit(Some(thumb), 100);
-            let indices: [u32; 2] = [ColIndex::Thumb as u32, ColIndex::StripThumb as u32];
             assert!(thumb.ref_count() > 0);
-            self.store.set(iter, &indices, &[thumb, &strip_thumb]);
+            self.store.set(
+                iter,
+                &[
+                    (ColIndex::Thumb as u32, thumb),
+                    (ColIndex::StripThumb as u32, &strip_thumb),
+                ],
+            );
         }
     }
 
     pub fn set_property(&self, iter: &gtk::TreeIter, change: &MetadataChange) {
-        if let Ok(Some(libfile)) = self
+        if let Ok(libfile) = self
             .store
-            .get_value(&iter, ColIndex::File as i32)
+            .value(&iter, ColIndex::File as i32)
             .get::<&StoreLibFile>()
         {
             assert!(libfile.0.id() == change.id);

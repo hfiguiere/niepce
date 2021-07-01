@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/utils/files.rs
  *
- * Copyright (C) 2018-2020 Hubert Figuière
+ * Copyright (C) 2018-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ impl FileList {
     {
         let mut l = FileList::default();
 
-        let dir = gio::File::new_for_path(dir);
-        let dir_path = dir.get_path();
+        let dir = gio::File::for_path(dir);
+        let dir_path = dir.path();
         if dir_path.is_none() {
             err_out!("Couldn't get dir path");
             return l;
@@ -53,18 +53,16 @@ impl FileList {
                     continue;
                 }
                 let finfo = itr.unwrap();
-                let ftype = finfo.get_file_type();
+                let ftype = finfo.file_type();
                 if ftype == gio::FileType::Regular || ftype == gio::FileType::SymbolicLink {
                     if !filter(&finfo) {
                         err_out!("Filtered out");
                         continue;
                     }
-                    if let Some(name) = finfo.get_name() {
-                        if let Some(fullname) = glib::build_filenamev(&[&dir_path, &name]) {
-                            dbg_out!("Found file {:?}", &fullname);
-                            l.0.push(fullname);
-                        }
-                    }
+                    let name = finfo.name();
+                    let fullname = glib::build_filenamev(&[&dir_path, &name]);
+                    dbg_out!("Found file {:?}", &fullname);
+                    l.0.push(fullname);
                 }
             }
         }
@@ -74,7 +72,7 @@ impl FileList {
     }
 
     pub fn file_is_media(fileinfo: &gio::FileInfo) -> bool {
-        if let Some(gmtype) = fileinfo.get_content_type() {
+        if let Some(gmtype) = fileinfo.content_type() {
             let t = guess_type(&gmtype);
             return match t {
                 MType::Image(_) | MType::Movie => true,

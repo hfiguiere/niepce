@@ -22,10 +22,10 @@ use std::cell::Cell;
 
 use gdk::prelude::*;
 use gdk_pixbuf::Pixbuf;
-use glib::subclass;
+use glib;
 use glib::subclass::prelude::*;
+use glib::subclass::Signal;
 use glib::translate::*;
-use glib::Type;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
@@ -41,15 +41,10 @@ const PIXBUFS: Lazy<Pixbufs> = Lazy::new(|| Pixbufs {
     unstar: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-unset-star.png").unwrap(),
 });
 
-glib_wrapper! {
+glib::wrapper! {
     pub struct RatingLabel(
-        Object<subclass::simple::InstanceStruct<RatingLabelPriv>,
-        subclass::simple::ClassStruct<RatingLabelPriv>, RatingLabelClass>)
+        ObjectSubclass<RatingLabelPriv>)
         @extends gtk::DrawingArea, gtk::Widget;
-
-    match fn {
-        get_type => || RatingLabelPriv::get_type().to_glib(),
-    }
 }
 
 pub struct RatingLabelPriv {
@@ -64,40 +59,16 @@ impl RatingLabelPriv {
 
     fn set_rating(&self, rating: i32) {
         self.rating.set(rating);
-        let w = self.get_instance();
+        let w = self.instance();
         w.queue_draw();
     }
 }
 
-static PROPERTIES: [subclass::Property; 1] = [subclass::Property("rating", |rating| {
-    glib::ParamSpec::int(
-        rating,
-        "Rating",
-        "The rating value",
-        0,
-        5,
-        0,
-        glib::ParamFlags::READWRITE,
-    )
-})];
-
+#[glib::object_subclass]
 impl ObjectSubclass for RatingLabelPriv {
     const NAME: &'static str = "RatingLabel";
+    type Type = RatingLabel;
     type ParentType = gtk::DrawingArea;
-    type Instance = subclass::simple::InstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
-
-    glib_object_subclass!();
-
-    fn class_init(klass: &mut Self::Class) {
-        klass.install_properties(&PROPERTIES);
-        klass.add_signal(
-            "rating-changed",
-            glib::SignalFlags::RUN_LAST,
-            &[Type::I32],
-            Type::Unit,
-        );
-    }
 
     fn new() -> Self {
         Self {
@@ -108,17 +79,15 @@ impl ObjectSubclass for RatingLabelPriv {
 }
 
 impl ObjectImpl for RatingLabelPriv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &Self::Type) {
         self.parent_constructed(obj);
 
-        let widget = self.get_instance();
+        let widget = self.instance();
         widget.connect_realize(|w| {
             let priv_ = RatingLabelPriv::from_instance(w);
             if priv_.editable.get() {
-                if let Some(win) = w.get_window() {
-                    let mut mask = win.get_events();
+                if let Some(win) = w.window() {
+                    let mut mask = win.events();
                     mask |= gdk::EventMask::BUTTON_PRESS_MASK;
                     win.set_events(mask);
                 }
@@ -126,13 +95,47 @@ impl ObjectImpl for RatingLabelPriv {
         });
     }
 
-    fn set_property(&self, _obj: &glib::Object, id: usize, value: &glib::Value) {
-        let prop = &PROPERTIES[id];
+    fn signals() -> &'static [Signal] {
+        use once_cell::sync::Lazy;
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder(
+                "rating-changed",
+                &[<i32>::static_type().into()],
+                <()>::static_type().into(),
+            )
+            .run_last()
+            .build()]
+        });
+        SIGNALS.as_ref()
+    }
 
-        match *prop {
-            subclass::Property("rating", ..) => {
+    fn properties() -> &'static [glib::ParamSpec] {
+        use once_cell::sync::Lazy;
+        static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+            vec![glib::ParamSpec::new_int(
+                "rating",
+                "Rating",
+                "The rating value",
+                0,
+                5,
+                0,
+                glib::ParamFlags::READWRITE,
+            )]
+        });
+        PROPERTIES.as_ref()
+    }
+
+    fn set_property(
+        &self,
+        _obj: &Self::Type,
+        _id: usize,
+        value: &glib::Value,
+        pspec: &glib::ParamSpec,
+    ) {
+        match pspec.name() {
+            "rating" => {
                 let rating = value
-                    .get_some()
+                    .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.set_rating(rating);
             }
@@ -140,11 +143,9 @@ impl ObjectImpl for RatingLabelPriv {
         }
     }
 
-    fn get_property(&self, _obj: &glib::Object, id: usize) -> Result<glib::Value, ()> {
-        let prop = &PROPERTIES[id];
-
-        match *prop {
-            subclass::Property("rating", ..) => Ok(self.rating.get().to_value()),
+    fn property(&self, _obj: &Self::Type, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+        match pspec.name() {
+            "rating" => self.rating.get().to_value(),
             _ => unimplemented!(),
         }
     }
@@ -162,17 +163,17 @@ impl RatingLabelExt for RatingLabel {
 }
 
 impl RatingLabel {
-    pub fn get_star() -> Pixbuf {
+    pub fn star() -> Pixbuf {
         PIXBUFS.star.clone()
     }
 
-    pub fn get_unstar() -> Pixbuf {
+    pub fn unstar() -> Pixbuf {
         PIXBUFS.unstar.clone()
     }
 
-    pub fn get_geometry() -> (i32, i32) {
-        let star = Self::get_star();
-        (star.get_width() * 5, star.get_height())
+    pub fn geometry() -> (i32, i32) {
+        let star = Self::star();
+        (star.width() * 5, star.height())
     }
 
     pub fn draw_rating(
@@ -185,8 +186,8 @@ impl RatingLabel {
     ) {
         let rating = if rating == -1 { 0 } else { rating };
 
-        let w = star.get_width();
-        let h = star.get_height();
+        let w = star.width();
+        let h = star.height();
         let mut y = y;
         y -= h as f64;
         let mut x = x;
@@ -202,15 +203,12 @@ impl RatingLabel {
     }
 
     pub fn rating_value_from_hit_x(x: f64) -> i32 {
-        let width: f64 = Self::get_star().get_width().into();
+        let width: f64 = Self::star().width().into();
         (x / width).round() as i32
     }
 
     pub fn new(rating: i32, editable: bool) -> Self {
-        let obj: Self = glib::Object::new(Self::static_type(), &[])
-            .expect("Failed to create RatingLabel")
-            .downcast()
-            .expect("Created RatingLabel is of the wrong type");
+        let obj: Self = glib::Object::new(&[]).expect("Failed to create RatingLabel");
 
         let priv_ = RatingLabelPriv::from_instance(&obj);
         priv_.set_editable(editable);
@@ -221,15 +219,18 @@ impl RatingLabel {
 
 impl DrawingAreaImpl for RatingLabelPriv {}
 impl WidgetImpl for RatingLabelPriv {
-    fn button_press_event(&self, _widget: &gtk::Widget, event: &gdk::EventButton) -> Inhibit {
-        if event.get_button() != 1 {
+    fn button_press_event(&self, _widget: &RatingLabel, event: &gdk::EventButton) -> Inhibit {
+        if event.button() != 1 {
             Inhibit(false)
         } else {
-            if let Some((x, _)) = event.get_coords() {
+            if let Some((x, _)) = event.coords() {
                 let new_rating = RatingLabel::rating_value_from_hit_x(x);
                 if new_rating != self.rating.get() {
                     self.set_rating(new_rating);
-                    if let Err(err) = self.get_instance().emit("rating-changed", &[&new_rating]) {
+                    if let Err(err) = self
+                        .instance()
+                        .emit_by_name("rating-changed", &[&new_rating])
+                    {
                         err_out!("Emit signal 'rating-changed' failed: {}", err);
                     }
                 }
@@ -238,29 +239,22 @@ impl WidgetImpl for RatingLabelPriv {
         }
     }
 
-    fn draw(&self, _widget: &gtk::Widget, cr: &cairo::Context) -> Inhibit {
-        let star = RatingLabel::get_star();
+    fn draw(&self, _widget: &RatingLabel, cr: &cairo::Context) -> Inhibit {
+        let star = RatingLabel::star();
         let x = 0_f64;
-        let y = star.get_height() as f64;
-        RatingLabel::draw_rating(
-            cr,
-            self.rating.get(),
-            &star,
-            &RatingLabel::get_unstar(),
-            x,
-            y,
-        );
+        let y = star.height() as f64;
+        RatingLabel::draw_rating(cr, self.rating.get(), &star, &RatingLabel::unstar(), x, y);
 
         Inhibit(true)
     }
 
-    fn get_preferred_width(&self, _widget: &gtk::Widget) -> (i32, i32) {
-        let w = RatingLabel::get_star().get_width() * 5;
+    fn preferred_width(&self, _widget: &RatingLabel) -> (i32, i32) {
+        let w = RatingLabel::star().width() * 5;
         (w, w)
     }
 
-    fn get_preferred_height(&self, _widget: &gtk::Widget) -> (i32, i32) {
-        let h = RatingLabel::get_star().get_height();
+    fn preferred_height(&self, _widget: &RatingLabel) -> (i32, i32) {
+        let h = RatingLabel::star().height();
         (h, h)
     }
 }

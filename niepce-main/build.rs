@@ -37,6 +37,7 @@ fn main() {
             .exclude_item("GtkCellRenderer")
             .exclude_item("GtkWidget")
             .exclude_item("GFileInfo")
+            .exclude_item("PortableChannel")
             .with_crate(&crate_dir)
             .generate()
             .expect("Couldn't generate bindings")

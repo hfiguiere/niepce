@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/thumbstripview.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ use std::rc::Rc;
 
 use once_cell::unsync::OnceCell;
 
-use glib::subclass;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 use gtk;
@@ -42,34 +41,23 @@ pub enum ImageListStoreColIndex {
     FileStatusIndex = 3,
 }
 
-glib_wrapper! {
+glib::wrapper! {
     pub struct ThumbStripView(
-        Object<subclass::simple::InstanceStruct<ThumbStripViewPriv>,
-        subclass::simple::ClassStruct<ThumbStripViewPriv>,
-        ThumbStripViewClass>)
+        ObjectSubclass<ThumbStripViewPriv>)
         @extends gtk::IconView, gtk::Container, gtk::Widget;
-
-    match fn {
-        get_type => || ThumbStripViewPriv::get_type().to_glib(),
-    }
 }
 
 impl ThumbStripView {
     pub fn new(store: &gtk::TreeModel) -> Self {
-        glib::Object::new(
-            Self::static_type(),
-            &[
-                ("model", store),
-                ("item-height", &THUMB_STRIP_VIEW_DEFAULT_ITEM_HEIGHT),
-                ("selection-mode", &gtk::SelectionMode::Multiple),
-                ("column-spacing", &THUMB_STRIP_VIEW_SPACING),
-                ("row-spacing", &THUMB_STRIP_VIEW_SPACING),
-                ("margin", &0),
-            ],
-        )
+        glib::Object::new(&[
+            ("model", store),
+            ("item-height", &THUMB_STRIP_VIEW_DEFAULT_ITEM_HEIGHT),
+            ("selection-mode", &gtk::SelectionMode::Multiple),
+            ("column-spacing", &THUMB_STRIP_VIEW_SPACING),
+            ("row-spacing", &THUMB_STRIP_VIEW_SPACING),
+            ("margin", &0),
+        ])
         .expect("Failed to create ThumbStripView")
-        .downcast()
-        .expect("Created ThumbStripView is of the wrong type")
     }
 }
 
@@ -88,12 +76,12 @@ impl ItemCount {
         self.count.set(count);
     }
 
-    fn row_added(&self, view: &gtk::IconView) {
+    fn row_added(&self, view: &ThumbStripView) {
         self.count.replace(self.count.get() + 1);
         self.update(view);
     }
 
-    fn row_deleted(&self, view: &gtk::IconView) {
+    fn row_deleted(&self, view: &ThumbStripView) {
         let count = self.count.get();
         if count > 0 {
             self.count.replace(count + 1);
@@ -101,7 +89,7 @@ impl ItemCount {
         self.update(view);
     }
 
-    fn update(&self, view: &gtk::IconView) {
+    fn update(&self, view: &ThumbStripView) {
         view.set_columns(self.count.get());
     }
 }
@@ -135,7 +123,7 @@ impl ThumbStripViewPriv {
     fn set_item_height(&self, height: i32) {
         self.item_height.set(height);
         if let Some(renderer) = self.renderer.get() {
-            renderer.set_property_height(height);
+            renderer.set_height(height);
         }
     }
 
@@ -152,13 +140,13 @@ impl ThumbStripViewPriv {
 
         self.store.replace(model.clone());
         self.setup_model();
-        self.get_instance().set_model(model.as_ref());
+        ThumbStripViewExt::set_model(&self.instance(), model);
     }
 
     fn setup_model(&self) {
         if let Some(store) = &*self.store.borrow() {
             // model item count
-            let iter = store.get_iter_first();
+            let iter = store.iter_first();
             let count = if let Some(ref iter) = iter {
                 let mut c = 0;
                 while store.iter_next(iter) {
@@ -170,7 +158,7 @@ impl ThumbStripViewPriv {
             };
             self.item_count.set(count);
 
-            let view = self.get_instance();
+            let view = self.instance();
             // update item count
             self.item_count.update(&view);
 
@@ -189,29 +177,11 @@ impl ThumbStripViewPriv {
     }
 }
 
-static PROPERTIES: [subclass::Property; 1] = [subclass::Property("item-height", |item_height| {
-    glib::ParamSpec::int(
-        item_height,
-        "Item Height",
-        "The Item Height",
-        -1,
-        100,
-        THUMB_STRIP_VIEW_DEFAULT_ITEM_HEIGHT, // Default value
-        glib::ParamFlags::READWRITE,
-    )
-})];
-
+#[glib::object_subclass]
 impl ObjectSubclass for ThumbStripViewPriv {
     const NAME: &'static str = "ThumbStripView";
+    type Type = ThumbStripView;
     type ParentType = gtk::IconView;
-    type Instance = subclass::simple::InstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
-
-    glib_object_subclass!();
-
-    fn class_init(klass: &mut Self::Class) {
-        klass.install_properties(&PROPERTIES);
-    }
 
     fn new() -> Self {
         Self {
@@ -227,20 +197,16 @@ impl ObjectSubclass for ThumbStripViewPriv {
 }
 
 impl ObjectImpl for ThumbStripViewPriv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &Self::Type) {
         self.parent_constructed(obj);
-
-        let self_ = obj.downcast_ref::<ThumbStripView>().unwrap();
 
         let cell_renderer = LibraryCellRenderer::new_thumb_renderer();
 
-        let icon_view_self = self_.clone().upcast::<gtk::IconView>();
+        let icon_view_self = obj.clone().upcast::<gtk::IconView>();
         icon_view_self.pack_start(&cell_renderer, false);
-        cell_renderer.set_property_height(100);
-        cell_renderer.set_property_yalign(0.5);
-        cell_renderer.set_property_xalign(0.5);
+        cell_renderer.set_height(100);
+        cell_renderer.set_yalign(0.5);
+        cell_renderer.set_xalign(0.5);
 
         icon_view_self.add_attribute(
             &cell_renderer,
@@ -260,18 +226,39 @@ impl ObjectImpl for ThumbStripViewPriv {
         self.renderer
             .set(cell_renderer)
             .expect("ThumbStripView::constructed set cell render failed.");
-        let model = icon_view_self.get_model();
+        let model = icon_view_self.model();
 
         self.setup_model();
         self.store.replace(model);
     }
 
-    fn set_property(&self, _obj: &glib::Object, id: usize, value: &glib::Value) {
-        let prop = &PROPERTIES[id];
-        match *prop {
-            subclass::Property("item-height", ..) => {
+    fn properties() -> &'static [glib::ParamSpec] {
+        use once_cell::sync::Lazy;
+        static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+            vec![glib::ParamSpec::new_int(
+                "item-height",
+                "Item Height",
+                "The Item Height",
+                -1,
+                100,
+                THUMB_STRIP_VIEW_DEFAULT_ITEM_HEIGHT, // Default value
+                glib::ParamFlags::READWRITE,
+            )]
+        });
+        PROPERTIES.as_ref()
+    }
+
+    fn set_property(
+        &self,
+        _obj: &ThumbStripView,
+        _id: usize,
+        value: &glib::Value,
+        pspec: &glib::ParamSpec,
+    ) {
+        match pspec.name() {
+            "item-height" => {
                 let height: i32 = value
-                    .get_some()
+                    .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.set_item_height(height);
             }
@@ -279,11 +266,9 @@ impl ObjectImpl for ThumbStripViewPriv {
         }
     }
 
-    fn get_property(&self, _obj: &glib::Object, id: usize) -> Result<glib::Value, ()> {
-        let prop = &PROPERTIES[id];
-
-        match *prop {
-            subclass::Property("item-height", ..) => Ok(self.item_height.get().to_value()),
+    fn property(&self, _obj: &ThumbStripView, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+        match pspec.name() {
+            "item-height" => self.item_height.get().to_value(),
             _ => unimplemented!(),
         }
     }

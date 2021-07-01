@@ -112,13 +112,12 @@ impl Thumbnail {
         } else if mime_type.is_movie() {
             // XXX FIXME
             dbg_out!("video thumbnail");
-            if let Some(mut cached) = glib::get_tmp_dir() {
-                cached.push("temp-1234");
-                if movieutils::thumbnail_movie(filename, w, h, &cached) {
-                    pix = gdk_pixbuf::Pixbuf::from_file_at_size(&cached, w, h).ok();
-                    if let Err(err) = fs::remove_file(&cached) {
-                        err_out!("Remove temporary file {:?} failed: {}", &cached, err);
-                    }
+            let mut cached = glib::tmp_dir();
+            cached.push("temp-1234");
+            if movieutils::thumbnail_movie(filename, w, h, &cached) {
+                pix = gdk_pixbuf::Pixbuf::from_file_at_size(&cached, w, h).ok();
+                if let Err(err) = fs::remove_file(&cached) {
+                    err_out!("Remove temporary file {:?} failed: {}", &cached, err);
                 }
             }
             if pix.is_none() {
@@ -138,7 +137,7 @@ impl Thumbnail {
             dbg_out!("trying raw loader");
             pix = gdk_utils::openraw_extract_rotated_thumbnail(filename, cmp::min(w, h) as u32);
             if let Some(ref pixbuf) = pix {
-                if (w < pixbuf.get_width()) || (h < pixbuf.get_height()) {
+                if (w < pixbuf.width()) || (h < pixbuf.height()) {
                     pix = gdk_utils::gdkpixbuf_scale_to_fit(Some(pixbuf), cmp::min(w, h));
                 }
             } else {
@@ -154,12 +153,12 @@ impl From<Option<gdk_pixbuf::Pixbuf>> for Thumbnail {
     fn from(pixbuf: Option<gdk_pixbuf::Pixbuf>) -> Self {
         if let Some(pixbuf) = pixbuf {
             if let Some(bytes) = pixbuf.read_pixel_bytes() {
-                let width = pixbuf.get_width();
-                let height = pixbuf.get_height();
-                let stride = pixbuf.get_rowstride();
-                let bits_per_sample = pixbuf.get_bits_per_sample();
-                let colorspace = pixbuf.get_colorspace();
-                let has_alpha = pixbuf.get_has_alpha();
+                let width = pixbuf.width();
+                let height = pixbuf.height();
+                let stride = pixbuf.rowstride();
+                let bits_per_sample = pixbuf.bits_per_sample();
+                let colorspace = pixbuf.colorspace();
+                let has_alpha = pixbuf.has_alpha();
                 return Self {
                     width,
                     height,

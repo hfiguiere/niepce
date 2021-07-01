@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/library_cell_renderer.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,14 +26,12 @@ use cairo;
 use gdk;
 use gdk::prelude::*;
 use gdk_pixbuf::Pixbuf;
-use glib::subclass;
 use glib::subclass::prelude::*;
+use glib::subclass::Signal;
 use glib::translate::*;
-use glib::Type;
 use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::CellRendererPixbufClass;
 
 use crate::niepce::ui::image_list_store::StoreLibFile;
 use npc_engine::db::libfile::{FileStatus, FileType};
@@ -65,16 +63,10 @@ const EMBLEMS: Lazy<Emblems> = Lazy::new(|| Emblems {
     flag_pick: Pixbuf::from_resource("/org/gnome/Niepce/pixmaps/niepce-flag-pick.png").unwrap(),
 });
 
-glib_wrapper! {
+glib::wrapper! {
     pub struct LibraryCellRenderer(
-        Object<subclass::simple::InstanceStruct<LibraryCellRendererPriv>,
-        subclass::simple::ClassStruct<LibraryCellRendererPriv>,
-        LibraryCellRendererClass>)
+        ObjectSubclass<LibraryCellRendererPriv>)
         @extends gtk::CellRendererPixbuf, gtk::CellRenderer;
-
-    match fn {
-        get_type => || LibraryCellRendererPriv::get_type().to_glib(),
-    }
 }
 
 impl LibraryCellRenderer {
@@ -82,13 +74,8 @@ impl LibraryCellRenderer {
     /// callback: an optional callback used to get a colour for labels.
     /// callback_data: raw pointer passed as is to the callback.
     pub fn new(callback: Option<GetColourCallback>, callback_data: *const c_void) -> Self {
-        let obj: Self = glib::Object::new(
-            Self::static_type(),
-            &[("mode", &gtk::CellRendererMode::Activatable)],
-        )
-        .expect("Failed to create Library Cell Renderer")
-        .downcast()
-        .expect("Created Library Cell Renderer is of wrong type");
+        let obj: Self = glib::Object::new(&[("mode", &gtk::CellRendererMode::Activatable)])
+            .expect("Failed to create Library Cell Renderer");
 
         if callback.is_some() {
             let priv_ = LibraryCellRendererPriv::from_instance(&obj);
@@ -232,8 +219,8 @@ impl LibraryCellRendererPriv {
     }
 
     fn do_draw_thumbnail(&self, cr: &cairo::Context, pixbuf: &Pixbuf, r: &gdk::Rectangle) {
-        let w = pixbuf.get_width();
-        let h = pixbuf.get_height();
+        let w = pixbuf.width();
+        let h = pixbuf.height();
         let offset_x = (self.size.get() - w) / 2;
         let offset_y = (self.size.get() - h) / 2;
         let x: f64 = (r.x + self.pad.get() + offset_x).into();
@@ -257,7 +244,7 @@ impl LibraryCellRendererPriv {
             _ => return,
         };
 
-        let w = pixbuf.get_width();
+        let w = pixbuf.width();
         let x: f64 = (r.x + r.width - CELL_PADDING - w).into();
         let y: f64 = (r.y + CELL_PADDING).into();
         cr.set_source_pixbuf(&pixbuf, x, y);
@@ -275,8 +262,8 @@ impl LibraryCellRendererPriv {
     }
 
     fn do_draw_format_emblem(cr: &cairo::Context, emblem: &Pixbuf, r: &gdk::Rectangle) -> i32 {
-        let w = emblem.get_width();
-        let h = emblem.get_height();
+        let w = emblem.width();
+        let h = emblem.height();
         let left = CELL_PADDING + w;
         let x: f64 = (r.x + r.width - left).into();
         let y: f64 = (r.y + r.height - CELL_PADDING - h).into();
@@ -312,46 +299,11 @@ impl LibraryCellRendererPriv {
     }
 }
 
-static PROPERTIES: [subclass::Property; 2] = [
-    subclass::Property("libfile", |libfile| {
-        glib::ParamSpec::boxed(
-            libfile,
-            "Library File",
-            "File from the library in the cell",
-            StoreLibFile::get_type(),
-            glib::ParamFlags::READWRITE,
-        )
-    }),
-    subclass::Property("status", |status| {
-        glib::ParamSpec::int(
-            status,
-            "File Status",
-            "Status of the file in the cell",
-            FileStatus::Ok as i32,
-            FileStatus::Missing as i32,
-            FileStatus::Ok as i32,
-            glib::ParamFlags::READWRITE,
-        )
-    }),
-];
-
+#[glib::object_subclass]
 impl ObjectSubclass for LibraryCellRendererPriv {
     const NAME: &'static str = "LibraryCellRenderer";
+    type Type = LibraryCellRenderer;
     type ParentType = gtk::CellRendererPixbuf;
-    type Instance = subclass::simple::InstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
-
-    glib_object_subclass!();
-
-    fn class_init(klass: &mut Self::Class) {
-        klass.install_properties(&PROPERTIES);
-        klass.add_signal(
-            "rating-changed",
-            glib::SignalFlags::RUN_LAST,
-            &[Type::I64, Type::I32],
-            Type::Unit,
-        );
-    }
 
     fn new() -> Self {
         Self {
@@ -373,25 +325,66 @@ impl ObjectSubclass for LibraryCellRendererPriv {
 }
 
 impl ObjectImpl for LibraryCellRendererPriv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &LibraryCellRenderer) {
         self.parent_constructed(obj);
     }
 
-    fn set_property(&self, _obj: &glib::Object, id: usize, value: &glib::Value) {
-        let prop = &PROPERTIES[id];
-        match *prop {
-            subclass::Property("libfile", ..) => {
-                let libfile = value
-                    .get::<&StoreLibFile>()
-                    .expect("type conformity checked by `Object::set_property`")
-                    .map(|f| f.clone());
+    fn properties() -> &'static [glib::ParamSpec] {
+        use once_cell::sync::Lazy;
+        static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+            vec![
+                glib::ParamSpec::new_boxed(
+                    "libfile",
+                    "Library File",
+                    "File from the library in the cell",
+                    StoreLibFile::static_type(),
+                    glib::ParamFlags::READWRITE,
+                ),
+                glib::ParamSpec::new_int(
+                    "status",
+                    "File Status",
+                    "Status of the file in the cell",
+                    FileStatus::Ok as i32,
+                    FileStatus::Missing as i32,
+                    FileStatus::Ok as i32,
+                    glib::ParamFlags::READWRITE,
+                ),
+            ]
+        });
+
+        PROPERTIES.as_ref()
+    }
+
+    fn signals() -> &'static [Signal] {
+        use once_cell::sync::Lazy;
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder(
+                "rating-changed",
+                &[<i64>::static_type().into(), <i32>::static_type().into()],
+                <()>::static_type().into(),
+            )
+            .run_last()
+            .build()]
+        });
+
+        SIGNALS.as_ref()
+    }
+
+    fn set_property(
+        &self,
+        _obj: &LibraryCellRenderer,
+        _id: usize,
+        value: &glib::Value,
+        pspec: &glib::ParamSpec,
+    ) {
+        match pspec.name() {
+            "libfile" => {
+                let libfile = value.get::<&StoreLibFile>().map(|f| f.clone()).ok();
                 self.set_libfile(libfile);
             }
-            subclass::Property("status", ..) => {
+            "status" => {
                 let status: i32 = value
-                    .get_some()
+                    .get()
                     .expect("type conformity checked by `Object::set_property`");
                 self.set_status(FileStatus::from(status));
             }
@@ -399,12 +392,15 @@ impl ObjectImpl for LibraryCellRendererPriv {
         }
     }
 
-    fn get_property(&self, _obj: &glib::Object, id: usize) -> Result<glib::Value, ()> {
-        let prop = &PROPERTIES[id];
-
-        match *prop {
-            subclass::Property("libfile", ..) => Ok(self.libfile.borrow().to_value()),
-            subclass::Property("status", ..) => Ok((self.status.get() as i32).to_value()),
+    fn property(
+        &self,
+        _obj: &LibraryCellRenderer,
+        _id: usize,
+        pspec: &glib::ParamSpec,
+    ) -> glib::Value {
+        match pspec.name() {
+            "libfile" => self.libfile.borrow().to_value(),
+            "status" => (self.status.get() as i32).to_value(),
             _ => unimplemented!(),
         }
     }
@@ -413,18 +409,18 @@ impl ObjectImpl for LibraryCellRendererPriv {
 impl CellRendererPixbufImpl for LibraryCellRendererPriv {}
 
 impl CellRendererImpl for LibraryCellRendererPriv {
-    fn get_preferred_width<P: IsA<gtk::Widget>>(
+    fn preferred_width<P: IsA<gtk::Widget>>(
         &self,
-        _renderer: &gtk::CellRenderer,
+        _renderer: &LibraryCellRenderer,
         _widget: &P,
     ) -> (i32, i32) {
         let maxdim: i32 = self.size.get() + self.pad.get() * 2;
         (maxdim, maxdim)
     }
 
-    fn get_preferred_height<P: IsA<gtk::Widget>>(
+    fn preferred_height<P: IsA<gtk::Widget>>(
         &self,
-        _renderer: &gtk::CellRenderer,
+        _renderer: &LibraryCellRenderer,
         _widget: &P,
     ) -> (i32, i32) {
         let maxdim: i32 = self.size.get() + self.pad.get() * 2;
@@ -433,16 +429,16 @@ impl CellRendererImpl for LibraryCellRendererPriv {
 
     fn render<P: IsA<gtk::Widget>>(
         &self,
-        _renderer: &gtk::CellRenderer,
+        _renderer: &LibraryCellRenderer,
         cr: &cairo::Context,
         widget: &P,
         _background_area: &gdk::Rectangle,
         cell_area: &gdk::Rectangle,
         flags: gtk::CellRendererState,
     ) {
-        let self_ = self.get_instance();
-        let xpad = self_.get_property_xpad();
-        let ypad = self_.get_property_ypad();
+        let self_ = self.instance();
+        let xpad = self_.xpad();
+        let ypad = self_.ypad();
 
         let mut r = cell_area.clone();
         r.x += xpad as i32;
@@ -450,7 +446,7 @@ impl CellRendererImpl for LibraryCellRendererPriv {
 
         let file = self.libfile.borrow();
 
-        let style_context = widget.get_style_context();
+        let style_context = widget.style_context();
 
         style_context.save();
         style_context.set_state(if flags.contains(gtk::CellRendererState::SELECTED) {
@@ -479,7 +475,7 @@ impl CellRendererImpl for LibraryCellRendererPriv {
         }
         style_context.restore();
 
-        if let Some(pixbuf) = self_.get_property_pixbuf() {
+        if let Some(pixbuf) = self_.pixbuf() {
             self.do_draw_thumbnail(cr, &pixbuf, &r);
         }
         if self.draw_rating.get() {
@@ -492,8 +488,8 @@ impl CellRendererImpl for LibraryCellRendererPriv {
             RatingLabel::draw_rating(
                 cr,
                 rating,
-                &RatingLabel::get_star(),
-                &RatingLabel::get_unstar(),
+                &RatingLabel::star(),
+                &RatingLabel::unstar(),
                 x,
                 y,
             );
@@ -540,7 +536,7 @@ impl CellRendererImpl for LibraryCellRendererPriv {
 
     fn activate<P: IsA<gtk::Widget>>(
         &self,
-        _renderer: &gtk::CellRenderer,
+        _renderer: &LibraryCellRenderer,
         _event: Option<&gdk::Event>,
         _widget: &P,
         _path: &str,
@@ -548,22 +544,19 @@ impl CellRendererImpl for LibraryCellRendererPriv {
         cell_area: &gdk::Rectangle,
         _flags: gtk::CellRendererState,
     ) -> bool {
-        let mut instance = self
-            .get_instance()
-            .downcast::<LibraryCellRenderer>()
-            .unwrap();
+        let mut instance = self.instance().downcast::<LibraryCellRenderer>().unwrap();
 
         if instance.is_hit() {
             instance.reset_hit();
 
             // hit test with the rating region
-            let xpad = instance.get_property_xpad();
-            let ypad = instance.get_property_ypad();
+            let xpad = instance.xpad();
+            let ypad = instance.ypad();
             let mut r = cell_area.clone();
             r.x += xpad as i32;
             r.y += ypad as i32;
 
-            let (rw, rh) = RatingLabel::get_geometry();
+            let (rw, rh) = RatingLabel::geometry();
             let rect = gdk::Rectangle {
                 x: r.x + CELL_PADDING,
                 y: r.y + r.height - rh - CELL_PADDING,
@@ -598,7 +591,9 @@ impl CellRendererImpl for LibraryCellRendererPriv {
             if let Some(f) = &*file {
                 if f.0.rating() != new_rating {
                     // emit signal if changed
-                    if let Err(err) = instance.emit("rating-changed", &[&f.0.id(), &new_rating]) {
+                    if let Err(err) =
+                        instance.emit_by_name("rating-changed", &[&f.0.id(), &new_rating])
+                    {
                         err_out!("Can't emit rating-changed signal: {}", err);
                     }
                 }
@@ -612,14 +607,6 @@ impl CellRendererImpl for LibraryCellRendererPriv {
 
 // allow subclassing this
 pub trait LibraryCellRendererImpl: CellRendererPixbufImpl + 'static {}
-
-unsafe impl<T: ObjectSubclass + LibraryCellRendererImpl> IsSubclassable<T>
-    for LibraryCellRendererClass
-{
-    fn override_vfuncs(&mut self) {
-        <CellRendererPixbufClass as IsSubclassable<T>>::override_vfuncs(self);
-    }
-}
 
 #[no_mangle]
 pub unsafe extern "C" fn npc_library_cell_renderer_new(

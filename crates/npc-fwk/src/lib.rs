@@ -24,7 +24,6 @@ extern crate gdk_pixbuf;
 extern crate gdk_pixbuf_sys;
 extern crate gio;
 extern crate gio_sys;
-#[macro_use]
 extern crate glib;
 extern crate glib_sys;
 extern crate gtk;
