@@ -867,9 +867,9 @@ dependencies = [
 
 [[package]]
 name = "rexiv2"
-version = "0.7.0"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd37fad736a6936a741e98c75127561c8ce4af83683489fff0586dee2f985ef4"
+checksum = "ab34307334dcf90c2f9afeda08e0c52310f4d9f282cf6e8ec6a6ffb0b09826a5"
 dependencies = [
  "gexiv2-sys",
  "libc",
