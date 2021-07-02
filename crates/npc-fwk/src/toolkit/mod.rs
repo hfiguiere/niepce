@@ -30,11 +30,9 @@ pub type Sender<T> = async_channel::Sender<T>;
 pub struct PortableChannel<T>(pub Sender<T>);
 
 pub fn thread_context() -> glib::MainContext {
-    glib::MainContext::thread_default()
-        .unwrap_or_else(|| {
-            let ctx = glib::MainContext::new();
-            ctx.push_thread_default();
-            ctx
-        })
+    glib::MainContext::thread_default().unwrap_or_else(|| {
+        let ctx = glib::MainContext::new();
+        ctx.push_thread_default();
+        ctx
+    })
 }
-

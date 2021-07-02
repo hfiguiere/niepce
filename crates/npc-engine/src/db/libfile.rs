@@ -237,23 +237,23 @@ impl FromDb for LibFile {
         "id"
     }
 
-    fn read_from(row: &rusqlite::Row) -> Self {
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self> {
         //DBG_ASSERT(dbdrv->get_number_of_columns() == 10, "wrong number of columns");
-        let id = row.get(0);
-        let fid = row.get(1);
-        let path: String = row.get(2);
-        let name: String = row.get(3);
-        let fsfid = row.get(8);
+        let id = row.get(0)?;
+        let fid = row.get(1)?;
+        let path: String = row.get(2)?;
+        let name: String = row.get(3)?;
+        let fsfid = row.get(8)?;
         let mut file = LibFile::new(id, fid, fsfid, PathBuf::from(&path), &name);
 
-        file.set_orientation(row.get(4));
-        file.set_rating(row.get(5));
-        file.set_label(row.get(6));
-        file.set_flag(row.get(9));
-        let file_type: i32 = row.get(7);
+        file.set_orientation(row.get(4)?);
+        file.set_rating(row.get(5)?);
+        file.set_label(row.get(6)?);
+        file.set_flag(row.get(9)?);
+        let file_type: i32 = row.get(7)?;
         file.set_file_type(FileType::from(file_type));
 
-        file
+        Ok(file)
     }
 }
 

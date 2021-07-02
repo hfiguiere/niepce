@@ -102,7 +102,11 @@ impl ThumbnailCache {
         }
     }
 
-    fn execute(task: ThumbnailTask, cache_dir: &Path, sender: async_channel::Sender<LibNotification>) {
+    fn execute(
+        task: ThumbnailTask,
+        cache_dir: &Path,
+        sender: async_channel::Sender<LibNotification>,
+    ) {
         let w = task.width;
         let h = task.height;
         let libfile = task.file;
@@ -114,10 +118,12 @@ impl ThumbnailCache {
         let pix = get_thumbnail(&libfile, w, h, &dest);
         if !path.is_file() {
             dbg_out!("file doesn't exist");
-            if let Err(err) = toolkit::thread_context().block_on(sender.send(FileStatusChanged(FileStatusChange {
-                id,
-                status: FileStatus::Missing,
-            }))) {
+            if let Err(err) = toolkit::thread_context().block_on(sender.send(FileStatusChanged(
+                FileStatusChange {
+                    id,
+                    status: FileStatus::Missing,
+                },
+            ))) {
                 err_out!("Sending file status change notification failed: {}", err);
             }
         }
@@ -126,17 +132,16 @@ impl ThumbnailCache {
             return;
         }
         // notify the thumbnail
-        if let Err(err) = toolkit::thread_context().block_on(
-            sender.send(ThumbnailLoaded(notification::Thumbnail {
+        if let Err(err) = toolkit::thread_context().block_on(sender.send(ThumbnailLoaded(
+            notification::Thumbnail {
                 id,
                 width: pix.get_width(),
                 height: pix.get_height(),
                 pix,
-            })))
-        {
+            },
+        ))) {
             err_out!("Sending thumbnail notification failed: {}", err);
         }
-
     }
 
     fn main(

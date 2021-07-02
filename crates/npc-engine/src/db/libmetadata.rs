@@ -277,18 +277,18 @@ impl FromDb for LibMetadata {
         "files.id"
     }
 
-    fn read_from(row: &rusqlite::Row) -> Self {
-        let id: LibraryId = row.get(0);
-        let xmp: String = row.get(1);
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self> {
+        let id: LibraryId = row.get(0)?;
+        let xmp: String = row.get(1)?;
 
         let mut xmpmeta = XmpMeta::new();
         xmpmeta.unserialize(&xmp);
         let mut libmeta = LibMetadata::new_with_xmp(id, xmpmeta);
-        let col: i32 = row.get(2);
+        let col: i32 = row.get(2)?;
         libmeta.file_type = FileType::from(col);
-        libmeta.name = row.get(3);
-        libmeta.folder = row.get(4);
-        libmeta
+        libmeta.name = row.get(3)?;
+        libmeta.folder = row.get(4)?;
+        Ok(libmeta)
     }
 }
 

@@ -79,10 +79,10 @@ impl FromDb for Label {
         "id"
     }
 
-    fn read_from(row: &rusqlite::Row) -> Self {
-        let label: String = row.get(1);
-        let colour: String = row.get(2);
-        Label::new(row.get(0), &label, &colour)
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self> {
+        let label: String = row.get(1)?;
+        let colour: String = row.get(2)?;
+        Ok(Label::new(row.get(0)?, &label, &colour))
     }
 }
 

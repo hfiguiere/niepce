@@ -60,9 +60,9 @@ impl FromDb for Keyword {
         "id"
     }
 
-    fn read_from(row: &rusqlite::Row) -> Self {
-        let kw: String = row.get(1);
-        Keyword::new(row.get(0), &kw)
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self> {
+        let kw: String = row.get(1)?;
+        Ok(Keyword::new(row.get(0)?, &kw))
     }
 }
 

@@ -40,7 +40,7 @@ pub use self::props::NiepcePropertyIdx;
 
 use rusqlite;
 
-pub trait FromDb {
+pub trait FromDb: Sized {
     /// return the columns for reading from the DB.
     fn read_db_columns() -> &'static str;
     /// return the tables for reading from the DB.
@@ -48,5 +48,5 @@ pub trait FromDb {
     /// return the column for the where clause on the id for the DB.
     fn read_db_where_id() -> &'static str;
     /// read a new object from the DB row.
-    fn read_from(row: &rusqlite::Row) -> Self;
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self>;
 }

@@ -149,14 +149,9 @@ pub unsafe extern "C" fn engine_library_notify_filestatus_changed(
     id: LibraryId,
     status: FileStatus,
 ) -> bool {
-    if let Err(err) = toolkit::thread_context().block_on((*channel)
-        .0
-        .clone()
-        .send(LibNotification::FileStatusChanged(FileStatusChange {
-            id,
-            status,
-        })))
-    {
+    if let Err(err) = toolkit::thread_context().block_on((*channel).0.clone().send(
+        LibNotification::FileStatusChanged(FileStatusChange { id, status }),
+    )) {
         err_out!("Error sending notification: {}", err);
         return false;
     }

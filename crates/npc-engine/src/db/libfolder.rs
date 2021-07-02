@@ -123,14 +123,14 @@ impl FromDb for LibFolder {
         "id"
     }
 
-    fn read_from(row: &rusqlite::Row) -> Self {
-        let id: LibraryId = row.get(0);
-        let name: String = row.get(1);
-        let virt_type: i32 = row.get(2);
-        let locked = row.get(3);
-        let expanded = row.get(4);
-        let path: Option<String> = row.get_checked(5).ok();
-        let parent = row.get(6);
+    fn read_from(row: &rusqlite::Row) -> rusqlite::Result<Self> {
+        let id: LibraryId = row.get(0)?;
+        let name: String = row.get(1)?;
+        let virt_type: i32 = row.get(2)?;
+        let locked = row.get(3)?;
+        let expanded = row.get(4)?;
+        let path: Option<String> = row.get(5).ok();
+        let parent = row.get(6)?;
 
         let mut libfolder = LibFolder::new(id, &name, path);
         libfolder.set_parent(parent);
@@ -138,7 +138,7 @@ impl FromDb for LibFolder {
         libfolder.set_locked(locked);
         libfolder.set_expanded(expanded);
 
-        libfolder
+        Ok(libfolder)
     }
 }
 

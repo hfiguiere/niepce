@@ -44,7 +44,10 @@ pub struct LibraryClientWrapper {
 }
 
 impl LibraryClientWrapper {
-    pub fn new(dir: PathBuf, sender: async_channel::Sender<LibNotification>) -> LibraryClientWrapper {
+    pub fn new(
+        dir: PathBuf,
+        sender: async_channel::Sender<LibNotification>,
+    ) -> LibraryClientWrapper {
         LibraryClientWrapper {
             client: Arc::new(LibraryClient::new(dir, sender)),
         }
@@ -183,9 +186,7 @@ pub unsafe extern "C" fn lcchannel_new(
         }
     };
     glib::MainContext::default().spawn_local(event_handler);
-    Box::into_raw(Box::new(PortableChannel::<LibNotification>(
-        sender,
-    )))
+    Box::into_raw(Box::new(PortableChannel::<LibNotification>(sender)))
 }
 
 #[no_mangle]
