@@ -1,7 +1,7 @@
 /*
  * niepce - crates/npc-fwk/src/toolkit/mod.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,17 @@ pub mod movieutils;
 pub mod thumbnail;
 pub mod widgets;
 
-pub type Sender<T> = glib::Sender<T>;
+pub type Sender<T> = async_channel::Sender<T>;
 
 /// Wrapper type for the channel tuple to get passed down to the unsafe C++ code.
-pub struct PortableChannel<T>(pub Sender<T>, pub glib::SourceId);
+pub struct PortableChannel<T>(pub Sender<T>);
+
+pub fn thread_context() -> glib::MainContext {
+    glib::MainContext::thread_default()
+        .unwrap_or_else(|| {
+            let ctx = glib::MainContext::new();
+            ctx.push_thread_default();
+            ctx
+        })
+}
+

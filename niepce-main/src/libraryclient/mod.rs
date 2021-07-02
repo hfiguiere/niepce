@@ -44,7 +44,7 @@ pub struct LibraryClientWrapper {
 }
 
 impl LibraryClientWrapper {
-    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClientWrapper {
+    pub fn new(dir: PathBuf, sender: async_channel::Sender<LibNotification>) -> LibraryClientWrapper {
         LibraryClientWrapper {
             client: Arc::new(LibraryClient::new(dir, sender)),
         }
@@ -65,7 +65,7 @@ pub struct LibraryClient {
 }
 
 impl LibraryClient {
-    pub fn new(dir: PathBuf, sender: glib::Sender<LibNotification>) -> LibraryClient {
+    pub fn new(dir: PathBuf, sender: async_channel::Sender<LibNotification>) -> LibraryClient {
         LibraryClient {
             pimpl: ClientImpl::new(dir, sender),
             trash_id: 0,
@@ -173,26 +173,24 @@ pub unsafe extern "C" fn lcchannel_new(
     cb: extern "C" fn(n: *const LibNotification, data: *mut c_void) -> i32,
     data: *mut c_void,
 ) -> *mut LcChannel {
-    let (sender, receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
-    let source_id = receiver.attach(None, move |n: LibNotification| {
-        let continuation = cb(&n, data) != 0;
-        glib::Continue(continuation)
-    });
+    let (sender, receiver) = async_channel::unbounded();
+    let event_handler = async move {
+        while let Ok(n) = receiver.recv().await {
+            if cb(&n, data) == 0 {
+                receiver.close();
+                break;
+            }
+        }
+    };
+    glib::MainContext::default().spawn_local(event_handler);
     Box::into_raw(Box::new(PortableChannel::<LibNotification>(
-        sender, source_id,
+        sender,
     )))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn lcchannel_delete(obj: *mut LcChannel) {
     Box::from_raw(obj);
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn lcchannel_destroy(obj: *mut LcChannel) {
-    if let Some(source) = glib::MainContext::default().find_source_by_id(&(*obj).1) {
-        source.destroy();
-    }
 }
 
 #[no_mangle]

@@ -22,7 +22,6 @@ use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::result;
-use std::sync::mpsc;
 
 use chrono::Utc;
 use rusqlite;
@@ -40,6 +39,7 @@ use crate::db::libfolder::LibFolder;
 use crate::db::libmetadata::LibMetadata;
 use crate::library::notification::LibNotification;
 use npc_fwk;
+use npc_fwk::toolkit;
 use npc_fwk::PropertyValue;
 
 #[repr(i32)]
@@ -81,7 +81,7 @@ pub struct Library {
 impl Library {
     #[cfg(test)]
     pub fn new_in_memory() -> Library {
-        let (sender, _) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+        let (sender, _) = async_channel::unbounded();
         let mut lib = Library {
             // maindir: dir,
             dbpath: PathBuf::default(),
@@ -129,7 +129,8 @@ impl Library {
         if let Some(ref conn) = self.dbconn {
             let sender = self.sender.clone();
             if let Err(err) = conn.create_scalar_function("rewrite_xmp", 0, false, move |_| {
-                if let Err(err) = sender.send(LibNotification::XmpNeedsUpdate) {
+                if let Err(err) =
+                    toolkit::thread_context().block_on(sender.send(LibNotification::XmpNeedsUpdate)) {
                     // This not fatal, at least the data should be saved.
                     // But still, it's not good.
                     err_out!("Error sending XmpNeedsUpdate notification: {}", err);
@@ -335,8 +336,9 @@ impl Library {
     pub fn notify(
         &self,
         notif: LibNotification,
-    ) -> std::result::Result<(), mpsc::SendError<LibNotification>> {
-        self.sender.send(notif)
+    ) -> std::result::Result<(), async_channel::SendError<LibNotification>> {
+        toolkit::thread_context().block_on(
+            self.sender.send(notif))
     }
 
     pub fn add_jpeg_file_to_bundle(&self, file_id: LibraryId, fsfile_id: LibraryId) -> Result<()> {

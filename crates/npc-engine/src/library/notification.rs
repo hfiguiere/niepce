@@ -1,7 +1,7 @@
 /*
  * niepce - engine/library/notification.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ use super::queriedcontent::QueriedContent;
 use crate::db::libfile::FileStatus;
 use crate::db::{Keyword, Label, LibFolder, LibMetadata, LibraryId, NiepceProperties};
 use npc_fwk::base::PropertyIndex;
+use npc_fwk::toolkit;
 use npc_fwk::toolkit::thumbnail;
 use npc_fwk::toolkit::PortableChannel;
 use npc_fwk::PropertyValue;
@@ -148,13 +149,13 @@ pub unsafe extern "C" fn engine_library_notify_filestatus_changed(
     id: LibraryId,
     status: FileStatus,
 ) -> bool {
-    if let Err(err) = (*channel)
+    if let Err(err) = toolkit::thread_context().block_on((*channel)
         .0
         .clone()
         .send(LibNotification::FileStatusChanged(FileStatusChange {
             id,
             status,
-        }))
+        })))
     {
         err_out!("Error sending notification: {}", err);
         return false;

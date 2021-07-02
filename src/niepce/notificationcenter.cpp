@@ -42,7 +42,6 @@ NotificationCenter::NotificationCenter()
 
 NotificationCenter::~NotificationCenter()
 {
-    ffi::lcchannel_destroy(m_channel.get());
 }
 
 void NotificationCenter::dispatch_lib_notification(const eng::LibNotification *n) const

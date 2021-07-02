@@ -1,7 +1,7 @@
 /*
  * niepce - library/thumbnail_cache.rs
  *
- * Copyright (C) 2020 Hubert Figuière
+ * Copyright (C) 2020-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ use std::sync::atomic;
 use std::thread;
 
 use gdk_pixbuf;
-use glib;
 
 use crate::db::libfile::{FileStatus, LibFile};
 use crate::db::LibraryId;
@@ -36,6 +35,7 @@ use crate::library::notification;
 use crate::library::notification::LibNotification::{FileStatusChanged, ThumbnailLoaded};
 use crate::library::notification::{FileStatusChange, LcChannel, LibNotification};
 use crate::library::queriedcontent::QueriedContent;
+use npc_fwk::toolkit;
 use npc_fwk::toolkit::thumbnail::Thumbnail;
 
 /// Thumbnail task
@@ -89,11 +89,11 @@ pub struct ThumbnailCache {
     cache_dir: PathBuf,
     tasks: Tasks,
     running: Running,
-    sender: glib::Sender<LibNotification>,
+    sender: async_channel::Sender<LibNotification>,
 }
 
 impl ThumbnailCache {
-    fn new(dir: &Path, sender: glib::Sender<LibNotification>) -> Self {
+    fn new(dir: &Path, sender: async_channel::Sender<LibNotification>) -> Self {
         Self {
             cache_dir: PathBuf::from(dir),
             tasks: sync::Arc::new((sync::Mutex::new(VecDeque::new()), sync::Condvar::new())),
@@ -102,7 +102,7 @@ impl ThumbnailCache {
         }
     }
 
-    fn execute(task: ThumbnailTask, cache_dir: &Path, sender: glib::Sender<LibNotification>) {
+    fn execute(task: ThumbnailTask, cache_dir: &Path, sender: async_channel::Sender<LibNotification>) {
         let w = task.width;
         let h = task.height;
         let libfile = task.file;
@@ -114,10 +114,10 @@ impl ThumbnailCache {
         let pix = get_thumbnail(&libfile, w, h, &dest);
         if !path.is_file() {
             dbg_out!("file doesn't exist");
-            if let Err(err) = sender.send(FileStatusChanged(FileStatusChange {
+            if let Err(err) = toolkit::thread_context().block_on(sender.send(FileStatusChanged(FileStatusChange {
                 id,
                 status: FileStatus::Missing,
-            })) {
+            }))) {
                 err_out!("Sending file status change notification failed: {}", err);
             }
         }
@@ -126,21 +126,24 @@ impl ThumbnailCache {
             return;
         }
         // notify the thumbnail
-        if let Err(err) = sender.send(ThumbnailLoaded(notification::Thumbnail {
-            id,
-            width: pix.get_width(),
-            height: pix.get_height(),
-            pix,
-        })) {
+        if let Err(err) = toolkit::thread_context().block_on(
+            sender.send(ThumbnailLoaded(notification::Thumbnail {
+                id,
+                width: pix.get_width(),
+                height: pix.get_height(),
+                pix,
+            })))
+        {
             err_out!("Sending thumbnail notification failed: {}", err);
         }
+
     }
 
     fn main(
         running: &Running,
         tasks: &Tasks,
         cache_dir: PathBuf,
-        sender: glib::Sender<LibNotification>,
+        sender: async_channel::Sender<LibNotification>,
     ) {
         while running.load(atomic::Ordering::Relaxed) {
             let elem: Option<ThumbnailTask>;
