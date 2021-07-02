@@ -1,4 +1,19 @@
 #[macro_export]
+macro_rules! on_err_out {
+    ($e:expr) => {
+        if let Err(err) = $e {
+            err_out!(
+                "{}:{} Error '{}': {}",
+                file!(),
+                line!(),
+                stringify!($e),
+                err
+            );
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! dbg_out {
     ( $( $x:expr ),* ) => {
         print!("DEBUG: ");

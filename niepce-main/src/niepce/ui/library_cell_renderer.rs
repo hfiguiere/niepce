@@ -228,10 +228,10 @@ impl LibraryCellRendererPriv {
 
         cr.set_source_rgb(1.0, 1.0, 1.0);
         cr.rectangle(x, y, w.into(), h.into());
-        cr.stroke();
+        on_err_out!(cr.stroke());
 
         cr.set_source_pixbuf(&pixbuf, x, y);
-        cr.paint();
+        on_err_out!(cr.paint());
     }
 
     fn do_draw_flag(cr: &cairo::Context, flag: i32, r: &gdk::Rectangle) {
@@ -248,7 +248,7 @@ impl LibraryCellRendererPriv {
         let x: f64 = (r.x + r.width - CELL_PADDING - w).into();
         let y: f64 = (r.y + CELL_PADDING).into();
         cr.set_source_pixbuf(&pixbuf, x, y);
-        cr.paint();
+        on_err_out!(cr.paint());
     }
 
     fn do_draw_status(cr: &cairo::Context, status: FileStatus, r: &gdk::Rectangle) {
@@ -258,7 +258,7 @@ impl LibraryCellRendererPriv {
         let x: f64 = (r.x + CELL_PADDING).into();
         let y: f64 = (r.y + CELL_PADDING).into();
         cr.set_source_pixbuf(&EMBLEMS.status_missing, x, y);
-        cr.paint();
+        on_err_out!(cr.paint());
     }
 
     fn do_draw_format_emblem(cr: &cairo::Context, emblem: &Pixbuf, r: &gdk::Rectangle) -> i32 {
@@ -268,7 +268,7 @@ impl LibraryCellRendererPriv {
         let x: f64 = (r.x + r.width - left).into();
         let y: f64 = (r.y + r.height - CELL_PADDING - h).into();
         cr.set_source_pixbuf(emblem, x, y);
-        cr.paint();
+        on_err_out!(cr.paint());
         left
     }
 
@@ -279,11 +279,11 @@ impl LibraryCellRendererPriv {
 
         cr.rectangle(x, y, LABEL_SIZE.into(), LABEL_SIZE.into());
         cr.set_source_rgb(1.0, 1.0, 1.0);
-        cr.stroke();
+        on_err_out!(cr.stroke());
         cr.rectangle(x, y, LABEL_SIZE.into(), LABEL_SIZE.into());
         let rgb: gdk::RGBA = colour.into();
         cr.set_source_rgba(rgb.red, rgb.green, rgb.blue, rgb.alpha);
-        cr.fill();
+        on_err_out!(cr.fill());
     }
 
     fn get_colour(&self, label_id: i32) -> Option<RgbColour> {

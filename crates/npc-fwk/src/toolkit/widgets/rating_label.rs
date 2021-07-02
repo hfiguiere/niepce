@@ -197,7 +197,7 @@ impl RatingLabel {
             } else {
                 cr.set_source_pixbuf(unstar, x, y);
             }
-            cr.paint();
+            on_err_out!(cr.paint());
             x += w as f64;
         }
     }
