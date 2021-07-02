@@ -24,7 +24,7 @@ use gtk::prelude::*;
 use gtk::{Dialog, Entry, Label};
 use gtk_sys;
 
-use libraryclient::{ClientInterface, LibraryClientWrapper};
+use crate::libraryclient::{ClientInterface, LibraryClientWrapper};
 
 #[no_mangle]
 pub unsafe extern "C" fn dialog_request_new_folder(

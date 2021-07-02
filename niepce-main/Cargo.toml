@@ -3,6 +3,7 @@ name = "niepce_rust"
 version = "0.1.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 build = "build.rs"
+edition = "2018"
 
 [dependencies]
 once_cell = "^1.8.0"
