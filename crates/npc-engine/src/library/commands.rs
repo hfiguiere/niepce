@@ -215,7 +215,7 @@ pub fn cmd_set_metadata(lib: &Library, id: LibraryId, meta: Np, value: &Property
             if lib
                 .notify(LibNotification::MetadataChanged(MetadataChange::new(
                     id,
-                    meta.into(),
+                    meta,
                     value.clone(),
                 )))
                 .is_err()

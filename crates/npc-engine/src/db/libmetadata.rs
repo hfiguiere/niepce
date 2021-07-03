@@ -18,8 +18,6 @@
  */
 
 use chrono::Utc;
-use exempi;
-use rusqlite;
 
 use super::libfile::FileType;
 use super::props;
@@ -244,7 +242,7 @@ impl LibMetadata {
                     props.set_value(*prop_id, PropertyValue::StringArray(self.sidecars.clone()));
                 }
                 _ => {
-                    if let Some(propval) = self.get_metadata((*prop_id).into()) {
+                    if let Some(propval) = self.get_metadata(*prop_id) {
                         props.set_value(*prop_id, propval);
                     } else {
                         dbg_out!("missing prop {:?}", prop_id);

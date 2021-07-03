@@ -100,20 +100,18 @@ pub struct Thumbnail {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn metadatachange_get_id(meta: *const MetadataChange) -> LibraryId {
-    (*meta).id
+pub extern "C" fn metadatachange_get_id(meta: &MetadataChange) -> LibraryId {
+    meta.id
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn metadatachange_get_meta(meta: *const MetadataChange) -> PropertyIndex {
-    (*meta).meta.into()
+pub extern "C" fn metadatachange_get_meta(meta: &MetadataChange) -> PropertyIndex {
+    meta.meta.into()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn metadatachange_get_value(
-    meta: *const MetadataChange,
-) -> *const PropertyValue {
-    &(*meta).value
+pub extern "C" fn metadatachange_get_value(meta: &MetadataChange) -> *const PropertyValue {
+    &meta.value
 }
 
 #[derive(Clone)]
@@ -144,12 +142,12 @@ pub enum LibNotification {
 /// Send a notification for the file status change.
 /// Return `false` if sending failed.
 #[no_mangle]
-pub unsafe extern "C" fn engine_library_notify_filestatus_changed(
-    channel: *const LcChannel,
+pub extern "C" fn engine_library_notify_filestatus_changed(
+    channel: &LcChannel,
     id: LibraryId,
     status: FileStatus,
 ) -> bool {
-    if let Err(err) = toolkit::thread_context().block_on((*channel).0.clone().send(
+    if let Err(err) = toolkit::thread_context().block_on(channel.0.clone().send(
         LibNotification::FileStatusChanged(FileStatusChange { id, status }),
     )) {
         err_out!("Error sending notification: {}", err);
@@ -159,6 +157,9 @@ pub unsafe extern "C" fn engine_library_notify_filestatus_changed(
 }
 
 /// Delete the Notification object.
+///
+/// # Safety
+/// Use raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_library_notification_delete(n: *mut LibNotification) {
     Box::from_raw(n);

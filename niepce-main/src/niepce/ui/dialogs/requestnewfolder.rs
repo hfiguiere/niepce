@@ -19,13 +19,13 @@
 
 use gettextrs::gettext;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::{Dialog, Entry, Label};
-use gtk_sys;
 
 use crate::libraryclient::{ClientInterface, LibraryClientWrapper};
 
+/// # Safety
+/// Use raw pointers.
 #[no_mangle]
 pub unsafe extern "C" fn dialog_request_new_folder(
     client: &mut LibraryClientWrapper,

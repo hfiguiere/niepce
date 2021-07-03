@@ -18,7 +18,6 @@
  */
 
 use libc::c_char;
-use rusqlite;
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::path::{Path, PathBuf};
@@ -28,7 +27,6 @@ use super::FromDb;
 use super::LibraryId;
 use super::NiepceProperties as Np;
 use super::NiepcePropertyIdx;
-use npc_fwk;
 
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -81,9 +79,9 @@ impl From<i32> for FileType {
     }
 }
 
-impl Into<&'static str> for FileType {
-    fn into(self) -> &'static str {
-        match self {
+impl From<FileType> for &'static str {
+    fn from(v: FileType) -> &'static str {
+        match v {
             FileType::Unknown => "Unknown",
             FileType::Raw => "RAW",
             FileType::RawJpeg => "RAW + JPEG",
@@ -93,9 +91,9 @@ impl Into<&'static str> for FileType {
     }
 }
 
-impl Into<i32> for FileType {
-    fn into(self) -> i32 {
-        match self {
+impl From<FileType> for i32 {
+    fn from(v: FileType) -> i32 {
+        match v {
             FileType::Unknown => 0,
             FileType::Raw => 1,
             FileType::RawJpeg => 2,
@@ -275,6 +273,8 @@ pub fn mimetype_to_filetype(mime: &npc_fwk::MimeType) -> FileType {
     }
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_db_libfile_new(
     id: LibraryId,
@@ -293,6 +293,8 @@ pub unsafe extern "C" fn engine_db_libfile_new(
     Box::into_raw(lf)
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_db_libfile_delete(lf: *mut LibFile) {
     Box::from_raw(lf);

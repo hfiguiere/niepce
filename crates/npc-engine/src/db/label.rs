@@ -18,7 +18,6 @@
  */
 
 use libc::c_char;
-use rusqlite;
 use std::ffi::CString;
 use std::str::FromStr;
 
@@ -86,6 +85,8 @@ impl FromDb for Label {
     }
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_db_label_delete(l: *mut Label) {
     Box::from_raw(l);

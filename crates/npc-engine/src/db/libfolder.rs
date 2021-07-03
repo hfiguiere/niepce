@@ -18,7 +18,6 @@
  */
 
 use libc::c_char;
-use rusqlite;
 use std::ffi::CString;
 
 use super::FromDb;

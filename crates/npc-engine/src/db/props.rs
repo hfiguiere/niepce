@@ -43,14 +43,16 @@ pub enum NiepceProperties {
     Index(NiepcePropertyIdx),
     Other(u32),
 }
-impl Into<u32> for NiepceProperties {
-    fn into(self) -> u32 {
-        match self {
-            Self::Index(i) => i as u32,
-            Self::Other(i) => i,
+
+impl From<NiepceProperties> for u32 {
+    fn from(v: NiepceProperties) -> u32 {
+        match v {
+            NiepceProperties::Index(i) => i as u32,
+            NiepceProperties::Other(i) => i,
         }
     }
 }
+
 impl From<u32> for NiepceProperties {
     fn from(v: u32) -> NiepceProperties {
         match v {

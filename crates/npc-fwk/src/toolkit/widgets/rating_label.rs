@@ -22,7 +22,6 @@ use std::cell::Cell;
 
 use gdk::prelude::*;
 use gdk_pixbuf::Pixbuf;
-use glib;
 use glib::subclass::prelude::*;
 use glib::subclass::Signal;
 use glib::translate::*;

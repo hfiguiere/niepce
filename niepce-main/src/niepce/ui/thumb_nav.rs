@@ -24,7 +24,6 @@ use once_cell::unsync::OnceCell;
 
 use glib::subclass::prelude::*;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
@@ -42,9 +41,9 @@ pub enum ThumbNavMode {
     Invalid,
 }
 
-impl Into<i32> for ThumbNavMode {
-    fn into(self) -> i32 {
-        match self {
+impl From<ThumbNavMode> for i32 {
+    fn from(v: ThumbNavMode) -> i32 {
+        match v {
             ThumbNavMode::OneRow => 0,
             ThumbNavMode::OneColumn => 1,
             ThumbNavMode::MultipleRows => 2,
@@ -447,6 +446,8 @@ impl ContainerImpl for ThumbNavPriv {}
 
 impl BoxImpl for ThumbNavPriv {}
 
+/// # Safety
+/// Use raw pointers
 #[no_mangle]
 pub unsafe extern "C" fn npc_thumb_nav_new(
     thumbview: *mut gtk_sys::GtkIconView,

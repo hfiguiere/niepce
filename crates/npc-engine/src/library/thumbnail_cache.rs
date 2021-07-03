@@ -27,8 +27,6 @@ use std::sync;
 use std::sync::atomic;
 use std::thread;
 
-use gdk_pixbuf;
-
 use crate::db::libfile::{FileStatus, LibFile};
 use crate::db::LibraryId;
 use crate::library::notification;
@@ -79,7 +77,7 @@ fn get_thumbnail(f: &LibFile, w: i32, h: i32, cached: &Path) -> Thumbnail {
     } else {
         dbg_out!("couldn't get the thumbnail for {:?}", filename);
     }
-    return thumbnail;
+    thumbnail
 }
 
 type Tasks = sync::Arc<(sync::Mutex<VecDeque<ThumbnailTask>>, sync::Condvar)>;
@@ -188,7 +186,7 @@ impl ThumbnailCache {
         }
     }
 
-    pub fn request(&self, fl: &Vec<LibFile>) {
+    pub fn request(&self, fl: &[LibFile]) {
         for f in fl {
             self.schedule(ThumbnailTask::new(f.clone(), 160, 160));
         }
@@ -206,7 +204,7 @@ impl ThumbnailCache {
     ) -> PathBuf {
         let base_name = filename.file_name().and_then(|f| f.to_str()).unwrap(); // XXX fatal if fails.
         let thumb_name = format!("{}-{}.png", id, base_name);
-        let mut path = PathBuf::from(Self::dir_for_thumbnail(size, cache_dir));
+        let mut path = Self::dir_for_thumbnail(size, cache_dir);
         path.push(thumb_name);
         path
     }
@@ -223,6 +221,8 @@ impl ThumbnailCache {
     }
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_library_thumbnail_cache_new(
     dir: *const c_char,
@@ -232,13 +232,15 @@ pub unsafe extern "C" fn engine_library_thumbnail_cache_new(
     Box::into_raw(Box::new(ThumbnailCache::new(&path, (*channel).0.clone())))
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_library_thumbnail_cache_delete(obj: *mut ThumbnailCache) {
     Box::from_raw(obj);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn engine_library_thumbnail_cache_request(
+pub extern "C" fn engine_library_thumbnail_cache_request(
     self_: &mut ThumbnailCache,
     content: &QueriedContent,
 ) {

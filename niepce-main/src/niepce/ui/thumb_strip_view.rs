@@ -24,7 +24,6 @@ use once_cell::unsync::OnceCell;
 
 use glib::subclass::prelude::*;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
@@ -280,6 +279,8 @@ impl ContainerImpl for ThumbStripViewPriv {}
 
 impl IconViewImpl for ThumbStripViewPriv {}
 
+/// # Safety
+/// Use raw pointers
 #[no_mangle]
 pub unsafe extern "C" fn npc_thumb_strip_view_new(
     store: *mut gtk_sys::GtkTreeModel,

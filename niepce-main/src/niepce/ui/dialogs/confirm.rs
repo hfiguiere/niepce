@@ -1,7 +1,7 @@
 /*
  * niepce - niepce/ui/dialogs/confirm.rs
  *
- * Copyright (C) 2017 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ use libc::c_char;
 use std::ffi::CStr;
 
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::MessageDialog;
-use gtk_sys;
 
+/// # Safety
+/// Use raw pointers.
 #[no_mangle]
 pub unsafe extern "C" fn dialog_confirm(
     message: *const c_char,

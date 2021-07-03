@@ -19,7 +19,6 @@
 
 use glib::subclass::prelude::*;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::subclass::widget::WidgetImplExt;
@@ -78,6 +77,8 @@ impl ContainerImpl for ImageGridViewPriv {}
 
 impl IconViewImpl for ImageGridViewPriv {}
 
+/// # Safety
+/// Use raw pointers.
 #[no_mangle]
 pub unsafe extern "C" fn npc_image_grid_view_new(
     store: *mut gtk_sys::GtkTreeModel,

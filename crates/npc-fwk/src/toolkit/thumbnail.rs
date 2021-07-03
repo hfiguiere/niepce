@@ -75,18 +75,7 @@ impl Thumbnail {
     /// Make a gdk_pixbuf::Pixbuf out of the Thumbnail
     pub fn make_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         if self.ok() {
-            // XXX figure out the allocation here.
-            // Ideally we should have this shared
-            // Also this is duplicated with Into()
-            Some(gdk_pixbuf::Pixbuf::from_bytes(
-                &glib::Bytes::from(&self.bytes),
-                self.colorspace,
-                self.has_alpha,
-                self.bits_per_sample,
-                self.width,
-                self.height,
-                self.stride,
-            ))
+            Some(self.into())
         } else {
             None
         }
@@ -174,16 +163,16 @@ impl From<Option<gdk_pixbuf::Pixbuf>> for Thumbnail {
     }
 }
 
-impl Into<gdk_pixbuf::Pixbuf> for Thumbnail {
-    fn into(self) -> gdk_pixbuf::Pixbuf {
+impl From<&Thumbnail> for gdk_pixbuf::Pixbuf {
+    fn from(v: &Thumbnail) -> gdk_pixbuf::Pixbuf {
         gdk_pixbuf::Pixbuf::from_bytes(
-            &glib::Bytes::from(&self.bytes),
-            self.colorspace,
-            self.has_alpha,
-            self.bits_per_sample,
-            self.width,
-            self.height,
-            self.stride,
+            &glib::Bytes::from(&v.bytes),
+            v.colorspace,
+            v.has_alpha,
+            v.bits_per_sample,
+            v.width,
+            v.height,
+            v.stride,
         )
     }
 }

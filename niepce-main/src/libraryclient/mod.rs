@@ -172,7 +172,7 @@ impl ClientInterfaceSync for LibraryClient {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn lcchannel_new(
+pub extern "C" fn lcchannel_new(
     cb: extern "C" fn(n: *const LibNotification, data: *mut c_void) -> i32,
     data: *mut c_void,
 ) -> *mut LcChannel {

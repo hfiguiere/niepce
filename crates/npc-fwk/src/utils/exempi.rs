@@ -479,11 +479,11 @@ pub fn xmp_date_from_exif(d: &str) -> Option<exempi::DateTime> {
     }
     let year = try_opt!(i32::from_str_radix(ymd[0], 10).ok());
     let month = try_opt!(i32::from_str_radix(ymd[1], 10).ok());
-    if month < 1 || month > 12 {
+    if !(1..=12).contains(&month) {
         return None;
     }
     let day = try_opt!(i32::from_str_radix(ymd[2], 10).ok());
-    if day < 1 || day > 31 {
+    if !(1..=31).contains(&day) {
         return None;
     }
     let hms: Vec<&str> = v[1].split(':').collect();
@@ -492,15 +492,15 @@ pub fn xmp_date_from_exif(d: &str) -> Option<exempi::DateTime> {
         return None;
     }
     let hour = try_opt!(i32::from_str_radix(hms[0], 10).ok());
-    if hour < 0 || hour > 23 {
+    if !(0..=23).contains(&hour) {
         return None;
     }
     let min = try_opt!(i32::from_str_radix(hms[1], 10).ok());
-    if min < 0 || min > 59 {
+    if !(0..=59).contains(&min) {
         return None;
     }
     let sec = try_opt!(i32::from_str_radix(hms[2], 10).ok());
-    if sec < 0 || sec > 59 {
+    if !(0..=59).contains(&sec) {
         return None;
     }
 

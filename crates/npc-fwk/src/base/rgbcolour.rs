@@ -1,7 +1,7 @@
 /*
  * niepce - fwk/base/rgbcolour.rs
  *
- * Copyright (C) 2017-2020 Hubert Figuière
+ * Copyright (C) 2017-2021 Hubert Figuière
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  */
 
 use libc::c_char;
-use std::convert::Into;
 use std::ffi::CString;
 use std::num::ParseIntError;
 use std::str::FromStr;
@@ -74,12 +73,12 @@ impl ToString for RgbColour {
     }
 }
 
-impl Into<gdk::RGBA> for RgbColour {
-    fn into(self) -> gdk::RGBA {
+impl From<RgbColour> for gdk::RGBA {
+    fn from(v: RgbColour) -> gdk::RGBA {
         gdk::RGBA {
-            red: self.r as f64 / 65535_f64,
-            green: self.g as f64 / 65535_f64,
-            blue: self.b as f64 / 65535_f64,
+            red: v.r as f64 / 65535_f64,
+            green: v.g as f64 / 65535_f64,
+            blue: v.b as f64 / 65535_f64,
             alpha: 1.0,
         }
     }

@@ -20,12 +20,8 @@
 use std::collections::BTreeMap;
 use std::ptr;
 
-use gdk_pixbuf;
-use gdk_pixbuf_sys;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
-use gtk_sys;
 
 use once_cell::unsync::OnceCell;
 
@@ -59,6 +55,12 @@ pub struct ImageListStore {
     current_keyword: LibraryId,
     idmap: BTreeMap<LibraryId, gtk::TreeIter>,
     image_loading_icon: OnceCell<Option<gdk_pixbuf::Pixbuf>>,
+}
+
+impl Default for ImageListStore {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl ImageListStore {
@@ -100,10 +102,10 @@ impl ImageListStore {
     }
 
     fn is_property_interesting(idx: Np) -> bool {
-        return (idx == Np::Index(NpXmpRatingProp))
+        (idx == Np::Index(NpXmpRatingProp))
             || (idx == Np::Index(NpXmpLabelProp))
             || (idx == Np::Index(NpTiffOrientationProp))
-            || (idx == Np::Index(NpNiepceFlagProp));
+            || (idx == Np::Index(NpNiepceFlagProp))
     }
 
     fn get_iter_from_id(&self, id: LibraryId) -> Option<&gtk::TreeIter> {
@@ -117,9 +119,9 @@ impl ImageListStore {
     }
 
     fn add_libfile(&mut self, f: &LibFile) {
-        let icon = self.get_loading_icon().map(|v| v.clone());
+        let icon = self.get_loading_icon().cloned();
         let iter = self.add_row(
-            icon.clone().as_ref(),
+            icon.as_ref(),
             f,
             gdk_utils::gdkpixbuf_scale_to_fit(icon.as_ref(), 100).as_ref(),
             FileStatus::Ok,
@@ -127,7 +129,7 @@ impl ImageListStore {
         self.idmap.insert(f.id(), iter);
     }
 
-    fn add_libfiles(&mut self, content: &Vec<LibFile>) {
+    fn add_libfiles(&mut self, content: &[LibFile]) {
         for f in content.iter() {
             self.add_libfile(f);
         }
@@ -299,11 +301,13 @@ impl ImageListStore {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_new() -> *mut ImageListStore {
+pub extern "C" fn npc_image_list_store_new() -> *mut ImageListStore {
     let box_ = Box::new(ImageListStore::new());
     Box::into_raw(box_)
 }
 
+/// # Safety
+/// Dereference pointer.
 #[no_mangle]
 pub unsafe extern "C" fn npc_image_list_store_delete(self_: *mut ImageListStore) {
     assert!(!self_.is_null());
@@ -312,13 +316,14 @@ pub unsafe extern "C" fn npc_image_list_store_delete(self_: *mut ImageListStore)
 
 /// Return the gobj for the GtkListStore. You must ref it to hold it.
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_gobj(
-    self_: &ImageListStore,
-) -> *mut gtk_sys::GtkListStore {
+pub extern "C" fn npc_image_list_store_gobj(self_: &ImageListStore) -> *mut gtk_sys::GtkListStore {
     self_.store.to_glib_none().0
 }
 
 /// Return the ID of the file at the given GtkTreePath
+///
+/// # Safety
+/// Use glib pointers.
 #[no_mangle]
 pub unsafe extern "C" fn npc_image_list_store_get_file_id_at_path(
     self_: &ImageListStore,
@@ -328,6 +333,8 @@ pub unsafe extern "C" fn npc_image_list_store_get_file_id_at_path(
     self_.get_file_id_at_path(&from_glib_borrow(path))
 }
 
+/// # Safety
+/// Dereference pointers.
 #[no_mangle]
 pub unsafe extern "C" fn npc_image_list_store_add_row(
     self_: &mut ImageListStore,
@@ -345,7 +352,7 @@ pub unsafe extern "C" fn npc_image_list_store_add_row(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_get_iter_from_id(
+pub extern "C" fn npc_image_list_store_get_iter_from_id(
     self_: &mut ImageListStore,
     id: LibraryId,
 ) -> *const gtk_sys::GtkTreeIter {
@@ -353,7 +360,7 @@ pub unsafe extern "C" fn npc_image_list_store_get_iter_from_id(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_get_file(
+pub extern "C" fn npc_image_list_store_get_file(
     self_: &mut ImageListStore,
     id: LibraryId,
 ) -> *mut LibFile {
@@ -365,7 +372,7 @@ pub unsafe extern "C" fn npc_image_list_store_get_file(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_on_lib_notification(
+pub extern "C" fn npc_image_list_store_on_lib_notification(
     self_: &mut ImageListStore,
     notification: &LibNotification,
     thumbnail_cache: &ThumbnailCache,
@@ -374,6 +381,6 @@ pub unsafe extern "C" fn npc_image_list_store_on_lib_notification(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn npc_image_list_store_clear_content(self_: &mut ImageListStore) {
+pub extern "C" fn npc_image_list_store_clear_content(self_: &mut ImageListStore) {
     self_.clear_content()
 }

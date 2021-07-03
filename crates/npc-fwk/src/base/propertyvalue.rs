@@ -75,21 +75,12 @@ pub unsafe extern "C" fn fwk_property_value_delete(v: *mut PropertyValue) {
 
 #[no_mangle]
 pub extern "C" fn fwk_property_value_is_empty(v: &PropertyValue) -> bool {
-    match *v {
-        PropertyValue::Empty => true,
-        _ => false,
-    }
+    matches!(*v, PropertyValue::Empty)
 }
 
 #[no_mangle]
 pub extern "C" fn fwk_property_value_is_integer(v: &PropertyValue) -> bool {
-    match *v {
-        PropertyValue::Int(_) => true,
-        _ => {
-            println!("PropertyValue is {:?}", &v);
-            false
-        }
-    }
+    matches!(*v, PropertyValue::Int(_))
 }
 
 #[no_mangle]
@@ -102,10 +93,7 @@ pub extern "C" fn fwk_property_value_get_integer(v: &PropertyValue) -> i32 {
 
 #[no_mangle]
 pub extern "C" fn fwk_property_value_is_date(v: &PropertyValue) -> bool {
-    match *v {
-        PropertyValue::Date(_) => true,
-        _ => false,
-    }
+    matches!(*v, PropertyValue::Date(_))
 }
 
 #[no_mangle]
@@ -118,10 +106,7 @@ pub extern "C" fn fwk_property_value_get_date(v: &PropertyValue) -> *const Date 
 
 #[no_mangle]
 pub extern "C" fn fwk_property_value_is_string(v: &PropertyValue) -> bool {
-    match *v {
-        PropertyValue::String(_) => true,
-        _ => false,
-    }
+    matches!(*v, PropertyValue::String(_))
 }
 
 #[no_mangle]

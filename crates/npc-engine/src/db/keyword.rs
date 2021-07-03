@@ -20,7 +20,6 @@
 use super::FromDb;
 use super::LibraryId;
 use libc::c_char;
-use rusqlite;
 use std::ffi::CStr;
 use std::ffi::CString;
 
@@ -42,7 +41,7 @@ impl Keyword {
         self.id
     }
 
-    pub fn keyword(&self) -> &String {
+    pub fn keyword(&self) -> &str {
         &self.keyword
     }
 }
@@ -66,6 +65,8 @@ impl FromDb for Keyword {
     }
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_db_keyword_new(id: i64, keyword: *const c_char) -> *mut Keyword {
     let kw = Box::new(Keyword::new(
@@ -82,10 +83,12 @@ pub extern "C" fn engine_db_keyword_id(obj: &Keyword) -> i64 {
 
 #[no_mangle]
 pub extern "C" fn engine_db_keyword_keyword(obj: &Keyword) -> *mut c_char {
-    let cstr = CString::new(obj.keyword().clone()).unwrap();
+    let cstr = CString::new(obj.keyword()).unwrap();
     cstr.into_raw()
 }
 
+/// # Safety
+/// Dereference raw pointer.
 #[no_mangle]
 pub unsafe extern "C" fn engine_db_keyword_delete(kw: *mut Keyword) {
     Box::from_raw(kw);

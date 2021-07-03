@@ -38,8 +38,6 @@ pub use self::library::Library;
 pub use self::props::NiepceProperties;
 pub use self::props::NiepcePropertyIdx;
 
-use rusqlite;
-
 pub trait FromDb: Sized {
     /// return the columns for reading from the DB.
     fn read_db_columns() -> &'static str;

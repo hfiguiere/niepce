@@ -22,14 +22,11 @@ use once_cell::unsync::Lazy;
 use std::cell::{Cell, RefCell};
 use std::ptr;
 
-use cairo;
-use gdk;
 use gdk::prelude::*;
 use gdk_pixbuf::Pixbuf;
 use glib::subclass::prelude::*;
 use glib::subclass::Signal;
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
@@ -440,7 +437,7 @@ impl CellRendererImpl for LibraryCellRendererPriv {
         let xpad = self_.xpad();
         let ypad = self_.ypad();
 
-        let mut r = cell_area.clone();
+        let mut r = *cell_area;
         r.x += xpad as i32;
         r.y += ypad as i32;
 
@@ -552,7 +549,7 @@ impl CellRendererImpl for LibraryCellRendererPriv {
             // hit test with the rating region
             let xpad = instance.xpad();
             let ypad = instance.ypad();
-            let mut r = cell_area.clone();
+            let mut r = *cell_area;
             r.x += xpad as i32;
             r.y += ypad as i32;
 
@@ -608,6 +605,8 @@ impl CellRendererImpl for LibraryCellRendererPriv {
 // allow subclassing this
 pub trait LibraryCellRendererImpl: CellRendererPixbufImpl + 'static {}
 
+/// # Safety
+/// Use raw pointers
 #[no_mangle]
 pub unsafe extern "C" fn npc_library_cell_renderer_new(
     get_colour: Option<unsafe extern "C" fn(i32, *mut RgbColour, *const c_void) -> bool>,

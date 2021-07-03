@@ -24,7 +24,6 @@ use std::path::{Path, PathBuf};
 use std::result;
 
 use chrono::Utc;
-use rusqlite;
 use rusqlite::{functions::FunctionFlags, params};
 
 use super::props::NiepceProperties as Np;
@@ -39,7 +38,6 @@ use crate::db::libfolder;
 use crate::db::libfolder::LibFolder;
 use crate::db::libmetadata::LibMetadata;
 use crate::library::notification::LibNotification;
-use npc_fwk;
 use npc_fwk::toolkit;
 use npc_fwk::PropertyValue;
 

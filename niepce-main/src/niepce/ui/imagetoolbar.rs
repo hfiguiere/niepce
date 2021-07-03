@@ -1,7 +1,7 @@
 /*
  * niepce - ui/imagetoolbar.rs
  *
- * Copyright (C) 2018 Hubert Figuiere
+ * Copyright (C) 2018-2021 Hubert Figuiere
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@
  */
 
 use glib::translate::*;
-use gtk;
 use gtk::prelude::*;
-use gtk_sys;
 
 #[no_mangle]
 pub extern "C" fn image_toolbar_new() -> *mut gtk_sys::GtkToolbar {

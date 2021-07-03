@@ -74,10 +74,7 @@ impl FileList {
     pub fn file_is_media(fileinfo: &gio::FileInfo) -> bool {
         if let Some(gmtype) = fileinfo.content_type() {
             let t = guess_type(&gmtype);
-            return match t {
-                MType::Image(_) | MType::Movie => true,
-                _ => false,
-            };
+            return matches!(t, MType::Image(_) | MType::Movie);
         }
 
         err_out!("Coudln't get file type");
