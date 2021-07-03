@@ -116,7 +116,7 @@ pub unsafe extern "C" fn fwk_file_list_delete(l: *mut FileList) {
 #[no_mangle]
 pub unsafe extern "C" fn fwk_file_list_get_files_from_directory(
     dir: *const c_char,
-    filter: Option<fn(*mut gio_sys::GFileInfo) -> bool>,
+    filter: Option<extern "C" fn(*mut gio_sys::GFileInfo) -> bool>,
 ) -> *mut FileList {
     let cstr = CStr::from_ptr(dir);
     match filter {
