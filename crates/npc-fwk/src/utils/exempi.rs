@@ -326,7 +326,7 @@ impl XmpMeta {
 
     pub fn label(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::default();
-        let xmpstring = try_opt!(self.xmp.get_property(NS_XAP, "Label", &mut flags).ok());
+        let xmpstring = self.xmp.get_property(NS_XAP, "Label", &mut flags).ok()?;
         Some(String::from(xmpstring.to_str()))
     }
 
@@ -344,21 +344,21 @@ impl XmpMeta {
 
     pub fn creation_date(&self) -> Option<DateTime<Utc>> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::default();
-        let xmpstring = try_opt!(self
+        let xmpstring = self
             .xmp
             .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
-            .ok());
-        let date = try_opt!(DateTime::parse_from_rfc3339(xmpstring.to_str()).ok());
+            .ok()?;
+        let date = DateTime::parse_from_rfc3339(xmpstring.to_str()).ok()?;
 
         Some(date.with_timezone(&Utc))
     }
 
     pub fn creation_date_str(&self) -> Option<String> {
         let mut flags: exempi::PropFlags = exempi::PropFlags::empty();
-        let xmpstring = try_opt!(self
+        let xmpstring = self
             .xmp
             .get_property(NS_EXIF, "DateTimeOriginal", &mut flags)
-            .ok());
+            .ok()?;
         Some(String::from(xmpstring.to_str()))
     }
 
@@ -413,7 +413,7 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
     let degs: &str;
 
     // step 1 - degrees
-    let sep = try_opt!(current.find(','));
+    let sep = current.find(',')?;
     let (d, remainder) = current.split_at(sep);
     current = remainder;
     degs = d;
@@ -443,17 +443,17 @@ pub fn gps_coord_from_xmp(xmps: &str) -> Option<f64> {
         let (minutes, seconds) = current.split_at(sep);
         let (_, seconds) = seconds.split_at(1);
         let (seconds, _) = seconds.split_at(seconds.len() - 1);
-        let m = try_opt!(minutes.parse::<f64>().ok());
-        let s = try_opt!(seconds.parse::<f64>().ok());
+        let m = minutes.parse::<f64>().ok()?;
+        let s = seconds.parse::<f64>().ok()?;
         fminutes = m + (s / 60f64);
     } else {
         // DD,mm.mm format
         let (minutes, _) = current.split_at(current.len() - 1);
-        let m = try_opt!(minutes.parse::<f64>().ok());
+        let m = minutes.parse::<f64>().ok()?;
         fminutes = m;
     }
 
-    let mut deg = try_opt!(degs.parse::<f64>().ok());
+    let mut deg = degs.parse::<f64>().ok()?;
     if deg > 180.0 {
         return None;
     }
@@ -477,12 +477,12 @@ pub fn xmp_date_from_exif(d: &str) -> Option<exempi::DateTime> {
         err_out!("ymd split failed {:?}", ymd);
         return None;
     }
-    let year = try_opt!(i32::from_str_radix(ymd[0], 10).ok());
-    let month = try_opt!(i32::from_str_radix(ymd[1], 10).ok());
+    let year = i32::from_str_radix(ymd[0], 10).ok()?;
+    let month = i32::from_str_radix(ymd[1], 10).ok()?;
     if !(1..=12).contains(&month) {
         return None;
     }
-    let day = try_opt!(i32::from_str_radix(ymd[2], 10).ok());
+    let day = i32::from_str_radix(ymd[2], 10).ok()?;
     if !(1..=31).contains(&day) {
         return None;
     }
@@ -491,15 +491,15 @@ pub fn xmp_date_from_exif(d: &str) -> Option<exempi::DateTime> {
         err_out!("hms split failed {:?}", hms);
         return None;
     }
-    let hour = try_opt!(i32::from_str_radix(hms[0], 10).ok());
+    let hour = i32::from_str_radix(hms[0], 10).ok()?;
     if !(0..=23).contains(&hour) {
         return None;
     }
-    let min = try_opt!(i32::from_str_radix(hms[1], 10).ok());
+    let min = i32::from_str_radix(hms[1], 10).ok()?;
     if !(0..=59).contains(&min) {
         return None;
     }
-    let sec = try_opt!(i32::from_str_radix(hms[2], 10).ok());
+    let sec = i32::from_str_radix(hms[2], 10).ok()?;
     if !(0..=59).contains(&sec) {
         return None;
     }

@@ -33,8 +33,6 @@ extern crate lazy_static;
 extern crate libc;
 extern crate multimap;
 extern crate once_cell;
-#[macro_use]
-extern crate try_opt;
 
 #[macro_use]
 pub mod base;

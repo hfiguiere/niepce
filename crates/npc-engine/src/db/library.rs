@@ -431,8 +431,8 @@ impl Library {
     }
 
     pub fn leaf_name_for_pathname(pathname: &str) -> Option<String> {
-        let name = try_opt!(Path::new(pathname).file_name());
-        Some(String::from(try_opt!(name.to_str())))
+        let name = Path::new(pathname).file_name()?;
+        Some(String::from(name.to_str()?))
     }
 
     fn get_content(&self, id: LibraryId, sql_where: &str) -> Result<Vec<LibFile>> {

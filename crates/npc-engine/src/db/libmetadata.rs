@@ -77,7 +77,7 @@ impl LibMetadata {
     }
 
     fn get_metadata(&self, meta: Np) -> Option<PropertyValue> {
-        let index_to_xmp = try_opt!(property_index_to_xmp(meta));
+        let index_to_xmp = property_index_to_xmp(meta)?;
 
         let mut prop_flags = exempi::PropFlags::default();
         let mut xmp_result =
@@ -96,7 +96,7 @@ impl LibMetadata {
             }
         }
         Some(PropertyValue::String(String::from(
-            try_opt!(xmp_result.ok()).to_str(),
+            xmp_result.ok()?.to_str(),
         )))
     }
 
